@@ -59,14 +59,14 @@ export function SimpleButton() {
 
 ---
 
-ip.minpeter.xyz 서버를 이용한 독자 아이피 조회 컴포넌트
+ip.minpeter.uk 서버를 이용한 독자 아이피 조회 컴포넌트
 
 ```jsx
 export function Ip() {
   const [ip, setIp] = useState("");
 
   useEffect(() => {
-    fetch("https://ip.minpeter.xyz/ip").then((res) =>
+    fetch("https://ip.minpeter.uk/ip").then((res) =>
       res.text().then((ip) => setIp(ip))
     );
   }, []);

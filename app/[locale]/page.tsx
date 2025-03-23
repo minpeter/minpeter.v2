@@ -68,7 +68,7 @@ export default function Page() {
                 icon: <KeyboardIcon className="h-4 w-4" />,
               },
               {
-                href: "https://ip.minpeter.xyz/",
+                href: "https://ip.minpeter.uk/",
                 text: t("ipTitle"),
                 icon: <CodeIcon className="h-4 w-4" />,
                 external: true,

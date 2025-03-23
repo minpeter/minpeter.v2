@@ -184,7 +184,7 @@ To find `[YOUR SERVER IP]`, you can use the following commands in the server ter
 ```bash
 curl ifconfig.me
 # or
-curl ip.minpeter.xyz -L
+curl ip.minpeter.uk -L
 ```
 
 Also, to allow traffic through Traefik, you need to open ports 80 and 443 on your router or firewall. ~~(Do this on your own)~~
@@ -245,7 +245,7 @@ services:
     container_name: iplogger-service
     labels:
       - traefik.enable=true
-      - traefik.http.routers.iplogger.rule=Host(`ip.minpeter.xyz`)
+      - traefik.http.routers.iplogger.rule=Host(`ip.minpeter.uk`)
       - traefik.http.routers.iplogger.entrypoints=websecure
       - traefik.http.routers.iplogger.tls.certresolver=myresolver
     networks: [traefik]
@@ -454,7 +454,7 @@ Create a service definition file within the `external_services` folder:
 [http.routers]
   [http.routers.iplogger]
     entryPoints = ["websecure"]
-    rule = "Host(`ip.minpeter.xyz`)"
+    rule = "Host(`ip.minpeter.uk`)"
     service = "iplogger-ext-srv"
     [http.routers.iplogger.tls]
       certResolver = "myresolver"
