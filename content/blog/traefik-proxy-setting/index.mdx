@@ -200,7 +200,7 @@ URL에는 `*.example.com//.well-known/acme-challenge/*` 를 입력해주고 Pick
 
 traefik 폴더를 만들고 docker-compose.yaml 파일을 생성해준다.
 
-이후 설정파일에서 나오는 minpeter.xyz는 모두 본인의 도메인으로 대체하면 된다.
+이후 설정파일에서 나오는 minpeter.uk는 모두 본인의 도메인으로 대체하면 된다.
 
 ```bash
 version: '3.8'
@@ -211,7 +211,7 @@ services:
     restart: unless-stopped
     labels:
       - traefik.enable=true
-      - traefik.http.routers.traefik.rule=Host(`traefik.minpeter.xyz`) && PathPrefix(`/api`, `/dashboard`)
+      - traefik.http.routers.traefik.rule=Host(`traefik.minpeter.uk`) && PathPrefix(`/api`, `/dashboard`)
       - traefik.http.routers.traefik.entrypoints=websecure
       - traefik.http.routers.traefik.tls.certresolver=myresolver
       - traefik.http.routers.traefik.service=api@internal
@@ -250,7 +250,7 @@ volumes:
 
 ```bash
 # docker-compose.yaml 중 traefik service의 labels
-- traefik.http.routers.traefik.rule=Host(`traefik.minpeter.xyz`) && PathPrefix(`/api`, `/dashboard`)
+- traefik.http.routers.traefik.rule=Host(`traefik.minpeter.uk`) && PathPrefix(`/api`, `/dashboard`)
 - traefik.http.routers.traefik.service=api@internal
 ```
 
@@ -425,7 +425,7 @@ services:
       - traefik.http.services.uptime-kuma.loadbalancer.server.port=3001
       - traefik.http.routers.uptime-kuma.entrypoints=websecure
       - traefik.http.routers.uptime-kuma.tls.certresolver=myresolver
-      - traefik.http.routers.uptime-kuma.rule=Host(`uptime.minpeter.xyz`)
+      - traefik.http.routers.uptime-kuma.rule=Host(`uptime.minpeter.uk`)
     networks:
       - traefik
 

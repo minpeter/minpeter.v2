@@ -214,7 +214,7 @@ Connect to the server using SSH or your preferred method.
 
 Create a `traefik` folder and generate a `docker-compose.yaml` file.
 
-Replace `minpeter.xyz` with your domain name in the configuration below.
+Replace `minpeter.uk` with your domain name in the configuration below.
 
 ```yaml
 version: "3.8"
@@ -225,7 +225,7 @@ services:
     restart: unless-stopped
     labels:
       - traefik.enable=true
-      - traefik.http.routers.traefik.rule=Host(`traefik.minpeter.xyz`) && PathPrefix(`/api`, `/dashboard`)
+      - traefik.http.routers.traefik.rule=Host(`traefik.minpeter.uk`) && PathPrefix(`/api`, `/dashboard`)
       - traefik.http.routers.traefik.entrypoints=websecure
       - traefik.http.routers.traefik.tls.certresolver=myresolver
       - traefik.http.routers.traefik.service=api@internal
@@ -262,7 +262,7 @@ This configuration introduces several new elements. Notably, HTTPS setup and cer
 
 ```yaml
 # Labels section in the traefik service within docker-compose.yaml
-- traefik.http.routers.traefik.rule=Host(`traefik.minpeter.xyz`) && PathPrefix(`/api`, `/dashboard`)
+- traefik.http.routers.traefik.rule=Host(`traefik.minpeter.uk`) && PathPrefix(`/api`, `/dashboard`)
 - traefik.http.routers.traefik.service=api@internal
 ```
 
@@ -421,7 +421,7 @@ services:
       - traefik.http.services.uptime-kuma.loadbalancer.server.port=3001
       - traefik.http.routers.uptime-kuma.entrypoints=websecure
       - traefik.http.routers.uptime-kuma.tls.certresolver=myresolver
-      - traefik.http.routers.uptime-kuma.rule=Host(`uptime.minpeter.xyz`)
+      - traefik.http.routers.uptime-kuma.rule=Host(`uptime.minpeter.uk`)
     networks:
       - traefik
 
