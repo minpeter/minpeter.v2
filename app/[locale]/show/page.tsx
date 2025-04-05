@@ -52,6 +52,10 @@ export default async function Page({
         <Link href="/show/model-card-artwork" className="underline">
           /show/model-card-artwork
         </Link>
+
+        <Link href="/show/unstructured" className="underline">
+          /show/unstructured
+        </Link>
       </div>
     </section>
   );
