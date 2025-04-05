@@ -41,7 +41,7 @@ First, create an account on FriendliAI's website and follow the instructions in 
 
 Create a `.env` file in the project root and set the token as an environment variable.
 
-```.env
+```text title=".env"
 # .env
 FRIENDLI_TOKEN=flp_xxxxx
 ```

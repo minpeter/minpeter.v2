@@ -42,7 +42,7 @@ AI SDK를 사용하려면 LLM 모델을 제공하는 **provider**가 필요합�
 
 프로젝트 루트에 `.env` 파일을 생성하고, 발급받은 토큰을 환경 변수로 설정합니다.
 
-```.env
+```text title=".env"
 # .env
 FRIENDLI_TOKEN=flp_xxxxx
 ```

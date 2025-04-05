@@ -54,8 +54,7 @@ netcat이라는 유틸리티로 해당 서버의 프로그램을 원격 실행�
 
 우선 일반적인 입출력을 수행하는 프로그램을 작성한다.
 
-```py
-# main.py
+```py title="main.py"
 userInput = input("Enter a number: ")
 
 try:
@@ -75,7 +74,7 @@ except ValueError:
 
 이제 배포를 위한 Dockerfile를 작성한다.
 
-```Dockerfile
+```dockerfile title="Dockerfile"
 FROM python:3.10-alpine
 
 RUN apk add socat
