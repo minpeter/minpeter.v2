@@ -21,5 +21,8 @@ export function middleware(request: NextRequest) {
 export const config = {
   // Matcher ignoring `/_next/`, `/api/`, and files with extensions
   // ".*\\..*" 는 확장자가 있는 경우 (public의 에셋인 경우) 예외처리
-  matcher: ["/((?!api|_next/static|_next/image|favicon.ico|.*\\..*).*)"],
+  // .well-known는 flags를 위해 예외처리
+  matcher: [
+    "/((?!api|.well-known|_next/static|_next/image|favicon.ico|.*\\..*).*)",
+  ],
 };

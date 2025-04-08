@@ -1,6 +1,7 @@
 import { Analytics } from "@vercel/analytics/react";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { VercelToolbar } from "@vercel/toolbar/next";
 
 import { RootProvider } from "fumadocs-ui/provider";
 import { NuqsAdapter } from "nuqs/adapters/next";
@@ -46,6 +47,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const { locale } = await params;
+  const shouldInjectToolbar = process.env.NODE_ENV === "development";
 
   return (
     <html
@@ -67,6 +69,7 @@ export default async function RootLayout({
                   <main className="relative mx-auto min-h-screen w-full max-w-3xl px-4 py-24">
                     <div className="from-background pointer-events-none fixed inset-x-0 top-0 z-10 h-24 bg-linear-to-b to-transparent" />
                     {children}
+                    {shouldInjectToolbar && <VercelToolbar />}
                   </main>
 
                   <Footer />

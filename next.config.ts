@@ -1,5 +1,6 @@
 import { createMDX } from "fumadocs-mdx/next";
 import bundleAnalyzer from "@next/bundle-analyzer";
+import { withVercelToolbar } from "@vercel/toolbar/plugins/next";
 
 const withBundleAnalyzer = bundleAnalyzer({
   enabled: process.env.ANALYZE === "true",
@@ -52,4 +53,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default withBundleAnalyzer(withMDX(nextConfig));
+export default withVercelToolbar()(withBundleAnalyzer(withMDX(nextConfig)));
