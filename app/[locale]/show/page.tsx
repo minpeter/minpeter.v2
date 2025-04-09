@@ -5,7 +5,7 @@ import Link from "next/link";
 import { setStaticParamsLocale } from "next-international/server";
 
 import NewMetadata from "@/lib/metadata";
-import { exampleFlag } from "@/lib/flags";
+import { createFeatureGate } from "@/lib/flags";
 
 export const metadata = NewMetadata({
   title: "minpeter | showcase",
@@ -21,7 +21,7 @@ export default async function Page({
 
   setStaticParamsLocale(locale);
 
-  const example = await exampleFlag();
+  const enabled = await createFeatureGate("test_flag")(); //Disabled by default, edit in the Statsig console
 
   const t = await getI18n();
   return (
@@ -36,7 +36,7 @@ export default async function Page({
         data-animate-speed="fast"
         className="flex flex-col gap-2"
       >
-        <div>Flag {example ? "on" : "off"}</div>
+        <div>myFeatureGate is {enabled ? "on" : "off"}</div>
         <Link href="/show/yet-another-tempfiles" className="underline">
           /show/yet-another-tempfiles
         </Link>
