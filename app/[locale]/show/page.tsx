@@ -36,7 +36,6 @@ export default async function Page({
         data-animate-speed="fast"
         className="flex flex-col gap-2"
       >
-        <div>myFeatureGate is {enabled ? "on" : "off"}</div>
         <Link href="/show/yet-another-tempfiles" className="underline">
           /show/yet-another-tempfiles
         </Link>
@@ -60,6 +59,8 @@ export default async function Page({
         <Link href="/show/unstructured" className="underline">
           /show/unstructured
         </Link>
+
+        <div>test_flag is {enabled ? "on" : "off"}</div>
       </div>
     </section>
   );
