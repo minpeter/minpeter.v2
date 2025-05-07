@@ -5,7 +5,7 @@ import { BlogList, BlogListFallback } from "./list";
 import NewMetadata from "@/lib/metadata";
 import { getI18n } from "@/locales/server";
 import { setStaticParamsLocale } from "next-international/server";
-import { BlogSearch, BlogSearchFallback } from "./search";
+// import { BlogSearch, BlogSearchFallback } from "./search";
 import { createLoader, parseAsString, SearchParams } from "nuqs/server";
 import { blog, getPostsMetadata } from "@/lib/source";
 
@@ -42,9 +42,12 @@ export default async function Page({
         description={t("blogPageDescription")}
         link={{ href: "/", text: t("backToHome") }}
       />
-      <Suspense fallback={<BlogSearchFallback />}>
+      {/* FIXME: node:fs
+Module build failed: UnhandledSchemeError: Reading from "node:fs" is not handled by plugins (Unhandled scheme).
+Webpack supports "data:" and "file:" URIs by default. */}
+      {/* <Suspense fallback={<BlogSearchFallback />}>
         <BlogSearch lang={locale} />
-      </Suspense>
+      </Suspense> */}
       <Suspense fallback={<BlogListFallback query={query} posts={posts} />}>
         <BlogList posts={posts} lang={locale} />
       </Suspense>
