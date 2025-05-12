@@ -108,16 +108,30 @@ export default async function Page({
         )}
       </aside>
       <DocsBody>
-        <MDX
-          className="mdx"
-          components={{
-            ...defaultMdxComponents,
-            img: (props) => <ImageZoom {...props} />,
-            Tab,
-            Tabs,
-            Callout,
-          }}
-        />
+        <div style={{ wordBreak: "break-word", overflowWrap: "break-word" }}>
+          <MDX
+            className="mdx"
+            components={{
+              ...defaultMdxComponents,
+              img: (props) => <ImageZoom {...props} />,
+              Tab,
+              Tabs,
+              Callout,
+              a: (props) => {
+                const { href, children, ...rest } = props;
+                return (
+                  <Link
+                    href={href}
+                    className="text-primary hover:bg-secondary/100 rounded-md px-2 py-1"
+                    {...rest}
+                  >
+                    {children}
+                  </Link>
+                );
+              },
+            }}
+          />
+        </div>
       </DocsBody>
 
       <section className="mt-32">
