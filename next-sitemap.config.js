@@ -9,9 +9,9 @@ module.exports = {
   generateIndexSitemap: false,
 
   transform: async (config, path) => {
-    if (path.includes("/ko/")) {
+    if (path.includes("/ko")) {
       return {
-        loc: path.replace("/ko/", "/"),
+        loc: path.replace("/ko", ""),
         changefreq: config.changefreq,
         priority: config.priority,
       };

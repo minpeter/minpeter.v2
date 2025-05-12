@@ -13,6 +13,8 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   poweredByHeader: false,
 
+  distDir: process.env.NODE_ENV === "production" ? ".next" : ".next-dev",
+
   compiler: {
     // Remove console logs only in production, excluding error logs
     removeConsole:
@@ -21,7 +23,11 @@ const nextConfig: NextConfig = {
 
   // For additional debugging in Lighthouse
   productionBrowserSourceMaps: true,
-
+  logging: {
+    fetches: {
+      fullUrl: true,
+    },
+  },
   reactStrictMode: true,
   experimental: {
     // Trade off FCP, LCP and TTFB
