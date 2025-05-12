@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "build": "next build",
+    "build": "next build --turbopack",
     "analyze": "ANALYZE=true next build",
     "lint": "next lint",
     "dev": "next dev --turbopack -p 8200",
