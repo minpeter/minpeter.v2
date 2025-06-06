@@ -14,6 +14,7 @@ import { Callout } from "fumadocs-ui/components/callout";
 import { getI18n } from "@/locales/server";
 import { setStaticParamsLocale } from "next-international/server";
 import { TOCItemType } from "fumadocs-core/server";
+import ExternalRedirect from "@/components/external-redirect";
 
 export async function generateStaticParams() {
   return blog.generateParams();
@@ -46,6 +47,10 @@ export default async function Page({
   const post = blog.getPage(slug, locale);
   const posts = blog.getPages(locale);
 
+  // Redirect to external URL if provided
+  if (post?.data.external_url) {
+    return <ExternalRedirect url={post.data.external_url}  />;
+  }
   posts.sort(
     (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
   );

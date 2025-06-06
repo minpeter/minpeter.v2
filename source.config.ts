@@ -27,6 +27,7 @@ export const { docs, meta } = defineDocs({
             return z.NEVER;
           }
         }),
+      external_url: z.string().url().optional(),
     }),
   },
 });

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { cn, formatDate, formatYear } from "@/lib/utils";
+import { ExternalLink } from "lucide-react";
 
 import { useQueryState, parseAsString } from "nuqs";
 import { postMetadataType } from "@/lib/source";
@@ -76,15 +77,23 @@ export function BlogListFallback({
                       key={post.url}
                       className="group/post flex justify-between space-x-4"
                     >
-                      <Link href={post.url}>
-                        <span
-                          className={cn(
-                            itemSytles,
-                            "inline box-decoration-clone px-2 py-1"
-                          )}
-                        >
+                      <Link
+                        href={post.external_url ? post.external_url : post.url}
+                        className={cn(
+                          itemSytles,
+                          "inline-flex items-center gap-1 px-2"
+                        )}
+                        target={post.external_url ? "_blank" : undefined}
+                        rel={
+                          post.external_url ? "noopener noreferrer" : undefined
+                        }
+                      >
+                        <span className="inline box-decoration-clone py-1">
                           {post.title}
                         </span>
+                        {post.external_url && (
+                          <ExternalLink size={16} className="pb-1 opacity-60" />
+                        )}
                       </Link>
 
                       {post.draft ? (
