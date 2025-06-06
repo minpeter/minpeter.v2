@@ -48,7 +48,11 @@ Webpack supports "data:" and "file:" URIs by default. */}
       {/* <Suspense fallback={<BlogSearchFallback />}>
         <BlogSearch lang={locale} />
       </Suspense> */}
-      <Suspense fallback={<BlogListFallback query={query} posts={posts} />}>
+      <Suspense
+        fallback={
+          <BlogListFallback query={query} posts={posts} lang={locale} />
+        }
+      >
         <BlogList posts={posts} lang={locale} />
       </Suspense>
     </section>
