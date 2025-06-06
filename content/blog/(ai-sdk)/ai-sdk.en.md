@@ -1,7 +1,9 @@
 ---
-title: ▲ Vercel AI SDK (en)
+title: ▲ Vercel AI SDK
 description: How to add LLM-based chat functionality to your website
 date: 2024-09-23
+lang:
+  - en
 ---
 
 ## Overview

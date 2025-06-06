@@ -28,6 +28,10 @@ export const { docs, meta } = defineDocs({
           }
         }),
       external_url: z.string().url().optional(),
+      lang: z
+        .array(z.enum(["ko", "en"]))
+        .optional()
+        .default(["ko"]),
     }),
   },
 });

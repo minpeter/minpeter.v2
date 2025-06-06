@@ -15,23 +15,23 @@ export function BlogList({
   lang: string;
   posts: postMetadataType[];
 }) {
-  const [query] = useQueryState(
-    "q",
-    parseAsString.withDefault(lang == "en" ? "(en)" : "")
-  );
-
-  return <BlogListFallback posts={posts} query={query} />;
+  const [query] = useQueryState("q", parseAsString.withDefault(""));
+  return <BlogListFallback posts={posts} query={query} lang={lang} />;
 }
 
 export function BlogListFallback({
   posts,
   query,
+  lang,
 }: {
   posts: postMetadataType[];
   query: string;
+  lang: string;
 }) {
-  const filteredPosts = posts.filter((post: postMetadataType) =>
-    post.title?.toLowerCase().includes(query.toLowerCase())
+  // first filter by language metadata, then by title query
+  const byLang = posts.filter((post) => post.lang.includes(lang));
+  const filteredPosts = byLang.filter((post) =>
+    post.title.toLowerCase().includes(query.toLowerCase())
   );
   const yearList = filteredPosts.reduce(
     (acc: Record<string, postMetadataType[]>, post) => {
@@ -52,7 +52,7 @@ export function BlogListFallback({
 
   return (
     <div data-animate data-animate-speed="slow" className="group/list">
-      {posts.length === 0 ? (
+      {filteredPosts.length === 0 ? (
         <div className="py-8 text-center">
           <p>검색 결과가 없습니다 :/</p>
         </div>
@@ -79,21 +79,26 @@ export function BlogListFallback({
                     >
                       <Link
                         href={post.external_url ? post.external_url : post.url}
-                        className={cn(
-                          itemSytles,
-                          "inline-flex items-center gap-1 px-2"
-                        )}
+                        className={cn(itemSytles, "inline-flex items-center")}
                         target={post.external_url ? "_blank" : undefined}
                         rel={
                           post.external_url ? "noopener noreferrer" : undefined
                         }
                       >
-                        <span className="inline box-decoration-clone py-1">
+                        <span
+                          className={cn(
+                            "inline box-decoration-clone px-1 py-1",
+                            itemSytles
+                          )}
+                        >
                           {post.title}
+                          {post.external_url && (
+                            <ExternalLink
+                              size={16}
+                              className="ml-1 inline-block pb-1 opacity-60"
+                            />
+                          )}
                         </span>
-                        {post.external_url && (
-                          <ExternalLink size={16} className="pb-1 opacity-60" />
-                        )}
                       </Link>
 
                       {post.draft ? (

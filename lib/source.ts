@@ -20,6 +20,7 @@ export type postMetadataType = {
   draft: boolean;
   date: Date;
   external_url?: string;
+  lang: string[];
 };
 
 export function getPostMetadata(post: blogType): postMetadataType {
@@ -32,6 +33,7 @@ export function getPostMetadata(post: blogType): postMetadataType {
       draft: false,
       date: new Date(),
       external_url: undefined,
+      lang: ["ko"],
     };
   }
 
@@ -41,6 +43,7 @@ export function getPostMetadata(post: blogType): postMetadataType {
     draft: post.data.draft,
     date: post.data.date,
     external_url: (post.data as any).external_url,
+    lang: (post.data as any).lang || ["ko"],
   };
 }
 
