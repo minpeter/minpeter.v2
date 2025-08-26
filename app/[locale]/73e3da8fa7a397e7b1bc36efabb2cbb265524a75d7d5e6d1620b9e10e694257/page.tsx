@@ -4,9 +4,9 @@ import type { Route } from "next";
 export default async function Page({
   params,
 }: {
-  params: Promise<{ locale: "ko" | "en" }>;
+  params: { locale: "ko" | "en" };
 }) {
-  const { locale } = await params;
+  const { locale } = params;
   return (
     <section className="flex flex-col gap-1">
       <div data-animate data-animate-speed="fast">

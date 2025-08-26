@@ -4,9 +4,9 @@ import type { Route } from "next";
 export default async function Page({
   params,
 }: {
-  params: Promise<{ locale: "ko" | "en" }>;
+  params: { locale: "ko" | "en" };
 }) {
-  const { locale } = await params;
+  const { locale } = params;
   return (
     <section className="flex flex-col gap-8">
       <Header

@@ -4,9 +4,9 @@ import type { Route } from "next";
 export default async function NotFound({
   params,
 }: {
-  params: Promise<{ locale: "ko" | "en" }>;
+  params?: { locale: "ko" | "en" };
 }) {
-  const { locale } = await params;
+  const locale = params?.locale ?? "ko";
   return (
     <section>
       <Header

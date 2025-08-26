@@ -17,16 +17,26 @@ import { setStaticParamsLocale } from "next-international/server";
 import { TOCItemType } from "fumadocs-core/server";
 import ExternalRedirect from "@/components/external-redirect";
 
-export async function generateStaticParams() {
-  return blog.generateParams();
+export async function generateStaticParams(
+  _props: { params: { locale: string; slug: string[] } }
+) {
+  const locales = ["ko", "en"] as const;
+  const params: { locale: "ko" | "en"; slug: string[] }[] = [];
+  for (const locale of locales) {
+    const pages = blog.getPages(locale);
+    for (const page of pages) {
+      params.push({ locale, slug: page.slugs });
+    }
+  }
+  return params;
 }
 
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ locale: string; slug: string[] }>;
+  params: { locale: string; slug: string[] };
 }) {
-  const { locale, slug } = await params;
+  const { locale, slug } = params;
   const page = blog.getPage(slug, locale);
   if (!page) notFound();
 
@@ -39,9 +49,9 @@ export async function generateMetadata({
 export default async function Page({
   params,
 }: {
-  params: Promise<{ locale: string; slug: string[] }>;
+  params: { locale: string; slug: string[] };
 }) {
-  const { locale, slug } = await params;
+  const { locale, slug } = params;
   setStaticParamsLocale(locale);
   const t = await getI18n();
 
