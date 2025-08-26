@@ -46,7 +46,7 @@ export default async function RootLayout({
   params: Promise<{ locale: string }>;
   children: React.ReactNode;
 }) {
-  const { locale } = await Promise.resolve((params as any) ?? { locale: "ko" });
+  const { locale } = await params;
   const shouldInjectToolbar = process.env.NODE_ENV === "development";
 
   return (
