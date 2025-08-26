@@ -8,6 +8,7 @@ import { setStaticParamsLocale } from "next-international/server";
 // import { BlogSearch, BlogSearchFallback } from "./search";
 import { createLoader, parseAsString, SearchParams } from "nuqs/server";
 import { blog, getPostsMetadata } from "@/lib/source";
+import type { Route } from "next";
 
 export const metadata = NewMetadata({
   title: "minpeter | blog",
@@ -40,7 +41,7 @@ export default async function Page({
       <Header
         title={t("blogPageTitle")}
         description={t("blogPageDescription")}
-        link={{ href: "/", text: t("backToHome") }}
+        link={{ href: `/${locale}` as Route, text: t("backToHome") }}
       />
       {/* FIXME: node:fs
 Module build failed: UnhandledSchemeError: Reading from "node:fs" is not handled by plugins (Unhandled scheme).

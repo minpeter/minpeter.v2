@@ -4,6 +4,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { nextSentencesGenerator } from "./action";
 import Header from "@/components/header";
 import { useCurrentLocale, useI18n } from "@/locales/client";
+import type { Route } from "next";
 
 // Add utility function to check Korean characters
 const isKorean = (char: string) => {
@@ -314,7 +315,7 @@ export default function Page() {
       <Header
         title="Peter's Typing practice"
         description={t("typingDescription")}
-        link={{ href: "/", text: t("backToHome") }}
+        link={{ href: `/${locale}` as Route, text: t("backToHome") }}
       />
       <div
         className="relative flex flex-col items-center justify-center gap-4 p-4"

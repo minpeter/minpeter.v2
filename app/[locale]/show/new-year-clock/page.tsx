@@ -1,15 +1,18 @@
 "use client";
 
 import Header from "@/components/header";
+import { useCurrentLocale } from "@/locales/client";
 
 import { useEffect, useState } from "react";
+import type { Route } from "next";
 
 export default function Page() {
+  const locale = useCurrentLocale();
   return (
     <section className="flex flex-col gap-3">
       <Header
         title="/show/new-year-clock"
-        link={{ href: "/show", text: "Back" }}
+        link={{ href: `/${locale}/show` as Route, text: "Back" }}
         description="Countdown to the next year"
       />
 

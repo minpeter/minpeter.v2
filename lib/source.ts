@@ -42,8 +42,17 @@ export function getPostMetadata(post: blogType): postMetadataType {
     title: post.data.title,
     draft: post.data.draft,
     date: post.data.date,
-    external_url: (post.data as any).external_url,
-    lang: (post.data as any).lang || ["ko"],
+    // Safely extract optional fields from dynamic MDX frontmatter
+    external_url: (() => {
+      const data = post.data as unknown as Record<string, unknown>;
+      return typeof data.external_url === "string" ? data.external_url : undefined;
+    })(),
+    lang: (() => {
+      const data = post.data as unknown as Record<string, unknown>;
+      return Array.isArray(data.lang) && data.lang.every((v) => typeof v === "string")
+        ? (data.lang as string[])
+        : ["ko"];
+    })(),
   };
 }
 

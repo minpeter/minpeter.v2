@@ -1,6 +1,7 @@
 import Header from "@/components/header";
 import { getI18n } from "@/locales/server";
 import Link from "next/link";
+import type { Route } from "next";
 
 import { setStaticParamsLocale } from "next-international/server";
 
@@ -29,34 +30,52 @@ export default async function Page({
       <Header
         title="showcase"
         description="Just things I did"
-        link={{ href: "/", text: t("backToHome") }}
+        link={{ href: `/${locale}` as Route, text: t("backToHome") }}
       />
       <div
         data-animate
         data-animate-speed="fast"
         className="flex flex-col gap-2"
       >
-        <Link href="/show/yet-another-tempfiles" className="underline">
+        <Link
+          href={`/${locale}/show/yet-another-tempfiles` as Route}
+          className="underline"
+        >
           /show/yet-another-tempfiles
         </Link>
 
-        <Link href="/show/tech-stack-ball" className="underline">
+        <Link
+          href={`/${locale}/show/tech-stack-ball` as Route}
+          className="underline"
+        >
           /show/tech-stack-ball
         </Link>
 
-        <Link href="/show/dynamic-hacked-text" className="underline">
+        <Link
+          href={`/${locale}/show/dynamic-hacked-text` as Route}
+          className="underline"
+        >
           /show/dynamic-hacked-text
         </Link>
 
-        <Link href="/show/new-year-clock" className="underline">
+        <Link
+          href={`/${locale}/show/new-year-clock` as Route}
+          className="underline"
+        >
           /show/new-year-clock
         </Link>
 
-        <Link href="/show/model-card-artwork" className="underline">
+        <Link
+          href={`/${locale}/show/model-card-artwork` as Route}
+          className="underline"
+        >
           /show/model-card-artwork
         </Link>
 
-        <Link href="/show/unstructured" className="underline">
+        <Link
+          href={`/${locale}/show/unstructured` as Route}
+          className="underline"
+        >
           /show/unstructured
         </Link>
 
