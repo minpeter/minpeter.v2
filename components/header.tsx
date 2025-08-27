@@ -3,12 +3,13 @@
 import { Backlink } from "./link";
 import { useChangeLocale, useCurrentLocale } from "@/locales/client";
 import { cn } from "@/lib/utils";
+import type { Route } from "next";
 
 type HeaderProps = {
   title?: string;
   description?: string;
   link?: {
-    href: string;
+    href: Route;
     text: string;
   };
 };
