@@ -25,11 +25,11 @@ export default async function Page({
   params,
   searchParams,
 }: {
-  params: { locale: string };
+  params: Promise<{ locale: "ko" | "en" }>;
   searchParams: SearchParams;
 }) {
-  const { locale } = params;
-  const { q: query } = await loadSearchParams(searchParams);
+  const { locale } = await params;
+  const { q: query } = loadSearchParams(searchParams);
 
   const posts = getPostsMetadata(blog.getPages(locale));
 

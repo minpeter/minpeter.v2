@@ -17,10 +17,12 @@ import { setStaticParamsLocale } from "next-international/server";
 import { TOCItemType } from "fumadocs-core/server";
 import ExternalRedirect from "@/components/external-redirect";
 
-export async function generateStaticParams(
-  { params }: { params: { locale: string; slug: string[] } }
-) {
-  const locale = params.locale as "ko" | "en";
+export async function generateStaticParams({
+  params,
+}: {
+  params: { locale: string; slug: string[] };
+}) {
+  const { locale } = params;
   const pages = blog.getPages(locale);
   return pages.map((page) => ({ slug: page.slugs }));
 }
@@ -54,7 +56,7 @@ export default async function Page({
 
   // Redirect to external URL if provided
   if (post?.data.external_url) {
-    return <ExternalRedirect url={post.data.external_url}  />;
+    return <ExternalRedirect url={post.data.external_url} />;
   }
   posts.sort(
     (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
@@ -190,7 +192,9 @@ export default async function Page({
         <div className="flex justify-between">
           {postsIndex[post.slugs.join("/")].previous ? (
             <Link
-              href={`${postsIndex[post.slugs.join("/")].previous?.url}` as Route}
+              href={
+                `${postsIndex[post.slugs.join("/")].previous?.url}` as Route
+              }
               className="text-primary hover:bg-secondary/100 rounded-md px-2 py-1"
             >
               ← {postsIndex[post.slugs.join("/")].previous?.data.title}

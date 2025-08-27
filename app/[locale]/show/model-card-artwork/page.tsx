@@ -7,9 +7,9 @@ import type { Route } from "next";
 export default async function Page({
   params,
 }: {
-  params: { locale: "ko" | "en" };
+  params: Promise<{ locale: "ko" | "en" }>;
 }) {
-  const { locale } = params;
+  const { locale } = await params;
   return (
     <section className="flex flex-col gap-3">
       <Header
