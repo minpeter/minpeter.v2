@@ -75,7 +75,7 @@ export default function Page() {
                 icon: <CodeIcon className="h-4 w-4" />,
                 external: true,
               },
-            ].map((item) => (
+            ].map((item) =>
               item.external ? (
                 <a
                   key={item.href}
@@ -90,21 +90,25 @@ export default function Page() {
                   <div className="absolute top-3 right-3 flex items-center gap-1.5">
                     <ExternalLinkIcon className="h-3 w-3" />
                   </div>
-                  <span className="mt-auto self-start text-sm">{item.text}</span>
+                  <span className="mt-auto self-start text-sm">
+                    {item.text}
+                  </span>
                 </a>
               ) : (
                 <Link
                   key={item.href}
-                  href={`/${locale}/typing` as Route}
+                  href={`/${locale}${item.href}` as Route}
                   className="relative flex aspect-square flex-col rounded-xl bg-black/5 p-3 transition-colors duration-200 hover:bg-black/10 dark:bg-white/5 dark:hover:bg-white/10"
                 >
                   <div className="absolute top-3 left-3 flex items-center gap-1.5">
                     {item.icon}
                   </div>
-                  <span className="mt-auto self-start text-sm">{item.text}</span>
+                  <span className="mt-auto self-start text-sm">
+                    {item.text}
+                  </span>
                 </Link>
               )
-            ))}
+            )}
 
             <div className="gap-2">
               <CarouselImage />
