@@ -40,7 +40,7 @@ export default async function Page({
               <Image
                 src={SaaSComponentImage}
                 alt="SaaS overlay"
-                className="border-border absolute top-[25%] left-[-5%] w-[78%] cursor-pointer rounded-lg border transition duration-300 ease-out group-hover:brightness-105"
+                className="absolute top-[25%] left-[-5%] w-[78%] cursor-pointer rounded-lg border-2 border-neutral-200 transition duration-300 ease-out group-hover:brightness-105"
               />
             </Link>
           </div>
