@@ -295,3 +295,10 @@
 [data-animate] > *:nth-child(n + 18) {
   --lv-wait: 17;
 }
+
+@layer base {
+  img {
+    -webkit-user-drag: none;
+    user-select: none;
+  }
+}
