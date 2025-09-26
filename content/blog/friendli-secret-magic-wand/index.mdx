@@ -1,0 +1,98 @@
+---
+title: 프렌들리의 비밀 마법 지팡이 (함수 호출과 리즈닝)
+date: 2025-09-26 23:01:09 +0900
+tags:
+  - friendli
+  - dedicated endpoints
+  - tool calling
+draft: true
+---
+
+WIP (about ocra-config-wand)
+
+Friendli Dedicated Endpoints에서 함수 호출 가능한 모델 배포 하는 법
+
+1. [ ] 모델 선택
+2. [ ] create page 사용법
+3. [ ] 배포 이후 overview
+4. [ ] API 호출을 통한 함수 호출 검증
+
+안되는 모델에 대한 이야기 (like deepseek r1 0528)
+
+1. [ ] 안되는 케이스 소개 (이미지와 함께)
+2. [ ] 왜 안되는지 간략히 설명
+3. [ ] ocra-config-wand의 동작 방식
+
+이를 해결하는 방법 (custom chat template)
+
+1. [ ] 어떻게 non tool call chat template를 tool call chat template으로 수정하는지 (무엇이 중요한지)
+2. [ ] 수정 예시와 함께 설명
+3. [ ] 엔드포인트 생성시 탬플릿 커스터마이징 하는 방법
+4. [ ] 배포 후 차이 확인하기
+
+[ ] wrap up
+
+
+-----
+
+FriendliAI의 완전관리형 모델 서빙 제품인 Friendli Dedicated Endpoints는 안정적이고 편리한 모델 서빙을 지원하며, 여러 기능 중 하나로 함수 호출 설정이 자동으로 감지·활성화되는 기능을 제공한다.
+
+예를 들어, `Qwen/Qwen3-30B-A3B` 모델의 경우 아래 순서에 따라서 배포를 진행한 경우 자동으로 함수 호출이 가능한 엔드포인트가 배포되게 된다.
+
+1. 모델 선택 후 Features > Tool call: Supported 확인
+![](./images/qwen3-native-toolcall.png)
+
+2. 배포 후 Endpoint Overview에서 Endpoint ID 확인 (e.g., `dep0hyjaasjus3o`)
+![](./images/native-endpoint-overview.png)
+
+3. [`FRIENDLI_TOKEN`](https://friendli.ai/suite/setting/tokens)발급 후 API 요청으로 테스트 (강조된 부분을 주의하여 본인의 값으로 수정)
+```text
+curl https://api.friendli.ai/dedicated/v1/chat/completions \
+  -H "Content-Type: application/json" \
+// [!code highlight:1]
+  -H "Authorization: Bearer $FRIENDLI_TOKEN" \
+  -d '{
+// [!code highlight:1]
+    "model": "dep0hyjaasjus3o",
+    "messages": [
+      {"role": "user", "content": "서울 날씨 알려줘"}
+    ],
+    "tools": [
+      {
+        "type": "function",
+        "function": {
+          "name": "get_weather",
+          "description": "도시의 현재 날씨를 가져옴",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "location": {"type": "string"}
+            },
+            "required": ["location"]
+          }
+        }
+      }
+    ],
+    "tool_choice": "auto"
+  }' | jq .choices[].message
+```
+
+4. 함수 호출 결과 확인
+```json
+{
+  "content": "\n\n",
+  "reasoning_content": "\nOkay, the user is asking for the weather in Seoul. Let me check the tools available. There's a function called get_weather that takes a location parameter. Since the user mentioned \"서울\" which is Seoul, I need to call that function with the location set to Seoul. I should make sure the arguments are correctly formatted in JSON. Alright, the required parameter is location, so I'll structure the tool call accordingly.\n",
+  "role": "assistant",
+// [!code highlight:10]
+  "tool_calls": [
+    {
+      "function": {
+        "arguments": "{\"location\": \"서울\"}",
+        "name": "get_weather"
+      },
+      "id": "call_XIl0NYYMh9jRLhUdhF2OtTjE",
+      "type": "function"
+    }
+  ]
+}
+```

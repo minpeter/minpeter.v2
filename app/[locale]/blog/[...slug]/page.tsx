@@ -145,6 +145,8 @@ export default async function Page({
                 }
                 return (
                   <a
+                    target="_blank"
+                    rel="noopener noreferrer"
                     href={h}
                     className="text-primary hover:bg-secondary/100 rounded-md px-2 py-1"
                     {...rest}
