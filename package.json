@@ -11,12 +11,12 @@
     "postbuild": "next-sitemap",
     "check:prettier": "prettier --check .",
     "check:eslint": "eslint .",
+    "precheck:type": "next typegen",
+    "check:type": "tsc --noEmit",
     "check": "run-p check:**",
     "fmt:prettier": "prettier --write .",
     "fmt:eslint": "eslint --fix .",
-    "fmt": "run-p fmt:**",
-    "pretypecheck": "next typegen",
-    "typecheck": "tsc --noEmit"
+    "fmt": "run-p fmt:**"
   },
   "dependencies": {
     "@flags-sdk/statsig": "^0.2.2",
