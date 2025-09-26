@@ -7,6 +7,7 @@ import NewMetadata from "@/lib/metadata";
 import Header from "@/components/header";
 import { cn, formatDateLong } from "@/lib/utils";
 import Link from "next/link";
+import type { Route } from "next";
 
 import { Tab, Tabs } from "fumadocs-ui/components/tabs";
 import { ImageZoom } from "fumadocs-ui/components/image-zoom";
@@ -16,8 +17,14 @@ import { setStaticParamsLocale } from "next-international/server";
 import { TOCItemType } from "fumadocs-core/server";
 import ExternalRedirect from "@/components/external-redirect";
 
-export async function generateStaticParams() {
-  return blog.generateParams();
+export async function generateStaticParams({
+  params,
+}: {
+  params: { locale: string; slug: string[] };
+}) {
+  const { locale } = params;
+  const pages = blog.getPages(locale);
+  return pages.map((page) => ({ slug: page.slugs }));
 }
 
 export async function generateMetadata({
@@ -49,7 +56,7 @@ export default async function Page({
 
   // Redirect to external URL if provided
   if (post?.data.external_url) {
-    return <ExternalRedirect url={post.data.external_url}  />;
+    return <ExternalRedirect url={post.data.external_url} />;
   }
   posts.sort(
     (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
@@ -85,7 +92,7 @@ export default async function Page({
             ? formatDateLong(post.data.date)
             : post.data.description
         }
-        link={{ href: `/blog`, text: t("backToBlog") }}
+        link={{ href: `/${locale}/blog` as Route, text: t("backToBlog") }}
       />
 
       <aside className="fixed top-36 left-8 hidden w-72 2xl:block">
@@ -124,14 +131,26 @@ export default async function Page({
               Callout,
               a: (props) => {
                 const { href, children, ...rest } = props;
+                const h = href as string | undefined;
+                if (h && h.startsWith("/") && !h.startsWith("//")) {
+                  return (
+                    <Link
+                      href={h as Route}
+                      className="text-primary hover:bg-secondary/100 rounded-md px-2 py-1"
+                      {...(rest as Record<string, unknown>)}
+                    >
+                      {children}
+                    </Link>
+                  );
+                }
                 return (
-                  <Link
-                    href={href}
+                  <a
+                    href={h}
                     className="text-primary hover:bg-secondary/100 rounded-md px-2 py-1"
                     {...rest}
                   >
                     {children}
-                  </Link>
+                  </a>
                 );
               },
             }}
@@ -173,7 +192,9 @@ export default async function Page({
         <div className="flex justify-between">
           {postsIndex[post.slugs.join("/")].previous ? (
             <Link
-              href={`${postsIndex[post.slugs.join("/")].previous?.url}`}
+              href={
+                `${postsIndex[post.slugs.join("/")].previous?.url}` as Route
+              }
               className="text-primary hover:bg-secondary/100 rounded-md px-2 py-1"
             >
               ← {postsIndex[post.slugs.join("/")].previous?.data.title}
@@ -184,7 +205,7 @@ export default async function Page({
 
           {postsIndex[post.slugs.join("/")].next && (
             <Link
-              href={`${postsIndex[post.slugs.join("/")].next?.url}`}
+              href={`${postsIndex[post.slugs.join("/")].next?.url}` as Route}
               className="text-primary hover:bg-secondary/100 rounded-md px-2 py-1"
             >
               {postsIndex[post.slugs.join("/")].next?.data.title} →

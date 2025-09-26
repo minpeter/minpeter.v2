@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import type { Route } from "next";
 import { cn, formatDate, formatYear } from "@/lib/utils";
 import { ExternalLink } from "lucide-react";
 
@@ -25,13 +26,13 @@ export function BlogListFallback({
   lang,
 }: {
   posts: postMetadataType[];
-  query: string;
+  query: string | null;
   lang: string;
 }) {
   // first filter by language metadata, then by title query
   const byLang = posts.filter((post) => post.lang.includes(lang));
   const filteredPosts = byLang.filter((post) =>
-    post.title.toLowerCase().includes(query.toLowerCase())
+    post.title.toLowerCase().includes((query || "").toLowerCase())
   );
   const yearList = filteredPosts.reduce(
     (acc: Record<string, postMetadataType[]>, post) => {
@@ -77,29 +78,41 @@ export function BlogListFallback({
                       key={post.url}
                       className="group/post flex justify-between space-x-4"
                     >
-                      <Link
-                        href={post.external_url ? post.external_url : post.url}
-                        className={cn(itemSytles, "inline-flex items-center")}
-                        target={post.external_url ? "_blank" : undefined}
-                        rel={
-                          post.external_url ? "noopener noreferrer" : undefined
-                        }
-                      >
-                        <span
-                          className={cn(
-                            "inline box-decoration-clone px-1 py-1",
-                            itemSytles
-                          )}
+                      {post.external_url ? (
+                        <a
+                          href={post.external_url}
+                          className={cn(itemSytles, "inline-flex items-center")}
+                          target="_blank"
+                          rel="noopener noreferrer"
                         >
-                          {post.title}
-                          {post.external_url && (
+                          <span
+                            className={cn(
+                              "inline box-decoration-clone px-1 py-1",
+                              itemSytles
+                            )}
+                          >
+                            {post.title}
                             <ExternalLink
                               size={16}
                               className="ml-1 inline-block pb-1 opacity-60"
                             />
-                          )}
-                        </span>
-                      </Link>
+                          </span>
+                        </a>
+                      ) : (
+                        <Link
+                          href={post.url as Route}
+                          className={cn(itemSytles, "inline-flex items-center")}
+                        >
+                          <span
+                            className={cn(
+                              "inline box-decoration-clone px-1 py-1",
+                              itemSytles
+                            )}
+                          >
+                            {post.title}
+                          </span>
+                        </Link>
+                      )}
 
                       {post.draft ? (
                         <Badge variant="secondary">Draft</Badge>

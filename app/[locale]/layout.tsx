@@ -6,7 +6,7 @@ import { VercelToolbar } from "@vercel/toolbar/next";
 import { RootProvider } from "fumadocs-ui/provider";
 import { NuqsAdapter } from "nuqs/adapters/next";
 import localFont from "next/font/local";
-import { I18nProvider } from "fumadocs-ui/i18n";
+import { NextProvider } from "fumadocs-core/framework/next";
 
 import Footer from "@/components/footer";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -57,14 +57,14 @@ export default async function RootLayout({
     >
       <body>
         <I18nProviderClient locale={locale}>
-          <I18nProvider locale={locale}>
+          <NextProvider>
             <ThemeProvider
               attribute="class"
               defaultTheme="dark"
               enableSystem
               disableTransitionOnChange
             >
-              <RootProvider>
+              <RootProvider i18n={{ locale }}>
                 <NuqsAdapter>
                   <main className="relative mx-auto min-h-screen w-full max-w-3xl px-4 py-24">
                     <div className="from-background pointer-events-none fixed inset-x-0 top-0 z-10 h-24 bg-linear-to-b to-transparent" />
@@ -76,7 +76,7 @@ export default async function RootLayout({
                 </NuqsAdapter>
               </RootProvider>
             </ThemeProvider>
-          </I18nProvider>
+          </NextProvider>
         </I18nProviderClient>
       </body>
       <Analytics />

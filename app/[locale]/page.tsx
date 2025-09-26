@@ -16,7 +16,7 @@ import {
   CarouselItem,
 } from "@/components/ui/carousel";
 
-import { useI18n } from "@/locales/client";
+import { useCurrentLocale, useI18n } from "@/locales/client";
 
 import Header from "@/components/header";
 import {
@@ -31,6 +31,7 @@ import Link from "next/link";
 import dynamic from "next/dynamic";
 
 import { Skeleton } from "@/components/ui/skeleton";
+import type { Route } from "next";
 
 const Lickitung = dynamic(() => import("@/components/Lickitung"));
 
@@ -38,6 +39,7 @@ import { cn } from "@/lib/utils";
 
 export default function Page() {
   const t = useI18n();
+  const locale = useCurrentLocale();
 
   return (
     <section className="flex flex-col gap-3">
@@ -53,7 +55,7 @@ export default function Page() {
           className="grid w-full grid-cols-1 gap-2 lg:grid-cols-2"
         >
           <Link
-            href="/blog"
+            href={`/${locale}/blog` as Route}
             className="lg:square flex h-40 flex-col justify-between rounded-xl bg-black/5 p-5 transition-colors duration-200 hover:bg-black/10 lg:h-auto dark:bg-white/5 dark:hover:bg-white/10"
           >
             <span className="text-lg font-medium">{t("blogTitle")}</span>
@@ -73,25 +75,40 @@ export default function Page() {
                 icon: <CodeIcon className="h-4 w-4" />,
                 external: true,
               },
-            ].map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                target={item.external ? "_blank" : undefined}
-                className="relative flex aspect-square flex-col rounded-xl bg-black/5 p-3 transition-colors duration-200 hover:bg-black/10 dark:bg-white/5 dark:hover:bg-white/10"
-              >
-                <div className="absolute top-3 left-3 flex items-center gap-1.5">
-                  {item.icon}
-                </div>
-
-                {item.external && (
+            ].map((item) =>
+              item.external ? (
+                <a
+                  key={item.href}
+                  href={item.href}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="relative flex aspect-square flex-col rounded-xl bg-black/5 p-3 transition-colors duration-200 hover:bg-black/10 dark:bg-white/5 dark:hover:bg-white/10"
+                >
+                  <div className="absolute top-3 left-3 flex items-center gap-1.5">
+                    {item.icon}
+                  </div>
                   <div className="absolute top-3 right-3 flex items-center gap-1.5">
                     <ExternalLinkIcon className="h-3 w-3" />
                   </div>
-                )}
-                <span className="mt-auto self-start text-sm">{item.text}</span>
-              </Link>
-            ))}
+                  <span className="mt-auto self-start text-sm">
+                    {item.text}
+                  </span>
+                </a>
+              ) : (
+                <Link
+                  key={item.href}
+                  href={`/${locale}${item.href}` as Route}
+                  className="relative flex aspect-square flex-col rounded-xl bg-black/5 p-3 transition-colors duration-200 hover:bg-black/10 dark:bg-white/5 dark:hover:bg-white/10"
+                >
+                  <div className="absolute top-3 left-3 flex items-center gap-1.5">
+                    {item.icon}
+                  </div>
+                  <span className="mt-auto self-start text-sm">
+                    {item.text}
+                  </span>
+                </Link>
+              )
+            )}
 
             <div className="gap-2">
               <CarouselImage />
@@ -112,7 +129,7 @@ export default function Page() {
                   icon: <LinkedInLogoIcon className="h-4 w-4" />,
                 },
               ].map((item) => (
-                <Link
+                <a
                   aria-label={`social link to ${item.href}`}
                   key={item.href}
                   href={item.href}
@@ -121,13 +138,13 @@ export default function Page() {
                   className="flex aspect-square items-center justify-center rounded-xl bg-black/5 p-3 transition-colors duration-200 hover:bg-black/10 dark:bg-white/5 dark:hover:bg-white/10"
                 >
                   <div className="flex items-center gap-1.5">{item.icon}</div>
-                </Link>
+                </a>
               ))}
 
               <Link
                 aria-label="Project Showcase Link"
                 className="col-span-3"
-                href={"/show"}
+                href={`/${locale}/show` as Route}
               >
                 <Suspense
                   fallback={<Skeleton className="aspect-3/2 h-full w-full" />}

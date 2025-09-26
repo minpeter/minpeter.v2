@@ -1,11 +1,17 @@
 import Header from "@/components/header";
+import type { Route } from "next";
 
-export default function Page() {
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ locale: "ko" | "en" }>;
+}) {
+  const { locale } = await params;
   return (
     <section className="flex flex-col gap-8">
       <Header
         title="/show/unstructured"
-        link={{ href: "/show", text: "Back" }}
+        link={{ href: `/${locale}/show` as Route, text: "Back" }}
         description="unstructured"
       />
 
