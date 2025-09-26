@@ -1,4 +1,3 @@
-
 import Link from "next/link";
 import type { Route } from "next";
 import { ArrowTopLeftIcon } from "@radix-ui/react-icons";
