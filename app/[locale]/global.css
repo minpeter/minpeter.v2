@@ -9,10 +9,6 @@
 
 @custom-variant dark (&:is(.dark *));
 
-@theme inline {
-  --font-arita: var(--font-arita);
-}
-
 @theme {
 
   --radius-lg: var(--radius);
@@ -96,7 +92,6 @@
 
   html {
     scroll-behavior: smooth;
-    font-family: var(--font-arita);
   }
 
   :root {

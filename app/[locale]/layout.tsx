@@ -43,7 +43,7 @@ export default async function RootLayout({
       lang={locale ? locale : "ko"}
       suppressHydrationWarning
     >
-      <body className={cn(AritaBuriLocalFont.variable, "font-arita antialiased")}>
+      <body className={cn(AritaBuriLocalFont.className, "antialiased")}>
       <I18nProviderClient locale={locale}>
           <NextProvider>
             <ThemeProvider
