@@ -335,3 +335,326 @@ FDE에서는 chat template를 기반으로 tool call type를 자동으로 감지
   </Tab>
 </Tabs>
 
+이렇게 함수 호출이 제거된 순수한 버전의 chat template를 생성한 후, 다시 tool call 관련된 랜더링 로직을 추가하는데, 이때 사용하는 로직은 엔진에서 지원하는 tool call format을 기반으로 하면 된다.
+
+여러가지 유형이 있지만, 그 중 가장 일반적인 [Hermes Function Calling Standard](https://github.com/NousResearch/Hermes-Function-Calling) 포맷 등을 사용하면 된다.
+
+
+<Tabs items={[
+  "gemma-3-27b-it",
+  "GLM-4.5-Air",
+  "GLM-4.5-Air (diff)",
+]}>
+  <Tab value="gemma-3-27b-it">
+```jinja
+{{- bos_token -}}
+{%- if tools -%}
+	{%- if messages[0]["role"] == "system" -%}
+		{%- if messages[0]["content"] is string -%}
+			{%- set system_content = messages[0]["content"] -%}
+		{%- else -%}
+			{%- set system_content = messages[0]["content"][0]["text"] -%}
+		{%- endif -%}
+		{%- set first_user_prefix = system_content + "\n\n# Tools\n\nYou may call one or more functions to assist with the user query.\n\nYou are provided with function signatures within <tools></tools> XML tags:\n<tools>" -%}
+		{%- for tool in tools -%}
+			{%- set first_user_prefix = first_user_prefix + "\n" + (tool | tojson) -%}
+		{%- endfor -%}
+		{%- set first_user_prefix = first_user_prefix + "\n</tools>\n\nFor each function call, return a json object with function name and arguments within <tool_call></tool_call> XML tags:\n<tool_call>\n{\"name\": <function-name>, \"arguments\": <args-json-object>}\n</tool_call>\n\n" -%}
+		{%- set loop_messages = messages[1:] -%}
+	{%- else -%}
+		{%- set first_user_prefix = "# Tools\n\nYou may call one or more functions to assist with the user query.\n\nYou are provided with function signatures within <tools></tools> XML tags:\n<tools>" -%}
+		{%- for tool in tools -%}
+			{%- set first_user_prefix = first_user_prefix + "\n" + (tool | tojson) -%}
+		{%- endfor -%}
+		{%- set first_user_prefix = first_user_prefix + "\n</tools>\n\nFor each function call, return a json object with function name and arguments within <tool_call></tool_call> XML tags:\n<tool_call>\n{\"name\": <function-name>, \"arguments\": <args-json-object>}\n</tool_call>\n\n" -%}
+		{%- set loop_messages = messages -%}
+	{%- endif -%}
+{%- else -%}
+	{%- if messages[0]["role"] == "system" -%}
+		{%- if messages[0]["content"] is string -%}
+			{%- set first_user_prefix = messages[0]["content"] + "\n\n" -%}
+		{%- else -%}
+			{%- set first_user_prefix = messages[0]["content"][0]["text"] + "\n\n" -%}
+		{%- endif -%}
+		{%- set loop_messages = messages[1:] -%}
+	{%- else -%}
+		{%- set first_user_prefix = "" -%}
+		{%- set loop_messages = messages -%}
+	{%- endif -%}
+{%- endif -%}
+
+{%- for message in loop_messages -%}
+	{%- if message["role"] == "tool" -%}
+		{%- if loop.first or (loop_messages[loop.index0 - 1]["role"] != "tool") -%}
+			{{- "<start_of_turn>user\n" -}}
+		{%- endif -%}
+		{{- "<tool_response>\n" -}}
+		{%- if message["content"] is string -%}
+			{{- message["content"] | trim -}}
+		{%- else -%}
+			{{- message["content"][0]["text"] | trim -}}
+		{%- endif -%}
+		{{- "\n</tool_response>" -}}
+		{%- if loop.last or (loop_messages[loop.index0 + 1]["role"] != "tool") -%}
+			{{- "<end_of_turn>\n" -}}
+		{%- endif -%}
+	{%- elif message["role"] in ["user", "assistant"] -%}
+		{%- if message["role"] == "user" != ((loop.index0 - (loop_messages[:loop.index0] | selectattr("role", "equalto", "tool") | list | length)) % 2 == 0) -%}
+			{{- raise_exception("Conversation roles must alternate user/assistant/user/assistant/... (excluding tool messages)") -}}
+		{%- endif -%}
+		{%- if message["role"] == "assistant" -%}
+			{%- set role = "model" -%}
+		{%- else -%}
+			{%- set role = message["role"] -%}
+		{%- endif -%}
+		{{- "<start_of_turn>" + role + "\n" + (first_user_prefix if loop.first and role == "user" else "") -}}
+		{%- if message["content"] is string -%}
+			{{- message["content"] | trim -}}
+		{%- elif message["content"] is iterable -%}
+			{%- for item in message["content"] -%}
+				{%- if item["type"] == "image" -%}
+					{{- "<start_of_image>" -}}
+				{%- elif item["type"] == "text" -%}
+					{{- item["text"] | trim -}}
+				{%- endif -%}
+			{%- endfor -%}
+		{%- else -%}
+			{{- raise_exception("Invalid content type") -}}
+		{%- endif -%}
+		{%- if message["role"] == "assistant" and message.get("tool_calls") -%}
+			{%- for tool_call in message["tool_calls"] -%}
+				{{- "\n" -}}
+				{%- if tool_call.get("function") -%}
+					{%- set tool_call = tool_call["function"] -%}
+				{%- endif -%}
+				{{- "<tool_call>\n{\"name\": \"" -}}
+				{{- tool_call["name"] -}}
+				{{- "\", \"arguments\": " -}}
+				{%- if tool_call["arguments"] is string -%}
+					{{- tool_call["arguments"] -}}
+				{%- else -%}
+					{{- tool_call["arguments"] | tojson -}}
+				{%- endif -%}
+				{{- "}\n</tool_call>" -}}
+			{%- endfor -%}
+		{%- endif -%}
+		{{- "<end_of_turn>\n" -}}
+	{%- endif -%}
+{%- endfor -%}
+
+{%- if add_generation_prompt -%}
+	{{- "<start_of_turn>model\n" -}}
+{%- endif -%}
+```
+  </Tab>
+  <Tab value="GLM-4.5-Air">
+```jinja
+{{- "[gMASK]<sop>" -}}
+{# --- Tools Definition Block from the new template --- #}
+{%- if tools %}
+    {{- '<|system|>\n' }}
+    {%- if messages[0].role == 'system' %}
+        {{- messages[0].content + '\n\n' }}
+    {%- endif %}
+    {{- "# Tools\n\nYou may call one or more functions to assist with the user query.\n\nYou are provided with function signatures within <tools></tools> XML tags:\n<tools>" }}
+    {%- for tool in tools %}
+        {{- "\n" }}
+        {{- tool | tojson }}
+    {%- endfor %}
+    {{- "\n</tools>\n\nFor each function call, return a json object with function name and arguments within <tool_call></tool_call> XML tags:\n<tool_call>\n{\"name\": <function-name>, \"arguments\": <args-json-object>}\n</tool_call>" }}
+{%- else %}
+    {%- if messages[0].role == 'system' %}
+        {{- '<|system|>\n' + messages[0].content }}
+    {%- endif %}
+{%- endif %}
+
+{# --- Main message loop structure from the original template --- #}
+{%- macro visible_text(content) -%}
+	{%- if content is string -%}
+		{{- content -}}
+	{%- elif content is iterable and content is not mapping -%}
+		{%- for item in content -%}
+			{%- if item is mapping and item.type == "text" -%}
+				{{- item.text -}}
+			{%- elif item is string -%}
+				{{- item -}}
+			{%- endif -%}
+		{%- endfor -%}
+	{%- else -%}
+		{{- content -}}
+	{%- endif -%}
+{%- endmacro -%}
+
+{%- set ns = namespace(last_user_index=-1) -%}
+{%- for m in messages -%}
+	{%- if m.role == "user" -%}
+		{%- set ns.last_user_index = loop.index0 -%}
+	{%- endif -%}
+{%- endfor -%}
+
+{%- for m in messages -%}
+	{%- if m.role == "user" -%}
+		{{- "<|user|>\n" -}}
+		{{- visible_text(m.content) -}}
+		{{- "/nothink" if enable_thinking is defined and not enable_thinking and not visible_text(m.content).endswith("/nothink") else "" -}}
+	{%- elif m.role == "assistant" -%}
+		{{- "<|assistant|>" -}}
+		{%- set reasoning_content = "" -%}
+		{%- set content = visible_text(m.content) -%}
+		{%- if m.reasoning_content is string -%}
+			{%- set reasoning_content = m.reasoning_content -%}
+		{%- elif "</think>" in content -%}
+			{%- set reasoning_content = content.split("</think>")[0].rstrip("\n").split("<think>")[-1].lstrip("\n") -%}
+			{%- set content = content.split("</think>")[-1].lstrip("\n") -%}
+		{%- endif -%}
+		{%- if loop.index0 > ns.last_user_index and reasoning_content -%}
+			{{- "\n<think>" + reasoning_content.strip() + "</think>" -}}
+		{%- else -%}
+			{{- "\n<think></think>" -}}
+		{%- endif -%}
+		{%- if content.strip() -%}
+			{{- "\n" + content.strip() -}}
+		{%- endif -%}
+        {# --- Tool Call Rendering Block from the new template --- #}
+		{%- if m.tool_calls -%}
+			{%- for tool_call in m.tool_calls -%}
+                {%- if (loop.first and content.strip()) or (not loop.first) %}
+                    {{- '\n' }}
+                {%- endif %}
+				{%- if tool_call.function -%}
+					{%- set tool_call = tool_call.function -%}
+				{%- endif %}
+				{{- '<tool_call>\n{"name": "' }}
+				{{- tool_call.name }}
+				{{- '", "arguments": ' }}
+				{%- if tool_call.arguments is string %}
+					{{- tool_call.arguments }}
+				{%- else %}
+					{{- tool_call.arguments | tojson }}
+				{%- endif %}
+				{{- '}\n</tool_call>' }}
+			{%- endfor %}
+		{%- endif -%}
+    {# --- Tool Response Rendering Block from the new template --- #}
+	{%- elif m.role == "tool" -%}
+        {{- '\n<tool_response>\n' }}
+        {{- visible_text(m.content) }}
+        {{- '\n</t' + 'ool_response>' }}
+	{%- elif m.role == "system" and not loop.first -%}
+		{{- "<|system|>\n" -}}
+		{{- visible_text(m.content) -}}
+	{%- endif -%}
+{%- endfor -%}
+
+{# --- Generation prompt from the original template --- #}
+{%- if add_generation_prompt -%}
+	{{- "<|assistant|>" -}}
+	{{- "\n<think></think>" if enable_thinking is defined and not enable_thinking else "" -}}
+{%- endif -%}
+```
+  </Tab>
+  <Tab value="GLM-4.5-Air (diff)">
+```diff
+  {{- "[gMASK]<sop>" -}}
++ {# --- Tools Definition Block from the new template --- #}
++ {%- if tools %}
++     {{- '<|system|>\n' }}
++     {%- if messages[0].role == 'system' %}
++         {{- messages[0].content + '\n\n' }}
++     {%- endif %}
++     {{- "# Tools\n\nYou may call one or more functions to assist with the user query.\n\nYou are provided with function signatures within <tools></tools> XML tags:\n<tools>" }}
++     {%- for tool in tools %}
++         {{- "\n" }}
++         {{- tool | tojson }}
++     {%- endfor %}
++     {{- "\n</tools>\n\nFor each function call, return a json object with function name and arguments within <tool_call></tool_call> XML tags:\n<tool_call>\n{\"name\": <function-name>, \"arguments\": <args-json-object>}\n</tool_call>" }}
++ {%- else %}
++     {%- if messages[0].role == 'system' %}
++         {{- '<|system|>\n' + messages[0].content }}
++     {%- endif %}
++ {%- endif %}
++ 
++ {# --- Main message loop structure from the original template --- #}
+  {%- macro visible_text(content) -%}
+  	{%- if content is string -%}
+  		{{- content -}}
+  	{%- elif content is iterable and content is not mapping -%}
+  		{%- for item in content -%}
+  			{%- if item is mapping and item.type == "text" -%}
+  				{{- item.text -}}
+  			{%- elif item is string -%}
+  				{{- item -}}
+  			{%- endif -%}
+  		{%- endfor -%}
+  	{%- else -%}
+  		{{- content -}}
+  	{%- endif -%}
+  {%- endmacro -%}
+  {%- set ns = namespace(last_user_index=-1) -%}
+  {%- for m in messages -%}
+  	{%- if m.role == "user" -%}
+  		{%- set ns.last_user_index = loop.index0 -%}
+  	{%- endif -%}
+  {%- endfor -%}
+  {%- for m in messages -%}
+  	{%- if m.role == "user" -%}
+  		{{- "<|user|>\n" -}}
+  		{{- visible_text(m.content) -}}
+  		{{- "/nothink" if enable_thinking is defined and not enable_thinking and not visible_text(m.content).endswith("/nothink") else "" -}}
+  	{%- elif m.role == "assistant" -%}
+  		{{- "<|assistant|>" -}}
+  		{%- set reasoning_content = "" -%}
+  		{%- set content = visible_text(m.content) -%}
+  		{%- if m.reasoning_content is string -%}
+  			{%- set reasoning_content = m.reasoning_content -%}
+  		{%- elif "</think>" in content -%}
+  			{%- set reasoning_content = content.split("</think>")[0].rstrip("\n").split("<think>")[-1].lstrip("\n") -%}
+  			{%- set content = content.split("</think>")[-1].lstrip("\n") -%}
+  		{%- endif -%}
+  		{%- if loop.index0 > ns.last_user_index and reasoning_content -%}
+  			{{- "\n<think>" + reasoning_content.strip() + "</think>" -}}
+  		{%- else -%}
+  			{{- "\n<think></think>" -}}
+  		{%- endif -%}
+  		{%- if content.strip() -%}
+  			{{- "\n" + content.strip() -}}
+  		{%- endif -%}
++         {# --- Tool Call Rendering Block from the new template --- #}
++ 		{%- if m.tool_calls -%}
++ 			{%- for tool_call in m.tool_calls -%}
++                 {%- if (loop.first and content.strip()) or (not loop.first) %}
++                     {{- '\n' }}
++                 {%- endif %}
++ 				{%- if tool_call.function -%}
++ 					{%- set tool_call = tool_call.function -%}
++ 				{%- endif %}
++ 				{{- '<tool_call>\n{"name": "' }}
++ 				{{- tool_call.name }}
++ 				{{- '", "arguments": ' }}
++ 				{%- if tool_call.arguments is string %}
++ 					{{- tool_call.arguments }}
++ 				{%- else %}
++ 					{{- tool_call.arguments | tojson }}
++ 				{%- endif %}
++ 				{{- '}\n</tool_call>' }}
++ 			{%- endfor %}
++ 		{%- endif -%}
++     {# --- Tool Response Rendering Block from the new template --- #}
++ 	{%- elif m.role == "tool" -%}
++         {{- '\n<tool_response>\n' }}
++         {{- visible_text(m.content) }}
++         {{- '\n</t' + 'ool_response>' }}
+- 	{%- elif m.role == "system" -%}
++ 	{%- elif m.role == "system" and not loop.first -%}
+  		{{- "<|system|>\n" -}}
+  		{{- visible_text(m.content) -}}
+  	{%- endif -%}
+  {%- endfor -%}
++ {# --- Generation prompt from the original template --- #}
+  {%- if add_generation_prompt -%}
+  	{{- "<|assistant|>" -}}
+  	{{- "\n<think></think>" if enable_thinking is defined and not enable_thinking else "" -}}
+  {%- endif -%}
+```
+</Tab>
+</Tabs>
