@@ -1,6 +1,7 @@
 import Header from "@/components/header";
 import { getI18n } from "@/locales/server";
 import Link from "next/link";
+import type { Route } from "next";
 
 import { setStaticParamsLocale } from "next-international/server";
 
@@ -12,10 +13,19 @@ export const metadata = NewMetadata({
   description: "공들여 만들었지만 사용하지 않는 컴포넌트의 무덤",
 });
 
+const showcasePaths = [
+  "/show/yet-another-tempfiles",
+  "/show/tech-stack-ball",
+  "/show/dynamic-hacked-text",
+  "/show/new-year-clock",
+  "/show/model-card-artwork",
+  "/show/unstructured",
+] as const;
+
 export default async function Page({
   params,
 }: {
-  params: Promise<{ locale: string }>;
+  params: Promise<{ locale: "ko" | "en" }>;
 }) {
   const { locale } = await params;
 
@@ -29,36 +39,22 @@ export default async function Page({
       <Header
         title="showcase"
         description="Just things I did"
-        link={{ href: "/", text: t("backToHome") }}
+        link={{ href: `/${locale}` as Route, text: t("backToHome") }}
       />
       <div
         data-animate
         data-animate-speed="fast"
         className="flex flex-col gap-2"
       >
-        <Link href="/show/yet-another-tempfiles" className="underline">
-          /show/yet-another-tempfiles
-        </Link>
-
-        <Link href="/show/tech-stack-ball" className="underline">
-          /show/tech-stack-ball
-        </Link>
-
-        <Link href="/show/dynamic-hacked-text" className="underline">
-          /show/dynamic-hacked-text
-        </Link>
-
-        <Link href="/show/new-year-clock" className="underline">
-          /show/new-year-clock
-        </Link>
-
-        <Link href="/show/model-card-artwork" className="underline">
-          /show/model-card-artwork
-        </Link>
-
-        <Link href="/show/unstructured" className="underline">
-          /show/unstructured
-        </Link>
+        {showcasePaths.map((path) => (
+          <Link
+            key={path}
+            href={`/${locale}${path}` as Route}
+            className="underline"
+          >
+            {path}
+          </Link>
+        ))}
 
         <div>test_flag is {enabled ? "on" : "off"}</div>
       </div>

@@ -1,13 +1,13 @@
 import Link from "next/link";
-
+import type { Route } from "next";
 import { ArrowTopLeftIcon } from "@radix-ui/react-icons";
 
 export function Backlink({
   text = "plz input text props",
-  href = "/",
+  href,
 }: {
   text: string;
-  href: string;
+  href: Route;
 }) {
   return (
     <Link
