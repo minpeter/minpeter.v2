@@ -2,6 +2,7 @@
   "name": "minpeter.v2",
   "version": "0.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "postinstall": "fumadocs-mdx",
     "dev": "next dev --turbo -p 8200",
