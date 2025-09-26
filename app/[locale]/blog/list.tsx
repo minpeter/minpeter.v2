@@ -26,13 +26,13 @@ export function BlogListFallback({
   lang,
 }: {
   posts: postMetadataType[];
-  query: string;
+  query: string | null;
   lang: string;
 }) {
   // first filter by language metadata, then by title query
   const byLang = posts.filter((post) => post.lang.includes(lang));
   const filteredPosts = byLang.filter((post) =>
-    post.title.toLowerCase().includes(query.toLowerCase())
+    post.title.toLowerCase().includes((query || "").toLowerCase())
   );
   const yearList = filteredPosts.reduce(
     (acc: Record<string, postMetadataType[]>, post) => {
