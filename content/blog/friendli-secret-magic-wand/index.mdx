@@ -19,8 +19,8 @@ Friendli Dedicated Endpoints에서 함수 호출 가능한 모델 배포 하는 
 
 안되는 모델에 대한 이야기 (like deepseek r1 0528)
 
-1. [ ] 안되는 케이스 소개 (이미지와 함께)
-2. [ ] 왜 안되는지 간략히 설명
+1. [X] 안되는 케이스 소개 (이미지와 함께)
+2. [X] 왜 안되는지 간략히 설명
 3. [ ] ocra-config-wand의 동작 방식
 
 이를 해결하는 방법 (custom chat template)
@@ -108,13 +108,253 @@ curl https://api.friendli.ai/dedicated/v1/chat/completions \
 이러한 기능을 이용하다 보면, 일부 모델의 경우 도구 호출이 지원되지 않는다고 표시되는 경우가 있습니다.
 알려진 일반적인 경우는 다음과 같습니다.
 
-1. 해당 모델의 Chat template에 `tool call`를 랜더링 하기 위한 로직이 없는 경우 (e.g., `google/gemma-3-27b-it`)
+1. 해당 모델의 chat template에 `tool call`를 랜더링 하기 위한 로직이 없는 경우 (e.g., `google/gemma-3-27b-it`)
 
-2. 모델에는 문제가 없지만, 엔진에서 지원되지 않는 유형의 도구 호출인 경우 (e.g., `meta-llama/Llama-4-Scout-17B-16E-Instruct`)
-
-
-이러한 이유로 지원되지 않는다고 표시된다고 해서, Dedicated 에서 완전히 도구 호출을 사용하지 못한다는 의미는 아닙니다.
-Chat template과 tool calling에 대한 약간에 이해만 있다면 사용자 정의 Chat template를 이용하여 문제를 해결하거나 우회하여 도구 호출이 가능하도록 엔드포인트를 설정할 수 있습니다.
+2. 모델에는 문제(?)가 없지만, 엔진에서 지원되지 않는 유형의 도구 호출인 경우 (e.g., `meta-llama/Llama-4-Scout-17B-16E-Instruct`)
 
 
+이러한 이유로 지원되지 않는다고 표시된다고 해서, Dedicated 에서 완전히 도구 호출을 사용하지 못한다는 의미는 아닙니다.  
+FDE에서는 chat template를 기반으로 tool call type를 자동으로 감지하고, 설정하기 때문에 chat template과 tool calling에 대한 약간에 이해만 있다면 사용자 정의 chat template를 이용하여 문제를 해결하거나 우회하여 도구 호출이 가능하도록 엔드포인트를 설정할 수 있습니다.
 
+## 이를 해결하는 방법 (custom chat template tip)
+
+이러한 문제를 해결하기 위해 엔진에서 지원하는 형식의 tool call format으로 랜더링을 수행하는 chat template를 모델에 맞게 작성하는 과정을 수행해야합니다.
+
+<Callout type="warn" title="아래에서 설명하는 기능은 고급 기능으로, 의도치 않는 모델 함수 호출 성능 저하를 일으킬 수 있습니다." />
+
+우선, 기존의 모델 chat template를 분석하여, instruct, vision, reasoning를 위한 탬플릿 포맷을 정의합니다.
+`google/gemma-3-27b-it`처럼 기존에 탬플릿에 tool call을 위한 로직이 없는 경우, 그대로 사용하면 됩니다.
+
+<Tabs items={['gemma-3-27b-it', 'Llama-4-Scout-17B-16E-Instruct', 'Llama-4-Scout-17B-16E-Instruct (diff)']}>
+  <Tab value="gemma-3-27b-it">
+```jinja
+{{- bos_token -}}
+{%- if messages[0]["role"] == "system" -%}
+	{%- if messages[0]["content"] is string -%}
+		{%- set first_user_prefix = messages[0]["content"] + "\n\n" -%}
+	{%- else -%}
+		{%- set first_user_prefix = messages[0]["content"][0]["text"] + "\n\n" -%}
+	{%- endif -%}
+	{%- set loop_messages = messages[1:] -%}
+{%- else -%}
+	{%- set first_user_prefix = "" -%}
+	{%- set loop_messages = messages -%}
+{%- endif -%}
+
+{%- for message in loop_messages -%}
+	{%- if message["role"] == "user" != (loop.index0 % 2 == 0) -%}
+		{{- raise_exception("Conversation roles must alternate user/assistant/user/assistant/...") -}}
+	{%- endif -%}
+	{%- if message["role"] == "assistant" -%}
+		{%- set role = "model" -%}
+	{%- else -%}
+		{%- set role = message["role"] -%}
+	{%- endif -%}
+	{{- "<start_of_turn>" + role + "\n" + (first_user_prefix if loop.first else "") -}}
+	{%- if message["content"] is string -%}
+		{{- message["content"] | trim -}}
+	{%- elif message["content"] is iterable -%}
+		{%- for item in message["content"] -%}
+			{%- if item["type"] == "image" -%}
+				{{- "<start_of_image>" -}}
+			{%- elif item["type"] == "text" -%}
+				{{- item["text"] | trim -}}
+			{%- endif -%}
+		{%- endfor -%}
+	{%- else -%}
+		{{- raise_exception("Invalid content type") -}}
+	{%- endif -%}
+	{{- "<end_of_turn>\n" -}}
+{%- endfor -%}
+
+{%- if add_generation_prompt -%}
+	{{- "<start_of_turn>model\n" -}}
+{%- endif -%}
+```
+  </Tab>
+  <Tab value="Llama-4-Scout-17B-16E-Instruct">
+```jinja
+{{- bos_token -}}
+{%- if messages[0]["role"] == "system" -%}
+	{%- if messages[0]["content"] is string -%}
+		{%- set system_message = messages[0]["content"] | trim -%}
+	{%- else -%}
+		{%- set system_message = messages[0]["content"][0]["text"] | trim -%}
+	{%- endif -%}
+	{%- set messages = messages[1:] -%}
+{%- else -%}
+	{%- set system_message = "" -%}
+{%- endif -%}
+
+{%- if system_message -%}
+	{{- "<|header_start|>system<|header_end|>\n\n" -}}
+	{{- system_message -}}
+	{{- "<|eot|>" -}}
+{%- endif -%}
+
+{%- for message in messages -%}
+	{{- "<|header_start|>" + message["role"] + "<|header_end|>\n\n" -}}
+	{%- if message["content"] is string -%}
+		{{- message["content"] -}}
+	{%- else -%}
+		{%- for content in message["content"] -%}
+			{%- if content["type"] == "image" -%}
+				{{- "<|image|>" -}}
+			{%- elif content["type"] == "text" -%}
+				{{- content["text"] | trim -}}
+			{%- endif -%}
+		{%- endfor -%}
+	{%- endif -%}
+	{{- "<|eot|>" -}}
+{%- endfor -%}
+
+{%- if add_generation_prompt -%}
+	{{- "<|header_start|>assistant<|header_end|>\n\n" -}}
+{%- endif -%}
+```
+  </Tab>
+  <Tab value="Llama-4-Scout-17B-16E-Instruct (diff)">
+```diff
+  {{- bos_token -}}
+- {%- if custom_tools is defined and custom_tools -%}
+- 	{%- set tools = custom_tools -%}
+- {%- endif -%}
+- {%- if tools is defined and tools -%}
+- 	{%- set tool_definition = tool_definition ~ tools | tojson(indent=4) -%}
+- {%- else -%}
+- 	{%- set tools = none -%}
+- {%- endif -%}
+- {#  This block extracts the system message, so we can slot it into the right place.  #}
+- {%- if messages[0]["role"] == "system" -%}
+- 	{%- set user_provided_system_message = true -%}
+- 	{%- if messages[0]["content"] is string -%}
+- 		{%- set system_message = messages[0]["content"] | trim -%}
+- 	{%- else -%}
+- 		{%- set system_message = messages[0]["content"][0]["text"] | trim -%}
+- 	{%- endif -%}
+- 	{%- set messages = messages[1:] -%}
+- {%- elif tools is not none -%}
+- 	{#  Since not system_message was provided by user, if tool is provided, system_message is now default tool system message  #}
+- 	{#  This system message is from llama website:https://www.llama.com/docs/model-cards-and-prompt-formats/llama4/   #}
+- 	{%- set system_message = "You are a helpful assistant and an expert in function composition. You can answer general questions using your internal knowledge OR invoke functions when necessary. Follow these strict guidelines:\n\n1. FUNCTION CALLS:\n- ONLY use functions that are EXPLICITLY listed in the function list below\n- If NO functions are listed (empty function list []), respond ONLY with internal knowledge or \"I don't have access to [Unavailable service] information\"\n- If a function is not in the list, respond ONLY with internal knowledge or \"I don't have access to [Unavailable service] information\"\n- If ALL required parameters are present AND the query EXACTLY matches a listed function's purpose: output ONLY the function call(s)\n- Use exact format: [func_name1(param1=value1, param2=value2), func_name2(...)]\nExamples:\nCORRECT: [get_weather(location=\"Vancouver\"), calculate_route(start=\"Boston\", end=\"New York\")] <- Only if get_weather and calculate_route are in function list\nINCORRECT: get_weather(location=\"New York\")\nINCORRECT: Let me check the weather: [get_weather(location=\"New York\")]\nINCORRECT: [get_events(location=\"Singapore\")] <- If function not in list\n\n2. RESPONSE RULES:\n- For pure function requests matching a listed function: ONLY output the function call(s)\n- For knowledge questions: ONLY output text\n- For missing parameters: ONLY request the specific missing parameters\n- For unavailable services (not in function list): output ONLY with internal knowledge or \"I don't have access to [Unavailable service] information\". Do NOT execute a function call.\n- If the query asks for information beyond what a listed function provides: output ONLY with internal knowledge about your limitations\n- NEVER combine text and function calls in the same response\n- NEVER suggest alternative functions when the requested service is unavailable\n- NEVER create or invent new functions not listed below\n\n3. STRICT BOUNDARIES:\n- ONLY use functions from the list below - no exceptions\n- NEVER use a function as an alternative to unavailable information\n- NEVER call functions not present in the function list\n- NEVER add explanatory text to function calls\n- NEVER respond with empty brackets\n- Use proper Python/JSON syntax for function calls\n- Check the function list carefully before responding\n\n4. TOOL RESPONSE HANDLING:\n- When receiving tool responses: provide concise, natural language responses\n- Don't repeat tool response verbatim\n- Don't add supplementary information\n\nHere is a list of functions in JSON format that you can invoke:\n" -%}
+- {%- else -%}
+- 	{%- set system_message = "" -%}
+- {%- endif -%}
+- {#  Now writing the system message: use the user provided system message if user_provided_system_message, else default tool system message if tools presented  #}
+- {%- if system_message -%}
+- 	{#  always use user provided system message to override default tool system message  #}
+- 	{{- "<|header_start|>system<|header_end|>\n\n" -}}
+- 	{{- system_message -}}
+- 	{%- if user_provided_system_message and tools -%}
+- 		{{- "\nHere is a list of functions in JSON format that you can invoke. Use exact format: [func_name1(param1=value1, param2=value2), func_name2(...)]\n" -}}
+- 		{{- tool_definition -}}
+- 	{%- elif tool_definition -%}
+- 		{{- tool_definition -}}
+- 	{%- endif -%}
+- 	{{- "<|eot|>" -}}
+- {%- endif -%}
+- {#  Now deal with all other messages  #}
+- {%- for message in messages -%}
+- 	{#  Base case: messages that are not from tool role and has empty tool_call list   #}
+- 	{%- if not (message.role == "ipython" or message.role == "tool" or "tool_calls" in message and message.tool_calls | length != 0) -%}
+- 		{{- "<|header_start|>" + message["role"] + "<|header_end|>\n\n" -}}
+- 		{%- if message["content"] is string -%}
+- 			{{- message["content"] -}}
+- 		{%- else -%}
+- 			{%- for content in message["content"] -%}
+- 				{%- if content["type"] == "image" -%}
+- 					{{- "<|image|>" -}}
+- 				{%- elif content["type"] == "text" -%}
+- 					{{- content["text"] | trim -}}
+- 				{%- endif -%}
+- 			{%- endfor -%}
+- 		{%- endif -%}
+- 		{{- "<|eot|>" -}}
+- 	{#  Tool case: messages has non-empty tool_call list, must from assistant  #}
+- 	{%- elif "tool_calls" in message -%}
+- 		{#  assume tool_calls are always coming from assistant  #}
+- 		{%- if message.role == "assistant" -%}
+- 			{{- "<|header_start|>assistant<|header_end|>\n\n" -}}
+- 			{%- if message["content"] is string -%}
+- 				{{- message["content"] -}}
+- 			{%- else -%}
+- 				{%- for content in message["content"] -%}
+- 					{%- if content["type"] == "image" -%}
+- 						{{- "<|image|>" -}}
+- 					{%- elif content["type"] == "text" -%}
+- 						{{- content["text"] -}}
+- 					{%- endif -%}
+- 				{%- endfor -%}
+- 			{%- endif -%}
+- 			{{- "[" -}}
+- 			{%- for tool_call in message.tool_calls -%}
+- 				{%- if tool_call.function is defined -%}
+- 					{%- set tool_call = tool_call.function -%}
+- 				{%- endif -%}
+- 				{{- tool_call.name + "(" -}}
+- 				{%- for param in tool_call.arguments -%}
+- 					{{- param + "=\"" -}}
+- 					{{- "%s" | format(tool_call.arguments[param]) -}}
+- 					{{- "\"" -}}
+- 					{%- if not loop.last -%}
+- 						{{- ", " -}}
+- 					{%- endif -%}
+- 				{%- endfor -%}
+- 				{{- ")" -}}
+- 				{%- if not loop.last -%}
+- 					{{- ", " -}}
+- 				{%- endif -%}
+- 			{%- endfor -%}
+- 			{{- "]<|eot|>" -}}
+- 		{%- endif -%}
+- 	{#  Tool_response case: messages are from tool_response   #}
+- 	{%- elif message.role == "tool" or message.role == "ipython" -%}
+- 		{{- "<|header_start|>ipython<|header_end|>\n\n" -}}
+- 		{%- if message.content is string -%}
+- 			{{- message.content | tojson -}}
+- 		{%- else -%}
+- 			{%- for content in message["content"] -%}
+- 				{%- if content["type"] == "text" -%}
+- 					{{- content["text"] | tojson -}}
+- 				{%- endif -%}
+- 			{%- endfor -%}
+- 		{%- endif -%}
+- 		{{- "<|eot|>" -}}
+- 	{%- endif -%}
+- {%- endfor -%}
++ {%- if messages[0]["role"] == "system" -%}
++ 	{%- if messages[0]["content"] is string -%}
++ 		{%- set system_message = messages[0]["content"] | trim -%}
++ 	{%- else -%}
++ 		{%- set system_message = messages[0]["content"][0]["text"] | trim -%}
++ 	{%- endif -%}
++ 	{%- set messages = messages[1:] -%}
++ {%- else -%}
++ 	{%- set system_message = "" -%}
++ {%- endif -%}
++ {%- if system_message -%}
++ 	{{- "<|header_start|>system<|header_end|>\n\n" -}}
++ 	{{- system_message -}}
++ 	{{- "<|eot|>" -}}
++ {%- endif -%}
++ {%- for message in messages -%}
++ 	{{- "<|header_start|>" + message["role"] + "<|header_end|>\n\n" -}}
++ 	{%- if message["content"] is string -%}
++ 		{{- message["content"] -}}
++ 	{%- else -%}
++ 		{%- for content in message["content"] -%}
++ 			{%- if content["type"] == "image" -%}
++ 				{{- "<|image|>" -}}
++ 			{%- elif content["type"] == "text" -%}
++ 				{{- content["text"] | trim -}}
++ 			{%- endif -%}
++ 		{%- endfor -%}
++ 	{%- endif -%}
++ 	{{- "<|eot|>" -}}
++ {%- endfor -%}
+  {%- if add_generation_prompt -%}
+  	{{- "<|header_start|>assistant<|header_end|>\n\n" -}}
+  {%- endif -%}
+```
+  </Tab>
+</Tabs>
