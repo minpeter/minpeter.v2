@@ -25,6 +25,6 @@ export const config = {
   // .well-known는 flags를 위해 예외처리
   // media for custom font
   matcher: [
-    "/((?!api|.well-known|media|_next/static|_next/image|favicon.ico|.*\\..*).*)",
+    "/((?!api|.well-known|_next/media|_next/static|_next/image|favicon.ico|.*\\..*).*)",
   ],
 };
