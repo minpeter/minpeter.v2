@@ -12,10 +12,10 @@ WIP (about ocra-config-wand)
 
 Friendli Dedicated Endpoints에서 함수 호출 가능한 모델 배포 하는 법
 
-1. [ ] 모델 선택
-2. [ ] create page 사용법
-3. [ ] 배포 이후 overview
-4. [ ] API 호출을 통한 함수 호출 검증
+1. [X] 모델 선택
+2. [X] create page 사용법
+3. [X] 배포 이후 overview
+4. [X] API 호출을 통한 함수 호출 검증
 
 안되는 모델에 대한 이야기 (like deepseek r1 0528)
 
@@ -36,6 +36,10 @@ Friendli Dedicated Endpoints에서 함수 호출 가능한 모델 배포 하는 
 -----
 
 FriendliAI의 완전관리형 모델 서빙 제품인 Friendli Dedicated Endpoints는 안정적이고 편리한 모델 서빙을 지원하며, 여러 기능 중 하나로 함수 호출 설정이 자동으로 감지·활성화되는 기능을 제공한다.
+
+
+## Dedicated Endpoints에서 함수 호출 가능한 모델 배포 하는 법
+
 
 예를 들어, `Qwen/Qwen3-30B-A3B` 모델의 경우 아래 순서에 따라서 배포를 진행한 경우 자동으로 함수 호출이 가능한 엔드포인트가 배포되게 된다.
 
@@ -96,3 +100,21 @@ curl https://api.friendli.ai/dedicated/v1/chat/completions \
   ]
 }
 ```
+
+이렇게 어떠한 추가적인 설정 없이 함수 호출이 가능한 엔드포인트를 배포할 수 있다는 것을 확인할 수 있다.
+
+## 자동으로 설정이 안되는 모델에 대한 이야기
+
+이러한 기능을 이용하다 보면, 일부 모델의 경우 도구 호출이 지원되지 않는다고 표시되는 경우가 있습니다.
+알려진 일반적인 경우는 다음과 같습니다.
+
+1. 해당 모델의 Chat template에 `tool call`를 랜더링 하기 위한 로직이 없는 경우 (e.g., `google/gemma-3-27b-it`)
+
+2. 모델에는 문제가 없지만, 엔진에서 지원되지 않는 유형의 도구 호출인 경우 (e.g., `meta-llama/Llama-4-Scout-17B-16E-Instruct`)
+
+
+이러한 이유로 지원되지 않는다고 표시된다고 해서, Dedicated 에서 완전히 도구 호출을 사용하지 못한다는 의미는 아닙니다.
+Chat template과 tool calling에 대한 약간에 이해만 있다면 사용자 정의 Chat template를 이용하여 문제를 해결하거나 우회하여 도구 호출이 가능하도록 엔드포인트를 설정할 수 있습니다.
+
+
+
