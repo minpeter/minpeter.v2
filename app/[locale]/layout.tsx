@@ -5,14 +5,13 @@ import { VercelToolbar } from "@vercel/toolbar/next";
 
 import { RootProvider } from "fumadocs-ui/provider";
 import { NuqsAdapter } from "nuqs/adapters/next";
-import localFont from "next/font/local";
 import { NextProvider } from "fumadocs-core/framework/next";
 
 import Footer from "@/components/footer";
 import { ThemeProvider } from "@/components/theme-provider";
 import { I18nProviderClient } from "@/locales/client";
+import { AritaBuriLocalFont } from "@/lib/font.AritaBuri";
 import NewMetadata from "@/lib/metadata";
-import { cn } from "@/lib/utils";
 
 import "./global.css";
 
@@ -21,17 +20,7 @@ export const metadata = NewMetadata({
   description: "이 웹에서 가장 멋진 사이트가 될거야~",
 });
 
-const FontSans = localFont({
-  variable: "--font-sans",
-  display: "swap",
-  src: [
-    {
-      path: "../../public/fonts/AritaBuri-Medium.woff2",
-      weight: "400",
-      style: "normal",
-    },
-  ],
-});
+
 
 import { getStaticParams } from "@/locales/server";
 
@@ -52,11 +41,11 @@ export default async function RootLayout({
   return (
     <html
       lang={locale ? locale : "ko"}
-      className={cn("antialiased", FontSans.className)}
+      className={AritaBuriLocalFont.variable}
       suppressHydrationWarning
     >
-      <body>
-        <I18nProviderClient locale={locale}>
+      <body className="font-sans antialiased">
+      <I18nProviderClient locale={locale}>
           <NextProvider>
             <ThemeProvider
               attribute="class"
