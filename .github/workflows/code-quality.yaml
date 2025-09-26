@@ -42,7 +42,7 @@ jobs:
 
       - name: Run TypeScript type check
         run: |
-          pnpm typecheck
+          pnpm check:types
 
   eslint:
     name: ESLint
