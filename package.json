@@ -1,12 +1,12 @@
 {
-  "name": "minpeter.uk",
+  "name": "minpeter.v2",
   "version": "0.0.0",
   "private": true,
   "scripts": {
     "postinstall": "fumadocs-mdx",
-    "analyze": "ANALYZE=true next build",
     "dev": "next dev --turbo -p 8200",
     "build": "next build --turbo",
+    "build:analyze": "ANALYZE=true next build",
     "start": "next start",
     "postbuild": "next-sitemap",
     "check:prettier": "prettier --check .",
