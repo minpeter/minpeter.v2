@@ -1,5 +1,5 @@
 /** @type {import('next-sitemap').IConfig} */
-module.exports = {
+const config = {
   // NOTE: The value does not include the protocol scheme "https://"
   // https://vercel.com/docs/environment-variables/system-environment-variables#VERCEL_PROJECT_PRODUCTION_URL
   siteUrl: process.env.VERCEL_PROJECT_PRODUCTION_URL
@@ -24,3 +24,5 @@ module.exports = {
     };
   },
 };
+
+export default config;
