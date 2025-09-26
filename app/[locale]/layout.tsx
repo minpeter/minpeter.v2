@@ -11,6 +11,8 @@ import Footer from "@/components/footer";
 import { ThemeProvider } from "@/components/theme-provider";
 import { I18nProviderClient } from "@/locales/client";
 import { AritaBuriLocalFont } from "@/lib/font.AritaBuri";
+import { getStaticParams } from "@/locales/server";
+import { cn } from "@/lib/utils";
 import NewMetadata from "@/lib/metadata";
 
 import "./global.css";
@@ -21,8 +23,6 @@ export const metadata = NewMetadata({
 });
 
 
-
-import { getStaticParams } from "@/locales/server";
 
 export function generateStaticParams() {
   return getStaticParams();
@@ -41,10 +41,9 @@ export default async function RootLayout({
   return (
     <html
       lang={locale ? locale : "ko"}
-      className={AritaBuriLocalFont.variable}
       suppressHydrationWarning
     >
-      <body className="font-sans antialiased">
+      <body className={cn(AritaBuriLocalFont.variable, "font-arita antialiased")}>
       <I18nProviderClient locale={locale}>
           <NextProvider>
             <ThemeProvider

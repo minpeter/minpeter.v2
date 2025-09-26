@@ -9,8 +9,11 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@theme inline {
+  --font-arita: var(--font-arita);
+}
+
 @theme {
-  --font-sans: var(--font-sans);
 
   --radius-lg: var(--radius);
   --radius-md: calc(var(--radius) - 2px);
