@@ -15,7 +15,7 @@ import { getStaticParams } from "@/locales/server";
 import { cn } from "@/lib/utils";
 import NewMetadata from "@/lib/metadata";
 
-import "./global.css";
+import "./globals.css";
 
 export const metadata = NewMetadata({
   title: "minpeter",
@@ -42,7 +42,7 @@ export default async function RootLayout({
     <html
       lang={locale ? locale : "ko"}
       suppressHydrationWarning
-      className={cn(AritaBuriLocalFont.className, "antialiased")}
+      className={cn(AritaBuriLocalFont.variable, "antialiased font-aritaburi")}
     >
       <body>
       <I18nProviderClient locale={locale}>

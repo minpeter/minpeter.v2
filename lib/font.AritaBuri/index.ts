@@ -1,9 +1,9 @@
 import localFont from 'next/font/local';
 
 const AritaBuriLocalFont = localFont({
-  src: './AritaBuri-Medium.woff2',
-  variable: '--font-arita',
-  display: 'swap',
+  src: "./AritaBuriKR-Medium.ttf",
+  variable: '--font-aritaburi',
+  display: 'swap'
 });
 
 export { AritaBuriLocalFont };
