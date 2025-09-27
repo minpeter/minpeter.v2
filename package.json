@@ -5,9 +5,9 @@
   "scripts": {
     "postinstall": "fumadocs-mdx",
     "dev": "next dev --turbo -p 8200",
+    "start": "next start -p 8200",
     "build": "next build --turbo",
     "build:analyze": "ANALYZE=true next build",
-    "start": "next start",
     "postbuild": "next-sitemap --config next-sitemap.config.mjs",
     "check:prettier": "prettier --check .",
     "check:eslint": "eslint .",
