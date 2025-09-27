@@ -16,10 +16,10 @@
   .stagger_container > * {
     --level: 0;
     --overflow-level: 0;
-    --base-delay: 60ms;
+    --base-delay: 120ms;
     --start-delay: 0ms;
 
-    animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
     animation-delay: calc(
       var(--level) * var(--base-delay) + var(--overflow-level) *
         var(--base-delay) + var(--start-delay)
@@ -28,134 +28,134 @@
 
   /* Speed variants */
   .slow > * {
-    --base-delay: 120ms;
+    --base-delay: 180ms;
   }
 
   .fast > * {
-    --base-delay: 30ms;
+    --base-delay: 80ms;
   }
 }
 
 /* Efficient level assignment using batch selectors - Covers unlimited elements */
 
 /* Batch 1: 1-10 */
-.container > *:nth-child(1) {
+.stagger_container > *:nth-child(1) {
   --level: 1;
 }
-.container > *:nth-child(2) {
+.stagger_container > *:nth-child(2) {
   --level: 2;
 }
-.container > *:nth-child(3) {
+.stagger_container > *:nth-child(3) {
   --level: 3;
 }
-.container > *:nth-child(4) {
+.stagger_container > *:nth-child(4) {
   --level: 4;
 }
-.container > *:nth-child(5) {
+.stagger_container > *:nth-child(5) {
   --level: 5;
 }
-.container > *:nth-child(6) {
+.stagger_container > *:nth-child(6) {
   --level: 6;
 }
-.container > *:nth-child(7) {
+.stagger_container > *:nth-child(7) {
   --level: 7;
 }
-.container > *:nth-child(8) {
+.stagger_container > *:nth-child(8) {
   --level: 8;
 }
-.container > *:nth-child(9) {
+.stagger_container > *:nth-child(9) {
   --level: 9;
 }
-.container > *:nth-child(10) {
+.stagger_container > *:nth-child(10) {
   --level: 10;
 }
 
 /* Batch 2: 11-20 with overflow-level pattern */
-.container > *:nth-child(11) {
+.stagger_container > *:nth-child(11) {
   --level: 1;
   --overflow-level: 10;
 }
-.container > *:nth-child(12) {
+.stagger_container > *:nth-child(12) {
   --level: 2;
   --overflow-level: 10;
 }
-.container > *:nth-child(13) {
+.stagger_container > *:nth-child(13) {
   --level: 3;
   --overflow-level: 10;
 }
-.container > *:nth-child(14) {
+.stagger_container > *:nth-child(14) {
   --level: 4;
   --overflow-level: 10;
 }
-.container > *:nth-child(15) {
+.stagger_container > *:nth-child(15) {
   --level: 5;
   --overflow-level: 10;
 }
-.container > *:nth-child(16) {
+.stagger_container > *:nth-child(16) {
   --level: 6;
   --overflow-level: 10;
 }
-.container > *:nth-child(17) {
+.stagger_container > *:nth-child(17) {
   --level: 7;
   --overflow-level: 10;
 }
-.container > *:nth-child(18) {
+.stagger_container > *:nth-child(18) {
   --level: 8;
   --overflow-level: 10;
 }
-.container > *:nth-child(19) {
+.stagger_container > *:nth-child(19) {
   --level: 9;
   --overflow-level: 10;
 }
-.container > *:nth-child(20) {
+.stagger_container > *:nth-child(20) {
   --level: 10;
   --overflow-level: 10;
 }
 
 /* Batch 3: 21-30 */
-.container > *:nth-child(21) {
+.stagger_container > *:nth-child(21) {
   --level: 1;
   --overflow-level: 20;
 }
-.container > *:nth-child(22) {
+.stagger_container > *:nth-child(22) {
   --level: 2;
   --overflow-level: 20;
 }
-.container > *:nth-child(23) {
+.stagger_container > *:nth-child(23) {
   --level: 3;
   --overflow-level: 20;
 }
-.container > *:nth-child(24) {
+.stagger_container > *:nth-child(24) {
   --level: 4;
   --overflow-level: 20;
 }
-.container > *:nth-child(25) {
+.stagger_container > *:nth-child(25) {
   --level: 5;
   --overflow-level: 20;
 }
-.container > *:nth-child(26) {
+.stagger_container > *:nth-child(26) {
   --level: 6;
   --overflow-level: 20;
 }
-.container > *:nth-child(27) {
+.stagger_container > *:nth-child(27) {
   --level: 7;
   --overflow-level: 20;
 }
-.container > *:nth-child(28) {
+.stagger_container > *:nth-child(28) {
   --level: 8;
   --overflow-level: 20;
 }
-.container > *:nth-child(29) {
+.stagger_container > *:nth-child(29) {
   --level: 9;
   --overflow-level: 20;
 }
-.container > *:nth-child(30) {
+.stagger_container > *:nth-child(30) {
   --level: 10;
   --overflow-level: 20;
 }
 
 /* Fallback: For elements beyond 30, maintain sequential order */
-.container > *:nth-child(n + 31) {
+.stagger_container > *:nth-child(n + 31) {
   --level: 1;
   --overflow-level: 30;
 }
