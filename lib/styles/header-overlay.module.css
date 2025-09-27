@@ -1,0 +1,23 @@
+/*
+  Defines a keyframe animation that creates a gradient overlay effect based on scroll position.
+  The animation transitions from transparent to a black-to-transparent gradient overlay.
+*/
+@keyframes header-overlay-appear {
+  from {
+    background-color: rgba(0, 0, 0, 0); /* Start with transparent background */
+  }
+  to {
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 1), transparent);
+  }
+}
+
+/* 
+  Applies scroll-driven animation to create a responsive header overlay effect.
+  Uses CSS scroll-timeline API to link animation progress directly to scroll position.
+*/
+.scroll_responsive_header {
+  animation-name: header-overlay-appear;
+  animation-timeline: scroll(root);
+  animation-range: 0 100px; /* Animation progresses from 0px to 100px scroll position */
+  animation-fill-mode: forwards; /* Maintains final state after animation completion */
+}
