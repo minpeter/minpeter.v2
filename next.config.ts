@@ -3,12 +3,6 @@ import { withVercelToolbar } from "@vercel/toolbar/plugins/next";
 import { createMDX } from "fumadocs-mdx/next";
 import type { NextConfig } from "next";
 
-const withBundleAnalyzer = bundleAnalyzer({
-  enabled: process.env.ANALYZE === "true",
-});
-
-const withMDX = createMDX();
-
 const nextConfig: NextConfig = {
   poweredByHeader: false,
   typedRoutes: true,
@@ -29,18 +23,11 @@ const nextConfig: NextConfig = {
     },
   },
   reactStrictMode: true,
-  experimental: {
-    optimizePackageImports: [
-      "@radix-ui/react-icons",
-      "@react-three/drei",
-      "@react-three/fiber",
-      "matter-js",
-      "three",
-    ],
-  },
   eslint: {
-    // Warning: This allows production builds to successfully complete even if
-    // your project has ESLint errors.
+    // !WARN!
+    // This allows production builds to successfully complete
+    // even if project has ESLint errors.
+    // !WARN!
     ignoreDuringBuilds: true,
   },
   images: {
@@ -54,31 +41,12 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  // Ensure static assets are properly served
-  trailingSlash: false,
-  // Add headers for static assets
-  async headers() {
-    return [
-      {
-        source: "/:path*.(ttf|woff|woff2|eot|otf)",
-        headers: [
-          {
-            key: "Cache-Control",
-            value: "public, max-age=31536000, immutable",
-          },
-        ],
-      },
-      {
-        source: "/:path*.(gltf|glb)",
-        headers: [
-          {
-            key: "Content-Type",
-            value: "model/gltf+json",
-          },
-        ],
-      },
-    ];
-  },
 };
+
+const withBundleAnalyzer = bundleAnalyzer({
+  enabled: process.env.ANALYZE === "true",
+});
+
+const withMDX = createMDX();
 
 export default withVercelToolbar()(withBundleAnalyzer(withMDX(nextConfig)));
