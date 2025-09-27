@@ -5,7 +5,8 @@ import defaultMdxComponents from "fumadocs-ui/mdx";
 import { DocsBody } from "fumadocs-ui/page";
 import NewMetadata from "@/lib/metadata";
 import Header from "@/components/header";
-import { cn, formatDateLong } from "@/lib/utils";
+import { formatDateLong } from "@/lib/utils";
+import { cn } from "@/lib/tw-utils";
 import Link from "next/link";
 import type { Route } from "next";
 

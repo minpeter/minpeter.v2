@@ -31,9 +31,6 @@ const nextConfig: NextConfig = {
   },
   reactStrictMode: true,
   experimental: {
-    // Trade off FCP, LCP and TTFB
-    inlineCss: true,
-
     optimizePackageImports: [
       "@radix-ui/react-icons",
       "@react-three/drei",
@@ -64,20 +61,20 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       {
-        source: '/:path*.(ttf|woff|woff2|eot|otf)',
+        source: "/:path*.(ttf|woff|woff2|eot|otf)",
         headers: [
           {
-            key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable',
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
           },
         ],
       },
       {
-        source: '/:path*.(gltf|glb)',
+        source: "/:path*.(gltf|glb)",
         headers: [
           {
-            key: 'Content-Type',
-            value: 'model/gltf+json',
+            key: "Content-Type",
+            value: "model/gltf+json",
           },
         ],
       },

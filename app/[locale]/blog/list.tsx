@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import type { Route } from "next";
-import { cn, formatDate, formatYear } from "@/lib/utils";
+import { formatDate, formatYear } from "@/lib/utils";
+import { cn } from "@/lib/tw-utils";
 import { ExternalLink } from "lucide-react";
 
 import { useQueryState, parseAsString } from "nuqs";
