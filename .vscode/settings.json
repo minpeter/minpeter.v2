@@ -11,5 +11,6 @@
     "editor.wordWrap": "wordWrapColumn",
     "editor.wordWrapColumn": 94
   },
-  "cSpell.words": ["fumadocs"]
+  "cSpell.words": ["fumadocs"],
+  "typescript.tsdk": "node_modules/typescript/lib"
 }
