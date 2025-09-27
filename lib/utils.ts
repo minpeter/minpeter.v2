@@ -1,10 +1,3 @@
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-
 // 2022-1-1 -> 01. 01.
 export function formatDate(date?: string | number | undefined | Date) {
   const d = new Date(date ? date : new Date());

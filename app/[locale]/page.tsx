@@ -35,7 +35,7 @@ import type { Route } from "next";
 
 const Lickitung = dynamic(() => import("@/components/Lickitung"));
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/tw-utils";
 
 export default function Page() {
   const t = useI18n();

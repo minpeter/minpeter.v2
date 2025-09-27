@@ -2,7 +2,7 @@
 
 import { Backlink } from "./link";
 import { useChangeLocale, useCurrentLocale } from "@/locales/client";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/tw-utils";
 import type { Route } from "next";
 
 type HeaderProps = {

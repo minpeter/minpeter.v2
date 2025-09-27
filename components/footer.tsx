@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ArrowTopRightIcon } from "@radix-ui/react-icons";
 import Image from "next/image";
 import purplePikmin from "@/public/purple-pikmin-carrying-fruit.webp";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/tw-utils";
 
 export default function Footer({ className }: { className?: string }) {
   return (

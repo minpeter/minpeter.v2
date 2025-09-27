@@ -11,7 +11,7 @@ import {
   Runner,
 } from "matter-js";
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/tw-utils";
 
 const stackIcon = [
   "AWS.png",
