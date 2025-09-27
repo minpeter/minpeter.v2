@@ -1,5 +1,5 @@
 import { getProviderData } from "@flags-sdk/statsig";
-import { verifyAccess, type ApiData } from "flags";
+import { verifyAccess, version, type ApiData } from "flags";
 import { NextResponse, type NextRequest } from "next/server";
 
 export async function GET(request: NextRequest) {
@@ -11,5 +11,7 @@ export async function GET(request: NextRequest) {
     projectId: process.env.STATSIG_PROJECT_ID || "",
   });
 
-  return NextResponse.json<ApiData>(statsigData);
+  return NextResponse.json<ApiData>(statsigData, {
+    headers: { "x-flags-sdk-version": version },
+  });
 }
