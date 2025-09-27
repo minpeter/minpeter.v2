@@ -6,7 +6,7 @@ const fallbackLanguage = "ko";
 const I18nMiddleware = createI18nMiddleware({
   locales: languages,
   defaultLocale: fallbackLanguage,
-  urlMappingStrategy: "rewrite",
+  urlMappingStrategy: "rewriteDefault",
   resolveLocaleFromRequest: () => {
     return fallbackLanguage;
   },
@@ -20,12 +20,10 @@ export const config = {
   matcher: [
     /*
      * Match all request paths except for the ones starting with:
-     * - api (API routes)
      * - _next (Next.js internal files)
-     * - favicon.ico (favicon file)
-     * - Static assets (fonts, images, etc.)
-     * - sitemap.xml, robots.txt, .well-known
+     * - .well-known (well-known URIs)
+     * - *.* - static assets (fonts, images, etc.)
      */
-    "/((?!_next/$|api/|api$|\\.well-known$|.*\\..*).*)",
+    "/((?!_next/|_next/$|\\.well-known|\\.well-known$|.*\\..*).*)",
   ],
 };
