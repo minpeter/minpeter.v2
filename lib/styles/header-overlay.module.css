@@ -1,27 +1,50 @@
-/* Smooth header overlay animation with natural gradient fade */
+/* Smooth header overlay animation with gradient blur effect */
 @keyframes header-overlay-appear {
   from {
-    background: linear-gradient(to bottom, transparent, transparent);
+    background: transparent;
     opacity: 0;
+    backdrop-filter: blur(0px);
+    mask: linear-gradient(to bottom, transparent, transparent);
+    -webkit-mask: linear-gradient(to bottom, transparent, transparent);
   }
   to {
     background: linear-gradient(
       to bottom,
-      rgba(0, 0, 0, 0.7) 0%,
-      rgba(0, 0, 0, 0.3) 30%,
+      rgba(0, 0, 0, 0.6) 0%,
+      rgba(0, 0, 0, 0.4) 20%,
+      rgba(0, 0, 0, 0.2) 40%,
       rgba(0, 0, 0, 0.1) 60%,
-      transparent 90%
+      rgba(0, 0, 0, 0.05) 80%,
+      transparent 100%
     );
     opacity: 1;
+    backdrop-filter: blur(1.5px);
+    mask: linear-gradient(
+      to bottom,
+      black 0%,
+      rgba(0, 0, 0, 0.9) 20%,
+      rgba(0, 0, 0, 0.6) 40%,
+      rgba(0, 0, 0, 0.3) 60%,
+      rgba(0, 0, 0, 0.1) 80%,
+      transparent 100%
+    );
+    -webkit-mask: linear-gradient(
+      to bottom,
+      black 0%,
+      rgba(0, 0, 0, 0.9) 20%,
+      rgba(0, 0, 0, 0.6) 40%,
+      rgba(0, 0, 0, 0.3) 60%,
+      rgba(0, 0, 0, 0.1) 80%,
+      transparent 100%
+    );
   }
 }
 
-/* Scroll-responsive header with smooth gradient overlay */
+/* Scroll-responsive header with gradient blur overlay */
 .scroll_responsive_header {
   animation: header-overlay-appear;
   animation-timeline: scroll(root);
   animation-range: 0 250px;
   animation-fill-mode: forwards;
   animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
-  backdrop-filter: blur(0.5px);
 }

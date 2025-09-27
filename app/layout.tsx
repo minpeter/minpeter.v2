@@ -58,7 +58,7 @@ export default function RootLayout({
                 <div
                   className={cn(
                     styles.scroll_responsive_header,
-                    "pointer-events-none fixed inset-x-0 top-0 z-10 h-24"
+                    "pointer-events-none fixed inset-x-0 top-0 z-10 h-40"
                   )}
                 />
 
