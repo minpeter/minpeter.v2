@@ -1,10 +1,11 @@
-import Header from "@/components/header";
 import type { Route } from "next";
 import Image from "next/image";
+import Link from "next/link";
+
+import Header from "@/components/header";
 
 import SaaSComponentImage from "./saas-component.png";
 import SaaSPageImage from "./saas-page.png";
-import Link from "next/link";
 
 export default async function Page({
   params,

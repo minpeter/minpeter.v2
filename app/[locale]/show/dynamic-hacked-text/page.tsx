@@ -1,6 +1,8 @@
-import Header from "@/components/header";
-import AnimatedText from "./animated-text";
 import type { Route } from "next";
+
+import Header from "@/components/header";
+
+import AnimatedText from "./animated-text";
 
 export default async function Page({
   params,

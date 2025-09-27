@@ -1,10 +1,10 @@
 "use client";
 
+import type { Route } from "next";
+import { useEffect, useState } from "react";
+
 import Header from "@/components/header";
 import { useCurrentLocale } from "@/locales/client";
-
-import { useEffect, useState } from "react";
-import type { Route } from "next";
 
 export default function Page() {
   const locale = useCurrentLocale();

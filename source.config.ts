@@ -1,3 +1,4 @@
+import { remarkInstall } from "fumadocs-docgen";
 import {
   defineDocs,
   defineConfig,
@@ -5,8 +6,6 @@ import {
   frontmatterSchema,
 } from "fumadocs-mdx/config";
 import { z } from "zod";
-
-import { remarkInstall } from "fumadocs-docgen";
 
 export const { docs, meta } = defineDocs({
   dir: "content/blog",

@@ -1,17 +1,16 @@
-import { Analytics } from "@vercel/analytics/react";
 import { GoogleAnalytics } from "@next/third-parties/google";
+import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { VercelToolbar } from "@vercel/toolbar/next";
-import { Geist_Mono } from "next/font/google";
-
-import { NuqsAdapter } from "nuqs/adapters/next";
 import { NextProvider } from "fumadocs-core/framework/next";
+import { Geist_Mono } from "next/font/google";
+import { NuqsAdapter } from "nuqs/adapters/next";
 
 import Footer from "@/components/footer";
 import { ThemeProvider } from "@/components/theme-provider";
 import { AritaBuriLocalFont } from "@/lib/font.AritaBuri";
-import { cn } from "@/lib/tw-utils";
 import NewMetadata from "@/lib/metadata";
+import { cn } from "@/lib/tw-utils";
 
 import "./globals.css";
 

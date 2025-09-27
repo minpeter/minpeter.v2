@@ -1,14 +1,13 @@
 import { NextRequest } from "next/server";
 import { createI18nMiddleware } from "next-international/middleware";
 
-
-const languages = ["en", "ko"]
-const fallbackLanguage = "ko"
+const languages = ["en", "ko"];
+const fallbackLanguage = "ko";
 const I18nMiddleware = createI18nMiddleware({
   locales: languages,
   defaultLocale: fallbackLanguage,
   urlMappingStrategy: "rewrite",
-  resolveLocaleFromRequest: (request) => {
+  resolveLocaleFromRequest: () => {
     return fallbackLanguage;
   },
 });
@@ -27,6 +26,6 @@ export const config = {
      * - Static assets (fonts, images, etc.)
      * - sitemap.xml, robots.txt, .well-known
      */
-    '/((?!_next/$|api/|api$|\\.well-known$|.*\\..*).*)',
+    "/((?!_next/$|api/|api$|\\.well-known$|.*\\..*).*)",
   ],
 };

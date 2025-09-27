@@ -1,6 +1,5 @@
 "use client";
 
-import React, { useRef, Suspense } from "react";
 import {
   Environment,
   MeshTransmissionMaterial,
@@ -8,9 +7,10 @@ import {
   Text,
 } from "@react-three/drei";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import React, { useRef, Suspense } from "react";
 
 // Preload the GLTF file
-if (typeof window !== 'undefined') {
+if (typeof window !== "undefined") {
   useGLTF.preload("/Lickitung.gltf", true);
 }
 

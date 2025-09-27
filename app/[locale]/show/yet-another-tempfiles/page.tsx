@@ -1,7 +1,8 @@
+import type { Route } from "next";
+
 import Header from "@/components/header";
 
 import TmpfUI from "./tmpf";
-import type { Route } from "next";
 
 export default async function Page({
   params,

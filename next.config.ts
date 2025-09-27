@@ -1,14 +1,13 @@
-import { createMDX } from "fumadocs-mdx/next";
 import bundleAnalyzer from "@next/bundle-analyzer";
 import { withVercelToolbar } from "@vercel/toolbar/plugins/next";
+import { createMDX } from "fumadocs-mdx/next";
+import type { NextConfig } from "next";
 
 const withBundleAnalyzer = bundleAnalyzer({
   enabled: process.env.ANALYZE === "true",
 });
 
 const withMDX = createMDX();
-
-import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,

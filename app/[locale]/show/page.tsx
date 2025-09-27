@@ -1,12 +1,11 @@
-import Header from "@/components/header";
-import { getI18n } from "@/locales/server";
-import Link from "next/link";
 import type { Route } from "next";
-
+import Link from "next/link";
 import { setStaticParamsLocale } from "next-international/server";
 
-import NewMetadata from "@/lib/metadata";
+import Header from "@/components/header";
 import { createFeatureGate } from "@/lib/flags";
+import NewMetadata from "@/lib/metadata";
+import { getI18n } from "@/locales/server";
 
 export const metadata = NewMetadata({
   title: "minpeter | showcase",

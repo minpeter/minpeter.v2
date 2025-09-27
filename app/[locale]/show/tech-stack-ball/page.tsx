@@ -1,6 +1,8 @@
-import Header from "@/components/header";
-import { Playground } from "./animated-stack";
 import type { Route } from "next";
+
+import Header from "@/components/header";
+
+import { Playground } from "./animated-stack";
 
 export default async function Page({
   params,

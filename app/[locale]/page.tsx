@@ -1,24 +1,5 @@
 "use client";
 
-import mainImage1 from "@/public/assets/images/main-image-1.jpg";
-import mainImage2 from "@/public/assets/images/main-image-2.png";
-import mainImage3 from "@/public/assets/images/main-image-3.png";
-
-import { AspectRatio } from "@/components/ui/aspect-ratio";
-
-import Image from "next/image";
-
-import { Suspense, useState } from "react";
-
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-} from "@/components/ui/carousel";
-
-import { useCurrentLocale, useI18n } from "@/locales/client";
-
-import Header from "@/components/header";
 import {
   CookieIcon,
   GitHubLogoIcon,
@@ -26,16 +7,27 @@ import {
   LinkedInLogoIcon,
 } from "@radix-ui/react-icons";
 import { CodeIcon, KeyboardIcon, ExternalLinkIcon } from "lucide-react";
-import Link from "next/link";
-
-import dynamic from "next/dynamic";
-
-import { Skeleton } from "@/components/ui/skeleton";
 import type { Route } from "next";
+import dynamic from "next/dynamic";
+import Image from "next/image";
+import Link from "next/link";
+import { Suspense, useState } from "react";
+
+import Header from "@/components/header";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+} from "@/components/ui/carousel";
+import { Skeleton } from "@/components/ui/skeleton";
+import { cn } from "@/lib/tw-utils";
+import { useCurrentLocale, useI18n } from "@/locales/client";
+import mainImage1 from "@/public/assets/images/main-image-1.jpg";
+import mainImage2 from "@/public/assets/images/main-image-2.png";
+import mainImage3 from "@/public/assets/images/main-image-3.png";
 
 const Lickitung = dynamic(() => import("@/components/Lickitung"));
-
-import { cn } from "@/lib/tw-utils";
 
 export default function Page() {
   const t = useI18n();
