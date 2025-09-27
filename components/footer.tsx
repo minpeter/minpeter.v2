@@ -1,9 +1,11 @@
-import { ModeToggle } from "./theme-toggle";
-import Link from "next/link";
 import { ArrowTopRightIcon } from "@radix-ui/react-icons";
 import Image from "next/image";
+import Link from "next/link";
+
+import { cn } from "@/lib/tw-utils";
 import purplePikmin from "@/public/purple-pikmin-carrying-fruit.webp";
-import { cn } from "@/lib/utils";
+
+import { ModeToggle } from "./theme-toggle";
 
 export default function Footer({ className }: { className?: string }) {
   return (

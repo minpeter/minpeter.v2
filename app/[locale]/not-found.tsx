@@ -1,8 +1,9 @@
 "use client";
 
+import type { Route } from "next";
+
 import Header from "@/components/header";
 import { useCurrentLocale, useI18n } from "@/locales/client";
-import type { Route } from "next";
 
 export default function NotFound() {
   const t = useI18n();

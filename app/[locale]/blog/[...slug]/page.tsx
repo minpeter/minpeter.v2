@@ -1,21 +1,21 @@
-import { blog } from "@/lib/source";
-
-import { notFound } from "next/navigation";
+import { TOCItemType } from "fumadocs-core/server";
+import { Callout } from "fumadocs-ui/components/callout";
+import { ImageZoom } from "fumadocs-ui/components/image-zoom";
+import { Tab, Tabs } from "fumadocs-ui/components/tabs";
 import defaultMdxComponents from "fumadocs-ui/mdx";
 import { DocsBody } from "fumadocs-ui/page";
-import NewMetadata from "@/lib/metadata";
-import Header from "@/components/header";
-import { cn, formatDateLong } from "@/lib/utils";
-import Link from "next/link";
 import type { Route } from "next";
-
-import { Tab, Tabs } from "fumadocs-ui/components/tabs";
-import { ImageZoom } from "fumadocs-ui/components/image-zoom";
-import { Callout } from "fumadocs-ui/components/callout";
-import { getI18n } from "@/locales/server";
+import Link from "next/link";
+import { notFound } from "next/navigation";
 import { setStaticParamsLocale } from "next-international/server";
-import { TOCItemType } from "fumadocs-core/server";
+
 import ExternalRedirect from "@/components/external-redirect";
+import Header from "@/components/header";
+import NewMetadata from "@/lib/metadata";
+import { blog } from "@/lib/source";
+import { cn } from "@/lib/tw-utils";
+import { formatDateLong } from "@/lib/utils";
+import { getI18n } from "@/locales/server";
 
 export async function generateStaticParams({
   params,

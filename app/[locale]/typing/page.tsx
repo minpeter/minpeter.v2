@@ -1,10 +1,12 @@
 "use client";
 
+import type { Route } from "next";
 import { useState, useRef, useEffect, useCallback } from "react";
-import { nextSentencesGenerator } from "./action";
+
 import Header from "@/components/header";
 import { useCurrentLocale, useI18n } from "@/locales/client";
-import type { Route } from "next";
+
+import { nextSentencesGenerator } from "./action";
 
 // Add utility function to check Korean characters
 const isKorean = (char: string) => {

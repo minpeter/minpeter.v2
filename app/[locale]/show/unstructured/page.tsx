@@ -1,5 +1,6 @@
-import Header from "@/components/header";
 import type { Route } from "next";
+
+import Header from "@/components/header";
 
 export default async function Page({
   params,

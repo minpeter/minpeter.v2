@@ -1,14 +1,16 @@
-import Header from "@/components/header";
-import { Suspense } from "react";
-import { BlogList, BlogListFallback } from "./list";
-
-import NewMetadata from "@/lib/metadata";
-import { getI18n } from "@/locales/server";
-import { setStaticParamsLocale } from "next-international/server";
-// import { BlogSearch, BlogSearchFallback } from "./search";
-import { createLoader, parseAsString, SearchParams } from "nuqs/server";
-import { blog, getPostsMetadata } from "@/lib/source";
 import type { Route } from "next";
+import { setStaticParamsLocale } from "next-international/server";
+import { createLoader, parseAsString, SearchParams } from "nuqs/server";
+import { Suspense } from "react";
+
+import Header from "@/components/header";
+import NewMetadata from "@/lib/metadata";
+import { blog, getPostsMetadata } from "@/lib/source";
+import { getI18n } from "@/locales/server";
+
+// import { BlogSearch, BlogSearchFallback } from "./search";
+
+import { BlogList, BlogListFallback } from "./list";
 
 export const metadata = NewMetadata({
   title: "minpeter | blog",

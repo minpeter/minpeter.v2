@@ -1,5 +1,6 @@
-import { Backlink } from "@/components/link";
 import type { Route } from "next";
+
+import { Backlink } from "@/components/link";
 
 export default async function Page({
   params,

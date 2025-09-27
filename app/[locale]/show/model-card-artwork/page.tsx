@@ -1,8 +1,9 @@
+import type { Route } from "next";
+import Image from "next/image";
+
 import Header from "@/components/header";
 
 import { hermes3, llama3p1, qwen2p5 } from "./assets";
-import Image from "next/image";
-import type { Route } from "next";
 
 export default async function Page({
   params,

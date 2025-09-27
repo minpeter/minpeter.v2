@@ -1,13 +1,6 @@
-import { createMDX } from "fumadocs-mdx/next";
 import bundleAnalyzer from "@next/bundle-analyzer";
 import { withVercelToolbar } from "@vercel/toolbar/plugins/next";
-
-const withBundleAnalyzer = bundleAnalyzer({
-  enabled: process.env.ANALYZE === "true",
-});
-
-const withMDX = createMDX();
-
+import { createMDX } from "fumadocs-mdx/next";
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
@@ -30,21 +23,11 @@ const nextConfig: NextConfig = {
     },
   },
   reactStrictMode: true,
-  experimental: {
-    // Trade off FCP, LCP and TTFB
-    inlineCss: true,
-
-    optimizePackageImports: [
-      "@radix-ui/react-icons",
-      "@react-three/drei",
-      "@react-three/fiber",
-      "matter-js",
-      "three",
-    ],
-  },
   eslint: {
-    // Warning: This allows production builds to successfully complete even if
-    // your project has ESLint errors.
+    // !WARN!
+    // This allows production builds to successfully complete
+    // even if project has ESLint errors.
+    // !WARN!
     ignoreDuringBuilds: true,
   },
   images: {
@@ -59,5 +42,11 @@ const nextConfig: NextConfig = {
     ],
   },
 };
+
+const withBundleAnalyzer = bundleAnalyzer({
+  enabled: process.env.ANALYZE === "true",
+});
+
+const withMDX = createMDX();
 
 export default withVercelToolbar()(withBundleAnalyzer(withMDX(nextConfig)));

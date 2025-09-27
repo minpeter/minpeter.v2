@@ -1,10 +1,9 @@
 "use client";
 
-import copy from "clipboard-copy";
-import { highlight } from "sugar-high";
-
-import { useEffect, useState } from "react";
 import { CheckIcon, CopyIcon } from "@radix-ui/react-icons";
+import copy from "clipboard-copy";
+import { useEffect, useState } from "react";
+import { highlight } from "sugar-high";
 
 async function handleCopyClick(content: string) {
   try {

@@ -1,10 +1,9 @@
 "use client";
 
-import * as React from "react";
 import { SunIcon } from "@radix-ui/react-icons";
-import { FiMoon } from "react-icons/fi";
-
 import { useTheme } from "next-themes";
+import * as React from "react";
+import { FiMoon } from "react-icons/fi";
 
 export function ModeToggle() {
   const { setTheme, theme } = useTheme();

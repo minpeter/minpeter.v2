@@ -2,22 +2,19 @@
 
 @import "fumadocs-ui/css/neutral.css";
 @import "fumadocs-ui/css/preset.css";
-/* @import 'fumadocs-twoslash/twoslash.css';
-@import 'fumadocs-openapi/css/preset.css'; */
 
 @plugin 'tailwindcss-animate';
 
 @custom-variant dark (&:is(.dark *));
 
-@layer utilities {
-  .font-aritaburi {
-    font-family: var(--font-aritaburi);
-  }
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-arita-buri);
+  --font-mono: var(--font-geist-mono);
 }
 
 @theme {
-  --font-aritaburi: var(--font-aritaburi);
-
   --radius-lg: var(--radius);
   --radius-md: calc(var(--radius) - 2px);
   --radius-sm: calc(var(--radius) - 4px);
@@ -56,8 +53,6 @@
   --color-chart-4: hsl(var(--chart-4));
   --color-chart-5: hsl(var(--chart-5));
 }
-
-
 
 /*
   The default border color has changed to `currentColor` in Tailwind CSS v4,
@@ -312,10 +307,3 @@
     user-select: none;
   }
 }
-
-
-
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
