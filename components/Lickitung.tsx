@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef } from "react";
+import React, { useRef, Suspense } from "react";
 import {
   Environment,
   MeshTransmissionMaterial,
@@ -9,7 +9,10 @@ import {
 } from "@react-three/drei";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 
-useGLTF.preload("/Lickitung.gltf", true);
+// Preload the GLTF file
+if (typeof window !== 'undefined') {
+  useGLTF.preload("/Lickitung.gltf", true);
+}
 
 const calculateAspectRatio = (ratio: string) => {
   const [width, height] = ratio.split("/").map(Number);
@@ -37,9 +40,11 @@ export default function Lickitung({ aspect = "3/2" }) {
             antialias: false, // 안티앨리어싱 비활성화
           }}
         >
-          <Model />
-          <directionalLight intensity={2} position={[0, 2, 3]} />
-          <Environment files="/studio_small_03_1k.hdr" />
+          <Suspense fallback={null}>
+            <Model />
+            <directionalLight intensity={2} position={[0, 2, 3]} />
+            <Environment files="/studio_small_03_1k.hdr" />
+          </Suspense>
         </Canvas>
       </div>
     </div>

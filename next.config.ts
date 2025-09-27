@@ -58,6 +58,31 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  // Ensure static assets are properly served
+  trailingSlash: false,
+  // Add headers for static assets
+  async headers() {
+    return [
+      {
+        source: '/:path*.(ttf|woff|woff2|eot|otf)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      {
+        source: '/:path*.(gltf|glb)',
+        headers: [
+          {
+            key: 'Content-Type',
+            value: 'model/gltf+json',
+          },
+        ],
+      },
+    ];
+  },
 };
 
 export default withVercelToolbar()(withBundleAnalyzer(withMDX(nextConfig)));
