@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { postMetadataType } from "@/lib/source";
 import { formatDate, formatYear } from "@/lib/utils/date";
 import { cn } from "@/lib/utils/tailwind";
+import styles from "@/lib/styles/stagger-fade-in.module.css";
 
 export function BlogList({
   lang,
@@ -53,7 +54,7 @@ export function BlogListFallback({
     "group-hover/year:opacity-100! group-hover/post:bg-secondary/100 group-hover/list:opacity-60 rounded-md";
 
   return (
-    <div data-animate data-animate-speed="slow" className="group/list">
+    <div className={cn(styles.container, styles.slow, "group/list")}>
       {filteredPosts.length === 0 ? (
         <div className="py-8 text-center">
           <p>검색 결과가 없습니다 :/</p>
@@ -72,10 +73,9 @@ export function BlogListFallback({
                 </h2>
               </div>
               {
-                <ul data-animate className="w-full space-y-3">
+                <ul className={cn(styles.container, "w-full space-y-3")}>
                   {yearList[year].map((post: postMetadataType) => (
                     <li
-                      data-animate
                       key={post.url}
                       className="group/post flex justify-between space-x-4"
                     >

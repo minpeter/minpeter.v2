@@ -7,6 +7,8 @@ import Header from "@/components/header";
 import { blog, getPostsMetadata } from "@/lib/source";
 import NewMetadata from "@/lib/utils/metadata";
 import { getI18n } from "@/locales/server";
+import { cn } from "@/lib/utils/tailwind";
+import styles from "@/lib/styles/stagger-fade-in.module.css";
 
 // import { BlogSearch, BlogSearchFallback } from "./search";
 
@@ -39,7 +41,7 @@ export default async function Page({
   const t = await getI18n();
 
   return (
-    <section data-animate>
+    <section className={styles.container}>
       <Header
         title={t("blogPageTitle")}
         description={t("blogPageDescription")}
