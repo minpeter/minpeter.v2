@@ -9,12 +9,11 @@ import { NuqsAdapter } from "nuqs/adapters/next";
 import Footer from "@/components/footer";
 import { ThemeProvider } from "@/components/theme-provider";
 import { AritaBuriLocalFont } from "@/lib/font.AritaBuri";
-import NewMetadata from "@/lib/metadata";
-import { cn } from "@/lib/tw-utils";
+import styles from "@/lib/styles/header-overlay.module.css";
+import NewMetadata from "@/lib/utils/metadata";
+import { cn } from "@/lib/utils/tailwind";
 
 import "./globals.css";
-
-import styles from "@/lib/styles/header-overlay.module.css";
 
 export const metadata = NewMetadata({
   title: "minpeter",

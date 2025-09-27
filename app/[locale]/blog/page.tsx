@@ -4,8 +4,8 @@ import { createLoader, parseAsString, SearchParams } from "nuqs/server";
 import { Suspense } from "react";
 
 import Header from "@/components/header";
-import NewMetadata from "@/lib/metadata";
 import { blog, getPostsMetadata } from "@/lib/source";
+import NewMetadata from "@/lib/utils/metadata";
 import { getI18n } from "@/locales/server";
 
 // import { BlogSearch, BlogSearchFallback } from "./search";

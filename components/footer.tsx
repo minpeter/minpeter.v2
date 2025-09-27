@@ -2,7 +2,7 @@ import { ArrowTopRightIcon } from "@radix-ui/react-icons";
 import Image from "next/image";
 import Link from "next/link";
 
-import { cn } from "@/lib/tw-utils";
+import { cn } from "@/lib/utils/tailwind";
 import purplePikmin from "@/public/purple-pikmin-carrying-fruit.webp";
 
 import { ModeToggle } from "./theme-toggle";

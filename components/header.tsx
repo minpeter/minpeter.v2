@@ -2,7 +2,7 @@
 
 import type { Route } from "next";
 
-import { cn } from "@/lib/tw-utils";
+import { cn } from "@/lib/utils/tailwind";
 import { useChangeLocale, useCurrentLocale } from "@/locales/client";
 
 import { Backlink } from "./link";

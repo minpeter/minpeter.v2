@@ -21,7 +21,7 @@ import {
   CarouselItem,
 } from "@/components/ui/carousel";
 import { Skeleton } from "@/components/ui/skeleton";
-import { cn } from "@/lib/tw-utils";
+import { cn } from "@/lib/utils/tailwind";
 import { useCurrentLocale, useI18n } from "@/locales/client";
 import mainImage1 from "@/public/assets/images/main-image-1.jpg";
 import mainImage2 from "@/public/assets/images/main-image-2.png";

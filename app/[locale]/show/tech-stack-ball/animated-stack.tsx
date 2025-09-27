@@ -11,7 +11,7 @@ import {
 } from "matter-js";
 import React, { useEffect, useRef } from "react";
 
-import { cn } from "@/lib/tw-utils";
+import { cn } from "@/lib/utils/tailwind";
 
 const stackIcon = [
   "AWS.png",

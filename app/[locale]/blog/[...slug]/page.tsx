@@ -11,10 +11,10 @@ import { setStaticParamsLocale } from "next-international/server";
 
 import ExternalRedirect from "@/components/external-redirect";
 import Header from "@/components/header";
-import NewMetadata from "@/lib/metadata";
 import { blog } from "@/lib/source";
-import { cn } from "@/lib/tw-utils";
-import { formatDateLong } from "@/lib/utils";
+import { formatDateLong } from "@/lib/utils/date";
+import NewMetadata from "@/lib/utils/metadata";
+import { cn } from "@/lib/utils/tailwind";
 import { getI18n } from "@/locales/server";
 
 export async function generateStaticParams({
