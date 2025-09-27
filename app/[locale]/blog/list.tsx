@@ -54,7 +54,7 @@ export function BlogListFallback({
     "group-hover/year:opacity-100! group-hover/post:bg-secondary/100 group-hover/list:opacity-60 rounded-md";
 
   return (
-    <div className={cn(styles.container, styles.slow, "group/list")}>
+    <div className={cn(styles.stagger_container, styles.slow, "group/list")}>
       {filteredPosts.length === 0 ? (
         <div className="py-8 text-center">
           <p>검색 결과가 없습니다 :/</p>
@@ -73,7 +73,9 @@ export function BlogListFallback({
                 </h2>
               </div>
               {
-                <ul className={cn(styles.container, "w-full space-y-3")}>
+                <ul
+                  className={cn(styles.stagger_container, "w-full space-y-3")}
+                >
                   {yearList[year].map((post: postMetadataType) => (
                     <li
                       key={post.url}

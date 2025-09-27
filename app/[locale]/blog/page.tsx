@@ -41,7 +41,7 @@ export default async function Page({
   const t = await getI18n();
 
   return (
-    <section className={styles.container}>
+    <section className={styles.stagger_container}>
       <Header
         title={t("blogPageTitle")}
         description={t("blogPageDescription")}

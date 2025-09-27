@@ -16,6 +16,7 @@ import { formatDateLong } from "@/lib/utils/date";
 import NewMetadata from "@/lib/utils/metadata";
 import { cn } from "@/lib/utils/tailwind";
 import { getI18n } from "@/locales/server";
+import styles from "@/lib/styles/stagger-fade-in.module.css";
 
 export async function generateStaticParams({
   params,
@@ -84,7 +85,7 @@ export default async function Page({
   );
 
   return (
-    <section data-animate>
+    <section className={styles.stagger_container}>
       <Header
         title={post.data.title}
         description={
@@ -98,7 +99,7 @@ export default async function Page({
       <aside className="fixed top-36 left-8 hidden w-72 2xl:block">
         {post.data.toc.length > 0 && (
           <div className="text-sm">
-            <nav data-animate>
+            <nav className={styles.stagger_container}>
               {post.data.toc.map((item: TOCItemType) => (
                 <a
                   key={item.url}

@@ -5,6 +5,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 
 import Header from "@/components/header";
 import { useCurrentLocale, useI18n } from "@/locales/client";
+import styles from "@/lib/styles/stagger-fade-in.module.css";
 
 import { nextSentencesGenerator } from "./action";
 
@@ -313,7 +314,7 @@ export default function Page() {
   };
 
   return (
-    <section data-animate className="flex flex-col gap-12">
+    <section className={`${styles.stagger_container} flex flex-col gap-12`}>
       <Header
         title="Peter's Typing practice"
         description={t("typingDescription")}

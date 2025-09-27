@@ -13,7 +13,7 @@
   }
 
   /* Main container - Apply staggered animation to child elements */
-  .container > * {
+  .stagger_container > * {
     --level: 0;
     --overflow-level: 0;
     --base-delay: 60ms;

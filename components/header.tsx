@@ -4,6 +4,7 @@ import type { Route } from "next";
 
 import { cn } from "@/lib/utils/tailwind";
 import { useChangeLocale, useCurrentLocale } from "@/locales/client";
+import styles from "@/lib/styles/stagger-fade-in.module.css";
 
 import { Backlink } from "./link";
 
@@ -21,7 +22,7 @@ export default function Header({ title, description, link }: HeaderProps) {
   const locale = useCurrentLocale();
 
   return (
-    <header className="mb-10 space-y-1" data-animate>
+    <header className={cn("mb-10 space-y-1", styles.stagger_container)}>
       {link ? (
         <div>
           <Backlink text={link.text} href={link.href} />

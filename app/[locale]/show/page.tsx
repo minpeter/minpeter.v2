@@ -6,6 +6,8 @@ import Header from "@/components/header";
 import { createFeatureGate } from "@/lib/flags";
 import NewMetadata from "@/lib/utils/metadata";
 import { getI18n } from "@/locales/server";
+import { cn } from "@/lib/utils/tailwind";
+import styles from "@/lib/styles/stagger-fade-in.module.css";
 
 export const metadata = NewMetadata({
   title: "minpeter | showcase",
@@ -41,9 +43,11 @@ export default async function Page({
         link={{ href: `/${locale}` as Route, text: t("backToHome") }}
       />
       <div
-        data-animate
-        data-animate-speed="fast"
-        className="flex flex-col gap-2"
+        className={cn(
+          styles.stagger_container,
+          styles.fast,
+          "flex flex-col gap-2"
+        )}
       >
         {showcasePaths.map((path) => (
           <Link

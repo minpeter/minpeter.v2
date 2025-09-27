@@ -1,6 +1,8 @@
 import type { Route } from "next";
 
 import Header from "@/components/header";
+import { cn } from "@/lib/utils/tailwind";
+import styles from "@/lib/styles/stagger-fade-in.module.css";
 
 import TmpfUI from "./tmpf";
 
@@ -17,7 +19,9 @@ export default async function Page({
         description="tmpf.me보다 간단한 대체 프론트엔드"
         link={{ href: `/${locale}/show` as Route, text: "showcase로 돌아가기" }}
       />
-      <div data-animate data-animate-speed="slow" className="flex flex-col">
+      <div
+        className={cn(styles.stagger_container, styles.slow, "flex flex-col")}
+      >
         <TmpfUI />
       </div>
     </section>

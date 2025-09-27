@@ -23,6 +23,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils/tailwind";
 import { useCurrentLocale, useI18n } from "@/locales/client";
+import styles from "@/lib/styles/stagger-fade-in.module.css";
 import mainImage1 from "@/public/assets/images/main-image-1.jpg";
 import mainImage2 from "@/public/assets/images/main-image-2.png";
 import mainImage3 from "@/public/assets/images/main-image-3.png";
@@ -39,12 +40,14 @@ export default function Page() {
         description="written, coded, and designed by minpeter"
         title="minpeter 🇰🇷"
       />
-      <div data-animate data-animate-speed="slow">
+      <div className={cn(styles.stagger_container, styles.slow)}>
         <div
-          data-animate
-          data-animate-speed="slow"
-          // 상위 레이아웃에 넓이 제한이 존재하기 때문에 여기서 넓이 제한은 의미없음
-          className="grid w-full grid-cols-1 gap-2 lg:grid-cols-2"
+          className={cn(
+            styles.stagger_container,
+            styles.slow,
+            // 상위 레이아웃에 넓이 제한이 존재하기 때문에 여기서 넓이 제한은 의미없음
+            "grid w-full grid-cols-1 gap-2 lg:grid-cols-2"
+          )}
         >
           <Link
             href={`/${locale}/blog` as Route}
