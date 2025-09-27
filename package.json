@@ -8,7 +8,7 @@
     "build": "next build --turbo",
     "build:analyze": "ANALYZE=true next build",
     "start": "next start",
-    "postbuild": "next-sitemap",
+    "postbuild": "next-sitemap --config next-sitemap.config.mjs",
     "check:prettier": "prettier --check .",
     "check:eslint": "eslint .",
     "precheck:types": "next typegen",
