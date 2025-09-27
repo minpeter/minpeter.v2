@@ -5,6 +5,7 @@ import { VercelToolbar } from "@vercel/toolbar/next";
 import { NextProvider } from "fumadocs-core/framework/next";
 import { Geist_Mono } from "next/font/google";
 import { NuqsAdapter } from "nuqs/adapters/next";
+import type { Viewport } from "next";
 
 import Footer from "@/components/footer";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -19,6 +20,14 @@ export const metadata = NewMetadata({
   title: "minpeter",
   description: "이 웹에서 가장 멋진 사이트가 될거야~",
 });
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#0a0a0b" },
+  ],
+  colorScheme: "light dark",
+};
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
