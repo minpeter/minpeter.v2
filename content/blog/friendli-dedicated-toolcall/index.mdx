@@ -331,8 +331,8 @@ FriendliAI의 완전관리형 모델 서빙 제품인 Friendli Dedicated Endpoin
 
 #### 2단계: 호환 가능한 tool call 기능 추가하기
 
-순수한 템플릿을 준비했다면, 이제 FDE 엔진에서 인식할 수 있는 형식으로 tool call 기능을 추가해야 합니다. 가장 널리 사용되는 표준은 [Hermes Function Calling Standard](https://github.com/NousResearch/Hermes-Function-Calling) 형식입니다.
-이 표준의 핵심 특징은 다음과 같습니다:
+순수한 템플릿을 준비했다면, 이제 FDE 엔진에서 인식할 수 있는 형식으로 tool call 기능을 추가해야 합니다. 가장 널리 사용되는 형식은 [Hermes Function Calling Standard](https://github.com/NousResearch/Hermes-Function-Calling) 형식입니다.
+이 형식의 핵심 특징은 다음과 같습니다:
 
 - Tool 정의: `<tools>...</tools>` XML 태그 내에 JSON 형식으로 정의
 - Tool 호출: `<tool_call>{"name": "함수명", "arguments": {...}}</tool_call>` 형식으로 호출
