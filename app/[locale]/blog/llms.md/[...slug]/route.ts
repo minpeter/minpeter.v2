@@ -20,7 +20,7 @@ export async function GET(
 
   return new NextResponse(content, {
     headers: {
-      "Content-Type": "text/plain",
+      "Content-Type": "text/plain; charset=utf-8",
     },
   });
 }
