@@ -1,4 +1,4 @@
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { createI18nMiddleware } from "next-international/middleware";
 
 const languages = ["en", "ko"];
@@ -13,17 +13,22 @@ const I18nMiddleware = createI18nMiddleware({
 });
 
 export function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+
+  // 1. Exclusions
+  if (pathname.startsWith("/_next/")) return NextResponse.next();
+  if (pathname.startsWith("/.well-known/")) return NextResponse.next();
+  if (pathname.startsWith("/.")) return NextResponse.next();
+
+  // 2. Exclude paths with a file extension, but allow .md
+  const match = pathname.match(/\.[^/]+$/); // last extension
+  if (match && match[0] !== ".md") {
+    return NextResponse.next();
+  }
+
   return I18nMiddleware(request);
 }
 
 export const config = {
-  matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - _next (Next.js internal files)
-     * - .well-known (well-known URIs)
-     * - *.* - static assets (fonts, images, etc.)
-     */
-    "/((?!_next/|_next/$|\\.well-known|\\.well-known$|.*\\..*).*)",
-  ],
+  matcher: "/:path*",
 };

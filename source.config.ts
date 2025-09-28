@@ -32,12 +32,16 @@ export const { docs, meta } = defineDocs({
         .optional()
         .default(["ko"]),
     }),
+    postprocess: {
+      includeProcessedMarkdown: true,
+    },
   },
 });
 
 const mdxOptions: DefaultMDXOptions = {
   remarkPlugins: [remarkInstall],
   rehypePlugins: (v) => [...v],
+  development: process.env.NODE_ENV === "development",
 };
 
 export default defineConfig({

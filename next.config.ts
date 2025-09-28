@@ -41,6 +41,16 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+
+  rewrites: async () => {
+    return [
+      // AI/LLM endpoints for blog content
+      {
+        source: "/:locale/blog/:path*.md",
+        destination: "/:locale/blog/llms.md/:path*",
+      },
+    ];
+  },
 };
 
 const withBundleAnalyzer = bundleAnalyzer({
