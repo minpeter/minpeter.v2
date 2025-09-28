@@ -7,9 +7,9 @@ import { useQueryState, parseAsString } from "nuqs";
 
 import { Badge } from "@/components/ui/badge";
 import { postMetadataType } from "@/lib/source";
+import styles from "@/lib/styles/stagger-fade-in.module.css";
 import { formatDate, formatYear } from "@/lib/utils/date";
 import { cn } from "@/lib/utils/tailwind";
-import styles from "@/lib/styles/stagger-fade-in.module.css";
 
 export function BlogList({
   lang,

@@ -2,9 +2,9 @@
 
 import type { Route } from "next";
 
+import styles from "@/lib/styles/stagger-fade-in.module.css";
 import { cn } from "@/lib/utils/tailwind";
 import { useChangeLocale, useCurrentLocale } from "@/locales/client";
-import styles from "@/lib/styles/stagger-fade-in.module.css";
 
 import { Backlink } from "./link";
 

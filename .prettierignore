@@ -1,3 +1,4 @@
 .gitignore
 public/*
 content/blog/friendli-dedicated-toolcall/index.mdx
+pnpm-lock.yaml

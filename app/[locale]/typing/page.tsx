@@ -4,8 +4,8 @@ import type { Route } from "next";
 import { useState, useRef, useEffect, useCallback } from "react";
 
 import Header from "@/components/header";
-import { useCurrentLocale, useI18n } from "@/locales/client";
 import styles from "@/lib/styles/stagger-fade-in.module.css";
+import { useCurrentLocale, useI18n } from "@/locales/client";
 
 import { nextSentencesGenerator } from "./action";
 

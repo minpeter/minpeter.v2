@@ -3,9 +3,9 @@ import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { VercelToolbar } from "@vercel/toolbar/next";
 import { NextProvider } from "fumadocs-core/framework/next";
+import type { Viewport } from "next";
 import { Geist_Mono } from "next/font/google";
 import { NuqsAdapter } from "nuqs/adapters/next";
-import type { Viewport } from "next";
 
 import Footer from "@/components/footer";
 import { ThemeProvider } from "@/components/theme-provider";

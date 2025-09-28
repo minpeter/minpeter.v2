@@ -4,10 +4,10 @@ import { setStaticParamsLocale } from "next-international/server";
 
 import Header from "@/components/header";
 import { createFeatureGate } from "@/lib/flags";
-import NewMetadata from "@/lib/utils/metadata";
-import { getI18n } from "@/locales/server";
-import { cn } from "@/lib/utils/tailwind";
 import styles from "@/lib/styles/stagger-fade-in.module.css";
+import NewMetadata from "@/lib/utils/metadata";
+import { cn } from "@/lib/utils/tailwind";
+import { getI18n } from "@/locales/server";
 
 export const metadata = NewMetadata({
   title: "minpeter | showcase",

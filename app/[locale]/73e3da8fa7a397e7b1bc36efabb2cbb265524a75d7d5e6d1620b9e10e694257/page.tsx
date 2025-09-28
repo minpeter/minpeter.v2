@@ -1,8 +1,8 @@
 import type { Route } from "next";
 
 import { Backlink } from "@/components/link";
-import { cn } from "@/lib/utils/tailwind";
 import styles from "@/lib/styles/stagger-fade-in.module.css";
+import { cn } from "@/lib/utils/tailwind";
 
 export default async function Page({
   params,
