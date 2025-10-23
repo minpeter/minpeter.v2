@@ -1,4 +1,4 @@
-import { RootProvider } from "fumadocs-ui/provider";
+import { RootProvider } from "fumadocs-ui/provider/next";
 
 import { I18nProviderClient } from "@/locales/client";
 import { getStaticParams } from "@/locales/server";

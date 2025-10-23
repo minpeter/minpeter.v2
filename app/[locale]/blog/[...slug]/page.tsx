@@ -1,4 +1,3 @@
-import { TOCItemType } from "fumadocs-core/server";
 import { Callout } from "fumadocs-ui/components/callout";
 import { ImageZoom } from "fumadocs-ui/components/image-zoom";
 import { Tab, Tabs } from "fumadocs-ui/components/tabs";
@@ -8,6 +7,7 @@ import type { Route } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { setStaticParamsLocale } from "next-international/server";
+import { TOCItemType } from "fumadocs-core/toc";
 
 import ExternalRedirect from "@/components/external-redirect";
 import Header from "@/components/header";

@@ -7,8 +7,6 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   typedRoutes: true,
 
-  distDir: process.env.NODE_ENV === "production" ? ".next" : ".next-dev",
-
   compiler: {
     // Remove console logs only in production, excluding error logs
     removeConsole:
@@ -23,13 +21,6 @@ const nextConfig: NextConfig = {
     },
   },
   reactStrictMode: true,
-  eslint: {
-    // !WARN!
-    // This allows production builds to successfully complete
-    // even if project has ESLint errors.
-    // !WARN!
-    ignoreDuringBuilds: true,
-  },
   images: {
     formats: ["image/avif", "image/webp"],
     remotePatterns: [

@@ -1,7 +1,7 @@
 import { loader } from "fumadocs-core/source";
-import { createMDXSource } from "fumadocs-mdx";
 
 import { docs, meta } from "@/.source";
+import { createMDXSource } from "fumadocs-mdx/runtime/next";
 
 export const blog = loader({
   i18n: {

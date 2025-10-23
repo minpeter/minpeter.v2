@@ -12,7 +12,7 @@ const I18nMiddleware = createI18nMiddleware({
   },
 });
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // 1. Exclusions
