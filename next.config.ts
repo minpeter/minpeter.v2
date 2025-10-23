@@ -11,21 +11,11 @@ const nextConfig: NextConfig = {
   experimental: {
     turbopackFileSystemCacheForDev: true,
   },
-
-  compiler: {
-    // Remove console logs only in production, excluding error logs
-    removeConsole:
-      process.env.NODE_ENV === "production" ? { exclude: ["error"] } : false,
-  },
-
-  // For additional debugging in Lighthouse
-  productionBrowserSourceMaps: true,
   logging: {
     fetches: {
       fullUrl: true,
     },
   },
-  reactStrictMode: true,
   images: {
     formats: ["image/avif", "image/webp"],
     remotePatterns: [
