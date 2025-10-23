@@ -7,7 +7,6 @@ import Header from "@/components/header";
 import { blog, getPostsMetadata } from "@/lib/source";
 import styles from "@/lib/styles/stagger-fade-in.module.css";
 import NewMetadata from "@/lib/utils/metadata";
-import { cn } from "@/lib/utils/tailwind";
 import { getI18n } from "@/locales/server";
 
 // import { BlogSearch, BlogSearchFallback } from "./search";
