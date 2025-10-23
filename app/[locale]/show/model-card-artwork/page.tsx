@@ -5,12 +5,10 @@ import Header from "@/components/header";
 
 import { hermes3, llama3p1, qwen2p5 } from "./assets";
 
-export default async function Page({
-  params,
-}: {
-  params: Promise<{ locale: "ko" | "en" }>;
-}) {
-  const { locale } = await params;
+export default async function Page(
+  props: PageProps<"/[locale]/show/model-card-artwork">
+) {
+  const { locale } = await props.params;
   return (
     <section className="flex flex-col gap-3">
       <Header

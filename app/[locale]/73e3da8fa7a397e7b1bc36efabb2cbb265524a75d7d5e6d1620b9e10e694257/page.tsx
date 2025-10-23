@@ -4,12 +4,10 @@ import { Backlink } from "@/components/link";
 import styles from "@/lib/styles/stagger-fade-in.module.css";
 import { cn } from "@/lib/utils/tailwind";
 
-export default async function Page({
-  params,
-}: {
-  params: Promise<{ locale: "ko" | "en" }>;
-}) {
-  const { locale } = await params;
+export default async function Page(
+  props: PageProps<"/[locale]/73e3da8fa7a397e7b1bc36efabb2cbb265524a75d7d5e6d1620b9e10e694257">
+) {
+  const { locale } = await props.params;
   return (
     <section className="flex flex-col gap-1">
       <div className={cn(styles.stagger_container, styles.fast)}>

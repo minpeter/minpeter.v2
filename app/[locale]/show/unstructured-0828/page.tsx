@@ -7,12 +7,10 @@ import Header from "@/components/header";
 import SaaSComponentImage from "./saas-component.png";
 import SaaSPageImage from "./saas-page.png";
 
-export default async function Page({
-  params,
-}: {
-  params: Promise<{ locale: "ko" | "en" }>;
-}) {
-  const { locale } = await params;
+export default async function Page(
+  props: PageProps<"/[locale]/show/unstructured-0828">
+) {
+  const { locale } = await props.params;
   return (
     <section className="flex flex-col gap-8">
       <Header

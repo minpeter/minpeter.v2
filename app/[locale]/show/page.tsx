@@ -23,12 +23,8 @@ const showcasePaths = [
   "/show/unstructured",
 ] as const;
 
-export default async function Page({
-  params,
-}: {
-  params: Promise<{ locale: "ko" | "en" }>;
-}) {
-  const { locale } = await params;
+export default async function Page(props: PageProps<"/[locale]/show">) {
+  const { locale } = await props.params;
 
   setStaticParamsLocale(locale);
 

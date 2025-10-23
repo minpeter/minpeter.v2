@@ -28,12 +28,10 @@ export async function generateStaticParams({
   return pages.map((page) => ({ slug: page.slugs }));
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ locale: string; slug: string[] }>;
-}) {
-  const { locale, slug } = await params;
+export async function generateMetadata(
+  props: PageProps<"/[locale]/blog/[...slug]">
+) {
+  const { locale, slug } = await props.params;
   const page = blog.getPage(slug, locale);
   if (!page) notFound();
 
@@ -43,12 +41,10 @@ export async function generateMetadata({
   });
 }
 
-export default async function Page({
-  params,
-}: {
-  params: Promise<{ locale: string; slug: string[] }>;
-}) {
-  const { locale, slug } = await params;
+export default async function Page(
+  props: PageProps<"/[locale]/blog/[...slug]">
+) {
+  const { locale, slug } = await props.params;
   setStaticParamsLocale(locale);
   const t = await getI18n();
 

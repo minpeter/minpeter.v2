@@ -6,12 +6,10 @@ import { cn } from "@/lib/utils/tailwind";
 
 import AnimatedText from "./animated-text";
 
-export default async function Page({
-  params,
-}: {
-  params: Promise<{ locale: "ko" | "en" }>;
-}) {
-  const { locale } = await params;
+export default async function Page(
+  props: PageProps<"/[locale]/show/dynamic-hacked-text">
+) {
+  const { locale } = await props.params;
   return (
     <section className="flex flex-col gap-3">
       <Header

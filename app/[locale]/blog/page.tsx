@@ -25,15 +25,9 @@ const blogSearchParams = {
 
 const loadSearchParams = createLoader(blogSearchParams);
 
-export default async function Page({
-  params,
-  searchParams,
-}: {
-  params: Promise<{ locale: "ko" | "en" }>;
-  searchParams: SearchParams;
-}) {
-  const { locale } = await params;
-  const { q: query } = loadSearchParams(searchParams);
+export default async function Page(props: PageProps<"/[locale]/blog">) {
+  const { locale } = await props.params;
+  const { q: query } = loadSearchParams(await props.searchParams);
 
   const posts = getPostsMetadata(blog.getPages(locale));
 

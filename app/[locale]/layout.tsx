@@ -7,14 +7,8 @@ export function generateStaticParams() {
   return getStaticParams();
 }
 
-export default async function RootLayout({
-  params,
-  children,
-}: {
-  params: Promise<{ locale: string }>;
-  children: React.ReactNode;
-}) {
-  const { locale } = await params;
+export default async function RootLayout(props: LayoutProps<"/[locale]">) {
+  const { locale } = await props.params;
 
   //   if (!(languages as readonly string[]).includes(locale)) {
   //     notFound();
@@ -22,7 +16,7 @@ export default async function RootLayout({
 
   return (
     <I18nProviderClient locale={locale}>
-      <RootProvider i18n={{ locale }}>{children}</RootProvider>
+      <RootProvider i18n={{ locale }}>{props.children}</RootProvider>
     </I18nProviderClient>
   );
 }
