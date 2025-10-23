@@ -4,9 +4,9 @@
   "private": true,
   "scripts": {
     "postinstall": "fumadocs-mdx",
-    "dev": "next dev --turbo -p 8200",
+    "dev": "next dev -p 8200",
     "start": "next start -p 8200",
-    "build": "next build --turbo",
+    "build": "next build",
     "build:analyze": "ANALYZE=true next build",
     "postbuild": "next-sitemap --config next-sitemap.config.mjs",
     "check:prettier": "prettier --check .",
