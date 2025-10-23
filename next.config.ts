@@ -1,11 +1,16 @@
 import bundleAnalyzer from "@next/bundle-analyzer";
-import { withVercelToolbar } from "@vercel/toolbar/plugins/next";
+import { withVercelToolbar as vercelToolbar } from "@vercel/toolbar/plugins/next";
 import { createMDX } from "fumadocs-mdx/next";
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
   typedRoutes: true,
+  cacheComponents: true,
+  reactCompiler: true,
+  experimental: {
+    turbopackFileSystemCacheForDev: true,
+  },
 
   compiler: {
     // Remove console logs only in production, excluding error logs
@@ -44,10 +49,10 @@ const nextConfig: NextConfig = {
   },
 };
 
+const withMDX = createMDX();
+const withVercelToolbar = vercelToolbar();
 const withBundleAnalyzer = bundleAnalyzer({
   enabled: process.env.ANALYZE === "true",
 });
 
-const withMDX = createMDX();
-
-export default withVercelToolbar()(withBundleAnalyzer(withMDX(nextConfig)));
+export default withBundleAnalyzer(withVercelToolbar(withMDX(nextConfig)));

@@ -4,8 +4,6 @@ import { type NextRequest, NextResponse } from "next/server";
 import { getLLMText } from "@/lib/get-llm-text";
 import { blog } from "@/lib/source";
 
-export const revalidate = false;
-
 export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ slug?: string[] }> }
