@@ -1,5 +1,7 @@
 import { notFound } from "next/navigation";
 
-export default function CatchAll404() {
+export default function NotFoundCatchAllPage() {
   notFound();
+
+  return <></>;
 }
