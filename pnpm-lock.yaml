@@ -54,6 +54,9 @@ importers:
       axios:
         specifier: ^1.12.2
         version: 1.12.2
+      babel-plugin-react-compiler:
+        specifier: ^1.0.0
+        version: 1.0.0
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1
@@ -142,9 +145,6 @@ importers:
       '@types/react-dom':
         specifier: 19.2.2
         version: 19.2.2(@types/react@19.2.2)
-      babel-plugin-react-compiler:
-        specifier: ^1.0.0
-        version: 1.0.0
       eslint:
         specifier: ^9.38.0
         version: 9.38.0(jiti@2.6.1)
