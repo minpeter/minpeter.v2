@@ -7,7 +7,7 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   typedRoutes: true,
   cacheComponents: true,
-  reactCompiler: true,
+  reactCompiler: false,
   experimental: {
     turbopackFileSystemCacheForDev: true,
   },
