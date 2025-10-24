@@ -1,9 +1,5 @@
 import { notFound } from "next/navigation";
 
-export default async function NotFoundCatchAllPage() {
-  "use cache";
-
+export default function Page() {
   notFound();
-
-  return <div />;
 }

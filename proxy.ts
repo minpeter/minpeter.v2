@@ -1,10 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createI18nMiddleware } from "next-international/middleware";
 
-const languages = ["en", "ko"];
+export const SUPPORTED_LOCALES = ["en", "ko"] as const;
+export type SupportedLocale = (typeof SUPPORTED_LOCALES)[number];
+
 const fallbackLanguage = "ko";
 const I18nMiddleware = createI18nMiddleware({
-  locales: languages,
+  locales: SUPPORTED_LOCALES,
   defaultLocale: fallbackLanguage,
   urlMappingStrategy: "rewriteDefault",
   resolveLocaleFromRequest: () => {
