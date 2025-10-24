@@ -6,8 +6,8 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   poweredByHeader: false,
   typedRoutes: true,
-  cacheComponents: true,
-  reactCompiler: false,
+  cacheComponents: false,
+  reactCompiler: true,
   experimental: {
     turbopackFileSystemCacheForDev: true,
   },
