@@ -1,15 +1,7 @@
 import { notFound } from "next/navigation";
-import { Suspense } from "react";
+import { connection } from "next/server";
 
-function NotFoundContent() {
+export default async function NotFoundCatchAllPage() {
+  await connection;
   notFound();
-  return null;
-}
-
-export default function NotFoundCatchAllPage() {
-  return (
-    <Suspense fallback={<div />}>
-      <NotFoundContent />
-    </Suspense>
-  );
 }
