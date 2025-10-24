@@ -1,5 +1,15 @@
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
+
+function NotFoundContent() {
+  notFound();
+  return null;
+}
 
 export default function NotFoundCatchAllPage() {
-  notFound();
+  return (
+    <Suspense fallback={<div />}>
+      <NotFoundContent />
+    </Suspense>
+  );
 }
