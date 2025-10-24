@@ -1,3 +1,10 @@
 export default function NotFound() {
-  return <section>404</section>;
+  return (
+    <div>
+      <section>
+        404: I don't expect people to come here (if they bypass i18n by going
+        through a proxy)
+      </section>
+    </div>
+  );
 }
