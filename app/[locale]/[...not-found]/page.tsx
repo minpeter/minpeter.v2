@@ -4,4 +4,6 @@ export default async function NotFoundCatchAllPage() {
   "use cache";
 
   notFound();
+
+  return <div />;
 }
