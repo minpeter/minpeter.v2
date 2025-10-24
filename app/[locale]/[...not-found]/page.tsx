@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
 
-export default async function NotFoundCatchAllPage() {
+export default function NotFoundCatchAllPage() {
   notFound();
 }
