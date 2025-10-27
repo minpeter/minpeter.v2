@@ -18,7 +18,7 @@ import NewMetadata from "@/lib/utils/metadata";
 import { cn } from "@/lib/utils/tailwind";
 import { getI18n } from "@/locales/server";
 
-export async function generateStaticParams({
+export function generateStaticParams({
   params,
 }: {
   params: { locale: string; slug: string[] };
@@ -33,7 +33,9 @@ export async function generateMetadata(
 ) {
   const { locale, slug } = await props.params;
   const page = blog.getPage(slug, locale);
-  if (!page) notFound();
+  if (!page) {
+    notFound();
+  }
 
   return NewMetadata({
     title: page.data.title,
@@ -59,7 +61,9 @@ export default async function Page(
     (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
   );
 
-  if (!post) notFound();
+  if (!post) {
+    notFound();
+  }
 
   const MDX = post.data.body;
 
@@ -69,9 +73,9 @@ export default async function Page(
   };
 
   const postsIndex = posts.reduce<Record<string, PostWithNavigation>>(
-    (acc, post, index) => {
-      acc[post.slugs.join("/")] = {
-        ...post,
+    (acc, currentPost, index) => {
+      acc[currentPost.slugs.join("/")] = {
+        ...currentPost,
         previous: posts[index - 1] || null,
         next: posts[index + 1] || null,
       };
@@ -100,7 +104,7 @@ export default async function Page(
                 <a
                   className={cn(
                     "my-1 block",
-                    "animation:enter w-fit rounded-md px-0.5 hover:bg-secondary/100",
+                    "animation:enter w-fit rounded-md px-0.5 hover:bg-secondary",
                     "box-decoration-clone px-2 py-1"
                   )}
                   href={item.url}
@@ -122,17 +126,19 @@ export default async function Page(
             className="mdx"
             components={{
               ...defaultMdxComponents,
-              img: (props) => <ImageZoom {...props} />,
+              img: (imageProps) => <ImageZoom {...imageProps} />,
               Tab,
               Tabs,
               Callout,
-              a: (props) => {
-                const { href, children, ...rest } = props;
+              a: (anchorProps) => {
+                const { href, children, ...rest } = anchorProps;
                 const h = href as string | undefined;
-                if (h && h.startsWith("/") && !h.startsWith("//")) {
+                const isInternalLink =
+                  h?.startsWith("/") && !h?.startsWith("//");
+                if (isInternalLink) {
                   return (
                     <Link
-                      className="rounded-md px-2 py-1 text-primary hover:bg-secondary/100"
+                      className="rounded-md px-2 py-1 text-primary hover:bg-secondary"
                       href={h as Route}
                       {...(rest as Record<string, unknown>)}
                     >
@@ -142,7 +148,7 @@ export default async function Page(
                 }
                 return (
                   <a
-                    className="rounded-md px-2 py-1 text-primary hover:bg-secondary/100"
+                    className="rounded-md px-2 py-1 text-primary hover:bg-secondary"
                     href={h}
                     rel="noopener noreferrer"
                     target="_blank"
@@ -191,7 +197,7 @@ export default async function Page(
         <div className="flex justify-between">
           {postsIndex[post.slugs.join("/")].previous ? (
             <Link
-              className="rounded-md px-2 py-1 text-primary hover:bg-secondary/100"
+              className="rounded-md px-2 py-1 text-primary hover:bg-secondary"
               href={
                 `${postsIndex[post.slugs.join("/")].previous?.url}` as Route
               }
@@ -204,7 +210,7 @@ export default async function Page(
 
           {postsIndex[post.slugs.join("/")].next && (
             <Link
-              className="rounded-md px-2 py-1 text-primary hover:bg-secondary/100"
+              className="rounded-md px-2 py-1 text-primary hover:bg-secondary"
               href={`${postsIndex[post.slugs.join("/")].next?.url}` as Route}
             >
               {postsIndex[post.slugs.join("/")].next?.data.title} →

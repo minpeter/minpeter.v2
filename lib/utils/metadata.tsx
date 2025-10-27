@@ -7,14 +7,23 @@ export default function NewMetadata({
   title?: string;
   description?: string;
 }): Metadata {
+  const LOCAL_PORT_FALLBACK = 3000;
+
+  const baseUrl = (() => {
+    if (process.env.PUBLIC_BASE_URL) {
+      return process.env.PUBLIC_BASE_URL;
+    }
+
+    if (process.env.VERCEL_URL) {
+      return `https://${process.env.VERCEL_URL}`;
+    }
+
+    const port = process.env.PORT ?? LOCAL_PORT_FALLBACK;
+    return `http://localhost:${port}`;
+  })();
+
   return {
-    metadataBase: new URL(
-      process.env.PUBLIC_BASE_URL
-        ? process.env.PUBLIC_BASE_URL
-        : process.env.VERCEL_URL
-          ? `https://${process.env.VERCEL_URL}`
-          : `http://localhost:${process.env.PORT ?? 3000}`
-    ),
+    metadataBase: new URL(baseUrl),
 
     title,
     description,

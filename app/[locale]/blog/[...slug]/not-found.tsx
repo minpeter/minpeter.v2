@@ -2,7 +2,7 @@ import type { Route } from "next";
 
 import Header from "@/components/header";
 
-export default async function NotFound({
+export default function NotFound({
   params,
 }: {
   params?: { locale: "ko" | "en" };

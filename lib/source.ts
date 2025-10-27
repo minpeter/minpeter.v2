@@ -25,8 +25,6 @@ export type postMetadataType = {
 
 export function getPostMetadata(post: blogType): postMetadataType {
   if (!post) {
-    console.error("Post not found");
-
     return {
       url: "",
       title: "",

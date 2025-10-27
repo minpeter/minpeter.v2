@@ -1,14 +1,18 @@
 "use client";
 import { useEffect, useState } from "react";
 
-interface ExternalRedirectProps {
+const DEFAULT_COUNTDOWN_START = 3;
+const ONE_SECOND_MS = 1000;
+const COUNTDOWN_DECREMENT = 1;
+
+type ExternalRedirectProps = {
   url: string;
   countdownStart?: number;
-}
+};
 
 export default function ExternalRedirect({
   url,
-  countdownStart = 3,
+  countdownStart = DEFAULT_COUNTDOWN_START,
 }: ExternalRedirectProps) {
   const [count, setCount] = useState(countdownStart);
 
@@ -16,8 +20,13 @@ export default function ExternalRedirect({
     if (count <= 0) {
       window.location.href = url;
     } else {
-      const timer = setTimeout(() => setCount(count - 1), 1000);
-      return () => clearTimeout(timer);
+      const timer = window.setTimeout(() => {
+        setCount((previous) => previous - COUNTDOWN_DECREMENT);
+      }, ONE_SECOND_MS);
+
+      return () => {
+        window.clearTimeout(timer);
+      };
     }
   }, [count, url]);
 

@@ -44,6 +44,21 @@ const stackIcon = [
   "Vite.js.png",
 ];
 
+const GRAVITY_X = 0;
+const GRAVITY_Y = 1;
+const GRAVITY_SCALE = 0.001;
+const CANVAS_BACKGROUND = "transparent";
+const WALL_THICKNESS = 100;
+const WALL_SAFE_ZONE = 100;
+const ICON_DIAMETER = 30;
+const ICON_TEXTURE_BASE_DIMENSION = 300;
+const INITIAL_BODY_POSITION = 100;
+const RANDOM_SORT_BIAS = 0.5;
+const SLICE_START_INDEX = 0;
+const MAX_RENDERED_ICONS = 10;
+const MOUSE_CONSTRAINT_STIFFNESS = 0.05;
+const CANVAS_FILTER = "grayscale(1)";
+
 export function Playground({
   w,
   h,
@@ -56,17 +71,23 @@ export function Playground({
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
+    const canvas = canvasRef.current;
+
+    if (!canvas) {
+      return;
+    }
+
     const engine = Engine.create({
-      gravity: { x: 0, y: 1, scale: 0.001 },
+      gravity: { x: GRAVITY_X, y: GRAVITY_Y, scale: GRAVITY_SCALE },
     });
 
     const render = Render.create({
       engine,
-      canvas: canvasRef.current!,
+      canvas,
       options: {
         width: w,
         height: h,
-        background: "transparent",
+        background: CANVAS_BACKGROUND,
         wireframes: false,
       },
     });
@@ -77,9 +98,9 @@ export function Playground({
         visible: false,
       },
     };
-    const wallThickness = 100;
+    const wallThickness = WALL_THICKNESS;
     const wallOffset = -(wallThickness / 2);
-    const wallSafeZone = 100;
+    const wallSafeZone = WALL_SAFE_ZONE;
     const wallPositions = [
       {
         x: w / 2,
@@ -117,10 +138,10 @@ export function Playground({
       )
     );
 
-    const iconSize = 30;
-    const iconScale = iconSize / 300;
-    const boxs = stackIcon.map((icon) =>
-      Bodies.circle(100, 100, iconSize, {
+    const iconSize = ICON_DIAMETER;
+    const iconScale = iconSize / ICON_TEXTURE_BASE_DIMENSION;
+    const boxes = stackIcon.map((icon) =>
+      Bodies.circle(INITIAL_BODY_POSITION, INITIAL_BODY_POSITION, iconSize, {
         render: {
           sprite: {
             texture: `/assets/images/stack-icon/${icon}`,
@@ -135,18 +156,20 @@ export function Playground({
     const mouseConstraint = MouseConstraint.create(engine, {
       mouse,
       constraint: {
-        stiffness: 0.05,
+        stiffness: MOUSE_CONSTRAINT_STIFFNESS,
         render: {
           visible: false,
         },
       },
     });
 
-    // boxs에서 랜덤으로 반절만 선택
+    // 아이콘을 무작위로 선택하여 제한된 수만 렌더링합니다.
     World.add(engine.world, [
       ...walls,
       mouseConstraint,
-      ...boxs.sort(() => Math.random() - 0.5).slice(0, 10),
+      ...boxes
+        .sort(() => Math.random() - RANDOM_SORT_BIAS)
+        .slice(SLICE_START_INDEX, MAX_RENDERED_ICONS),
     ]);
 
     Render.run(render);
@@ -172,7 +195,7 @@ export function Playground({
       height={h}
       ref={canvasRef}
       style={{
-        filter: "grayscale(1)",
+        filter: CANVAS_FILTER,
       }}
       width={w}
     />

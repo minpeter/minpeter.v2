@@ -38,23 +38,25 @@ export default function Header({ title, description, link }: HeaderProps) {
         <div className="flex space-x-1">
           <button
             className={cn(
-              "animation:enter w-fit rounded-md px-0.5 text-gray-400 text-sm underline hover:bg-secondary/100",
+              "animation:enter w-fit rounded-md px-0.5 text-gray-400 text-sm underline hover:bg-secondary",
               {
                 "text-primary": locale === "ko",
               }
             )}
             onClick={() => changeLocale("ko")}
+            type="button"
           >
             Korean
           </button>
           <button
             className={cn(
-              "animation:enter w-fit rounded-md px-0.5 text-gray-400 text-sm underline hover:bg-secondary/100",
+              "animation:enter w-fit rounded-md px-0.5 text-gray-400 text-sm underline hover:bg-secondary",
               {
                 "text-primary": locale === "en",
               }
             )}
             onClick={() => changeLocale("en")}
+            type="button"
           >
             English
           </button>

@@ -5,13 +5,15 @@ import { getLLMText } from "@/lib/get-llm-text";
 import { blog } from "@/lib/source";
 
 export async function GET(
-  req: NextRequest,
+  _req: NextRequest,
   { params }: { params: Promise<{ slug?: string[] }> }
 ) {
   const { slug } = await params;
   const page = blog.getPage(slug);
 
-  if (!page) notFound();
+  if (!page) {
+    notFound();
+  }
 
   // Always return full content for individual blog posts
   const content = await getLLMText(page, true);

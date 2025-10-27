@@ -50,14 +50,21 @@ export async function downloadFile(folderId: string, fileName: string) {
   return;
 }
 
-export async function uploadFile(file: File[]) {
+type UploadResponse = {
+  folderId: string;
+  files: Array<{
+    fileName: string;
+  }>;
+};
+
+export async function uploadFile(file: File[]): Promise<UploadResponse> {
   const formData = new FormData();
-  file.forEach((f) => {
+  for (const f of file) {
     formData.append("file", f);
-  });
+  }
 
   return await axiosInstance
-    .post(API_SUFFIX.UPLOAD, formData, {
+    .post<UploadResponse>(API_SUFFIX.UPLOAD, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -68,8 +75,7 @@ export async function uploadFile(file: File[]) {
 
 export default function TmpfUI() {
   const [file, setFile] = useState<File[] | null>(null);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [uploaded, setUploaded] = useState<any | null>(null);
+  const [uploaded, setUploaded] = useState<UploadResponse | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -111,9 +117,10 @@ export default function TmpfUI() {
               uploaded
             </p>
             <Button
-              onClick={() => {
-                for (let i = 0; i < uploaded.files.length; i++) {
-                  downloadFile(uploaded.folderId, uploaded.files[i].fileName);
+              onClick={async () => {
+                for (const item of uploaded.files) {
+                  // eslint-disable-next-line no-await-in-loop
+                  await downloadFile(uploaded.folderId, item.fileName);
                 }
               }}
             >
@@ -122,8 +129,7 @@ export default function TmpfUI() {
           </div>
 
           <ul>
-            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-            {uploaded.files.map((f: any) => (
+            {uploaded.files.map((f) => (
               <li key={f.fileName}>
                 <a
                   className="flex items-center space-x-2 hover:underline"

@@ -16,9 +16,9 @@ export function getCurrentWebsiteUrl(options?: {
 }): string {
   const vercelEnv =
     options?.vercelEnv ||
-    process.env["NEXT_PUBLIC_VERCEL_ENV"] ||
-    process.env["VERCEL_ENV"];
-  const vercelUrl = options?.vercelUrl || process.env["VERCEL_URL"];
+    process.env.NEXT_PUBLIC_VERCEL_ENV ||
+    process.env.VERCEL_ENV;
+  const vercelUrl = options?.vercelUrl || process.env.VERCEL_URL;
 
   // Use the same logic as metadata.tsx
   if (vercelEnv === "production") {

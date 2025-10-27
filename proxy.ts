@@ -5,6 +5,7 @@ export const SUPPORTED_LOCALES = ["en", "ko"] as const;
 export type SupportedLocale = (typeof SUPPORTED_LOCALES)[number];
 
 const fallbackLanguage = "ko";
+const extensionPattern = /\.[^/]+$/;
 const I18nMiddleware = createI18nMiddleware({
   locales: SUPPORTED_LOCALES,
   defaultLocale: fallbackLanguage,
@@ -27,7 +28,7 @@ export function proxy(request: NextRequest) {
   }
 
   // 2. Exclude paths with a file extension, but allow .md
-  const match = pathname.match(/\.[^/]+$/); // last extension
+  const match = pathname.match(extensionPattern); // last extension
   if (match && match[0] !== ".md") {
     return NextResponse.next();
   }

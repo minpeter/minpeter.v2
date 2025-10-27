@@ -28,7 +28,7 @@ import mainImage1 from "@/public/assets/images/main-image-1.jpg";
 import mainImage2 from "@/public/assets/images/main-image-2.png";
 import mainImage3 from "@/public/assets/images/main-image-3.png";
 
-const Lickitung = dynamic(() => import("@/components/Lickitung"));
+const Lickitung = dynamic(() => import("@/components/lickitung"));
 
 export default function Page() {
   const t = useI18n();
@@ -157,12 +157,29 @@ export default function Page() {
 
 function CarouselImage() {
   const [grayscale, setGrayscale] = useState("grayscale(1)");
+  const slides = [
+    {
+      id: "spotlight-video",
+      image: mainImage1,
+      url: "https://youtu.be/n_R0-YosZ3g?t=39",
+    },
+    {
+      id: "spotlight-gallery",
+      image: mainImage3,
+      url: null,
+    },
+    {
+      id: "spotlight-showcase",
+      image: mainImage2,
+      url: "/73e3da8fa7a397e7b1bc36efabb2cbb265524a75d7d5e6d1620b9e10e694257",
+    },
+  ];
 
   return (
     <Carousel>
       <CarouselContent>
-        {Array.from({ length: 3 }).map((_, index) => (
-          <CarouselItem key={index}>
+        {slides.map((slide, index) => (
+          <CarouselItem key={slide.id}>
             <AspectRatio ratio={1}>
               <Image
                 alt={`Main image ${index + 1}`}
@@ -173,18 +190,15 @@ function CarouselImage() {
                 height={300}
                 loading="lazy"
                 onClick={() => {
-                  const urls = [
-                    "https://youtu.be/n_R0-YosZ3g?t=39",
-                    null,
-                    "/73e3da8fa7a397e7b1bc36efabb2cbb265524a75d7d5e6d1620b9e10e694257",
-                  ];
-                  if (urls[index]) window.open(urls[index]);
+                  if (slide.url) {
+                    window.open(slide.url);
+                  }
                 }}
                 onMouseEnter={() => setGrayscale("grayscale(0)")}
                 onMouseLeave={() => setGrayscale("grayscale(70%)")}
                 onTouchEnd={() => setGrayscale("grayscale(70%)")}
                 placeholder="blur"
-                src={[mainImage1, mainImage3, mainImage2][index]}
+                src={slide.image}
                 width={300}
               />
             </AspectRatio>

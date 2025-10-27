@@ -3,7 +3,7 @@ import Image from "next/image";
 
 import Header from "@/components/header";
 
-import { hermes3, llama3p1, qwen2p5 } from "./assets";
+import { modelCardArtworks } from "./assets";
 
 export default async function Page(
   props: PageProps<"/[locale]/show/model-card-artwork">
@@ -16,9 +16,14 @@ export default async function Page(
         title="/show/model-card-artwork"
       />
       <div className="grid grid-cols-1 items-center gap-3 sm:grid-cols-2 md:grid-cols-3">
-        <Image alt="llama3.1" placeholder="blur" src={llama3p1} />
-        <Image alt="hermes3" placeholder="blur" src={hermes3} />
-        <Image alt="qwen2.5" placeholder="blur" src={qwen2p5} />
+        {modelCardArtworks.map((artwork) => (
+          <Image
+            alt={artwork.alt}
+            key={artwork.alt}
+            placeholder="blur"
+            src={artwork.src}
+          />
+        ))}
       </div>
 
       <hr />
