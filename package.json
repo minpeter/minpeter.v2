@@ -9,11 +9,11 @@
     "build": "next build",
     "build:analyze": "ANALYZE=true next build",
     "postbuild": "next-sitemap --config next-sitemap.config.mjs",
-    "check:ultracite": "ultracite check",
+    "check:biome": "ultracite check",
     "precheck:types": "next typegen",
     "check:types": "tsc --noEmit",
     "check": "run-p check:**",
-    "fmt:ultracite": "ultracite fix",
+    "fmt:biome": "ultracite fix",
     "fmt": "run-p fmt:**"
   },
   "dependencies": {
@@ -29,7 +29,7 @@
     "@vercel/analytics": "^1.5.0",
     "@vercel/speed-insights": "^1.2.0",
     "@vercel/toolbar": "^0.1.41",
-    "ai": "^5.0.78",
+    "ai": "^5.0.81",
     "axios": "^1.12.2",
     "babel-plugin-react-compiler": "^1.0.0",
     "class-variance-authority": "^0.7.1",
@@ -48,8 +48,8 @@
     "react": "19.2.0",
     "react-dom": "19.2.0",
     "react-icons": "^5.5.0",
-    "three": "^0.164.1",
     "sugar-high": "^0.9.4",
+    "three": "^0.180.0",
     "zod": "^4.1.12"
   },
   "devDependencies": {
@@ -65,20 +65,11 @@
     "next-sitemap": "^4.2.3",
     "next-themes": "^0.4.6",
     "npm-run-all": "^4.1.5",
+    "tailwind-merge": "^3.3.1",
     "tailwindcss": "^4.1.16",
     "tailwindcss-animate": "^1.0.7",
     "typescript": "^5.9.3",
     "ultracite": "6.0.3"
-  },
-  "prettier": {
-    "trailingComma": "es5",
-    "semi": true,
-    "tabWidth": 2,
-    "singleQuote": false,
-    "jsxSingleQuote": false,
-    "plugins": [
-      "prettier-plugin-tailwindcss"
-    ]
   },
   "packageManager": "pnpm@10.19.0+sha512.c9fc7236e92adf5c8af42fd5bf1612df99c2ceb62f27047032f4720b33f8eacdde311865e91c411f2774f618d82f320808ecb51718bfa82c060c4ba7c76a32b8",
   "pnpm": {
