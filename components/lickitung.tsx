@@ -8,6 +8,7 @@ import {
 } from "@react-three/drei";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Suspense, useRef } from "react";
+import type { BufferGeometry } from "three";
 
 // Preload the GLTF file
 if (typeof window !== "undefined") {
@@ -48,7 +49,7 @@ const MATERIAL_EMISSIVE_INTENSITY = 0.4;
 type LickitungGLTF = {
   nodes: {
     mesh_0: {
-      geometry: unknown;
+      geometry: BufferGeometry;
     };
   };
 };
