@@ -3,10 +3,10 @@
 import { ExternalLink } from "lucide-react";
 import type { Route } from "next";
 import Link from "next/link";
-import { useQueryState, parseAsString } from "nuqs";
+import { parseAsString, useQueryState } from "nuqs";
 
 import { Badge } from "@/components/ui/badge";
-import { postMetadataType } from "@/lib/source";
+import type { postMetadataType } from "@/lib/source";
 import styles from "@/lib/styles/stagger-fade-in.module.css";
 import { formatDate, formatYear } from "@/lib/utils/date";
 import { cn } from "@/lib/utils/tailwind";
@@ -19,7 +19,7 @@ export function BlogList({
   posts: postMetadataType[];
 }) {
   const [query] = useQueryState("q", parseAsString.withDefault(""));
-  return <BlogListFallback posts={posts} query={query} lang={lang} />;
+  return <BlogListFallback lang={lang} posts={posts} query={query} />;
 }
 
 export function BlogListFallback({
@@ -64,11 +64,11 @@ export function BlogListFallback({
           .reverse()
           .map((year) => (
             <div
-              key={year}
               className="group/year flex flex-col gap-2 border-t py-8 last-of-type:border-b sm:flex-row"
+              key={year}
             >
               <div className="w-24">
-                <h2 className="group-hover/year:bg-secondary/100 w-fit rounded-md px-2 opacity-60">
+                <h2 className="w-fit rounded-md px-2 opacity-60 group-hover/year:bg-secondary/100">
                   {year}
                 </h2>
               </div>
@@ -78,15 +78,15 @@ export function BlogListFallback({
                 >
                   {yearList[year].map((post: postMetadataType) => (
                     <li
-                      key={post.url}
                       className="group/post flex justify-between space-x-4"
+                      key={post.url}
                     >
                       {post.external_url ? (
                         <a
-                          href={post.external_url}
                           className={cn(itemSytles, "inline-flex items-center")}
-                          target="_blank"
+                          href={post.external_url}
                           rel="noopener noreferrer"
+                          target="_blank"
                         >
                           <span
                             className={cn(
@@ -96,15 +96,15 @@ export function BlogListFallback({
                           >
                             {post.title}
                             <ExternalLink
-                              size={16}
                               className="ml-1 inline-block pb-1 opacity-60"
+                              size={16}
                             />
                           </span>
                         </a>
                       ) : (
                         <Link
-                          href={post.url as Route}
                           className={cn(itemSytles, "inline-flex items-center")}
+                          href={post.url as Route}
                         >
                           <span
                             className={cn(

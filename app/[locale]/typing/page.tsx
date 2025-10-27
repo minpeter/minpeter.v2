@@ -1,7 +1,7 @@
 "use client";
 
 import type { Route } from "next";
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import Header from "@/components/header";
 import styles from "@/lib/styles/stagger-fade-in.module.css";
@@ -13,15 +13,13 @@ import { nextSentencesGenerator } from "./action";
 const isKorean = (char: string) => {
   const code = char.charCodeAt(0);
   return (
-    (code >= 0xac00 && code <= 0xd7a3) || // 완성형 한글
-    (code >= 0x3131 && code <= 0x318e) // 자음/모음
+    (code >= 0xac_00 && code <= 0xd7_a3) || // 완성형 한글
+    (code >= 0x31_31 && code <= 0x31_8e) // 자음/모음
   );
 };
 
 // Add utility function to check special characters after isKorean function
-const isSpecialChar = (char: string) => {
-  return /[.,!?]/.test(char);
-};
+const isSpecialChar = (char: string) => /[.,!?]/.test(char);
 
 // Initial sentences array
 
@@ -80,9 +78,9 @@ export default function Page() {
   // Modify WPM calculation to consider character types
   const calculateWPM = useCallback((input: string, elapsedSeconds: number) => {
     // Korean characters count as 2 characters, others as 1
-    const effectiveLength = input.split("").reduce((acc, char) => {
-      return acc + (isKorean(char) ? 2 : 1);
-    }, 0);
+    const effectiveLength = input
+      .split("")
+      .reduce((acc, char) => acc + (isKorean(char) ? 2 : 1), 0);
 
     const wordsTyped = effectiveLength / 5;
     const minutes = elapsedSeconds / 60;
@@ -120,10 +118,8 @@ export default function Page() {
 
       if (isKorean(targetChar) || isKorean(inputChar)) {
         if (targetChar === inputChar) correctChars++;
-      } else {
-        if (targetChar.toLowerCase() === inputChar.toLowerCase())
-          correctChars++;
-      }
+      } else if (targetChar.toLowerCase() === inputChar.toLowerCase())
+        correctChars++;
     }
 
     return Math.round((correctChars / inputLength) * 100);
@@ -316,9 +312,9 @@ export default function Page() {
   return (
     <section className={`${styles.stagger_container} flex flex-col gap-12`}>
       <Header
-        title="Peter's Typing practice"
         description={t("typingDescription")}
         link={{ href: `/${locale}` as Route, text: t("backToHome") }}
+        title="Peter's Typing practice"
       />
       <div
         className="relative flex flex-col items-center justify-center gap-4 p-4"
@@ -326,19 +322,19 @@ export default function Page() {
       >
         {/* 숨겨진 입력 필드 */}
         <input
-          ref={inputRef}
-          type="text"
+          autoFocus
           className="absolute opacity-0"
+          onCompositionEnd={handleCompositionEnd}
           onCompositionStart={handleCompositionStart}
           onCompositionUpdate={(e) => {
             if (!isTransitioning) {
               setComposingText(e.data || "");
             }
           }}
-          onCompositionEnd={handleCompositionEnd}
           onInput={handleInput}
           onKeyDown={handleKeyDown}
-          autoFocus
+          ref={inputRef}
+          type="text"
         />
 
         {/* 타이핑 텍스트 표시 */}
@@ -363,7 +359,6 @@ export default function Page() {
 
             return (
               <span
-                key={index}
                 className={`transition-all ${
                   isTyped
                     ? isCorrect
@@ -373,6 +368,7 @@ export default function Page() {
                       ? "opacity-100"
                       : "opacity-30"
                 } ${isComposingHere ? "border-b-2" : ""}`}
+                key={index}
               >
                 {isComposingHere
                   ? composingText
@@ -389,7 +385,7 @@ export default function Page() {
         </div>
 
         {/* Update progress display to include fetching indicator */}
-        <div className="flex items-center gap-2 text-sm text-gray-400">
+        <div className="flex items-center gap-2 text-gray-400 text-sm">
           <span>
             {currentSentenceIndex + 1} / {sentences.length}
           </span>

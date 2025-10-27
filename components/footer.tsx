@@ -16,15 +16,15 @@ export default function Footer({ className }: { className?: string }) {
       )}
     >
       <Image
-        src={purplePikmin}
         alt="Purple Pikmin carrying fruit "
-        width={32}
         height={32}
+        src={purplePikmin}
+        width={32}
       />
-      <p className="text-sm text-gray-400">
+      <p className="text-gray-400 text-sm">
         written by{" "}
         <Link
-          className="hover:bg-secondary/100 rounded-md px-0.5 text-sm text-gray-400 underline"
+          className="rounded-md px-0.5 text-gray-400 text-sm underline hover:bg-secondary/100"
           href="/about"
         >
           minpeter
@@ -32,10 +32,10 @@ export default function Footer({ className }: { className?: string }) {
         </Link>
         {" • "}
         <a
-          className="hover:bg-secondary/100 rounded-md px-0.5 text-sm text-gray-400 underline"
+          className="rounded-md px-0.5 text-gray-400 text-sm underline hover:bg-secondary/100"
           href="https://github.com/minpeter/minpeter.uk"
-          target="_blank"
           rel="noopener noreferrer"
+          target="_blank"
         >
           source code
           <ArrowTopRightIcon className="mb-1 ml-0.5 inline h-3 w-3" />

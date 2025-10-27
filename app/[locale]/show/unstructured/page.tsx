@@ -9,18 +9,18 @@ export default async function Page(
   return (
     <section className="flex flex-col gap-8">
       <Header
-        title="/show/unstructured"
-        link={{ href: `/${locale}/show` as Route, text: "Back" }}
         description="unstructured"
+        link={{ href: `/${locale}/show` as Route, text: "Back" }}
+        title="/show/unstructured"
       />
 
       <div className="h-48 w-full">
         <div className="group relative h-full w-full cursor-pointer">
           {/* 배경: 기본 상태에는 -rotate-1, 호버시 정렬 (rotate-0) */}
-          <div className="absolute inset-0 -rotate-1 transform rounded-sm bg-neutral-600 transition-all duration-300 group-hover:rotate-1" />
+          <div className="-rotate-1 absolute inset-0 transform rounded-sm bg-neutral-600 transition-all duration-300 group-hover:rotate-1" />
           {/* 내용: 기본 상태에는 rotate-1, 호버시 정렬 (rotate-0) */}
-          <div className="absolute inset-0 rotate-1 transform rounded-sm bg-neutral-500 p-8 transition-all duration-300 group-hover:-rotate-1">
-            <h1 className="text-2xl font-extrabold text-neutral-200">
+          <div className="group-hover:-rotate-1 absolute inset-0 rotate-1 transform rounded-sm bg-neutral-500 p-8 transition-all duration-300">
+            <h1 className="font-extrabold text-2xl text-neutral-200">
               Hover me
             </h1>
           </div>
@@ -31,17 +31,17 @@ export default async function Page(
       <div className="h-48 w-full [perspective:1500px]">
         <div className="group relative h-full w-full cursor-pointer">
           <div className="absolute inset-0 flex transform items-center justify-center rounded-sm bg-neutral-600 transition-all duration-500 ease-out group-hover:[transform:translate3d(-15px,-15px,40px)_rotateX(10deg)_rotateY(-5deg)]">
-            <span className="text-2xl font-extrabold text-white drop-shadow-md">
+            <span className="font-extrabold text-2xl text-white drop-shadow-md">
               Layer 1
             </span>
           </div>
           <div className="absolute inset-0 flex transform items-center justify-center rounded-sm bg-neutral-500 transition-all duration-500 ease-out group-hover:[transform:translate3d(0px,0px,20px)_rotateX(5deg)_rotateY(-3deg)]">
-            <span className="text-2xl font-extrabold text-white drop-shadow-md">
+            <span className="font-extrabold text-2xl text-white drop-shadow-md">
               Layer 2
             </span>
           </div>
           <div className="absolute inset-0 flex transform items-center justify-center rounded-sm bg-neutral-400 transition-all duration-500 ease-out group-hover:[transform:translate3d(15px,15px,-10px)_rotateX(-5deg)_rotateY(-8deg)]">
-            <span className="text-2xl font-extrabold text-white drop-shadow-md">
+            <span className="font-extrabold text-2xl text-white drop-shadow-md">
               Layer 3
             </span>
           </div>
@@ -54,7 +54,7 @@ export default async function Page(
           {/* Front layer - largest */}
           <div className="absolute inset-0 origin-left transform rounded-sm bg-neutral-700 shadow-lg transition-all duration-700 ease-out group-hover:[transform:translate3d(-20px,-10px,0px)_rotateY(30deg)]">
             <div className="flex h-full p-6">
-              <span className="text-2xl font-extrabold text-white drop-shadow-md">
+              <span className="font-extrabold text-2xl text-white drop-shadow-md">
                 Front
               </span>
             </div>
@@ -63,7 +63,7 @@ export default async function Page(
           {/* Middle layer - smaller with padding */}
           <div className="absolute inset-0 origin-left transform rounded-md bg-neutral-600 shadow-lg transition-all duration-700 ease-out group-hover:inset-2 group-hover:[transform:translate3d(0px,10px,0px)_rotateY(30deg)_translateZ(100px)]">
             <div className="flex h-full p-6">
-              <span className="text-xl font-extrabold text-white opacity-0 drop-shadow-md transition-opacity delay-100 duration-300 group-hover:opacity-100">
+              <span className="font-extrabold text-white text-xl opacity-0 drop-shadow-md transition-opacity delay-100 duration-300 group-hover:opacity-100">
                 Middle
               </span>
             </div>
@@ -72,12 +72,12 @@ export default async function Page(
           {/* Back layer 1 - much smaller */}
           <div className="absolute inset-x-4 inset-y-6 flex origin-left transform flex-row gap-6 rounded-sm p-3 transition-all duration-700 ease-out group-hover:[transform:translate3d(20px,30px,0px)_rotateY(30deg)_translateZ(200px)]">
             <div className="flex h-full w-1/2 rounded-lg bg-neutral-500 p-6">
-              <span className="text-lg font-extrabold text-white opacity-0 drop-shadow-md transition-opacity delay-200 duration-300 group-hover:opacity-100">
+              <span className="font-extrabold text-lg text-white opacity-0 drop-shadow-md transition-opacity delay-200 duration-300 group-hover:opacity-100">
                 Back 1
               </span>
             </div>
             <div className="flex h-full w-1/2 rounded-lg bg-neutral-400 p-6">
-              <span className="text-lg font-extrabold text-white opacity-0 drop-shadow-md transition-opacity delay-300 duration-300 group-hover:opacity-100">
+              <span className="font-extrabold text-lg text-white opacity-0 drop-shadow-md transition-opacity delay-300 duration-300 group-hover:opacity-100">
                 Back 2
               </span>
             </div>

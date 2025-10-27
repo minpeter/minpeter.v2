@@ -3,11 +3,11 @@
 import {
   Environment,
   MeshTransmissionMaterial,
-  useGLTF,
   Text,
+  useGLTF,
 } from "@react-three/drei";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import React, { useRef, Suspense } from "react";
+import { Suspense, useRef } from "react";
 
 // Preload the GLTF file
 if (typeof window !== "undefined") {
@@ -27,17 +27,17 @@ export default function Lickitung({ aspect = "3/2" }) {
     >
       <div className="absolute inset-0">
         <Canvas
+          camera={{ fov: 1 }}
+          dpr={[0.7, 1.5]}
+          gl={{
+            powerPreference: "high-performance",
+            antialias: false, // 안티앨리어싱 비활성화
+          }} // 디바이스 픽셀 비율 하향 조정
+          performance={{ min: 0.5 }} // 최소 성능 임계값 증가
           style={{
             width: "100%",
             height: "100%",
             display: "block",
-          }}
-          camera={{ fov: 1 }}
-          dpr={[0.7, 1.5]} // 디바이스 픽셀 비율 하향 조정
-          performance={{ min: 0.5 }} // 최소 성능 임계값 증가
-          gl={{
-            powerPreference: "high-performance",
-            antialias: false, // 안티앨리어싱 비활성화
           }}
         >
           <Suspense fallback={null}>
@@ -69,40 +69,40 @@ export function Model() {
 
   useFrame(() => {
     // eslint-disable-next-line
-    // @ts-ignore
+    // @ts-expect-error
     torus.current.rotation.z += 0.02;
   });
 
   return (
     <group scale={viewport.width / 20}>
       <Text
-        position={[0, 0, -20]}
-        fontSize={0.7}
-        color="white"
         anchorX="center"
         anchorY="middle"
-        textAlign="center"
-        // opacity={0.7} // 텍스트 투명도 조정
+        color="white"
         fillOpacity={0.7}
+        fontSize={0.7}
+        position={[0, 0, -20]}
+        // opacity={0.7} // 텍스트 투명도 조정
+        textAlign="center"
       >
         {"VUD ❤️\n\nflag{1ICK17un6_1o8-2}\n\nNULL"}
       </Text>
 
       <mesh
-        ref={torus}
+        castShadow={false}
         // eslint-disable-next-line
-        // @ts-ignore
+        // @ts-expect-error
+        frustumCulled={true}
         geometry={nodes.mesh_0.geometry}
         position={[0, -6, 0]}
+        receiveShadow={false} // 시야 밖 렌더링 방지
+        ref={torus} // 그림자 비활성화
         rotation={[-Math.PI / -2, 0, 0]}
-        frustumCulled={true} // 시야 밖 렌더링 방지
-        castShadow={false} // 그림자 비활성화
-        receiveShadow={false}
       >
         <MeshTransmissionMaterial
           {...materialProps}
-          emissiveIntensity={0.2} // 약간의 자체 발광 추가
-          clearcoat={0.1} // 광택 추가
+          clearcoat={0.1} // 약간의 자체 발광 추가
+          emissiveIntensity={0.2} // 광택 추가
         />
       </mesh>
     </group>

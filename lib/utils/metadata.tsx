@@ -13,11 +13,11 @@ export default function NewMetadata({
         ? process.env.PUBLIC_BASE_URL
         : process.env.VERCEL_URL
           ? `https://${process.env.VERCEL_URL}`
-          : `http://localhost:${process.env.PORT ?? 3_000}`
+          : `http://localhost:${process.env.PORT ?? 3000}`
     ),
 
-    title: title,
-    description: description,
+    title,
+    description,
     keywords: [
       "minpeter",
       "blog",
@@ -34,14 +34,14 @@ export default function NewMetadata({
       type: "website",
       locale: "ko_KR",
       siteName: "minpeter",
-      title: title,
-      description: description,
+      title,
+      description,
       images: "/og-image.png",
     },
     twitter: {
       card: "summary_large_image",
-      title: title,
-      description: description,
+      title,
+      description,
       creator: "@minpeter",
       images: "/og-image.png",
     },

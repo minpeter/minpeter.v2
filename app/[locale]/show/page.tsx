@@ -34,9 +34,9 @@ export default async function Page(props: PageProps<"/[locale]/show">) {
   return (
     <section className="flex flex-col gap-3">
       <Header
-        title="showcase"
         description="Just things I did"
         link={{ href: `/${locale}` as Route, text: t("backToHome") }}
+        title="showcase"
       />
       <div
         className={cn(
@@ -47,9 +47,9 @@ export default async function Page(props: PageProps<"/[locale]/show">) {
       >
         {showcasePaths.map((path) => (
           <Link
-            key={path}
-            href={`/${locale}${path}` as Route}
             className="underline"
+            href={`/${locale}${path}` as Route}
+            key={path}
           >
             {path}
           </Link>

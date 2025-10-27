@@ -45,9 +45,7 @@ export async function downloadFile(folderId: string, fileName: string) {
       window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
     })
-    .catch((error) => {
-      return error;
-    });
+    .catch((error) => error);
 
   return;
 }
@@ -64,12 +62,8 @@ export async function uploadFile(file: File[]) {
         "Content-Type": "multipart/form-data",
       },
     })
-    .then((response) => {
-      return response.data;
-    })
-    .catch((error) => {
-      return error;
-    });
+    .then((response) => response.data)
+    .catch((error) => error);
 }
 
 export default function TmpfUI() {
@@ -100,9 +94,9 @@ export default function TmpfUI() {
         <div className="flex w-full max-w-md items-center space-x-2">
           <Input
             id="uploadfiles"
-            type="file"
-            onChange={handleFileChange}
             multiple={true}
+            onChange={handleFileChange}
+            type="file"
           />
           <Button onClick={handleUpload}>Upload</Button>
         </div>
@@ -134,8 +128,8 @@ export default function TmpfUI() {
                 <a
                   className="flex items-center space-x-2 hover:underline"
                   href={BACKEND(API_SUFFIX.VIEW(uploaded.folderId, f.fileName))}
-                  target="_blank"
                   rel="noreferrer noopener"
+                  target="_blank"
                 >
                   <span>{f.fileName}</span>
                   <EyeOpenIcon className="h-4 w-4" />

@@ -1,7 +1,7 @@
 import { cva } from "class-variance-authority";
 
 export const h1Variants = cva(
-  "scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl",
+  "scroll-m-20 font-extrabold text-4xl tracking-tight lg:text-5xl",
   {
     variants: {
       color: {
@@ -15,7 +15,7 @@ export const h1Variants = cva(
 );
 
 export const h2Variants = cva(
-  "scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0",
+  "scroll-m-20 border-b pb-2 font-semibold text-3xl tracking-tight first:mt-0",
   {
     variants: {
       color: {
@@ -29,7 +29,7 @@ export const h2Variants = cva(
 );
 
 export const h3Variants = cva(
-  "scroll-m-20 text-2xl font-semibold tracking-tight",
+  "scroll-m-20 font-semibold text-2xl tracking-tight",
   {
     variants: {
       color: {
@@ -43,7 +43,7 @@ export const h3Variants = cva(
 );
 
 export const h4Variants = cva(
-  "scroll-m-20 text-xl font-semibold tracking-tight",
+  "scroll-m-20 font-semibold text-xl tracking-tight",
   {
     variants: {
       color: {
@@ -56,7 +56,7 @@ export const h4Variants = cva(
   }
 );
 
-export const pVariants = cva("leading-7 not-first:mt-6", {
+export const pVariants = cva("not-first:mt-6 leading-7", {
   variants: {
     color: {
       primary: "",
@@ -90,7 +90,7 @@ export const ulVariants = cva("ml-6 list-disc [&>li]:mt-0", {
 });
 
 export const codeVariants = cva(
-  "relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold",
+  "relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono font-semibold text-sm",
   {
     variants: {
       color: {
@@ -103,7 +103,7 @@ export const codeVariants = cva(
   }
 );
 
-export const leadVariants = cva("text-xl text-muted-foreground", {
+export const leadVariants = cva("text-muted-foreground text-xl", {
   variants: {
     color: {
       primary: "",
@@ -114,7 +114,7 @@ export const leadVariants = cva("text-xl text-muted-foreground", {
   },
 });
 
-export const largeVariants = cva("text-lg font-semibold", {
+export const largeVariants = cva("font-semibold text-lg", {
   variants: {
     color: {
       primary: "",
@@ -125,7 +125,7 @@ export const largeVariants = cva("text-lg font-semibold", {
   },
 });
 
-export const smallVariants = cva("text-sm font-medium leading-none", {
+export const smallVariants = cva("font-medium text-sm leading-none", {
   variants: {
     color: {
       primary: "",
@@ -136,7 +136,7 @@ export const smallVariants = cva("text-sm font-medium leading-none", {
   },
 });
 
-export const mutedVariants = cva("text-sm text-muted-foreground", {
+export const mutedVariants = cva("text-muted-foreground text-sm", {
   variants: {
     color: {
       primary: "",

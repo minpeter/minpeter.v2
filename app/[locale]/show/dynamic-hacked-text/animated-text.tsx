@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ{}</>믾쾹쵭퀴섫뤱윤チェ・ソユン";
 
@@ -63,7 +63,7 @@ export default function AnimatedText({ data }: { data: string }) {
   }, [handleMouseOver, ref]);
 
   return (
-    <span ref={ref} className="text-lg font-bold">
+    <span className="font-bold text-lg" ref={ref}>
       {text}
     </span>
   );

@@ -27,7 +27,7 @@ export default function ExternalRedirect({
         <p className="text-lg">
           Redirecting to external link in <strong>{count}</strong> seconds...
         </p>
-        <a href={url} className="text-primary underline">
+        <a className="text-primary underline" href={url}>
           Click here if you are not redirected.
         </a>
       </div>

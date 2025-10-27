@@ -23,9 +23,9 @@ export function getCurrentWebsiteUrl(options?: {
   // Use the same logic as metadata.tsx
   if (vercelEnv === "production") {
     return websiteUrl.production; // vercel production
-  } else if (vercelEnv === "preview" && vercelUrl) {
-    return `https://${vercelUrl}`; // vercel preview
-  } else {
-    return websiteUrl.development; // local development
   }
+  if (vercelEnv === "preview" && vercelUrl) {
+    return `https://${vercelUrl}`; // vercel preview
+  }
+  return websiteUrl.development; // local development
 }

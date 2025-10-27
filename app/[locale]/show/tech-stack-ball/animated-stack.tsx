@@ -1,15 +1,15 @@
 "use client";
 
 import {
-  World,
-  Engine,
-  Render,
   Bodies,
+  Engine,
   Mouse,
   MouseConstraint,
+  Render,
   Runner,
+  World,
 } from "matter-js";
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 
 import { cn } from "@/lib/utils/tailwind";
 
@@ -107,20 +107,20 @@ export function Playground({
       },
     ];
 
-    const walls = wallPositions.map((position) => {
-      return Bodies.rectangle(
+    const walls = wallPositions.map((position) =>
+      Bodies.rectangle(
         position.x,
         position.y,
         position.w,
         position.h,
         wallProperties
-      );
-    });
+      )
+    );
 
     const iconSize = 30;
     const iconScale = iconSize / 300;
-    const boxs = stackIcon.map((icon) => {
-      return Bodies.circle(100, 100, iconSize, {
+    const boxs = stackIcon.map((icon) =>
+      Bodies.circle(100, 100, iconSize, {
         render: {
           sprite: {
             texture: `/assets/images/stack-icon/${icon}`,
@@ -128,8 +128,8 @@ export function Playground({
             yScale: iconScale,
           },
         },
-      });
-    });
+      })
+    );
 
     const mouse = Mouse.create(render.canvas);
     const mouseConstraint = MouseConstraint.create(engine, {
@@ -165,16 +165,16 @@ export function Playground({
 
   return (
     <canvas
-      ref={canvasRef}
-      width={w}
-      height={h}
       className={cn(
-        "bg-card text-card-foreground rounded-lg border shadow-xs",
+        "rounded-lg border bg-card text-card-foreground shadow-xs",
         className
       )}
+      height={h}
+      ref={canvasRef}
       style={{
         filter: "grayscale(1)",
       }}
+      width={w}
     />
   );
 }

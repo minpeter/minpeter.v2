@@ -11,9 +11,9 @@ export default function Page() {
   return (
     <section className="flex flex-col gap-3">
       <Header
-        title="/show/new-year-clock"
-        link={{ href: `/${locale}/show` as Route, text: "Back" }}
         description="Countdown to the next year"
+        link={{ href: `/${locale}/show` as Route, text: "Back" }}
+        title="/show/new-year-clock"
       />
 
       <Countdown />
@@ -57,7 +57,7 @@ function Countdown() {
   });
 
   return (
-    <div className="rounded-xl text-sm whitespace-pre-wrap">
+    <div className="whitespace-pre-wrap rounded-xl text-sm">
       {Object.keys(timeLeft).length ? (
         <>
           {timeLeft.days}일 {timeLeft.hours}시간 {timeLeft.minutes}분{" "}

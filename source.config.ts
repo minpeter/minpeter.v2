@@ -1,8 +1,8 @@
 import { remarkInstall } from "fumadocs-docgen";
 import {
-  defineDocs,
-  defineConfig,
   type DefaultMDXOptions,
+  defineConfig,
+  defineDocs,
   frontmatterSchema,
 } from "fumadocs-mdx/config";
 import { z } from "zod";
@@ -46,6 +46,6 @@ const mdxOptions: DefaultMDXOptions = {
 
 export default defineConfig({
   lastModifiedTime: "git",
-  mdxOptions: mdxOptions,
+  mdxOptions,
   // generateManifest: false,
 });

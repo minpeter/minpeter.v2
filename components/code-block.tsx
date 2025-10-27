@@ -85,7 +85,7 @@ export function ModCodeBlock({
     <div className="flex flex-col gap-1">
       <pre style={{ marginBottom: 0 }}>
         <div
-          className="bg-card invisible absolute top-3 right-3 rounded-md border p-1 hover:cursor-pointer"
+          className="invisible absolute top-3 right-3 rounded-md border bg-card p-1 hover:cursor-pointer"
           onClick={() => {
             setOnCopy(true);
             handleCopyClick(
@@ -93,17 +93,17 @@ export function ModCodeBlock({
                 .map(({ data, type }) => {
                   if (type === "static") {
                     return data;
-                  } else if (type === "dynamic" && data === "%TAB") {
-                    return "    ";
-                  } else {
-                    return state[data];
                   }
+                  if (type === "dynamic" && data === "%TAB") {
+                    return "    ";
+                  }
+                  return state[data];
                 })
                 .join("")
             );
           }}
         >
-          <CopyIcon className={!onCopy ? "block" : "hidden"} />
+          <CopyIcon className={onCopy ? "hidden" : "block"} />
           <CheckIcon className={onCopy ? "block" : "hidden"} />
         </div>
 
@@ -112,63 +112,63 @@ export function ModCodeBlock({
             {parsedTemplate.map(({ data, type }, i) => {
               if (type === "static") {
                 return <span key={i}>{data}</span>;
-              } else if (type === "dynamic" && data === "%TAB") {
-                return <span key={i}>&nbsp;&nbsp;&nbsp;&nbsp;</span>;
-              } else {
-                return onFocus[i] ? (
-                  <input
-                    type="text"
-                    autoFocus
-                    //
-                    className={`bg-secondary inline h-5 rounded-md px-1 py-0.5`}
-                    key={i}
-                    value={state[data]}
-                    onFocus={(e) => {
-                      const input = e.target;
-                      input.style.width = input.value.length + 2 + "ch";
-                    }}
-                    onChange={(e) => {
-                      stateUpdate(data, e.target.value);
-
-                      const input = e.target;
-                      input.style.width = input.value.length + 2 + "ch";
-                    }}
-                    onBlur={() =>
-                      setOnFocus((prev) => {
-                        const newFocus = [...prev];
-                        newFocus[i] = false;
-                        return newFocus;
-                      })
-                    }
-                    onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-                      if (e.key === "Enter") {
-                        e.preventDefault();
-                        (e.target as HTMLInputElement).blur();
-                      }
-                    }}
-                  />
-                ) : (
-                  <span
-                    key={i}
-                    onClick={() => {
-                      setOnFocus((prev) => {
-                        const newFocus = [...prev];
-                        newFocus[i] = true;
-                        return newFocus;
-                      });
-                    }}
-                    className="bg-secondary cursor-pointer rounded-md px-1 py-0.5 text-blue-500 hover:bg-blue-500 hover:text-white"
-                  >
-                    {state[data] || `plz enter \`${data}\``}
-                  </span>
-                );
               }
+              if (type === "dynamic" && data === "%TAB") {
+                return <span key={i}>&nbsp;&nbsp;&nbsp;&nbsp;</span>;
+              }
+              return onFocus[i] ? (
+                <input
+                  autoFocus
+                  className={"inline h-5 rounded-md bg-secondary px-1 py-0.5"}
+                  //
+                  key={i}
+                  onBlur={() =>
+                    setOnFocus((prev) => {
+                      const newFocus = [...prev];
+                      newFocus[i] = false;
+                      return newFocus;
+                    })
+                  }
+                  onChange={(e) => {
+                    stateUpdate(data, e.target.value);
+
+                    const input = e.target;
+                    input.style.width = input.value.length + 2 + "ch";
+                  }}
+                  onFocus={(e) => {
+                    const input = e.target;
+                    input.style.width = input.value.length + 2 + "ch";
+                  }}
+                  onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      (e.target as HTMLInputElement).blur();
+                    }
+                  }}
+                  type="text"
+                  value={state[data]}
+                />
+              ) : (
+                <span
+                  className="cursor-pointer rounded-md bg-secondary px-1 py-0.5 text-blue-500 hover:bg-blue-500 hover:text-white"
+                  key={i}
+                  onClick={() => {
+                    setOnFocus((prev) => {
+                      const newFocus = [...prev];
+                      newFocus[i] = true;
+                      return newFocus;
+                    });
+                  }}
+                >
+                  {state[data] || `plz enter \`${data}\``}
+                </span>
+              );
             })}
           </code>
         </div>
       </pre>
 
-      <div className="mb-4 pl-1 text-xs text-gray-500">
+      <div className="mb-4 pl-1 text-gray-500 text-xs">
         *파란색 텍스트를 클릭하면 간편하게 수정 후 복사할 수 있습니다.
       </div>
     </div>
@@ -204,13 +204,13 @@ export function CodeBlock({
   return (
     <>
       <div
-        className="bg-card invisible absolute top-3 right-3 rounded-md border p-1 hover:cursor-pointer"
+        className="invisible absolute top-3 right-3 rounded-md border bg-card p-1 hover:cursor-pointer"
         onClick={() => {
           setOnCopy(true);
           handleCopyClick(code);
         }}
       >
-        <CopyIcon className={!onCopy ? "block" : "hidden"} />
+        <CopyIcon className={onCopy ? "hidden" : "block"} />
         <CheckIcon className={onCopy ? "block" : "hidden"} />
       </div>
       {isMultiline ? (

@@ -11,9 +11,9 @@ export default async function NotFound({
   return (
     <section>
       <Header
-        title="404"
         description="page not found :/"
         link={{ href: `/${locale}/blog` as Route, text: "글 목록으로" }}
+        title="404"
       />
     </section>
   );

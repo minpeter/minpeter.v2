@@ -11,7 +11,7 @@ export default async function Page(
   return (
     <section className="flex flex-col gap-1">
       <div className={cn(styles.stagger_container, styles.fast)}>
-        <Backlink text="돌아가기" href={`/${locale}` as Route} />
+        <Backlink href={`/${locale}` as Route} text="돌아가기" />
       </div>
       <div
         className={cn(styles.stagger_container, styles.slow, "flex flex-col")}
