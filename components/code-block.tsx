@@ -2,6 +2,7 @@
 
 import copy from "clipboard-copy";
 import { useEffect, useMemo, useState } from "react";
+import { highlight } from "sugar-high";
 
 const TEMPLATE_TOKEN_REGEX = /{{([^}]+)}}/g;
 const LEADING_NEWLINE = "\n";
@@ -255,6 +256,7 @@ export function ModCodeBlock({
 export function CodeBlock({ code }: { code: string; language?: string }) {
   const { status, markCopied, markError } = useCopyStatus();
   const isMultiline = code.includes(MULTILINE_SEPARATOR);
+  const highlightedCode = useMemo(() => highlight(code), [code]);
 
   const handleCopy = async () => {
     try {
@@ -278,10 +280,12 @@ export function CodeBlock({ code }: { code: string; language?: string }) {
       </button>
       {isMultiline ? (
         <pre style={{ overflowX: "auto" }}>
-          <code>{code}</code>
+          {/* biome-ignore lint/security/noDangerouslySetInnerHtml: sugar-high output is sanitized */}
+          <code dangerouslySetInnerHTML={{ __html: highlightedCode }} />
         </pre>
       ) : (
-        <code>{code}</code>
+        /* biome-ignore lint/security/noDangerouslySetInnerHtml: sugar-high output is sanitized */
+        <code dangerouslySetInnerHTML={{ __html: highlightedCode }} />
       )}
       {status === "error" && (
         <output className="mt-2 text-destructive text-xs">
