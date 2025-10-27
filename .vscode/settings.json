@@ -1,5 +1,6 @@
 {
   "editor.formatOnSave": true,
+  "typescript.referencesCodeLens.enabled": true,
   "files.associations": {
     "*.mdx": "markdown"
   },
