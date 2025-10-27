@@ -108,9 +108,6 @@ importers:
       sugar-high:
         specifier: ^0.9.4
         version: 0.9.4
-      tailwind-merge:
-        specifier: ^3.3.1
-        version: 3.3.1
       zod:
         specifier: ^4.1.12
         version: 4.1.12
@@ -151,6 +148,9 @@ importers:
       npm-run-all:
         specifier: ^4.1.5
         version: 4.1.5
+      tailwind-merge:
+        specifier: ^3.3.1
+        version: 3.3.1
       tailwindcss:
         specifier: ^4.1.16
         version: 4.1.16

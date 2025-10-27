@@ -10,7 +10,7 @@
     "editor.wordWrap": "wordWrapColumn",
     "editor.wordWrapColumn": 94
   },
-  "cSpell.words": ["fumadocs", "turbopack", "ultracite"],
+  "cSpell.words": ["fumadocs", "minpeter", "turbopack", "ultracite"],
   "typescript.tsdk": "node_modules/typescript/lib",
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "[javascript]": {
