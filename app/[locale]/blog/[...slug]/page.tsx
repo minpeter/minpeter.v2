@@ -111,7 +111,6 @@ export default async function Page(
                   key={item.url}
                   style={{ marginLeft: `${(item.depth - 1) * 1}rem` }}
                 >
-                  {/* eslint-disable-next-line */}
                   {/* @ts-ignore */}
                   {item.title?.props.children}
                 </a>

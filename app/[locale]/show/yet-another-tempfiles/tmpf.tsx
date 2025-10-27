@@ -119,7 +119,6 @@ export default function TmpfUI() {
             <Button
               onClick={async () => {
                 for (const item of uploaded.files) {
-                  // eslint-disable-next-line no-await-in-loop
                   await downloadFile(uploaded.folderId, item.fileName);
                 }
               }}
