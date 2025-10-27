@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 
 import { I18nProviderClient } from "@/locales/client";
 import { getStaticParams } from "@/locales/server";
-import { SUPPORTED_LOCALES, SupportedLocale } from "@/proxy";
+import { SUPPORTED_LOCALES, type SupportedLocale } from "@/proxy";
 
 export function generateStaticParams() {
   return getStaticParams();

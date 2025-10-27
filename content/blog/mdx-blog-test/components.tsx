@@ -4,23 +4,29 @@ import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 
+const PUSHED_THRESHOLD = 8;
+const HEART_COUNT = 82;
+const INFINITY_COUNT = 802;
+
 export function SimpleButton() {
   const [toggle, setToggle] = useState(false);
   const [count, setCount] = useState(0);
 
+  const handleClick = () => {
+    setToggle((prevToggle) => !prevToggle);
+    setCount((prevCount) => prevCount + 1);
+  };
+
+  let buttonLabel = "Push me!!";
+  if (count >= PUSHED_THRESHOLD) {
+    buttonLabel = `You pushed me ${PUSHED_THRESHOLD} times!!`;
+  } else if (toggle) {
+    buttonLabel = "You pushed me!!";
+  }
+
   return (
-    <Button
-      variant={"secondary"}
-      onClick={() => {
-        setToggle(!toggle);
-        setCount(count + 1);
-      }}
-    >
-      {count >= 8
-        ? "You pushed me 8 times!!"
-        : toggle
-          ? "You pushed me!!"
-          : "Push me!!"}
+    <Button onClick={handleClick} variant={"secondary"}>
+      {buttonLabel}
     </Button>
   );
 }
@@ -36,10 +42,9 @@ export function Ip() {
         }
         return res.text();
       })
-      .then((ip) => setIp(ip))
-      .catch((err) => {
-        console.error(err);
-        setIp("Failed to fetch IP, check console for more information.");
+      .then((fetchedIp) => setIp(fetchedIp))
+      .catch(() => {
+        setIp("Failed to fetch IP. Please try again later.");
       });
   }, []);
 
@@ -53,13 +58,13 @@ export function Counter() {
     <div className="space-y-2">
       <p>
         Count: {count}
-        {count == 82 || count == 802 ? " - 🫵🩷♾️" : ""}
+        {count === HEART_COUNT || count === INFINITY_COUNT ? " - 🫵🩷♾️" : ""}
       </p>
       <div className="space-x-1">
-        <Button variant={"secondary"} onClick={() => setCount(count + 1)}>
+        <Button onClick={() => setCount(count + 1)} variant={"secondary"}>
           Count Up
         </Button>
-        <Button variant={"outline"} onClick={() => setCount(0)}>
+        <Button onClick={() => setCount(0)} variant={"outline"}>
           Reset
         </Button>
       </div>

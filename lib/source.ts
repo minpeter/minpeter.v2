@@ -1,7 +1,6 @@
 import { loader } from "fumadocs-core/source";
-
-import { docs, meta } from "@/.source";
 import { createMDXSource } from "fumadocs-mdx/runtime/next";
+import { docs, meta } from "@/.source";
 
 export const blog = loader({
   i18n: {
@@ -26,8 +25,6 @@ export type postMetadataType = {
 
 export function getPostMetadata(post: blogType): postMetadataType {
   if (!post) {
-    console.error("Post not found");
-
     return {
       url: "",
       title: "",
@@ -62,10 +59,6 @@ export function getPostMetadata(post: blogType): postMetadataType {
 
 export function getPostsMetadata(posts: blogListType): postMetadataType[] {
   return posts
-    .sort((a, b) => {
-      return b.data.date.getTime() - a.data.date.getTime();
-    })
-    .map((post) => {
-      return getPostMetadata(post);
-    });
+    .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+    .map((post) => getPostMetadata(post));
 }

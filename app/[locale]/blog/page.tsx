@@ -1,6 +1,6 @@
 import type { Route } from "next";
 import { setStaticParamsLocale } from "next-international/server";
-import { createLoader, parseAsString, SearchParams } from "nuqs/server";
+import { createLoader, parseAsString } from "nuqs/server";
 import { Suspense } from "react";
 
 import Header from "@/components/header";
@@ -36,9 +36,9 @@ export default async function Page(props: PageProps<"/[locale]/blog">) {
   return (
     <section className={styles.stagger_container}>
       <Header
-        title={t("blogPageTitle")}
         description={t("blogPageDescription")}
         link={{ href: `/${locale}` as Route, text: t("backToHome") }}
+        title={t("blogPageTitle")}
       />
       {/* FIXME: node:fs
 Module build failed: UnhandledSchemeError: Reading from "node:fs" is not handled by plugins (Unhandled scheme).
@@ -48,10 +48,10 @@ Webpack supports "data:" and "file:" URIs by default. */}
       </Suspense> */}
       <Suspense
         fallback={
-          <BlogListFallback query={query} posts={posts} lang={locale} />
+          <BlogListFallback lang={locale} posts={posts} query={query} />
         }
       >
-        <BlogList posts={posts} lang={locale} />
+        <BlogList lang={locale} posts={posts} />
       </Suspense>
     </section>
   );

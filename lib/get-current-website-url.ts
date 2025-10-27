@@ -16,16 +16,16 @@ export function getCurrentWebsiteUrl(options?: {
 }): string {
   const vercelEnv =
     options?.vercelEnv ||
-    process.env["NEXT_PUBLIC_VERCEL_ENV"] ||
-    process.env["VERCEL_ENV"];
-  const vercelUrl = options?.vercelUrl || process.env["VERCEL_URL"];
+    process.env.NEXT_PUBLIC_VERCEL_ENV ||
+    process.env.VERCEL_ENV;
+  const vercelUrl = options?.vercelUrl || process.env.VERCEL_URL;
 
   // Use the same logic as metadata.tsx
   if (vercelEnv === "production") {
     return websiteUrl.production; // vercel production
-  } else if (vercelEnv === "preview" && vercelUrl) {
-    return `https://${vercelUrl}`; // vercel preview
-  } else {
-    return websiteUrl.development; // local development
   }
+  if (vercelEnv === "preview" && vercelUrl) {
+    return `https://${vercelUrl}`; // vercel preview
+  }
+  return websiteUrl.development; // local development
 }

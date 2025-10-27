@@ -25,43 +25,45 @@ export default function Header({ title, description, link }: HeaderProps) {
     <header className={cn("mb-10 space-y-1", styles.stagger_container)}>
       {link ? (
         <div>
-          <Backlink text={link.text} href={link.href} />
+          <Backlink href={link.href} text={link.text} />
         </div>
       ) : (
         <div className="invisible">.</div>
       )}
       <div className="flex flex-row justify-between">
-        <h1 className="text-bold flex flex-wrap items-center break-all">
+        <h1 className="flex flex-wrap items-center break-all text-bold">
           {title || "minpeter"}
         </h1>
 
         <div className="flex space-x-1">
           <button
             className={cn(
-              "hover:bg-secondary/100 animation:enter w-fit rounded-md px-0.5 text-sm text-gray-400 underline",
+              "animation:enter w-fit rounded-md px-0.5 text-gray-400 text-sm underline hover:bg-secondary",
               {
                 "text-primary": locale === "ko",
               }
             )}
             onClick={() => changeLocale("ko")}
+            type="button"
           >
             Korean
           </button>
           <button
             className={cn(
-              "hover:bg-secondary/100 animation:enter w-fit rounded-md px-0.5 text-sm text-gray-400 underline",
+              "animation:enter w-fit rounded-md px-0.5 text-gray-400 text-sm underline hover:bg-secondary",
               {
                 "text-primary": locale === "en",
               }
             )}
             onClick={() => changeLocale("en")}
+            type="button"
           >
             English
           </button>
         </div>
       </div>
       {description && (
-        <p className="w-full text-sm text-gray-400">{description}</p>
+        <p className="w-full text-gray-400 text-sm">{description}</p>
       )}
     </header>
   );

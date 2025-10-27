@@ -11,7 +11,7 @@ export function Backlink({
 }) {
   return (
     <Link
-      className="hover:bg-secondary/100 animation:enter w-fit rounded-md px-0.5 text-sm text-gray-400 underline"
+      className="animation:enter w-fit rounded-md px-0.5 text-gray-400 text-sm underline hover:bg-secondary/100"
       href={href}
     >
       <ArrowTopLeftIcon className="mr-0.5 mb-1 inline h-3 w-3" />

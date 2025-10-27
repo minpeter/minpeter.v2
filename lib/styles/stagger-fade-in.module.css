@@ -21,8 +21,11 @@
 
     animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
     animation-delay: calc(
-      var(--level) * var(--base-delay) + var(--overflow-level) *
-        var(--base-delay) + var(--start-delay)
+      var(--level) *
+      var(--base-delay) +
+      var(--overflow-level) *
+      var(--base-delay) +
+      var(--start-delay)
     );
   }
 

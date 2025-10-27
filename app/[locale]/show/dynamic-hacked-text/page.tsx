@@ -13,9 +13,9 @@ export default async function Page(
   return (
     <section className="flex flex-col gap-3">
       <Header
-        title="/show/dynamic-hacked-text"
         description="글자 위에 마우스를 가져다 놓아보세요"
         link={{ href: `/${locale}/show` as Route, text: "showcase로 돌아가기" }}
+        title="/show/dynamic-hacked-text"
       />
       <div className={cn(styles.stagger_container, styles.slow)}>
         <AnimatedText data={"Hello world"} />

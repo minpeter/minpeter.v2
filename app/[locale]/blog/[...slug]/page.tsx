@@ -1,3 +1,4 @@
+import type { TOCItemType } from "fumadocs-core/toc";
 import { Callout } from "fumadocs-ui/components/callout";
 import { ImageZoom } from "fumadocs-ui/components/image-zoom";
 import { Tab, Tabs } from "fumadocs-ui/components/tabs";
@@ -7,7 +8,6 @@ import type { Route } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { setStaticParamsLocale } from "next-international/server";
-import { TOCItemType } from "fumadocs-core/toc";
 
 import ExternalRedirect from "@/components/external-redirect";
 import Header from "@/components/header";
@@ -18,7 +18,7 @@ import NewMetadata from "@/lib/utils/metadata";
 import { cn } from "@/lib/utils/tailwind";
 import { getI18n } from "@/locales/server";
 
-export async function generateStaticParams({
+export function generateStaticParams({
   params,
 }: {
   params: { locale: string; slug: string[] };
@@ -33,7 +33,9 @@ export async function generateMetadata(
 ) {
   const { locale, slug } = await props.params;
   const page = blog.getPage(slug, locale);
-  if (!page) notFound();
+  if (!page) {
+    notFound();
+  }
 
   return NewMetadata({
     title: page.data.title,
@@ -59,7 +61,9 @@ export default async function Page(
     (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
   );
 
-  if (!post) notFound();
+  if (!post) {
+    notFound();
+  }
 
   const MDX = post.data.body;
 
@@ -69,9 +73,9 @@ export default async function Page(
   };
 
   const postsIndex = posts.reduce<Record<string, PostWithNavigation>>(
-    (acc, post, index) => {
-      acc[post.slugs.join("/")] = {
-        ...post,
+    (acc, currentPost, index) => {
+      acc[currentPost.slugs.join("/")] = {
+        ...currentPost,
         previous: posts[index - 1] || null,
         next: posts[index + 1] || null,
       };
@@ -83,13 +87,13 @@ export default async function Page(
   return (
     <section className={styles.stagger_container}>
       <Header
-        title={post.data.title}
         description={
           post.data.description === undefined
             ? formatDateLong(post.data.date)
             : post.data.description
         }
         link={{ href: `/${locale}/blog` as Route, text: t("backToBlog") }}
+        title={post.data.title}
       />
 
       <aside className="fixed top-36 left-8 hidden w-72 2xl:block">
@@ -98,16 +102,15 @@ export default async function Page(
             <nav className={styles.stagger_container}>
               {post.data.toc.map((item: TOCItemType) => (
                 <a
-                  key={item.url}
-                  href={item.url}
                   className={cn(
                     "my-1 block",
-                    "hover:bg-secondary/100 animation:enter w-fit rounded-md px-0.5",
+                    "animation:enter w-fit rounded-md px-0.5 hover:bg-secondary",
                     "box-decoration-clone px-2 py-1"
                   )}
+                  href={item.url}
+                  key={item.url}
                   style={{ marginLeft: `${(item.depth - 1) * 1}rem` }}
                 >
-                  {/* eslint-disable-next-line */}
                   {/* @ts-ignore */}
                   {item.title?.props.children}
                 </a>
@@ -122,18 +125,20 @@ export default async function Page(
             className="mdx"
             components={{
               ...defaultMdxComponents,
-              img: (props) => <ImageZoom {...props} />,
+              img: (imageProps) => <ImageZoom {...imageProps} />,
               Tab,
               Tabs,
               Callout,
-              a: (props) => {
-                const { href, children, ...rest } = props;
+              a: (anchorProps) => {
+                const { href, children, ...rest } = anchorProps;
                 const h = href as string | undefined;
-                if (h && h.startsWith("/") && !h.startsWith("//")) {
+                const isInternalLink =
+                  h?.startsWith("/") && !h?.startsWith("//");
+                if (isInternalLink) {
                   return (
                     <Link
+                      className="rounded-md px-2 py-1 text-primary hover:bg-secondary"
                       href={h as Route}
-                      className="text-primary hover:bg-secondary/100 rounded-md px-2 py-1"
                       {...(rest as Record<string, unknown>)}
                     >
                       {children}
@@ -142,10 +147,10 @@ export default async function Page(
                 }
                 return (
                   <a
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    className="rounded-md px-2 py-1 text-primary hover:bg-secondary"
                     href={h}
-                    className="text-primary hover:bg-secondary/100 rounded-md px-2 py-1"
+                    rel="noopener noreferrer"
+                    target="_blank"
                     {...rest}
                   >
                     {children}
@@ -158,7 +163,7 @@ export default async function Page(
       </DocsBody>
 
       <section className="mt-32">
-        <div className="text-muted-foreground mb-8 flex flex-row items-center gap-2 text-sm">
+        <div className="mb-8 flex flex-row items-center gap-2 text-muted-foreground text-sm">
           <div className="flex gap-2">
             <span>{t("writeDate")}:</span>
             <time dateTime={new Date(post.data.date).toISOString()}>
@@ -191,21 +196,21 @@ export default async function Page(
         <div className="flex justify-between">
           {postsIndex[post.slugs.join("/")].previous ? (
             <Link
+              className="rounded-md px-2 py-1 text-primary hover:bg-secondary"
               href={
                 `${postsIndex[post.slugs.join("/")].previous?.url}` as Route
               }
-              className="text-primary hover:bg-secondary/100 rounded-md px-2 py-1"
             >
               ← {postsIndex[post.slugs.join("/")].previous?.data.title}
             </Link>
           ) : (
-            <div></div>
+            <div />
           )}
 
           {postsIndex[post.slugs.join("/")].next && (
             <Link
+              className="rounded-md px-2 py-1 text-primary hover:bg-secondary"
               href={`${postsIndex[post.slugs.join("/")].next?.url}` as Route}
-              className="text-primary hover:bg-secondary/100 rounded-md px-2 py-1"
             >
               {postsIndex[post.slugs.join("/")].next?.data.title} →
             </Link>

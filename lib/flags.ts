@@ -1,6 +1,6 @@
-import { statsigAdapter, type StatsigUser } from "@flags-sdk/statsig";
+import { type StatsigUser, statsigAdapter } from "@flags-sdk/statsig";
 import type { Identify } from "flags";
-import { flag, dedupe } from "flags/next";
+import { dedupe, flag } from "flags/next";
 
 export const identify = dedupe((async () => ({
   customIDs: { stableID: "1234" },

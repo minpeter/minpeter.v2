@@ -6,7 +6,7 @@ import {
   InstagramLogoIcon,
   LinkedInLogoIcon,
 } from "@radix-ui/react-icons";
-import { CodeIcon, KeyboardIcon, ExternalLinkIcon } from "lucide-react";
+import { CodeIcon, ExternalLinkIcon, KeyboardIcon } from "lucide-react";
 import type { Route } from "next";
 import dynamic from "next/dynamic";
 import Image from "next/image";
@@ -28,7 +28,7 @@ import mainImage1 from "@/public/assets/images/main-image-1.jpg";
 import mainImage2 from "@/public/assets/images/main-image-2.png";
 import mainImage3 from "@/public/assets/images/main-image-3.png";
 
-const Lickitung = dynamic(() => import("@/components/Lickitung"));
+const Lickitung = dynamic(() => import("@/components/lickitung"));
 
 export default function Page() {
   const t = useI18n();
@@ -50,10 +50,10 @@ export default function Page() {
           )}
         >
           <Link
-            href={`/${locale}/blog` as Route}
             className="lg:square flex h-40 flex-col justify-between rounded-xl bg-black/5 p-5 transition-colors duration-200 hover:bg-black/10 lg:h-auto dark:bg-white/5 dark:hover:bg-white/10"
+            href={`/${locale}/blog` as Route}
           >
-            <span className="text-lg font-medium">{t("blogTitle")}</span>
+            <span className="font-medium text-lg">{t("blogTitle")}</span>
             <CookieIcon className="h-6 w-6" />
           </Link>
 
@@ -73,11 +73,11 @@ export default function Page() {
             ].map((item) =>
               item.external ? (
                 <a
-                  key={item.href}
-                  href={item.href}
-                  target="_blank"
-                  rel="noreferrer noopener"
                   className="relative flex aspect-square flex-col rounded-xl bg-black/5 p-3 transition-colors duration-200 hover:bg-black/10 dark:bg-white/5 dark:hover:bg-white/10"
+                  href={item.href}
+                  key={item.href}
+                  rel="noreferrer noopener"
+                  target="_blank"
                 >
                   <div className="absolute top-3 left-3 flex items-center gap-1.5">
                     {item.icon}
@@ -91,9 +91,9 @@ export default function Page() {
                 </a>
               ) : (
                 <Link
-                  key={item.href}
-                  href={`/${locale}${item.href}` as Route}
                   className="relative flex aspect-square flex-col rounded-xl bg-black/5 p-3 transition-colors duration-200 hover:bg-black/10 dark:bg-white/5 dark:hover:bg-white/10"
+                  href={`/${locale}${item.href}` as Route}
+                  key={item.href}
                 >
                   <div className="absolute top-3 left-3 flex items-center gap-1.5">
                     {item.icon}
@@ -126,11 +126,11 @@ export default function Page() {
               ].map((item) => (
                 <a
                   aria-label={`social link to ${item.href}`}
-                  key={item.href}
-                  href={item.href}
-                  target="_blank"
-                  rel="noreferrer noopener"
                   className="flex aspect-square items-center justify-center rounded-xl bg-black/5 p-3 transition-colors duration-200 hover:bg-black/10 dark:bg-white/5 dark:hover:bg-white/10"
+                  href={item.href}
+                  key={item.href}
+                  rel="noreferrer noopener"
+                  target="_blank"
                 >
                   <div className="flex items-center gap-1.5">{item.icon}</div>
                 </a>
@@ -157,35 +157,49 @@ export default function Page() {
 
 function CarouselImage() {
   const [grayscale, setGrayscale] = useState("grayscale(1)");
+  const slides = [
+    {
+      id: "spotlight-video",
+      image: mainImage1,
+      url: "https://youtu.be/n_R0-YosZ3g?t=39",
+    },
+    {
+      id: "spotlight-gallery",
+      image: mainImage3,
+      url: null,
+    },
+    {
+      id: "spotlight-showcase",
+      image: mainImage2,
+      url: "/73e3da8fa7a397e7b1bc36efabb2cbb265524a75d7d5e6d1620b9e10e694257",
+    },
+  ];
 
   return (
     <Carousel>
       <CarouselContent>
-        {Array.from({ length: 3 }).map((_, index) => (
-          <CarouselItem key={index}>
+        {slides.map((slide, index) => (
+          <CarouselItem key={slide.id}>
             <AspectRatio ratio={1}>
               <Image
-                loading="lazy"
-                placeholder="blur"
+                alt={`Main image ${index + 1}`}
                 className={cn(
-                  "transition-filter h-full w-full cursor-pointer rounded-lg object-cover grayscale-[70%] duration-1000",
+                  "h-full w-full cursor-pointer rounded-lg object-cover grayscale-[70%] transition-filter duration-1000",
                   grayscale === "grayscale(0)" && "grayscale-0"
                 )}
-                width={300}
                 height={300}
-                src={[mainImage1, mainImage3, mainImage2][index]}
-                alt={`Main image ${index + 1}`}
+                loading="lazy"
+                onClick={() => {
+                  if (slide.url) {
+                    window.open(slide.url);
+                  }
+                }}
                 onMouseEnter={() => setGrayscale("grayscale(0)")}
                 onMouseLeave={() => setGrayscale("grayscale(70%)")}
                 onTouchEnd={() => setGrayscale("grayscale(70%)")}
-                onClick={() => {
-                  const urls = [
-                    "https://youtu.be/n_R0-YosZ3g?t=39",
-                    null,
-                    "/73e3da8fa7a397e7b1bc36efabb2cbb265524a75d7d5e6d1620b9e10e694257",
-                  ];
-                  if (urls[index]) window.open(urls[index]);
-                }}
+                placeholder="blur"
+                src={slide.image}
+                width={300}
               />
             </AspectRatio>
           </CarouselItem>

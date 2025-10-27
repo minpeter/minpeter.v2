@@ -1,7 +1,7 @@
 "use client";
 
 import type { Route } from "next";
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import Header from "@/components/header";
 import styles from "@/lib/styles/stagger-fade-in.module.css";
@@ -9,23 +9,229 @@ import { useCurrentLocale, useI18n } from "@/locales/client";
 
 import { nextSentencesGenerator } from "./action";
 
+const HANGUL_SYLLABLE_START = 0xac_00;
+const HANGUL_SYLLABLE_END = 0xd7_a3;
+const HANGUL_JAMO_START = 0x31_31;
+const HANGUL_JAMO_END = 0x31_8e;
+const SPECIAL_CHAR_PATTERN = /[.,!?]/;
+
+const MIN_ACCURACY_THRESHOLD = 85;
+const PERCENTAGE_MULTIPLIER = 100;
+const SENTENCE_PREFETCH_THRESHOLD = 3;
+const TRANSITION_DELAY_MS = 300;
+const INPUT_FOCUS_DELAY_MS = 50;
+const WPM_WORD_LENGTH = 5;
+const SECONDS_PER_MINUTE = 60;
+const MILLISECONDS_PER_SECOND = 1000;
+
 // Add utility function to check Korean characters
 const isKorean = (char: string) => {
   const code = char.charCodeAt(0);
   return (
-    (code >= 0xac00 && code <= 0xd7a3) || // 완성형 한글
-    (code >= 0x3131 && code <= 0x318e) // 자음/모음
+    (code >= HANGUL_SYLLABLE_START && code <= HANGUL_SYLLABLE_END) || // 완성형 한글
+    (code >= HANGUL_JAMO_START && code <= HANGUL_JAMO_END) // 자음/모음
   );
 };
 
 // Add utility function to check special characters after isKorean function
-const isSpecialChar = (char: string) => {
-  return /[.,!?]/.test(char);
+const isSpecialChar = (char: string) => SPECIAL_CHAR_PATTERN.test(char);
+
+const getLastChar = (value: string) => value.at(-1) ?? "";
+
+const shouldPrefetchSentences = (
+  currentIndex: number,
+  totalSentences: number
+) => currentIndex >= totalSentences - SENTENCE_PREFETCH_THRESHOLD;
+
+const hasNextSentence = (currentIndex: number, totalSentences: number) =>
+  currentIndex < totalSentences - 1;
+
+const mergeInputWithComposition = (
+  currentInput: string,
+  composition: string,
+  incoming: string
+) => {
+  if (!composition) {
+    return incoming.length === 1 ? currentInput + incoming : currentInput;
+  }
+
+  const lastComposingChar = getLastChar(composition);
+  const shouldAttachSpecial =
+    incoming.length > 0 &&
+    lastComposingChar &&
+    isSpecialChar(incoming) &&
+    isKorean(lastComposingChar);
+
+  const composedSegment = shouldAttachSpecial
+    ? composition + incoming
+    : composition;
+
+  return currentInput + composedSegment;
 };
 
-// Initial sentences array
+const buildFinalInputAfterComposition = (
+  currentInput: string,
+  composition: string,
+  targetSentence: string
+) => {
+  const baseInput = currentInput + composition;
 
-const MIN_ACCURACY_THRESHOLD = 85; // 85% accuracy threshold
+  if (baseInput.length >= targetSentence.length) {
+    return baseInput;
+  }
+
+  const nextChar = targetSentence[baseInput.length];
+  const lastComposingChar = getLastChar(composition);
+
+  if (
+    nextChar &&
+    lastComposingChar &&
+    isSpecialChar(nextChar) &&
+    isKorean(lastComposingChar)
+  ) {
+    const appendedInput = baseInput + nextChar;
+    return appendedInput.length <= targetSentence.length
+      ? appendedInput
+      : baseInput;
+  }
+
+  return baseInput;
+};
+
+type CharRenderParams = {
+  char: string;
+  index: number;
+  userInput: string;
+  isComposing: boolean;
+  composingText: string;
+  currentSentenceIndex: number;
+};
+
+type CharRenderState = {
+  key: string;
+  display: string;
+  className: string;
+};
+
+type DisplayCharOptions = {
+  baseChar: string;
+  typedChar: string;
+  isTyped: boolean;
+  isComposingHere: boolean;
+  isSpace: boolean;
+  isWrongSpace: boolean;
+  isTypedSpace: boolean;
+  composingText: string;
+};
+
+const resolveDisplayChar = ({
+  baseChar,
+  typedChar,
+  isTyped,
+  isComposingHere,
+  isSpace,
+  isWrongSpace,
+  isTypedSpace,
+  composingText,
+}: DisplayCharOptions) => {
+  if (isComposingHere) {
+    return composingText || baseChar;
+  }
+
+  if (isTyped) {
+    return isWrongSpace || isTypedSpace ? "_" : typedChar;
+  }
+
+  if (isSpace) {
+    return " ";
+  }
+
+  return baseChar;
+};
+
+const isRenderCorrect = (
+  baseChar: string,
+  typedChar: string,
+  isTyped: boolean
+) => {
+  if (!isTyped) {
+    return true;
+  }
+
+  if (isKorean(baseChar) || isKorean(typedChar)) {
+    return baseChar === typedChar;
+  }
+
+  return baseChar.toLowerCase() === typedChar.toLowerCase();
+};
+
+const buildClassName = (
+  isTyped: boolean,
+  isCurrentTyping: boolean,
+  isComposingHere: boolean,
+  isCorrect: boolean
+) => {
+  const classes = ["transition-all"];
+
+  if (isTyped) {
+    classes.push(
+      isCorrect ? "text-emerald-400" : "text-pink-400",
+      "opacity-100"
+    );
+  } else if (isCurrentTyping) {
+    classes.push("opacity-100");
+  } else {
+    classes.push("opacity-30");
+  }
+
+  if (isComposingHere) {
+    classes.push("border-b-2");
+  }
+
+  return classes.join(" ");
+};
+
+const buildCharRenderState = ({
+  char,
+  index,
+  userInput,
+  isComposing,
+  composingText,
+  currentSentenceIndex,
+}: CharRenderParams): CharRenderState => {
+  const isTyped = index < userInput.length;
+  const typedChar = userInput[index] ?? "";
+  const isCurrentTyping = index === userInput.length;
+  const isComposingHere = isCurrentTyping && isComposing;
+  const isSpace = char === " ";
+  const isWrongSpace = isTyped && isSpace && typedChar !== " ";
+  const isTypedSpace = isTyped && !isSpace && typedChar === " ";
+
+  const display = resolveDisplayChar({
+    baseChar: char,
+    typedChar,
+    isTyped,
+    isComposingHere,
+    isSpace,
+    isWrongSpace,
+    isTypedSpace,
+    composingText,
+  });
+
+  const isCorrect = isRenderCorrect(char, typedChar, isTyped);
+  const className = buildClassName(
+    isTyped,
+    isCurrentTyping,
+    isComposingHere,
+    isCorrect
+  );
+
+  return {
+    key: `${currentSentenceIndex}-${index}-${char}`,
+    display,
+    className,
+  };
+};
 
 export default function Page() {
   const t = useI18n();
@@ -42,6 +248,7 @@ export default function Page() {
   const [sentences, setSentences] = useState(initialSentences);
   const [isFetching, setIsFetching] = useState(false);
   const [lastWpm, setLastWpm] = useState(0); // Add this line after other state declarations
+  const [fetchError, setFetchError] = useState<string | null>(null);
 
   // 상태 관리
   const [userInput, setUserInput] = useState(""); // 사용자가 입력한 텍스트
@@ -56,8 +263,14 @@ export default function Page() {
 
   const currentSentence = sentences[currentSentenceIndex];
 
+  const focusInputIfPossible = useCallback(() => {
+    if (!isTransitioning) {
+      inputRef.current?.focus();
+    }
+  }, [isTransitioning]);
+
   // 입력 상태 초기화 함수
-  const resetInputStates = () => {
+  const resetInputStates = useCallback(() => {
     setUserInput("");
     setComposingText("");
     setIsComposing(false);
@@ -67,7 +280,7 @@ export default function Page() {
       inputRef.current.blur();
       setTimeout(() => {
         inputRef.current?.focus();
-      }, 50);
+      }, INPUT_FOCUS_DELAY_MS);
     }
     // Store current WPM before resetting
     if (wpm > 0) {
@@ -75,41 +288,54 @@ export default function Page() {
     }
     setStartTime(null);
     setWpm(0);
-  };
+  }, [wpm]);
+
+  const scheduleSentenceAdvance = useCallback(() => {
+    setTimeout(() => {
+      resetInputStates();
+      setCurrentSentenceIndex((prev) => prev + 1);
+      setIsTransitioning(false);
+    }, TRANSITION_DELAY_MS);
+  }, [resetInputStates]);
 
   // Modify WPM calculation to consider character types
   const calculateWPM = useCallback((input: string, elapsedSeconds: number) => {
     // Korean characters count as 2 characters, others as 1
-    const effectiveLength = input.split("").reduce((acc, char) => {
-      return acc + (isKorean(char) ? 2 : 1);
-    }, 0);
+    const effectiveLength = input
+      .split("")
+      .reduce((acc, char) => acc + (isKorean(char) ? 2 : 1), 0);
 
-    const wordsTyped = effectiveLength / 5;
-    const minutes = elapsedSeconds / 60;
+    const wordsTyped = effectiveLength / WPM_WORD_LENGTH;
+    const minutes = elapsedSeconds / SECONDS_PER_MINUTE;
     return Math.round(wordsTyped / minutes);
   }, []);
 
   // Modify fetch function to get multiple sentences
-  const fetchNewSentences = async () => {
-    if (isFetching) return;
+  const fetchNewSentences = useCallback(async () => {
+    if (isFetching) {
+      return;
+    }
 
     try {
       setIsFetching(true);
+      setFetchError(null);
       const [sentence1, sentence2] = await Promise.all([
         nextSentencesGenerator(locale),
         nextSentencesGenerator(locale),
       ]);
       setSentences((prev) => [...prev, sentence1, sentence2]);
-    } catch (error) {
-      console.error("Failed to fetch new sentences:", error);
+    } catch {
+      setFetchError("문장을 불러오는 중 오류가 발생했습니다.");
     } finally {
       setIsFetching(false);
     }
-  };
+  }, [isFetching, locale]);
 
   // Add accuracy calculation function
   const calculateAccuracy = useCallback((input: string, target: string) => {
-    if (input.length === 0) return 0;
+    if (input.length === 0) {
+      return 0;
+    }
 
     let correctChars = 0;
     const inputLength = Math.min(input.length, target.length);
@@ -119,48 +345,52 @@ export default function Page() {
       const inputChar = input[i];
 
       if (isKorean(targetChar) || isKorean(inputChar)) {
-        if (targetChar === inputChar) correctChars++;
-      } else {
-        if (targetChar.toLowerCase() === inputChar.toLowerCase())
+        if (targetChar === inputChar) {
           correctChars++;
+        }
+      } else if (targetChar.toLowerCase() === inputChar.toLowerCase()) {
+        correctChars++;
       }
     }
 
-    return Math.round((correctChars / inputLength) * 100);
+    return Math.round((correctChars / inputLength) * PERCENTAGE_MULTIPLIER);
   }, []);
 
-  // Replace existing completion check effect
   useEffect(() => {
-    const checkCompletion = async () => {
-      const currentInput = isComposing ? userInput + composingText : userInput;
+    if (
+      shouldPrefetchSentences(currentSentenceIndex, sentences.length) &&
+      !isFetching
+    ) {
+      fetchNewSentences();
+    }
+  }, [currentSentenceIndex, sentences.length, isFetching, fetchNewSentences]);
 
-      // Start fetching when running low on sentences
-      if (currentSentenceIndex >= sentences.length - 3 && !isFetching) {
-        fetchNewSentences();
-      }
+  useEffect(() => {
+    if (isTransitioning) {
+      return;
+    }
 
-      // Check if input length matches target and accuracy is above threshold
-      if (
-        !isTransitioning &&
-        currentInput.length === currentSentence.length &&
-        (currentInput === currentSentence ||
-          calculateAccuracy(currentInput, currentSentence) >=
-            MIN_ACCURACY_THRESHOLD)
-      ) {
-        setIsTransitioning(true);
+    const currentInput = isComposing ? userInput + composingText : userInput;
 
-        if (currentSentenceIndex < sentences.length - 1) {
-          setTimeout(() => {
-            resetInputStates();
-            setCurrentSentenceIndex((prev) => prev + 1);
-            setIsTransitioning(false);
-          }, 300);
-        }
-      }
-    };
+    if (currentInput.length !== currentSentence.length) {
+      return;
+    }
 
-    checkCompletion();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const meetsAccuracy =
+      currentInput === currentSentence ||
+      calculateAccuracy(currentInput, currentSentence) >=
+        MIN_ACCURACY_THRESHOLD;
+
+    if (!meetsAccuracy) {
+      return;
+    }
+
+    if (!hasNextSentence(currentSentenceIndex, sentences.length)) {
+      return;
+    }
+
+    setIsTransitioning(true);
+    scheduleSentenceAdvance();
   }, [
     userInput,
     composingText,
@@ -170,7 +400,7 @@ export default function Page() {
     isComposing,
     isTransitioning,
     calculateAccuracy,
-    isFetching,
+    scheduleSentenceAdvance,
   ]);
 
   // WPM 계산 효과
@@ -185,7 +415,7 @@ export default function Page() {
     // WPM 계산 (composingText도 길이에 포함)
     if (startTime && (userInput.length > 0 || composingText.length > 0)) {
       const currentInput = userInput + composingText;
-      const elapsedSeconds = (Date.now() - startTime) / 1000;
+      const elapsedSeconds = (Date.now() - startTime) / MILLISECONDS_PER_SECOND;
       const currentWPM = calculateWPM(currentInput, elapsedSeconds);
       setWpm(currentWPM);
     }
@@ -210,25 +440,18 @@ export default function Page() {
       return;
     }
 
-    let newInput = userInput;
+    const nextInput = mergeInputWithComposition(
+      userInput,
+      composingText,
+      input
+    );
 
     if (composingText) {
-      // 조합이 끝난 한글 뒤에 특수문자가 오는 경우 처리
-      if (
-        isSpecialChar(input) &&
-        isKorean(composingText[composingText.length - 1])
-      ) {
-        newInput += composingText + input;
-      } else {
-        newInput += composingText;
-      }
       setComposingText("");
-    } else if (input.length === 1) {
-      newInput += input;
     }
 
-    if (newInput.length <= currentSentence.length) {
-      setUserInput(newInput);
+    if (nextInput.length <= currentSentence.length) {
+      setUserInput(nextInput);
     }
 
     e.currentTarget.value = "";
@@ -238,36 +461,27 @@ export default function Page() {
   const handleCompositionEnd = (
     e: React.CompositionEvent<HTMLInputElement>
   ) => {
-    if (!isTransitioning) {
-      setIsComposing(false);
+    if (isTransitioning) {
+      return;
+    }
 
-      // 조합 중인 텍스트를 userInput에 추가
-      if (composingText) {
-        const newInput = userInput + composingText;
+    setIsComposing(false);
 
-        // 문장의 마지막 글자가 한글이고, 다음에 특수문자가 와야 하는 경우 처리
-        if (newInput.length < currentSentence.length) {
-          const nextChar = currentSentence[newInput.length];
-          if (
-            isSpecialChar(nextChar) &&
-            isKorean(composingText[composingText.length - 1])
-          ) {
-            const finalInput = newInput + nextChar;
-            if (finalInput.length <= currentSentence.length) {
-              setUserInput(finalInput);
-            }
-          } else {
-            setUserInput(newInput);
-          }
-        } else {
-          setUserInput(newInput);
-        }
+    if (composingText) {
+      const finalInput = buildFinalInputAfterComposition(
+        userInput,
+        composingText,
+        currentSentence
+      );
 
-        setComposingText("");
+      if (finalInput.length <= currentSentence.length) {
+        setUserInput(finalInput);
       }
 
-      e.currentTarget.value = "";
+      setComposingText("");
     }
+
+    e.currentTarget.value = "";
   };
 
   // onCompositionStart 이벤트 핸들러
@@ -278,134 +492,139 @@ export default function Page() {
     }
   };
 
-  // Update handleKeyDown to prevent early Enter presses
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter" && !isTransitioning) {
-      e.preventDefault();
-      // 강제로 다음 문장으로 진행 (다음 문장이 있을 때만)
-      if (currentSentenceIndex < sentences.length - 1) {
-        setIsTransitioning(true);
-        if (currentSentenceIndex >= sentences.length - 3) {
-          fetchNewSentences();
-        }
-        setTimeout(() => {
-          resetInputStates();
-          setCurrentSentenceIndex((prev) => prev + 1);
-          setIsTransitioning(false);
-        }, 300);
-      }
-      return;
+  const handleEnterPress = useCallback(() => {
+    if (!hasNextSentence(currentSentenceIndex, sentences.length)) {
+      return false;
     }
 
-    if (e.key === "Backspace") {
-      if (!isComposing && userInput.length > 0) {
-        e.preventDefault();
-        if (isAllSelected) {
-          setUserInput("");
-          setIsAllSelected(false);
-        } else {
-          setUserInput((prev) => prev.slice(0, -1));
-        }
-      }
-    } else if (e.key === "a" && (e.ctrlKey || e.metaKey)) {
-      e.preventDefault();
-      setIsAllSelected(true);
+    setIsTransitioning(true);
+
+    if (shouldPrefetchSentences(currentSentenceIndex, sentences.length)) {
+      fetchNewSentences();
     }
-  };
+
+    scheduleSentenceAdvance();
+    return true;
+  }, [
+    currentSentenceIndex,
+    sentences.length,
+    fetchNewSentences,
+    scheduleSentenceAdvance,
+  ]);
+
+  const handleBackspacePress = useCallback(() => {
+    if (isComposing || userInput.length === 0) {
+      return false;
+    }
+
+    if (isAllSelected) {
+      setUserInput("");
+      setIsAllSelected(false);
+    } else {
+      setUserInput((prev) => prev.slice(0, -1));
+    }
+
+    return true;
+  }, [isComposing, userInput, isAllSelected]);
+
+  // Update handleKeyDown to prevent early Enter presses
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLInputElement>) => {
+      switch (e.key) {
+        case "Enter":
+          if (!isTransitioning && handleEnterPress()) {
+            e.preventDefault();
+          }
+          break;
+        case "Backspace":
+          if (handleBackspacePress()) {
+            e.preventDefault();
+          }
+          break;
+        case "a":
+          if (e.ctrlKey || e.metaKey) {
+            e.preventDefault();
+            setIsAllSelected(true);
+          }
+          break;
+        default:
+      }
+    },
+    [handleEnterPress, handleBackspacePress, isTransitioning]
+  );
 
   return (
     <section className={`${styles.stagger_container} flex flex-col gap-12`}>
       <Header
-        title="Peter's Typing practice"
         description={t("typingDescription")}
         link={{ href: `/${locale}` as Route, text: t("backToHome") }}
+        title="Peter's Typing practice"
       />
-      <div
-        className="relative flex flex-col items-center justify-center gap-4 p-4"
-        onClick={() => !isTransitioning && inputRef.current?.focus()}
-      >
-        {/* 숨겨진 입력 필드 */}
+      <div className="relative flex w-full flex-col items-center justify-center">
+        <button
+          className="flex w-full flex-col items-center justify-center gap-4 rounded-md p-4 text-left outline-none focus-visible:ring-2"
+          onClick={focusInputIfPossible}
+          type="button"
+        >
+          <div className="font-mono text-2xl">
+            {currentSentence.split("").map((char, index) => {
+              const { key, display, className } = buildCharRenderState({
+                char,
+                index,
+                userInput,
+                isComposing,
+                composingText,
+                currentSentenceIndex,
+              });
+
+              return (
+                <span className={className} key={key}>
+                  {display}
+                </span>
+              );
+            })}
+          </div>
+
+          <div className="flex items-center gap-2 text-gray-400 text-sm">
+            <span>
+              {currentSentenceIndex + 1} / {sentences.length}
+            </span>
+            {(wpm > 0 || lastWpm > 0) && (
+              <>
+                <span className="text-gray-500">•</span>
+                <span>{wpm > 0 ? wpm : lastWpm} WPM</span>
+              </>
+            )}
+            {isFetching && (
+              <>
+                <span className="text-gray-500">•</span>
+                <span>생성중...</span>
+              </>
+            )}
+            {fetchError && (
+              <>
+                <span className="text-gray-500">•</span>
+                <span className="text-pink-400">{fetchError}</span>
+              </>
+            )}
+          </div>
+        </button>
+
         <input
-          ref={inputRef}
-          type="text"
-          className="absolute opacity-0"
+          autoFocus
+          className="pointer-events-none absolute inset-0 h-full w-full opacity-0"
+          onCompositionEnd={handleCompositionEnd}
           onCompositionStart={handleCompositionStart}
           onCompositionUpdate={(e) => {
             if (!isTransitioning) {
               setComposingText(e.data || "");
             }
           }}
-          onCompositionEnd={handleCompositionEnd}
           onInput={handleInput}
           onKeyDown={handleKeyDown}
-          autoFocus
+          ref={inputRef}
+          type="text"
         />
-
-        {/* 타이핑 텍스트 표시 */}
-        <div className="font-mono text-2xl">
-          {currentSentence.split("").map((char, index) => {
-            const isTyped = index < userInput.length;
-            const typedChar = userInput[index];
-            const isCurrentTyping = index === userInput.length;
-            const isComposingHere = isCurrentTyping && isComposing;
-            const isSpace = char === " ";
-            const isWrongSpace = isTyped && isSpace && typedChar !== " ";
-            const isTypedSpace = isTyped && !isSpace && typedChar === " ";
-
-            // Modified accuracy check logic
-            const isCorrect = (() => {
-              if (!isTyped) return true;
-              if (isKorean(char) || isKorean(typedChar)) {
-                return char === typedChar;
-              }
-              return char.toLowerCase() === typedChar?.toLowerCase();
-            })();
-
-            return (
-              <span
-                key={index}
-                className={`transition-all ${
-                  isTyped
-                    ? isCorrect
-                      ? "text-emerald-400 opacity-100"
-                      : "text-pink-400 opacity-100"
-                    : isCurrentTyping
-                      ? "opacity-100"
-                      : "opacity-30"
-                } ${isComposingHere ? "border-b-2" : ""}`}
-              >
-                {isComposingHere
-                  ? composingText
-                  : isTyped
-                    ? isWrongSpace || isTypedSpace
-                      ? "_"
-                      : typedChar
-                    : isSpace
-                      ? " "
-                      : char}
-              </span>
-            );
-          })}
-        </div>
-
-        {/* Update progress display to include fetching indicator */}
-        <div className="flex items-center gap-2 text-sm text-gray-400">
-          <span>
-            {currentSentenceIndex + 1} / {sentences.length}
-          </span>
-          {(wpm > 0 || lastWpm > 0) && (
-            <>
-              <span className="text-gray-500">•</span>
-              <span>{wpm > 0 ? wpm : lastWpm} WPM</span>
-            </>
-          )}
-          {isFetching && (
-            <>
-              <span className="text-gray-500">•</span>
-              <span>생성중...</span>
-            </>
-          )}
-        </div>
       </div>
     </section>
   );

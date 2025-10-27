@@ -14,9 +14,9 @@ export default async function Page(
   return (
     <section className="flex flex-col gap-8">
       <Header
-        title="/show/unstructured-0828"
-        link={{ href: `/${locale}/show` as Route, text: "Back" }}
         description="unstructured 250828"
+        link={{ href: `/${locale}/show` as Route, text: "Back" }}
+        title="/show/unstructured-0828"
       />
 
       {/* Keep overlay pinned by stacking in a relative container */}
@@ -26,9 +26,9 @@ export default async function Page(
           <div className="relative inline-block [transform:scaleX(-1)_scaleY(-1)_rotate(90deg)]">
             {/* Base image */}
             <Image
-              src={SaaSPageImage}
               alt="SaaS"
-              className="border-border rounded-lg border"
+              className="rounded-lg border border-border"
+              src={SaaSPageImage}
             />
 
             {/* Overlay image pinned on top of the base image */}
@@ -37,9 +37,9 @@ export default async function Page(
               target="_blank"
             >
               <Image
-                src={SaaSComponentImage}
                 alt="SaaS overlay"
                 className="absolute top-[25%] left-[-5%] w-[78%] cursor-pointer rounded-lg border-2 border-neutral-200 transition duration-300 ease-out group-hover:brightness-105"
+                src={SaaSComponentImage}
               />
             </Link>
           </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import type { Route } from "next";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import Header from "@/components/header";
 import { useCurrentLocale } from "@/locales/client";
@@ -11,9 +11,9 @@ export default function Page() {
   return (
     <section className="flex flex-col gap-3">
       <Header
-        title="/show/new-year-clock"
-        link={{ href: `/${locale}/show` as Route, text: "Back" }}
         description="Countdown to the next year"
+        link={{ href: `/${locale}/show` as Route, text: "Back" }}
+        title="/show/new-year-clock"
       />
 
       <Countdown />
@@ -21,47 +21,88 @@ export default function Page() {
   );
 }
 
+type TimeLeft = {
+  days: number;
+  hours: number;
+  minutes: number;
+  seconds: number;
+};
+
+const MILLISECONDS_PER_SECOND = 1000;
+const SECONDS_PER_MINUTE = 60;
+const MINUTES_PER_HOUR = 60;
+const HOURS_PER_DAY = 24;
+const TIMER_INTERVAL_MS = MILLISECONDS_PER_SECOND;
+
+const ZERO_TIME_LEFT: TimeLeft = {
+  days: 0,
+  hours: 0,
+  minutes: 0,
+  seconds: 0,
+};
+
+const JANUARY_INDEX = 0;
+const FIRST_DAY = 1;
+const NEXT_YEAR_OFFSET = 1;
+
 function Countdown() {
-  interface TimeLeft {
-    days: number;
-    hours: number;
-    minutes: number;
-    seconds: number;
-  }
+  const targetTimestamp = useMemo(() => {
+    const currentYear = new Date().getFullYear();
+    return new Date(
+      currentYear + NEXT_YEAR_OFFSET,
+      JANUARY_INDEX,
+      FIRST_DAY
+    ).getTime();
+  }, []);
 
-  const calculateTimeLeft = (): TimeLeft => {
-    const difference =
-      +new Date(`01/01/${new Date().getFullYear() + 1}`) - +new Date();
-    let timeLeft: TimeLeft = { days: 0, hours: 0, minutes: 0, seconds: 0 };
+  const calculateTimeLeft = useCallback((): TimeLeft => {
+    const now = Date.now();
+    const difference = targetTimestamp - now;
 
-    if (difference > 0) {
-      timeLeft = {
-        days: Math.floor(difference / (1000 * 60 * 60 * 24)),
-        hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
-        minutes: Math.floor((difference / 1000 / 60) % 60),
-        seconds: Math.floor((difference / 1000) % 60),
-      };
+    if (difference <= 0) {
+      return ZERO_TIME_LEFT;
     }
 
-    return timeLeft;
-  };
+    const millisecondsPerMinute = MILLISECONDS_PER_SECOND * SECONDS_PER_MINUTE;
+    const millisecondsPerHour = millisecondsPerMinute * MINUTES_PER_HOUR;
+    const millisecondsPerDay = millisecondsPerHour * HOURS_PER_DAY;
 
-  const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
+    return {
+      days: Math.floor(difference / millisecondsPerDay),
+      hours: Math.floor((difference / millisecondsPerHour) % HOURS_PER_DAY),
+      minutes: Math.floor(
+        (difference / millisecondsPerMinute) % SECONDS_PER_MINUTE
+      ),
+      seconds: Math.floor(
+        (difference / MILLISECONDS_PER_SECOND) % SECONDS_PER_MINUTE
+      ),
+    };
+  }, [targetTimestamp]);
+
+  const [remainingTime, setRemainingTime] =
+    useState<TimeLeft>(calculateTimeLeft);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setTimeLeft(calculateTimeLeft());
-    }, 1000);
+    const intervalId = window.setInterval(() => {
+      setRemainingTime(calculateTimeLeft());
+    }, TIMER_INTERVAL_MS);
 
-    return () => clearTimeout(timer);
-  });
+    return () => {
+      window.clearInterval(intervalId);
+    };
+  }, [calculateTimeLeft]);
+
+  const hasTimeLeft = useMemo(
+    () => Object.values(remainingTime).some((value) => value > 0),
+    [remainingTime]
+  );
 
   return (
-    <div className="rounded-xl text-sm whitespace-pre-wrap">
-      {Object.keys(timeLeft).length ? (
+    <div className="whitespace-pre-wrap rounded-xl text-sm">
+      {hasTimeLeft ? (
         <>
-          {timeLeft.days}일 {timeLeft.hours}시간 {timeLeft.minutes}분{" "}
-          {timeLeft.seconds}초
+          {remainingTime.days}일 {remainingTime.hours}시간{" "}
+          {remainingTime.minutes}분 {remainingTime.seconds}초
         </>
       ) : (
         "Happy New Year!"

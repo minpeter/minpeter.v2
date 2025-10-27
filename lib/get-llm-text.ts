@@ -1,7 +1,7 @@
 import { getCurrentWebsiteUrl } from "./get-current-website-url";
 import type { blogType } from "./source";
 
-export async function getLLMText(page: blogType, full: boolean = false) {
+export async function getLLMText(page: blogType, full = false) {
   if (!page) {
     return "";
   }

@@ -1,48 +1,131 @@
 "use client";
 
-import { CheckIcon, CopyIcon } from "@radix-ui/react-icons";
 import copy from "clipboard-copy";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { highlight } from "sugar-high";
 
-async function handleCopyClick(content: string) {
-  try {
-    await copy(content);
-  } catch (error) {
-    console.error("Failed to copy text to clipboard", error);
-  }
+const TEMPLATE_TOKEN_REGEX = /{{([^}]+)}}/g;
+const LEADING_NEWLINE = "\n";
+const TAB_PLACEHOLDER = "%TAB";
+const TAB_REPLACEMENT = "    ";
+const MULTILINE_SEPARATOR = "\n";
+const COPY_STATUS_RESET_DELAY_MS = 1000;
+const EDITABLE_INPUT_PADDING_CH = 2;
+const MIN_EDITABLE_CONTENT_LENGTH = 1;
+const COPY_ERROR_LABEL = "Copy failed";
+
+type CopyStatus = "idle" | "copied" | "error";
+
+type TemplateSegment =
+  | { id: string; type: "static"; content: string }
+  | { id: string; type: "dynamic"; content: string };
+
+async function copyToClipboard(content: string) {
+  await copy(content);
 }
 
-function parseTemplate(template: string) {
-  const regex = /{{([^}]+)}}/g;
-  const result = [];
+function parseTemplate(template: string): TemplateSegment[] {
+  const normalizedTemplate = template.startsWith(LEADING_NEWLINE)
+    ? template.slice(1)
+    : template;
+
+  const segments: TemplateSegment[] = [];
   let lastIndex = 0;
-  let match;
+  let segmentIndex = 0;
 
-  if (template[0] === "\n") {
-    lastIndex = 1;
-  }
+  for (const match of normalizedTemplate.matchAll(TEMPLATE_TOKEN_REGEX)) {
+    const matchIndex = match.index ?? 0;
 
-  while ((match = regex.exec(template))) {
-    if (match.index > lastIndex) {
-      result.push({
-        data: template.slice(lastIndex, match.index),
+    if (matchIndex > lastIndex) {
+      segments.push({
+        id: `static-${segmentIndex}`,
         type: "static",
+        content: normalizedTemplate.slice(lastIndex, matchIndex),
       });
+      segmentIndex += 1;
     }
-    result.push({
-      data: match[1],
+
+    segments.push({
+      id: `dynamic-${segmentIndex}`,
       type: "dynamic",
+      content: match[1],
     });
-    lastIndex = match.index + match[0].length;
+    segmentIndex += 1;
+    lastIndex = matchIndex + match[0].length;
   }
-  if (lastIndex < template.length) {
-    result.push({
-      data: template.slice(lastIndex),
+
+  if (lastIndex < normalizedTemplate.length) {
+    segments.push({
+      id: `static-${segmentIndex}`,
       type: "static",
+      content: normalizedTemplate.slice(lastIndex),
     });
   }
-  return result;
+
+  return segments;
+}
+
+function useCopyStatus() {
+  const [status, setStatus] = useState<CopyStatus>("idle");
+
+  useEffect(() => {
+    if (status === "idle") {
+      return;
+    }
+    const timeoutId = window.setTimeout(() => {
+      setStatus("idle");
+    }, COPY_STATUS_RESET_DELAY_MS);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [status]);
+
+  const markCopied = () => {
+    setStatus("copied");
+  };
+
+  const markError = () => {
+    setStatus("error");
+  };
+
+  return { status, markCopied, markError };
+}
+
+function buildTemplateOutput(
+  segments: TemplateSegment[],
+  values: Record<string, string>
+) {
+  let compiled = "";
+
+  for (const segment of segments) {
+    if (segment.type === "static") {
+      compiled += segment.content;
+      continue;
+    }
+
+    if (segment.content === TAB_PLACEHOLDER) {
+      compiled += TAB_REPLACEMENT;
+      continue;
+    }
+
+    compiled += values[segment.content] ?? "";
+  }
+
+  return compiled;
+}
+
+function getInputWidth(value: string) {
+  const effectiveLength = Math.max(value.length, MIN_EDITABLE_CONTENT_LENGTH);
+  return `${effectiveLength + EDITABLE_INPUT_PADDING_CH}ch`;
+}
+
+function getCopyLabel(status: CopyStatus) {
+  if (status === "copied") {
+    return "Copied";
+  }
+  if (status === "error") {
+    return "Retry copy";
+  }
+  return "Copy";
 }
 
 export function ModCodeBlock({
@@ -52,182 +135,163 @@ export function ModCodeBlock({
   template: string;
   data: { [key: string]: string };
 }) {
-  const parsedTemplate = parseTemplate(template);
-
-  const [state, setState] = useState(data);
-
-  const [onFocus, setOnFocus] = useState(
-    new Array(Object.keys(data).length).fill(false)
+  const segments = useMemo(() => parseTemplate(template), [template]);
+  const [values, setValues] = useState(data);
+  const [activeSegmentIndex, setActiveSegmentIndex] = useState<number | null>(
+    null
   );
+  const { status, markCopied, markError } = useCopyStatus();
 
   useEffect(() => {
-    setState(data);
+    setValues(data);
   }, [data]);
 
-  const stateUpdate = (key: string, value: string) => {
-    setState((prev) => ({
+  useEffect(() => {
+    if (activeSegmentIndex === null) {
+      return;
+    }
+    if (activeSegmentIndex >= segments.length) {
+      setActiveSegmentIndex(null);
+    }
+  }, [activeSegmentIndex, segments.length]);
+
+  const handleCopy = async () => {
+    const compiled = buildTemplateOutput(segments, values);
+
+    try {
+      await copyToClipboard(compiled);
+      markCopied();
+    } catch {
+      markError();
+    }
+  };
+
+  const handleSegmentChange = (key: string, value: string) => {
+    setValues((prev) => ({
       ...prev,
       [key]: value,
     }));
   };
 
-  const [onCopy, setOnCopy] = useState(false);
-
-  useEffect(() => {
-    if (onCopy) {
-      setTimeout(() => {
-        setOnCopy(false);
-      }, 1000);
-    }
-  }, [onCopy]);
+  const copyLabel = getCopyLabel(status);
 
   return (
-    <div className="flex flex-col gap-1">
-      <pre style={{ marginBottom: 0 }}>
-        <div
-          className="bg-card invisible absolute top-3 right-3 rounded-md border p-1 hover:cursor-pointer"
-          onClick={() => {
-            setOnCopy(true);
-            handleCopyClick(
-              parsedTemplate
-                .map(({ data, type }) => {
-                  if (type === "static") {
-                    return data;
-                  } else if (type === "dynamic" && data === "%TAB") {
-                    return "    ";
-                  } else {
-                    return state[data];
-                  }
-                })
-                .join("")
-            );
-          }}
-        >
-          <CopyIcon className={!onCopy ? "block" : "hidden"} />
-          <CheckIcon className={onCopy ? "block" : "hidden"} />
-        </div>
-
+    <div className="relative flex flex-col gap-1">
+      <button
+        className="absolute top-3 right-3 rounded-md border bg-card px-2 py-1 text-xs focus-visible:outline-2"
+        onClick={handleCopy}
+        type="button"
+      >
+        {copyLabel}
+      </button>
+      <pre className="mb-0">
         <div style={{ overflowX: "auto" }}>
           <code>
-            {parsedTemplate.map(({ data, type }, i) => {
-              if (type === "static") {
-                return <span key={i}>{data}</span>;
-              } else if (type === "dynamic" && data === "%TAB") {
-                return <span key={i}>&nbsp;&nbsp;&nbsp;&nbsp;</span>;
-              } else {
-                return onFocus[i] ? (
-                  <input
-                    type="text"
-                    autoFocus
-                    //
-                    className={`bg-secondary inline h-5 rounded-md px-1 py-0.5`}
-                    key={i}
-                    value={state[data]}
-                    onFocus={(e) => {
-                      const input = e.target;
-                      input.style.width = input.value.length + 2 + "ch";
-                    }}
-                    onChange={(e) => {
-                      stateUpdate(data, e.target.value);
+            {segments.map((segment, index) => {
+              if (segment.type === "static") {
+                return <span key={segment.id}>{segment.content}</span>;
+              }
 
-                      const input = e.target;
-                      input.style.width = input.value.length + 2 + "ch";
-                    }}
-                    onBlur={() =>
-                      setOnFocus((prev) => {
-                        const newFocus = [...prev];
-                        newFocus[i] = false;
-                        return newFocus;
-                      })
-                    }
-                    onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-                      if (e.key === "Enter") {
-                        e.preventDefault();
-                        (e.target as HTMLInputElement).blur();
-                      }
-                    }}
-                  />
-                ) : (
-                  <span
-                    key={i}
-                    onClick={() => {
-                      setOnFocus((prev) => {
-                        const newFocus = [...prev];
-                        newFocus[i] = true;
-                        return newFocus;
-                      });
-                    }}
-                    className="bg-secondary cursor-pointer rounded-md px-1 py-0.5 text-blue-500 hover:bg-blue-500 hover:text-white"
-                  >
-                    {state[data] || `plz enter \`${data}\``}
+              if (segment.content === TAB_PLACEHOLDER) {
+                return (
+                  <span key={segment.id}>
+                    {TAB_REPLACEMENT.replace(/ /g, "\u00a0")}
                   </span>
                 );
               }
+
+              const segmentValue = values[segment.content] ?? "";
+              if (activeSegmentIndex === index) {
+                return (
+                  <input
+                    aria-label={`Value for ${segment.content}`}
+                    autoFocus
+                    className="inline h-5 rounded-md bg-secondary px-1 py-0.5"
+                    key={segment.id}
+                    onBlur={() => setActiveSegmentIndex(null)}
+                    onChange={(event) => {
+                      handleSegmentChange(segment.content, event.target.value);
+                    }}
+                    onKeyDown={(event) => {
+                      if (event.key === "Enter") {
+                        event.preventDefault();
+                        (event.target as HTMLInputElement).blur();
+                      }
+                    }}
+                    style={{ width: getInputWidth(segmentValue) }}
+                    type="text"
+                    value={segmentValue}
+                  />
+                );
+              }
+
+              const displayValue = segmentValue || `Enter ${segment.content}`;
+
+              return (
+                <button
+                  className="cursor-pointer rounded-md bg-secondary px-1 py-0.5 text-blue-500 hover:bg-blue-500 hover:text-white"
+                  key={segment.id}
+                  onClick={() => setActiveSegmentIndex(index)}
+                  type="button"
+                >
+                  {displayValue}
+                </button>
+              );
             })}
           </code>
         </div>
       </pre>
-
-      <div className="mb-4 pl-1 text-xs text-gray-500">
+      <p className="mb-4 pl-1 text-gray-500 text-xs">
         *파란색 텍스트를 클릭하면 간편하게 수정 후 복사할 수 있습니다.
-      </div>
+      </p>
+      {status === "error" && (
+        <output className="pl-1 text-destructive text-xs">
+          {COPY_ERROR_LABEL}
+        </output>
+      )}
     </div>
   );
 }
 
-export function CodeBlock({
-  code,
-  language = "",
-}: {
-  code: string;
-  language?: string;
-}) {
-  const isPlain =
-    language === "plaintext" ||
-    language === "text" ||
-    language === "plain" ||
-    language === "nohighlight" ||
-    language === "";
+export function CodeBlock({ code }: { code: string; language?: string }) {
+  const { status, markCopied, markError } = useCopyStatus();
+  const isMultiline = code.includes(MULTILINE_SEPARATOR);
+  const highlightedCode = useMemo(() => highlight(code), [code]);
 
-  const [onCopy, setOnCopy] = useState(false);
-
-  useEffect(() => {
-    if (onCopy) {
-      setTimeout(() => {
-        setOnCopy(false);
-      }, 1000);
+  const handleCopy = async () => {
+    try {
+      await copyToClipboard(code);
+      markCopied();
+    } catch {
+      markError();
     }
-  }, [onCopy]);
+  };
 
-  const isMultiline = code.includes("\n");
+  const copyLabel = getCopyLabel(status);
 
   return (
-    <>
-      <div
-        className="bg-card invisible absolute top-3 right-3 rounded-md border p-1 hover:cursor-pointer"
-        onClick={() => {
-          setOnCopy(true);
-          handleCopyClick(code);
-        }}
+    <div className="relative">
+      <button
+        className="absolute top-3 right-3 rounded-md border bg-card px-2 py-1 text-xs focus-visible:outline-2"
+        onClick={handleCopy}
+        type="button"
       >
-        <CopyIcon className={!onCopy ? "block" : "hidden"} />
-        <CheckIcon className={onCopy ? "block" : "hidden"} />
-      </div>
+        {copyLabel}
+      </button>
       {isMultiline ? (
-        <div style={{ overflowX: "auto" }}>
-          {isPlain ? (
-            <code>{code}</code>
-          ) : (
-            <code
-              dangerouslySetInnerHTML={{
-                __html: highlight(code),
-              }}
-            />
-          )}
-        </div>
+        <pre style={{ overflowX: "auto" }}>
+          {/* biome-ignore lint/security/noDangerouslySetInnerHtml: sugar-high output is sanitized */}
+          <code dangerouslySetInnerHTML={{ __html: highlightedCode }} />
+        </pre>
       ) : (
-        <code>{code}</code>
+        /* biome-ignore lint/security/noDangerouslySetInnerHtml: sugar-high output is sanitized */
+        <code dangerouslySetInnerHTML={{ __html: highlightedCode }} />
       )}
-    </>
+      {status === "error" && (
+        <output className="mt-2 text-destructive text-xs">
+          {COPY_ERROR_LABEL}
+        </output>
+      )}
+    </div>
   );
 }

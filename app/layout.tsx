@@ -42,7 +42,7 @@ export default function RootLayout({
   const shouldInjectToolbar = process.env.NODE_ENV === "development";
 
   return (
-    <html suppressHydrationWarning>
+    <html lang="ko" suppressHydrationWarning>
       <body
         className={cn(
           AritaBuriLocalFont.variable,
@@ -54,8 +54,8 @@ export default function RootLayout({
           <ThemeProvider
             attribute="class"
             defaultTheme="dark"
-            enableSystem
             disableTransitionOnChange
+            enableSystem
           >
             <NuqsAdapter>
               <main
