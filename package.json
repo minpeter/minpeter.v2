@@ -34,6 +34,7 @@
     "axios": "^1.12.2",
     "babel-plugin-react-compiler": "^1.0.0",
     "class-variance-authority": "^0.7.1",
+    "clipboard-copy": "^4.0.1",
     "clsx": "^2.1.1",
     "embla-carousel-react": "^8.6.0",
     "flags": "^4.0.1",
@@ -48,6 +49,7 @@
     "react": "19.2.0",
     "react-dom": "19.2.0",
     "react-icons": "^5.5.0",
+    "sugar-high": "^0.9.4",
     "three": "^0.180.0",
     "zod": "^4.1.12"
   },
