@@ -12,9 +12,11 @@ export const shouldExclude = (path: string) =>
   (extPattern.test(path) && !allowedExts.some((ext) => path.endsWith(ext)));
 
 export function proxy(request: NextRequest) {
-  return shouldExclude(request.nextUrl.pathname)
-    ? NextResponse.next()
-    : createMiddleware(routing)(request);
+  if (shouldExclude(request.nextUrl.pathname)) {
+    return NextResponse.next();
+  }
+
+  return createMiddleware(routing)(request);
 }
 
 export const config = {
