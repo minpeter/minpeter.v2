@@ -2,6 +2,7 @@
   "name": "minpeter.v2",
   "version": "0.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "postinstall": "fumadocs-mdx",
     "dev": "next dev -p 8200",
@@ -9,6 +10,9 @@
     "build": "next build",
     "build:analyze": "ANALYZE=true next build",
     "postbuild": "next-sitemap --config next-sitemap.config.mjs",
+    "test": "NODE_OPTIONS='--experimental-vm-modules --no-warnings' vitest",
+    "test:ui": "NODE_OPTIONS='--experimental-vm-modules --no-warnings' vitest --ui",
+    "test:run": "NODE_OPTIONS='--experimental-vm-modules --no-warnings' vitest run",
     "check:biome": "ultracite check",
     "precheck:types": "next typegen",
     "check:types": "tsc --noEmit",
@@ -57,6 +61,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.3.2",
+    "@edge-runtime/vm": "^4.0.4",
     "@next/bundle-analyzer": "16.0.1",
     "@tailwindcss/postcss": "^4.1.16",
     "@types/matter-js": "^0.20.2",
@@ -65,6 +70,7 @@
     "@types/react": "19.2.2",
     "@types/react-dom": "19.2.2",
     "@types/three": "^0.181.0",
+    "@vitest/ui": "^3.0.0",
     "knip": "^5.66.4",
     "next-sitemap": "^4.2.3",
     "next-themes": "^0.4.6",
@@ -73,7 +79,9 @@
     "tailwindcss": "^4.1.16",
     "tailwindcss-animate": "^1.0.7",
     "typescript": "^5.9.3",
-    "ultracite": "6.1.0"
+    "ultracite": "6.1.0",
+    "vite-tsconfig-paths": "^5.1.4",
+    "vitest": "^3.0.0"
   },
   "packageManager": "pnpm@10.19.0+sha512.c9fc7236e92adf5c8af42fd5bf1612df99c2ceb62f27047032f4720b33f8eacdde311865e91c411f2774f618d82f320808ecb51718bfa82c060c4ba7c76a32b8"
 }
