@@ -6,6 +6,7 @@ import {
   frontmatterSchema,
 } from "fumadocs-mdx/config";
 import { z } from "zod";
+import { routing } from "./shared/i18n/routing";
 
 export const { docs, meta } = defineDocs({
   dir: "content/blog",
@@ -28,9 +29,9 @@ export const { docs, meta } = defineDocs({
         }),
       external_url: z.string().url().optional(),
       lang: z
-        .array(z.enum(["ko", "en"]))
+        .array(z.enum(routing.locales))
         .optional()
-        .default(["ko"]),
+        .default([routing.defaultLocale]),
     }),
     postprocess: {
       includeProcessedMarkdown: true,
