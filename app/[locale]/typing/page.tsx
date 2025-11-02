@@ -340,16 +340,16 @@ export default function Page() {
     let correctChars = 0;
     const inputLength = Math.min(input.length, target.length);
 
-    for (let i = 0; i < inputLength; i++) {
+    for (let i = 0; i < inputLength; i += 1) {
       const targetChar = target[i];
       const inputChar = input[i];
 
       if (isKorean(targetChar) || isKorean(inputChar)) {
         if (targetChar === inputChar) {
-          correctChars++;
+          correctChars += 1;
         }
       } else if (targetChar.toLowerCase() === inputChar.toLowerCase()) {
-        correctChars++;
+        correctChars += 1;
       }
     }
 
