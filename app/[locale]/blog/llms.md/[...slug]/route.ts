@@ -1,8 +1,8 @@
 import { notFound } from "next/navigation";
 import { type NextRequest, NextResponse } from "next/server";
 
-import { getLLMText } from "@/lib/get-llm-text";
-import { blog } from "@/lib/source";
+import { getLLMText } from "@/shared/get-llm-text";
+import { blog } from "@/shared/source";
 
 export async function GET(
   _req: NextRequest,

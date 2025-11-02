@@ -14,7 +14,7 @@ import {
 } from "react";
 
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils/tailwind";
+import { cn } from "@/shared/utils/tailwind";
 
 type CarouselApi = UseEmblaCarouselType[1];
 type UseCarouselParameters = Parameters<typeof useEmblaCarousel>;

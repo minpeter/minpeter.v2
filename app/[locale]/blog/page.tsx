@@ -4,10 +4,10 @@ import { createLoader, parseAsString } from "nuqs/server";
 import { Suspense } from "react";
 
 import Header from "@/components/header";
-import { blog, getPostsMetadata } from "@/lib/source";
-import styles from "@/lib/styles/stagger-fade-in.module.css";
-import NewMetadata from "@/lib/utils/metadata";
-import { getI18n } from "@/locales/server";
+import { getI18n } from "@/shared/i18n/server";
+import { blog, getPostsMetadata } from "@/shared/source";
+import styles from "@/shared/styles/stagger-fade-in.module.css";
+import NewMetadata from "@/shared/utils/metadata";
 
 // import { BlogSearch, BlogSearchFallback } from "./search";
 

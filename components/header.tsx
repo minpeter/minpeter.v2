@@ -1,10 +1,9 @@
 "use client";
 
 import type { Route } from "next";
-
-import styles from "@/lib/styles/stagger-fade-in.module.css";
-import { cn } from "@/lib/utils/tailwind";
-import { useChangeLocale, useCurrentLocale } from "@/locales/client";
+import { useChangeLocale, useCurrentLocale } from "@/shared/i18n/client";
+import styles from "@/shared/styles/stagger-fade-in.module.css";
+import { cn } from "@/shared/utils/tailwind";
 
 import { Backlink } from "./link";
 

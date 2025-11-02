@@ -21,12 +21,12 @@ import {
   CarouselItem,
 } from "@/components/ui/carousel";
 import { Skeleton } from "@/components/ui/skeleton";
-import styles from "@/lib/styles/stagger-fade-in.module.css";
-import { cn } from "@/lib/utils/tailwind";
-import { useCurrentLocale, useI18n } from "@/locales/client";
 import mainImage1 from "@/public/assets/images/main-image-1.jpg";
 import mainImage2 from "@/public/assets/images/main-image-2.png";
 import mainImage3 from "@/public/assets/images/main-image-3.png";
+import { useCurrentLocale, useI18n } from "@/shared/i18n/client";
+import styles from "@/shared/styles/stagger-fade-in.module.css";
+import { cn } from "@/shared/utils/tailwind";
 
 const Lickitung = dynamic(() => import("@/components/lickitung"));
 

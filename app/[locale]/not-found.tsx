@@ -3,7 +3,7 @@
 import type { Route } from "next";
 
 import Header from "@/components/header";
-import { useCurrentLocale, useI18n } from "@/locales/client";
+import { useCurrentLocale, useI18n } from "@/shared/i18n/client";
 
 export default function NotFound() {
   const t = useI18n();

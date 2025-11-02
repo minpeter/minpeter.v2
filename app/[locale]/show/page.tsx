@@ -3,11 +3,11 @@ import Link from "next/link";
 import { setStaticParamsLocale } from "next-international/server";
 
 import Header from "@/components/header";
-import { createFeatureGate } from "@/lib/flags";
-import styles from "@/lib/styles/stagger-fade-in.module.css";
-import NewMetadata from "@/lib/utils/metadata";
-import { cn } from "@/lib/utils/tailwind";
-import { getI18n } from "@/locales/server";
+import { createFeatureGate } from "@/shared/flags";
+import { getI18n } from "@/shared/i18n/server";
+import styles from "@/shared/styles/stagger-fade-in.module.css";
+import NewMetadata from "@/shared/utils/metadata";
+import { cn } from "@/shared/utils/tailwind";
 
 export const metadata = NewMetadata({
   title: "minpeter | showcase",

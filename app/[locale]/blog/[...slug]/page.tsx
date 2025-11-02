@@ -11,12 +11,12 @@ import { setStaticParamsLocale } from "next-international/server";
 
 import ExternalRedirect from "@/components/external-redirect";
 import Header from "@/components/header";
-import { blog } from "@/lib/source";
-import styles from "@/lib/styles/stagger-fade-in.module.css";
-import { formatDateLong } from "@/lib/utils/date";
-import NewMetadata from "@/lib/utils/metadata";
-import { cn } from "@/lib/utils/tailwind";
-import { getI18n } from "@/locales/server";
+import { getI18n } from "@/shared/i18n/server";
+import { blog } from "@/shared/source";
+import styles from "@/shared/styles/stagger-fade-in.module.css";
+import { formatDateLong } from "@/shared/utils/date";
+import NewMetadata from "@/shared/utils/metadata";
+import { cn } from "@/shared/utils/tailwind";
 
 export function generateStaticParams({
   params,

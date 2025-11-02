@@ -1,7 +1,7 @@
 // "use client";
 
 // import { useQueryState, parseAsString } from "nuqs";
-// import { blog, blogType } from "@/lib/source";
+// import { blog, blogType } from "@/shared/source";
 
 // import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 

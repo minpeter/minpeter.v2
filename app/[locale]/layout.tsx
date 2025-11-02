@@ -1,9 +1,8 @@
 import { RootProvider } from "fumadocs-ui/provider/next";
 import { notFound } from "next/navigation";
-
-import { I18nProviderClient } from "@/locales/client";
-import { getStaticParams } from "@/locales/server";
 import { SUPPORTED_LOCALES, type SupportedLocale } from "@/proxy";
+import { I18nProviderClient } from "@/shared/i18n/client";
+import { getStaticParams } from "@/shared/i18n/server";
 
 export function generateStaticParams() {
   return getStaticParams();

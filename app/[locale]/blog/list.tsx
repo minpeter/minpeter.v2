@@ -6,10 +6,10 @@ import Link from "next/link";
 import { parseAsString, useQueryState } from "nuqs";
 
 import { Badge } from "@/components/ui/badge";
-import type { postMetadataType } from "@/lib/source";
-import styles from "@/lib/styles/stagger-fade-in.module.css";
-import { formatDate, formatYear } from "@/lib/utils/date";
-import { cn } from "@/lib/utils/tailwind";
+import type { postMetadataType } from "@/shared/source";
+import styles from "@/shared/styles/stagger-fade-in.module.css";
+import { formatDate, formatYear } from "@/shared/utils/date";
+import { cn } from "@/shared/utils/tailwind";
 
 export function BlogList({
   lang,

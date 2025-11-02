@@ -1,8 +1,8 @@
 import type { Route } from "next";
 
 import Header from "@/components/header";
-import styles from "@/lib/styles/stagger-fade-in.module.css";
-import { cn } from "@/lib/utils/tailwind";
+import styles from "@/shared/styles/stagger-fade-in.module.css";
+import { cn } from "@/shared/utils/tailwind";
 
 import TmpfUI from "./tmpf";
 

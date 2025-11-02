@@ -9,10 +9,10 @@ import { NuqsAdapter } from "nuqs/adapters/next";
 
 import Footer from "@/components/footer";
 import { ThemeProvider } from "@/components/theme-provider";
-import { AritaBuriLocalFont } from "@/lib/font.AritaBuri";
-import styles from "@/lib/styles/header-overlay.module.css";
-import NewMetadata from "@/lib/utils/metadata";
-import { cn } from "@/lib/utils/tailwind";
+import { AritaBuriLocalFont } from "@/shared/font.AritaBuri";
+import styles from "@/shared/styles/header-overlay.module.css";
+import NewMetadata from "@/shared/utils/metadata";
+import { cn } from "@/shared/utils/tailwind";
 
 import "./globals.css";
 
