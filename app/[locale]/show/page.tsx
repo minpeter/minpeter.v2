@@ -4,7 +4,7 @@ import { setStaticParamsLocale } from "next-international/server";
 
 import Header from "@/components/header";
 import { createFeatureGate } from "@/shared/flags";
-import { getI18n } from "@/shared/i18n/server";
+import { getI18n } from "@/shared/i18n-legacy/server";
 import styles from "@/shared/styles/stagger-fade-in.module.css";
 import NewMetadata from "@/shared/utils/metadata";
 import { cn } from "@/shared/utils/tailwind";

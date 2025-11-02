@@ -4,7 +4,7 @@ import { createLoader, parseAsString } from "nuqs/server";
 import { Suspense } from "react";
 
 import Header from "@/components/header";
-import { getI18n } from "@/shared/i18n/server";
+import { getI18n } from "@/shared/i18n-legacy/server";
 import { blog, getPostsMetadata } from "@/shared/source";
 import styles from "@/shared/styles/stagger-fade-in.module.css";
 import NewMetadata from "@/shared/utils/metadata";

@@ -4,7 +4,7 @@ import type { Route } from "next";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 import Header from "@/components/header";
-import { useCurrentLocale } from "@/shared/i18n/client";
+import { useCurrentLocale } from "@/shared/i18n-legacy/client";
 
 export default function Page() {
   const locale = useCurrentLocale();

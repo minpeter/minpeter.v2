@@ -24,7 +24,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import mainImage1 from "@/public/assets/images/main-image-1.jpg";
 import mainImage2 from "@/public/assets/images/main-image-2.png";
 import mainImage3 from "@/public/assets/images/main-image-3.png";
-import { useCurrentLocale, useI18n } from "@/shared/i18n/client";
+import { useCurrentLocale, useI18n } from "@/shared/i18n-legacy/client";
 import styles from "@/shared/styles/stagger-fade-in.module.css";
 import { cn } from "@/shared/utils/tailwind";
 

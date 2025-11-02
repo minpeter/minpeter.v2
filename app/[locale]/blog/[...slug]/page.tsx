@@ -11,7 +11,7 @@ import { setStaticParamsLocale } from "next-international/server";
 
 import ExternalRedirect from "@/components/external-redirect";
 import Header from "@/components/header";
-import { getI18n } from "@/shared/i18n/server";
+import { getI18n } from "@/shared/i18n-legacy/server";
 import { blog } from "@/shared/source";
 import styles from "@/shared/styles/stagger-fade-in.module.css";
 import { formatDateLong } from "@/shared/utils/date";

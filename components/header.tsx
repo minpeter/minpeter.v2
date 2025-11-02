@@ -1,7 +1,7 @@
 "use client";
 
 import type { Route } from "next";
-import { useChangeLocale, useCurrentLocale } from "@/shared/i18n/client";
+import { useChangeLocale, useCurrentLocale } from "@/shared/i18n-legacy/client";
 import styles from "@/shared/styles/stagger-fade-in.module.css";
 import { cn } from "@/shared/utils/tailwind";
 
