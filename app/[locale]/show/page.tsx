@@ -1,10 +1,8 @@
 import type { Route } from "next";
 import Link from "next/link";
-import { setStaticParamsLocale } from "next-international/server";
-
+import { getTranslations } from "next-intl/server";
 import Header from "@/components/header";
 import { createFeatureGate } from "@/shared/flags";
-import { getI18n } from "@/shared/i18n-legacy/server";
 import styles from "@/shared/styles/stagger-fade-in.module.css";
 import NewMetadata from "@/shared/utils/metadata";
 import { cn } from "@/shared/utils/tailwind";
@@ -26,11 +24,9 @@ const showcasePaths = [
 export default async function Page(props: PageProps<"/[locale]/show">) {
   const { locale } = await props.params;
 
-  setStaticParamsLocale(locale);
-
   const enabled = await createFeatureGate("test_flag")(); //Disabled by default, edit in the Statsig console
 
-  const t = await getI18n();
+  const t = await getTranslations();
   return (
     <section className="flex flex-col gap-3">
       <Header

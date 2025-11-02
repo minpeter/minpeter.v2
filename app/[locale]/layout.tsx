@@ -1,23 +1,25 @@
 import { RootProvider } from "fumadocs-ui/provider/next";
 import { notFound } from "next/navigation";
-import { SUPPORTED_LOCALES, type SupportedLocale } from "@/proxy";
-import { I18nProviderClient } from "@/shared/i18n-legacy/client";
-import { getStaticParams } from "@/shared/i18n-legacy/server";
+import { hasLocale, NextIntlClientProvider } from "next-intl";
+
+import { setRequestLocale } from "next-intl/server";
+
+import { routing } from "@/shared/i18n/routing";
 
 export function generateStaticParams() {
-  return getStaticParams();
+  return routing.locales.map((locale) => ({ locale }));
 }
 
 export default async function LocaleLayout(props: LayoutProps<"/[locale]">) {
   const { locale } = await props.params;
-
-  if (!SUPPORTED_LOCALES.includes(locale as SupportedLocale)) {
+  if (!hasLocale(routing.locales, locale)) {
     notFound();
   }
+  setRequestLocale(locale); // Enable static rendering
 
   return (
-    <I18nProviderClient locale={locale}>
+    <NextIntlClientProvider>
       <RootProvider i18n={{ locale }}>{props.children}</RootProvider>
-    </I18nProviderClient>
+    </NextIntlClientProvider>
   );
 }

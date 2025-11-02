@@ -1,13 +1,12 @@
 "use client";
 
 import type { Route } from "next";
-
+import { useLocale, useTranslations } from "next-intl";
 import Header from "@/components/header";
-import { useCurrentLocale, useI18n } from "@/shared/i18n-legacy/client";
 
 export default function NotFound() {
-  const t = useI18n();
-  const locale = useCurrentLocale();
+  const t = useTranslations();
+  const locale = useLocale();
   return (
     <section>
       <Header

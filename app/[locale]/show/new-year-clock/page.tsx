@@ -1,13 +1,12 @@
 "use client";
 
 import type { Route } from "next";
+import { useLocale } from "next-intl";
 import { useCallback, useEffect, useMemo, useState } from "react";
-
 import Header from "@/components/header";
-import { useCurrentLocale } from "@/shared/i18n-legacy/client";
 
 export default function Page() {
-  const locale = useCurrentLocale();
+  const locale = useLocale();
   return (
     <section className="flex flex-col gap-3">
       <Header

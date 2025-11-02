@@ -42,7 +42,8 @@ export default function RootLayout({
   const shouldInjectToolbar = process.env.NODE_ENV === "development";
 
   return (
-    <html lang="ko" suppressHydrationWarning>
+    // biome-ignore lint/a11y/useHtmlLang: next-intl handles lang attribute via middleware
+    <html>
       <body
         className={cn(
           AritaBuriLocalFont.variable,

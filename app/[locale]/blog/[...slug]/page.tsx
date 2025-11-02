@@ -7,11 +7,9 @@ import { DocsBody } from "fumadocs-ui/page";
 import type { Route } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { setStaticParamsLocale } from "next-international/server";
-
+import { getTranslations } from "next-intl/server";
 import ExternalRedirect from "@/components/external-redirect";
 import Header from "@/components/header";
-import { getI18n } from "@/shared/i18n-legacy/server";
 import { blog } from "@/shared/source";
 import styles from "@/shared/styles/stagger-fade-in.module.css";
 import { formatDateLong } from "@/shared/utils/date";
@@ -47,8 +45,7 @@ export default async function Page(
   props: PageProps<"/[locale]/blog/[...slug]">
 ) {
   const { locale, slug } = await props.params;
-  setStaticParamsLocale(locale);
-  const t = await getI18n();
+  const t = await getTranslations();
 
   const post = blog.getPage(slug, locale);
   const posts = blog.getPages(locale);

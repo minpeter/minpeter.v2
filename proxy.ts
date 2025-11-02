@@ -1,30 +1,19 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { createI18nMiddleware } from "next-international/middleware";
+import createMiddleware from "next-intl/middleware";
 
-export const SUPPORTED_LOCALES = ["en", "ko"] as const;
-export type SupportedLocale = (typeof SUPPORTED_LOCALES)[number];
+import { routing } from "./shared/i18n/routing";
 
-const fallbackLanguage = "ko";
 const extensionPattern = /\.[^/]+$/;
-const I18nMiddleware = createI18nMiddleware({
-  locales: SUPPORTED_LOCALES,
-  defaultLocale: fallbackLanguage,
-  urlMappingStrategy: "rewriteDefault",
-  resolveLocaleFromRequest: () => fallbackLanguage,
-});
+
+const expectedPaths = ["/_next/", "/.well-known/", "/."];
 
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // 1. Exclusions
-  if (pathname.startsWith("/_next/")) {
-    return NextResponse.next();
-  }
-  if (pathname.startsWith("/.well-known/")) {
-    return NextResponse.next();
-  }
-  if (pathname.startsWith("/.")) {
-    return NextResponse.next();
+  if (expectedPaths.map((path) => pathname.startsWith(path)).includes(true)) {
+    // skip middleware by expectedPaths
+    return;
   }
 
   // 2. Exclude paths with a file extension, but allow .md
@@ -33,7 +22,7 @@ export function proxy(request: NextRequest) {
     return NextResponse.next();
   }
 
-  return I18nMiddleware(request);
+  return createMiddleware(routing)(request);
 }
 
 export const config = {

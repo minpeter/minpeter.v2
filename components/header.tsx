@@ -1,10 +1,11 @@
 "use client";
 
 import type { Route } from "next";
-import { useChangeLocale, useCurrentLocale } from "@/shared/i18n-legacy/client";
+import { useLocale } from "next-intl";
+import { Link, usePathname } from "@/shared/i18n/navigation";
+import { routing } from "@/shared/i18n/routing";
 import styles from "@/shared/styles/stagger-fade-in.module.css";
 import { cn } from "@/shared/utils/tailwind";
-
 import { Backlink } from "./link";
 
 type HeaderProps = {
@@ -17,8 +18,8 @@ type HeaderProps = {
 };
 
 export default function Header({ title, description, link }: HeaderProps) {
-  const changeLocale = useChangeLocale();
-  const locale = useCurrentLocale();
+  const locale = useLocale();
+  const pathname = usePathname();
 
   return (
     <header className={cn("mb-10 space-y-1", styles.stagger_container)}>
@@ -35,30 +36,27 @@ export default function Header({ title, description, link }: HeaderProps) {
         </h1>
 
         <div className="flex space-x-1">
-          <button
-            className={cn(
-              "animation:enter w-fit rounded-md px-0.5 text-gray-400 text-sm underline hover:bg-secondary",
-              {
-                "text-primary": locale === "ko",
-              }
-            )}
-            onClick={() => changeLocale("ko")}
-            type="button"
-          >
-            Korean
-          </button>
-          <button
-            className={cn(
-              "animation:enter w-fit rounded-md px-0.5 text-gray-400 text-sm underline hover:bg-secondary",
-              {
-                "text-primary": locale === "en",
-              }
-            )}
-            onClick={() => changeLocale("en")}
-            type="button"
-          >
-            English
-          </button>
+          {routing.locales.map((l) => {
+            const isActive = locale === l;
+            const label = l === "ko" ? "Korean" : "English";
+
+            return (
+              <Link
+                className={cn(
+                  "animation:enter w-fit rounded-md px-0.5 text-sm underline hover:bg-secondary",
+                  {
+                    "text-primary": isActive,
+                    "text-gray-400": !isActive,
+                  }
+                )}
+                href={pathname}
+                key={l}
+                locale={l}
+              >
+                {label}
+              </Link>
+            );
+          })}
         </div>
       </div>
       {description && (

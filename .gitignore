@@ -43,3 +43,6 @@ public/sitemap.xml
 public/robots.txt
 
 .source
+
+# next-intl
+shared/i18n/*.d.json.ts

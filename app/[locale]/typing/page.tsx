@@ -1,12 +1,10 @@
 "use client";
 
 import type { Route } from "next";
+import { useLocale, useTranslations } from "next-intl";
 import { useCallback, useEffect, useRef, useState } from "react";
-
 import Header from "@/components/header";
-import { useCurrentLocale, useI18n } from "@/shared/i18n-legacy/client";
 import styles from "@/shared/styles/stagger-fade-in.module.css";
-
 import { nextSentencesGenerator } from "./action";
 
 const HANGUL_SYLLABLE_START = 0xac_00;
@@ -234,15 +232,14 @@ const buildCharRenderState = ({
 };
 
 export default function Page() {
-  const t = useI18n();
+  const t = useTranslations();
+  const locale = useLocale();
 
   const initialSentences = [
     t("typingInitialSentences.0"),
     t("typingInitialSentences.1"),
     t("typingInitialSentences.2"),
   ];
-
-  const locale = useCurrentLocale();
 
   // Add new states
   const [sentences, setSentences] = useState(initialSentences);

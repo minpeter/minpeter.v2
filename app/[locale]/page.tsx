@@ -11,8 +11,8 @@ import type { Route } from "next";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
+import { useLocale, useTranslations } from "next-intl";
 import { Suspense, useState } from "react";
-
 import Header from "@/components/header";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import {
@@ -24,15 +24,14 @@ import { Skeleton } from "@/components/ui/skeleton";
 import mainImage1 from "@/public/assets/images/main-image-1.jpg";
 import mainImage2 from "@/public/assets/images/main-image-2.png";
 import mainImage3 from "@/public/assets/images/main-image-3.png";
-import { useCurrentLocale, useI18n } from "@/shared/i18n-legacy/client";
 import styles from "@/shared/styles/stagger-fade-in.module.css";
 import { cn } from "@/shared/utils/tailwind";
 
 const Lickitung = dynamic(() => import("@/components/lickitung"));
 
 export default function Page() {
-  const t = useI18n();
-  const locale = useCurrentLocale();
+  const t = useTranslations();
+  const locale = useLocale();
 
   return (
     <section className="flex flex-col gap-3">

@@ -1,16 +1,15 @@
 import type { Route } from "next";
-import { setStaticParamsLocale } from "next-international/server";
 import { createLoader, parseAsString } from "nuqs/server";
 import { Suspense } from "react";
 
 import Header from "@/components/header";
-import { getI18n } from "@/shared/i18n-legacy/server";
 import { blog, getPostsMetadata } from "@/shared/source";
 import styles from "@/shared/styles/stagger-fade-in.module.css";
 import NewMetadata from "@/shared/utils/metadata";
 
 // import { BlogSearch, BlogSearchFallback } from "./search";
 
+import { getTranslations } from "next-intl/server";
 import { BlogList, BlogListFallback } from "./list";
 
 export const metadata = NewMetadata({
@@ -30,8 +29,7 @@ export default async function Page(props: PageProps<"/[locale]/blog">) {
 
   const posts = getPostsMetadata(blog.getPages(locale));
 
-  setStaticParamsLocale(locale);
-  const t = await getI18n();
+  const t = await getTranslations();
 
   return (
     <section className={styles.stagger_container}>
