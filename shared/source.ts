@@ -1,10 +1,10 @@
-import { loader } from "fumadocs-core/source";
-import type { MetaData, PageData, SourceConfig } from "fumadocs-core/source";
 import { docs, meta } from "fumadocs-mdx:collections/server";
+import type { MetaData, PageData } from "fumadocs-core/source";
+import { loader } from "fumadocs-core/source";
 import {
-  toFumadocsSource,
   type DocCollectionEntry,
   type MetaCollectionEntry,
+  toFumadocsSource,
 } from "fumadocs-mdx/runtime/server";
 
 type BlogFrontmatter = PageData & {
@@ -16,10 +16,6 @@ type BlogFrontmatter = PageData & {
 
 type BlogPageData = DocCollectionEntry<BlogFrontmatter>;
 type BlogMetaData = MetaCollectionEntry<MetaData>;
-type BlogSourceConfig = SourceConfig & {
-  pageData: BlogPageData;
-  metaData: BlogMetaData;
-};
 
 const blogSource = toFumadocsSource<BlogPageData, BlogMetaData>(
   docs as BlogPageData[],
