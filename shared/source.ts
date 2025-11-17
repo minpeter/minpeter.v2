@@ -1,14 +1,37 @@
 import { loader } from "fumadocs-core/source";
-import { createMDXSource } from "fumadocs-mdx/runtime/next";
-import { docs, meta } from "@/.source";
+import type { MetaData, PageData, SourceConfig } from "fumadocs-core/source";
+import { docs, meta } from "fumadocs-mdx:collections/server";
+import {
+  toFumadocsSource,
+  type DocCollectionEntry,
+  type MetaCollectionEntry,
+} from "fumadocs-mdx/runtime/server";
 
-export const blog = loader({
+type BlogFrontmatter = PageData & {
+  draft: boolean;
+  date: Date;
+  external_url?: string;
+  lang: string[];
+};
+
+type BlogPageData = DocCollectionEntry<BlogFrontmatter>;
+type BlogMetaData = MetaCollectionEntry<MetaData>;
+type BlogSourceConfig = SourceConfig & {
+  pageData: BlogPageData;
+  metaData: BlogMetaData;
+};
+
+const blogSource = toFumadocsSource<BlogPageData, BlogMetaData>(
+  docs as BlogPageData[],
+  meta as BlogMetaData[]
+);
+
+export const blog = loader(blogSource, {
   i18n: {
     defaultLanguage: "ko",
     languages: ["ko", "en"],
   },
   baseUrl: "/blog",
-  source: createMDXSource(docs, meta),
 });
 
 export type blogListType = ReturnType<typeof blog.getPages>;
@@ -37,23 +60,11 @@ export function getPostMetadata(post: blogType): postMetadataType {
 
   return {
     url: post.url,
-    title: post.data.title,
+    title: post.data.title ?? "",
     draft: post.data.draft,
     date: post.data.date,
-    // Safely extract optional fields from dynamic MDX frontmatter
-    external_url: (() => {
-      const data = post.data as unknown as Record<string, unknown>;
-      return typeof data.external_url === "string"
-        ? data.external_url
-        : undefined;
-    })(),
-    lang: (() => {
-      const data = post.data as unknown as Record<string, unknown>;
-      return Array.isArray(data.lang) &&
-        data.lang.every((v) => typeof v === "string")
-        ? (data.lang as string[])
-        : ["ko"];
-    })(),
+    external_url: post.data.external_url,
+    lang: post.data.lang?.length ? post.data.lang : ["ko"],
   };
 }
 
