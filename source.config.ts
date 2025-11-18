@@ -5,6 +5,7 @@ import {
   defineDocs,
   frontmatterSchema,
 } from "fumadocs-mdx/config";
+import lastModified from "fumadocs-mdx/plugins/last-modified";
 import { z } from "zod";
 import { routing } from "./shared/i18n/routing";
 
@@ -46,7 +47,7 @@ const mdxOptions: DefaultMDXOptions = {
 };
 
 export default defineConfig({
-  lastModifiedTime: "git",
   mdxOptions,
+  plugins: [lastModified()],
   // generateManifest: false,
 });
