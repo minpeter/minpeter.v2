@@ -19,7 +19,7 @@ categories: "home lab"
 
 k8s-ctrlr과 k8s-node의 static ip를 설정한다.
 어김없이 netplan를 이용한다.  
-상황에 따라서 다르겠지만 보통의 공유기의 보통의 단일 컴퓨터로 만들어진 proxmox에서는 거희 비슷할 것이다.  
+상황에 따라서 다르겠지만 보통의 공유기의 보통의 단일 컴퓨터로 만들어진 proxmox에서는 거의 비슷할 것이다.  
 파일 수정 전 혹시 모르니 백업을 해둔다.
 
 ```bash
@@ -134,7 +134,7 @@ sudo ln -s /etc/machine-id /var/lib/dbus/machine-id
 
 그 다음 전원을 끄고 web ui에서 Cover to Template을 눌러준다.
 
-탬플릿으로 변경됬다면 원하는 수 만큼 worker를 만들 수 있다.
+탬플릿으로 변경됐다면 원하는 수 만큼 worker를 만들 수 있다.
 여기서는 k8s-node-1, k8s-node-2 이렇게 2개를 생성해주자.
 
 ## 8. vm 사양 변경
@@ -145,8 +145,8 @@ proxmox을 구동하고 있는 서버 사양에 따라서 변경해주면 되는
 만약 서버 사양이 부족하다면 전부 2cpu에 2gb로 설정해주자.
 이게 최소사양이다.  
 그리고 사양이 좋다고 해도 램은 증가시키기보다 worker를 더 생성하는 편이 좋다고 하는데.. 난 몰라도 되지 않을까?
-설정이 완료됬다면 다시 전부 전원을 켜주자.
-또한 탬플릿에서 복제한 vm의 경우 static ip가 풀려서 dhcp가 됬을텐데 원한다면 static ip로 변경해주자.
+설정이 완료됐다면 다시 전부 전원을 켜주자.
+또한 탬플릿에서 복제한 vm의 경우 static ip가 풀려서 dhcp가 됐을텐데 원한다면 static ip로 변경해주자.
 
 ## 9. cluster 생성
 

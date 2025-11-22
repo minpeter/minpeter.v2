@@ -187,7 +187,7 @@ EOS: `<|eot_id|>`
 모델 별로 학습할 때 사용된 탬플릿을 찾아서 올바르게 사용하는 것이 모델 성능에 큰 영향을 미치는데, 이를 찾는 방법은 어렵지 않습니다.
 
 1. huggingface files에서 `tokenizer_config.json` 파일 찾기  
-   모델이 instrcut 모델이라면 높은 확율로 `tokenizer_config.json` 파일에 chat template 필드가 존재합니다.
+   모델이 Instruct 모델이라면 높은 확률로 `tokenizer_config.json` 파일에 chat template 필드가 존재합니다.
    보통 한줄로 포맷팅되어 있으며 여기에 탬플릿이 존재한다면 대부분 그대로 사용하면 됩니다.
 
    ```json title="hf.co/NousResearch/Hermes-3-Llama-3.2-3B/blob/main/tokenizer_config.json"
@@ -201,7 +201,7 @@ EOS: `<|eot_id|>`
    ```
 
 2. model card에 명시된 "Prompting Template" 찾기  
-   모델 제작자가 친절한 경우 어떤 탬플릿이 작동작하는지에 대하여 서술해두는 경우가 있습니다.
+   모델 제작자가 친절한 경우 어떤 탬플릿이 작동하는지에 대하여 서술해두는 경우가 있습니다.
    어떤 방법으로 학습했는지에 따라 완전히 다른 탬플릿이 사용되기도 하니 이를 참고하여 사용하면 됩니다.  
    아래의 경우 Mistral `[INST]` 탬플릿과 ChatML의 혼합된 형태를 사용하고 있습니다.  
    e.g. [Sao10K/MN-12B-Lyra-v3](https://huggingface.co/Sao10K/MN-12B-Lyra-v3)
