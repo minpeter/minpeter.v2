@@ -7,14 +7,15 @@ import {
   toFumadocsSource,
 } from "fumadocs-mdx/runtime/server";
 
-type BlogFrontmatter = PageData & {
+export type BlogFrontmatter = PageData & {
   draft: boolean;
   date: Date;
+  lastModified?: Date;
   external_url?: string;
   lang: string[];
 };
 
-type BlogPageData = DocCollectionEntry<BlogFrontmatter>;
+export type BlogPageData = DocCollectionEntry<"blog", BlogFrontmatter>;
 type BlogMetaData = MetaCollectionEntry<MetaData>;
 
 const blogSource = toFumadocsSource<BlogPageData, BlogMetaData>(
