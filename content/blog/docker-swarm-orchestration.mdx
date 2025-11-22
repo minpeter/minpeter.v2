@@ -42,7 +42,7 @@ docker swarm은 기본적으로 여러개의 서버를 관리하는 툴이다.
 다양한 방법이 있지만 dind (docker in docker)기능을 활용해서 도커 컨테이너를 각각 노드로 사용하여 실습하도록하겠다.  
 (다른 방법으로는 vagrant을 이용해 가상머신을 생성해주거나 클라우드서비스를 이용해 실제 클러스터를 구현할수도)  
 docker compose을 이용해서 1개의 manager node(dind)와 3개의 worker node(dind)을 생성해줄것이다.  
-참고한 기존 블로그 글에서는 registy컨테어너가 별도로 존재했지만 실습결과 딱히 필요성을 느끼지 못해 삭제하였다.  
+참고한 기존 블로그 글에서는 registry 컨테이너가 별도로 존재했지만 실습결과 딱히 필요성을 느끼지 못해 삭제하였다.  
 (docker registy는 docker hub를 대체하는 로컬서버정도로 이해하면 될 것 같다.)
 
 ## 가상클러스터 생성
@@ -238,7 +238,7 @@ $ docker exec -it manager \
 docker node ls
 ```
 
-만약 worker node을 포함해 4개의 node가 나온다면 클러스터를 만드는데 성공한 것이다.
+만약 worker node를 포함해 4개의 node가 나온다면 클러스터를 만드는데 성공한 것이다.
 
 <details>
 <summary>docker registry 이미지 등록</summary>
@@ -281,11 +281,11 @@ swarm에서 단일 컨테이너를 배포하기 위해선 service라는 단위�
 docker service create --name [서비스이름] -p [외부포트]:[내부포트] [도커이미지]:[태그]
 ```
 
-이를 테스트 해보기 위해 [hashcorp/http-echo](https://hub.docker.com/r/hashicorp/http-echo/)이미지를 사용해보자
+이를 테스트 해보기 위해 [hashicorp/http-echo](https://hub.docker.com/r/hashicorp/http-echo/)이미지를 사용해보자
 
 ```
 docker exec -it manager \
-docker service create --name test_swarm -p 5678:5678 hashcorp/http-echo:latest
+docker service create --name test_swarm -p 5678:5678 hashicorp/http-echo:latest
 ```
 
 다음 명령어로 서비스가 생성된걸 확인할수 있다.
@@ -309,7 +309,7 @@ docker service scale test_swarm=6
 
 ```
 docker exec -it manager \
-docker serivce rm test_swarm
+docker service rm test_swarm
 ```
 
 ## 참고자료
