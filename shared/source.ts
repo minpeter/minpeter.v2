@@ -7,14 +7,15 @@ import {
   toFumadocsSource,
 } from "fumadocs-mdx/runtime/server";
 
-type BlogFrontmatter = PageData & {
+export type BlogFrontmatter = PageData & {
   draft: boolean;
   date: Date;
+  lastModified?: Date;
   external_url?: string;
   lang: string[];
 };
 
-type BlogPageData = DocCollectionEntry<BlogFrontmatter>;
+export type BlogPageData = DocCollectionEntry<"blog", BlogFrontmatter>;
 type BlogMetaData = MetaCollectionEntry<MetaData>;
 
 const blogSource = toFumadocsSource<BlogPageData, BlogMetaData>(
@@ -60,7 +61,7 @@ export function getPostMetadata(post: blogType): postMetadataType {
     draft: post.data.draft,
     date: post.data.date,
     external_url: post.data.external_url,
-    lang: post.data.lang?.length ? post.data.lang : ["ko"],
+    lang: post.data.lang.length ? post.data.lang : ["ko"],
   };
 }
 
