@@ -61,7 +61,7 @@ export function getPostMetadata(post: blogType): postMetadataType {
     draft: post.data.draft,
     date: post.data.date,
     external_url: post.data.external_url,
-    lang: post.data.lang?.length ? post.data.lang : ["ko"],
+    lang: post.data.lang.length ? post.data.lang : ["ko"],
   };
 }
 
