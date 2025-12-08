@@ -550,6 +550,9 @@ export default function Page() {
     [handleEnterPress, handleBackspacePress, isTransitioning]
   );
 
+  const shouldShowWpm = wpm > 0 || lastWpm > 0;
+  const displayWpm = wpm > 0 ? wpm : lastWpm;
+
   return (
     <section className={`${styles.stagger_container} flex flex-col gap-12`}>
       <Header
@@ -586,24 +589,24 @@ export default function Page() {
             <span>
               {currentSentenceIndex + 1} / {sentences.length}
             </span>
-            {(wpm > 0 || lastWpm > 0) && (
+            {shouldShowWpm ? (
               <>
                 <span className="text-gray-500">•</span>
-                <span>{wpm > 0 ? wpm : lastWpm} WPM</span>
+                <span>{displayWpm} WPM</span>
               </>
-            )}
-            {isFetching && (
+            ) : null}
+            {isFetching ? (
               <>
                 <span className="text-gray-500">•</span>
                 <span>생성중...</span>
               </>
-            )}
-            {fetchError && (
+            ) : null}
+            {fetchError ? (
               <>
                 <span className="text-gray-500">•</span>
                 <span className="text-pink-400">{fetchError}</span>
               </>
-            )}
+            ) : null}
           </div>
         </button>
 

@@ -73,7 +73,7 @@ export default function RootLayout({
                 />
 
                 {children}
-                {shouldInjectToolbar && <VercelToolbar />}
+                {shouldInjectToolbar ? <VercelToolbar /> : null}
               </main>
 
               <Footer />

@@ -168,20 +168,20 @@ export default async function Page(
             </time>
           </div>
 
-          {post.data.lastModified && <>{" • "}</>}
+          {post.data.lastModified ? <span aria-hidden="true">•</span> : null}
 
-          {post.data.lastModified && (
+          {post.data.lastModified ? (
             <div className="flex gap-2">
               <span>{t("lastModifiedDate")}:</span>
               <time dateTime={new Date(post.data.lastModified).toISOString()}>
                 {formatDateLong(post.data.lastModified)}
               </time>
             </div>
-          )}
+          ) : null}
 
-          {post.data.draft && <>{" • "}</>}
+          {post.data.draft ? <span aria-hidden="true">•</span> : null}
 
-          {post.data.draft && <span>draft</span>}
+          {post.data.draft ? <span>draft</span> : null}
         </div>
 
         <hr className="my-8" />
@@ -204,14 +204,14 @@ export default async function Page(
             <div />
           )}
 
-          {postsIndex[post.slugs.join("/")].next && (
+          {postsIndex[post.slugs.join("/")].next ? (
             <Link
               className="rounded-md px-2 py-1 text-primary hover:bg-secondary"
               href={`${postsIndex[post.slugs.join("/")].next?.url}` as Route}
             >
               {postsIndex[post.slugs.join("/")].next?.data.title} →
             </Link>
-          )}
+          ) : null}
         </div>
       </section>
     </section>

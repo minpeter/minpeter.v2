@@ -23,7 +23,6 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import mainImage1 from "@/public/assets/images/main-image-1.jpg";
 import mainImage2 from "@/public/assets/images/main-image-2.png";
-import mainImage3 from "@/public/assets/images/main-image-3.png";
 import styles from "@/shared/styles/stagger-fade-in.module.css";
 import { cn } from "@/shared/utils/tailwind";
 
@@ -44,7 +43,7 @@ export default function Page() {
           className={cn(
             styles.stagger_container,
             styles.slow,
-            // 상위 레이아웃에 넓이 제한이 존재하기 때문에 여기서 넓이 제한은 의미없음
+            // The parent layout already has a width constraint, so setting a width constraint here is unnecessary.
             "grid w-full grid-cols-1 gap-2 lg:grid-cols-2"
           )}
         >
@@ -160,11 +159,6 @@ function CarouselImage() {
     {
       id: "spotlight-video",
       image: mainImage1,
-      url: "https://youtu.be/n_R0-YosZ3g?t=39",
-    },
-    {
-      id: "spotlight-gallery",
-      image: mainImage3,
       url: null,
     },
     {
@@ -183,7 +177,7 @@ function CarouselImage() {
               <Image
                 alt={`Main image ${index + 1}`}
                 className={cn(
-                  "h-full w-full cursor-pointer rounded-lg object-cover grayscale-[70%] transition-filter duration-1000",
+                  "h-full w-full cursor-pointer rounded-lg object-cover grayscale-70 transition-filter duration-1000",
                   grayscale === "grayscale(0)" && "grayscale-0"
                 )}
                 height={300}
