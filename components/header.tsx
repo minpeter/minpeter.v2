@@ -59,9 +59,9 @@ export default function Header({ title, description, link }: HeaderProps) {
           })}
         </div>
       </div>
-      {description && (
+      {description ? (
         <p className="w-full text-gray-400 text-sm">{description}</p>
-      )}
+      ) : null}
     </header>
   );
 }

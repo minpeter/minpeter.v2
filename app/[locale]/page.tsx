@@ -164,8 +164,7 @@ function CarouselImage() {
     {
       id: "spotlight-showcase",
       image: mainImage2,
-      url:  "/73e3da8fa7a397e7b1bc36efabb2cbb265524a75d7d5e6d1620b9e10e694257",
-
+      url: "/73e3da8fa7a397e7b1bc36efabb2cbb265524a75d7d5e6d1620b9e10e694257",
     },
   ];
 

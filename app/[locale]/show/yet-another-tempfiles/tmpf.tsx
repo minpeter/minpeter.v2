@@ -57,26 +57,33 @@ type UploadResponse = {
   }>;
 };
 
-export async function uploadFile(file: File[]): Promise<UploadResponse> {
+export async function uploadFile(file: File[]): Promise<UploadResponse | null> {
   const formData = new FormData();
   for (const f of file) {
     formData.append("file", f);
   }
 
-  return await axiosInstance
-    .post<UploadResponse>(API_SUFFIX.UPLOAD, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    })
-    .then((response) => response.data)
-    .catch((error) => error);
+  try {
+    const response = await axiosInstance.post<UploadResponse>(
+      API_SUFFIX.UPLOAD,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data;
+  } catch {
+    return null;
+  }
 }
 
 export default function TmpfUI() {
   const [file, setFile] = useState<File[] | null>(null);
   const [uploaded, setUploaded] = useState<UploadResponse | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -85,13 +92,32 @@ export default function TmpfUI() {
   };
 
   const handleUpload = async () => {
-    if (file) {
-      setLoading(true);
-      const response = await uploadFile(file);
-      setUploaded(response);
-      setLoading(false);
+    if (!file) {
+      return;
+    }
+    setError(null);
+    setLoading(true);
+    const response = await uploadFile(file);
+    setUploaded(response);
+    if (!response) {
+      setError("Upload failed. Please try again.");
+    }
+    setLoading(false);
+  };
+
+  const handleDownloadAll = async () => {
+    if (!(uploaded?.folderId && Array.isArray(uploaded.files))) {
+      return;
+    }
+    for (const item of uploaded.files) {
+      await downloadFile(uploaded.folderId, item.fileName);
     }
   };
+
+  const hasUploadedFiles =
+    uploaded?.folderId &&
+    Array.isArray(uploaded?.files) &&
+    uploaded.files.length > 0;
 
   return (
     <div className="flex flex-col items-center space-y-4">
@@ -108,31 +134,29 @@ export default function TmpfUI() {
         </div>
       </div>
 
-      {loading && <p>Uploading...</p>}
-      {uploaded && (
+      {error ? <p className="text-red-400 text-sm">{error}</p> : null}
+      {loading ? <p>Uploading...</p> : null}
+      {hasUploadedFiles ? (
         <>
           <div className="flex flex-row items-center space-x-4">
             <p>
-              Folder <code className={codeVariants()}>{uploaded.folderId}</code>{" "}
+              Folder{" "}
+              <code className={codeVariants()}>{uploaded?.folderId}</code>{" "}
               uploaded
             </p>
-            <Button
-              onClick={async () => {
-                for (const item of uploaded.files) {
-                  await downloadFile(uploaded.folderId, item.fileName);
-                }
-              }}
-            >
+            <Button onClick={handleDownloadAll}>
               <DownloadIcon className="h-4 w-4" />
             </Button>
           </div>
 
           <ul>
-            {uploaded.files.map((f) => (
+            {uploaded?.files.map((f) => (
               <li key={f.fileName}>
                 <a
                   className="flex items-center space-x-2 hover:underline"
-                  href={BACKEND(API_SUFFIX.VIEW(uploaded.folderId, f.fileName))}
+                  href={BACKEND(
+                    API_SUFFIX.VIEW(uploaded?.folderId ?? "", f.fileName)
+                  )}
                   rel="noreferrer noopener"
                   target="_blank"
                 >
@@ -143,7 +167,7 @@ export default function TmpfUI() {
             ))}
           </ul>
         </>
-      )}
+      ) : null}
     </div>
   );
 }
