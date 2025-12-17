@@ -17,7 +17,7 @@ export function ModeToggle() {
       onClick={toggleTheme}
       type="button"
     >
-      <SunIcon className="dark:-rotate-90 absolute h-3 w-3 rotate-0 scale-100 transition-all dark:scale-0" />
+      <SunIcon className="absolute h-3 w-3 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
       <FiMoon className="absolute h-3 w-3 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
       <span className="sr-only">Toggle theme</span>
     </button>

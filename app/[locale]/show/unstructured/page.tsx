@@ -17,9 +17,9 @@ export default async function Page(
       <div className="h-48 w-full">
         <div className="group relative h-full w-full cursor-pointer">
           {/* 배경: 기본 상태에는 -rotate-1, 호버시 정렬 (rotate-0) */}
-          <div className="-rotate-1 absolute inset-0 transform rounded-sm bg-neutral-600 transition-all duration-300 group-hover:rotate-1" />
+          <div className="absolute inset-0 -rotate-1 transform rounded-sm bg-neutral-600 transition-all duration-300 group-hover:rotate-1" />
           {/* 내용: 기본 상태에는 rotate-1, 호버시 정렬 (rotate-0) */}
-          <div className="group-hover:-rotate-1 absolute inset-0 rotate-1 transform rounded-sm bg-neutral-500 p-8 transition-all duration-300">
+          <div className="absolute inset-0 rotate-1 transform rounded-sm bg-neutral-500 p-8 transition-all duration-300 group-hover:-rotate-1">
             <h1 className="font-extrabold text-2xl text-neutral-200">
               Hover me
             </h1>
