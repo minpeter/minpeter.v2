@@ -96,22 +96,22 @@ const buildFinalInputAfterComposition = (
   return baseInput;
 };
 
-type CharRenderParams = {
+interface CharRenderParams {
   char: string;
   index: number;
   userInput: string;
   isComposing: boolean;
   composingText: string;
   currentSentenceIndex: number;
-};
+}
 
-type CharRenderState = {
+interface CharRenderState {
   key: string;
   display: string;
   className: string;
-};
+}
 
-type DisplayCharOptions = {
+interface DisplayCharOptions {
   baseChar: string;
   typedChar: string;
   isTyped: boolean;
@@ -120,7 +120,7 @@ type DisplayCharOptions = {
   isWrongSpace: boolean;
   isTypedSpace: boolean;
   composingText: string;
-};
+}
 
 const resolveDisplayChar = ({
   baseChar,

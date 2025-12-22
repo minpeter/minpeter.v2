@@ -50,12 +50,12 @@ export async function downloadFile(folderId: string, fileName: string) {
   return;
 }
 
-type UploadResponse = {
+interface UploadResponse {
   folderId: string;
   files: Array<{
     fileName: string;
   }>;
-};
+}
 
 export async function uploadFile(file: File[]): Promise<UploadResponse | null> {
   const formData = new FormData();

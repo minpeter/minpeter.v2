@@ -5,10 +5,10 @@ const DEFAULT_COUNTDOWN_START = 3;
 const ONE_SECOND_MS = 1000;
 const COUNTDOWN_DECREMENT = 1;
 
-type ExternalRedirectProps = {
+interface ExternalRedirectProps {
   url: string;
   countdownStart?: number;
-};
+}
 
 export default function ExternalRedirect({
   url,

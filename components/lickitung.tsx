@@ -46,19 +46,19 @@ const MATERIAL_CHROMATIC_ABERRATION = 0.7;
 const MATERIAL_CLEARCOAT = 0.1;
 const MATERIAL_EMISSIVE_INTENSITY = 0.4;
 
-type LickitungGLTF = {
+interface LickitungGLTF {
   nodes: {
     mesh_0: {
       geometry: BufferGeometry;
     };
   };
-};
+}
 
-type Rotatable = {
+interface Rotatable {
   rotation: {
     z: number;
   };
-};
+}
 
 const calculateAspectRatio = (ratio: string) => {
   const [width, height] = ratio.split("/").map(Number);

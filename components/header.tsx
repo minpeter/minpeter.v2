@@ -8,14 +8,14 @@ import styles from "@/shared/styles/stagger-fade-in.module.css";
 import { cn } from "@/shared/utils/tailwind";
 import { Backlink } from "./link";
 
-type HeaderProps = {
+interface HeaderProps {
   title?: string;
   description?: string;
   link?: {
     href: Route;
     text: string;
   };
-};
+}
 
 export default function Header({ title, description, link }: HeaderProps) {
   const locale = useLocale();
