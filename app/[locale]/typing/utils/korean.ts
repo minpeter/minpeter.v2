@@ -1,7 +1,10 @@
-const HANGUL_SYLLABLE_START = 0xac_00;
-const HANGUL_SYLLABLE_END = 0xd7_a3;
-const HANGUL_JAMO_START = 0x31_31;
-const HANGUL_JAMO_END = 0x31_8e;
+import {
+  HANGUL_JAMO_END,
+  HANGUL_JAMO_START,
+  HANGUL_SYLLABLE_END,
+  HANGUL_SYLLABLE_START,
+} from "./hangul";
+
 const SPECIAL_CHAR_PATTERN = /[.,!?]/;
 
 export const isKorean = (char: string): boolean => {

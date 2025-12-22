@@ -39,8 +39,7 @@ export default function Page() {
     composingText,
     inputRef,
     currentInputWithComposition,
-    resetInputStates,
-    clearInput,
+    resetInput,
     focusInput,
     handleInput,
     handleCompositionStart,
@@ -62,12 +61,12 @@ export default function Page() {
 
   const scheduleSentenceAdvance = useCallback(() => {
     setTimeout(() => {
-      resetInputStates();
+      resetInput();
       resetStats();
       advanceToNextSentence();
       setIsTransitioning(false);
     }, TRANSITION_DELAY_MS);
-  }, [resetInputStates, resetStats, advanceToNextSentence]);
+  }, [resetInput, resetStats, advanceToNextSentence]);
 
   useEffect(() => {
     if (isTransitioning) {
@@ -117,10 +116,10 @@ export default function Page() {
   }, [hasNext, shouldPrefetch, fetchNewSentences, scheduleSentenceAdvance]);
 
   const handleReset = useCallback(() => {
-    clearInput();
+    resetInput();
     cancelStats();
     setIsTransitioning(false);
-  }, [clearInput, cancelStats]);
+  }, [resetInput, cancelStats]);
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLInputElement>) => {

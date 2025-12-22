@@ -17,7 +17,7 @@ export function useTypingInput(
   const [isAllSelected, setIsAllSelected] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const clearInput = useCallback(() => {
+  const resetInput = useCallback(() => {
     setUserInput("");
     setComposingText("");
     setIsComposing(false);
@@ -30,10 +30,6 @@ export function useTypingInput(
       }, INPUT_FOCUS_DELAY_MS);
     }
   }, []);
-
-  const resetInputStates = useCallback(() => {
-    clearInput();
-  }, [clearInput]);
 
   const focusInput = useCallback(() => {
     if (!isTransitioning) {
@@ -151,7 +147,7 @@ export function useTypingInput(
     isAllSelected,
     inputRef,
     currentInputWithComposition,
-    resetInputStates,
+    resetInput,
     focusInput,
     handleInput,
     handleCompositionStart,
@@ -159,6 +155,5 @@ export function useTypingInput(
     handleCompositionEnd,
     handleBackspace,
     handleSelectAll,
-    clearInput,
   };
 }
