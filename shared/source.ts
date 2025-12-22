@@ -34,14 +34,14 @@ export const blog = loader(blogSource, {
 export type blogListType = ReturnType<typeof blog.getPages>;
 export type blogType = ReturnType<typeof blog.getPage>;
 
-export type postMetadataType = {
+export interface postMetadataType {
   url: string;
   title: string;
   draft: boolean;
   date: Date;
   external_url?: string;
   lang: string[];
-};
+}
 
 export function getPostMetadata(post: blogType): postMetadataType {
   if (!post) {

@@ -20,12 +20,12 @@ export default function Page() {
   );
 }
 
-type TimeLeft = {
+interface TimeLeft {
   days: number;
   hours: number;
   minutes: number;
   seconds: number;
-};
+}
 
 const MILLISECONDS_PER_SECOND = 1000;
 const SECONDS_PER_MINUTE = 60;
