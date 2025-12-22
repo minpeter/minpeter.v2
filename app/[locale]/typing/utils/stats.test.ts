@@ -1,8 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { calculateAccuracy, calculateWPM } from "./stats";
+import { calculateAccuracy, calculateCPM, calculateWPM } from "./stats";
 
 describe("타자 통계 유틸리티", () => {
   describe("calculateWPM (분당 타수 계산)", () => {
+    // ... 기존 테스트
     it("빈 입력이나 경과 시간이 0이면 0을 반환한다", () => {
       expect(calculateWPM("", 10)).toBe(0);
       expect(calculateWPM("test", 0)).toBe(0);
@@ -24,6 +25,14 @@ describe("타자 통계 유틸리티", () => {
       const input = "닭";
       const seconds = 6;
       expect(calculateWPM(input, seconds)).toBe(8);
+    });
+  });
+
+  describe("calculateCPM (분당 타수 변환)", () => {
+    it("WPM을 CPM(타수)으로 변환한다 (WPM * 5)", () => {
+      expect(calculateCPM(100)).toBe(500);
+      expect(calculateCPM(0)).toBe(0);
+      expect(calculateCPM(20.5)).toBe(103);
     });
   });
 

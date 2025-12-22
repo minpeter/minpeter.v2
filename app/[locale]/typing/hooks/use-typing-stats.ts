@@ -63,14 +63,6 @@ export function useTypingStats(
     setAccuracy(0);
   }, [wpm, accuracy]);
 
-  const fullReset = useCallback(() => {
-    setStartTime(null);
-    setWpm(0);
-    setAccuracy(0);
-    setLastWpm(0);
-    setLastAccuracy(0);
-  }, []);
-
   const cancelStats = useCallback(() => {
     setStartTime(null);
     setWpm(0);
@@ -91,7 +83,6 @@ export function useTypingStats(
     unitLabel,
     shouldShowStats: wpm > 0 || lastWpm > 0,
     resetStats,
-    fullReset,
     cancelStats,
   };
 }

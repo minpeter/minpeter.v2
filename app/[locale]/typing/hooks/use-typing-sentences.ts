@@ -47,12 +47,6 @@ export function useTypingSentences(
     setCurrentSentenceIndex((prev) => prev + 1);
   }, []);
 
-  const resetToBeginning = useCallback(() => {
-    setCurrentSentenceIndex(0);
-    setSentences(initialSentences);
-    setFetchError(null);
-  }, [initialSentences]);
-
   useEffect(() => {
     if (
       shouldPrefetchSentences(currentSentenceIndex, sentences.length) &&
@@ -69,7 +63,6 @@ export function useTypingSentences(
     isFetching,
     fetchError,
     advanceToNextSentence,
-    resetToBeginning,
     fetchNewSentences,
     shouldPrefetch: shouldPrefetchSentences(
       currentSentenceIndex,
