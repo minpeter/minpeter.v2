@@ -9,8 +9,7 @@ const INPUT_FOCUS_DELAY_MS = 50;
 
 export function useTypingInput(
   currentSentence: string,
-  isTransitioning: boolean,
-  onReset?: () => void
+  isTransitioning: boolean
 ) {
   const [userInput, setUserInput] = useState("");
   const [isComposing, setIsComposing] = useState(false);
@@ -34,8 +33,7 @@ export function useTypingInput(
 
   const resetInputStates = useCallback(() => {
     clearInput();
-    onReset?.();
-  }, [clearInput, onReset]);
+  }, [clearInput]);
 
   const focusInput = useCallback(() => {
     if (!isTransitioning) {

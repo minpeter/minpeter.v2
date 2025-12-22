@@ -39,14 +39,6 @@ export default function Page() {
   } = useTypingSentences(initialSentences, locale, t);
 
   const {
-    displayWpm,
-    displayAccuracy,
-    shouldShowStats,
-    resetStats,
-    cancelStats,
-  } = useTypingStats("", "", currentSentence);
-
-  const {
     userInput,
     isComposing,
     composingText,
@@ -61,17 +53,25 @@ export default function Page() {
     handleCompositionEnd,
     handleBackspace,
     handleSelectAll,
-  } = useTypingInput(currentSentence, isTransitioning, resetStats);
+  } = useTypingInput(currentSentence, isTransitioning);
 
-  const statsHook = useTypingStats(userInput, composingText, currentSentence);
+  const {
+    displayValue,
+    displayAccuracy,
+    unitLabel,
+    shouldShowStats,
+    resetStats,
+    cancelStats,
+  } = useTypingStats(userInput, composingText, currentSentence);
 
   const scheduleSentenceAdvance = useCallback(() => {
     setTimeout(() => {
       resetInputStates();
+      resetStats();
       advanceToNextSentence();
       setIsTransitioning(false);
     }, TRANSITION_DELAY_MS);
-  }, [resetInputStates, advanceToNextSentence]);
+  }, [resetInputStates, resetStats, advanceToNextSentence]);
 
   useEffect(() => {
     if (isTransitioning) {
@@ -197,14 +197,15 @@ export default function Page() {
             <span>
               {currentSentenceIndex + 1} / {sentences.length}
             </span>
-            {shouldShowStats || statsHook.shouldShowStats ? (
+            {shouldShowStats ? (
               <>
                 <span className="text-gray-500">•</span>
-                <span>{statsHook.displayWpm || displayWpm} WPM</span>
+                <span>
+                  {displayValue} {t(unitLabel)}
+                </span>
                 <span className="text-gray-500">•</span>
                 <span>
-                  {statsHook.displayAccuracy || displayAccuracy}%{" "}
-                  {t("typingAccuracy")}
+                  {displayAccuracy}% {t("typingAccuracy")}
                 </span>
               </>
             ) : null}
