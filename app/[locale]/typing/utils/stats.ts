@@ -51,9 +51,5 @@ export const calculateAccuracy = (input: string, target: string): number => {
     }
   }
 
-  if (inputJaso.length === 0) {
-    return 0;
-  }
-
   return Math.round((correctCount / inputJaso.length) * PERCENTAGE_MULTIPLIER);
 };

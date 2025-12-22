@@ -10,7 +10,6 @@ import { useTypingInput } from "./hooks/use-typing-input";
 import { useTypingSentences } from "./hooks/use-typing-sentences";
 import { useTypingStats } from "./hooks/use-typing-stats";
 import { buildCharRenderState } from "./utils/char-render";
-import { calculateAccuracy } from "./utils/stats";
 
 const MIN_ACCURACY_THRESHOLD = 85;
 const TRANSITION_DELAY_MS = 300;
@@ -52,6 +51,7 @@ export default function Page() {
   } = useTypingInput(currentSentence, isTransitioning);
 
   const {
+    accuracy,
     displayValue,
     displayAccuracy,
     unitLabel,
@@ -80,8 +80,7 @@ export default function Page() {
 
     const meetsAccuracy =
       currentInputWithComposition === currentSentence ||
-      calculateAccuracy(currentInputWithComposition, currentSentence) >=
-        MIN_ACCURACY_THRESHOLD;
+      accuracy >= MIN_ACCURACY_THRESHOLD;
 
     if (!meetsAccuracy) {
       return;
@@ -94,6 +93,7 @@ export default function Page() {
     setIsTransitioning(true);
     scheduleSentenceAdvance();
   }, [
+    accuracy,
     currentInputWithComposition,
     currentSentence,
     hasNext,
