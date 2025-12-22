@@ -7,13 +7,14 @@
   "backToHome": "홈으로",
   "aboutTitle": "안녕하세요, 민웅기입니다 :)",
   "aboutMe": "현재는 프론트엔드 개발자로 일하고 있습니다.\n프론트엔드 개발자로서 빠르게 변화하는 기술을 배우고 적용하는 것을 즐깁니다.\n또한, 사용자 경험을 중요시하며 사용자에게 최고의 경험을 제공하기 위해 노력합니다.",
-  "typingInitialSentences": [
-    "각 문장이 완성되면 자동으로 넘어갑니다.",
-    "엔터 키를 눌러 강제로 다음 문장으로 이동할 수 있습니다.",
-    "문장은 자동으로 생성됩니다, 즐거운 타이핑하세요."
-  ],
   "typingDescription": "원하는 방식이 맞는지 모르겠어. 마음에 들면 좋겠다",
-
+  "typingGenerating": "생성 중...",
+  "typingFetchError": "문장을 불러오는 중 오류가 발생했습니다.",
+  "typingAccuracy": "정확도",
+  "typingHintEnter": "다음 문장",
+  "typingHintEsc": "다시 쓰기",
+  "CPM": "타",
+  "WPM": "WPM",
   "blogPageTitle": "민웅기의 개발 노트",
   "blogPageDescription": "내가 적은 블로그, 너를 위해 써봤지",
   "writeDate": "작성일",

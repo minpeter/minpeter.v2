@@ -43,7 +43,7 @@ export default function RootLayout({
 
   return (
     // biome-ignore lint/a11y/useHtmlLang: next-intl handles lang attribute via middleware
-    <html>
+    <html suppressHydrationWarning>
       <body
         className={cn(
           AritaBuriLocalFont.variable,

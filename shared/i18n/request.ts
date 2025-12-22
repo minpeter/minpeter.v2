@@ -43,7 +43,9 @@ export default getRequestConfig(async ({ requestLocale }) => {
   if (locale !== routing.defaultLocale) {
     const defaultMessages = (await import(`./${routing.defaultLocale}.json`))
       .default;
-    messages = deepmerge(defaultMessages, currentMessages);
+    messages = deepmerge(defaultMessages, currentMessages, {
+      arrayMerge: (_destination, source) => source,
+    });
   }
 
   return {
