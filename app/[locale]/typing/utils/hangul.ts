@@ -51,6 +51,52 @@ const COMPLEX_JONGSUNG_MAP: Record<string, string[]> = {
   ㅄ: ["ㅂ", "ㅅ"],
 };
 
+const CHOSUNG_CHARS = [
+  "ㄱ",
+  "ㄲ",
+  "ㄴ",
+  "ㄷ",
+  "ㄸ",
+  "ㄹ",
+  "ㅁ",
+  "ㅂ",
+  "ㅃ",
+  "ㅅ",
+  "ㅆ",
+  "ㅇ",
+  "ㅈ",
+  "ㅉ",
+  "ㅊ",
+  "ㅋ",
+  "ㅌ",
+  "ㅍ",
+  "ㅎ",
+];
+
+const JUNGSUNG_CHARS = [
+  "ㅏ",
+  "ㅐ",
+  "ㅑ",
+  "ㅒ",
+  "ㅓ",
+  "ㅔ",
+  "ㅕ",
+  "ㅖ",
+  "ㅗ",
+  "ㅘ",
+  "ㅙ",
+  "ㅚ",
+  "ㅛ",
+  "ㅜ",
+  "ㅝ",
+  "ㅞ",
+  "ㅟ",
+  "ㅠ",
+  "ㅡ",
+  "ㅢ",
+  "ㅣ",
+];
+
 export const getCharStrokeCount = (char: string): number => {
   const code = char.charCodeAt(0);
 
@@ -76,53 +122,8 @@ export const disassembleHangul = (char: string): string[] => {
   const jungsungIndex = Math.floor((offset / 28) % 21);
   const jongsungIndex = offset % 28;
 
-  const CHO = [
-    "ㄱ",
-    "ㄲ",
-    "ㄴ",
-    "ㄷ",
-    "ㄸ",
-    "ㄹ",
-    "ㅁ",
-    "ㅂ",
-    "ㅃ",
-    "ㅅ",
-    "ㅆ",
-    "ㅇ",
-    "ㅈ",
-    "ㅉ",
-    "ㅊ",
-    "ㅋ",
-    "ㅌ",
-    "ㅍ",
-    "ㅎ",
-  ];
-  const JUNG = [
-    "ㅏ",
-    "ㅐ",
-    "ㅑ",
-    "ㅒ",
-    "ㅓ",
-    "ㅔ",
-    "ㅕ",
-    "ㅖ",
-    "ㅗ",
-    "ㅘ",
-    "ㅙ",
-    "ㅚ",
-    "ㅛ",
-    "ㅜ",
-    "ㅝ",
-    "ㅞ",
-    "ㅟ",
-    "ㅠ",
-    "ㅡ",
-    "ㅢ",
-    "ㅣ",
-  ];
-
-  const result: string[] = [CHO[chosungIndex]];
-  result.push(JUNG[jungsungIndex]);
+  const result: string[] = [CHOSUNG_CHARS[chosungIndex]];
+  result.push(JUNGSUNG_CHARS[jungsungIndex]);
 
   if (jongsungIndex > 0) {
     const jong = JONGSUNG_CHARS[jongsungIndex];
