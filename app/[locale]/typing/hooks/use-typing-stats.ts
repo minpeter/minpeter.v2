@@ -48,6 +48,10 @@ export function useTypingStats(
       const currentAccuracy = calculateAccuracy(currentInput, currentSentence);
       setWpm(currentWPM);
       setAccuracy(currentAccuracy);
+    } else if (startTime && currentInput.length === 0) {
+      setStartTime(null);
+      setWpm(0);
+      setAccuracy(0);
     }
   }, [startTime, currentSentence, currentInput]);
 

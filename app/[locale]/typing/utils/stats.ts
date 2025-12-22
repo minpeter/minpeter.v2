@@ -7,7 +7,6 @@ const PERCENTAGE_MULTIPLIER = 100;
 export const TYPING_UNITS = {
   ko: { unit: "CPM", scale: 5 },
   en: { unit: "WPM", scale: 1 },
-  ja: { unit: "CPM", scale: 5 },
 } as const;
 
 export type TypingUnit =

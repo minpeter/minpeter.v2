@@ -3,6 +3,12 @@ export const HANGUL_SYLLABLE_END = 0xd7_a3;
 export const HANGUL_JAMO_START = 0x31_31;
 export const HANGUL_JAMO_END = 0x31_8e;
 
+/**
+ * Stroke count for each jongsung (final consonant) index.
+ * - 0: No final consonant (empty string)
+ * - 1: Simple consonants (single keystroke, e.g., ㄱ, ㄴ, ㅁ)
+ * - 2: Complex consonants (double keystroke, e.g., ㄳ, ㄵ, ㄺ)
+ */
 const JONGSUNG_COST = [
   0, 1, 1, 2, 1, 2, 2, 1, 1, 2, 2, 2, 2, 2, 2, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1,
   1, 1,
