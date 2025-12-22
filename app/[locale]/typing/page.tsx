@@ -322,11 +322,11 @@ export default function Page() {
       ]);
       setSentences((prev) => [...prev, sentence1, sentence2]);
     } catch {
-      setFetchError("문장을 불러오는 중 오류가 발생했습니다.");
+      setFetchError(t("typingFetchError"));
     } finally {
       setIsFetching(false);
     }
-  }, [isFetching, locale]);
+  }, [isFetching, locale, t]);
 
   // Add accuracy calculation function
   const calculateAccuracy = useCallback((input: string, target: string) => {
@@ -598,7 +598,7 @@ export default function Page() {
             {isFetching ? (
               <>
                 <span className="text-gray-500">•</span>
-                <span>생성중...</span>
+                <span>{t("typingGenerating")}</span>
               </>
             ) : null}
             {fetchError ? (

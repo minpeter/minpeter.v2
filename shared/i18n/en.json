@@ -13,6 +13,8 @@
     "Sentences are generated automatically, enjoy typing."
   ],
   "typingDescription": "The simplest UI for typing practice",
+  "typingGenerating": "Generating...",
+  "typingFetchError": "An error occurred while loading sentences.",
   "blogPageTitle": "Peter's Development Notes",
   "blogPageDescription": "I don't know if this makes any sense,",
   "writeDate": "Write",
