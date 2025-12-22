@@ -6,8 +6,8 @@ export const HANGUL_JAMO_END = 0x31_8e;
 /**
  * Stroke count for each jongsung (final consonant) index.
  * - 0: No final consonant (empty string)
- * - 1: Simple consonants (single keystroke, e.g., ㄱ, ㄴ, ㅁ)
- * - 2: Complex consonants (double keystroke, e.g., ㄳ, ㄵ, ㄺ)
+ * - 1: Single keystroke consonants (including double jamos like ㄲ, ㅆ)
+ * - 2: Composite clusters requiring two keystrokes (e.g., ㄳ, ㄵ, ㄺ)
  */
 const JONGSUNG_COST = [
   0, 1, 1, 2, 1, 2, 2, 1, 1, 2, 2, 2, 2, 2, 2, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1,
