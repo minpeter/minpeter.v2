@@ -1,10 +1,10 @@
 import { useLocale } from "next-intl";
 import { useCallback, useEffect, useState } from "react";
 import {
-  TYPING_UNITS,
   calculateAccuracy,
   calculateCPM,
   calculateWPM,
+  TYPING_UNITS,
 } from "../utils/stats";
 
 const MILLISECONDS_PER_SECOND = 1000;

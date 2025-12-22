@@ -4,6 +4,7 @@ import type { Route } from "next";
 import { useLocale, useTranslations } from "next-intl";
 import { useCallback, useEffect, useState } from "react";
 import Header from "@/components/header";
+import { Skeleton } from "@/components/ui/skeleton";
 import styles from "@/shared/styles/stagger-fade-in.module.css";
 import { useTypingInput } from "./hooks/use-typing-input";
 import { useTypingSentences } from "./hooks/use-typing-sentences";
@@ -18,12 +19,6 @@ export default function Page() {
   const t = useTranslations();
   const locale = useLocale();
 
-  const initialSentences = [
-    t("typingInitialSentences.0"),
-    t("typingInitialSentences.1"),
-    t("typingInitialSentences.2"),
-  ];
-
   const [isTransitioning, setIsTransitioning] = useState(false);
 
   const {
@@ -31,12 +26,13 @@ export default function Page() {
     currentSentence,
     currentSentenceIndex,
     isFetching,
+    isInitialLoading,
     fetchError,
     advanceToNextSentence,
     fetchNewSentences,
     shouldPrefetch,
     hasNext,
-  } = useTypingSentences(initialSentences, locale, t);
+  } = useTypingSentences(locale, () => t("typingFetchError"));
 
   const {
     userInput,
@@ -175,22 +171,32 @@ export default function Page() {
           type="button"
         >
           <div className="font-mono text-2xl">
-            {currentSentence.split("").map((char, index) => {
-              const { key, display, className } = buildCharRenderState({
-                char,
-                index,
-                userInput,
-                isComposing,
-                composingText,
-                currentSentenceIndex,
-              });
+            {isInitialLoading ? (
+              <div className="flex flex-wrap justify-center gap-3">
+                <Skeleton className="h-8 w-24" />
+                <Skeleton className="h-8 w-16" />
+                <Skeleton className="h-8 w-32" />
+                <Skeleton className="h-8 w-20" />
+                <Skeleton className="h-8 w-28" />
+              </div>
+            ) : (
+              currentSentence.split("").map((char, index) => {
+                const { key, display, className } = buildCharRenderState({
+                  char,
+                  index,
+                  userInput,
+                  isComposing,
+                  composingText,
+                  currentSentenceIndex,
+                });
 
-              return (
-                <span className={className} key={key}>
-                  {display}
-                </span>
-              );
-            })}
+                return (
+                  <span className={className} key={key}>
+                    {display}
+                  </span>
+                );
+              })
+            )}
           </div>
 
           <div className="flex items-center gap-2 text-gray-400 text-sm">

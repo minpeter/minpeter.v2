@@ -7,11 +7,6 @@
   "backToHome": "Home",
   "aboutTitle": "Hello, I'm Woonggi Min :)",
   "aboutMe": "I am currently working as a frontend developer.\nAs a frontend developer, I enjoy learning and applying rapidly changing technologies.\nI also prioritize user experience and strive to provide the best experience for users.",
-  "typingInitialSentences": [
-    "Each sentence will automatically move to the next one once completed.",
-    "You can press the Enter key to forcefully move to the next sentence.",
-    "Sentences are generated automatically, enjoy typing."
-  ],
   "typingDescription": "The simplest UI for typing practice",
   "typingGenerating": "Generating...",
   "typingFetchError": "An error occurred while loading sentences.",

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { nextSentencesGenerator } from "../action";
 
 const SENTENCE_PREFETCH_THRESHOLD = 3;
@@ -12,16 +12,17 @@ export const hasNextSentence = (currentIndex: number, totalSentences: number) =>
   currentIndex < totalSentences - 1;
 
 export function useTypingSentences(
-  initialSentences: string[],
   locale: string,
-  t: (key: string) => string
+  getErrorMessage: () => string
 ) {
-  const [sentences, setSentences] = useState(initialSentences);
+  const [sentences, setSentences] = useState<string[]>([]);
   const [currentSentenceIndex, setCurrentSentenceIndex] = useState(0);
   const [isFetching, setIsFetching] = useState(false);
   const [fetchError, setFetchError] = useState<string | null>(null);
+  const hasFetchedInitial = useRef(false);
 
-  const currentSentence = sentences[currentSentenceIndex];
+  const currentSentence = sentences[currentSentenceIndex] ?? "";
+  const isInitialLoading = sentences.length === 0 && !fetchError;
 
   const fetchNewSentences = useCallback(async () => {
     if (isFetching) {
@@ -37,18 +38,26 @@ export function useTypingSentences(
       ]);
       setSentences((prev) => [...prev, sentence1, sentence2]);
     } catch {
-      setFetchError(t("typingFetchError"));
+      setFetchError(getErrorMessage());
     } finally {
       setIsFetching(false);
     }
-  }, [isFetching, locale, t]);
+  }, [isFetching, locale, getErrorMessage]);
 
   const advanceToNextSentence = useCallback(() => {
     setCurrentSentenceIndex((prev) => prev + 1);
   }, []);
 
   useEffect(() => {
+    if (!hasFetchedInitial.current) {
+      hasFetchedInitial.current = true;
+      fetchNewSentences();
+    }
+  }, [fetchNewSentences]);
+
+  useEffect(() => {
     if (
+      sentences.length > 0 &&
       shouldPrefetchSentences(currentSentenceIndex, sentences.length) &&
       !isFetching
     ) {
@@ -61,6 +70,7 @@ export function useTypingSentences(
     currentSentence,
     currentSentenceIndex,
     isFetching,
+    isInitialLoading,
     fetchError,
     advanceToNextSentence,
     fetchNewSentences,
