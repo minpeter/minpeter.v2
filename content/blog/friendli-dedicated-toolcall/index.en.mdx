@@ -1,0 +1,743 @@
+---
+title: Deploying FDE Function Calling Endpoints
+description: "How to deploy function calling endpoints with Friendli Dedicated Endpoints"
+date: 2025-09-28 12:56:00 +0900
+tags:
+  - friendli
+  - dedicated endpoints
+  - tool calling
+draft: false
+lang: ["en"]
+machine_translated: true
+---
+
+<Callout
+  type="info"
+  title="This post is not directly affiliated with FriendliAI. All content and explanations are personal opinions and do not represent FriendliAI's views."
+/>
+
+
+Friendli Dedicated Endpoints (FDE), FriendliAI's fully managed model serving product, provides stable and convenient model serving. It particularly supports automatic detection and activation of function calling settings, allowing developers to easily implement function calling without complex configuration.
+
+
+## Deploying Models That Support Function Calling
+
+Most modern models support function calling by default. Using `Qwen/Qwen3-30B-A3B` as an example, you can deploy an endpoint capable of function calling with the following simple steps:
+
+1. **Select and Verify Model**: After selecting the model, verify the Features > Tool call: Supported indicator.
+   ![](./images/qwen3-native-toolcall.png)
+
+2. **Verify Endpoint ID**: Once deployment is complete, check the Endpoint ID (e.g., `dep0hyjaasjus3o`) in the Endpoint Overview.
+   ![](./images/native-endpoint-overview.png)
+
+3. **Test API**: After obtaining a [`FRIENDLI_TOKEN`](https://friendli.ai/suite/setting/tokens), test with the following API request.
+
+	```plaintext
+	curl https://api.friendli.ai/dedicated/v1/chat/completions \
+	-H "Content-Type: application/json" \
+	// [!code highlight:1]
+	-H "Authorization: Bearer $FRIENDLI_TOKEN" \
+	-d '{
+	// [!code highlight:1]
+		"model": "dep0hyjaasjus3o",
+		"messages": [
+			{"role": "user", "content": "Tell me the weather in Seoul"}
+		],
+		"tools": [
+		{
+			"type": "function",
+			"function": {
+			"name": "get_weather",
+			"description": "Get the current weather for a city",
+			"parameters": {
+				"type": "object",
+				"properties": {
+				"location": {"type": "string"}
+				},
+				"required": ["location"]
+			}
+			}
+		}
+		],
+		"tool_choice": "auto"
+	}' | jq .choices[].message
+	```
+
+4. **Verify Results**: If the function is called successfully, you'll receive a response like this:
+
+	```json
+	{
+		"content": "\n\n",
+		"reasoning_content": "\nOkay, the user is asking for the weather in Seoul. Let me check the tools available. There's a function called get_weather that takes a location parameter. Since the user mentioned \"Seoul\" which is Seoul, I need to call that function with the location set to Seoul. I should make sure the arguments are correctly formatted in JSON. Alright, the required parameter is location, so I'll structure the tool call accordingly.\n",
+		"role": "assistant",
+		// [!code highlight:10]
+		"tool_calls": [
+			{
+				"function": {
+					"arguments": "{\"location\": \"Seoul\"}",
+					"name": "get_weather"
+				},
+				"id": "call_XIl0NYYMh9jRLhUdhF2OtTjE",
+				"type": "function"
+			}
+		]
+	}
+	```
+
+As shown, you can easily deploy endpoints capable of function calling without any complex configuration.
+
+## Limitations and Causes for Models That Don't Support Function Calling
+
+Not all models support function calling. For some models, you may see a "Tool call: Not supported" message, which is mainly due to the following reasons:
+
+1. **Chat Template Limitations**: The model's chat template doesn't include logic for rendering tool calls (e.g., `google/gemma-3-27b-it`).
+
+2. **Engine Compatibility Issues**: The model itself has no issues, but uses a tool call format that the engine doesn't support (e.g., `zai-org/GLM-4.5-Air`).
+
+However, these limitations don't mean you can't use tool calling at all in FDE. FDE provides automatic detection and configuration of tool call types based on chat templates, so these issues can be resolved by utilizing custom chat templates.
+
+## Solutions Using Custom Chat Templates
+
+The key to enabling function calling for unsupported models is to write a chat template that renders in a tool call format supported by the engine.
+
+<Callout
+  type="warn"
+  title="The features described below are advanced features that may cause unintended degradation of model function calling performance."
+/>
+
+### Template Conversion Process
+
+The key to resolving unsupported function calling models is understanding the proper template conversion process. This process is broadly divided into two stages:
+
+1. **Analyzing and Cleaning Existing Templates**: Remove or clean up tool call-related logic from the model's original template
+2. **Restructuring to Compatible Format**: Re-add tool call functionality in a standard format supported by the engine
+
+#### Stage 1: Preparing Pure Templates
+
+First, you need to understand each model's basic structure. Each model has different situations:
+
+- Case 1: Models without tool call logic originally
+Models like `google/gemma-3-27b-it` don't have tool call logic in their templates from the start. In such cases, you can use the existing template as-is, making the work simple.
+- Case 2: Models using incompatible tool call formats
+Models like `GLM-4.5-Air` already have tool call functionality implemented, but use a format that FDE engine doesn't support. In such cases, you need to remove the existing tool call logic to create a pure conversation template.
+
+<Tabs items={['gemma-3-27b-it', 'GLM-4.5-Air', 'GLM-4.5-Air (diff)']}>
+  <Tab value="gemma-3-27b-it">
+```jinja
+{{- bos_token -}}
+{%- if messages[0]["role"] == "system" -%}
+	{%- if messages[0]["content"] is string -%}
+		{%- set first_user_prefix = messages[0]["content"] + "\n\n" -%}
+	{%- else -%}
+		{%- set first_user_prefix = messages[0]["content"][0]["text"] + "\n\n" -%}
+	{%- endif -%}
+	{%- set loop_messages = messages[1:] -%}
+{%- else -%}
+	{%- set first_user_prefix = "" -%}
+	{%- set loop_messages = messages -%}
+{%- endif -%}
+
+{%- for message in loop_messages -%}
+	{%- if message["role"] == "user" != (loop.index0 % 2 == 0) -%}
+		{{- raise_exception("Conversation roles must alternate user/assistant/user/assistant/...") -}}
+	{%- endif -%}
+	{%- if message["role"] == "assistant" -%}
+		{%- set role = "model" -%}
+	{%- else -%}
+		{%- set role = message["role"] -%}
+	{%- endif -%}
+	{{- "<start_of_turn>" + role + "\n" + (first_user_prefix if loop.first else "") -}}
+	{%- if message["content"] is string -%}
+		{{- message["content"] | trim -}}
+	{%- elif message["content"] is iterable -%}
+		{%- for item in message["content"] -%}
+			{%- if item["type"] == "image" -%}
+				{{- "<start_of_image>" -}}
+			{%- elif item["type"] == "text" -%}
+				{{- item["text"] | trim -}}
+			{%- endif -%}
+		{%- endfor -%}
+	{%- else -%}
+		{{- raise_exception("Invalid content type") -}}
+	{%- endif -%}
+	{{- "<end_of_turn>\n" -}}
+{%- endfor -%}
+
+{%- if add_generation_prompt -%}
+	{{- "<start_of_turn>model\n" -}}
+{%- endif -%}
+```
+  </Tab>
+  <Tab value="GLM-4.5-Air">
+```jinja
+{{- "[gMASK]<sop>" -}}
+{%- macro visible_text(content) -%}
+	{%- if content is string -%}
+		{{- content -}}
+	{%- elif content is iterable and content is not mapping -%}
+		{%- for item in content -%}
+			{%- if item is mapping and item.type == "text" -%}
+				{{- item.text -}}
+			{%- elif item is string -%}
+				{{- item -}}
+			{%- endif -%}
+		{%- endfor -%}
+	{%- else -%}
+		{{- content -}}
+	{%- endif -%}
+{%- endmacro -%}
+
+{%- set ns = namespace(last_user_index=-1) -%}
+{%- for m in messages -%}
+	{%- if m.role == "user" -%}
+		{%- set ns.last_user_index = loop.index0 -%}
+	{%- endif -%}
+{%- endfor -%}
+
+{%- for m in messages -%}
+	{%- if m.role == "user" -%}
+		{{- "<|user|>\n" -}}
+		{{- visible_text(m.content) -}}
+		{{- "/nothink" if enable_thinking is defined and not enable_thinking and not visible_text(m.content).endswith("/nothink") else "" -}}
+	{%- elif m.role == "assistant" -%}
+		{{- "<|assistant|>" -}}
+		{%- set reasoning_content = "" -%}
+		{%- set content = visible_text(m.content) -%}
+		{%- if m.reasoning_content is string -%}
+			{%- set reasoning_content = m.reasoning_content -%}
+		{%- elif "</think>" in content -%}
+			{%- set reasoning_content = content.split("</think>")[0].rstrip("\n").split("<think>")[-1].lstrip("\n") -%}
+			{%- set content = content.split("</think>")[-1].lstrip("\n") -%}
+		{%- endif -%}
+		{%- if loop.index0 > ns.last_user_index and reasoning_content -%}
+			{{- "\n<think>" + reasoning_content.strip() + "</think>" -}}
+		{%- else -%}
+			{{- "\n<think></think>" -}}
+		{%- endif -%}
+		{%- if content.strip() -%}
+			{{- "\n" + content.strip() -}}
+		{%- endif -%}
+	{%- elif m.role == "system" -%}
+		{{- "<|system|>\n" -}}
+		{{- visible_text(m.content) -}}
+	{%- endif -%}
+{%- endfor -%}
+
+{%- if add_generation_prompt -%}
+	{{- "<|assistant|>" -}}
+	{{- "\n<think></think>" if enable_thinking is defined and not enable_thinking else "" -}}
+{%- endif -%}
+```
+
+  </Tab>
+  <Tab value="GLM-4.5-Air (diff)">
+```diff
+  {{- "[gMASK]<sop>" -}}
+- {%- if tools -%}
+- 	{{- "<|system|>\n# Tools\n\nYou may call one or more functions to assist with the user query.\n\nYou are provided with function signatures within <tools></tools> XML tags:\n<tools>\n" -}}
+- 	{%- for tool in tools -%}
+- 		{{- tool | tojson(ensure_ascii=False) -}}
+- 		{{- "\n" -}}
+- 	{%- endfor -%}
+- 	{{- "</tools>\n\nFor each function call, output the function name and arguments within the following XML format:\n<tool_call>{function-name}\n<arg_key>{arg-key-1}</arg_key>\n<arg_value>{arg-value-1}</arg_value>\n<arg_key>{arg-key-2}</arg_key>\n<arg_value>{arg-value-2}</arg_value>\n...\n</tool_call>" -}}
+- {%- endif -%}
+  {%- macro visible_text(content) -%}
+  	{%- if content is string -%}
+  		{{- content -}}
+  	{%- elif content is iterable and content is not mapping -%}
+  		{%- for item in content -%}
+  			{%- if item is mapping and item.type == "text" -%}
+  				{{- item.text -}}
+  			{%- elif item is string -%}
+  				{{- item -}}
+  			{%- endif -%}
+  		{%- endfor -%}
+  	{%- else -%}
+  		{{- content -}}
+  	{%- endif -%}
+  {%- endmacro -%}
+  {%- set ns = namespace(last_user_index=-1) -%}
+  {%- for m in messages -%}
+  	{%- if m.role == "user" -%}
+  		{%- set ns.last_user_index = loop.index0 -%}
+  	{%- endif -%}
+  {%- endfor -%}
+  {%- for m in messages -%}
+  	{%- if m.role == "user" -%}
+  		{{- "<|user|>\n" -}}
+  		{{- visible_text(m.content) -}}
+  		{{- "/nothink" if enable_thinking is defined and not enable_thinking and not visible_text(m.content).endswith("/nothink") else "" -}}
+  	{%- elif m.role == "assistant" -%}
+  		{{- "<|assistant|>" -}}
+  		{%- set reasoning_content = "" -%}
+  		{%- set content = visible_text(m.content) -%}
+  		{%- if m.reasoning_content is string -%}
+  			{%- set reasoning_content = m.reasoning_content -%}
+  		{%- elif "</think>" in content -%}
+  			{%- set reasoning_content = content.split("</think>")[0].rstrip("\n").split("<think>")[-1].lstrip("\n") -%}
+  			{%- set content = content.split("</think>")[-1].lstrip("\n") -%}
+  		{%- endif -%}
+  		{%- if loop.index0 > ns.last_user_index and reasoning_content -%}
+  			{{- "\n<think>" + reasoning_content.strip() + "</think>" -}}
+  		{%- else -%}
+  			{{- "\n<think></think>" -}}
+  		{%- endif -%}
+  		{%- if content.strip() -%}
+  			{{- "\n" + content.strip() -}}
+  		{%- endif -%}
+- 		{%- if m.tool_calls -%}
+- 			{%- for tc in m.tool_calls -%}
+- 				{%- if tc.function -%}
+- 					{%- set tc = tc.function -%}
+- 				{%- endif -%}
+- 				{{- "\n<tool_call>" + tc.name -}}
+- 				{{- "\n" -}}
+- 				{%- set _args = tc.arguments -%}
+- 				{%- for (k, v) in _args.items() -%}
+- 					{{- "<arg_key>" -}}
+- 					{{- k -}}
+- 					{{- "</arg_key>\n<arg_value>" -}}
+- 					{{- v | tojson(ensure_ascii=False) if v is not string else v -}}
+- 					{{- "</arg_value>\n" -}}
+- 				{%- endfor -%}
+- 				{{- "</tool_call>" -}}
+- 			{%- endfor -%}
+- 		{%- endif -%}
+- 	{%- elif m.role == "tool" -%}
+- 		{%- if m.content is string -%}
+- 			{%- if loop.first or messages[loop.index0 - 1].role != "tool" -%}
+- 				{{- "<|observation|>" -}}
+- 			{%- endif -%}
+- 			{{- "\n<tool_response>\n" -}}
+- 			{{- m.content -}}
+- 			{{- "\n</tool_response>" -}}
+- 		{%- else -%}
+- 			{{- "<|observation|>" -}}
+- 			{%- for tr in m.content -%}
+- 				{{- "\n<tool_response>\n" -}}
+- 				{{- tr.output if tr.output is defined else tr -}}
+- 				{{- "\n</tool_response>" -}}
+- 			{%- endfor -%}
+- 		{%- endif -%}
+  	{%- elif m.role == "system" -%}
+  		{{- "<|system|>\n" -}}
+  		{{- visible_text(m.content) -}}
+  	{%- endif -%}
+  {%- endfor -%}
+  {%- if add_generation_prompt -%}
+  	{{- "<|assistant|>" -}}
+  	{{- "\n<think></think>" if enable_thinking is defined and not enable_thinking else "" -}}
+  {%- endif -%}
+```
+  </Tab>
+</Tabs>
+
+#### Stage 2: Adding Compatible Tool Call Functionality
+
+Once you've prepared a pure template, you need to add tool call functionality in a format recognizable by the FDE engine. The most widely used format is the [Hermes Function Calling Standard](https://github.com/NousResearch/Hermes-Function-Calling) format.
+The key features of this format are:
+
+- Tool definition: Defined in JSON format within `<tools>...</tools>` XML tags
+- Tool call: Called in `<tool_call>{"name": "function_name", "arguments": {...}}</tool_call>` format
+- Tool response: Results returned in `<tool_response>...</tool_response>` format
+
+<Tabs items={[
+  "gemma-3-27b-it",
+  "GLM-4.5-Air",
+  "GLM-4.5-Air (diff)",
+]}>
+  <Tab value="gemma-3-27b-it">
+```jinja
+{{- bos_token -}}
+{%- if tools -%}
+	{%- if messages[0]["role"] == "system" -%}
+		{%- if messages[0]["content"] is string -%}
+			{%- set system_content = messages[0]["content"] -%}
+		{%- else -%}
+			{%- set system_content = messages[0]["content"][0]["text"] -%}
+		{%- endif -%}
+		{%- set first_user_prefix = system_content + "\n\n# Tools\n\nYou may call one or more functions to assist with the user query.\n\nYou are provided with function signatures within <tools></tools> XML tags:\n<tools>" -%}
+		{%- for tool in tools -%}
+			{%- set first_user_prefix = first_user_prefix + "\n" + (tool | tojson) -%}
+		{%- endfor -%}
+		{%- set first_user_prefix = first_user_prefix + "\n</tools>\n\nFor each function call, return a json object with function name and arguments within <tool_call></tool_call> XML tags:\n<tool_call>\n{\"name\": <function-name>, \"arguments\": <args-json-object>}\n</tool_call>\n\n" -%}
+		{%- set loop_messages = messages[1:] -%}
+	{%- else -%}
+		{%- set first_user_prefix = "# Tools\n\nYou may call one or more functions to assist with the user query.\n\nYou are provided with function signatures within <tools></tools> XML tags:\n<tools>" -%}
+		{%- for tool in tools -%}
+			{%- set first_user_prefix = first_user_prefix + "\n" + (tool | tojson) -%}
+		{%- endfor -%}
+		{%- set first_user_prefix = first_user_prefix + "\n</tools>\n\nFor each function call, return a json object with function name and arguments within <tool_call></tool_call> XML tags:\n<tool_call>\n{\"name\": <function-name>, \"arguments\": <args-json-object>}\n</tool_call>\n\n" -%}
+		{%- set loop_messages = messages -%}
+	{%- endif -%}
+{%- else -%}
+	{%- if messages[0]["role"] == "system" -%}
+		{%- if messages[0]["content"] is string -%}
+			{%- set first_user_prefix = messages[0]["content"] + "\n\n" -%}
+		{%- else -%}
+			{%- set first_user_prefix = messages[0]["content"][0]["text"] + "\n\n" -%}
+		{%- endif -%}
+		{%- set loop_messages = messages[1:] -%}
+	{%- else -%}
+		{%- set first_user_prefix = "" -%}
+		{%- set loop_messages = messages -%}
+	{%- endif -%}
+{%- endif -%}
+
+{%- for message in loop_messages -%}
+	{%- if message["role"] == "tool" -%}
+		{%- if loop.first or (loop_messages[loop.index0 - 1]["role"] != "tool") -%}
+			{{- "<start_of_turn>user\n" -}}
+		{%- endif -%}
+		{{- "<tool_response>\n" -}}
+		{%- if message["content"] is string -%}
+			{{- message["content"] | trim -}}
+		{%- else -%}
+			{{- message["content"][0]["text"] | trim -}}
+		{%- endif -%}
+		{{- "\n</tool_response>" -}}
+		{%- if loop.last or (loop_messages[loop.index0 + 1]["role"] != "tool") -%}
+			{{- "<end_of_turn>\n" -}}
+		{%- endif -%}
+	{%- elif message["role"] in ["user", "assistant"] -%}
+		{%- if message["role"] == "user" != ((loop.index0 - (loop_messages[:loop.index0] | selectattr("role", "equalto", "tool") | list | length)) % 2 == 0) -%}
+			{{- raise_exception("Conversation roles must alternate user/assistant/user/assistant/... (excluding tool messages)") -}}
+		{%- endif -%}
+		{%- if message["role"] == "assistant" -%}
+			{%- set role = "model" -%}
+		{%- else -%}
+			{%- set role = message["role"] -%}
+		{%- endif -%}
+		{{- "<start_of_turn>" + role + "\n" + (first_user_prefix if loop.first and role == "user" else "") -}}
+		{%- if message["content"] is string -%}
+			{{- message["content"] | trim -}}
+		{%- elif message["content"] is iterable -%}
+			{%- for item in message["content"] -%}
+				{%- if item["type"] == "image" -%}
+					{{- "<start_of_image>" -}}
+				{%- elif item["type"] == "text" -%}
+					{{- item["text"] | trim -}}
+				{%- endif -%}
+			{%- endfor -%}
+		{%- else -%}
+			{{- raise_exception("Invalid content type") -}}
+		{%- endif -%}
+		{%- if message["role"] == "assistant" and message.get("tool_calls") -%}
+			{%- for tool_call in message["tool_calls"] -%}
+				{{- "\n" -}}
+				{%- if tool_call.get("function") -%}
+					{%- set tool_call = tool_call["function"] -%}
+				{%- endif -%}
+				{{- "<tool_call>\n{\"name\": \"" -}}
+				{{- tool_call["name"] -}}
+				{{- "\", \"arguments\": " -}}
+				{%- if tool_call["arguments"] is string -%}
+					{{- tool_call["arguments"] -}}
+				{%- else -%}
+					{{- tool_call["arguments"] | tojson -}}
+				{%- endif -%}
+				{{- "}\n</tool_call>" -}}
+			{%- endfor -%}
+		{%- endif -%}
+		{{- "<end_of_turn>\n" -}}
+	{%- endif -%}
+{%- endfor -%}
+
+{%- if add_generation_prompt -%}
+	{{- "<start_of_turn>model\n" -}}
+{%- endif -%}
+```
+  </Tab>
+  <Tab value="GLM-4.5-Air">
+```jinja
+{{- "[gMASK]<sop>" -}}
+{# --- Tools Definition Block from the new template --- #}
+{%- if tools %}
+    {{- '<|system|>\n' }}
+    {%- if messages[0].role == 'system' %}
+        {{- messages[0].content + '\n\n' }}
+    {%- endif %}
+    {{- "# Tools\n\nYou may call one or more functions to assist with the user query.\n\nYou are provided with function signatures within <tools></tools> XML tags:\n<tools>" }}
+    {%- for tool in tools %}
+        {{- "\n" }}
+        {{- tool | tojson }}
+    {%- endfor %}
+    {{- "\n</tools>\n\nFor each function call, return a json object with function name and arguments within <tool_call></tool_call> XML tags:\n<tool_call>\n{\"name\": <function-name>, \"arguments\": <args-json-object>}\n</tool_call>" }}
+{%- else %}
+    {%- if messages[0].role == 'system' %}
+        {{- '<|system|>\n' + messages[0].content }}
+    {%- endif %}
+{%- endif %}
+
+{# --- Main message loop structure from the original template --- #}
+{%- macro visible_text(content) -%}
+	{%- if content is string -%}
+		{{- content -}}
+	{%- elif content is iterable and content is not mapping -%}
+		{%- for item in content -%}
+			{%- if item is mapping and item.type == "text" -%}
+				{{- item.text -}}
+			{%- elif item is string -%}
+				{{- item -}}
+			{%- endif -%}
+		{%- endfor -%}
+	{%- else -%}
+		{{- content -}}
+	{%- endif -%}
+{%- endmacro -%}
+
+{%- set ns = namespace(last_user_index=-1) -%}
+{%- for m in messages -%}
+	{%- if m.role == "user" -%}
+		{%- set ns.last_user_index = loop.index0 -%}
+	{%- endif -%}
+{%- endfor -%}
+
+{%- for m in messages -%}
+	{%- if m.role == "user" -%}
+		{{- "<|user|>\n" -}}
+		{{- visible_text(m.content) -}}
+		{{- "/nothink" if enable_thinking is defined and not enable_thinking and not visible_text(m.content).endswith("/nothink") else "" -}}
+	{%- elif m.role == "assistant" -%}
+		{{- "<|assistant|>" -}}
+		{%- set reasoning_content = "" -%}
+		{%- set content = visible_text(m.content) -%}
+		{%- if m.reasoning_content is string -%}
+			{%- set reasoning_content = m.reasoning_content -%}
+		{%- elif "</think>" in content -%}
+			{%- set reasoning_content = content.split("</think>")[0].rstrip("\n").split("<think>")[-1].lstrip("\n") -%}
+			{%- set content = content.split("</think>")[-1].lstrip("\n") -%}
+		{%- endif -%}
+		{%- if loop.index0 > ns.last_user_index and reasoning_content -%}
+			{{- "\n<think>" + reasoning_content.strip() + "</think>" -}}
+		{%- else -%}
+			{{- "\n<think></think>" -}}
+		{%- endif -%}
+		{%- if content.strip() -%}
+			{{- "\n" + content.strip() -}}
+		{%- endif -%}
+        {# --- Tool Call Rendering Block from the new template --- #}
+		{%- if m.tool_calls -%}
+			{%- for tool_call in m.tool_calls -%}
+                {%- if (loop.first and content.strip()) or (not loop.first) %}
+                    {{- '\n' }}
+                {%- endif %}
+				{%- if tool_call.function -%}
+					{%- set tool_call = tool_call.function -%}
+				{%- endif %}
+				{{- '<tool_call>\n{"name": "' }}
+				{{- tool_call.name }}
+				{{- '", "arguments": ' }}
+				{%- if tool_call.arguments is string %}
+					{{- tool_call.arguments }}
+				{%- else %}
+					{{- tool_call.arguments | tojson }}
+				{%- endif %}
+				{{- '}\n</tool_call>' }}
+			{%- endfor %}
+		{%- endif -%}
+    {# --- Tool Response Rendering Block from the new template --- #}
+	{%- elif m.role == "tool" -%}
+        {{- '\n<tool_response>\n' }}
+        {{- visible_text(m.content) }}
+        {{- '\n</tool_response>' }}
+	{%- elif m.role == "system" and not loop.first -%}
+		{{- "<|system|>\n" -}}
+		{{- visible_text(m.content) -}}
+	{%- endif -%}
+{%- endfor -%}
+
+{# --- Generation prompt from the original template --- #}
+{%- if add_generation_prompt -%}
+	{{- "<|assistant|>" -}}
+	{{- "\n<think></think>" if enable_thinking is defined and not enable_thinking else "" -}}
+{%- endif -%}
+```
+  </Tab>
+  <Tab value="GLM-4.5-Air (diff)">
+```diff
+  {{- "[gMASK]<sop>" -}}
++ {# --- Tools Definition Block from the new template --- #}
++ {%- if tools %}
++     {{- '<|system|>\n' }}
++     {%- if messages[0].role == 'system' %}
++         {{- messages[0].content + '\n\n' }}
++     {%- endif %}
++     {{- "# Tools\n\nYou may call one or more functions to assist with the user query.\n\nYou are provided with function signatures within <tools></tools> XML tags:\n<tools>" }}
++     {%- for tool in tools %}
++         {{- "\n" }}
++         {{- tool | tojson }}
++     {%- endfor %}
++     {{- "\n</tools>\n\nFor each function call, return a json object with function name and arguments within <tool_call></tool_call> XML tags:\n<tool_call>\n{\"name\": <function-name>, \"arguments\": <args-json-object>}\n</tool_call>" }}
++ {%- else %}
++     {%- if messages[0].role == 'system' %}
++         {{- '<|system|>\n' + messages[0].content }}
++     {%- endif %}
++ {%- endif %}
++
++ {# --- Main message loop structure from the original template --- #}
+  {%- macro visible_text(content) -%}
+  	{%- if content is string -%}
+  		{{- content -}}
+  	{%- elif content is iterable and content is not mapping -%}
+  		{%- for item in content -%}
+  			{%- if item is mapping and item.type == "text" -%}
+  				{{- item.text -}}
+  			{%- elif item is string -%}
+  				{{- item -}}
+  			{%- endif -%}
+  		{%- endfor -%}
+  	{%- else -%}
+  		{{- content -}}
+  	{%- endif -%}
+  {%- endmacro -%}
+  {%- set ns = namespace(last_user_index=-1) -%}
+  {%- for m in messages -%}
+  	{%- if m.role == "user" -%}
+  		{%- set ns.last_user_index = loop.index0 -%}
+  	{%- endif -%}
+  {%- endfor -%}
+  {%- for m in messages -%}
+  	{%- if m.role == "user" -%}
+  		{{- "<|user|>\n" -}}
+  		{{- visible_text(m.content) -}}
+  		{{- "/nothink" if enable_thinking is defined and not enable_thinking and not visible_text(m.content).endswith("/nothink") else "" -}}
+  	{%- elif m.role == "assistant" -%}
+  		{{- "<|assistant|>" -}}
+  		{%- set reasoning_content = "" -%}
+  		{%- set content = visible_text(m.content) -%}
+  		{%- if m.reasoning_content is string -%}
+  			{%- set reasoning_content = m.reasoning_content -%}
+  		{%- elif "</think>" in content -%}
+  			{%- set reasoning_content = content.split("</think>")[0].rstrip("\n").split("<think>")[-1].lstrip("\n") -%}
+  			{%- set content = content.split("</think>")[-1].lstrip("\n") -%}
+  		{%- endif -%}
+  		{%- if loop.index0 > ns.last_user_index and reasoning_content -%}
+  			{{- "\n<think>" + reasoning_content.strip() + "</think>" -}}
+  		{%- else -%}
+  			{{- "\n<think></think>" -}}
+  		{%- endif -%}
+  		{%- if content.strip() -%}
+  			{{- "\n" + content.strip() -}}
+  		{%- endif -%}
++         {# --- Tool Call Rendering Block from the new template --- #}
++ 		{%- if m.tool_calls -%}
++ 			{%- for tool_call in m.tool_calls -%}
++                 {%- if (loop.first and content.strip()) or (not loop.first) %}
++                     {{- '\n' }}
++                 {%- endif %}
++ 				{%- if tool_call.function -%}
++ 					{%- set tool_call = tool_call.function -%}
++ 				{%- endif %}
++ 				{{- '<tool_call>\n{"name": "' }}
++ 				{{- tool_call.name }}
++ 				{{- '", "arguments": ' }}
++ 				{%- if tool_call.arguments is string %}
++ 					{{- tool_call.arguments }}
++ 				{%- else %}
++ 					{{- tool_call.arguments | tojson }}
++ 				{%- endif %}
++ 				{{- '}\n</tool_call>' }}
++ 			{%- endfor %}
++ 		{%- endif -%}
++     {# --- Tool Response Rendering Block from the new template --- #}
++ 	{%- elif m.role == "tool" -%}
++         {{- '\n<tool_response>\n' }}
++         {{- visible_text(m.content) }}
++         {{- '\n</tool_response>' }}
+- 	{%- elif m.role == "system" -%}
++ 	{%- elif m.role == "system" and not loop.first -%}
+  		{{- "<|system|>\n" -}}
+  		{{- visible_text(m.content) -}}
+  	{%- endif -%}
+  {%- endfor -%}
++ {# --- Generation prompt from the original template --- #}
+  {%- if add_generation_prompt -%}
+  	{{- "<|assistant|>" -}}
+  	{{- "\n<think></think>" if enable_thinking is defined and not enable_thinking else "" -}}
+  {%- endif -%}
+```
+</Tab>
+</Tabs>
+
+### Deploying with Custom Templates
+
+Let's walk through the step-by-step process of deploying a model that previously didn't support function calling using a modified template.
+
+1. **Verify Model Status**: First, select the model and confirm it shows "Tool call: Not supported" status.
+   ![](./images/glm-default-unsupported.png)
+
+2. **Apply Custom Template**: Select "Custom chat template" and paste the chat template you've written.
+   ![](./images/custom-template-modal.png)
+
+3. **Override Settings**: Select "Override" and verify that tool call information shows as "unknown".
+   ![](./images/glm-custom-template-unknown.png)
+
+4. **Verify Deployment Completion**: After deployment is complete, verify in Overview that tool call has changed to "supported".
+   ![](./images/override-endpoint-overview.png)
+
+5. **Test API**: Test with API calls in the same manner as before.
+	```text
+	curl https://api.friendli.ai/dedicated/v1/chat/completions \
+	-H "Content-Type: application/json" \
+	// [!code highlight:1]
+	-H "Authorization: Bearer $FRIENDLI_TOKEN" \
+	-d '{
+	// [!code highlight:1]
+		"model": "depp771mey8y1se",
+		"messages": [
+		{"role": "user", "content": "Tell me the weather in Seoul"}
+		],
+		"tools": [
+		{
+			"type": "function",
+			"function": {
+			"name": "get_weather",
+			"description": "Get the current weather for a city",
+			"parameters": {
+				"type": "object",
+				"properties": {
+				"location": {"type": "string"}
+				},
+				"required": ["location"]
+			}
+			}
+		}
+		],
+		"tool_choice": "auto"
+	}' | jq .choices[].message
+	```
+
+6. **Verify Success Results**: Now function calling works successfully even on the GLM-4.5-Air model that wasn't supported before:
+	```json
+	{
+		"content": "\n\nI'll check the current weather in Seoul for you.\n",
+		"reasoning_content": "The user is asking for the weather in Seoul. I can use the `get_weather` function I have. This function requires a location parameter, and the user explicitly mentioned \"Seoul\".\n\nWhen calling the function, I need to pass \"Seoul\" as the location parameter.",
+		"role": "assistant",
+		// [!code highlight:10]
+		"tool_calls": [
+			{
+				"function": {
+						"arguments": "{\"location\": \"Seoul\"}",
+						"name": "get_weather"
+				},
+				"id": "call_oaNZe3tgKLLgv5aUMFQNBTRr",
+				"type": "function"
+			}
+		]
+	}
+	```
+
+### Expanding Application Scope
+
+Applying this approach can yield very interesting results. Even early models like `mistralai/Mistral-7B-Instruct-v0.1` that received no function calling training can demonstrate reasonably decent function calling performance.
+
+
+## Conclusion
+
+Friendli Dedicated Endpoints is an excellent serving platform that simplifies the entire process from model deployment to function calling configuration.
+
+For supported models, you can implement Agentic workflows immediately without any additional configuration, greatly enhancing development productivity.
+For unsupported models, you can manually enable function calling through the Custom Chat Template feature. This goes beyond simply working around existing limitations - it's a powerful feature that allows you to maximize the potential of various models.
+
+As a result, FDE provides the flexibility and extensibility to utilize tool calling functionality in virtually any model, regardless of function calling support. These characteristics provide tremendous value in AI agent development and building complex AI workflows.

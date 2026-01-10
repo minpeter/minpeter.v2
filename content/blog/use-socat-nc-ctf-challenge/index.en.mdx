@@ -1,0 +1,167 @@
+---
+title: Deploying NC Remote CTF Challenges Using Socat
+date: 2022-09-10 00:11:18
+tags: ["socat", "nc", "netcat", "remote", "buildx"]
+lang: ["en"]
+machine_translated: true
+---
+
+## Overview
+
+When solving various CTF challenges and Dreamhack problems, you often encounter addresses like this:
+`nc pwnable.kr 9000`
+\*BOF challenge from pwnable.kr
+
+Using a utility called netcat, you can remotely execute programs on the server, which made me wonder:
+"How do they create and deploy challenges in this format?"
+
+So I looked into it.
+
+## So How Do You Do It?
+
+**Use SOCAT**
+
+The first method I discovered was to develop a socket server directly.
+This was actually quite good, but only for simple message output.
+But thinking about it, even the BOF challenge mentioned above performs various input/output operations multiple times, and there's no way they implemented all of this with a socket server.
+Looking at the source code provided alongside the nc address confirmed my suspicions.
+**There was no socket-related code at all.**
+
+Then I found the answer in GoogleCTF.
+I noticed a program called socat written in the CMD of a challenge Dockerfile.
+I had a gut feeling this was the nc server-related utility I didn't know about.
+
+### Multipurpose Relay (SOcket CAT)
+
+```
+A command-line based utility that establishes two bidirectional byte streams and transfers data between them.
+Because streams can consist of various types of data sinks and sources (see address types) and many address options can be applied to streams, socat can be used for various purposes.
+```
+
+That's what it says.
+You can think of it as an advanced version of netcat.
+
+## Installing Socat
+
+On Ubuntu, you can install it as follows:
+`apt-get install socat`
+On Mac, assuming brew is installed:
+`brew install socat`
+
+Since this article is about deploying challenges using socat, I won't use socat directly or go into deep detail.
+
+## Socat Challenge Example
+
+Here's an example using socat.
+
+First, write a program that performs typical input/output:
+
+```py title="main.py"
+userInput = input("Enter a number: ")
+
+try:
+    userInput = int(userInput)
+    if userInput == 1395:
+        print("flag{you_entered_the_correct_number}")
+    else:
+        print("You did not enter the correct number")
+except ValueError:
+    print("You did not enter a number!")
+
+
+```
+
+As you can see, this is a simple program that provides the flag when you enter 1395.
+If you're thinking of creating a CTF challenge after reading this, you can replace it with your challenge file.
+
+Now write a Dockerfile for deployment.
+
+```dockerfile title="Dockerfile"
+FROM python:3.10-alpine
+
+RUN apk add socat
+
+WORKDIR /app
+
+ENV PORT 1337
+ENV FILE_NAEM main.py
+
+COPY $FILE_NAEM .
+
+
+CMD ["socat" , "-T60" , "-dd" , "-v" , "-v" , "TCP-LISTEN:"+$PORT+",reuseaddr,fork" , "EXEC:python3 "+$FILE_NAEM+",pty,stderr,setsid,sigint,sane"]
+```
+
+Now build the Docker image.
+
+`docker build -t socattest .`
+
+If it builds without issues, run it.
+
+`docker run --rm -p 1337:1337 socattest`
+
+Now open a new terminal window and connect to the server with the following command.
+
+`nc localhost 1337`
+
+You should see the following:
+
+```
+Enter a number:
+```
+
+Now enter 1395 and you'll see:
+
+```
+Enter a number: 1395
+flag{you_entered_the_correct_number}
+```
+
+Now let's upload this challenge to a CTF.
+
+## Uploading the Challenge to a CTF
+
+To upload a challenge to a CTF, you need the following files:
+
+- Dockerfile
+- Challenge file
+- Challenge description file
+
+Create a folder for the challenge and write the files as follows:
+
+```
+.
+├── Dockerfile
+├── README.md
+└── main.py
+```
+
+The Dockerfile is the same as above.
+
+Write the README.md as follows:
+
+```
+# socat challenge
+
+## Description
+
+This is a socat challenge.
+
+## How to solve
+
+1. Connect to the server.
+2. Enter the correct number.
+```
+
+main.py is the same as above.
+
+Now compress this folder and upload it to the CTF.
+
+I hope this helps anyone creating CTF challenges.
+Thank you to everyone who read this far.
+
+## Note
+
+The section above about uploading challenges to CTF was entirely written by GitHub Copilot.
+Honestly, I was amazed at how well it matched the context and how natural the sentences were.
+Long live AI?

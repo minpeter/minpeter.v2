@@ -1,0 +1,42 @@
+---
+title: "AWS - Why I Started Studying"
+description: "From Hanbit to NSB, the story of why I started studying AWS again"
+date: 2022-05-04T11:38:16.376Z
+tags: ["aws"]
+categories: "aws"
+lang:
+  - en
+machine_translated: true
+---
+
+This story begins when I joined "Hanbit."
+Hanbit was the intranet development team at Hansei Cybersecurity High School - though the servers have been shut down now.
+Anyway, when I was a freshman, I joined Hanbit and learned about infrastructure.
+There was a quite skilled senior in their third year, and I received many explanations directly from them about how infrastructure is structured, especially about how the Hanbit service was running.
+
+Looking back now, the word "AWS" itself was unfamiliar and seemed vaguely interesting, so I remember concentrating and listening even if I didn't understand well.
+
+The infrastructure explanation that left the biggest impression (or maybe the only one) was about CI/CD - when you push code on GitHub, the code automatically gets updated on the server.
+
+Hanbit's code deployment pipeline was quite complex, but basically, they explained that automatic deployment was done using a tool called CodeDeploy.
+
+To summarize what the senior explained at that time: GitHub Actions detects code commits, compresses all code files and stores them in S3 (at that time, I didn't exactly understand what S3 was), then calls CodeDeploy to upload(?) the code to the server.
+
+And the fact that all of this happens **automatically** -
+it was so amazing...
+
+At that time, the senior gave me homework to build a CI/CD pipeline that deploys a Python API program with roughly 3 methods, so I completed the implementation while barely understanding anything...
+And as additional homework, they told me to connect a domain and apply an SSL certificate too...
+But while doing that, the deployment pipeline stopped working.
+
+I think it was because the EC2 server costs were high, so I temporarily stopped it and restarted it, but the codedeploy-agent service had stopped, which is why it didn't work.
+
+Now I can calmly troubleshoot when problems occur, but at that time I was overwhelmed with anxiety that something wrong with a cloud server with a registered card might result in a billing bomb.
+
+After about 3 attempts that kept failing, my mental state collapsed, and the repo where I was trying to build CI/CD with HTTPS application in progress came to a halt.
+
+Coming back as a sophomore, I joined the NSB club (written as NSB, read as "Skills Competition Team").
+
+I never knew there were so many things you could do with VMware, and by building various things, I started getting back into servers.
+
+I liked developing on Linux and was obsessed with Docker, so I became interested in the cloud again - that's what made me start studying AWS again.

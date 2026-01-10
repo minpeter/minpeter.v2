@@ -1,0 +1,74 @@
+---
+title: "Installing zsh with p10k"
+description: "A setup guide for the popular zsh shell along with oh-my-zsh and powerlevel10k"
+date: 2021-08-29 05:05:05 +0900
+tags: ["linux", "ohmyzsh", "p10k", "shell", "zsh"]
+lang:
+  - en
+machine_translated: true
+---
+
+## The relationship between zsh, oh-my-zsh, and p10k
+
+zsh is a shell that replaces friends like bash, adding aesthetic improvements.
+~~(At least that's how I felt about it)~~
+This is where oh-my-zsh comes in - it allows you to configure themes and plugins for zsh.
+And p10k is a theme for oh-my-zsh.
+Its advantages include ~~looking cool!~~ and being customizable!!!
+If you install the official fonts, you can display distro logos, git-related emojis, folder icons, and other interesting features in your terminal.
+
+## Installing zsh
+
+`sudo apt-get install zsh`
+
+Most other distros work the same way, just change the package manager.
+
+For example, on Arch: `sudo pacman -S zsh`
+
+On Fedora: `sudo dnf install zsh`
+
+## Installing oh-my-zsh
+
+```bash
+sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+```
+
+This should work the same on all distros.
+During installation, you'll be prompted to enter your password to change zsh to your default shell - go ahead and enter it.
+
+## Installing power level 10k (p10k)
+
+```bash
+git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/powerlevel10k
+```
+
+This will work correctly as long as oh-my-zsh is installed.
+
+## Applying the p10k theme
+
+`vim ~/.zshrc` - use any editor you're comfortable with.
+
+Change `ZSH_THEME="robbyrussell"` to `ZSH_THEME="powerlevel10k/powerlevel10k"`
+
+## Font installation
+
+Here you need to choose a font.
+Basically any monospace font with powerline support will work, but I recommend choosing from `D2coding`, `MesloLGS NF`, or `Fira Code`.
+
+Note that `MesloLGS NF` is the official p10k font, and installing it enables icon display options.
+
+This part varies depending on your OS and setup environment, so please look up font installation and terminal font configuration instructions for your system.
+
+## p10k setting
+
+You can customize the p10k theme using the `p10k configure` command.
+
+Read carefully and configure it according to your preferences to create your own p10k theme.
+
+## References
+
+[abdfnx/oh-my-zsh-powerlevel10k-cool-terminal-1no0](https://dev.to/abdfnx/oh-my-zsh-powerlevel10k-cool-terminal-1no0)
+[ruddms936/zsh-설치](https://velog.io/@ruddms936/zsh-%EC%84%A4%EC%B9%98)
+[FiraCode](https://github.com/tonsky/FiraCode)
+[D2coding](https://github.com/naver/d2codingfont)
+[MesloLGS NF](https://github.com/romkatv/powerlevel10k/#user-content-fonts)

@@ -1,0 +1,96 @@
+---
+title: "OneDrive and Pi-hole (TIL)"
+date: 2022-09-25 11:01:00 +0900
+tags: ["DNS", "TIL", "homelab", "onedirve", "pihole", "server"]
+lang: ["en"]
+machine_translated: true
+---
+
+### Update Log
+
+| Date       | Changes                          |
+| ---------- | -------------------------------- |
+| 2021/09/12 | First article written            |
+| 2022/09/25 | Updated with current situation   |
+
+## How It Started
+
+I wasted 2 days on something trivial.
+Windows 11 DEV channel completely separated from BETA channel with different build numbers.
+What this means is that you can no longer move from DEV to BETA, and DEV will no longer be practical for daily use.
+Also, right when I moved to build 22454, the sandbox issue from the previous build wasn't fixed, and a weird bug appeared where icons in the taskbar shifted to the left.
+Honestly, with this many bugs, there was no reason to continue with the DEV channel flight.
+So I decided to downgrade to BETA channel.
+
+## The Compatibility of OneDrive and Pi-hole
+
+To downgrade to BETA channel, I had to reinstall everything.
+Recently, program installation has become simple with the winget package manager, and Windows installation doesn't take long either, so I decided to just wipe it.
+I made an installation USB, installed BETA, and then encountered a problem when setting up OneDrive local folder backup.
+The option wasn't there.
+Thinking maybe the Windows installation went wrong, I reinstalled, and even went back up to DEV to try the settings.
+All failures.
+What was the problem?
+It was simpler than expected.
+If you go to [about onedrive](https://support.microsoft.com/ko-kr/office/onedrive%eb%a6%b4%eb%a6%ac%ec%8a%a4-%ec%a0%95%eb%b3%b4-%ec%b0%b8%ec%a1%b0-845dcf18-f921-435e-bf28-4e24b95e5fc0?ui=ko-kr&rs=ko-kr&ad=kr),
+it shows the following:
+
+```
+Notes:
+
+Blank spaces in the table mean there are currently no builds being deployed to that ring.
+
+For OneDrive sync app updates to apply, computers need to be able to connect to: "oneclient.sfx.ms" and "g.live.com." Make sure these domains are not being blocked. These are also used to enable/disable features and apply bug fixes. More information about URLs and IP addresses used in Microsoft 365
+
+Learn more about the OneDrive sync app update process.
+
+After completing a Deferred ring release, builds wait to be released to the Production ring before being selected for the next Deferred ring release. In this case, we update the Deferred column to "Next release: 19.222.x" before posting the exact build number and target date to help with customer planning.
+```
+
+Look carefully at the second line.
+You need to be able to connect to "oneclient.sfx.ms" and "g.live.com".
+But when I did a ping test, I couldn't access "g.live.com".
+More precisely, it couldn't find the IP address at all, so Pi-hole was blocking it.
+When I returned the DNS server to default and tried the backup settings again, it worked like magic.
+Damn...
+Honestly, it's not Microsoft's fault. It's just that g.live.com is used so broadly for ad image servers, MSN news servers, and some OneDrive features...
+I added it to Pi-hole's whitelist and completed the migration to Windows 11 beta channel.
+
+Besides what I mentioned in this article, I did all sorts of random troubleshooting and wasted 2 days.
+~~My precious weekend..~~
+
+## 2022/09/25 Update
+
+After the above incident, I didn't use Pi-hole for about 2 weeks and used Cloudflare's DNS instead.
+But at some point, Pi-hole's default Adlist was updated, and queries became possible without a separate whitelist as follows:
+
+```
+C:\Users\minpeter>nslookup
+Default Server:  pi.hole
+Address:  192.168.0.120
+
+> oneclient.sfx.ms
+Server:  pi.hole
+Address:  192.168.0.120
+
+Non-authoritative answer:
+Name:    e9659.dspg.akamaiedge.net
+Addresses:  2600:1410:1000:185::25bb
+          2600:1410:1000:18d::25bb
+          104.74.21.118
+Aliases:  oneclient.sfx.ms
+          oneclient.sfx.ms.edgekey.net
+
+> g.live.com
+Server:  pi.hole
+Address:  192.168.0.120
+
+Non-authoritative answer:
+Name:    g-msn-com-nsatc.trafficmanager.net
+Address:  52.231.199.126
+Aliases:  g.live.com
+          g.msn.com
+```
+
+Therefore, using Pi-hole as a DNS server no longer causes OneDrive backup errors.
+That's a relief.

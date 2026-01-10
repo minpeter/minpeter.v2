@@ -1,0 +1,230 @@
+---
+title: "WSL Arch distro Setup"
+description: "pacman, yay... arch is the best!!"
+date: 2023-02-24
+tags: ["arch", "linux", "terminal", "wsl"]
+lang:
+  - en
+machine_translated: true
+---
+
+![Untitled](./images/Untitled.png)
+
+Check that Virtual Machine Platform & Windows Subsystem for Linux are enabled
+
+![Untitled](./images/Untitled-1.png)
+
+As you can see from the list, Arch Linux is not an officially supported distro by Microsoft
+
+Therefore, you need to use a user-created program
+
+[https://github.com/yuk7/ArchWSL](https://github.com/yuk7/ArchWSL)
+
+There are 3 ways to install Arch.exe, which handles the Arch distro installation:
+
+Install from zip file, appx file installation, or using scoop
+
+We'll use the appx installation method here.
+
+https://github.com/yuk7/ArchWSL/releases
+
+First, download the appx file and cer file from the link above.
+
+There are files marked as online and ones that aren't - just download the same set.
+
+![Untitled](./images/Untitled-2.png)
+
+Then install the certificate and run the appx as described in the link below.
+
+Or you can complete it simply with the script below. Of course, you'll need to update the version according to yuk7/ArchWSL releases.
+
+```powershell
+Invoke-WebRequest -URI https://github.com/yuk7/ArchWSL/releases/download/22.10.16.0/ArchWSL_Online-AppX_22.10.16.0_x64.cer -OutFile arch.cer
+Invoke-WebRequest -URI https://github.com/yuk7/ArchWSL/releases/download/22.10.16.0/ArchWSL_Online-AppX_22.10.16.0_x64.appx -OutFile arch.appx
+
+Import-Certificate -FilePath .\arch.cer -CertStoreLocation Cert:\LocalMachine\TrustedPeople
+Add-AppxPackage -Path .\arch.appx
+```
+
+[Install Certificate for AppX](https://wsldl-pg.github.io/ArchW-docs/Install-Certificate/)
+
+![Untitled](./images/Untitled-3.png)
+
+Wait a moment and the installation will complete.
+
+[How to Setup](https://wsldl-pg.github.io/ArchW-docs/How-to-Setup/#setup-after-install)
+
+## YAY Installation
+
+This is a tool that makes it easier to use AUR, one of the advantages of Arch Linux.
+
+Refer to the link below.
+
+[GitHub - Jguer/yay: Yet another Yogurt - An AUR Helper written in Go](https://github.com/Jguer/yay#installation)
+
+After installation, you should also perform the tasks described in the link below.
+
+[GitHub - Jguer/yay: Yet another Yogurt - An AUR Helper written in Go](https://github.com/Jguer/yay#first-use)
+
+## ZSH and oh-my-zsh, powerlevel10k Setup
+
+### zsh & oh-my-zsh Setup
+
+```
+$ sudo pacman -S zsh
+$ chsh -l
+/bin/sh
+/bin/bash
+/usr/bin/git-shell
+/bin/zsh
+/usr/bin/zsh
+$ chsh -s /bin/zsh
+$ yay -S oh-my-zsh-git
+$ cp /usr/share/oh-my-zsh/zshrc ~/.zshrc
+```
+
+### powerlevel10k & zsh-syntax-highlighting & zsh-autosuggestions
+
+```
+$ sudo git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/powerlevel10k
+$ sudo git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+$ sudo git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+```
+
+You need to modify the .zshrc file slightly.
+
+Change ZSH_THEME as follows.
+
+```
+ZSH_THEME="powerlevel10k/powerlevel10k"
+```
+
+Also add the following to the plugins section.
+
+```
+plugins=(
+	git
+  zsh-syntax-highlighting
+  zsh-autosuggestions
+)
+```
+
+Install fonts from the following site for the powerlevel10k theme.
+
+[Nerd Fonts - Iconic font aggregator, glyphs/icons collection, & fonts patcher](https://www.nerdfonts.com/font-downloads)
+
+After installation, change the font for the Arch profile in Windows Terminal to the newly installed font.
+
+Apply the changes by restarting the terminal or using source .zshrc.
+
+## Windows Terminal Theme
+
+[Dark theme for Windows Terminal and 302+ apps - Dracula](https://draculatheme.com/windows-terminal)
+
+## Browser Settings and Various Utilities
+
+[wslu Wiki](https://wslutiliti.es/wslu/install.html#arch-linux)
+
+If you still get xdg-open related errors after installing wslu, see the command below [https://github.com/cli/cli/issues/826](https://github.com/cli/cli/issues/826)
+
+```
+sudo ln -s $(which wslview) /usr/local/bin/xdg-open
+```
+
+```
+$ sudo pacman -S github-cli
+$ sudo pacman -S bat
+$ yay -S logo-ls
+```
+
+Set up your aliases as needed.
+
+## Programming Language Installation
+
+### rust
+
+```
+sudo pacman -S rustup
+rustup default stable
+```
+
+Add the following to your .zshrc file
+
+```
+## rust cargo install path
+export PATH=$PATH:$HOME/.cargo/bin
+```
+
+### go
+
+```
+yay -Yc
+sudo pacman -S go
+```
+
+Add the following to your .zshrc file
+
+```
+## custom GOPATH & Go config
+export GOPATH=$HOME/.go
+export PATH=$PATH:$GOPATH/bin
+```
+
+### python
+
+```
+sudo pacman -S python
+```
+
+### node
+
+!If you need to use multiple versions of node, install nvm.
+
+```
+sudo pacman -S nodejs npm
+```
+
+Since Arch manages everything with the latest versions, you don't really need tools like asdf-vm.
+
+## Remove Windows Unnecessary Path
+
+By default, Windows exe-related paths that you'll never use are automatically added.
+
+This can cause situations like running npm but having it execute the Windows-installed npm.
+
+You won't know until you use the which command, putting you in a situation where you can't solve the problem.
+
+To fix this, perform the following.
+
+```
+$ sudo vim /etc/wsl.conf
+
+[interop]
+appendWindowsPath = false
+
+$ exit
+c:\Users\user> wsl --shutdown
+c:\Users\user> wsl
+$ echo $PATH
+```
+
+This solves the problem.
+
+However, some additional issues arise.
+
+You can no longer use some Windows commands you used to use like code, clip.exe, explorer.exe.
+
+Therefore, add the following settings to .zshrc.
+
+```
+## windows necessary path
+export PATH="$PATH:/mnt/c/Users/minpeter/AppData/Local/Programs/Microsoft VS Code/bin:/mnt/c/Windows/system32:/mnt/c/Windows/System32/WindowsPowerShell/v1.0:/mnt/c/Program Files/Docker/Docker/resources/bin"
+```
+
+I initially wanted to add git-credential-manager.exe as well, but determined it wasn't necessary since the path is defined in the .gitconfig file.
+
+![Untitled](./images/Untitled-4.png)
+
+A beautifully configured terminal is complete.
+
+Install vscode and a few extensions on top of this, and you have a perfect development environment.

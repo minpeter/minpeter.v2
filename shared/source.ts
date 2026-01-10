@@ -13,6 +13,7 @@ export type BlogFrontmatter = PageData & {
   lastModified?: Date;
   external_url?: string;
   lang: string[];
+  machine_translated: boolean;
 };
 
 export type BlogPageData = DocCollectionEntry<"blog", BlogFrontmatter>;

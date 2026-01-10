@@ -10,6 +10,7 @@ import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import ExternalRedirect from "@/components/external-redirect";
 import Header from "@/components/header";
+import { MachineTranslationNotice } from "@/components/machine-translation-notice";
 import { blog } from "@/shared/source";
 import styles from "@/shared/styles/stagger-fade-in.module.css";
 import { formatDateLong } from "@/shared/utils/date";
@@ -92,6 +93,10 @@ export default async function Page(
         link={{ href: `/${locale}/blog` as Route, text: t("backToBlog") }}
         title={post.data.title}
       />
+
+      {post.data.machine_translated && (
+        <MachineTranslationNotice className="mb-6" />
+      )}
 
       <aside className="fixed top-36 left-8 hidden w-72 2xl:block">
         {post.data.toc.length > 0 && (

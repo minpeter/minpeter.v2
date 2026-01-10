@@ -1,0 +1,281 @@
+---
+title: "AWS - VPC"
+description: "Let's learn about Virtual Private Cloud!"
+date: 2022-06-16T03:03:07.156Z
+tags: ["Subnet", "aws", "vpc"]
+categories: "aws"
+lang:
+  - en
+machine_translated: true
+---
+
+## Theory
+
+### VPC (Virtual Private Cloud)
+
+VPC stands for Virtual Private Cloud, which provides a logically isolated space on AWS to help you run resources.
+
+### Types of VPC
+
+In AWS, there are Default VPCs and Custom VPCs for each Region.
+Default VPCs are created by default, one per Region,
+and Custom VPCs can be created up to 5 per Region.
+
+### Subnet
+
+A network divided into smaller network areas.
+In the cloud environment's VPC, you can also divide and separate networks through subnets.
+
+#### Reserved IP Addresses in Subnets
+
+If the IP range assigned to a subnet is 10.0.0.0/24, then from 10.0.0.0 ~ 10.0.0.255:
+
+| Address    | Description                           |
+| ---------- | ------------------------------------- |
+| 10.0.0.0   | Network address                       |
+| 10.0.0.1   | AWS VPC virtual router address        |
+| 10.0.0.2   | AWS DNS server address                |
+| 10.0.0.3   | Reserved for future new features      |
+| 10.0.0.255 | Network broadcast address             |
+
+Also, AWS Subnets have Public Subnets and Private Subnets.
+Public Subnets are networks that can communicate directly with the external internet,
+Private Subnets are closed networks that cannot communicate directly with the external internet. *However, Private Subnets can communicate with the outside if there is a NAT Gateway.
+
+### Security Group and ACL
+
+The security technology at the instance level is Security Group.
+There is also a security technology used at the subnet level called Access Control List (ACL).
+
+## Lab - Public Subnet VPC Configuration
+
+#### Lab Steps
+
+| Public Subnet VPC Creation                        | Verification                                    |
+| ------------------------------------------------- | ----------------------------------------------- |
+| Create VPC                                        | Create EC2 instance                             |
+| Create public subnet                              | Access EC2 instance and verify communication    |
+| Create internet gateway and attach to VPC         |                                                 |
+| Create public routing table and associate subnet  |                                                 |
+| Add route to public routing table                 |                                                 |
+
+### Create VPC
+
+1. Access VPC Console -> VPC
+   ![](/images/bbe6166b-3c0c-425b-bf37-c20789281d48-image.png)
+2. Name: CloudPeter-VPC
+   IPv4 CIDR block: 10.0.0.0/16
+   ![](/images/c910f84f-9e0b-46d1-93e1-a87fb3a031e2-image.png)
+3. Verify creation
+   ![](/images/73329ad0-576c-4e66-9b2f-f8439c3e1998-image.png) *Later, you can distinguish between default VPC and custom VPC by checking the presence of the Name Tag
+
+### Create Public Subnet
+
+1. Access VPC Console -> Subnets
+   ![](/images/3cd9199a-6553-4856-bed2-399a6ddf9b15-image.png)
+2. VPC ID: Select created VPC (CloudPeter-VPC)
+   Name tag: CloudPeter-Public-SN
+   Availability Zone: ap-northeast-2a
+   IPv4 CIDR block: 10.0.0.0/24
+   ![](/images/b0f6ea91-d67f-4124-a2ab-b7e432a17df3-image.png)
+3. Verify creation
+   ![](/images/dddcd0e4-0b0f-483e-b660-1585cc8990dd-image.png)
+
+### Create Internet Gateway and Attach to VPC
+
+Create an IGW and attach it to the VPC for communication with the external internet
+
+1. Access VPC Console -> Internet Gateways
+   ![](/images/d2585bd8-5971-4375-a094-f4b63ecfa5ea-image.png)
+2. Name tag: CloudPeter-IGW
+   ![](/images/038ff117-33b8-40e6-9b93-67064fa7e92a-image.png)
+3. Attach IGW to VPC
+   ![](/images/0303ebce-9833-4e95-a3a8-4b7de36f63a4-image.png)
+   Available VPCs: Select created VPC (CloudPeter-VPC)
+   ![](/images/201acf68-3746-4742-9421-a28b5f73cc06-image.png)
+4. Verify attachment
+   ![](/images/001db724-5d88-4f93-b6d8-b99eedb6270f-image.png)
+
+If you've proceeded this far, the IGW for communicating with the internet is attached to the VPC, and the subnet is also created.
+However, external internet access is still not possible because there is no routing path to the external internet in the VPC's virtual routing table.
+
+### Create Public Routing Table and Associate Subnet
+
+1. Access VPC Console -> Route Tables
+   ![](/images/f5bef8c4-c90e-4370-8f14-b24ffaf58fc5-image.png)
+2. Name tag: CloudPeter-Public-RT
+   VPC: Select created VPC (CloudPeter-VPC)
+   ![](/images/78b91042-182a-4dba-9547-cfbc8eeb54a4-image.png)
+3. Verify creation and associate subnet
+   ![](/images/68d0b1b0-36cd-4f22-a6ea-e769c3eb8e7c-image.png)
+   Click Subnet associations
+   ![](/images/1144f945-24bd-423c-99a1-5917c2d24c5e-image.png)
+   Click Edit subnet associations
+   ![](/images/c11ea166-62c1-4d49-850b-fa66e25df326-image.png)
+   Select the previously created subnet
+
+### Add Route to Public Routing Table
+
+1. VPC Console -> Route Tables
+2. Select CloudPeter-Public-RT
+3. Go to Routes tab
+   ![](/images/09711401-bc5e-4737-8ade-6ed9edef3bd6-image.png)
+4. Destination: 0.0.0.0/0
+   Target: Internet Gateway -> Select igw-xxxxx
+   ![](/images/8e7b9d54-eadf-43cd-a57f-0ceb6dd430c4-image.png)
+5. Verify application
+   ![](/images/b6be05f1-b54a-490e-84e9-51ff333b3a86-image.png)
+
+Now all configurations are complete.
+Let's verify if actual communication is possible.
+
+### Create EC2 Instance
+
+Create an EC2 instance to verify communication
+
+1. Access EC2 Console -> Instances
+
+2. Click Launch instances
+   ![](/images/5a95d94c-bc0d-4626-a62f-2d6315dc86b4-image.png)
+
+3. Name: Public-EC2
+   OS Image: Amazon Machine Image(AMI), 64bit
+   Instance type: T2.micro
+   Key pair: The one you always use
+
+4. Network settings -> Edit
+   ![](/images/768d6c88-d81e-43d6-8bd6-7317858386fa-image.png)
+
+5. VPC: Select created VPC (CloudPeter-VPC)
+   Subnet: Select created Subnet (CloudPeter-Public-SN)
+   Auto-assign public IP: Enable
+   ![](/images/3f8ec53e-0f7c-4295-af5c-772cb1780cf8-image.png)
+
+6. Security group: default
+   ![](/images/27954cef-a255-4cc1-99c8-f37f7e19b031-image.png)
+
+7. Verify creation
+   ![](/images/00cd2548-1e35-4825-a324-2e8e3b07e853-image.png)
+
+### Access EC2 Instance and Verify Communication
+
+Access via SSH using the public IP, then run
+`ping google.com`
+If the ping works, success!
+
+## Lab - Private Subnet VPC Configuration
+
+#### Lab Steps
+
+| Add Private Subnet                                    | Verification                                           |
+| ----------------------------------------------------- | ------------------------------------------------------ |
+| Create private subnet                                 | Create EC2 instance                                    |
+| Create NAT gateway                                    | Access EC2 instance and verify communication           |
+| Create private routing table and associate subnet     | Communication flow between public and private subnets  |
+| Add route to private routing table                    |                                                        |
+
+### Create Private Subnet
+
+1. Access VPC Console -> Subnets
+
+2. Create subnet
+   VPC ID: Select created VPC (CloudPeter-VPC)
+   Name tag: CloudPeter-Private-SN
+   Availability Zone: ap-northeast-2c
+   IPv4 CIDR block: 10.0.1.0/24
+   ![](/images/447dd7cd-c68e-4397-b966-080eeecac7f2-image.png)
+
+3. Verify creation
+   ![](/images/acbeabeb-f41a-4d35-a7a4-a06b56e11aa7-image.png)
+
+### Create NAT Gateway
+
+1. Access VPC Console -> NAT Gateways
+   ![](/images/6af2950a-c904-445c-81bf-d3daf7b9c4b8-image.png)
+
+2. Name: CloudPeter-NAT
+   Subnet: Select public subnet (CloudPeter-Public-SN)
+   Click Allocate Elastic IP!
+   ![](/images/b9e00de5-9e66-416e-903a-a6d1d73d8467-image.png)
+
+3. Verify creation
+   ![](/images/6ea302a7-768f-4336-831d-f8c4111c748a-image.png)
+
+### Create Private Routing Table and Associate Subnet
+
+1. Access VPC Console -> Route Tables
+
+2. Name tag: CloudPeter-Private-RT
+   VPC: Select created VPC (CloudPeter-VPC)
+   ![](/images/e7d00c76-57f5-4e83-8677-6ef88edc38e8-image.png)
+
+3. Select private routing table
+
+4. Click Edit routes
+   ![](/images/9358db91-15f0-49f3-ac62-bad69f38a5be-image.png)
+
+5. Select private subnet (CloudPeter-Private-SN)
+   ![](/images/dffb377c-e33d-46a4-a8a8-69d43c3b88cf-image.png)
+
+### Add Route to Private Routing Table
+
+1. Access VPC Console -> Route Tables
+
+2. Select private routing table
+
+3. Click Edit routes
+   ![](/images/9b49470c-9bd7-4732-ad71-095303ba3cc0-image.png)
+   Edit as follows (Select NAT Gateway)
+   ![](/images/fec49ebe-9c14-4b4d-9055-2be184273abb-image.png)
+
+### Create EC2 Instance
+
+1. Access EC2 Console -> Instances
+
+2. Name: Private-EC2
+   Network: Select created VPC (CloudPeter-VPC)
+   Subnet: Select created private subnet (CloudPeter-Private-SN)
+
+3. Network settings
+   ![](/images/88cbd21f-a09e-44db-9736-510684ef9b21-image.png)
+
+4. Advanced details
+   ![](/images/a93a7eeb-32d2-41e3-889f-b51ee48956b1-image.png)
+
+```bash
+#!/bin/bash
+(
+echo "qwe123"
+echo "qwe123"
+) | passwd --stdin root
+sed -i "s/^PasswordAuthentication no/PasswordAuthentication yes/g" /etc/ssh/sshd_config
+sed -i "s/^#PermitRootLogin yes/PermitRootLogin yes/g" /etc/ssh/sshd_config
+service sshd restart
+```
+
+The user data above is a configuration that allows SSH access via password.
+It is read and applied when the EC2 instance boots.
+
+5. Verify creation
+   ![](/images/a2caa957-0db1-431d-829a-7e2973c337fa-image.png)
+
+If you check the network of Private-EC2, you can see that no public IP has been assigned.
+
+### Access EC2 Instance and Verify Communication
+
+1. SSH into Public-EC2's IP
+
+2. From the SSH session, SSH into Private-EC2's private IPv4 address
+
+3. Verify that `ping google.com` works through NAT
+   ![](/images/e1c8161d-bdb8-4d1c-b3cd-e732a9dc679b-image.png)
+
+*With NAT, going from inside to outside is possible, but accessing the Private Subnet from outside is not possible
+
+### Delete Resources
+
+1. Terminate EC2 instances (EC2 -> Instances -> Select instance -> Actions -> Instance state -> Terminate)
+2. Delete NAT gateway (VPC -> NAT Gateways -> Actions -> Delete NAT gateway)
+   Warning: Wait until the NAT gateway is deleted
+3. Delete Elastic IP (VPC -> Elastic IPs -> Actions -> Release Elastic IP addresses)
+4. Delete VPC (VPC -> Your VPCs -> Actions -> Delete VPC)
