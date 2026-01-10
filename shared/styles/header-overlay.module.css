@@ -10,10 +10,10 @@
   to {
     background: linear-gradient(
       to bottom,
-      black 0%,
-      rgba(0, 0, 0, 0.8) 20%,
-      rgba(0, 0, 0, 0.3) 50%,
-      rgba(0, 0, 0, 0.1) 80%,
+      rgb(var(--header-overlay-color)) 0%,
+      rgba(var(--header-overlay-color), 0.8) 20%,
+      rgba(var(--header-overlay-color), 0.3) 50%,
+      rgba(var(--header-overlay-color), 0.1) 80%,
       transparent
     );
     opacity: 1;
