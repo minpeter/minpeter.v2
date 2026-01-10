@@ -64,8 +64,6 @@ services:
     ports:
       - 8000:80
       - 9000:9000
-    depends_on:
-      - registry
     expose:
       - 3375
     volumes:
@@ -77,7 +75,6 @@ services:
     tty: true
     depends_on:
       - manager
-      - registry
     expose:
       - 7946
       - 7946/udp
@@ -89,7 +86,6 @@ services:
     tty: true
     depends_on:
       - manager
-      - registry
     expose:
       - 7946
       - 7946/udp
@@ -101,7 +97,6 @@ services:
     tty: true
     depends_on:
       - manager
-      - registry
     expose:
       - 7946
       - 7946/udp

@@ -92,10 +92,10 @@ The following example assumes a key was generated like this:
 ```
 /home/minpeter/.gnupg/pubring.kbx
 ---------------------------------
-pub   rsa4096/2167399770AVC2F3 2022-10-11 [SC]
-      2E992F8F8D1944D661F7FA652167399770AVC2F3
+pub   rsa4096/2167399770ABC2F3 2022-10-11 [SC]
+      2E992F8F8D1944D661F7FA652167399770ABC2F3
 uid                 [ultimate] minpeter2 (for github signed Commit) <kali2005611@gmail.com>
-sub   rsa4096/ADE4A2BCCAEA3G37 2022-10-11 [E]
+sub   rsa4096/ADE4A2BCCAEA3D37 2022-10-11 [E]
 ```
 
 ## Registering the Generated GPG Key on GitHub
@@ -103,7 +103,7 @@ sub   rsa4096/ADE4A2BCCAEA3G37 2022-10-11 [E]
 Use the following command to output the public key in ASCII format:
 
 ```
-gpg --armor --export 2167399770AVC2F3
+gpg --armor --export 2167399770ABC2F3
 ```
 
 Copy the entire output from `-----BEGIN PGP PUBLIC KEY BLOCK-----` to `-----END PGP PUBLIC KEY BLOCK-----`.
@@ -122,7 +122,7 @@ We're almost done with the setup.
 On the laptop where you want to make signed commits, register the key with this command:
 
 ```
-git config --global user.signingkey 2167399770AVC2F3
+git config --global user.signingkey 2167399770ABC2F3
 ```
 
 For Linux, run the following commands:
