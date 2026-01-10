@@ -1,0 +1,145 @@
+---
+title: k8s via proxmox (1) - Ubuntu Serverテンプレートの作成
+date: 2022-10-03 20:19:00
+tags:
+categories: "home lab"
+lang:
+  - ja
+machine_translated: true
+---
+
+# テンプレートとは？
+
+これまでProxmoxを使いながらテンプレートという概念を初めて知りました。
+テンプレートを作成すると、VMを作成するたびにインストール過程を経ることなく、テンプレートを複製して作成できます。
+
+Kubernetesをインストールするにはマスターノードとワーカーノードが必要です。
+少なくとも3つ以上のVMを設定する必要がありますが、一度は（いや実は2回も...）知らなくてVMを作成するたびにインストール過程を経ていました。
+3つのVMのインストールプロセスを同時に進めたところ、アップデートによるネットワークトラフィックの負荷がひどくなって遅くなりました。
+そこでテンプレートを作成して、VMを作成するたびにインストール過程を経ることなくテンプレートを複製して作成できるようにしてみましょう。
+
+# Ubuntu 22.04 Serverテンプレートの作成
+
+## 1. VM作成
+
+テンプレートの基本となるVMを作成します。
+このときVMには、これまで作成していた方式とは異なり、軽量化されたCloud Imageを使用して作成するため、やや異なる設定が必要です。
+
+1. Proxmoxで**VMを作成**します。
+2. テンプレートにするVMの名前はubuntu-22-04-server-templateにします。
+   後でvm-idが900であることを前提に進めるため、**vm-idも900に設定**しましょう。
+3. **メディアでDo not use any mediaを選択**します。
+   後で説明しますが、クラウドイメージを使用する予定だからです。
+4. **Systemタブでは Qemu Agentにチェック**を入れます。
+   これはVMが実行中にVMの状態を確認できるようにします。
+   しなくても問題ありませんが、後で設定することになった場合、有効になっている方が便利です。
+5. **ディスクは削除して**、CPUは1コア、メモリは1GBに設定します。
+
+6. ネットワークは一般的にVMを作成するときと同様に設定します。
+
+## 2. cloud init設定
+
+作成されたVMのhardwareタブでAdd > CloudInit Driveをクリックします。
+こうすると、VMのハードディスクにcloud-init driveが追加されます。
+VMのCloud-InitタブでUser Dataを設定します。
+このときネットワーク設定は必ずDHCPにする必要があります。
+staticに設定すると、複製したVMでIPが重複して問題が発生する可能性があります。
+ドメインは記入しなくてもよく、SSH Public Keyは以下の手順に従って生成しましょう。
+
+### 2.1 SSHキーの生成
+
+SSHキーを生成します。
+
+```bash
+ssh-keygen -t <key-type> -C <comment>
+```
+
+key-typeはrsa、dsa、ecdsa、ed25519などがあります。
+commentはキーに対する説明です。
+
+`Enter file in which to save the key (C:\Users\minpeter/.ssh/id_rsa): `という質問が出たら、proxmox_key...のような適切な名前を入力します。
+そして`Enter passphrase (empty for no passphrase): `という質問が出たらパスワードを入力します。（なくても問題ありません。）（ない方がいいです。）
+
+生成されたパブリックキーをコピーします。
+
+```bash
+cat ~/.ssh/<key-name>.pub
+```
+
+先ほどproxmox_keyと入力した場合は`cat ~/.ssh/proxmox_key.pub`と入力すればよいです。
+
+## 3. Cloud Imageのダウンロード
+
+イメージは少し作業が必要なので、PVEシェルで進めます。
+
+### 3.1 PVEシェル接続
+
+Web GUIまたはssh root@&lt;proxmox server ip&gt;で接続します。
+
+### 3.2 Cloud Imageのダウンロード
+
+[](https://cloud-images.ubuntu.com/minimal/releases/jammy/release/)からダウンロードできます。
+ubuntu-22.04-minimal-cloudimg-amd64.imgをダウンロードすればいいので、リンクをコピーしてwgetでダウンロードします。
+
+```bash
+wget https://cloud-images.ubuntu.com/minimal/releases/jammy/release/ubuntu-22.04-minimal-cloudimg-amd64.img
+```
+
+その後、`qm set 900 -serial0 socket -vga serial0`コマンドを入力します。
+このとき900はVMのIDです。
+
+### 3.3 Cloud Imageの変換
+
+イメージを変換します。
+
+```bash
+mv ubuntu-22.04-minimal-cloudimg-amd64.img ubuntu-22.04.qcow2
+qemu-img resize ubuntu-22.04.qcow2 32G
+```
+
+### 3.4 Cloud Imageの追加
+
+イメージを追加します。
+
+```bash
+qm importdisk 900 ubuntu-22.04.qcow2 local-lvm
+```
+
+もちろんこのときの900もVMのIDです。
+
+### 3.5 Cloud Imageの設定
+
+ここまで進めてからWeb GUIにアクセスすると、VMのhardwareにUnuse disk 0が追加されていることが確認できます。
+editをクリックして`Discard`項目にチェックを入れ、`Apply`をクリックします。
+
+次にoptionsタブで`Boot Order`を2番目に設定します。
+Start at boot項目はYesに変更します。
+
+これですべての設定が完了しました。
+すべての設定がうまくできたか確認した後、VMリストで900(ubuntu-22-04-server-template)を右クリックしてConvert to Templateをクリックします。
+しばらくの作業の後、テンプレートが作成されます。
+
+## 2. テンプレートを利用したVM作成
+
+先ほど変換したテンプレートを利用してVMを作成してみましょう。
+
+以前と同様に右クリックすると、メニューが変更されているはずです。
+今度は`Clone`をクリックします。
+
+その後、`Clone VM`というウィンドウが表示されますが、ここで`Name`を`ubuntu-test`に変更し、`Mode`を`Full Clone`に変更します。
+Cloneをクリックした後、電源を入れて待てば完了です。
+
+# 次回は...？
+
+今作ったテンプレートを利用してk8s-ctrlrとk8s-nodeを作成し、k8s-nodeテンプレートを追加で作成、合計k8s-ctrlr + 2つのk8s-nodeを作成して設定してみましょう。
+
+<br />
+<Callout>
+  [k8s via proxmox (2) - worker node & master node 設定
+  ](/blog/k8s-via-proxmox-2)に続きます。
+</Callout>
+
+## 参考資料
+
+- [youtube/Proxmox VE - How to build an Ubuntu 22.04 Template (Updated Method)](https://youtu.be/MJgIm03Jxdo)
+- [blog/Proxmox VE - How to build an Ubuntu 22.04 Template (Updated Method)](https://www.learnlinux.tv/proxmox-ve-how-to-build-an-ubuntu-22-04-template-updated-method/)

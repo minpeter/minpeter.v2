@@ -1,0 +1,112 @@
+---
+title: "AWS - CloudFormation"
+description: "AWSインフラをコードで宣言するCloudFormationについて学びましょう"
+date: 2022-06-15T23:50:15.412Z
+tags: ["aws", "cloudformation"]
+categories: "aws"
+lang:
+  - ja
+machine_translated: true
+---
+
+## 理論
+
+### CloudFormationとは？
+
+AWSインフラをコードで宣言する方法です。
+あらかじめコードで記述したAWSインフラリソースを作成または削除できます。
+類似のサービスにはTerraformがあり、これらを総称してIaC（Infrastructure as Code）と呼びます。
+
+### テンプレート
+
+作成するインフラリソースをコードで定義したファイルです。
+JSON、YAML形式を使用できます。
+
+### 作成手順
+
+1. テンプレートをCloudFormationにアップロード
+2. CloudFormationでスタック作成コマンドを実行
+3. AWSがテンプレートに記述された順序で自動的にリソースを作成
+
+### 削除手順
+
+1. CloudFormationでスタック削除コマンドを実行
+2. AWSが自動的にインフラリソースを削除
+
+## 実習
+
+### スタック作成
+
+```yaml
+Parameters:
+  KeyName:
+    Description: Name of an existing EC2 KeyPair to enable SSH access to the instances. Linked to AWS Parameter
+    Type: AWS::EC2::KeyPair::KeyName
+    ConstraintDescription: must be the name of an existing EC2 KeyPair.
+  LatestAmiId:
+    Description: (DO NOT CHANGE)
+    Type: "AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>"
+    Default: "/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2"
+    AllowedValues:
+      - /aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2
+
+Resources:
+  MyInstance:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !Ref LatestAmiId
+      InstanceType: t2.micro
+      KeyName: !Ref KeyName
+      Tags:
+        - Key: Name
+          Value: WebServer
+      SecurityGroups:
+        - !Ref MySG
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          yum install httpd -y
+          systemctl start httpd && systemctl enable httpd
+          echo "<h1>Test Web Server</h1>" > /var/www/html/index.html
+
+  MySG:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Enable HTTP access via port 80 and SSH access via port 22
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+```
+
+上記のコードをtest_lab1.yaml形式で保存し、次のステップに進みます。
+
+1. [CloudFormation Console](https://ap-northeast-2.console.aws.amazon.com/cloudformation/home?region=ap-northeast-2)にアクセスし、スタック作成をクリック
+2. 準備されたテンプレートを選択 -> テンプレートファイルをアップロード
+3. 任意のスタック名を指定（CF-TEST）
+4. KeyName：使用しているキーペアを選択
+
+### 作成されたリソースの確認
+
+1. EC2 Consoleにアクセス
+2. インスタンス -> インスタンス
+3. WebServerインスタンスのIPを確認
+4. SSHおよびHTTP接続を確認
+
+### スタック削除
+
+1. CloudFormation Consoleにアクセス
+2. スタックタブ
+3. 作成したスタックを選択（CF-TEST）
+4. 削除をクリック
+
+### 削除されたリソースの確認
+
+1. EC2 Consoleにアクセス
+2. インスタンス -> インスタンス
+3. WebServerインスタンスの状態を確認（Terminated）

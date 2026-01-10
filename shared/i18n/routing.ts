@@ -7,7 +7,7 @@ const LOCALE_COOKIE_MAX_AGE_SECONDS = 60 * 60 * 24 * DAYS_IN_MONTH;
 
 export const routing = defineRouting({
   // A list of all locales that are supported
-  locales: ["en", "ko"],
+  locales: ["en", "ko", "ja"],
 
   // Used when no locale matches
   defaultLocale: "ko",

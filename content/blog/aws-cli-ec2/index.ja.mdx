@@ -1,0 +1,300 @@
+---
+title: "AWS CLIでEC2を作成する"
+description: "コピー＆ペーストで簡単にEC2インスタンスを作成してみよう"
+date: 2024-05-10 00:00:00 +0900
+lang:
+  - ja
+machine_translated: true
+---
+
+<Callout>
+  この記事ではAWS CLIのインストールと設定が完了していることを前提に進めます。
+</Callout>
+
+import { ModCodeBlock } from "@/components/code-block";
+
+## VPC作成
+
+<ModCodeBlock
+  template="
+  aws ec2 create-vpc --cidr-block {{cidr-block}}"
+  data={{
+    "cidr-block": "10.10.0.0/16",
+  }}
+/>
+
+![](./2024-05-10-18-50-55.png)
+
+上記のコマンドでVPCを作成すると、VPC情報が返されます。
+
+## サブネット作成
+
+<ModCodeBlock
+  template="
+    aws ec2 create-subnet --vpc-id {{vpc-id}} \
+    --cidr-block {{cidr-block}}"
+  data={{
+    "vpc-id": "vpc-067f7fb23d3dfd42e",
+    "cidr-block": "10.10.0.0/24",
+  }}
+/>
+
+![](./2024-05-10-18-55-27.png)
+
+サブネットを作成すると、上記のようにサブネット情報が返されます。
+
+## IGW作成
+
+```
+aws ec2 create-internet-gateway
+```
+
+![](./2024-05-10-18-56-45.png)
+
+インターネットゲートウェイを作成し、返されるIDをメモしておきます。
+
+<ModCodeBlock
+  template="
+    aws ec2 attach-internet-gateway --internet-gateway-id {{igw-id}} \
+    --vpc-id {{vpc-id}}"
+  data={{
+    "igw-id": "igw-02f78a6c0e82cd8ee",
+    "vpc-id": "vpc-067f7fb23d3dfd42e",
+  }}
+/>
+
+次にインターネットゲートウェイをVPCに接続します。
+
+![](./2024-05-10-18-58-44.png)
+
+2回実行して`already attached to network`というメッセージが出れば成功です。
+
+## ルートテーブル作成
+
+<ModCodeBlock
+  template="
+    aws ec2 create-route-table --vpc-id {{vpc-id}}"
+  data={{
+    "vpc-id": "vpc-067f7fb23d3dfd42e",
+  }}
+/>
+
+![](./2024-05-10-18-59-53.png)
+
+次のコマンドでルートテーブルを作成します。
+
+<ModCodeBlock
+  template="
+    aws ec2 create-route --route-table-id {{route-table-id}} \
+    --destination-cidr-block {{destination-cidr-block}} \
+    --gateway-id {{gateway-id}}"
+  data={{
+    "route-table-id": "rtb-053e6e74ab1744ab0",
+    "destination-cidr-block": "0.0.0.0/0",
+    "gateway-id": "igw-02f78a6c0e82cd8ee",
+  }}
+/>
+
+![](./2024-05-10-19-00-48.png)
+
+結果値`True`が返されます。
+
+次にルートテーブルにサブネットを接続してみましょう。
+
+<ModCodeBlock
+  template='
+    aws ec2 describe-subnets --filters "Name=vpc-id,Values={{vpc-id}}" \
+    --query "Subnets[*].{ID:SubnetId,CIDR:CidrBlock}"'
+  data={{
+    "vpc-id": "vpc-067f7fb23d3dfd42e",
+  }}
+/>
+
+![](./2024-05-10-19-01-15.png)
+
+サブネットのIDは次のコマンドで確認できます。
+
+<ModCodeBlock
+  template="
+    aws ec2 associate-route-table --subnet-id {{subnet-id}} \
+    --route-table-id {{route-table-id}}"
+  data={{
+    "subnet-id": "subnet-05fb90e4ff9120ef7",
+    "route-table-id": "rtb-053e6e74ab1744ab0",
+  }}
+/>
+
+![](./2024-05-10-19-02-42.png)
+
+サブネットをルートテーブルに接続します。
+
+<ModCodeBlock
+  template="
+    aws ec2 modify-subnet-attribute --subnet-id {{subnet-id}} \
+    --map-public-ip-on-launch"
+  data={{
+    "subnet-id": "subnet-05fb90e4ff9120ef7",
+  }}
+/>
+
+次のコマンドで、EC2パブリックIPアドレスを自動的に割り当てるように設定します。
+EC2インスタンスは再起動するとIPアドレスが変更されるため、必ず設定する必要があります。
+そうでなければ、Elastic IPアドレスをインスタンスに関連付ける必要があります。
+
+## セキュリティグループ作成
+
+<ModCodeBlock
+  template="
+    aws ec2 create-security-group --group-name {{group-name}} \
+    --description {{description}} \
+    --vpc-id {{vpc-id}}"
+  data={{
+    "group-name": "cli-security-group",
+    description: "cli-security-group",
+    "vpc-id": "vpc-067f7fb23d3dfd42e",
+  }}
+/>
+
+![](./2024-05-10-19-04-20.png)
+
+次のコマンドでセキュリティグループを作成します。
+
+<ModCodeBlock
+  template="
+    aws ec2 authorize-security-group-ingress --group-id {{group-id}} \
+    --protocol {{protocol}} \
+    --port {{port}} \
+    --cidr {{cidr}}"
+  data={{
+    "group-id": "sg-0626016b0d2a61414",
+    protocol: "tcp",
+    port: "22",
+    cidr: "0.0.0.0/0",
+  }}
+/>
+
+![](./2024-05-10-19-04-49.png)
+
+続いてセキュリティグループの22ポート（SSH）をどこからでもアクセスできるように`0.0.0.0/0`で開放します。
+
+## キーペア作成
+
+<ModCodeBlock
+  template="
+    aws ec2 create-key-pair --key-name {{key-name}} \
+    --query 'KeyMaterial' --output text > {{key-name}}.pem
+
+    chmod 400 {{key-name}}.pem"
+  data={{
+    "key-name": "clikeypair",
+  }}
+/>
+
+キーペアを作成し、権限を設定します。
+
+## EC2作成
+
+```
+aws ec2 describe-images --owners self amazon | less
+```
+
+次のコマンドでAMIを探すことができます。適切なAMIを選択します。
+
+<ModCodeBlock
+  template="
+    aws ec2 run-instances --image-id {{image-id}} \
+    --count 1 \
+    --instance-type t2.micro \
+    --key-name {{key-name}} \
+    --security-group-ids {{security-group-ids}} \
+    --subnet-id {{subnet-id}}"
+  data={{
+    "image-id": "ami-0cb01c18bcde8e856",
+    "key-name": "clikeypair",
+    "security-group-ids": "sg-0626016b0d2a61414",
+    "subnet-id": "subnet-05fb90e4ff9120ef7",
+  }}
+/>
+
+次のコマンドでEC2インスタンスを作成します。
+
+![](./2024-05-10-19-07-31.png)
+
+インスタンス作成時に出力されるインスタンスIDをメモしておきます。
+
+<ModCodeBlock
+  template="
+    aws ec2 describe-instances --instance-id {{instance-id}}"
+  data={{
+    "instance-id": "i-09ed4ffc4dcae9a05",
+  }}
+/>
+
+![](./2024-05-10-19-08-49.png)
+
+上記のコマンドでインスタンスの状態がrunningになるまで待ちます。
+
+<ModCodeBlock
+  template="
+    aws ec2 describe-instances --instance-id {{instance-id}} \
+    --query 'Reservations[*].Instances[*].PublicIpAddress' \
+    --output text"
+  data={{
+    "instance-id": "i-09ed4ffc4dcae9a05",
+  }}
+/>
+
+![](./2024-05-10-19-10-23.png)
+
+上記のコマンドでEC2インスタンスのパブリックIPを確認します。
+
+<ModCodeBlock
+  template="
+    ssh -i {{key-name}}.pem ec2-user@{{public-ip}}"
+  data={{
+    "key-name": "clikeypair",
+    "public-ip": "34.239.114.18",
+  }}
+/>
+
+先ほど作成したキーとEC2のIPを入力してSSH接続を試みます。
+
+![](./2024-05-10-19-11-07.png)
+
+すると、CLIからEC2インスタンスへの接続に成功したことが確認できます。
+
+<ModCodeBlock
+  template="
+    aws ec2 terminate-instances --instance-ids {{instance-id}}
+    aws ec2 delete-subnet --subnet-id {{subnet-id}}
+    aws ec2 delete-route-table --route-table-id {{route-table-id}}
+    aws ec2 detach-internet-gateway --internet-gateway-id {{igw-id}} --vpc-id {{vpc-id}}
+    aws ec2 delete-internet-gateway --internet-gateway-id {{igw-id}}
+    aws ec2 delete-security-group --group-id {{group-id}}
+    aws ec2 delete-vpc --vpc-id {{vpc-id}}"
+  data={{
+    "instance-id": "i-09ed4ffc4dcae9a05",
+    "subnet-id": "subnet-05fb90e4ff9120ef7",
+    "route-table-id": "rtb-053e6e74ab1744ab0",
+    "igw-id": "igw-02f78a6c0e82cd8ee",
+    "vpc-id": "vpc-067f7fb23d3dfd42e",
+    "group-id": "sg-0626016b0d2a61414",
+  }}
+/>
+
+EC2インスタンスおよびセキュリティグループの削除は次の順序で行えます。
+一度に入力すると削除されない場合があるので、1つずつ入力してください。
+
+- EC2インスタンス削除
+- サブネット削除
+- ルートテーブル削除
+- インターネットゲートウェイをVPCから分離
+- インターネットゲートウェイ削除
+- セキュリティグループ削除
+- VPC削除
+
+_より良い方法として[nuke](https://chltjdbs.tistory.com/31)を使用してすべて削除する方法もあります。_
+
+---
+
+ref: https://dev.classmethod.jp/articles/build-ec2-with-aws-cli/

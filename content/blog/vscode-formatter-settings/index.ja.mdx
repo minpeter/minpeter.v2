@@ -1,0 +1,36 @@
+---
+title: "VSCode Formatter設定"
+description: "Prettierだけでは解決できないVSCode Formatter設定を手助けするガイド"
+date: 2022-03-27T10:27:57.379Z
+tags: ["Formatter", "vscode"]
+lang:
+  - ja
+machine_translated: true
+---
+
+VSCodeを使用する際、Formatterは非常に重要です。
+通常、Google検索するとPrettierとBeautifyがおすすめされます。
+
+私の場合はPrettierを選択して使用していましたが、たまに動作しない言語がありました。
+例えば、RustやGo、Javaなどの場合はPrettierが動作しませんでした。
+
+このような場合は、該当言語は別のフォーマッターを使用するように設定すればよく、
+通常は該当言語の拡張機能に含まれている場合が多いです。
+
+以下のsettings.jsonファイルは私のVSCode formatter設定です。
+
+```json
+"editor.formatOnSave": true,
+"[rust]": {
+  "editor.defaultFormatter": "matklad.rust-analyzer"
+},
+"[go]": {
+  "editor.defaultFormatter": "golang.go"
+},
+"[java]": {
+  "editor.defaultFormatter": "redhat.java"
+},
+"editor.defaultFormatter": "esbenp.prettier-vscode",
+```
+
+この設定を適用すれば、少なくともRust、Go、JavaとPrettierがサポートする言語は問題ないはずです。

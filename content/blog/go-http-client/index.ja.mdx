@@ -1,0 +1,264 @@
+---
+title: Go言語HTTPクライアントの作成
+description: Go言語のnet/httpパッケージを使用したHTTPクライアントの実装とタイムアウト処理の方法
+date: 2022-10-09 20:51:16
+tags: [golang, http]
+lang:
+  - ja
+machine_translated: true
+---
+
+## GoのHTTPクライアント
+
+HTTPはクライアント-サーバーベースのセッションを持たないプロトコルであり、アプリケーション層のプロトコルです。
+
+下位層の転送プロトコルとしてはTCPを使用します。
+\*2021年7月にHTTP/3が公開され、TCPだけでなくUDPを使用するHTTPが登場しました。
+
+### 統合リソース識別子（URL）
+
+クライアントがWebサーバーを見つけ、要求されたリソースを識別するために使用される一種のアドレスです。
+
+| スキーマ(scheme) | 権限情報(authority) | パス(path)     | クエリパラメータ(query parameter) | クエリパラメータ (query parameter) | フラグメント (fragment) |
+| -------------- | -------------------- | -------------- | ----------------------------- | ------------------------------- | -------------------- |
+| scheme://      | user:password@       | host:port/path | ?key1=value1                  | &key2=value2                    | #table_of_contents   |
+
+上記の表のように構成されており、主にインターネット上のURLは最低限スキーマとホスト名だけを含みます。
+
+> https://images.google.com/
+
+スキーマはブラウザにHTTPSを使用すると伝え、[images.google.com](https://images.google.com)/のパスでデフォルトリソースを要求しました。
+
+### クライアントリソース要求
+
+HTTP Requestはクライアントがサーバーに特定のリソースを応答するよう要求するメッセージです。
+
+HTTPは4つで構成されます。メソッド、対象リソース、ヘッダー、ボディで構成されます。
+
+メソッドはサーバーに対象リソースで何をするかという意図を示し、リクエストヘッダーには送信要求時に送るデータに関するメタデータが含まれます。
+
+もしPUTメソッドでボディに画像を載せて送信しようとする場合、リクエストヘッダーのContent-Length部分に画像のバイト数が記録されます。
+
+そしてリクエストボディにはネットワークで送信するのに適した形式でエンコードされた画像を送信することになります。
+
+少しnetcatコマンドでGoogleのrobots.txtファイル要求を送ってみましょう。
+
+```bash
+$ nc www.google.com 80
+GET /robots.txt HTTP/1.1
+
+```
+
+応答は以下の通りです。
+
+```
+HTTP/1.1 200 OK Accept-Ranges: bytes Vary: Accept-Encoding Content-Type:
+text/plain Cross-Origin-Resource-Policy: cross-origin
+Cross-Origin-Opener-Policy-Report-Only: same-origin;
+report-to="static-on-bigtable" Report-To:
+{"group":"static-on-bigtable","max_age":2592000,"endpoints":[{"url":"https://csp.withgoogle.com/csp/report-to/static-on-bigtable"}]}
+Content-Length: 7240 Date: Sat, 16 Jul 2022 02:01:54 GMT Expires: Sat, 16 Jul
+2022 02:01:54 GMT Cache-Control: private, max-age=0 Last-Modified: Wed, 13 Jul
+2022 19:00:00 GMT X-Content-Type-Options: nosniff Server: sffe X-XSS-Protection:
+0 User-agent: * Disallow: /search Allow: /search/about Allow: /search/static
+Allow: /search/howsearchworks . . . (省略)
+```
+
+一番上からステータスライン、一連のヘッダー、中間のボディと区別する空白行、応答ボディのrobots.txtファイルが送信されます。
+
+Goのnet/httpパッケージを使用すれば、HTTPメソッドとURLだけでHTTPリクエストを作成できます。
+
+### リクエストメソッドの種類
+
+| GET     | サーバーリソースを要求する。                                                                                                        |
+| ------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| HEAD    | 要求したリソースが予想より大きい場合に備えて、リソースの情報を含むヘッダーを先に要求する。                                      |
+| POST    | サーバーにリソースを追加しようとするときに使用される。                                                                      |
+| PUT     | すでにサーバーに存在するリソースを更新または置換するときに使用する。                                                                |
+| PATCH   | すでにサーバーに存在するリソースの一部を修正する場合に使用する。                                                                 |
+| DELETE  | サーバーに存在するリソースを削除するために使用する。                                                                               |
+| OPTIONS | サーバーの特定リソースに対して存在するメソッドを調べるために使用する。                                                            |
+| CONNECT | WebサーバーにHTTPトンネリングを要求したり、対象目的地とTCPセッションを確立してクライアントと目的地間のデータプロキシを可能にする。 |
+| TRACE   | Webサーバーに要求を処理せずにエコーイングするよう要求する。                                                                             |
+
+<aside>
+サーバー側でTRACEメソッドをサポートする前に、XST（Cross-Site Tracking）攻撃でTRACEメソッドがどのような役割を果たすか調べてください :)
+XST攻撃では、攻撃者はXSS攻撃を利用して認証されたユーザーの認証情報を盗みます。
+
+</aside>
+
+上記のメソッドはすべてのサーバーで正確に実装する義務はないため、正しく実装されていないWebサーバーも存在します。使用する前に検証することをお勧めします。
+
+### サーバー応答
+
+まあ覚えるのが面倒なので、200、404、403程度だけ覚えておきましょう...
+
+[Hypertext Transfer Protocol (HTTP) Status Code Registry](https://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml)
+
+## GoでWebリソースを取得する
+
+Go言語ではブラウザのように画面にHTMLページをレンダリングしません。
+
+それではリクエストを作成し、クライアント側で発生するささいなミスについて見ていきましょう。
+
+### GoのデフォルトHTTPクライアントを利用する
+
+net/httpパッケージには一度限りのHTTPリクエストができるデフォルトクライアントがあります。
+
+例えば、http.Head関数を使用して与えられたURLにHeadリクエストを送ることができます。
+
+以下のコードはHeadリクエストを通じて時刻を取得し、コンピュータの時刻と比較するコードです。
+
+```go
+package main
+
+import (
+	"net/http"
+	"testing"
+	"time"
+)
+
+func TestHeadTime(t *testing.T) {
+	resp, err := http.Get("https://www.time.gov")
+	if err != nil {
+		t.Fatal(err)
+	}
+	_ = resp.Body.Close()
+
+	now := time.Now().Round(time.Second)
+	date := resp.Header.Get("Date")
+	if date == "" {
+		t.Fatal("no Date header received from time.gov")
+	}
+	dt, err := time.Parse(time.RFC1123, date)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	t.Logf("time.gov: %s (skew %s)", dt, now.Sub(dt))
+}
+```
+
+![約2秒程度の差があることが確認できる。](./images/Untitled.png)
+
+約2秒程度の差があることが確認できます。
+
+上記のコードの3つの部分に注目しましょう。
+
+1つ目はHttp.Get関数を使用したデフォルトリソース要求部分で、このときGoのHTTPクライアントは自動的にURLスキーマで指定されたhttpsプロトコルに変更します。
+
+2つ目は応答ボディを閉じる部分で、後ほど応答ボディを読まなくても必ず閉じなければならない理由を見ていきましょう。
+
+最後にサーバーが応答を生成した時刻に関する情報であるDateヘッダーを取得する部分で、この情報を使用して現在のコンピュータの時刻とどれだけ差があるか比較できます。
+
+### 応答ボディを閉じる
+
+HTTP/1.1はクライアントがサーバーとのTCP接続を維持して複数のHTTPリクエストを維持できる機能であるkeepaliveが存在します。それでもクライアントは以前の応答に読み取っていないバイトがある場合、TCPセッションを再利用できないとされますが、GoのHTTPクライアントは応答ボディを閉じるときに自動的にすべてのバイトを消費して再利用できるようにしてくれます。
+
+したがって、応答ボディを閉じることはTCPセッションを再利用するために重要です。
+
+しかし、暗黙的に応答ボディを消費することは良くありません。
+
+このとき2つの方法を選択できます。
+
+1. headメソッドを使用して必要なデータかどうか確認してから要求する。
+
+   ```jsx
+   func TestHeadTime(t *testing.T) {
+   	//ボディ消費時のオーバーヘッド防止
+   	resp, err := http.Head("https://www.time.gov")
+   	if err != nil {
+   		t.Fatal(err)
+   	}
+   	_ = resp.Body.Close()
+   ```
+
+2. io.Copy関数とioutil.Discard関数を活用した明示的消費
+
+   ```go
+   _, _ = io.Copy(ioutil.Discard, resp.Body)
+   _ = resp.Body.Close()
+   ```
+
+   上記のようにBodyのすべてのバイトを読み取ってioutil.Discardにすべて書き込む形式で応答を消費します。
+
+   また、上記のコードで\_(アンダースコア)を使用して戻り値を無視したことを示しています。
+
+### タイムアウトとキャンセルの実装
+
+上記のコードは何の問題もないように見えるかもしれません。
+
+しかし深刻な問題があります。タイムアウト時間が設定されていないということです。
+
+つまり、実サービスでこのコードを運用すると、特定のエンドポイントにリクエストが積み重なってサービスが誤作動する場合が発生する可能性があるということです。
+
+以下はnet/http/httptestパッケージにある関数を使用して実装した、ループが発生するサーバーにリクエストを送った場合です。
+
+```go
+package main
+
+import (
+	"net/http"
+	"net/http/httptest"
+	"testing"
+)
+
+func blockIndefinitely(w http.ResponseWriter, r *http.Request) {
+	select {}
+}
+
+func TestBlockIndefinitely(t *testing.T) {
+	ts := httptest.NewServer(http.HandlerFunc(blockIndefinitely))
+	_, _ = http.Get(ts.URL)
+	t.Fatal("client did not indefinitely block")
+}
+```
+
+httptest.NewServer関数を使用してサーバーを作成しますが、HandlerFuncとしてblockIndefinitelyという関数を割り当てました。
+
+上記のようにblockIndefinitelyはユーザー定義関数で、何もハンドリングしていないことが分かります。
+
+このサーバーのURLにGetヘルパー関数でリクエストを送りますが、タイムアウトが存在しないため、テスト時間が終了するまで閉じ込められます。
+
+![](./images/Untitled-1.png)
+
+テスト最大時間30秒に設定、エラーとともに30秒で終了したことが分かります。
+本ではこれを「Goテストランナーがタイムアウトしてテストを中断し、スタックトレースを出力した」と表現しました。
+
+それではデッドラインコンテキストを使用して接続にタイムアウトを追加しましょう。また、タイムアウト後に接続をcancel関数でキャンセルすることも実装してみましょう。
+
+上記のコードにサーバーから5秒間応答がないときにリクエストをタイムアウトさせる機能を追加しました。
+
+```go
+func TestBlockIndefinitelyWithTimeout(t *testing.T) {
+	ts := httptest.NewServer(http.HandlerFunc(blockIndefinitely))
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	req, err := http.NewRequestWithContext(ctx, "GET", ts.URL, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		if !errors.Is(err, context.DeadlineExceeded) {
+			t.Fatal(err)
+		}
+		return
+	}
+	_ = resp.Body.Close()
+}
+```
+
+実行結果は以下の通りです。
+
+![5秒以内に終了し、自動的にキャンセル処理してエラーも出力されない](./images/Untitled-2.png)
+
+5秒以内に終了し、自動的にキャンセル処理してエラーも出力されません。
+
+または以下のコードのように
+
+### 永続的TCP接続の無効化
+
+作成中...

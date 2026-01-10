@@ -1,0 +1,322 @@
+---
+title: "Docker swarm Orchestration"
+date: 2021-09-09 11:12:00 +0900
+tags: ["docker", "docker swarm", "server"]
+lang:
+  - ja
+machine_translated: true
+---
+
+# はじめに
+
+この投稿はDocker内にDocker（dind）機能を利用してローカルでクラスタと類似した環境を構成し、
+docker swarmを利用してクラスタを制御するOrchestrationを実習する方法についての投稿です。
+
+## docker swarm、Orchestrationとは？
+
+docker swarmはkubernetesと同じOrchestrationツールです。
+例えば5台のサーバーがあると考えてみましょう
+Orchestrationツールを使用しない場合は、各サーバーに同じ機能を持つように設定したり、それぞれ特定の機能を担当するように設定する必要があります。
+しかしこの場合、特定の機能やサービスに多くのリクエストが来た場合、手動で該当サービスをもっと作成する必要があります。
+しかしOrchestrationツールを利用すれば、設定値に従って特定のサービスを作成・維持するため、負荷が多くかかった時は設定を変えるだけで良く、その作業も自動化できます。
+またサービスをアップデートする時にサービスを停止せずにデプロイすることが可能です。
+（特定のサーバーにサービスを集中して配置するのではなく分散して配置するため、順次デプロイを進めれば中断なしでも可能です）
+デプロイした時に該当デプロイに問題が発生した場合はデプロイを中断してデプロイ前の状態に戻し、サービスに問題が発生して終了した場合は自動で再起動も行います。
+このようにサービスがデプロイ中にも中断されず、停止しないようにする必要がある場合に使用すると良いツールです。
+
+## docker swarmで使用する用語説明
+
+|     名前     |                                                      役割                                                      |
+| :----------: | :------------------------------------------------------------------------------------------------------------: |
+|   compose    |                                複数のコンテナで構成されたDockerアプリケーションを管理                                 |
+|    swarm     |                                             クラスタ構築および管理                                              |
+|   service    |            基本的なデプロイ単位、swarmでクラスタ内のサービスを管理、基本dockerのrunと類似            |
+|    stack     |                           swarmで複数のサービスを合わせた全体アプリケーションを管理                           |
+|     node     |                                     swarmクラスタに属するDockerサーバーの単位                                     |
+| manager node | swarmクラスタの状態を管理するノード、同時にworker nodeになることができ、ここでのみswarmコマンドを実行可能 |
+| worker node  |                        manager nodeのコマンドを受けてコンテナを作成、状態をチェックするノード                        |
+|     task     |                 コンテナデプロイ単位、サービスは複数のtaskを実行、taskはコンテナを管理                  |
+
+# docker swarm実習
+
+docker swarmは基本的に複数のサーバーを管理するツールです。
+しかし私たちが実習する時はほとんどの場合ノートパソコン1台だけで実習します。
+そのため実際の環境とは少し異なる仮想実習環境を作ります。
+様々な方法がありますが、dind（docker in docker）機能を活用してDockerコンテナをそれぞれノードとして使用して実習します。
+（他の方法としてはvagrantを利用して仮想マシンを作成したり、クラウドサービスを利用して実際のクラスタを実装することもできます）
+docker composeを利用して1つのmanager node（dind）と3つのworker node（dind）を作成します。
+参考にした既存のブログ記事ではregistryコンテナが別途存在しましたが、実習の結果特に必要性を感じなかったので削除しました。
+（docker registyはdocker hubを代替するローカルサーバー程度に理解すれば良いでしょう）
+
+## 仮想クラスタ作成
+
+docker-swarmディレクトリを作成し、その中に以下のコードを参照してファイルを作成しましょう。
+**docker-compose.yaml**
+
+```yaml
+version: "3"
+services:
+  manager:
+    container_name: manager
+    image: docker:dind
+    privileged: true
+    tty: true
+    ports:
+      - 8000:80
+      - 9000:9000
+    depends_on:
+      - registry
+    expose:
+      - 3375
+    volumes:
+      - "./stack:/stack"
+  worker01:
+    container_name: worker01
+    image: docker:dind
+    privileged: true
+    tty: true
+    depends_on:
+      - manager
+      - registry
+    expose:
+      - 7946
+      - 7946/udp
+      - 4789/udp
+  worker02:
+    container_name: worker02
+    image: docker:dind
+    privileged: true
+    tty: true
+    depends_on:
+      - manager
+      - registry
+    expose:
+      - 7946
+      - 7946/udp
+      - 4789/udp
+  worker03:
+    container_name: worker03
+    image: docker:dind
+    privileged: true
+    tty: true
+    depends_on:
+      - manager
+      - registry
+    expose:
+      - 7946
+      - 7946/udp
+      - 4789/udp
+```
+
+<details>
+<summary>registryを利用した例</summary>
+<div markdown="1">
+
+```yaml
+version: "3"
+services:
+  registry:
+    container_name: registry
+    image: registry:latest
+    ports:
+      - 5000:5000
+    volumes:
+      - "./registry-data:/var/lib/registry"
+  manager:
+    container_name: manager
+    image: docker:dind
+    privileged: true
+    tty: true
+    ports:
+      - 8000:80
+      - 9000:9000
+    depends_on:
+      - registry
+    expose:
+      - 3375
+    command: "--insecure-registry registry:5000"
+    volumes:
+      - "./stack:/stack"
+  worker01:
+    container_name: worker01
+    image: docker:dind
+    privileged: true
+    tty: true
+    depends_on:
+      - manager
+      - registry
+    expose:
+      - 7946
+      - 7946/udp
+      - 4789/udp
+    command: "--insecure-registry registry:5000"
+  worker02:
+    container_name: worker02
+    image: docker:dind
+    privileged: true
+    tty: true
+    depends_on:
+      - manager
+      - registry
+    expose:
+      - 7946
+      - 7946/udp
+      - 4789/udp
+    command: "--insecure-registry registry:5000"
+  worker03:
+    container_name: worker03
+    image: docker:dind
+    privileged: true
+    tty: true
+    depends_on:
+      - manager
+      - registry
+    expose:
+      - 7946
+      - 7946/udp
+      - 4789/udp
+    command: "--insecure-registry registry:5000"
+```
+
+</div>
+</details><br />
+
+次に以下のコマンドを入力しましょう
+
+```
+$ docker compose up -d
+$ docker ps
+```
+
+これでクラスタの役割をするコンテナが4つまたは5つ作成されたことを確認できるでしょう。
+
+## manager登録
+
+本来は`docker swarm init`コマンドを利用して登録すれば良いのですが、現在コンテナ内に仮想クラスタを実行しているため、コマンドの前に次のコマンドを追加で入力する必要があります。
+
+```
+$ docker exec -it (実行するターゲット, manager or worker) \
+(実行するコマンド)
+```
+
+したがってmanagerでdocker swarm initコマンドを実行するには次のコマンドを実行すれば良いです。
+
+```
+$ docker exec -it manager \
+docker swarm init
+```
+
+コマンドを入力すると以下に
+
+```
+$ docker swarm join --token (トークン値) (マネージャーIP):(port)
+```
+
+形式で出力されますので、次のコマンドをコピーしてください。
+
+## worker登録
+
+上でコピーしたコマンドをworkerで実行すれば、私たちが作成したswarmクラスタに登録できます。
+次のような方法でworker01 ~ worker 03まで登録を進めましょう。
+
+```
+$ docker exec -it worker01 \
+docker swarm join --token (トークン値) (マネージャーIP):(port)
+```
+
+```
+$ docker exec -it worker02 \
+docker swarm join --token (トークン値) (マネージャーIP):(port)
+```
+
+```
+$ docker exec -it worker03 \
+docker swarm join --token (トークン値) (マネージャーIP):(port)
+```
+
+次のコマンドでノードが正しく登録されたか確認してみましょう
+
+```
+$ docker exec -it manager \
+docker node ls
+```
+
+もしworker nodeを含めて4つのnodeが表示されればクラスタの作成に成功したことになります。
+
+<details>
+<summary>docker registryイメージ登録</summary>
+<div markdown="1">
+
+## イメージタグ作成
+
+```
+$ docker tag (元のイメージ) localhost:5000/(元のイメージ)
+```
+
+## registryコンテナにイメージ登録
+
+```
+$ docker push localhost:5000/(元のイメージ)
+```
+
+## workerコンテナでイメージダウンロード
+
+```
+$ docker exec -it worker01 \
+docker pull registry:5000/(元のイメージ)
+```
+
+## イメージ確認
+
+```
+$ docker exec -it worker01 \
+docker images
+```
+
+</div>
+</details><br />
+
+## サービス作成
+
+swarmで単一コンテナをデプロイするにはserviceという単位を使用しますが、次のコマンドで実行できます。
+
+```
+docker service create --name [サービス名] -p [外部ポート]:[内部ポート] [Dockerイメージ]:[タグ]
+```
+
+これをテストするために[hashicorp/http-echo](https://hub.docker.com/r/hashicorp/http-echo/)イメージを使用してみましょう
+
+```
+docker exec -it manager \
+docker service create --name test_swarm -p 5678:5678 hashicorp/http-echo:latest
+```
+
+次のコマンドでサービスが作成されたことを確認できます。
+
+```
+docker exec -it manager \
+docker service ls
+```
+
+作成されたことが確認できたら、次のコマンドでスケールを調整してみましょう
+
+```
+docker exec -it manager \
+docker service scale test_swarm=6
+```
+
+しばらく待つとswarmが自動的にコンテナを作成して各ノードに分散配置します。
+そしてservice lsコマンドで再度確認すると、REPLICASが1個から9個に増えたことを確認できます。
+
+作成したサービスを削除するには次のコマンドを入力しましょう
+
+```
+docker exec -it manager \
+docker service rm test_swarm
+```
+
+## 参考資料
+
+[スウォーム(swarm)を利用したDockerコンテナデプロイ\_1](https://cornswrold.tistory.com/512?category=930033)
+[Docker Swarmを利用した簡単で素早い分散サーバー管理](https://subicura.com/2017/02/25/container-orchestration-with-docker-swarm.html)
+[docker docs](https://docs.docker.com/engine/swarm)

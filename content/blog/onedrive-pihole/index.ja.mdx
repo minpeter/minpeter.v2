@@ -1,0 +1,98 @@
+---
+title: "OneDriveとPi-hole（TIL）"
+description: Pi-holeのDNSブロックによるOneDriveの問題と解決方法
+date: 2022-09-25 11:01:00 +0900
+tags: ["DNS", "TIL", "homelab", "onedirve", "pihole", "server"]
+lang:
+  - ja
+machine_translated: true
+---
+
+### update log
+
+| 日付       | 変更点               |
+| ---------- | -------------------- |
+| 2021/09/12 | 最初に記事を書いた日 |
+| 2022/09/25 | 現在の状況をアップデート   |
+
+## 事件の発端
+
+大したことないことで2日を無駄にした。
+Windows 11 DEVチャンネルがBETAチャンネルと完全に分離されて、別のビルド番号を持つようになった。
+どういう意味かというと、もうDEVからBETAに移行できないということで、これからDEVでは実使用として使うのが難しくなるということだ。
+また、ちょうど22454ビルドに移行して、前のビルドに存在したsandbox動作不能は直らないまま、タスクバーのアイコンが左に寄る奇妙なバグが発生した。
+正直こんなにバグが多いのにDEVチャンネルのフライトを続ける理由もなかったし、
+そのためBETAチャンネルに下げることにした。
+
+## OneDriveとPi-holeの相性
+
+BETAチャンネルに下げるためには全部再インストールする必要があった。
+最近wingetパッケージマネージャーでプログラムのインストールも簡単になったし、Windowsのインストールもそんなに時間がかからないので、クリーンインストールすることにした。
+インストールUSBを作って、BETAをインストールした後、OneDriveのローカルフォルダバックアップをするときに問題が発生した。
+オプションがないのだ。
+もしかしてWindowsのインストールが間違ったかと思って再インストールもしてみたし、再びDEVに上げて設定もしてみた。
+全部失敗だった。
+何が問題だったのか？
+思ったより簡単だった。
+[about onedrive](https://support.microsoft.com/ko-kr/office/onedrive%eb%a6%b4%eb%a6%ac%ec%8a%a4-%ec%a0%95%eb%b3%b4-%ec%b0%b8%ec%a1%b0-845dcf18-f921-435e-bf28-4e24b95e5fc0?ui=ko-kr&rs=ko-kr&ad=kr)
+に入ってみると、以下のように書いてある。
+
+```
+注意事項:
+
+表の空欄は現在そのリングにデプロイ中のビルドがないことを意味します。
+
+OneDrive同期アプリのアップデートを適用するには、コンピュータが次に接続できる必要があります: "oneclient.sfx.ms"と"g.live.com"。これらのドメインをブロックしていないか確認してください。これらは機能の有効化/無効化やバグ修正の適用にも使用されます。Microsoft 365で使用されるURLとIPアドレスに関する詳細情報
+
+OneDrive同期アプリのアップデートプロセスについて詳しく学ぶ。
+
+遅延リングリリースを完了した後、ビルドがプロダクションリングにリリースされるのを待ってから、遅延リングの次のリリースとして選択されます。この場合、正確なビルド番号と目標日付を公開する前に、遅延列を「次のリリース: 19.222.x」にアップデートして顧客の計画を支援します。
+```
+
+2行目をよく見てみよう
+「oneclient.sfx.ms」と「g.live.com」に接続できなければならない。
+でもpingテストをしてみると「g.live.com」に接続できなかった。
+正確にはIPアドレスが全く見つからなかったので、Pi-holeがブロックしているのだ。
+DNSサーバーをデフォルト状態に戻して、再びバックアップ設定をしてみたら、嘘のようにうまく動作した。
+ああもう...
+正直MSのせいじゃないwww g.live.comが広告画像サーバー、MSCニュースサーバー、OneDriveの一部機能まであまりにも広範囲に使われているだけで...
+Pi-holeにホワイトリストを設定して、Windows 11 BETAチャンネルへの移行を完了した。
+
+記事で言及した以外にもいろいろな馬鹿なことをして2日も無駄にした。
+~~私の貴重な週末...~~
+
+## 2022/09/25 アップデート
+
+上記の事件後、約2週間ほどPi-holeを使わずCloudflareのDNSを使っていた。
+しかしある時点でPi-holeのデフォルトAdlistがアップデートされ、別途のホワイトリストなしに次のように正常にクエリが可能になった。
+
+```
+C:\Users\minpeter>nslookup
+Default Server:  pi.hole
+Address:  192.168.0.120
+
+> oneclient.sfx.ms
+Server:  pi.hole
+Address:  192.168.0.120
+
+Non-authoritative answer:
+Name:    e9659.dspg.akamaiedge.net
+Addresses:  2600:1410:1000:185::25bb
+          2600:1410:1000:18d::25bb
+          104.74.21.118
+Aliases:  oneclient.sfx.ms
+          oneclient.sfx.ms.edgekey.net
+
+> g.live.com
+Server:  pi.hole
+Address:  192.168.0.120
+
+Non-authoritative answer:
+Name:    g-msn-com-nsatc.trafficmanager.net
+Address:  52.231.199.126
+Aliases:  g.live.com
+          g.msn.com
+```
+
+したがってPi-holeをDNSサーバーとして使用してもOneDriveバックアップエラーは発生しない。
+良かったと思う。

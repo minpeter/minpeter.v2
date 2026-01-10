@@ -1,0 +1,146 @@
+---
+date: 2021-08-22 22:21:00 +0900
+title: JekyllとGitHub Pages
+description: GitHub PagesにJekyllを使ったブログ作成とテーマ選択からデプロイまでの過程記録
+tags:
+  - github
+  - pages
+  - jekyll
+  - ruby
+lang:
+  - ja
+machine_translated: true
+---
+
+GitHub Pages... もう3〜4回は試したが、Jekyllを使って試したのは全部失敗だった。
+
+気に入ったテーマは設定が難しかったり、プログラミングを始めたばかりでJekyllがどのように動作するのか把握できなかった。
+
+そのためNotionやiPadのノートアプリにメモやその日学んだことを書いていたが、考えてみるとポートフォリオや他の人に見せるときに不便が予想された。
+
+ちょうど学校で先輩が開発ブログを作っておくと良さそうだとアドバイスしてくれて、再びGitHub Pagesに挑戦することにした！
+
+まず最初にやるべきことはテーマを選ぶことだが、最初は[no-style-please](https://github.com/riggraz/no-style-please)というテーマを使いたかったが、このテーマが思ったより設定が難しくて[jekyll-theme-chirpy](https://github.com/cotes2020/jekyll-theme-chirpy)というテーマを使うことになった。（starも多い方でforkも1.8kもあった！）
+
+テーマを選んだら次は... ただテーマのREADMEファイルを読みながら作ればいい :)
+
+それでは私がブログを構築した方法について紹介する。GitHub Pagesを使う方法は思ったより多いが、その中の一つの方法を紹介するので、参考程度に見てもらえればと思う。
+
+## Rubyのインストール
+
+私はRubyを使わないし使い方も知らないが、ざっと検索してみるとインストール方法がいくつかあった。
+その中でrvmというRubyバージョンマネージャーがあったが、NodeJSのnvmのように便利だろうと予想してrvmを使ったインストールを行った。
+**zsh + oh my zsh環境を使用する場合はrvmではなく他の方法を使ってインストールすることをお勧めする**
+
+推奨は[rvm.io](https://rvm.io/rvm/install)の公式ドキュメントを参照することだが、簡単に説明すると
+
+```bash
+gpg --keyserver keyserver.ubuntu.com --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
+```
+
+```bash
+curl -sSL https://get.rvm.io | bash -s stable --ruby
+```
+
+をした後にターミナルを一度再起動すればrvmコマンドが動作するはずだ。
+
+しかし... ここで一つ小さな問題が発生するが、zshを使う場合は[zshインストール過程](https://rvm.io/integration/zsh)を通じて設定しなければならないが、これが難しいだけでなく、ほぼすべてのzshユーザーが使うoh-my-zshを使う場合、公式ページで直接rvmを使わないことを推奨すると書いてあるので...
+
+zsh + oh-my-zshの組み合わせを使う私としては最悪だった。
+[![](./assets/zsh+ohmyzsh-bug.png)](https://rvm.io/integration/zsh)
+
+実はこれを知らなかったときでさえも
+
+```bash
+curl -sSL https://get.rvm.io | zsh
+```
+
+コマンドでインストールしたが、知らずに使っていると問題が生じた...
+
+ターミナル起動時にrvmが自動起動せず、毎回手動で起動しなければならない...
+
+もうrvmじゃなくて他のを使おう...
+
+## jekyll、bundlerのインストール & プロジェクトの作成
+
+rvmの問題については後で詳しく調べることにして、続けて説明すると、以下のコマンドを実行して基本ブログテンプレートを生成する。
+
+```bash
+gem install jekyll bundler # jekyll、bundlerのインストール
+jekyll new username.github.io #usernameには自分のgithub idを入力
+cd username.github.io #username.github.ioフォルダに移動
+```
+
+ここまで実行したら、基本で設定されているテーマでブログを実行できるが、次のコマンドを入力すればいい。
+
+```bash
+bundle exec jekyll serve #jekyllサーバー起動
+```
+
+その後ブラウザで127.0.0.1:4000にアクセスするとブログが見えるはずだ。
+
+## テーマの設定
+
+私が適用したテーマは[chirpy](https://github.com/cotes2020/jekyll-theme-chirpy)というテーマだ。
+該当GitHubリポジトリのREADMEファイルによく説明されているため、簡単に説明する。
+
+`Gemfile`を作成するか編集する必要があるが、一番下の行に以下の内容を書けばいい。
+
+```sh
+gem "jekyll-theme-chirpy"
+```
+
+`_config.yml`を作成した場合は追加して、編集した場合はthemeを見つけて変更しよう
+
+```yml
+theme: jekyll-theme-chirpy
+```
+
+そして以下のコマンドを実行しよう
+
+```bash
+bundle
+```
+
+次は少し難しい段階だが
+
+```bash
+cd "$(bundle info --path jekyll-theme-chirpy)"
+```
+
+コマンドでchirpyテーマがインストールされたフォルダに移動し、そのディレクトリの
+
+```
+.
+├── _data
+├── _plugins
+├── _tabs
+├── _config.yml
+└──  index.html
+```
+
+ファイルをプロジェクトフォルダにコピーしよう（重複する場合は上書き）
+これでサーバーを起動すると、基本のchirpyテーマがローカルの4000番で実行されるはずだ。
+以降の段階は説明が難しい。
+\_config.ymlファイルをよく探して適切に名前、メールなどに置き換えて、about.mdなどを修正した後サーバーを起動すると適用された姿が見えるはずだ！
+
+- 参考にindex.mdファイルが存在する場合は削除しないと正常に動作しない。
+- 投稿作成は\_postsディレクトリに`日付-投稿タイトル.md`形式で作成すればいい。
+
+## GitHub Pagesへのデプロイ
+
+この部分で私は一つ決心した。
+実は多くの（そんなに多くはない）静的サイトジェネレーターの中で初めて見るRubyのJekyllを選んだ理由は、GitHub Pagesで強力にサポートしているからだったが... 私が選んだテーマはGitHub内の何かのビルドオプションのため、直接ビルドが不可能だという。
+
+したがって`GitHub Actions`を使用しなければならないという。
+Actionsでビルドした後、ビルド内容を別のブランチを作ってそのブランチをGitHub Pagesに登録するということだが...
+実はこれを使えば他の静的サイトジェネレーターを使っても問題ない！
+
+したがって！rvmのzsh issue、GitHub Pagesの秘密が加わって... このブログはしばらく使ってから、Goで作られたサイトジェネレーターhugoに移行しようかと考えている...
+
+~~正直RVM oh-my-zshはやりすぎだよ...~~
+
+---
+
+2023年11月27日追記
+私はNext.jsでブログを作って使っているが、静的サイトジェネレーターを使ってGitHub Pagesにサイトをデプロイする予定なら、GitHub Actionを使ってデプロイするのがお勧めのオプションだ。この記事でテーマ設定部分はまだ従っても良いが、デプロイ部分は他のブログを探して設定するのが良いだろう。（あ、なんだ、読み返してみたらどうせ説明を書いてなかったんだ...？）

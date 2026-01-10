@@ -1,0 +1,153 @@
+---
+title: DockerでGNS3を実行する
+description: "素早くGNS3を設定してネットワーク実験を行う"
+date: 2024-04-12
+lang:
+  - ja
+machine_translated: true
+---
+
+## はじめに
+
+このチュートリアルでは、MacBookでOrbstackのLinux VM環境内でDockerを使用してGNS3を起動し、簡単なトポロジを実行します。
+
+このような設定の利点は以下の通りです。
+
+1. インストールが簡単
+2. システムから分離されているため、問題が発生するリスクが低減
+
+GNS3デスクトップの設定とパケットキャプチャはこの記事の範囲外であり、ルーターとスイッチを通じてAlpine Dockerコンテナのルーティングをテストすることを目標としています。
+
+また、以下のプロジェクトに依存しています。
+
+[https://github.com/jsimonetti/docker-gns3-server](https://github.com/jsimonetti/docker-gns3-server)
+
+## MacBookでx86 Docker実行環境を構築
+
+何度かテストした結果、arm64環境のDocker上でGNS3サーバーの特定のネットワーキング機能が正常に動作しないことが分かりました。
+
+そのため、正常な実験のために仮想マシンを使用し、Rosettaを利用してx86環境をシミュレートします。
+
+もしWindowsユーザーやx86ベースの環境でDockerがインストールされている場合は、このパートをスキップしても構いません。
+
+[https://orbstack.dev/download](https://orbstack.dev/download)からファイルをダウンロードするか、`brew install orbstack`を実行してインストールします。
+
+インストール後、起動してMachinesタブに移動します。
+
+![Untitled](./images/Untitled.png)
+
+以下と同じ設定（Ubuntu、CPU type: intel）で作成します。
+
+![Untitled](./images/Untitled-1.png)
+
+ダブルクリックしてターミナルを開きます。
+
+![Untitled](./images/Untitled-2.png)
+
+以下のコマンドを順番に入力してDockerを設定します。
+
+```bash
+cd ~
+curl -L get.docker.com | sh
+```
+
+以下のコマンドを実行してDockerのインストールを確認します。
+
+```bash
+sudo docker version
+sudo docker ps
+```
+
+## Docker上にGNS3サーバーを構築
+
+上記の続きで、Dockerがインストールされたx86環境のターミナルであると仮定します。
+
+以下のコマンドを実行してGNS3データ保存用のフォルダを作成します。
+
+```bash
+mkdir gns3-data
+```
+
+その後、以下のコマンドでGNS3サーバーを実行します。
+
+```bash
+sudo docker run \
+   --rm -d \
+   --name gns3 \
+   --net=host --privileged \
+   -e BRIDGE_ADDRESS=172.21.1.1/24 \
+   -v ./gns3-data:/data \
+   jsimonetti/gns3-server:latest
+```
+
+MacBookで[http://ubuntu-gns3.orb.local:3080/](http://ubuntu-gns3.orb.local:3080/)にアクセスします。Orbstackを使用していない場合は、[http://localhost:3080](http://localhost:3080)または仮想マシンのIPと3080ポートでアクセスします。
+
+\*仮想マシンの名前が異なる場合もアドレスが異なる可能性があります。[https://orb.local/](https://orb.local/)で実行中のアドレスを確認できます。
+
+![Untitled](./images/Untitled-3.png)
+
+Web UIにアクセスできるようになります。
+
+## 非常に簡単なGNS3実習
+
+GNS3内部で2つのDockerコンテナを作成し、IPを割り当て、スイッチを通じて通信が可能かどうかを実習します。
+
+`Add blank project`をクリックし、任意の名前を入力します。
+
+![Untitled](./images/Untitled-4.png)
+
+上部中央の`+`ボタンをクリックして`New Template...`を選択します。
+
+![Untitled](./images/Untitled-5.png)
+
+Nextをクリックした後、フィルターにalpineを検索します。その後、リストの中でEmulatorタイプがDockerのアイテムのActionsからダウンロードアイコンをクリックします。
+
+![Untitled](./images/Untitled-6.png)
+
+`Create docker template`をクリックして作業を完了します。
+
+![Untitled](./images/Untitled-7.png)
+
+この画面からAlpine Linux 2つとEthernet switch 1つを取り出します。
+
+![Untitled](./images/Untitled-8.png)
+
+`+`の隣のボタンで線を接続します。
+
+![Untitled](./images/Untitled-9.png)
+
+各Alpine Linuxマシンを右クリックして`Configure`メニューを開き、`Edit network configuration`をクリックします。
+
+以下の内容を貼り付けます。（お互いのaddressが異なることに注意してください。）
+
+```text
+#alpine linux 1
+auto eth0
+iface eth0 inet static
+	address 192.168.0.1
+	netmask 255.255.255.0
+```
+
+```text
+#alpine linux 2
+auto eth0
+iface eth0 inet static
+	address 192.168.0.2
+	netmask 255.255.255.0
+```
+
+上部で実行ボタンを見つけてクリックします。
+
+![Untitled](./images/Untitled-10.png)
+
+ノードを右クリックして`Web console`をクリックします。（Alpine 1、Alpine 2両方）
+
+![Untitled](./images/Untitled-11.png)
+
+上記のようにAlpine 1から192.168.0.2へ、Alpine 2から192.168.0.1へPingが成功するかテストします。
+
+成功です :)
+
+![Untitled](./images/Untitled-12.png)
+
+GNS3デスクトップも使いやすく、EVE-ngも素晴らしいですが、Linuxルーティングテーブルの実験程度なら、この設定が軽量で良いと思います。
