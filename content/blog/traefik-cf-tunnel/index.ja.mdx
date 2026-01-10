@@ -1,0 +1,344 @@
+---
+title: CloudflareトンネルによるTraefik設定
+description: ホームラボにはインターネットとDockerがあれば十分です
+date: 2024-11-29 15:02:00 +0900
+tags:
+  - traefik
+  - homelab
+  - server
+  - cloudflare
+  - docker
+lang:
+  - ja
+machine_translated: true
+---
+
+## はじめに
+
+ホームラボを初めて始めるとき、または既存の設定を再構成するときは、シンプルかつ柔軟な設定が重要です。
+この記事では、Raspberry Piのような小規模環境からProxmoxベースの環境まで対応できる実用的なソリューションを紹介します。
+
+ここでは、複雑なネットワーク設定やポートフォワーディング、SSL証明書の発行、固定IPなどの制約なしにホームラボをインターネットに公開する方法を扱います。
+
+「準備するものはたった2つ、インターネットとDockerだけです。」
+
+Cloudflare Tunnelを活用すれば、ネットワーク権限なしでも安定してプロジェクトをインターネットに接続できます。
+これにより、DDNSやポートフォワーディングなしでもSSLが適用された安定した接続を提供します。Cloudflare TunnelとTraefikを連携して、これらすべての機能を実装できます。
+
+では、具体的な方法を見ていきましょう！
+
+## 0: 準備
+
+`docker`、`docker compose`コマンドが使用可能で、Cloudflareにアカウントがあり、登録されたドメインが必要です。
+
+様々なドキュメントでこの過程をサポートするガイドを見つけることができます。
+
+この記事では[yourdomain.xyz](http://yourdomain.xyz)を例として説明します。
+
+## 1: traefik
+
+まず2つのコンテナを起動するdocker composeから始めましょう。
+
+```jsx
+services: traefik: image: "traefik:v3.2";
+command: -"--api.insecure=true" -
+  "--providers.docker=true" -
+  "--providers.docker.exposedbydefault=false" -
+  "--entryPoints.web.address=:80";
+ports: -"80:80" - "8080:8080";
+volumes: -"/var/run/docker.sock:/var/run/docker.sock:ro";
+
+iplogger: image: "ghcr.io/minpeter/iplogger";
+labels: -"traefik.enable=true" -
+  "traefik.http.routers.iplogger.rule=Host(`ip.local`)" -
+  "traefik.http.routers.iplogger.entrypoints=web";
+```
+
+上記の内容をそのままコピーして`docker-compose.yaml`というファイルを作成し、そのファイルがあるパスで`docker compose up`を実行すると、最初の実験の準備が完了です。
+
+この時点で、私たちは2つのことを達成しました。
+
+1. この記事でホスティングすることにしたサービス「minpeter/iplogger」コンテナを起動しました。ユーザーがリクエストを送ると、そのユーザーの情報を返す非常にシンプルなコンテナです。
+2. traefikコンテナを起動し、dashboardを設定しました。目で確認するために、[http://localhost:8080](http://localhost:8080)にアクセスして直接確認できます。
+
+これで2つのコンテナは接続されました。これをテストするために、以下のようなコマンドを使用しましょう。
+
+```jsx
+curl -H "Host:ip.local" localhost:80
+```
+
+その後、以下のような応答を受け取ることができるでしょう。
+
+```
+Your IP is: 192.168.97.1
+Hostname: e94c02ab482c
+IP: 127.0.0.1
+IP: ::1
+IP: 192.168.97.2
+RemoteAddr: 192.168.97.3:34676
+GET / HTTP/1.1
+Accept-Encoding: gzip
+Accept: */*
+User-Agent: curl/8.7.1
+X-Forwarded-For: 192.168.97.1
+X-Forwarded-Host: ip.local
+X-Forwarded-Port: 80
+X-Forwarded-Proto: http
+X-Forwarded-Server: 0867b509fb45
+X-Real-Ip: 192.168.97.1
+```
+
+これは、私たちがtraefikコンテナにリクエストを送り、`ip.local`というホスト名でアクセスしたことを意味します。
+
+\*ホスト名は、どのドメインを使用してHTTPプロトコルを使用するサービスにアクセスするときに自動的に追加されます。今回に限り、[localhost:80](http://localhost:80)でアクセスしたため、任意に指定しました。
+
+これで、traefik proxyとtraefik proxyの後ろで動作する1つのサービスを配置しました。
+
+このパートが難しい場合は、Traefikについてもう少し学習してからこのチュートリアルを進めることをお勧めします。
+
+次の順番は、これをcf tunnelで外部に公開することです。
+
+## 2: cloudflare tunnel
+
+まずCloudflareアカウントが必要です。tunnel機能は無料で一部の機能を除いて無料で提供されているので心配ありません。
+
+また、Cloudflareに接続されたドメインが必要です。ここまでは設定されていると仮定して進めます。
+
+[https://dash.cloudflare.com](https://dash.cloudflare.com)にログインした後、左のメニューを見ると「Zero Trust」というメニューを見つけることができます。クリックすると、次のような画面を確認できます。
+
+![image.png](./images/image.png)
+
+この画面で続けて「Networks > Tunnels」メニューに入ります。
+
+![image.png](./images/image%201.png)
+
+ここで青い「Add a tunnel」ボタンを押すと、次のような画面が表示されます。
+
+![image.png](./images/image%202.png)
+
+今回の例ではcloudflaredコンテナを活用するので、「Select Cloudflared」を選択しましょう。
+
+次のページで好きな名前を決めた後、「Save tunnel」を押すとtunnelが作成されます。
+
+![image.png](./images/image%203.png)
+
+その後入った画面でDockerを選択すると、`docker run...`で始まるコマンドボックスがあります。コピーした後、`--token`の後にある「eyJhI……」のような値を全部コピーします。
+
+さて、cloudflare tunnelにアクセスできるTokenを発行しました。
+
+次に、先ほど作成しておいた`docker-compose.yaml`を以下のように修正しましょう。
+
+```
+services:
+  traefik:
+    image: "traefik:v3.2"
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entryPoints.web.address=:80"
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+
+  iplogger:
+    image: ghcr.io/minpeter/iplogger
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.iplogger.rule=Host(`ip.yourdomain.xyz`)" ## 重要
+      - "traefik.http.routers.iplogger.entrypoints=web"
+
+  cloudflared:
+    image: "cloudflare/cloudflared:latest"
+    command: tunnel --no-autoupdate run
+    environment:
+      - TUNNEL_TOKEN=${TUNNEL_TOKEN}
+```
+
+そして先ほど実行した`docker compose up`コマンドをctrl+cでキャンセルした後、以下のように入力します。
+
+```
+TUNNEL_TOKEN="YOUR_CLOUDFLARE_TUNNEL_TOKEN (e.g. eyJhI...)" docker compose up
+```
+
+こうすると、cloudflared、traefik、iploggerコンテナが起動します。
+
+![image.png](./images/image%204.png)
+
+ターミナルで上記のように特にエラーが見つからなければ、再びCloudflare Zero Trustコンソールに戻りましょう。
+
+![image.png](./images/image%205.png)
+
+新しいコネクションが作成されました。「Next」ボタンを押してください。
+
+![image.png](./images/image%206.png)
+
+次のページで上記と同様に設定すればOKです。
+
+\*tmpf.meの場合、ご自身のドメインに設定してください。
+
+詳細な設定値は以下の通りです。
+
+```
+Subdomain: *
+Domain: exmaple.com
+Path: (none)
+Service Type: HTTP
+Service URL: traefik
+```
+
+さて、ほとんどの設定が終わりました。「Save Tunnel」ボタンを押すと、以下のような画面が表示されます。
+
+![image.png](./images/image%207.png)
+
+ここでTunnel IDをコピーします。これが最後のステップです！！
+
+Cloudflare Zero Trustコンソールから出て、該当ドメイン（私の場合tmpf.me）のダッシュボードで「DNS > Records」メニューに入ります。
+
+その後、以下のようにレコードを追加しましょう。
+
+```
+Type: CNAME
+Name: *
+Target: <Tunnel ID>.cfargotunnel.com
+Proxy status: ON
+```
+
+![image.png](./images/image%208.png)
+
+これで本当に終わりです。
+
+SSL、ポートフォワーディング、DDNSを含むすべての面倒な設定を既に完了したのと同じ状況です。
+
+本当でしょうか？確認のために「https://ip.yourdomain.xyz」にアクセスしてみましょう。（上記のcompose.yamlファイルで修正しました。）
+
+おめでとうございます！これでインターネット環境に左右されない個人リバースプロキシを作成しました。
+
+## 3: cloudflare companion
+
+ワイルドカードは常に最良のオプションではありません。
+
+ネストされたサブドメインに対して証明書を発行しないCloudflareでは、特にこのようなワイルドカード方式をドメインごとに1つしか使用できなくなります。
+
+したがって、1つの改善点があります。traefikで特定のサービスを宣言した場合に限り、DNSレコードを動的に追加すればどうでしょうか？
+
+[`ghcr.io/tiredofit/docker-traefik-cloudflare-companion:latest`](http://ghcr.io/tiredofit/docker-traefik-cloudflare-companion:latest)を通じて実装できます。
+
+ただし、いくつかの設定を行う必要があります。
+
+.envファイルを作成し、以下の内容を記入しましょう。
+
+```
+TUNNEL_TOKEN=<TUNNEL_TOKEN>
+TARGET_DOMAIN=<TARGET_DOMAIN>
+
+DOMAIN1=<DOMAIN1>
+DOMAIN1_ZONE_ID=<DOMAIN1_ZONE_ID>
+CF_TOKEN=<CF_TOKEN>
+```
+
+| TUNNEL_TOKEN    | 上で発行したcf tunnelのトークンです。そのまま貼り付けましょう。                                                                           |
+| --------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| TARGET_DOMAIN   | 動的に追加されるレコードの値です。上でワイルドカードドメインを登録するときに使用した「Tunnel ID.cfargotunnel.com」の値をそのまま入力します。 |
+| DOMAIN1         | 動的にトラッキングするドメインの名前です。「yourdomain.xyz」になります。                                                                    |
+| DOMAIN1_ZONE_ID | 「yourdomain.xyz」のCloudflare上のzone_idです。以下で取得方法を説明します。                                                                |
+| CF_TOKEN        | Cloudflareのapiトークンです。レコードを更新する権限が必要です。以下で発行します。                                                          |
+
+### DOMAIN1_ZONE_ID
+
+Cloudflareコンソールで取得したいドメインをクリックします。（yourdomain.xyzになりますね）
+
+![Screenshot 2024-12-02 at 11.01.02 AM.png](./images/Screenshot_2024-12-02_at_11.01.02_AM.png)
+
+このようなページが表示され、黄色い部分の値をコピーします。
+
+### CF_TOKEN
+
+[https://dash.cloudflare.com/profile/api-tokens](https://dash.cloudflare.com/profile/api-tokens)にアクセスします。
+
+その後、青い「Create Token」をクリックします。（API KeyではなくAPI TokensのCreate Tokenです）
+
+![image.png](./images/image%209.png)
+
+Edit zone DNSテンプレートの「Use template」をクリックします。
+
+![image.png](./images/image%2010.png)
+
+Zone Resourcesの範囲を「All zone」に選択し、Continue to summaryを押します。（範囲を特定しても構いません）
+
+次の画面で表示されるトークンを大切にコピーしましょう。
+
+次に、先ほどstep 2で追加したドメインレコード設定の\*.yourdomainワイルドカードレコードを削除しましょう。自動でtraefikの設定を確認して必要なレコードだけ追加されるため、必要ありません。
+
+### Final compose
+
+```yaml
+services:
+  traefik:
+    image: "traefik:v3.2"
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entryPoints.web.address=:80"
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+
+  iplogger:
+    image: ghcr.io/minpeter/iplogger
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.iplogger.rule=Host(`ip.tmpf.me`)"
+      - "traefik.http.routers.iplogger.entrypoints=web"
+
+  whoami:
+    image: traefik/whoami
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.whoami.rule=Host(`whoami.tmpf.me`)"
+      - "traefik.http.routers.whoami.entrypoints=web"
+
+  cloudflared:
+    image: "cloudflare/cloudflared:latest"
+    command: "tunnel --no-autoupdate run"
+    environment:
+      - "TUNNEL_TOKEN=${TUNNEL_TOKEN}"
+
+  cloudflare-companion:
+    image: ghcr.io/tiredofit/docker-traefik-cloudflare-companion:latest
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - TRAEFIK_POLL_URL=http://traefik:8080/api
+      - ENABLE_TRAEFIK_POLL=TRUE
+      - REFRESH_ENTRIES=TRUE
+      - TARGET_DOMAIN=${TARGET_DOMAIN}
+      - DOMAIN1_PROXIED=TRUE
+      - DOMAIN1=${DOMAIN1}
+      - DOMAIN1_ZONE_ID=${DOMAIN1_ZONE_ID}
+      - CF_TOKEN=${CF_TOKEN}
+```
+
+次のようにcomposeを更新してcloudflare-companionを追加しましょう。
+
+ドメインが複数ある場合、DOMAIN2、DOMAIN2_ZONE_IDを追加して拡張できます。
+
+`docker compose up`を実行すると、cloudflare companionと一緒に実行され、しばらくすると「ip.yourdomain.xyz」がレコードに追加されるのが見えます。
+
+終わりました。これでドメインのワイルドカードレコードを使用せずに、traefikで定義したすべてのサービスを登録してサービスできるようになりました。
+
+## 制限、発展の可能性
+
+1. 「X-Forwarded-For」ヘッダーが正しくforwardされません。ただし、「Cf-Connecting-Ip」などのヘッダーで代替できます。
+2. 「_.yourdomain.xyz」（ルートワイルドカードレコード）の代わりに「_.str.yourdomain.xyz」のような連結されたサブドメインワイルドカードを処理できません。
+   これはCloudflareで証明書を発行してくれないためで、tunnelを使用する限り解決方法がありません。再びポートフォワーディングをしてDNS only + 自己証明書方式で解決する必要があります。
+3. おそらく最大容量制限が存在します。Cloudflare proxy機能はFreeティアの場合100MBです。
+4. TunnelはHTTPだけでなく、HTTPS、TCPコネクションもトンネリングします。例えば、うまく活用すればDBコネクションを共有する用途にも活用できます。
+   traefikに限定せず、様々な可能性を探求してみることができます。
+
+いずれにせよ、非常に面白い機能であることは確かです。さあ、自分でさらに進んでみましょう。

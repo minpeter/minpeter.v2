@@ -1,0 +1,509 @@
+---
+title: Traefikを使ったサービスプロキシ設定
+description: Traefikを利用したサービスプロキシ設定とDocker、ファイルを活用したサービス追加方法、HTTPS、証明書発行、サーバーでの構成
+date: 2023-3-12 22:12:8 +0900
+tags:
+  - traefik
+  - homelab
+  - server
+categories: home lab
+lang:
+  - ja
+machine_translated: true
+---
+
+記事を始める前に、[https://doc.traefik.io/traefik/](https://doc.traefik.io/traefik/)の内容の一部を再構成した記事であることをお知らせします。
+
+2023年3月時点でv3.9.8が最新バージョンであり、これを基準に作成しました。
+
+## Traefikとは？
+
+自分のインフラにサービスを公開するのを簡単にしてくれるEdge Routerです。
+
+Edge Routerは、外部ネットワークと内部ネットワークを接続できるように、その境界に存在する特殊なルーターです。
+
+入ってくるすべてのトラフィックをまず受け取り、ルールに従って適切なサービスに接続する役割を担います。
+
+## 記事で扱う範囲
+
+Traefik proxyは思ったより非常に多様な機能があります。
+
+サービスを接続するために[使用する手段と方法も多様に提供](https://doc.traefik.io/traefik/providers/overview/)しています。
+
+HTTPはもちろん、4層であるTCPとUDPもサポートしています。
+
+しかし、この記事ではDockerとファイル方式を利用してデプロイされるHTTPおよびHTTPSサービス接続の一部についてお話しします。
+
+## 概念
+
+先ほど言ったように、Traefik proxyはエッジルーターです。
+
+サーバーの入り口であり、入ってくるすべてのリクエストを傍受して、どのサービスがどのリクエストを処理するかを決定するルール（パス、ホスト、ヘッダー）を通じてルーティングします。
+
+このとき、サービスはファイルまたはDockerを利用した自動検出など、様々な方法を利用でき、これを[providers](https://doc.traefik.io/traefik/providers/overview/)と呼びます。
+
+また、単にルールに従ってサービスにルーティングするだけでなく、ミドルウェアを通じてアクセス制御やリクエストをサービスに転送する前にリクエストを更新できます。
+
+## ローカルでの動作理解
+
+記事の最後では、実際のサーバー（\*Raspberry Pi）にCloudflareを接続して設定することになります。
+
+しかし、サーバーにアップロードする前に、今この記事を見ているノートパソコンで簡単な実験を通じてTraefikの動作方式を説明しようと思います。
+
+ノートパソコンにDockerがインストールされていることを前提に説明を進めます。
+
+まずtraefik-testフォルダを作成し、そのフォルダの下にdocker-compose.yamlファイルを作成しましょう。
+
+```yaml
+version: "3"
+
+services:
+  traefik-proxy:
+    # traefik v2 公式Dockerイメージ
+    image: traefik:v2.9
+    # Web UIを有効にし、TraefikにDockerを監視させる
+    command: --api.insecure=true --providers.docker
+    ports:
+      # HTTPで入ってくるリクエストを受け取るためのポート
+      - "80:80"
+      # Traefik WEB UIポート（--api.insecure=trueオプションによって有効化）
+      - "8080:8080"
+    volumes:
+      # TraefikがDockerイベントを監視できるように設定
+      - /var/run/docker.sock:/var/run/docker.sock
+```
+
+次のコマンドでTraefikを起動できます。
+
+```bash
+docker-compose up -d traefik-proxy
+```
+
+ブラウザを開いて[http://localhost:8080/dashboard](http://localhost:8080/dashboard)にアクセスすると、TraefikのWeb UIを確認できます。
+
+![Untitled](./images/image.png)
+
+現在はTraefikのみがあり、サービスがない状態です。
+
+docker-compose.yamlファイルを次のように修正しましょう。
+
+```yaml
+version: "3"
+
+services:
+  traefik-proxy:
+    image: traefik:v2.9
+    command: --api.insecure=true --providers.docker
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  iplogger:
+    #接続IP等のアドレスを表示するコンテナを公開（サービス追加）
+    image: minpeter/iplogger
+    labels:
+      - "traefik.http.routers.iplogger.rule=Host(`ip.docker.localhost`, `ip.traefik.me`)"
+```
+
+次のコマンドでiploggerサービスを起動しましょう。
+
+```yaml
+docker-compose up -d iplogger
+```
+
+これでTraefikを通じてiploggerサービスにアクセスしてみましょう。
+
+```bash
+curl -H Host:ip.docker.localhost 127.0.0.1
+```
+
+上記のコマンドは、HTTPリクエストをlocalhost:80に1つ送信しますが、HTTPヘッダーにHostフィールドを追加し、これをip.docker.localhostとしてリクエストします。
+
+おそらく次のような画面が見えるでしょう。
+
+![Untitled](./images/image1.png)
+
+80ポートは確かにTraefikコンテナにバインドされています。
+
+しかし、リクエストはHostヘッダーによってiploggerコンテナにルーティングされ、正常に応答が返ってきました。
+
+- 番外：traefik.me
+  Hostヘッダーの理解を助けるために説明します。
+  上では、Hostヘッダーを直接修正してリクエストを送信しましたが、ユーザーがこのようなリクエストを送るのはやや無理があります。
+  したがって、DNS設定をしてドメインでアクセスすることになりますが、こうするとHostヘッダーが自動的に生成されます。
+  これを練習できる方法がまさにtraefik.meです。
+  traefik.meは必ず127.0.0.1と答えるドメインです。
+  ![Untitled](./images/image2.png)
+  [ip.traefik.me](http://ip.traefik.me)の場合もDNS照会結果は127.0.0.1です。
+  これを利用すると、次のようにリクエストを送ることができます。
+  ```bash
+  curl ip.traefik.me
+  ```
+  ![Untitled](./images/image3.png)
+  ブラウザで[http://ip.traefik.me/](http://ip.traefik.me/)にアクセスすると、次のようなWebページも見ることができます。
+  ![Untitled](./images/image4.png)
+
+これでローカルでできる基礎過程を終えました。
+
+## 実際のサーバーでは？
+
+少し複雑です。
+
+先ほど利用したdocker providerを利用したサービス自動検出は、同じDockerネットワークでコンテナが実行中のときのみ可能で、細かく気を配る必要があるアクセスログ、ダッシュボードアクセス制御ミドルウェア、file provider設定、HTTPS証明書自動発行などの設定があります。
+
+一つずつ見ていくので、見逃さずについてきてください。
+
+## 外部からサーバーへ！
+
+まず、サーバーにはOSとDockerがインストールされている必要があります。
+
+また、SSHや基本的な設定は完了していると仮定します。
+
+DNSは何を使用しても構いませんが、記事ではCloudflareを使用します。
+
+ドメインがexample.comなら、レコードに次を追加しましょう。
+
+| A record | \*.example.com | YOUR SERVER IP |
+| -------- | -------------- | -------------- |
+| A record | example.com    | YOUR SERVER IP |
+
+[YOUR SERVER IP]を調べる方法は、サーバーターミナルで次のコマンドを使用できます。
+
+```bash
+curl ifconfig.me
+# or
+curl ip.minpeter.uk -L
+```
+
+また、Traefikに入るトラフィックのために、ルーターやファイアウォールを使用している場合は、80、443ポートを開放する必要があります。~~（各自でやりましょう）~~
+
+Cloudflareを使用する場合は、Proxiedはオンにして、**Your SSL/TLS encryption mode is Full (strict) オプションはFull (strict)に設定しましょう。**
+
+![Untitled](./images/image5.png)
+
+~~まあ実際、FlexibleにしてHTTPS証明書発行設定を無視してもいいですけど。笑~~
+
+最後に、後で証明書発行のためにHTTP challengeを使用しますが、このためにページオプションを設定しましょう。
+
+設定はRules > Page Rules > Create Page Ruleでできます。
+
+URLには`*.example.com//.well-known/acme-challenge/*`を入力し、Pick a Setting (required)はSSL > Offに設定しましょう。
+
+![Untitled](./images/image6.png)
+
+これで比較的安全に80、443ポートで外部からアクセスできるようになり、今後進める証明書関連の設定も終わりました。
+
+もちろんCloudflare以外のDNSを利用する場合は、レコードだけ設定すればOKです。~~（代わりに攻撃は防げませんけど）~~
+
+## ゼロから特定サービスアクセス制限まで
+
+サーバーにSSHや好みの方法で接続します。
+
+traefikフォルダを作成し、docker-compose.yamlファイルを作成します。
+
+以下の設定ファイルに出てくるminpeter.ukはすべてご自身のドメインに置き換えてください。
+
+```bash
+version: '3.8'
+services:
+  traefik:
+    image: traefik:v2.9
+    container_name: traefik
+    restart: unless-stopped
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.traefik.rule=Host(`traefik.minpeter.uk`) && PathPrefix(`/api`, `/dashboard`)
+      - traefik.http.routers.traefik.entrypoints=websecure
+      - traefik.http.routers.traefik.tls.certresolver=myresolver
+      - traefik.http.routers.traefik.service=api@internal
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./traefik.yaml:/etc/traefik/traefik.yaml
+      - ./external_services:/external_services
+      - traefik-letsencrypt:/letsencrypt
+    networks: [traefik]
+
+  iplogger:
+    image: minpeter/iplogger
+    restart: unless-stopped
+    container_name: iplogger-service
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.iplogger.rule=Host(`ip.minpeter.uk`)
+      - traefik.http.routers.iplogger.entrypoints=websecure
+      - traefik.http.routers.iplogger.tls.certresolver=myresolver
+    networks: [traefik]
+
+networks:
+  traefik:
+    external: true
+
+volumes:
+  traefik-letsencrypt:
+```
+
+初めて見る設定が多くて戸惑うかもしれませんが、基本的に最初に行った実習にHTTPS設定と証明書発行関連、Web UIアクセス方式を変更しました。
+
+まず、以前8080ポートでアクセスしていたWeb UIをtraefik.example.comを通じてアクセスするように変更しました。
+
+```bash
+# docker-compose.yaml中のtraefikサービスのlabels
+- traefik.http.routers.traefik.rule=Host(`traefik.minpeter.uk`) && PathPrefix(`/api`, `/dashboard`)
+- traefik.http.routers.traefik.service=api@internal
+```
+
+また、SSL証明書のために次のような設定が追加されました。
+
+```bash
+version: '3.8'
+services:
+  traefik:
+
+...
+
+labels:
+..
+    - traefik.http.routers.traefik.entrypoints=websecure
+    - traefik.http.routers.traefik.tls.certresolver=myresolver
+
+...
+
+volumes:
+  traefik-letsencrypt:
+```
+
+ボリューム部分を見ると、3つが追加されていることが分かります。
+
+```bash
+traefik:
+  volumes:
+	...
+	      - ./traefik.yaml:/etc/traefik/traefik.yaml
+	      - ./external_services:/external_services
+	      - traefik-letsencrypt:/letsencrypt
+
+...
+
+volumes:
+  traefik-letsencrypt:
+```
+
+traefik.yamlは既存のcommandの代わりにファイルで静的設定をする用途で、すぐに設定します。
+
+external_servicesフォルダはfile providerのためにあらかじめ接続しておき、traefik-letsencryptボリュームは発行された証明書を保存するために使用します。
+
+最後にネットワーク関連の部分です。
+
+```bash
+#サービスごとに
+networks: [traefik]
+
+#このcomposeスタックでは外部Dockerネットワークを使用します～
+networks:
+  traefik:
+    external: true
+```
+
+という意味です。
+
+ボリュームで接続したtraefik.yamlファイルとexternal_servicesフォルダを作成しましょう。
+
+その後、traefik.yamlファイルを修正しましょう。
+
+```bash
+accessLog: {}
+
+api:
+  insecure: false
+  dashboard: true
+
+providers:
+  docker:
+    network: traefik
+    exposedByDefault: false
+  file:
+    directory: /external_services
+    watch: true
+
+entryPoints:
+  web:
+    address: :80
+    http:
+      redirections:
+        entryPoint:
+          to: websecure
+          scheme: https
+  websecure:
+    address: :443
+    forwardedHeaders:
+      trustedIPs:
+        - 173.245.48.0/20
+        - 103.21.244.0/22
+        - 103.22.200.0/22
+        - 103.31.4.0/22
+        - 141.101.64.0/18
+        - 108.162.192.0/18
+        - 190.93.240.0/20
+        - 188.114.96.0/20
+        - 197.234.240.0/22
+        - 198.41.128.0/17
+        - 162.158.0.0/15
+        - 104.16.0.0/13
+        - 104.24.0.0/14
+        - 172.64.0.0/13
+        - 131.0.72.0/22
+        - 2400:cb00::/32
+        - 2606:4700::/32
+        - 2803:f800::/32
+        - 2405:b500::/32
+        - 2405:8100::/32
+        - 2a06:98c0::/29
+        - 2c0f:f248::/32
+
+certificatesResolvers:
+  myresolver:
+    acme:
+      email: kali2005611@gmail.com
+      storage: /letsencrypt/acme.json
+      httpChallenge:
+        entryPoint: web
+```
+
+読めば理解できるでしょう。
+
+HTTP to HTTPSリダイレクト、証明書発行関連設定、信頼できるIP帯域（Cloudflare）、provider設定があります。
+
+特に変更するものはなく、下のmyresolverでemailをご自身のメールに変更して保存しましょう。
+
+サーバーを起動する前に、externalで指定したtraefikネットワークを作成します。
+
+```yaml
+docker network create traefik
+```
+
+この状態でサーバーを起動してみましょう。
+
+```bash
+docker compose up -d
+```
+
+サーバーが起動し、[ip.example.com](http://ip.example.com)の証明書が自動的に発行され、しばらくするとHTTPSでアクセスできるようになります。
+
+また、[traefik.example.com/dashboard/](http://traefik.example.com/dashboard/)にアクセスして、Web UIも利用できます。
+
+## 追加サービス構成
+
+ここまでついてきたなら、Traefik proxyの後ろではiploggerサービスが動いているでしょう。
+
+ここでサービスを追加するにはどうすればいいでしょうか？
+
+現在の設定では2つのproviderがあります。
+
+1. Dockerを利用した自動設定
+2. fileを利用した手動設定
+
+まず、Dockerを利用する方式はlabelsを利用して同じネットワークにあるコンテナを自動的に見つけて接続します。
+
+例は次の通りです。
+
+まずkumaフォルダを作成し、その中にdocker-compose.yamlファイルを作成します。
+
+```yaml
+version: "3.8"
+services:
+  uptime-kuma:
+    image: louislam/uptime-kuma:latest
+    container_name: uptime-kuma
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - uptime-kuma:/app/data
+    labels:
+      - traefik.enable=true
+      - traefik.http.services.uptime-kuma.loadbalancer.server.port=3001
+      - traefik.http.routers.uptime-kuma.entrypoints=websecure
+      - traefik.http.routers.uptime-kuma.tls.certresolver=myresolver
+      - traefik.http.routers.uptime-kuma.rule=Host(`uptime.minpeter.uk`)
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    external: true
+
+volumes:
+  uptime-kuma:
+    driver: local
+```
+
+ボリュームを除けば、常に同じパターンです。
+
+そのサービスに必要なcomposeファイルを作成し、Traefik用のlabelsとnetworksをtraefikネットワークに設定します。
+
+残りはTraefikが自動的に設定します。
+
+次に、fileを利用する方式は次の通りです。
+
+まず、同じサーバーでサービスが動作している場合と、同じネットワークの他のサーバーで動作している場合に分かれますが、後者の場合は少し応用すれば解決できます。
+
+DockerからホストのLocalhostにアクセスするために、traefik/docker-compose.yamlに次の内容を追加します。
+
+```yaml
+traefik:
+...
+
+	extra_hosts:
+	  - host.docker.internal:host-gateway
+```
+
+こうすると、Traefikコンテナ内部からhost.docker.internalを使用してホストのLocalhostにアクセスできます。
+
+その後、先ほど作成しておいたexternal_servicesフォルダにサービスを定義するファイルを作成します。
+
+Traefikが動作しているサーバーのLocalhostの10000ポートにサービスが動作していると仮定しましょう。
+
+```yaml
+[http.routers]
+  [http.routers.iplogger]
+    entryPoints = ["websecure"]
+    rule = "Host(`ip.minpeter.uk`)"
+    service = "iplogger-ext-srv"
+    [http.routers.iplogger.tls]
+      certResolver = "myresolver"
+[[http.services.iplogger-ext-srv.loadBalancer.servers]]
+  url = "http://host.docker.internal:10000"
+```
+
+このようにファイルを作成すると、ファイル保存と同時にip.example.comに入ってくるすべてのトラフィックは[localhost](http://localhost):10000に送られます。
+
+これで基本的な設定は完了しました。
+
+Traefikサービスに以下の2つのラベルを追加し、volumeにも1行追加しましょう。
+
+```bash
+# labels
+- traefik.http.routers.traefik.middlewares=traefik-auth
+- traefik.http.middlewares.traefik-auth.basicauth.usersfile=/usersfile
+
+#volume
+- ./usersfile:/usersfile
+```
+
+その後、以下のコマンドでusersfileを作成しましょう。
+
+```yaml
+echo "<username>:<htpassword>" >> traefik/usersfile
+```
+
+上記の&lt;、&gt;は削除し、htpasswordはオンラインまたはhtpasswdコマンドで生成しましょう。
+
+そうするとアクセス時にTraefikが認証過程を経て、認証に成功するとサービスに接続してくれます。
+
+書いていたら記事を書くのが嫌になって適当に書いてますね...
+
+もう書くのやめます

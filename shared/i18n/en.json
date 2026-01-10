@@ -20,5 +20,8 @@
   "writeDate": "Write",
   "lastModifiedDate": "Modified",
   "nextPost": "Next",
-  "prevPost": "Previous"
+  "prevPost": "Previous",
+  "translatedBy": "Translated by Claude Opus 4.5",
+  "aiDisclaimer": "AI-generated content may be inaccurate or misleading.",
+  "siteDescription": "written, coded, and designed by minpeter"
 }

@@ -1,0 +1,56 @@
+---
+title: "Rust標準入出力コード分析"
+description: "Rustの長くて奇妙な標準入力コードを見て驚き、知っている範囲でまとめた記事"
+date: 2022-03-28T12:55:30.277Z
+tags: ["Rust", "Syntax"]
+lang:
+  - ja
+machine_translated: true
+---
+
+```rust
+use std::io;
+fn main() {
+    let mut b = String::new();
+    io::stdin().read_line(&mut b).expect("Failed to read line");
+    let b: Vec<f64> = b
+        .split_whitespace()
+        .map(|x| x.trim().parse().expect("Please type a number!"))
+        .collect::<Vec<_>>();
+
+    println!("{}", b[0] / b[1]);
+}
+```
+
+上記のコードはAtCoder等の競技プログラミングサイトの`a - b`問題をRustで解いた結果です。
+かなり複雑に見えますが、ちょっとC言語で解いたバージョンを見てみましょう。
+
+```c
+#include <stdio.h>
+int main(void) {
+	float a, b;
+    scanf("%f %f", &a, &b);
+    printf("%f\n",a/b);
+}
+```
+
+Rustと比較すると本当にシンプルです。
+
+では、なぜRustの場合はこんなに多くのコードを書く必要があるのでしょうか？
+それは**エラー**を防ぐためです。
+もしユーザーが`e 2`と入力した場合を考えてみましょう。
+Rustの場合は`expect()`によってエラーを発生させて終了しますが、
+Cの場合は`0.673556`のような変な値が出力されます。
+
+そうです...まだ何が良いのかは分かりませんが、Rust側が不便な（慣れていない）のは事実です。
+
+## Rust文法説明
+
+`let mut b = String::new();` 可変なString型の変数bを作成
+`io::stdin().read_line(&mut b).expect("Failed to read line");` 1行を入力として受け取り、bのアドレスに保存する
+`let b: Vec<f64> = b.split_whitespace()` まだよく分からない、後でRustをもっと勉強したら修正しよう（おそらく空白を基準に分割してVec（大体配列のようなもの）形式で保存）
+`.map(|x| x.trim().parse().expect("Plese type a number!"))` mapを使ってVec型のbの要素一つ一つを`trim()`で空白を除去し（これやらなくてもいいんじゃない？）、`parse()`を使って数値型に変換するコード~~だと思う~~です
+`.collect::<Vec<_>>();` 分からないーーーー
+
+まだRust初心者なので、たくさん勉強が必要そうです。
+いつかRustをPythonのように使いこなせる日が来るでしょうか？

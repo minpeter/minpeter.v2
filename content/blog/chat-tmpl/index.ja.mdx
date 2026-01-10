@@ -1,0 +1,240 @@
+---
+title: chat template - alpaca & chatml
+date: 2025-02-02 05:20:25 +0900
+tags:
+  - chatml
+  - alpaca
+  - chatbot
+  - ai
+description: "LLMモデルのchat-template総まとめ：AlpacaからChatMLまで"
+draft: false
+lang:
+  - ja
+machine_translated: true
+---
+
+LLMモデルの中でchat（instruct）モデルの場合は、APIで使用する際に`/v1/completions`を通じたテキスト文字列の代わりに`/v1/chat/completions`を通じたroleとcontentで構成されたmessages配列を入力として受け取ります。
+
+```json
+[
+  { "role": "user", "content": "こんにちは" },
+  { "role": "assistant", "content": "こんにちは、私は親切なチャットボットです" },
+  { "role": "user", "content": "空が青い理由は何ですか？" }
+]
+```
+
+このようなメッセージ配列を実際にモデルに入力する前にテキスト文字列形式に変換する必要がありますが、この時chat templateが使用されます。
+chat templateは上記のmessages配列をどのようなフォーマットのテキスト文字列に変換するかを決定するjinja templateを意味します。
+
+以下は多くのchat template formatの中の1つであるchatml formatの簡略化された例です。
+
+```jinja
+{%- for message in messages %}
+    {{- '<|im_start|>' + message['role'] + '\n' + message['content'] + '<|im_end|>' + '\n' }}
+{%- endfor %}
+
+// [!code highlight:3]
+{%- if add_generation_prompt %}
+    {{- '<|im_start|>assistant\n' }}
+{%- endif %}
+```
+
+上記のmessages配列をchatml formatで変換すると、次のようなテキスト文字列が生成されます。
+
+```text
+<|im_start|>user
+こんにちは<|im_end|>
+<|im_start|>assistant
+こんにちは、私は親切なチャットボットです<|im_end|>
+<|im_start|>user
+空が青い理由は何ですか？<|im_end|>
+// [!code highlight:2]
+<|im_start|>assistant
+ㅤ
+```
+
+基本的に`<|im_start|>`と`<|im_end|>`はそれぞれターンの開始と終了を表し、最後のハイライトされた部分はモデルに指示を提供するために`add_generation_prompt`オプションをTrueにして、これから生成すべき部分の開始を（`<|im_start|>assistant\n`）レンダリングした結果です。
+
+このようにレンダリングされたテキストをモデルに入力すると、モデルは次のように応答を生成します。
+
+```text
+// [!code word:空が青い理由は光の散乱という現象のためです。]
+空が青い理由は光の散乱という現象のためです。<|im_end|>
+```
+
+ここで実際にモデルは`<コンテキストとターンに合わせて生成された応答>`と`<|im_end|>`を生成し、stop token（eos token）として`<|im_end|>`が認識されて生成が中断されました。
+ここまで完了すると`/v1/chat/completions`に対する応答としてモデルの応答が返されます。
+
+このようなユーザーとモデルの対話を特定のフォーマットで表すことを広い範囲でChat markup language（ChatML）と呼び、その派生形が存在します。（\*ChatMLという名前は特定のフォーマットを指すこともあります。）
+このような特定のフォーマットでレンダリングしてくれるテンプレートコードがChat templateであり、これは各モデルがInstruct tuningを行う過程で学習されるため、モデルごとに固有のテンプレートが存在します。
+
+## chat templateフォーマットの種類
+
+### ChatML
+
+最も広範囲に採用されているフォーマットであり、優れた性能を示します。
+ChatMLとその派生形を使用する代表的なモデルは次の通りです。
+
+Qwen、Hermes、SmolLM、Dolphin、InternLM（派生形）....
+
+ターンの開始を知らせる`<|im_start|>{{role}}\n`とターンの終了を知らせる`<|im_end|>`を使用します。
+
+BOS: `<|begin_of_text|>`（モデルによる）
+EOS: `<|im_end|>`
+
+```text title="NousResearch/Hermes-3-Llama-3.1-8B"
+// [!code word:<|im_start|>]
+// [!code word:<|im_end|>]
+<|begin_of_text|><|im_start|>system
+あなたはユーザーをいつもテンションアップさせるエネルギッシュな友達です。<|im_end|>
+<|im_start|>user
+眠い。<|im_end|>
+<|im_start|>assistant
+コーヒー飲んで！<|im_end|>
+<|im_start|>user
+でもコーヒーあんまり飲みたくない。<|im_end|>
+<|im_start|>assistant
+じゃあ冷たいアイスチョコにしよう！<|im_end|>
+```
+
+### Alpaca
+
+スタンフォードで開発された[Alpaca 7Bモデル](https://crfm.stanford.edu/2023/03/13/alpaca.html)で適用されたフォーマットです。
+シングルトンを前提に開発されており、prompt_no_input、prompt_inputの2つのバージョンが存在します。
+
+```text tab="prompt_no_input"
+// [!code word:### Instruction\:]
+// [!code word:### Response\:]
+### Instruction:
+お昼何食べよう？
+ㅤ
+### Response:
+牛丼はどう？
+```
+
+```text tab="prompt_input"
+// [!code word:### Instruction\:]
+// [!code word:### Response\:]
+// [!code word:### Input\:]
+### Instruction:
+奇数の1つを挙げてください。
+ㅤ
+### Input:
+Twitter、Instagram、Telegram
+ㅤ
+### Response:
+Telegram
+```
+
+### Mistral (Latest)
+
+Mistral系列の特徴として、レンダリング結果が改行なしで1行で出力されますが、以下では視覚的な便宜のために改行を追加しました。
+またmistralaiはchat templateを最も頻繁に更新・改善しており、バージョン別に空白処理、改行処理などの改善を見るのも面白いです。
+
+BOS: `<s>`
+EOS: `</s>`
+
+```text title="mistralai/Mistral-Small-24B-Instruct-2501 (V7-Tekken)"
+// [!code word:</s>]
+// [!code word:[INST\]]
+// [!code word:[/INST\]]
+// [!code word:[SYSTEM_PROMPT\]]
+// [!code word:[/SYSTEM_PROMPT\]]
+
+<s>[SYSTEM_PROMPT]あなたはユーザーに素早く天気を教える友達です。[/SYSTEM_PROMPT]
+[INST]今日の天気はどう？[/INST]曇りで肌寒いよ。</s>
+[INST]傘必要かな？[/INST]うん、雨が降るかもしれないよ！</s>
+```
+
+```text title="mistralai/Ministral-8B-Instruct-2410 (V3-Tekken)"
+// [!code word:</s>]
+// [!code word:[INST\]]
+// [!code word:[/INST\]]
+
+<s>[INST]あなたはユーザーに素早く天気を教える友達です。
+ㅤ
+今日の天気はどう？[/INST]曇りで肌寒いよ。</s>
+[INST]傘必要かな？[/INST]うん、雨が降るかもしれないよ！</s>
+```
+
+_For more information about the tokenizer please refer to [mistral-common](https://github.com/mistralai/mistral-common)_
+
+### Llama 3.x
+
+Llama系列Instructモデルで使用されるフォーマットです。
+EOSと次の指示を意味するスペシャルトークン間に改行がないのが特徴です。
+
+BOS: `<|begin_of_text|>`
+EOS: `<|eot_id|>`
+
+```text title="meta-llama/Llama-3.3-70B-Instruct"
+// [!code word:<|start_header_id|>]
+// [!code word:<|end_header_id|>]
+// [!code word:<|eot_id|>]
+
+<|begin_of_text|><|start_header_id|>system<|end_header_id|>
+ㅤ
+あなたはユーザーの決断を助ける現実的な友達です。<|eot_id|><|start_header_id|>user<|end_header_id|>
+ㅤ
+運動行くかやめるか？<|eot_id|><|start_header_id|>assistant<|end_header_id|>
+ㅤ
+行け、後悔しないよ。<|eot_id|><|start_header_id|>user<|end_header_id|>
+ㅤ
+でもすごくめんどくさいんだけど...<|eot_id|><|start_header_id|>assistant<|end_header_id|>
+ㅤ
+5分だけ軽くでもやってみて、そしたら体がほぐれるよ！<|eot_id|>
+```
+
+## モデル別chat templateの探し方
+
+モデル別に学習時に使用されたテンプレートを探して正しく使用することがモデル性能に大きな影響を与えますが、これを探す方法は難しくありません。
+
+1. huggingface filesで`tokenizer_config.json`ファイルを探す
+   モデルがInstructモデルなら高い確率で`tokenizer_config.json`ファイルにchat templateフィールドが存在します。
+   通常1行でフォーマットされており、ここにテンプレートが存在すればほとんどそのまま使用すれば良いです。
+
+   ```json title="hf.co/NousResearch/Hermes-3-Llama-3.2-3B/blob/main/tokenizer_config.json"
+   ...
+   "bos_token": "<|begin_of_text|>",
+   // [!code highlight]
+   "chat_template": "{% if not add_generation_prompt is defined %}{% set add_generation_prompt = false %}{% endif %}{% for message in messages %}{{'<|im_start|>' + message['role'] + '\n' + message['content'] + '<|im_end|>' + '\n'}}{% endfor %}{% if add_generation_prompt %}{{ '<|im_start|>assistant\n' }}{% endif %}",
+   "clean_up_tokenization_spaces": true,
+   "eos_token": "<|im_end|>",
+   ...
+   ```
+
+2. model cardに明示された「Prompting Template」を探す
+   モデル制作者が親切な場合、どのテンプレートが動作するかについて記述している場合があります。
+   どの方法で学習したかによって全く異なるテンプレートが使用されることもあるので、これを参考にして使用すれば良いです。
+   以下の場合はMistral `[INST]`テンプレートとChatMLの混合形態を使用しています。
+   e.g. [Sao10K/MN-12B-Lyra-v3](https://huggingface.co/Sao10K/MN-12B-Lyra-v3)
+
+## AutoTokenizerでchat templateをレンダリング
+
+```python
+from transformers import AutoTokenizer
+import os
+
+messages = [
+    {"role": "system", "content": "あなたはユーザーの一日を楽しくしてくれるいたずら好きな友達です。"},
+    {"role": "user", "content": "暇だな。"},
+    {"role": "assistant", "content": "モグラのジョーク1つ言うね！なぜモグラはインターネットが好きなんだと思う？"},
+    {"role": "user", "content": "なぜ？"},
+    {"role": "assistant", "content": "なぜなら、『トンネル』を通じていつも新しい情報を探すからだよ！"},
+]
+
+tokenizer = AutoTokenizer.from_pretrained(
+    "HuggingFaceTB/SmolLM2-1.7B-Instruct",
+    token=os.environ.get("HF_TOKEN"),
+    legacy=False,
+)
+
+print(tokenizer.apply_chat_template(messages, tokenize=False))
+```
+
+## Reference
+
+- https://github.com/openai/openai-python/blob/release-v0.28.0/chatml.md
+- https://github.com/InternLM/InternLM/blob/main/chat/chat_format.md
+- https://huggingface.co/docs/transformers/chat_templating
+- https://huggingface.co/blog/chat-templates

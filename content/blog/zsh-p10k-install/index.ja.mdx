@@ -1,0 +1,75 @@
+---
+title: "zsh p10kインストール"
+description: "最近話題のzshとそれを装飾するoh-my-zsh、powerlevel10k設定ガイド"
+date: 2021-08-29 05:05:05 +0900
+tags: ["linux", "ohmyzsh", "p10k", "shell", "zsh"]
+lang:
+  - ja
+machine_translated: true
+---
+
+## zshとoh-my-zsh、p10kの関係
+
+zshはbashのようなシェルを置き換える、美的な部分を加えてくれるシェルです。
+~~（少なくとも私にはそう感じられました）~~
+ここでoh-my-zshが登場しますが、zshにthemeとpluginを設定できるようにしてくれます。
+そしてoh-my-zshのテーマとして登場するのがp10kです。
+利点としては~~かっこよくて！~~カスタマイズ可能なことです！！！
+公式フォントをインストールすると、ディストリビューションのロゴやgit関連の絵文字やフォルダアイコンがターミナルに表示されるなど、面白い機能もあります。
+
+## zshインストール
+
+`sudo apt-get install zsh`
+
+ほとんどの他のディストリビューションもパッケージマネージャーを変更すれば動作します。
+
+例えばArchでは`sudo pacman -S zsh`
+
+Fedoraでは`sudo dnf install zsh`でインストールできます。
+
+## oh-my-zshインストール
+
+```bash
+sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+```
+
+そうです、全てのディストリビューションで同じだと思います。
+途中でzshをデフォルトシェルに変更するためパスワードを入力するよう求められますが、当然入力しましょう
+
+## power level 10k (p10k) インストール
+
+```bash
+git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/powerlevel10k
+```
+
+これもoh-my-zshがインストールされていれば正常に動作します。
+
+## p10kテーマ適用
+
+`vim ~/.zshrc` 他のエディタが使いやすければそのエディタを使用すればいいです。
+
+`ZSH_THEME="robbyrussell"` -> `ZSH_THEME="powerlevel10k/powerlevel10k"`
+に修正すればいいです
+
+## フォントインストール
+
+ここでフォントを選択する必要があります。
+基本的にpowerlineを含む等幅フォントであれば何でも構いませんが、`D2coding`、`MesloLGS NF`、`Fira Code`の中から選択することをおすすめします。
+
+ちなみに`MesloLGS NF`がp10k公式フォントで、このフォントをインストールするとアイコンを表示するオプションが生成されます。
+
+この部分はオペレーティングシステム、インストール環境などによって異なるので、各自でフォントのインストール方法、ターミナルのフォント設定方法を調べて設定してください
+
+## p10k設定
+
+`p10k configure`コマンドでp10kテーマのカスタマイズができます。
+
+よく読んで好みの設定で設定すれば、自分だけのp10k themeが完成します。
+
+## 参考資料
+
+[abdfnx/oh-my-zsh-powerlevel10k-cool-terminal-1no0](https://dev.to/abdfnx/oh-my-zsh-powerlevel10k-cool-terminal-1no0)
+[ruddms936/zsh-設置](https://velog.io/@ruddms936/zsh-%EC%84%A4%EC%B9%98)
+[FiraCode](https://github.com/tonsky/FiraCode)
+[D2coding](https://github.com/naver/d2codingfont)
+[MesloLGS NF](https://github.com/romkatv/powerlevel10k/#user-content-fonts)

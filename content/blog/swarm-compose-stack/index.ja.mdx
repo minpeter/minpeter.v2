@@ -1,0 +1,91 @@
+---
+title: "SwarmのCompose Stack"
+description: "Docker SwarmでComposeのようにスタックを使用してサービスをデプロイする方法"
+date: 2021-09-12 21:05:00 +0900
+tags: ["docker", "docker-swarn", "server"]
+lang:
+  - ja
+machine_translated: true
+---
+
+## SwarmでCompose
+
+前回、runコマンドと似たserviceコマンドを使ってSwarmにコンテナを起動し、スケールを調整しました。
+今回はcomposeコマンドと似たstackについて学びましょう。
+スタックとは、1つ以上のサービスをグループにまとめた単位で、アプリケーション全体の構成を定義します。
+簡単に言えば、Swarmで動作する（スケール機能が含まれた）composeだと考えましょう。
+また、特徴としてcomposeと同様に同じネットワークに含まれます。
+
+まずネットワークを1つ作成しましょう。
+
+```
+$ docker exec -it manager \
+docker network create --driver=overlay --attachable test
+```
+
+testという名前のネットワークを作成しました。
+次にstack-composeファイルを作成しましょう。
+**docker-stack.yaml**
+
+```yaml
+version: "3"
+services:
+  flask-echo:
+    image: minpeter/flask-echo
+    deploy:
+      replicas: 3
+      placement:
+        constraints: [node.role != manager]
+    ports:
+      - "5000:5000"
+    networks:
+      - test
+  nginx-echo:
+    image: minpeter/nginx-echo
+    deploy:
+      replicas: 3
+      placement:
+        constraints: [node.role != manager]
+    depends_on:
+      - flask-echo
+    ports:
+      - "8080:80"
+    networks:
+      - test
+
+networks:
+  test:
+    external: true
+```
+
+ファイルをmanagerコンテナに送る必要があります。docker cpコマンドを使用しましょう。
+
+```
+$ docker cp docker-stack.yaml manager:/docker-stack.yaml
+```
+
+これでstackをデプロイする番です。
+
+```
+$ docker exec -it manager \
+docker stack deploy -c /docker-stack.yaml echo
+```
+
+これで`hello, flask!`を出力するシンプルなページが8080ポートで起動しました。
+デプロイされたサービスを確認しましょう。
+
+```
+$ docker exec -it manager \
+docker stack services echo
+```
+
+スタックがコンテナをデプロイした方式を確認するには、次のコマンドを使用しましょう。
+
+```
+$ docker exec -it manager \
+docker stack ps echo
+```
+
+## 参考資料
+
+[Swarmを利用したDockerコンテナデプロイ_2](https://cornswrold.tistory.com/515?category=930033)

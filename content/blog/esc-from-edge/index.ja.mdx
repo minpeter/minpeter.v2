@@ -1,0 +1,77 @@
+---
+title: "Edgeの独裁から脱出する（TIL）"
+date: 2021-09-05 00:30:00 +0900
+tags: ["EdgeDeflector", "TIL", "chrome", "edge", "windows"]
+lang:
+  - ja
+machine_translated: true
+---
+
+## 雑談
+
+始める前に雑談をすると、だんだんマークダウンのスキルが上がっています。
+やはりマークダウンで作成するブログの力！
+この記事を見ているあなたにもGitHub Pagesブログの開設をおすすめします。
+
+## 解決すべき問題
+
+私たちは多くの理由で~~そして言い訳で~~Windowsを使用します。
+インターネットバンキング、Windows専用プログラム、WSLの便利さ、wingetによる利便性、**ゲーム**
+しかしWindowsを使用するすべてのユーザーは一度は出会う存在があります。
+その名も**MS EDGE**です。
+私たちのEdgeブラウザといえば、Windowsのデフォルトブラウザであり、速度も速く、今回のアップデートで非アクティブタブ機能が追加されてメモリを大幅に節約でき、Chromiumベースで作られているためChrome拡張機能をほぼそのまま使用できるという利点... ~~etc~~があるブラウザですが、
+**私には必要ない。**
+したがって私たちはEdgeを削除したいと思います。~~（そうでなければならない）~~
+しかしWindowsの検索機能、Cortana、私が知らない様々なWindows機能とEdgeが連携しており、削除が~~ほぼ~~不可能です。
+~~（レジストリで削除する記事を見たことがある、真似しないでください）~~
+
+実はインストールされていても、ただChromeをインストールしてデフォルトブラウザに設定して使えば問題ありません。
+しかし設定が変わらないものがあり、それがWindowsの検索機能です。
+Windows検索はデフォルトがEdgeで設定画面では変更できません。
+これは明らかに独裁です。
+実はMicrosoftが素直にアップデートで独裁をやめてくれれば一番良いのですが、そうはいきません。
+
+この記事ではWindowsの検索機能をChromeに変更する方法について紹介します。
+
+## Edgeの独裁から脱出する方法
+
+方法は思ったより簡単です。
+EdgeDeflectorというプログラムを使用してWindowsを騙し、Edge代わりにデフォルトブラウザに検索URLを渡します。
+次にChrome拡張機能のredirect bingプラグインでbing URLを他の検索エンジンURLに変更します。
+すると検索結果ページがデフォルトブラウザで開くという仕組みです。
+
+1. まずEdge以外の他のブラウザをWindowsのデフォルトブラウザに設定します。
+   必ずしもChromeである必要はなく、Opera、Whaleなど何でも設定すればOKです。
+   デフォルトブラウザに設定する方法はWindows 11基準でWindows 10より少し複雑になりました。
+   以下のリンクを見てデフォルトブラウザに設定しましょう。
+   [how set default web browser windows 11](https://www.windowscentral.com/how-set-default-web-browser-windows-11)
+2. 次にEdge Deflectorをインストールする必要があります。
+   オープンソースプログラムでGitHubに公開されています。
+   以下のページで最新バージョンのEdgeDeflector_install.exeファイルをダウンロードしましょう。
+   [github.com/da2x/EdgeDeflector/releases](https://github.com/da2x/EdgeDeflector/releases)
+   インストールすると設定方法を説明するページが表示されます。
+   順番に従えばすぐ終わります。
+   （より簡単な方法は、一度検索してedgedeflector 常に使用 -> 確認）
+3. Chrome拡張機能をインストールしましょう。
+   実はインストールしなくてもChromeで検索されます。
+   しかし検索結果がbing...これを自動的にGoogleや他の検索エンジンに変更するためにインストールします。
+   インストールは以下のリンクを使用しましょう。
+   [Chrometana Pro](https://chrome.google.com/webstore/detail/chrometana-pro-redirect-c/lllggmgeiphnciplalhefnbpddbadfdi/related?hl=ko&gl=US)
+   または[Chrome ウェブストア](https://chrome.google.com/webstore/category/extensions?utm_source=chrome-ntp-icon&gl=US)でredirect bingを検索して好きなものをダウンロードしましょう。
+   ~~何らかの理由でストア地域を米国に設定しないと検索結果が出てきません。
+   Googleが韓国をブロックしたようです。~~
+
+## 結果
+
+さあ検索してみましょう！
+Chromeで~~または他のデフォルトブラウザで~~開くのが見えます。
+これでEdgeの独裁から少しは脱出できました。
+素晴らしいプログラムを作ってくださった[Daniel Aleksandersen](https://github.com/da2x)と貢献者の皆様に感謝し、もう少し快適にWindowsを使用しようと思います。
+
+## 参考資料
+
+[EdgeDeflector](https://github.com/da2x/EdgeDeflector)
+[Chrometana Pro](https://chrome.google.com/webstore/detail/chrometana-pro-redirect-c/lllggmgeiphnciplalhefnbpddbadfdi/related?hl=ko&gl=US)
+[コムトマンのコンピュータ話 - Windows10検索ボックスBing検索をGoogleに変える方法。CortanaのBing検索変更](https://comterman.tistory.com/2134)
+
+~~結局後でEdgeが気に入ってメインで使用している私 :D~~

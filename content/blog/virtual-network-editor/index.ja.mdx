@@ -1,0 +1,70 @@
+---
+title: Virtual Network Editor
+date: 2024-03-18
+description: "VMware仮想ネットワーク設定ガイド"
+lang:
+  - ja
+machine_translated: true
+---
+
+VMwareには3種類のネットワークモードがあります。
+
+Bridged、NAT、Host-onlyです。
+
+ネットワーク設定の変更にはVirtual Network Editorというプログラムを使用します。
+
+![virtual network editor](./images/virtual_network_editor.png)
+
+何かを変更するには、下部のChange Settingsボタンをクリックして管理者権限を付与した後に修正が可能です。
+
+仮想ネットワークはVMnet\*の組み合わせで1つの仮想ネットワークアダプターが構成され、VMnet0からVMnet19番まで自由に作成・削除できます。
+
+まず、デフォルトで設定されている3つのネットワークアダプターを見てみましょう。
+
+## VMnet0 (Type Bridged)
+
+デフォルトでVMnet0番はブリッジモードに設定されています。
+
+これは変更可能で、使用するにはBridged to:と書かれた部分のデバイスを選択すればいいです。
+
+この時選択すべきデバイスは、ホストマシンで実際にインターネットにアクセスしているNIC、つまりノートPCで言えば無線LANアダプターです。
+
+ブリッジモードはHost-onlyと同様に複数宣言可能ですが、特徴として同じNICを使用するブリッジは作成できないということです。
+
+これを選択した場合、ホストPCが実行されている実際のネットワーク環境に応じてIPが付与され、学校のような固定IPを使用する機関ではDHCPサーバーがないため、VM内部で固定IPを設定する必要があります。
+
+実際のネットワークで実行されているように動作するため、同一ネットワーク上の他のPCからも仮想マシンにアクセスできるようになります。
+
+## VMnet1 (Type Host-only)
+
+デフォルトでHost-onlyモードに設定されています。
+
+同様に変更可能で、特徴としてはこのネットワークに接続されたVMはこのネットワーク内のVM同士でのみ通信可能になります。
+
+変更可能な設定としては、Subnet IP、Subnet mask、DHCP使用有無、DHCP帯域設定があります。
+
+## VMnet8 (Type NAT)
+
+最も興味深いVNICです。
+
+Host-onlyと似たように動作しますが、Network Address Translation技術の適用によりホストのインターネットを共有する方式で外部インターネットアクセスが可能で、VMにはVNIC内のプライベートネットワークIPが割り当てられます。
+
+Host-onlyと同様にSubnet IP、Subnet mask、DHCP使用有無、DHCP帯域を設定でき、
+
+NAT独自の設定としてはNAT Settingsボタンを押すと表示される設定画面があります。
+
+![virtual network editor NAT](./images/virtual_network_editor_NAT.png)
+
+ここでNATの特徴であるポートフォワーディングを実行できます。ルーターのポートフォワーディングと同様に、ホストのポート（公開されるポート）、ゲストのポート（サービス中のポート）、ゲストのIP（ポートフォワーディング先）を設定すればポートフォワーディングが実行されます。
+
+この時、ポートフォワーディングに成功すると、ブリッジモードと同様に該当サービスに限りホストPCと同じネットワーク上の他のPCからサービスにアクセスできるようになります。
+
+## Type Custom
+
+これはHost-onlyモードでConnect a host virtual adapter to this networkオプションをオフにした時に次のタイプに変更されます。
+
+Host-onlyモードとほぼ同様ですが、ホストPCとCustomタイプのVNICに属する仮想マシン間の通信ができなくなるという特徴があります。
+
+一般的に考えるHost-onlyモードがこれに該当します。
+
+実はHost-onlyモードも仮想マシン同士だけでなく、ホストコンピューターまでは通信できるんですよね。

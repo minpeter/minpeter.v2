@@ -27,7 +27,7 @@ const blogSource = toFumadocsSource<BlogPageData, BlogMetaData>(
 export const blog = loader(blogSource, {
   i18n: {
     defaultLanguage: "ko",
-    languages: ["ko", "en"],
+    languages: ["ko", "en", "ja"],
   },
   baseUrl: "/blog",
 });

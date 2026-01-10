@@ -1,0 +1,230 @@
+---
+title: "WSL Arch distro設定"
+description: "pacman、yay... arch最高!!"
+date: 2023-02-24
+tags: ["arch", "linux", "terminal", "wsl"]
+lang:
+  - ja
+machine_translated: true
+---
+
+![Untitled](./images/Untitled.png)
+
+Virtual Machine Platform & Windows Subsystem for Linuxにチェックが入っていることを確認
+
+![Untitled](./images/Untitled-1.png)
+
+以下のリストからわかるように、Arch LinuxはMicrosoft公式サポートのディストリビューションではありません
+
+したがって、ユーザーが作成したプログラムを使用する必要があります
+
+[https://github.com/yuk7/ArchWSL](https://github.com/yuk7/ArchWSL)
+
+Arch.exeをインストールして、この実行ファイルがArchディストリビューションのインストールを行います。Arch.exeをインストールする方法は3つあります
+
+zipファイルからインストール、appxファイルインストール、scoopの利用
+
+ここではappxインストールを使用します。
+
+https://github.com/yuk7/ArchWSL/releases
+
+まず上記のリンクからappxファイルとcerファイルをダウンロードしましょう
+
+onlineと書かれたファイルとそうでないファイルがありますが、同じセットでダウンロードすれば大丈夫です。
+
+![Untitled](./images/Untitled-2.png)
+
+次に、以下のリンクで説明されている通りに証明書をインストールしてappxを実行します。
+
+または、以下のスクリプトで簡単に完了することもできます。もちろん、yuk7/ArchWSLリリースの更新に伴いバージョンは変更する必要があります。
+
+```powershell
+Invoke-WebRequest -URI https://github.com/yuk7/ArchWSL/releases/download/22.10.16.0/ArchWSL_Online-AppX_22.10.16.0_x64.cer -OutFile arch.cer
+Invoke-WebRequest -URI https://github.com/yuk7/ArchWSL/releases/download/22.10.16.0/ArchWSL_Online-AppX_22.10.16.0_x64.appx -OutFile arch.appx
+
+Import-Certificate -FilePath .\arch.cer -CertStoreLocation Cert:\LocalMachine\TrustedPeople
+Add-AppxPackage -Path .\arch.appx
+```
+
+[Install Certificate for AppX](https://wsldl-pg.github.io/ArchW-docs/Install-Certificate/)
+
+![Untitled](./images/Untitled-3.png)
+
+その後、しばらく待つとインストールが完了します。
+
+[How to Setup](https://wsldl-pg.github.io/ArchW-docs/How-to-Setup/#setup-after-install)
+
+## YAYインストール
+
+Arch Linuxの利点の一つであるAURを便利に使えるようにするツールです。
+
+以下のリンクを参照してください
+
+[GitHub - Jguer/yay: Yet another Yogurt - An AUR Helper written in Go](https://github.com/Jguer/yay#installation)
+
+インストール後、以下のリンクで案内している作業も実行する必要があります。
+
+[GitHub - Jguer/yay: Yet another Yogurt - An AUR Helper written in Go](https://github.com/Jguer/yay#first-use)
+
+## ZSHおよびoh-my-zsh、powerlevel10k設定
+
+### zsh & oh-my-zsh設定
+
+```
+$ sudo pacman -S zsh
+$ chsh -l
+/bin/sh
+/bin/bash
+/usr/bin/git-shell
+/bin/zsh
+/usr/bin/zsh
+$ chsh -s /bin/zsh
+$ yay -S oh-my-zsh-git
+$ cp /usr/share/oh-my-zsh/zshrc ~/.zshrc
+```
+
+### powerlevel10k & zsh-syntax-highlighting & zsh-autosuggestions
+
+```
+$ sudo git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/powerlevel10k
+$ sudo git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+$ sudo git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+```
+
+.zshrcファイルを少し修正する必要があります。
+
+ZSH_THEMEを以下のように修正しましょう。
+
+```
+ZSH_THEME="powerlevel10k/powerlevel10k"
+```
+
+またplugins項目に以下を追加しましょう
+
+```
+plugins=(
+	git
+  zsh-syntax-highlighting
+  zsh-autosuggestions
+)
+```
+
+powerlevel10kテーマのために以下のサイトでフォントをインストールしましょう。
+
+[Nerd Fonts - Iconic font aggregator, glyphs/icons collection, & fonts patcher](https://www.nerdfonts.com/font-downloads)
+
+インストール後、WindowsターミナルでArchプロファイルのフォントを新しくインストールしたフォントに変更しましょう。
+
+ターミナルを再起動するかsource .zshrcを使用して変更を適用しましょう。
+
+## Windows Terminalテーマ
+
+[Dark theme for Windows Terminal and 302+ apps - Dracula](https://draculatheme.com/windows-terminal)
+
+## ブラウザ設定および各種ユーティリティ
+
+[wslu Wiki](https://wslutiliti.es/wslu/install.html#arch-linux)
+
+wsluをインストールした後もxdg-open関連のエラーが発生する場合は以下のコマンド [https://github.com/cli/cli/issues/826](https://github.com/cli/cli/issues/826) を参照
+
+```
+sudo ln -s $(which wslview) /usr/local/bin/xdg-open
+```
+
+```
+$ sudo pacman -S github-cli
+$ sudo pacman -S bat
+$ yay -S logo-ls
+```
+
+適宜aliasも設定しましょう。
+
+## プログラミング言語インストール
+
+### rust
+
+```
+sudo pacman -S rustup
+rustup default stable
+```
+
+.zshrcファイルに以下の内容を追加
+
+```
+## rust cargo install path
+export PATH=$PATH:$HOME/.cargo/bin
+```
+
+### go
+
+```
+yay -Yc
+sudo pacman -S go
+```
+
+.zshrcファイルに以下の内容を追加
+
+```
+## custom GOPATH & Go config
+export GOPATH=$HOME/.go
+export PATH=$PATH:$GOPATH/bin
+```
+
+### python
+
+```
+sudo pacman -S python
+```
+
+### node
+
+!複数のバージョンのnodeを使用する必要がある場合はnvmをインストールしましょう。
+
+```
+sudo pacman -S nodejs npm
+```
+
+Archは全て最新バージョンで管理してくれるので、asdf-vmのようなものを使わなくても大丈夫です。
+
+## 不要なWindowsパスの削除
+
+デフォルトで絶対に使用しないWindows exe関連のパスが自動的に追加されます。
+
+これにより、npmを実行したのにWindowsにインストールされたnpmが実行されるなどのハプニングが起こります。
+
+whichコマンドを使用するまで全く分からないため、問題を解決できない状況に陥ります。
+
+これを解決するために以下の作業を実行しましょう。
+
+```
+$ sudo vim /etc/wsl.conf
+
+[interop]
+appendWindowsPath = false
+
+$ exit
+c:\Users\user> wsl --shutdown
+c:\Users\user> wsl
+$ echo $PATH
+```
+
+これで問題が解決しました。
+
+しかし、いくつかの追加問題が発生します。
+
+code、clip.exe、explorer.exeなど、元々使用していた少数のWindowsコマンドが使用できなくなります。
+
+したがって、.zshrcに以下の設定を追加しましょう。
+
+```
+## windows necessary path
+export PATH="$PATH:/mnt/c/Users/minpeter/AppData/Local/Programs/Microsoft VS Code/bin:/mnt/c/Windows/system32:/mnt/c/Windows/System32/WindowsPowerShell/v1.0:/mnt/c/Program Files/Docker/Docker/resources/bin"
+```
+
+最初はgit-credential-manager.exeも追加しようとしましたが、.gitconfigファイルにパスが定義されているので問題ないと判断しました。
+
+![Untitled](./images/Untitled-4.png)
+
+かなり美しいターミナルが完成しました。
+
+ここにVSCodeをインストールして拡張機能をいくつかインストールすれば完璧な開発環境です。
