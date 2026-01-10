@@ -1,6 +1,12 @@
 "use client";
 
-import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
+import {
+  Content,
+  Item,
+  Portal,
+  Root,
+  Trigger,
+} from "@radix-ui/react-dropdown-menu";
 import { GlobeIcon } from "@radix-ui/react-icons";
 import { useLocale } from "next-intl";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -39,7 +45,9 @@ function isPointInTriangle(
   const dot12 = v1x * v2x + v1y * v2y;
 
   const denom = dot00 * dot11 - dot01 * dot01;
-  if (denom === 0) return false;
+  if (denom === 0) {
+    return false;
+  }
 
   const invDenom = 1 / denom;
   const u = (dot11 * dot02 - dot01 * dot12) * invDenom;
@@ -71,14 +79,20 @@ export function LanguageSelector() {
   // Clear timeouts on unmount
   useEffect(() => {
     return () => {
-      if (openTimeoutRef.current) clearTimeout(openTimeoutRef.current);
-      if (closeTimeoutRef.current) clearTimeout(closeTimeoutRef.current);
+      if (openTimeoutRef.current) {
+        clearTimeout(openTimeoutRef.current);
+      }
+      if (closeTimeoutRef.current) {
+        clearTimeout(closeTimeoutRef.current);
+      }
     };
   }, []);
 
   // Check if mouse is in safe triangle zone
   const isInSafeTriangle = useCallback(() => {
-    if (!triggerRef.current || !contentRef.current) return false;
+    if (!(triggerRef.current && contentRef.current)) {
+      return false;
+    }
 
     const triggerRect = triggerRef.current.getBoundingClientRect();
     const contentRect = contentRef.current.getBoundingClientRect();
@@ -100,7 +114,9 @@ export function LanguageSelector() {
 
   // Handle mouse movement for safe triangle
   useEffect(() => {
-    if (!isOpen || isTouchDevice) return;
+    if (!isOpen || isTouchDevice) {
+      return;
+    }
 
     const handleMouseMove = (e: MouseEvent) => {
       mousePositionRef.current = { x: e.clientX, y: e.clientY };
@@ -124,7 +140,9 @@ export function LanguageSelector() {
   }, [isOpen, isTouchDevice, isInSafeTriangle]);
 
   const handleMouseEnter = () => {
-    if (isTouchDevice) return;
+    if (isTouchDevice) {
+      return;
+    }
 
     // Cancel any pending close
     if (closeTimeoutRef.current) {
@@ -133,7 +151,7 @@ export function LanguageSelector() {
     }
 
     // Small delay to prevent flicker on quick mouse movements
-    if (!isOpen && !openTimeoutRef.current) {
+    if (!(isOpen || openTimeoutRef.current)) {
       openTimeoutRef.current = setTimeout(() => {
         setIsOpen(true);
         openTimeoutRef.current = null;
@@ -142,7 +160,9 @@ export function LanguageSelector() {
   };
 
   const handleMouseLeave = () => {
-    if (isTouchDevice) return;
+    if (isTouchDevice) {
+      return;
+    }
 
     // Cancel any pending open
     if (openTimeoutRef.current) {
@@ -161,7 +181,9 @@ export function LanguageSelector() {
   };
 
   const handleContentMouseEnter = () => {
-    if (isTouchDevice) return;
+    if (isTouchDevice) {
+      return;
+    }
 
     if (closeTimeoutRef.current) {
       clearTimeout(closeTimeoutRef.current);
@@ -170,7 +192,9 @@ export function LanguageSelector() {
   };
 
   const handleContentMouseLeave = () => {
-    if (isTouchDevice) return;
+    if (isTouchDevice) {
+      return;
+    }
 
     closeTimeoutRef.current = setTimeout(() => {
       setIsOpen(false);
@@ -188,15 +212,16 @@ export function LanguageSelector() {
   // Handle Radix's onOpenChange - only use for touch devices
   const handleOpenChange = (open: boolean) => {
     // On PC, we control state via hover handlers, ignore Radix's changes
-    if (!isTouchDevice) return;
+    if (!isTouchDevice) {
+      return;
+    }
     setIsOpen(open);
   };
 
   return (
-    <DropdownMenu.Root open={isOpen} onOpenChange={handleOpenChange} modal={false}>
-      <DropdownMenu.Trigger asChild>
+    <Root modal={false} onOpenChange={handleOpenChange} open={isOpen}>
+      <Trigger asChild>
         <button
-          ref={triggerRef}
           aria-label="Select language"
           className={cn(
             "flex items-center gap-1 rounded-md px-2 py-1 text-sm",
@@ -204,43 +229,44 @@ export function LanguageSelector() {
             "transition-colors duration-150",
             "focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           )}
-          type="button"
           onClick={handleTriggerClick}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
+          ref={triggerRef}
+          type="button"
         >
           <GlobeIcon className="h-3.5 w-3.5" />
           <span>{currentLabel.short}</span>
         </button>
-      </DropdownMenu.Trigger>
+      </Trigger>
 
-      <DropdownMenu.Portal>
-        <DropdownMenu.Content
-          ref={contentRef}
+      <Portal>
+        <Content
           align="end"
           className={cn(
             "z-50 min-w-[120px] rounded-md border border-border bg-background p-1 shadow-md",
-            "animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95",
+            "fade-in-0 zoom-in-95 data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 animate-in data-[state=closed]:animate-out",
             "data-[side=bottom]:slide-in-from-top-2 data-[side=top]:slide-in-from-bottom-2"
           )}
-          sideOffset={5}
+          onCloseAutoFocus={(e) => e.preventDefault()}
           onMouseEnter={handleContentMouseEnter}
           onMouseLeave={handleContentMouseLeave}
-          onCloseAutoFocus={(e) => e.preventDefault()}
+          ref={contentRef}
+          sideOffset={5}
         >
           {routing.locales.map((l) => {
             const isActive = locale === l;
             const label = LOCALE_LABELS[l] || { short: l, native: l };
 
             return (
-              <DropdownMenu.Item asChild key={l}>
+              <Item asChild key={l}>
                 <Link
                   className={cn(
                     "block w-full cursor-pointer rounded-sm px-3 py-2 text-left text-sm",
                     "transition-colors duration-150",
                     "focus:outline-none",
                     {
-                      "bg-secondary text-primary font-medium": isActive,
+                      "bg-secondary font-medium text-primary": isActive,
                       "text-muted-foreground hover:bg-secondary hover:text-primary focus:bg-secondary focus:text-primary":
                         !isActive,
                     }
@@ -251,11 +277,11 @@ export function LanguageSelector() {
                 >
                   {label.native}
                 </Link>
-              </DropdownMenu.Item>
+              </Item>
             );
           })}
-        </DropdownMenu.Content>
-      </DropdownMenu.Portal>
-    </DropdownMenu.Root>
+        </Content>
+      </Portal>
+    </Root>
   );
 }
