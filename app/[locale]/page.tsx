@@ -34,10 +34,7 @@ export default function Page() {
 
   return (
     <section className="flex flex-col gap-3">
-      <Header
-        description="written, coded, and designed by minpeter"
-        title="minpeter 🇰🇷"
-      />
+      <Header description={t("siteDescription")} title="minpeter 🇰🇷" />
       <div className={cn(styles.stagger_container, styles.slow)}>
         <div
           className={cn(

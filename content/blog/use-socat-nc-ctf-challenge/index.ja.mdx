@@ -1,0 +1,168 @@
+---
+title: socatを使用したnc remote CTFチャレンジのデプロイ
+description: socatを使用してCTFチャレンジをリモートで公開する方法
+date: 2022-09-10 00:11:18
+tags: ["socat", "nc", "netcat", "remote", "buildx"]
+lang:
+  - ja
+machine_translated: true
+---
+
+## 概要
+
+様々なCTFやDreamhackなどの問題を解いていると、このような形式のアドレスが提示されることが多いです。
+`nc pwnable.kr 9000`
+\*pwnable.krのBOF問題
+
+netcatというユーティリティで該当サーバーのプログラムをリモート実行できるのですが、こんな考えが浮かびました。
+「このような形式の問題はどうやって作ってデプロイするのだろう？」
+
+そこで調べてみました。
+
+## で、どうやるの？
+
+**SOCATを使えばいい**
+
+最初に知った方法はsocketサーバーを直接開発することでした。
+これが意外と良かったのですが、単純なメッセージ出力用としては良かったです。
+でも考えてみると、上のBOF問題でさえ入出力を様々な形で何度も実行するのに、これを一つ一つソケットサーバーで実装したとは思えませんでした。
+しかも、ncアドレスと一緒に提供されるソースコードを見ると、さらに確信が持てました。
+**ソケット関連のコードは全くなかった**からです。
+
+そしてGoogleCTFで答えが見つかりました。
+問題のDockerfile内にsocatというプログラムがCMDに書かれているのが見えたからです。
+これが今まで知らなかったncサーバー関連のユーティリティだという直感がしました。
+
+### Multipurpose relay (SOcket CAT)
+
+```
+2つの双方向バイトストリームを確立し、それらの間でデータを転送するコマンドラインベースのユーティリティです。
+ストリームは様々なタイプのデータシンクやソース（アドレスタイプを参照）で構成でき、多くのアドレスオプションがストリームに適用できるため、socatは様々な目的に使用できます。
+```
+
+とのことです。
+netcatの上位版と考えても良さそうです。
+
+## socat インストール
+
+Ubuntuでは以下のようにインストールできます。
+`apt-get install socat`
+Macではbrewがインストールされている前提で以下の通りです。
+`brew install socat`
+
+今回の記事はsocatを使った問題のデプロイなので、socatを直接使ったり深く扱ったりはしません。
+
+## socat 使用チャレンジ例
+
+以下はsocatを使用する例です。
+
+まず、一般的な入出力を行うプログラムを作成します。
+
+```py title="main.py"
+userInput = input("Enter a number: ")
+
+try:
+    userInput = int(userInput)
+    if userInput == 1395:
+        print("flag{you_entered_the_correct_number}")
+    else:
+        print("You did not enter the correct number")
+except ValueError:
+    print("You did not enter a number!")
+
+```
+
+上記のプログラムは見ての通り、1395を入力するとflagを提供する簡単なプログラムです。
+もしこの記事を見てCTF問題を出題する予定なら、該当する問題ファイルに置き換えればいいです。
+
+次にデプロイ用のDockerfileを作成します。
+
+```dockerfile title="Dockerfile"
+FROM python:3.10-alpine
+
+RUN apk add socat
+
+WORKDIR /app
+
+ENV PORT 1337
+ENV FILE_NAEM main.py
+
+COPY $FILE_NAEM .
+
+
+CMD ["socat" , "-T60" , "-dd" , "-v" , "-v" , "TCP-LISTEN:"+$PORT+",reuseaddr,fork" , "EXEC:python3 "+$FILE_NAEM+",pty,stderr,setsid,sigint,sane"]
+```
+
+次にDockerイメージをビルドします。
+
+`docker build -t socattest .`
+
+問題なくビルドできたら実行します。
+
+`docker run --rm -p 1337:1337 socattest`
+
+新しいターミナルウィンドウを開いて、以下のコマンドでサーバーに接続します。
+
+`nc localhost 1337`
+
+すると以下のような画面が表示されます。
+
+```
+Enter a number:
+```
+
+1395を入力すると以下のような画面が表示されます。
+
+```
+Enter a number: 1395
+flag{you_entered_the_correct_number}
+```
+
+この問題をCTFにアップロードしてみましょう。
+
+## CTFに問題をアップロードする
+
+CTFに問題をアップロードするには、以下のファイルが必要です。
+
+- Dockerfile
+- 問題ファイル
+- 問題説明ファイル
+
+問題をアップロードするためのフォルダを作成し、以下のようにファイルを作成します。
+
+```
+.
+├── Dockerfile
+├── README.md
+└── main.py
+```
+
+Dockerfileは上で作成したものと同じです。
+
+README.mdは以下のように作成します。
+
+```
+# socat challenge
+
+## Description
+
+This is a socat challenge.
+
+## How to solve
+
+1. Connect to the server.
+2. Enter the correct number.
+```
+
+main.pyは上で作成したものと同じです。
+
+このフォルダを圧縮してCTFにアップロードすれば完了です。
+
+この記事を読んでいる皆さんがCTF問題を作成する際に役立てば幸いです。
+ここまで記事を読んでくださった皆様に感謝いたします。
+
+## 参考
+
+上のCTFに問題をアップロードする方法はGithub Copilotが全て作成しました。
+正直、文脈がとても合っていて文章がとても自然だったので驚きました。
+AI万歳？

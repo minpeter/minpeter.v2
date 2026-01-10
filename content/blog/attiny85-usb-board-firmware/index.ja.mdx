@@ -1,0 +1,241 @@
+---
+title: Attiny85 USBボードファームウェアアップグレード!!
+date: 2022-08-31 21:11:34
+tags:
+  - attiny
+  - digispark
+lang:
+  - ja
+machine_translated: true
+---
+
+## 事前準備物
+
+1. コンピュータでスケッチアップロードが可能なすべてのArduino（多分？）
+2. 数本のジャンパーケーブル（正確には6本）
+3. 下の写真に写っているDigispark USB Development Board
+
+\*本記事でISPはIn-System Programmingを意味します。
+
+## Attinyとは？
+
+Atmel社から発売されたマイクロコントローラーです。
+AVR microcontrollerの中でArduinoで使用されるATmegaチップより全体的にスペックが低いのが特徴であり、それに見合ってサイズが小さいのも特徴です。
+今回の記事で使用するattinyチップはattiny85チップセットで、便宜上digispark社が設計したボードをベースにした中国製クローンボードを使用します。
+このボードはPCBをUSB A typeで設計してコンピュータに直接接続できるという特徴があります。
+![](/images/61e2f14edffc1edfa2685963155b0d33.jpg)
+
+## この投稿で行う作業
+
+digispark社の正規品、中国製コピー両方ともファームウェアバージョンがまちまちです。
+後で説明するファームウェア最新バージョンは2.6ですが、正規品の場合は1.02、中国製の場合はファームウェアがまったくない場合も存在します。
+したがって正規品、コピー関係なくファームウェアを2.6バージョンにアップグレードします。
+
+1. ArduinoをISPとして設定
+2. ISPを利用してMicronucleus V2.6をボードにアップロード
+3. digispark USBドライバーインストール
+4. サンプルプロジェクトをボードにアップロードして正常動作を確認
+
+## 使用するファームウェアMicronucleusについて
+
+まず使用するこの不思議なボードについてもう少し知る必要があります。
+USBポートが存在しますがUSBのための別途のハードウェアがありません。
+え？じゃあUSBはなぜあるの？
+attiny85チップセットがv-usbをサポート...いや、Atmel社のほぼすべてのAVRがv-usb機能をサポートしているから存在します。
+なんとデジタルポートを利用してUSBをソフトウェア的にサポートします。
+このv-usbを利用してプロジェクトをISPなしでアップロードできるのですが、これをサポートするファームウェアがMicronucleusです。
+
+簡単に説明するとUSBをプログラミングできる方式が2つあります。
+
+1. ISPを利用してボードメモリに直接プログラミングする方式
+2. Micronucleusをブートローダーとしてアップロードしてボードにv-usbサポートを追加しUSBでアップロードする方式
+
+それぞれ長所と短所があります。
+1番の場合はISPを接続する手間がかかる代わりにattiny85プログラミングメモリを全部利用できます。
+2番の場合はISPを接続する代わりにUSBで簡単にプログラミングが可能になる代わりに一部プログラミングメモリをファームウェアのMicronucleusに譲らなければなりません。
+こうすると便利ですが大きなプログラムをアップロードする場合は制約があります。
+
+とにかくファームウェアをアップロードすると決めた以上、この投稿は2番を実行する方法について説明します。
+
+多分後で「attiny85 without microncleus」のような記事を書くかもしれません？
+
+## ArduinoをISPにする
+
+実はこの段階はAVR ISP mkⅡのようなものがあれば必要ありません。
+しかし私は学生で最低でも2万ウォン程度のISPを購入するのは難し~~いというよりまだ買う理由を見つけていないだけ~~い。
+したがって誰でも家に1つはある（？）Arduinoを利用して仮のISPとして使用してみましょう。
+（実は家になくてもほとんどの中高校のどこかには転がっているのがArduinoではないでしょうか？）
+
+1. コンピュータにArduinoを接続する。
+2. Arduino IDEを開いて`File > Examples > 11.ArduinoISP > ArduinoISP`を選択する。
+3. Arduinoボードにサンプルスケッチをアップロードする。
+
+これでArduinoはまるでISPのように動作します。
+
+## ArduinoとAttiny85間のワイヤリング
+
+| ATtiny85 pin | Arduino Pin | Role  |
+| :----------: | :---------: | :---: |
+|      5V      |     5V      |  VCC  |
+|     GND      |     GND     |  GND  |
+|      P5      |     10      | Reset |
+|      P0      |     11      | MOSI  |
+|      P1      |     12      | MISO  |
+|      P2      |     13      |  SCK  |
+
+事前に準備しておいたジャンパーケーブルでうまく接続すればOKです。
+
+## 必須ファイルダウンロード
+
+https://github.com/micronucleus/micronucleus の`firmware/releases/t85_default.hex`ファイルが必要です。
+次の[リンク](https://github.com/micronucleus/micronucleus/blob/master/firmware/releases/t85_default.hex)からダウンロードできます。
+
+## avrdudeでファームウェアを書き込む
+
+```powershell
+"C:\Program Files (x86)\Arduino\hardware\tools\avr/bin/avrdude" ^
+-C "C:\Program Files (x86)\Arduino\hardware\tools\avr/etc/avrdude.conf" ^
+-v -pattiny85 -cstk500v1 -PCOM6 -b19200 ^
+-Uflash:w:"%USERPROFILE%\Downloads\micronucleus\firmware\releases\t85_default.hex":i ^
+-U lfuse:w:0xe1:m -U hfuse:w:0xdd:m -U efuse:w:0xfe:m
+```
+
+\*cmdコマンドの改行は^（キャレット）を使用します。余談でpwshは`（バッククォート）
+
+Arduino IDEインストール時に一緒にダウンロードされるavrdudeを使用するのですが、上のコマンドで`"%USERPROFILE%\Downloads\micronucleus\firmware\releases\t85_default.hex"`の部分はダウンロードした`t85_default.hex`ファイルがあるパスに置き換えてください。
+また`-PCOM6`オプションはISPとして設定したArduinoのポート番号に変更してください。
+私の場合はCOM6がArduinoなので-PCOM6に設定しました。
+
+これで全部終わりました。
+少し修正したコマンドを**CMD**で実行するとファームウェアアップロードが進行し、次のような文字が表示されれば成功です。
+
+```
+.
+.
+avrdude: input file 0xfe contains 1 bytes
+avrdude: reading on-chip efuse data:
+
+Reading | ################################################## | 100% 0.00s
+
+avrdude: verifying ...
+avrdude: 1 bytes of efuse verified
+
+avrdude: safemode: lfuse reads as E1
+avrdude: safemode: hfuse reads as DD
+avrdude: safemode: efuse reads as FE
+avrdude: safemode: Fuses OK (E:FE, H:DD, L:E1)
+
+avrdude done.  Thank you.
+```
+
+ここまで成功したら2.6バージョンのインストールに成功したことになります。
+または上でファームウェアファイルだけ変更して様々なオプションが有効化されたhttps://github.com/ArminJo/micronucleus-firmwareのスピードローダーファームウェアを試すこともできますし、digisparkで公式サポートする最後のバージョンであるmicronucleus 1.02にダウングレードすることもできます。
+
+## digispark USBドライバーインストール
+
+1. https://github.com/digistump/DigistumpArduino/releases で`Digistump.Driver.zip`をダウンロード
+2. 解凍
+3. `Install Drivers.exe`を実行してインストール
+
+これでドライバーはインストールされました。
+Arduino IDEに少し設定をすればコードをv-usbを利用してアップロードできるようになります。
+
+1. Arduino IDEを実行
+2. File > Preferences
+3. Additional Boards Manager URLsに`http://digistump.com/package_digistump_index.json`を追加
+4. OKをクリック
+5. Tools > Board > Boards Manager...
+6. digistumpを検索して`Digistump AVR Boards`をインストール
+
+設定は終わりです。
+テストコードをアップロードしてみましょう。
+
+## キーボードで「HelloWorld」と入力するプログラムをアップロード
+
+スケッチを1つ作成して次のコードを入力しましょう。
+
+```c
+#include "DigiKeyboard.h"
+
+void setup() {
+  pinMode(1, OUTPUT);
+}
+
+void loop() {
+
+  DigiKeyboard.update();
+  DigiKeyboard.sendKeyStroke(0); //旧型デバイス互換性維持用
+  DigiKeyboard.delay(500);
+  DigiKeyboard.println("HelloWorld");
+  DigiKeyboard.delay(1000);
+  DigiKeyboard.println("HelloWorld");
+
+  for(int i=0; i<=10; i++) {
+    digitalWrite(1, HIGH);
+    DigiKeyboard.delay(100);
+    digitalWrite(1, LOW);
+    DigiKeyboard.delay(100);
+  }
+}
+```
+
+HelloWorldを2回入力してLEDを10回点滅させるコードです。
+アップロードを進めてみましょう。
+
+1. Tools > Board > Digistump AVR Boards > Digispark (Default - 16.5mhz)
+2. Ctrl + U // コードアップロードショートカットキー
+
+次のような文字が出力されたらUSBポートにattiny85ボードを接続してください。
+
+```
+Sketch uses 3194 bytes (53%) of program storage space. Maximum is 6012 bytes.
+Global variables use 98 bytes of dynamic memory.
+Running Digispark Uploader...
+Plug in device now... (will timeout in 60 seconds)
+```
+
+接続後、次のように出力されれば正常にアップロードされたことになります。
+
+```
+> Device is found!
+connecting: 16% complete
+connecting: 22% complete
+connecting: 28% complete
+connecting: 33% complete
+> Device has firmware version 2.6
+> Device signature: 0x1e930b
+> Available space for user applications: 6650 bytes
+> Suggested sleep time between sending pages: 7ms
+> Whole page count: 104  page size: 64
+> Erase function sleep duration: 728ms
+parsing: 50% complete
+> Erasing the memory ...
+erasing: 55% complete
+erasing: 60% complete
+erasing: 65% complete
+> Starting to upload ...
+writing: 70% complete
+writing: 75% complete
+writing: 80% complete
+> Starting the user app ...
+running: 100% complete
+>> Micronucleus done. Thank you!
+```
+
+アップロード直後にボードが再接続され、6秒間コードアップロードを待機します。
+その後再び再接続されHIDモードで動作します。
+まるで人が直接入力しているかのように認識され、カーソルの位置にHelloWorldを2回入力するでしょう。
+その後ボードのLEDが10回点滅したらこの投稿のすべての過程が成功したという意味です。
+またコードをアップロードする際の出力中に次のような部分があります。
+
+```
+> Device is found!
+connecting: 16% complete
+connecting: 22% complete
+connecting: 28% complete
+connecting: 33% complete
+> Device has firmware version 2.6
+```
+
+直感的にファームウェアバージョン2.6!!と教えてくれます。
+次のattiny投稿は接続即座にプログラムが実行されるスピードローダーを利用してUSB rubber duckyを作ってみようかと思います。

@@ -1,0 +1,172 @@
+---
+title: 使っていないノートパソコンをProxmoxサーバーとして再活用
+description: Proxmoxインストールおよび設定ガイド、ノートパソコンでの効率的な活用方法紹介
+date: 2022-10-03 18:47:33
+tags:
+  - homelab
+  - server
+categories: home lab
+lang:
+  - ja
+machine_translated: true
+---
+
+# Proxmoxとは？
+
+Hyper-V、ESXi、XenServer、KVMなどと同様の機能を提供するType-1ハイパーバイザーです。
+オープンソースという利点があります。
+
+## インストール環境
+
+どの環境でインストールを行っても、正常な使用のためにはベアメタルにインストールする必要があります。
+
+最小要件は次の通りです。
+
+```
+CPU: x86 64bit cpu
+*完全仮想化対応のためのIntel VT/AMD-V対応CPU
+
+RAM: 1GB RAM + ゲスト用の追加RAM必要
+
+ハードドライブ（何でも保存できるものなら）
+
+ネットワークカード1枚以上
+```
+
+私の場合、以下のスペックでインストールを行いました。
+
+```
+Lenovo ThinkPad E485 (Ryzen 3 2200U + 12GB RAM(8 + 4) + 1TB HDD)
+```
+
+スペックから分かるように、ハイパーバイザーだからといって特に高いスペックを要求するわけではありません。
+今すぐ引き出しの中で使われていないノートパソコン1台があれば十分に可能です。
+
+## インストール手順
+
+1. [公式ホームページ](https://www.proxmox.com/en/downloads/category/iso-images-pve)からISOファイルをダウンロードします。
+2. ISOファイルをUSBに焼きます。（Windowsの場合rufus、Linuxの場合dd）
+3. USBをノートパソコンに挿して起動します。
+   次のような画面が表示されたら`Install Proxmox VE`を選択します。
+   ![image](./images/pve-grub-menu.png)
+
+4. 適切にディスクを選択、適切なパスワードを選択、適切なタイムゾーン、適切な選択でインストールを完了します。
+5. https://server-ip:8006にアクセスしてログインします。
+   私の場合は`192.168.100.113:8006`でした。
+
+## サブスクリプション用リポジトリ削除および非購読者用リポジトリ追加
+
+```bash
+# vim /etc/apt/sources.list.d/pve-enterprise.list
+```
+
+次のようにコメントアウトしましょう。
+
+```bash
+# deb https://enterprise.proxmox.com/debian/pve buster pve-enterprise
+```
+
+以下のコマンドで設定ファイルを開きます。
+
+```bash
+# vim /etc/apt/sources.list
+```
+
+次の内容を追加します。
+
+```bash
+# no subscription
+deb http://download.proxmox.com/debian/pve bullseye pve-no-subscription
+```
+
+![Untitled](./images/pve-no-subscription.png)
+
+保存後、更新します。
+
+```bash
+# apt update && apt dist-upgrade -y
+```
+
+![Webコンソールで警告が出ますが、開発用サーバーなので問題ありません！](./images/web-console-warning.png)
+
+Webコンソールで警告が出ますが、開発用サーバーなので問題ありません！
+
+## ログイン時のサブスクリプション案内メッセージ削除
+
+```bash
+# vim /usr/share/javascript/proxmox-widget-toolkit/proxmoxlib.js
+```
+
+513行目付近の
+
+```bash
+if (res == null || res == undefined ||
+		!res || res.data.status.toLowerCase() ! = 'active') {
+```
+
+を次のコードに置き換えます。
+
+```bash
+if (false) {
+```
+
+次のコマンドで変更を適用します。
+
+```bash
+# systemctl restart pveproxy.service
+```
+
+### ノートパソコンにインストール時のスリープモード設定
+
+Proxmoxをサーバーとして使用するのに、蓋を閉じてスリープモードに入ると不便でしょう。
+
+```bash
+# vim /etc/systemd/logind.conf
+```
+
+次のような行を
+
+```bash
+#HandleLidSwitch=suspend
+```
+
+次のように変更しましょう。
+
+```bash
+HandleLidSwitch=ignore
+```
+
+その後、コマンドを入力しましょう。
+
+```bash
+# systemctl restart systemd-logind
+```
+
+これで蓋を閉じてもスリープモードに入ることはなくなります。
+
+### Webコンソールにダークモード適用
+
+```bash
+bash <(curl -s https://raw.githubusercontent.com/Weilbyte/PVEDiscordDark/master/PVEDiscordDark.sh ) install
+```
+
+![F5でリロードするとテーマが適用されます！！](./images/proxmox-dark-theme.png)
+
+F5でリロードするとテーマが適用されます！！
+
+[https://github.com/Weilbyte/PVEDiscordDark](https://github.com/Weilbyte/PVEDiscordDark)
+
+### AMD GPUバックライト修正
+
+`/etc/default/grub`ファイル中の
+
+`GRUB_CMDLINE_LINUX_DEFAULT`に
+
+`acpi_backlight=native`を追加して
+
+`update-grub`を実行後`reboot`
+
+## 今後の活用方法
+
+Kubernetesクラスター構築、Jenkins CI/CD、プライベートDocker Registryなどで利用する予定です。
+とりあえずはテストデプロイ＆デプロイを行うオンプレミスサーバーができたことに意義を置きたいと思います。

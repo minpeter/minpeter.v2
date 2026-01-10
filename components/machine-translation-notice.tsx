@@ -1,3 +1,6 @@
+"use client";
+
+import { useTranslations } from "next-intl";
 import { cn } from "@/shared/utils/tailwind";
 
 function ClaudeIcon({ size = 16 }: { size?: number }) {
@@ -23,15 +26,15 @@ interface MachineTranslationNoticeProps {
 export function MachineTranslationNotice({
   className,
 }: MachineTranslationNoticeProps) {
+  const t = useTranslations();
+
   return (
     <div className={cn("flex flex-col gap-1", className)}>
       <div className="flex items-center gap-1.5 text-foreground">
         <ClaudeIcon size={16} />
-        <span className="text-sm">Translated by Claude Opus 4.5</span>
+        <span className="text-sm">{t("translatedBy")}</span>
       </div>
-      <p className="text-muted-foreground text-xs">
-        AI-generated content may be inaccurate or misleading.
-      </p>
+      <p className="text-muted-foreground text-xs">{t("aiDisclaimer")}</p>
     </div>
   );
 }

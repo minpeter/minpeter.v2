@@ -1,0 +1,281 @@
+---
+title: "AWS - VPC"
+description: "Virtual Private Cloudについて学びましょう！"
+date: 2022-06-16T03:03:07.156Z
+tags: ["Subnet", "aws", "vpc"]
+categories: "aws"
+lang:
+  - ja
+machine_translated: true
+---
+
+## 理論
+
+### VPC（仮想プライベートクラウド）
+
+Virtual Private Cloudの略で、AWS上で論理的に独立した空間を提供してリソースを実行できるようにします。
+
+### VPCの種類
+
+AWSにはリージョンごとにDefault VPCとCustom VPCが存在します。
+Default VPCは各リージョンにデフォルトで1つずつ作成されており、
+Custom VPCはリージョンごとに最大5つまで作成できます。
+
+### Subnet（サブネット）
+
+ネットワーク領域を分割したネットワークです。
+クラウド環境のVPCでもサブネットを通じてネットワークを分離して分割できます。
+
+#### サブネットで予約されたIPアドレス
+
+サブネットに割り当てたIP帯域が10.0.0.0/24の場合、10.0.0.0～10.0.0.255のうち
+
+| アドレス   | 説明                         |
+| ---------- | ---------------------------- |
+| 10.0.0.0   | ネットワークアドレス         |
+| 10.0.0.1   | AWS VPC仮想ルーターアドレス  |
+| 10.0.0.2   | AWS DNSサーバーアドレス      |
+| 10.0.0.3   | 将来の新機能のために予約     |
+| 10.0.0.255 | ネットワークブロードキャストアドレス |
+
+また、AWS SubnetにはPublic SubnetとPrivate Subnetが存在します。
+Public Subnetは外部インターネットと直接通信できるネットワークであり、
+Private Subnetは外部インターネットと直接通信できない閉じたネットワークです。*ただしPrivateサブネットの場合もNATゲートウェイがあれば外部との通信が可能です。
+
+### Security GroupとACL
+
+インスタンスレベルでのセキュリティ技術はSecurity Groupです。
+サブネットで使用するセキュリティ技術も存在し、それがAccess Control List（ACL）です。
+
+## 実習 - Public Subnet VPC構成
+
+#### 実習ステップ
+
+| Public Subnet VPC作成                    | 検証                           |
+| ---------------------------------------- | ------------------------------ |
+| VPC作成                                  | EC2インスタンス作成            |
+| パブリックサブネット作成                 | EC2インスタンスアクセス後、通信確認 |
+| インターネットゲートウェイ作成およびVPC接続 |                                |
+| パブリックルーティングテーブル作成およびサブネット接続 |                        |
+| パブリックルーティングテーブル経路追加   |                                |
+
+### VPC作成
+
+1. VPC Consoleにアクセス -> VPC
+   ![](/images/bbe6166b-3c0c-425b-bf37-c20789281d48-image.png)
+2. 名前：CloudPeter-VPC
+   IPv4 CIDRブロック：10.0.0.0/16
+   ![](/images/c910f84f-9e0b-46d1-93e1-a87fb3a031e2-image.png)
+3. 作成確認
+   ![](/images/73329ad0-576c-4e66-9b2f-f8439c3e1998-image.png) *後でデフォルトVPCとユーザーVPCを区別する際、Name Tagの有無を確認できます
+
+### Public Subnet作成
+
+1. VPC Consoleにアクセス -> サブネット
+   ![](/images/3cd9199a-6553-4856-bed2-399a6ddf9b15-image.png)
+2. VPC ID：作成したVPCを選択（CloudPeter-VPC）
+   名前タグ：CloudPeter-Public-SN
+   アベイラビリティーゾーン：ap-northeast-2a
+   IPv4 CIDRブロック：10.0.0.0/24
+   ![](/images/b0f6ea91-d67f-4124-a2ab-b7e432a17df3-image.png)
+3. 作成確認
+   ![](/images/dddcd0e4-0b0f-483e-b660-1585cc8990dd-image.png)
+
+### インターネットゲートウェイ作成およびVPC接続
+
+外部インターネットとの通信のためにIGWを作成し、VPCと接続します。
+
+1. VPC Consoleにアクセス -> インターネットゲートウェイ
+   ![](/images/d2585bd8-5971-4375-a094-f4b63ecfa5ea-image.png)
+2. 名前タグ：CloudPeter-IGW
+   ![](/images/038ff117-33b8-40e6-9b93-67064fa7e92a-image.png)
+3. IGWとVPCを接続
+   ![](/images/0303ebce-9833-4e95-a3a8-4b7de36f63a4-image.png)
+   使用可能なVPC：作成したVPCを選択（CloudPeter-VPC）
+   ![](/images/201acf68-3746-4742-9421-a28b5f73cc06-image.png)
+4. 接続確認
+   ![](/images/001db724-5d88-4f93-b6d8-b99eedb6270f-image.png)
+
+ここまで進めると、インターネットと通信するためのIGWがVPCと接続され、サブネットも作成された状態です。
+ただし、まだ外部インターネットへのアクセスは不可能です。VPCの仮想ルーティングテーブルに外部インターネットへのルーティング経路がないためです。
+
+### パブリックルーティングテーブル作成およびサブネット接続
+
+1. VPC Consoleにアクセス -> ルーティングテーブル
+   ![](/images/f5bef8c4-c90e-4370-8f14-b24ffaf58fc5-image.png)
+2. 名前タグ：CloudPeter-Public-RT
+   VPC：作成したVPCを選択（CloudPeter-VPC）
+   ![](/images/78b91042-182a-4dba-9547-cfbc8eeb54a4-image.png)
+3. 作成確認およびサブネット接続
+   ![](/images/68d0b1b0-36cd-4f22-a6ea-e769c3eb8e7c-image.png)
+   サブネット接続をクリック
+   ![](/images/1144f945-24bd-423c-99a1-5917c2d24c5e-image.png)
+   サブネット接続の編集をクリック
+   ![](/images/c11ea166-62c1-4d49-850b-fa66e25df326-image.png)
+   以前作成したサブネットを選択
+
+### パブリックルーティングテーブル経路追加
+
+1. VPC Console -> ルーティングテーブル
+2. CloudPeter-Public-RTを選択
+3. ルーティングタブに移動
+   ![](/images/09711401-bc5e-4737-8ade-6ed9edef3bd6-image.png)
+4. 宛先：0.0.0.0/0
+   ターゲット：インターネットゲートウェイ -> igw-xxxを選択
+   ![](/images/8e7b9d54-eadf-43cd-a57f-0ceb6dd430c4-image.png)
+5. 適用確認
+   ![](/images/b6be05f1-b54a-490e-84e9-51ff333b3a86-image.png)
+
+すべての設定が完了しました。
+実際に通信が可能か検証しましょう。
+
+### EC2インスタンス作成
+
+通信確認のためにEC2インスタンスを作成します。
+
+1. EC2 Consoleにアクセス -> インスタンス
+
+2. インスタンスの起動をクリック
+   ![](/images/5a95d94c-bc0d-4626-a62f-2d6315dc86b4-image.png)
+
+3. 名前：Public-EC2
+   OSイメージ：Amazon Machine Image(AMI)、64bit
+   インスタンスタイプ：T2.micro
+   キーペア：いつも使用しているもの
+
+4. ネットワーク設定 -> 編集
+   ![](/images/768d6c88-d81e-43d6-8bd6-7317858386fa-image.png)
+
+5. VPC：作成したVPCを選択（CloudPeter-VPC）
+   サブネット：作成したSubnetを選択（CloudPeter-Public-SN）
+   パブリックIP自動割り当て：有効化
+   ![](/images/3f8ec53e-0f7c-4295-af5c-772cb1780cf8-image.png)
+
+6. セキュリティグループ：default
+   ![](/images/27954cef-a255-4cc1-99c8-f37f7e19b031-image.png)
+
+7. 作成確認
+   ![](/images/00cd2548-1e35-4825-a324-2e8e3b07e853-image.png)
+
+### EC2インスタンスアクセス後、通信確認
+
+パブリックIPでSSH接続後
+`ping google.com`
+pingが通れば成功！
+
+## 実習 - Private Subnet VPC構成
+
+#### 実習ステップ
+
+| Private Subnet追加                         | 検証                                       |
+| ------------------------------------------ | ------------------------------------------ |
+| プライベートサブネット作成                 | EC2インスタンス作成                        |
+| NATゲートウェイ作成                        | EC2インスタンスアクセス後、通信確認        |
+| プライベートルーティングテーブル作成およびサブネット接続 | パブリックサブネットとプライベートサブネットの通信フロー |
+| プライベートルーティングテーブル経路追加   |                                            |
+
+### Private Subnet作成
+
+1. VPC Consoleにアクセス -> サブネット
+
+2. サブネット作成
+   VPC ID：作成したVPCを選択（CloudPeter-VPC）
+   名前タグ：CloudPeter-Private-SN
+   アベイラビリティーゾーン設定：ap-northeast-2c
+   IPv4 CIDRブロック：10.0.1.0/24
+   ![](/images/447dd7cd-c68e-4397-b966-080eeecac7f2-image.png)
+
+3. 作成確認
+   ![](/images/acbeabeb-f41a-4d35-a7a4-a06b56e11aa7-image.png)
+
+### NATゲートウェイ作成
+
+1. VPC Consoleにアクセス -> NATゲートウェイ
+   ![](/images/6af2950a-c904-445c-81bf-d3daf7b9c4b8-image.png)
+
+2. 名前：CloudPeter-NAT
+   サブネット：パブリックサブネットを選択（CloudPeter-Public-SN）
+   Elastic IP割り当てをクリック！
+   ![](/images/b9e00de5-9e66-416e-903a-a6d1d73d8467-image.png)
+
+3. 作成確認
+   ![](/images/6ea302a7-768f-4336-831d-f8c4111c748a-image.png)
+
+### プライベートルーティングテーブル作成およびサブネット接続
+
+1. VPC Consoleにアクセス -> ルーティングテーブル
+
+2. 名前タグ：CloudPeter-Private-RT
+   VPC：作成したVPCを選択（CloudPeter-VPC）
+   ![](/images/e7d00c76-57f5-4e83-8677-6ef88edc38e8-image.png)
+
+3. プライベートルーティングテーブルを選択
+
+4. ルーティング編集をクリック
+   ![](/images/9358db91-15f0-49f3-ac62-bad69f38a5be-image.png)
+
+5. プライベートサブネット（CloudPeter-Private-SN）を選択
+   ![](/images/dffb377c-e33d-46a4-a8a8-69d43c3b88cf-image.png)
+
+### プライベートルーティングテーブル経路追加
+
+1. VPC Consoleにアクセス -> ルーティングテーブル
+
+2. プライベートルーティングテーブルを選択
+
+3. ルーティング編集をクリック
+   ![](/images/9b49470c-9bd7-4732-ad71-095303ba3cc0-image.png)
+   以下のように編集（NATゲートウェイを選択）
+   ![](/images/fec49ebe-9c14-4b4d-9055-2be184273abb-image.png)
+
+### EC2インスタンス作成
+
+1. EC2 Consoleにアクセス -> インスタンス
+
+2. 名前：Private-EC2
+   ネットワーク：作成したVPCを選択（CloudPeter-VPC）
+   サブネット：作成したプライベートサブネット（CloudPeter-Private-SN）
+
+3. ネットワーク設定
+   ![](/images/88cbd21f-a09e-44db-9736-510684ef9b21-image.png)
+
+4. 高度な詳細
+   ![](/images/a93a7eeb-32d2-41e3-889f-b51ee48956b1-image.png)
+
+```bash
+#!/bin/bash
+(
+echo "qwe123"
+echo "qwe123"
+) | passwd --stdin root
+sed -i "s/^PasswordAuthentication no/PasswordAuthentication yes/g" /etc/ssh/sshd_config
+sed -i "s/^#PermitRootLogin yes/PermitRootLogin yes/g" /etc/ssh/sshd_config
+service sshd restart
+```
+
+上記のユーザーデータはパスワード方式でSSHにアクセスできるようにする設定です。
+EC2インスタンスが起動時に読み込んで適用します。
+
+5. 作成確認
+   ![](/images/a2caa957-0db1-431d-829a-7e2973c337fa-image.png)
+
+Private-EC2のネットワークを確認すると、パブリックIPが付与されていないことが確認できます。
+
+### EC2インスタンスアクセス後、通信確認
+
+1. Public-EC2のIPでSSH接続
+
+2. SSH接続した状態でPrivate-EC2のプライベートIPv4アドレスでSSH接続
+
+3. NATを利用して`ping google.com`にpingが通るか確認
+   ![](/images/e1c8161d-bdb8-4d1c-b3cd-e732a9dc679b-image.png)
+
+*NATの場合、内部から外部への通信は可能ですが、外部からPrivate Subnetへのアクセスは不可能です
+
+### リソース削除
+
+1. EC2インスタンスの終了（EC2 -> インスタンス -> インスタンス選択 -> アクション -> インスタンスの状態 -> 終了）
+2. NATゲートウェイの削除（VPC -> NATゲートウェイ -> アクション -> NATゲートウェイの削除）
+   ⚠️ NATゲートウェイが削除されるまで待機
+3. Elastic IPの削除（VPC -> Elastic IP -> Actions -> Elastic IPアドレスのリリース）
+4. VPCの削除（VPC -> VPC -> アクション -> VPCの削除）

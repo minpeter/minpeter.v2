@@ -1,0 +1,229 @@
+---
+title: Winja CTF | Nullcon Goa 2022 writeups
+date: 2022-09-11 23:04:53
+tags:
+lang:
+  - ja
+machine_translated: true
+---
+
+# 概要
+
+CTFに出場して問題を解いたことは何度もありましたが、writeupを記事として残すのは初めてだと思います。
+今回はNullcon Goa 2022に参加して問題を解いたので、大会中に解けた問題のwriteupを残そうと思います。
+どれも100点の基本問題で難しくはありませんが、ハッキング初心者の私にとっては解けた全ての問題が大切なので✨
+
+\*追加で、いつまで開いているかわかりませんが、Nullcon Goa 2022の問題は[こちら](https://ctf.winja.site/)で解くことができます。
+~~大会終了後に登録できるかは不明です。~~
+
+# 問題
+
+## 1. [Pwn] 100点 - FreeFall
+
+### 問題説明
+
+> The highest jump in freefall is 40km, I don't think you so you need to jump that much. But calculate before you jump.
+
+### 解法
+
+問題ファイルをダウンロード後、binwalkで構造分析
+
+![Untitled](./free-fall/Untitled.png)
+
+簡単にELFファイルであることを確認
+
+IDAで開いて構造を確認
+
+![Untitled](./free-fall/Untitled-1.png)
+
+これでgetによるbuffer overflow問題だと確信
+
+![Untitled](./free-fall/Untitled-2.png)
+
+また、プログラムのstringデータ中に`cat flag.txt`が存在することを確認
+
+ブログを検索してみると...IDAよりgdbをみんな好むようなので、私もGDBに移行
+
+`gdb bof1`でgdb実行
+
+`info functions`で全ての関数を検索
+
+![Untitled](./free-fall/Untitled-3.png)
+
+main関数の上にあるwinという関数が怪しい
+
+おそらくsystem("cat flag.txt")と同様の機能を持つ関数と推測
+
+`disassemble win`で関数をディスアセンブル
+
+![Untitled](./free-fall/Untitled-4.png)
+
+開始アドレスを確保（この時x64ベースであることがわかる）
+
+![Untitled](./free-fall/Untitled-5.png)
+
+char format[32];で宣言された変数にgets()関数を呼び出していることを確認
+
+したがって、BUF 32byte + SFP 4byte + RETなので
+
+合計40byteのダミーデータと上で確保したwin関数部分を使用してエクスプロイトすると
+
+```c
+python -c "print('A' * 40 + '\x72\x11\x40\x00\x00\x00\x00\x00')" | nc freefall.chall.winja.site 18967
+```
+
+![Untitled](./free-fall/Untitled-6.png)
+
+`flag{7fbec6d149f9878499b4acd05e06c692_Did_B4BY_MaK3_YOu_OVeRCrY}`
+
+このようなフラグ値を取得できます。
+
+## 2. [Rev] 100点 - Revagers
+
+### 問題説明
+
+> Help Yondu and the 40 ravagers to steal the flag.
+
+### 解法
+
+ファイルをダウンロード後、メモ帳で開いてファイルシグネチャを確認
+
+![Untitled](./revagers/Untitled.png)
+
+簡単にELFファイル、つまりLinux実行ファイルであることがわかる
+
+すぐにIDAで開く
+
+```c
+__int64 __fastcall main(int a1, char **a2, char **a3)
+{
+  if ( a1 == 2 )
+  {
+    if ( strlen(a2[1]) == 41 )
+      sub_1159(a2[1]);
+    else
+      printf("[!] Incorrect Passcode");
+  }
+  else
+  {
+    printf("[!] ERR! Usage ./vault <Passcode>");
+  }
+  return 0LL;
+}
+```
+
+```c
+int __fastcall sub_1159(const char *a1)
+{
+  int result; // eax
+
+  result = *((unsigned __int8 *)a1 + 1);
+  if ( (_BYTE)result == '9' )
+  {
+    result = *((unsigned __int8 *)a1 + 15);
+    if ( (_BYTE)result == '5' )
+    {
+--- [繰り返し部分省略] ---
+              result = *((unsigned __int8 *)a1 + 10);
+              if ( (_BYTE)result == 'a' )
+              {
+                result = *((unsigned __int8 *)a1 + 32);
+                if ( (_BYTE)result == '_' )
+                {
+                  result = *((unsigned __int8 *)a1 + 19);
+                  if ( (_BYTE)result == '6' )
+                  {
+                    result = *((unsigned __int8 *)a1 + 6);
+                    if ( (_BYTE)result == '8' )
+                    {
+--- [繰り返し部分省略] ---
+                      result = *((unsigned __int8 *)a1 + 18);
+                      if ( (_BYTE)result == '2' )
+                      {
+                        result = *((unsigned __int8 *)a1 + 35);
+                        if ( (_BYTE)result == '4' )
+                        {
+                          if ( a1[2] == 'f' )
+                          {
+                            puts("[+] You cracked the vault.");
+                            return printf(
+                                     "[+] Your flag is flag{%s}",
+                                     a1);
+                          }
+                          else
+                          {
+                            return printf("[!] Incorrect Passcode");
+                          }
+--- [閉じ括弧省略] ---
+  return result;
+}
+```
+
+./vault &lt;passcode&gt;で実行可能で
+
+この時passcodeの長さは41
+
+長さ41の文字列をsub_1159(a1)で呼び出し
+
+この関数で入力値を検証していることがわかる
+
+if文の数字を書き出すと以下の通り
+
+![これで判明したのは秘密ではない](./revagers/Untitled-1.png)
+
+これで判明したのは秘密ではない
+
+89fc238534a13e556726cf70f36205cf_ST4r10RD
+
+上記の値を引数としてプログラムを実行
+
+./vault 89fc238534a13e556726cf70f36205cf_ST4r10RD
+
+output:
+[+] You cracked the vault.
+[+] Your flag is `flag{89fc238534a13e556726cf70f36205cf_ST4r10RD}`
+
+やった、すぐに提出してみると？
+
+解法完了！！
+
+![Untitled](./revagers/Untitled-2.png)
+Brrrrrrrr これが私だ :)
+
+## 3. [Steganography] 100点 - T'kani
+
+### 問題説明
+
+> Buzz lightyear sent secret file to Alisha for their secret mission on T'kani Prime Planet.But Alisha is not able to read the file. Can you help Alisha ?
+
+### 解法
+
+ファイルをダウンロード後、binwalkで構造把握
+
+zlib + zipファイルであることを確認
+
+まずzipを解凍（実はzlibの解凍方法がわからなくて ㅠ）
+
+minionというファイルを確保
+
+再度構成を確認
+
+![Untitled](./tkani/Untitled.png)
+
+これもzip圧縮ファイルであることを確認
+
+`unzip minion`で解凍
+
+`grep -r 'flag' *`コマンドでファイル内のflagフォーマットを検索
+
+word/document.xmlファイル内でフラグを発見
+
+![Untitled](./tkani/Untitled-1.png)
+
+提出すると正解
+
+# 大会後記
+
+全222位中97位なら、一人ではよくやったのでは...？
+と慰めてみたいけど、もっとうまくなりたいのでもっと頑張って勉強しないと。
+次の大会はもっとうまくやろう。

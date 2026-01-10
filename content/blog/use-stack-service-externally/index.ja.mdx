@@ -1,0 +1,69 @@
+---
+title: "stackサービスを外部から使用する"
+description: "docker stackを使用する際、サービス公開のためにプロキシサーバーを立ててみましょう :)"
+date: 2021-09-14 08:23:00 +0900
+tags: ["docker", "server", "swarm"]
+lang:
+  - ja
+machine_translated: true
+---
+
+基本的にstackで実行されるサービスを外部からアクセスするには、managerノードと接続する必要があります。
+しかし、前の記事で作成したecho stackは`constraints: [node.role != manager]`オプションでマネージャーでは実行されないように設定したため、各コンテナが複数のノードに分散されているので、前にvisualizerサービスを作成した時と同じ方法も使用できません。
+
+そこで、クラスター外部のトラフィックを内部に転送するプロキシサーバーを構成してみます。
+haproxyイメージを使用して外部トラフィックがnginxコンテナに向かうように設定してみましょう。
+
+**ingress.yaml**
+
+```yaml
+version: "3"
+
+services:
+  haproxy:
+    image: dockercloud/haproxy
+    networks:
+      - test
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    deploy:
+      mode: global
+      placement:
+        constraints: [node.role == manager]
+    ports:
+      - 80:80
+      - 1936:1936 # for stats page (basic auth. stats:stats)
+
+networks:
+  test:
+    external: true
+```
+
+このプロキシは8080ポートのページを外部80ポートに接続する簡単なプロキシです。
+ファイルをmanagerコンテナに移動
+
+```
+$ docker cp ingress.yaml manager:/ingress.yaml
+```
+
+サービスデプロイ
+
+```
+$ docker exec -it manager \
+docker stack deploy -c /ingress.yaml ingress
+```
+
+以下のコマンドでサービスが実行されていることを確認できます。（またはvisualizerで確認しても構いません。）
+
+```
+$ docker exec -it manager \
+docker service ls
+```
+
+最後に、ローカルでブラウザから[localhost:8000](http://localhost:8000)にアクセスすると、`hello, flask!`というメッセージが出力されることがわかります。
+この時、プロキシサーバーで80ポートにフォワーディングしたのに8000ポートにアクセスする理由は、クラスターコンテナを作成した際にmanagerノードのポートを8000:80に設定したからです。
+
+## 参考資料
+
+[スウォーム(swarm)を利用したDockerコンテナデプロイ\_3 (スウォームクラスター外部からサービスを使用する)](https://cornswrold.tistory.com/516?category=930033)
+[docker docs](https://docs.docker.com/engine/swarm/ingress/)

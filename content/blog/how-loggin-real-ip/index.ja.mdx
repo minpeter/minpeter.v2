@@ -1,0 +1,355 @@
+---
+title: バックエンドでクライアントのIPをロギングする方法
+description: リバースプロキシ環境でのX-Forwarded-Forヘッダーを利用したクライアントIP取得とセキュリティ上の注意点
+date: 2023-02-25 03:03:18 +0900
+tags: ["http", " backend", " reverse proxy"]
+categories: ""
+lang:
+  - ja
+machine_translated: true
+---
+
+おそらく皆さんは自分で作ったバックエンドが一つくらいはあるでしょう。
+私の場合は[api.tmpf.me](https://api.tmpf.me)がありましたが、一つ残念な点がありました。
+
+それは`user access logging...`、アクセスするユーザーの記録を残す作業が不足していたことです。
+実は必ずしも必要ではないかもしれませんが、必要だと思いながら読んでみてください。
+
+まず様々なインフラ構成があり得ます。
+その中でクライアントとサーバーが直接通信する場合
+
+非常に簡単に処理できます。
+RemoteAddrフィールドをパースして使用すれば良いのです。
+
+下の画像に見えるように`211.104.53.76`がクライアントのIPです。
+（記事を書いている私のIP）
+![スタバのIPだ.. いじめないで。](./images/Untitled.png)
+
+2番目のケースです。
+サーバーとの間にプロキシサーバーが存在する場合です。
+この場合、新しく知っておく必要があるのがX-Forwarded-Forヘッダーです。
+
+このヘッダーはプロキシを通過するときに失われるRemoteAddrをプロキシの背後にあるサービスまで伝達するために作られた~~事実上の~~標準ヘッダーです。
+次のスクリーンショットはwhoamiサービスが2つのリバースプロキシの背後で実行されている場合です。
+
+![](./images/Untitled-1.png)
+
+よく見ると元のクライアントIPを入れることができる部分が2つ存在します。Cloudflareが追加した`Cf-Connecting-Ip`フィールドと`X-Forwarded-For`フィールドの最初の値です。
+
+まず`Cf-Connecting-Ip`の場合、CloudflareでProxied recordsを使用する場合にのみ該当するため除外し、下の`X-Forwarded-For`ヘッダーをよく見てみましょう。
+
+最初の値は明らかにclient ipです。では次の値は何でしょうか？
+それはCloudflareプロキシサーバーのIPであり、その次の上ではclient ipだったRemoteAddrの場合はCloudflareの次のリバースプロキシであるtraefikのIPです。
+
+上の画像とIPは異なりますが、以下のような構造を持っています。
+![](./images/Untitled-2024-02-13-1709.svg)
+
+X-Forwarded-Forヘッダーはプロキシを一つ通過するたびに既存のRemoteAddr部分をX-Forwarded-Forヘッダーにappendし、自分であるプロキシサーバーのIPがRemoteAddrに入る形式です。
+
+したがって「ほとんどの場合」次のロジックは正常にクライアントのIPを取得することに成功します。
+
+```go
+forward := r.Header.Get("X-Forwarded-For")
+  var ip string
+  var err error
+  if forward != "" {
+    // With proxy
+    ip = strings.Split(forward, ",")[0]
+  } else {
+    // Without proxy
+    ip, _, err = net.SplitHostPort(r.RemoteAddr)
+    if err != nil {
+      http.Error(w, "Error parsing remote address ["+r.RemoteAddr+"]", http.StatusInternalServerError)
+      return
+    }
+  }
+```
+
+しかし上記のロジックには深刻なエラーが一つ存在します。
+
+もし上で入れたIPでアクセス制御をすると考えてみましょう。
+
+サーバーがプロキシがある状態でもない状態でも、r.Headerという値は「ユーザーから」送信されるようになっています。
+
+また`X-Forwarded-For`ヘッダーは文字通りHTTPヘッダーです。
+
+ヘッダーは簡単に操作可能です。
+
+もし`X-Forwarded-For`ヘッダーを最初に送信するときに「追加」した状態で送信すると、以下のような形式で送信されます。
+
+X-Forwarded-For: &lt;改ざんして追加したIP A&gt;, &lt;クライアントの実際のIP B&gt;, &lt;PROXY 1 C&gt;
+
+もちろん場合によってはproxy Cがない場合もあり、クライアントの実際のIPがRemoteAddrにある場合もありますが、関係ありません。
+
+上記のロジックによればXFFヘッダーが設定されている → XFFヘッダーの最初の値を読む、なのでユーザーが改ざんして追加した値が実際のIPとして認識されます。
+
+これは問題です。
+したがってこれを処理する別のロジックが必要ですが...
+ほとんどのプロダクションプログラムでこの問題を解決する方法を見つけました。
+
+新しい設定値FORWORDEDを作成します。
+この設定値は数字で、各数字は以下を表します。
+
+| 数字 | 意味                                                                         |
+| ---- | ---------------------------------------------------------------------------- |
+| 0    | リバースプロキシがなく、RemoteAddrを使用します。                               |
+| 1    | サービスの前に1つのリバースプロキシがあり、XFFヘッダーの-1番目の値を使用します。 |
+| ..   | ..                                                                           |
+| 3    | サービスの前に3つのリバースプロキシがあり、XFFヘッダーの-3番目の値を使用します。 |
+| 4    | サービスの前に4つのリバースプロキシがあり、XFFヘッダーの-4番目の値を使用します。 |
+| ..   | ..                                                                           |
+
+このようにすれば、ユーザーがヘッダー値を改ざんして送った場合でも、設定値を超えるリクエストに対してはただ無視するため、影響を受けなくなります。
+
+例えばCloudflareとtraefikを経てサービスにトラフィックが到着する場合、FORWARDED環境変数を2に設定してXFFヘッダー配列の-2番目の値を使用することになります。
+したがってユーザーが任意に値を追加しても無視されるという意味です。
+
+しかしこの方法は先に述べたように完璧ではありません。
+なぜなら何か設定値が追加されたため、すべての環境に適応してサービスすることが不可能だからです。
+
+---
+
+## 注意：以下は面白いですが整理されていません。tl;dr
+
+- FORWARDED環境変数は思ったより悪くない方式です。お勧めします。
+- XFFヘッダーのIP帯域を信頼するプロキシの帯域に設定する方法もあります。
+- XFFヘッダーは操作可能なので信じないようにしましょう。
+
+---
+
+いつの間にかBurp Suiteを使って自分が制作したサイトを攻撃し、コードを再検証し、うっかり見過ごしてしまう可能性がある部分を点検するまでになりました。
+
+この問題はどのように知られているでしょうか？
+
+以下のような資料を見つけることができましたが、その中で興味深いいくつかの資料です。
+
+![Untitled](./images/Untitled-3.png)
+
+[https://blog.ircmaxell.com/2012/11/anatomy-of-attack-how-i-hacked.html](https://blog.ircmaxell.com/2012/11/anatomy-of-attack-how-i-hacked.html)
+
+一言で言うと、筆者がSSHトンネルによって偶発的にXFFヘッダーに127.0.0.1アドレスが入ることになり、これをStack Overflowが「管理者」のアクセスとして認識して権限昇格が起こったという話です。
+
+またこんな資料も見つけることができました。
+
+[https://www.acunetix.com/vulnerabilities/web/x-forwarded-for-http-header-security-bypass/](https://www.acunetix.com/vulnerabilities/web/x-forwarded-for-http-header-security-bypass/)
+
+XFF HTTP header security bypass、分類番号CWE-289
+
+CTFdのようにプロキシホップを制限して防止するロジックがある場合もありましたが、何とStack Overflowで権限昇格が起こったりするなど、かなり面白い技法でした。
+
+面白いのでもう少し進んで、他のサービスでのIPロギング方法を攻撃して分析してみましょう。
+
+まず[ifconfig.me](http://ifconfig.me)です。
+
+普段よく使うサービスなので選んでみました。
+
+![Untitled](./images/Untitled-4.png)
+
+次のようにproxy optionを選択してinterceptを行いました。
+
+![Untitled](./images/Untitled-5.png)
+
+何も改ざんしていないときの応答です。
+
+![Untitled](./images/Untitled-6.png)
+
+リクエストヘッダーに強制的に値を入れてみました。
+
+![Untitled](./images/Untitled-7.png)
+
+確かに値は操作されました。
+
+それではifconfig.meはどのような方式でclient ipを確認するのでしょうか？
+
+GitHubでリポジトリを見つけました。
+
+[GitHub - pmarques/ifconfig.me: Simple HTTP application for demos and tests](https://github.com/pmarques/ifconfig.me)
+
+と思いましたが、別のサービスだったという話...
+
+実際にローカルで実行してみて「あ、これは違う」と思いました。
+
+しかもここではその回避に対する備えをしておらず、実際する必要があるかは... ただ見せるだけなので〜
+
+実はこれ以外にも様々なリポジトリが「A IP echo server inspired by [http://ifconfig.me](http://ifconfig.me/)」というタイトルで制作されていましたが、いくつかのリポジトリのIP取得ロジックを持ってきてみました。
+
+```go
+ip := this.GetString("ip", this.Ctx.Input.IP())
+```
+
+ここでthis変数はbeegoライブラリのルーターパラメータでした。
+
+面白いものを見つけました。
+
+[Security issue: Trusted Reverse Proxy and X-Forwarded-\* headers · Issue #4589 · beego/beego](https://github.com/beego/beego/issues/4589)
+
+今私が解決しようとしている問題に関するイシューですが... ただクローズされました。
+
+これはつまり、ほとんどのbeegoで書かれたgolangバックエンド、その中で以前言及したStack Overflowのようなロジックを使用する場合、簡単にハッキングできるという話になります。
+
+```go
+// IP returns request client ip.
+// if in proxy, return first proxy id.
+// if error, return RemoteAddr.
+func (input *BeegoInput) IP() string {
+	return (*context.BeegoInput)(input).IP()
+}
+```
+
+現在のbeegoのdevelopブランチのコード実装とコメントを発掘してきました。
+
+うーん... 2番目のコメントの意味を推測すると「私たちはただ何も考えずにXFFの最初の値を取り出すよ、さよなら」
+
+![Untitled](./images/Untitled-8.png)
+
+次はあの`(*context.BeegoInput)(input).IP()`実装体です。
+
+[https://github.com/beego/beego/blob/031c0fc8af57ea1a18e21fd5a7a8e6f23c26bbea/server/web/context/input.go](https://github.com/beego/beego/blob/031c0fc8af57ea1a18e21fd5a7a8e6f23c26bbea/server/web/context/input.go)の一部コードです。
+
+```go
+// IP returns request client ip.
+// if in proxy, return first proxy id.
+// if error, return RemoteAddr.
+func (input *BeegoInput) IP() string {
+	ips := input.Proxy()
+	if len(ips) > 0 && ips[0] != "" {
+		rip, _, err := net.SplitHostPort(ips[0])
+		if err != nil {
+			rip = ips[0]
+		}
+		return rip
+	}
+	if ip, _, err := net.SplitHostPort(input.Context.Request.RemoteAddr); err == nil {
+		return ip
+	}
+	return input.Context.Request.RemoteAddr
+}
+```
+
+この実装、何かおかしいです...
+
+最後の希望で`input.Proxy()`の実装を見てみましょう。
+
+```go
+// Proxy returns proxy client ips slice.
+func (input *BeegoInput) Proxy() []string {
+	if ips := input.Header("X-Forwarded-For"); ips != "" {
+		return strings.Split(ips, ",")
+	}
+	return []string{}
+}
+```
+
+ああ...
+
+これで合っているのか疑問な実装です。
+
+とりあえずここまで見たら静かにさっきイシューを開くこともできますが... とりあえずbeego内部でIP()実装をどのように使用しているか検索してみましょう。
+
+server/web/error.go
+
+```go
+"AppError":      fmt.Sprintf("%s:%v", BConfig.AppName, err),
+"RequestMethod": ctx.Input.Method(),
+"RequestURL":    ctx.Input.URI(),
+"RemoteAddr":    ctx.Input.IP(),
+"Stack":         stack,
+"BeegoVersion":  beego.VERSION,
+"GoVersion":     runtime.Version(),
+```
+
+これはとりあえずRemoteAddrではありません。これだとエラーログを偽装できることになります。
+
+server/web/server.go
+
+```go
+record := &logs.AccessLogRecord{
+RemoteAddr:     ctx.Input.IP(),
+RequestTime:    requestTime,
+RequestMethod:  r.Method,
+Request:        fmt.Sprintf("%s %s %s", r.Method, r.RequestURI, r.Proto),
+```
+
+ここでも同様です。
+
+server/web/router.go
+
+```go
+if p.cfg.RunMode == DEV && !p.cfg.Log.AccessLogs {
+		match := map[bool]string{true: "match", false: "nomatch"}
+		devInfo := fmt.Sprintf("|%15s|%s %3d %s|%13s|%8s|%s %-7s %s %-3s",
+			ctx.Input.IP(),
+			logs.ColorByStatus(statusCode), statusCode, logs.ResetColor(),
+			timeDur.String(),
+			match[findRouter],
+```
+
+ここはdevモードでアクセスロギングを問題のある実装体で行うことになります。
+
+まあbeegoでアクセスロギングを信じないことにしましょう...
+
+次はfiber、echoを見てみましょう。
+
+[Trusted Reverse Proxy and get c.Hostname() value from X-Forwarded-Host and etc · Issue #1300 · gofiber/fiber](https://github.com/gofiber/fiber/issues/1300)
+
+誰かがTrustedProxy機能を追加しました。
+
+[IP Address | Echo - High performance, minimalist Go web framework](https://echo.labstack.com/guide/ip-address/#case-1-with-no-proxy)
+
+開発者がうまくやってくれました。
+
+## 結論
+
+これが私の結論です。
+
+汎用的にデプロイするバックエンドで最初から開発者が別の設定ファイルなしに「信頼できる」クライアントのIPを取得することは難しいです。
+
+しかしいくつかの選択可能なオプションが存在します。
+
+1. RemoteAddrだけを信じてバックエンドをプロキシなしでデプロイする場合
+2. XFFヘッダーの最初の値を使用するが、信頼できない状態で使用
+3. サーバーがデプロイされる環境のプロキシ数を環境変数で設定して信頼できるプロキシ数を設定
+   その数だけXFFヘッダーを読むように設定
+4. 信頼できるプロキシのIP帯域を設定しておき、最も近い信頼できないXFFヘッダーのIPを使用
+
+ここで3番と4番は設定ファイルが必要ですが、設定さえうまくすればいつでも信頼できるIPを持つことになり、
+
+1番は信頼は可能ですが、環境によってはクライアントIPではない場合（プロキシが存在する場合）が生じる可能性があります。
+
+2番は汎用性は高いですが、簡単にハッキングできます。
+
+また、それ以外の解決方法も存在します。
+
+Cloudflareを使用するという前提でCf-Con...ヘッダーを使用したり、サーバーの前段にあるプロキシでX-Real-IP値を設定してそれを信頼する方法など、様々な方法があります。
+
+常に選択が必要で、またバックエンドプログラムを開発するときや使用することになるとき、そのプログラムがどのように開発されたか分析して信頼できる方式かどうか検証しなければなりません。
+
+それで私はどのように開発するかというと...
+
+1. XFFヘッダーを使用
+2. 無条件信頼ではなくローカルアドレスとCloudflareのIPを信頼
+3. 追加プロキシオプションでRemoteAddrを使用
+4. 追加オプションで信頼可能なプロキシアドレスを追加できるように設定
+5. 追加オプションでプロキシホップ数だけで設定して信頼
+
+しかし終わりではありません。
+
+それでもWAFや不明な原因でXFFヘッダーが強制変更されて固定されたりする可能性があるため、ケースバイケースです...
+
+まあ私が開発するときは一生懸命参考にしないと
+
+---
+
+Q. 以前一度監視インフラ点検の際にXFFヘッダーが消失する奇妙なことがありましたよね？
+
+そのときの原因は何でしたか？
+
+A. 馬鹿みたいにオーケストレーションするつもりで設定しておいたswarmでoverlayネットワーク設定のせいでネットワークがおかしくなったせいでした。
+
+確かに熟練した技術者がいないと技術導入を延期しなければならないと感じた場面でしたね。
+
+Q. ipLoggerプロジェクトを最終的に進めましたが、何を感じましたか？
+
+A. 思ったより多くのプロジェクトでXFFヘッダーを信じているようで、その実装が不安定な場合もありました。
+
+もちろんipLoggerプロジェクトが完璧だということではありませんが、制作しながらロギング技術とクライアントの本当のIPを取得する技術面では確かに勉強になりました。

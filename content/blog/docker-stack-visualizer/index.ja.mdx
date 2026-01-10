@@ -1,0 +1,57 @@
+---
+title: docker stack visualizer
+date: 2021-09-13 12:05:00 +0900
+tags:
+  - docker
+  - server
+  - swarm
+  - visualizer
+description: Docker swarmモードでノードとコンテナの分布を視覚的に確認するvisualizer
+lang:
+  - ja
+machine_translated: true
+---
+
+## 概要
+
+visualizerは2016 dockerconでstack機能を紹介するために作成されたツールです。
+これを利用するとswarmモードでノードとコンテナの分布状態を視覚的に確認できます。
+
+## 実習
+
+**visualizer.yaml**
+
+```yaml
+version: "3"
+
+services:
+  app:
+    image: dockersamples/visualizer
+    ports:
+      - "9000:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    deploy:
+      mode: global
+      placement:
+        constraints: [node.role == manager]
+```
+
+コンテナを使って実習している場合はdocker cpコマンドでファイルを移動させましょう
+
+```
+$ docker cp visualizer.yaml manager:/visualizer.yaml
+```
+
+サービスを実行しましょう
+
+```
+$ docker exec -it manager \
+docker stack deploy -c /visualizer.yaml visualizer
+```
+
+localhost:9000にアクセスすると美しい画面が表示されるでしょう。
+
+## 参考資料
+
+[スウォーム(swarm)を利用したDockerコンテナデプロイ\_2](https://cornswrold.tistory.com/515?category=930033)

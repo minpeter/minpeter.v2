@@ -1,0 +1,117 @@
+---
+title: "Pi-holeを使った広告ブロック"
+description: "Pi-holeを使ってネットワーク全体の広告をブロックする方法"
+date: 2021-09-02 12:59:59 +0900
+tags: ["DNS", "homelab", "pihole", "raspberrypi", "server"]
+lang:
+  - ja
+machine_translated: true
+---
+
+## Pi-holeとは？
+
+Raspberry Piやその他のLinux系OSにインストールできるDNSサーバーです。
+ただし**広告ブロック機能付き**です。
+
+一般的に使用されるChromeプラグインとは異なり、ネットワークレベルで広告をブロックするため、パフォーマンスへの影響が少ないです。
+また、プラグインと比較にならないほどの利点があります。ルーターのDNSサーバーをPi-holeに設定すると、ネットワーク全体に適用されます。
+
+**つまり、スマートフォンでも使えるということです**
+
+このような利点があるなら、導入するしかないですよね？
+
+## インストール手順
+
+インストール方法は大きく2つに分かれます。
+
+1. インストールスクリプトを使用する方法
+
+   `curl -sSL https://install.pi-hole.net | bash`
+   を入力すると、選択画面が表示されます。
+   適切に設定してください。
+   すぐにPi-holeが起動します。
+   ~~Raspberry Pi Zeroのような~~低スペックマシンではこの方法を使うかもしれませんが、私は3B+で設定するので後者を好みます。
+
+2. Dockerを使用してコンテナとして起動する方法
+
+   この方法をお勧めします。
+   3B+のようなモデルの場合、Pi-holeを実行してもRAMなどのリソースが十分に余ります。
+   1番の方法でも余ったリソースを使用できますが、Dockerコンテナを使用すると管理がスッキリするので使用しています。
+   まずdockerとdocker-composeをインストールした後、
+   piholeディレクトリを作成します。
+   そのディレクトリでdocker-composeファイルを以下のように作成します。
+
+   ```yaml
+   version: "3"
+   # More info at https://github.com/pi-hole/docker-pi-hole/ and https://docs.pi-hole.net/
+   services:
+   pihole:
+     container_name: pihole
+     image: pihole/pihole:latest
+     ports:
+       - "53:53/tcp"
+       - "53:53/udp"
+       - "67:67/udp"
+       - "80:80/tcp"
+       - "443:443/tcp"
+     environment:
+     TZ: "Asia/Seoul"
+     WEBPASSWORD: "<MY_PASSWORD>"
+     # Volumes store your data between container upgrades
+     volumes:
+       - "./etc-pihole/:/etc/pihole/"
+       - "./etc-dnsmasq.d/:/etc/dnsmasq.d/"
+     dns:
+       - 127.0.0.1
+       - 1.1.1.1
+       - 1.0.0.1
+     # Recommended but not required (DHCP needs NET_ADMIN)
+     #   https://github.com/pi-hole/docker-pi-hole#note-on-capabilities
+     cap_add:
+   ```
+
+   上記のファイルで変更が必要なのは1つだけです。WEBPASSWORDの&lt;MY_PASSWORD&gt;の代わりにパスワードを入力してください。
+   （ここで入力したパスワードは管理画面のログインに使用されます）
+
+   `docker-compose up -d`
+   を実行すると、しばらくしてPi-holeが起動します。
+
+## Pi-holeの設定
+
+これでPi-holeのインストールは完了です。🎉
+広告ブロックのためにはいくつかの設定が必要です。まず管理画面にアクセスしましょう。
+管理画面は`RaspberryPiのIP/admin`でアクセスできます。
+正常に開けばPi-holeのインストールは成功しています。
+~~以下の説明はルーターを使用していることを前提に説明します~~
+開くことを確認したら、ルーターの設定ページに移動します。
+設定ページには通常インターネット設定ページがあり、そこで`DNS`の項目を変更する必要があります。
+プライマリDNSアドレスとセカンダリDNSアドレスを入力する欄があるので、プライマリDNSアドレスにRaspberry PiのIPアドレスを入力します。
+**絶対にセカンダリDNSには何も入力しないでください**
+私はインターネット上の説明に従って「なぜ動かないんだ...」と長時間試行錯誤しました...
+セカンダリDNSに1.1.1.1や8.8.8.8などのDNSアドレスを入力すると、せっかく構築したPi-holeの広告ブロック機能で広告のIPアドレスをブロックしても、ルーターが自動的にセカンダリDNSでドメインを検索してしまいます...
+**したがって、絶対にセカンダリDNSは空白のままにしてください**
+
+## Pi-holeの動作テスト
+
+ここまで問題なく進めてきたなら、今や広告ブロックが機能しているはずです。
+ただし、すべてがブロックされるわけではなく、Pi-holeの広告ブロックリストに登録された広告のみが削除されます。
+~~これは追加で登録できるので今は飛ばして~~
+広告が正しくブロックされているかどうかはすぐには分かりません。
+
+そこでテスト方法を紹介します。
+それは[speedtest.net](https://www.speedtest.net/)です！
+これはインターネット速度測定サイトで、Pi-holeが機能していないと広告がとても多いです。
+しかし、Pi-holeが正常に動作していれば、このサイトに広告が一つも表示されないはずです。
+もし広告が表示される場合は、以下の2つを試してみてください。
+
+1. セカンダリDNSを確認してください...
+2. コンピュータを再起動して再試行（Pi-holeが動作しているRaspberry Piではなく）
+
+ここまでが私がPi-holeを設定する中で学んだ内容です。
+明日はOpenVPNと連携して、自宅以外の外部からも広告ブロック効果を享受できるように設定してみます。
+
+## 参考資料
+
+[Pi-hole home page](https://pi-hole.net/)
+[Pi-holeで広告を根絶](https://kycfeel.github.io/2019/10/06/Pi-Hole%EB%A1%9C-%EA%B4%91%EA%B3%A0-%EB%BF%8C%EB%A6%AC%EB%BD%91%EA%B8%B0/)
+[pihole_test_site](https://www.reddit.com/r/pihole/comments/m1xran/pihole_test_site/)
