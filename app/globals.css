@@ -115,6 +115,8 @@
 
     --selection: #e2e2e2;
 
+    --header-overlay-color: 255, 255, 255;
+
     --background: 0 0% 100%;
     --foreground: 240 10% 3.9%;
     --card: 0 0% 100%;
@@ -158,6 +160,8 @@
     --sh-comment: #a5a5a5;
 
     --selection: #404040;
+
+    --header-overlay-color: 0, 0, 0;
 
     --background: 240 10% 3.9%;
     --foreground: 0 0% 98%;
