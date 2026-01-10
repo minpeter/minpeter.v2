@@ -1,0 +1,55 @@
+---
+title: "Rust Standard I/O Code Analysis"
+description: "Notes on Rust's long and peculiar standard input code that surprised me"
+date: 2022-03-28T12:55:30.277Z
+tags: ["Rust", "Syntax"]
+lang: ["en"]
+machine_translated: true
+---
+
+```rust
+use std::io;
+fn main() {
+    let mut b = String::new();
+    io::stdin().read_line(&mut b).expect("Failed to read line");
+    let b: Vec<f64> = b
+        .split_whitespace()
+        .map(|x| x.trim().parse().expect("Please type a number!"))
+        .collect::<Vec<_>>();
+
+    println!("{}", b[0] / b[1]);
+}
+```
+
+The code above is a Rust solution for the Baekjoon problem `a / b`.
+It looks quite dizzying, so let's briefly look at the C version:
+
+```c
+#include <stdio.h>
+int main(void) {
+	float a, b;
+    scanf("%f %f", &a, &b);
+    printf("%f\n",a/b);
+}
+```
+
+Compared to Rust, it's really simple.
+
+So why does Rust require so much code?
+It's to prevent **errors**.
+Let's consider what happens if the user inputs `e 2`:
+In Rust, `expect()` generates an error and terminates.
+In C, it outputs a strange value like `0.673556`.
+
+Right... I don't know which is better yet, but it's true that Rust's way is inconvenient (unfamiliar).
+
+## Rust Syntax Explanation
+
+`let mut b = String::new();` Creates a mutable String type variable b.
+`io::stdin().read_line(&mut b).expect("Failed to read line");` Reads a line and stores it at the address of b.
+`let b: Vec<f64> = b.split_whitespace()` Not fully understood yet, will update when I learn more Rust (probably splits by whitespace and stores in Vec format, which is like an array).
+`.map(|x| x.trim().parse().expect("Plese type a number!"))` Uses map to iterate over each element of Vec type b, removes whitespace with `trim()` (is this even necessary?), and converts to numeric type with `parse()`.
+`.collect::<Vec<_>>();` Not sure yet...
+
+I'm still a Rust beginner, so I clearly need more study.
+Will there come a day when I use Rust as naturally as Python?

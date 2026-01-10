@@ -1,0 +1,239 @@
+---
+title: Chat Template - Alpaca & ChatML
+date: 2025-02-02 05:20:25 +0900
+tags:
+  - chatml
+  - alpaca
+  - chatbot
+  - ai
+description: "Complete guide to LLM chat templates: From Alpaca to ChatML"
+draft: false
+lang: ["en"]
+machine_translated: true
+---
+
+For chat (instruct) LLM models, when using the API, instead of text strings via `/v1/completions`, you receive a messages array consisting of role and content via `/v1/chat/completions`.
+
+```json
+[
+  { "role": "user", "content": "Hello?" },
+  { "role": "assistant", "content": "Hello, I am a friendly chatbot" },
+  { "role": "user", "content": "Why is the sky blue?" }
+]
+```
+
+Before actually inputting this message array to the model, it must be converted to text string format, which is where chat templates are used.
+Chat templates refer to jinja templates that determine what format the messages array above will be converted into as a text string.
+
+Below is a simplified example of the chatml format, one of many chat template formats:
+
+```jinja
+{%- for message in messages %}
+    {{- '<|im_start|>' + message['role'] + '\n' + message['content'] + '<|im_end|>' + '\n' }}
+{%- endfor %}
+
+// [!code highlight:3]
+{%- if add_generation_prompt %}
+    {{- '<|im_start|>assistant\n' }}
+{%- endif %}
+```
+
+Converting the messages array above through the chatml format produces the following text string:
+
+```text
+<|im_start|>user
+Hello?<|im_end|>
+<|im_start|>assistant
+Hello, I am a friendly chatbot<|im_end|>
+<|im_start|>user
+Why is the sky blue?<|im_end|>
+// [!code highlight:2]
+<|im_start|>assistant
+
+```
+
+Basically, `<|im_start|>` and `<|im_end|>` indicate the start and end of each turn respectively. The highlighted part at the end renders the start of what needs to be generated (`<|im_start|>assistant\n`) by setting the `add_generation_prompt` option to True to provide instructions to the model.
+
+When this rendered text is input to the model, the model generates a response as follows:
+
+```text
+// [!code word:The sky is blue because of a phenomenon called light scattering.]
+The sky is blue because of a phenomenon called light scattering.<|im_end|>
+```
+
+Here, the model actually generated `<response generated according to context and turn>` and `<|im_end|>`, and generation stopped when `<|im_end|>` was recognized as a stop token (eos token).
+Once complete, the model's response is returned as the response to `/v1/chat/completions`.
+
+Broadly speaking, representing conversations between users and models in a specific format is called Chat Markup Language (ChatML), and there are derivative formats. (\*The name ChatML also refers to a specific format.)
+The template code that renders into these specific formats is called a Chat template, and since this is learned during each model's Instruct tuning process, each model has its own unique template.
+
+## Types of Chat Template Formats
+
+### ChatML
+
+The most widely adopted format with decent performance.
+Representative models using ChatML and its derivatives include:
+
+Qwen, Hermes, SmolLM, Dolphin, InternLM (derivative)....
+
+Uses `<|im_start|>{{role}}\n` to indicate turn start and `<|im_end|>` to indicate turn end.
+
+BOS: `<|begin_of_text|>` (Depends on model)
+EOS: `<|im_end|>`
+
+```text title="NousResearch/Hermes-3-Llama-3.1-8B"
+// [!code word:<|im_start|>]
+// [!code word:<|im_end|>]
+<|begin_of_text|><|im_start|>system
+You're an energetic friend who always hypes up the user.<|im_end|>
+<|im_start|>user
+I'm sleepy.<|im_end|>
+<|im_start|>assistant
+Drink some coffee!<|im_end|>
+<|im_start|>user
+But I don't really feel like coffee.<|im_end|>
+<|im_start|>assistant
+Then let's go for iced chocolate!<|im_end|>
+```
+
+### Alpaca
+
+A format applied in the [Alpaca 7B model](https://crfm.stanford.edu/2023/03/13/alpaca.html) developed by Stanford.
+It was developed assuming singleton conversations and has 2 versions: prompt_no_input and prompt_input.
+
+```text tab="prompt_no_input"
+// [!code word:### Instruction\:]
+// [!code word:### Response\:]
+### Instruction:
+What should I eat for lunch?
+
+### Response:
+How about some soup?
+```
+
+```text tab="prompt_input"
+// [!code word:### Instruction\:]
+// [!code word:### Response\:]
+// [!code word:### Input\:]
+### Instruction:
+Identify one odd one out.
+
+### Input:
+Twitter, Instagram, Telegram
+
+### Response:
+Telegram
+```
+
+### Mistral (Latest)
+
+A characteristic of the Mistral family is that rendered results come out in a single line without line breaks. Below, line breaks have been added for visual convenience.
+Also, mistralai updates and improves chat templates most frequently. It's interesting to see improvements in whitespace handling, line break handling, etc., across versions.
+
+BOS: `<s>`
+EOS: `</s>`
+
+```text title="mistralai/Mistral-Small-24B-Instruct-2501 (V7-Tekken)"
+// [!code word:</s>]
+// [!code word:[INST\]]
+// [!code word:[/INST\]]
+// [!code word:[SYSTEM_PROMPT\]]
+// [!code word:[/SYSTEM_PROMPT\]]
+
+<s>[SYSTEM_PROMPT]You're a friend who quickly tells the user about the weather.[/SYSTEM_PROMPT]
+[INST]How's the weather today?[/INST]Cloudy and chilly.</s>
+[INST]Do I need an umbrella?[/INST]Yes, it might rain!</s>
+```
+
+```text title="mistralai/Ministral-8B-Instruct-2410 (V3-Tekken)"
+// [!code word:</s>]
+// [!code word:[INST\]]
+// [!code word:[/INST\]]
+
+<s>[INST]You're a friend who quickly tells the user about the weather.
+
+How's the weather today?[/INST]Cloudy and chilly.</s>
+[INST]Do I need an umbrella?[/INST]Yes, it might rain!</s>
+```
+
+_For more information about the tokenizer please refer to [mistral-common](https://github.com/mistralai/mistral-common)_
+
+### Llama 3.x
+
+A format used in Llama family Instruct models.
+A characteristic is that there's no line break between EOS and the next instruction's special token.
+
+BOS: `<|begin_of_text|>`
+EOS: `<|eot_id|>`
+
+```text title="meta-llama/Llama-3.3-70B-Instruct"
+// [!code word:<|start_header_id|>]
+// [!code word:<|end_header_id|>]
+// [!code word:<|eot_id|>]
+
+<|begin_of_text|><|start_header_id|>system<|end_header_id|>
+
+You're a realistic friend who helps the user make decisions.<|eot_id|><|start_header_id|>user<|end_header_id|>
+
+Should I go exercise or not?<|eot_id|><|start_header_id|>assistant<|end_header_id|>
+
+Go, you won't regret it.<|eot_id|><|start_header_id|>user<|end_header_id|>
+
+But I'm so lazy...<|eot_id|><|start_header_id|>assistant<|end_header_id|>
+
+Even just 5 minutes lightly, your body will loosen up!<|eot_id|>
+```
+
+## How to Find Chat Templates for Each Model
+
+Finding and correctly using the template used during each model's training significantly impacts model performance, and it's not difficult to find:
+
+1. Find `tokenizer_config.json` file in huggingface files
+   If the model is an Instruct model, there's a high probability that the `tokenizer_config.json` file contains a chat template field.
+   It's usually formatted in a single line, and if the template exists here, you can usually use it as is.
+
+   ```json title="hf.co/NousResearch/Hermes-3-Llama-3.2-3B/blob/main/tokenizer_config.json"
+   ...
+   "bos_token": "<|begin_of_text|>",
+   // [!code highlight]
+   "chat_template": "{% if not add_generation_prompt is defined %}{% set add_generation_prompt = false %}{% endif %}{% for message in messages %}{{'<|im_start|>' + message['role'] + '\n' + message['content'] + '<|im_end|>' + '\n'}}{% endfor %}{% if add_generation_prompt %}{{ '<|im_start|>assistant\n' }}{% endif %}",
+   "clean_up_tokenization_spaces": true,
+   "eos_token": "<|im_end|>",
+   ...
+   ```
+
+2. Find "Prompting Template" specified in model card
+   If the model creator is helpful, they sometimes describe which template works.
+   Depending on how it was trained, completely different templates may be used, so refer to this.
+   In the case below, a hybrid form of Mistral `[INST]` template and ChatML is used.
+   e.g. [Sao10K/MN-12B-Lyra-v3](https://huggingface.co/Sao10K/MN-12B-Lyra-v3)
+
+## Rendering Chat Templates with AutoTokenizer
+
+```python
+from transformers import AutoTokenizer
+import os
+
+messages = [
+    {"role": "system", "content": "You're a playful friend who makes the user's day fun."},
+    {"role": "user", "content": "I'm bored."},
+    {"role": "assistant", "content": "Let me tell you a mole joke! Why do moles like the internet?"},
+    {"role": "user", "content": "Why?"},
+    {"role": "assistant", "content": "Because they always find new information through 'tunnels'!"},
+]
+
+tokenizer = AutoTokenizer.from_pretrained(
+    "HuggingFaceTB/SmolLM2-1.7B-Instruct",
+    token=os.environ.get("HF_TOKEN"),
+    legacy=False,
+)
+
+print(tokenizer.apply_chat_template(messages, tokenize=False))
+```
+
+## Reference
+
+- https://github.com/openai/openai-python/blob/release-v0.28.0/chatml.md
+- https://github.com/InternLM/InternLM/blob/main/chat/chat_format.md
+- https://huggingface.co/docs/transformers/chat_templating
+- https://huggingface.co/blog/chat-templates

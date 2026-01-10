@@ -1,0 +1,91 @@
+---
+title: "Compose Stack in Swarm"
+description: "Learn about Docker stack, which is similar to compose but works in swarm mode with scaling capabilities"
+date: 2021-09-12 21:05:00 +0900
+tags: ["docker", "docker-swarn", "server"]
+lang:
+  - en
+machine_translated: true
+---
+
+## Compose in Swarm
+
+Previously, we used the service command, which is similar to the run command, to deploy containers in swarm and adjust scaling.
+This time, let's learn about stack, which is similar to the compose command.
+A stack is a unit that groups one or more services together and defines the entire application configuration.
+Simply think of it as compose that works in swarm (with scaling features included).
+Another characteristic is that, like compose, services are included in the same network.
+
+First, let's create a network.
+
+```
+$ docker exec -it manager \
+docker network create --driver=overlay --attachable test
+```
+
+We created a network named test.
+Now let's create the stack-compose file.
+**docker-stack.yaml**
+
+```yaml
+version: "3"
+services:
+  flask-echo:
+    image: minpeter/flask-echo
+    deploy:
+      replicas: 3
+      placement:
+        constraints: [node.role != manager]
+    ports:
+      - "5000:5000"
+    networks:
+      - test
+  nginx-echo:
+    image: minpeter/nginx-echo
+    deploy:
+      replicas: 3
+      placement:
+        constraints: [node.role != manager]
+    depends_on:
+      - flask-echo
+    ports:
+      - "8080:80"
+    networks:
+      - test
+
+networks:
+  test:
+    external: true
+```
+
+Now we need to send the file to the manager container, let's use the docker cp command.
+
+```
+$ docker cp docker-stack.yaml manager:/docker-stack.yaml
+```
+
+Now it's time to deploy the stack.
+
+```
+$ docker exec -it manager \
+docker stack deploy -c /docker-stack.yaml echo
+```
+
+Now a simple page that outputs `hello, flask!` is up on port 8080.
+Let's check the deployed services.
+
+```
+$ docker exec -it manager \
+docker stack services echo
+```
+
+To see how the stack deployed the containers, use the following command.
+
+```
+$ docker exec -it manager \
+docker stack ps echo
+```
+
+## References
+
+[Deploying Docker Containers Using Swarm\_2](https://cornswrold.tistory.com/515?category=930033)

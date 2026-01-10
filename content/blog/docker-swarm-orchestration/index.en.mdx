@@ -1,0 +1,317 @@
+---
+title: "Docker Swarm Orchestration"
+description: "Learn Docker Swarm orchestration by building a cluster-like environment locally using Docker in Docker (dind)"
+date: 2021-09-09 11:12:00 +0900
+tags: ["docker", "docker swarm", "server"]
+lang:
+  - en
+machine_translated: true
+---
+
+# Introduction
+
+This post covers how to set up a cluster-like environment locally using the Docker in Docker (dind) feature and practice orchestration by controlling the cluster with Docker Swarm.
+
+## What is Docker Swarm and Orchestration?
+
+Docker Swarm is an orchestration tool similar to Kubernetes.
+For example, imagine you have 5 servers.
+Without an orchestration tool, you would need to configure each server with the same functionality or assign specific features to each one.
+However, if a particular feature or service receives heavy traffic, you would have to manually create more instances of that service.
+With an orchestration tool, it creates and maintains specific services according to configuration values, so when there's heavy load, you only need to change the settings, and this process can also be automated.
+Additionally, it's possible to deploy service updates without stopping the service.
+(Since services are distributed across servers rather than concentrated on one, you can deploy sequentially without downtime.)
+If there's a problem with a deployment, it stops the deployment and rolls back to the pre-deployment state, and if a service terminates due to an issue, it automatically restarts.
+This is a great tool to use when your service needs to remain available during deployments without interruption.
+
+## Terminology Used in Docker Swarm
+
+|     Name     |                                                      Role                                                      |
+| :----------: | :------------------------------------------------------------------------------------------------------------: |
+|   compose    |                                Manages Docker applications consisting of multiple containers                                 |
+|    swarm     |                                             Cluster construction and management                                              |
+|   service    |            Basic deployment unit, manages services in a swarm cluster, similar to docker run            |
+|    stack     |                           Manages the entire application by combining multiple services in swarm                           |
+|     node     |                                     A Docker server unit belonging to a swarm cluster                                     |
+| manager node | A node that manages the state of the swarm cluster, can also be a worker node, and swarm commands can only be executed here. |
+| worker node  |                        A node that receives commands from manager nodes to create containers and check status                        |
+|     task     |                 Container deployment unit, a service runs multiple tasks, and tasks manage containers                  |
+
+# Docker Swarm Hands-on Practice
+
+Docker Swarm is fundamentally a tool for managing multiple servers.
+However, most of us will practice with just a single laptop.
+Therefore, we'll create a virtual practice environment that's slightly different from an actual environment.
+There are various methods, but we'll use the dind (Docker in Docker) feature to use Docker containers as individual nodes for practice.
+(Other methods include creating virtual machines with Vagrant or implementing an actual cluster using cloud services.)
+We'll use Docker Compose to create 1 manager node (dind) and 3 worker nodes (dind).
+The original blog post I referenced had a separate registry container, but I removed it as I didn't find it necessary during practice.
+(Docker registry can be understood as a local server that replaces Docker Hub.)
+
+## Creating a Virtual Cluster
+
+Create a docker-swarm directory and create a file with the code below.
+**docker-compose.yaml**
+
+```yaml
+version: "3"
+services:
+  manager:
+    container_name: manager
+    image: docker:dind
+    privileged: true
+    tty: true
+    ports:
+      - 8000:80
+      - 9000:9000
+    expose:
+      - 3375
+    volumes:
+      - "./stack:/stack"
+  worker01:
+    container_name: worker01
+    image: docker:dind
+    privileged: true
+    tty: true
+    depends_on:
+      - manager
+    expose:
+      - 7946
+      - 7946/udp
+      - 4789/udp
+  worker02:
+    container_name: worker02
+    image: docker:dind
+    privileged: true
+    tty: true
+    depends_on:
+      - manager
+    expose:
+      - 7946
+      - 7946/udp
+      - 4789/udp
+  worker03:
+    container_name: worker03
+    image: docker:dind
+    privileged: true
+    tty: true
+    depends_on:
+      - manager
+    expose:
+      - 7946
+      - 7946/udp
+      - 4789/udp
+```
+
+<details>
+<summary>Example with registry</summary>
+<div markdown="1">
+
+```yaml
+version: "3"
+services:
+  registry:
+    container_name: registry
+    image: registry:latest
+    ports:
+      - 5000:5000
+    volumes:
+      - "./registry-data:/var/lib/registry"
+  manager:
+    container_name: manager
+    image: docker:dind
+    privileged: true
+    tty: true
+    ports:
+      - 8000:80
+      - 9000:9000
+    depends_on:
+      - registry
+    expose:
+      - 3375
+    command: "--insecure-registry registry:5000"
+    volumes:
+      - "./stack:/stack"
+  worker01:
+    container_name: worker01
+    image: docker:dind
+    privileged: true
+    tty: true
+    depends_on:
+      - manager
+      - registry
+    expose:
+      - 7946
+      - 7946/udp
+      - 4789/udp
+    command: "--insecure-registry registry:5000"
+  worker02:
+    container_name: worker02
+    image: docker:dind
+    privileged: true
+    tty: true
+    depends_on:
+      - manager
+      - registry
+    expose:
+      - 7946
+      - 7946/udp
+      - 4789/udp
+    command: "--insecure-registry registry:5000"
+  worker03:
+    container_name: worker03
+    image: docker:dind
+    privileged: true
+    tty: true
+    depends_on:
+      - manager
+      - registry
+    expose:
+      - 7946
+      - 7946/udp
+      - 4789/udp
+    command: "--insecure-registry registry:5000"
+```
+
+</div>
+</details><br />
+
+Now enter the following commands
+
+```
+$ docker compose up -d
+$ docker ps
+```
+
+You should now see 4 or 5 containers created that will act as the cluster.
+
+## Registering the Manager
+
+Normally you would register using the `docker swarm init` command, but since we're running a virtual cluster inside containers, we need to add the following command prefix.
+
+```
+$ docker exec -it (target, manager or worker) \
+(command to execute)
+```
+
+Therefore, to execute the docker swarm init command on the manager, run the following:
+
+```
+$ docker exec -it manager \
+docker swarm init
+```
+
+After entering the command, you'll see output in the form:
+
+```
+$ docker swarm join --token (token value) (manager IP):(port)
+```
+
+Copy this command.
+
+## Registering Workers
+
+Execute the command you copied above on the workers to register them to our swarm cluster.
+Register worker01 through worker03 as follows.
+
+```
+$ docker exec -it worker01 \
+docker swarm join --token (token value) (manager IP):(port)
+```
+
+```
+$ docker exec -it worker02 \
+docker swarm join --token (token value) (manager IP):(port)
+```
+
+```
+$ docker exec -it worker03 \
+docker swarm join --token (token value) (manager IP):(port)
+```
+
+Now let's verify the nodes are properly registered with the following command
+
+```
+$ docker exec -it manager \
+docker node ls
+```
+
+If you see 4 nodes including the worker nodes, you've successfully created the cluster.
+
+<details>
+<summary>Docker registry image registration</summary>
+<div markdown="1">
+
+## Creating Image Tags
+
+```
+$ docker tag (original image) localhost:5000/(original image)
+```
+
+## Registering Image to Registry Container
+
+```
+$ docker push localhost:5000/(original image)
+```
+
+## Downloading Image in Worker Container
+
+```
+$ docker exec -it worker01 \
+docker pull registry:5000/(original image)
+```
+
+## Checking Images
+
+```
+$ docker exec -it worker01 \
+docker images
+```
+
+</div>
+</details><br />
+
+## Creating Services
+
+To deploy a single container in swarm, you use a unit called service, which can be run with the following command:
+
+```
+docker service create --name [service name] -p [external port]:[internal port] [docker image]:[tag]
+```
+
+Let's test this using the [hashicorp/http-echo](https://hub.docker.com/r/hashicorp/http-echo/) image
+
+```
+docker exec -it manager \
+docker service create --name test_swarm -p 5678:5678 hashicorp/http-echo:latest
+```
+
+You can confirm the service was created with this command:
+
+```
+docker exec -it manager \
+docker service ls
+```
+
+Once confirmed, let's try scaling the service with this command:
+
+```
+docker exec -it manager \
+docker service scale test_swarm=6
+```
+
+Wait a moment and swarm will automatically create containers and distribute them across nodes.
+If you run the service ls command again, you'll see that REPLICAS has increased from 1 to 9.
+
+To delete the created service, enter the following command:
+
+```
+docker exec -it manager \
+docker service rm test_swarm
+```
+
+## References
+
+[Deploying Docker Containers Using Swarm\_1](https://cornswrold.tistory.com/512?category=930033)
+[Easy and Fast Distributed Server Management with Docker Swarm](https://subicura.com/2017/02/25/container-orchestration-with-docker-swarm.html)
+[docker docs](https://docs.docker.com/engine/swarm)

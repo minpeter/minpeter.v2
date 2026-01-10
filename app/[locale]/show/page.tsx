@@ -9,7 +9,7 @@ import { cn } from "@/shared/utils/tailwind";
 
 export const metadata = NewMetadata({
   title: "minpeter | showcase",
-  description: "공들여 만들었지만 사용하지 않는 컴포넌트의 무덤",
+  description: "A graveyard of components made with care but never used",
 });
 
 const showcasePaths = [

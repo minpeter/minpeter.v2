@@ -33,6 +33,7 @@ export const { docs, meta } = defineDocs({
         .array(z.enum(routing.locales))
         .optional()
         .default([routing.defaultLocale]),
+      machine_translated: z.boolean().optional().default(false),
     }),
     postprocess: {
       includeProcessedMarkdown: true,

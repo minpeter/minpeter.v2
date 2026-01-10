@@ -1,0 +1,57 @@
+---
+title: Docker Stack Visualizer
+description: A visualizer for visually checking node and container distribution in Docker swarm mode
+date: 2021-09-13 12:05:00 +0900
+tags:
+  - docker
+  - server
+  - swarm
+  - visualizer
+lang:
+  - en
+machine_translated: true
+---
+
+## Overview
+
+Visualizer is a tool created to introduce the stack feature at DockerCon 2016.
+Using this tool, you can visually see the distribution of nodes and containers in swarm mode.
+
+## Hands-on Practice
+
+**visualizer.yaml**
+
+```yaml
+version: "3"
+
+services:
+  app:
+    image: dockersamples/visualizer
+    ports:
+      - "9000:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    deploy:
+      mode: global
+      placement:
+        constraints: [node.role == manager]
+```
+
+If you're practicing with containers, use the docker cp command to transfer the file
+
+```
+$ docker cp visualizer.yaml manager:/visualizer.yaml
+```
+
+Let's run the service
+
+```
+$ docker exec -it manager \
+docker stack deploy -c /visualizer.yaml visualizer
+```
+
+If you access localhost:9000, you'll see a beautiful interface.
+
+## References
+
+[Deploying Docker Containers Using Swarm\_2](https://cornswrold.tistory.com/515?category=930033)
