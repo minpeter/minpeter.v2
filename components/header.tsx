@@ -17,7 +17,9 @@ interface HeaderProps {
 
 export default function Header({ title, description, link }: HeaderProps) {
   return (
-    <header className={cn("relative z-10 mb-10 space-y-1", styles.stagger_container)}>
+    <header
+      className={cn("relative z-10 mb-10 space-y-1", styles.stagger_container)}
+    >
       {link ? (
         <div>
           <Backlink href={link.href} text={link.text} />
