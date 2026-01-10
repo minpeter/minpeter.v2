@@ -1,0 +1,57 @@
+---
+title: apt vs dnf, snap vs flatpak
+date: 2021-10-01 11:24:00 +0900
+tags:
+  - Node
+  - linux
+description: How to easily install programs using snap and flatpak
+lang: ["en"]
+machine_translated: true
+---
+
+When first encountering Linux, the most welcome thing among various features is undoubtedly the package manager.
+For developers who used Windows before winget package manager came out, or who still haven't heard of winget, it would be even more welcome.
+~~I'll cover Windows' new package manager winget another time.~~
+
+When we usually (that is, on Windows) install programs, it's quite complicated.
+
+1. Search for the program on Google
+2. Download the exe or msix file
+3. Click the downloaded file and grant administrator privileges
+4. Spam the next button
+5. Done
+
+As you can see, it's not an easy process at all, and during this process, the installed exe, msi, msix files remain.
+When uninstalling programs, you also have to go into settings and spam the next button, and if the program doesn't show up in the Windows 10 settings app, you have to open the legacy Control Panel to delete it. (Same next button spamming..)
+
+But when you start using Linux, package managers like apt, yum, or dnf welcome you right after installation.
+
+**But..** default package managers like apt and yum use distribution-specific files like deb and rpm, so there are quite a few programs that can't be installed.
+
+For example, you can't directly install Discord using apt, Ubuntu's default package manager, and you can't get deb or rpm package files from the official page either.
+
+If at this point you suddenly regret deciding to use Linux, your hands are shaking, you want to go back to Windows, you miss winget, and you feel the urge to get a MacBook and visit apple.com, just wait a moment.
+
+Here are snap and flatpak given to Linux users!!!
+Snap is probably the backend of snap-store that all Ubuntu users have heard of (let's say so), and flatpak is registered as part of Fedora's store.
+
+Both of these contain far more packages than regular package managers, and this is possible because they run in a completely different space regardless of the distribution.
+
+If you've ever used AppImage or macOS, you'll understand quickly.
+
+Both can be run immediately after downloading from the internet without any separate configuration, because all the information is stored inside that file.
+
+Similarly, snap and flatpak commands use universal packaging files that can be installed on any Linux distribution regardless of distribution, and um... that Discord that gave us headaches can be installed with one line.
+
+`snap install discord`
+
+~~I did so much trial and error not knowing this~~
+
+Flatpak is almost identical.
+
+`flatpak install package-name`
+
+Well, they're almost the same, but since they have different packages available, it seems good to use both.
+
+I still don't know how snap and flatpak internally package things to run on all distributions, but later when I get into GTK programming, I want to try packaging for both snap and flatpak.
+I'll do it after exams :)

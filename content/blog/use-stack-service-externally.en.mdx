@@ -1,0 +1,69 @@
+---
+title: "Using Stack Services Externally"
+description: "Let's set up a proxy server to expose services when using docker stack"
+date: 2021-09-14 08:23:00 +0900
+tags: ["docker", "server", "swarm"]
+lang:
+  - en
+machine_translated: true
+---
+
+By default, to access services running in a stack from outside, you need to connect through the manager node.
+However, the echo stack we created in the previous post was configured with the `constraints: [node.role != manager]` option so it doesn't run on the manager, and since containers are distributed across multiple nodes, we can't use the same approach we used when creating the visualizer service.
+
+Therefore, we'll configure a proxy server that routes traffic from outside the cluster to the inside.
+Let's use the haproxy image to set up external traffic to go to the nginx containers.
+
+**ingress.yaml**
+
+```yaml
+version: "3"
+
+services:
+  haproxy:
+    image: dockercloud/haproxy
+    networks:
+      - test
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    deploy:
+      mode: global
+      placement:
+        constraints: [node.role == manager]
+    ports:
+      - 80:80
+      - 1936:1936 # for stats page (basic auth. stats:stats)
+
+networks:
+  test:
+    external: true
+```
+
+This proxy is a simple one that connects the page on port 8080 to external port 80.
+Transfer the file to the manager container.
+
+```
+$ docker cp ingress.yaml manager:/ingress.yaml
+```
+
+Deploy the service.
+
+```
+$ docker exec -it manager \
+docker stack deploy -c /ingress.yaml ingress
+```
+
+You can confirm the service is running with the command below (or you can check using visualizer).
+
+```
+$ docker exec -it manager \
+docker service ls
+```
+
+Finally, if you access [localhost:8000](http://localhost:8000) in your browser locally, you'll see the message `hello, flask!`.
+The reason we access port 8000 even though we forwarded to port 80 in the proxy server is because we set the manager node's port to 8000:80 when we created the cluster containers.
+
+## References
+
+[Deploying Docker Containers Using Swarm\_3 (Using Services from Outside the Swarm Cluster)](https://cornswrold.tistory.com/516?category=930033)
+[docker docs](https://docs.docker.com/engine/swarm/ingress/)

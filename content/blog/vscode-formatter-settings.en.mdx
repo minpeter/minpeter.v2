@@ -1,0 +1,36 @@
+---
+title: "VS Code Formatter Settings"
+description: "A guide to help with VS Code Formatter settings that Prettier alone can't solve"
+date: 2022-03-27T10:27:57.379Z
+tags: ["Formatter", "vscode"]
+lang:
+  - en
+machine_translated: true
+---
+
+When using VS Code, the Formatter is quite important.
+Usually when you search online, Prettier and Beautify are recommended.
+
+In my case, I chose to use Prettier, but there were some languages where it didn't work.
+For example, Prettier didn't work for rust, go, or java.
+
+In these cases, you can configure those languages to use separate formatters,
+which are usually included in the language's extension.
+
+Below is my VS Code formatter settings.json file.
+
+```json
+"editor.formatOnSave": true,
+"[rust]": {
+  "editor.defaultFormatter": "matklad.rust-analyzer"
+},
+"[go]": {
+  "editor.defaultFormatter": "golang.go"
+},
+"[java]": {
+  "editor.defaultFormatter": "redhat.java"
+},
+"editor.defaultFormatter": "esbenp.prettier-vscode",
+```
+
+Applying these settings should take care of at least rust, go, java, and languages that Prettier supports.

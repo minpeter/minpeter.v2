@@ -1,0 +1,65 @@
+---
+title: "Node Version Management with nvm"
+description: "A tool that helps manage NodeJS versions - the best choice if you only use Node"
+date: 2021-10-01 11:24:00 +0900
+tags: ["Node", "Version Manager"]
+lang:
+  - en
+machine_translated: true
+---
+
+### Notice
+
+For developers who only use Node, I recommend using nvm.
+However, if you also use python, java, etc., I recommend using a tool called asdf instead of nvm.
+
+**It's much more elegant**
+
+Honestly, I don't like self-diagnosis.
+Before I switched to iPhone 7, the app took too long to open,
+and the action of mindlessly entering "No" three times in a row felt really inefficient.
+But the education office seems to think it's necessary.
+Well, past me didn't care what the education office thought,
+and I made a program in Python that automatically performed self-diagnosis by sending requests to the self-diagnosis server.
+~~Until the teacher caught me,~~
+After that, I didn't pay much attention to automating self-diagnosis and just did it as required.
+Then one day, I discovered [this repo](https://github.com/kimcore/hcs.js) on GitHub.
+
+It's a Node library project called hcs.js that perfectly handles the recently added security keypad!
+The code I wrote before was written when I was a newbie, so it's a mess, ~~and I'm still a newbie..~~
+Especially with the security keypad implementation this time, it just stopped working.
+Seeing the hcs.js project made me want to improve my program again.
+I just wanted to see it analyze the system and automatically work.
+
+First, I decided to try the hcs.js library and looked for a way to download node.
+
+## The Right Way to Install nodeJS
+
+There seemed to be many ways to install nodeJS.
+You could tell by the different search results across blogs when you search for 'nodejs install'.
+I found 2 methods.
+
+1. Install using a node version manager like nvm
+2. Install a specific version of node using a package manager like winget or apt
+
+Honestly, method 2 works fine, but there's a reason node version managers exist.
+NodeJS releases new versions very frequently.
+
+If you install node with a package manager, a new version is installed each time, which can break existing dependencies or cause other problems.
+To solve this, you use nvm, which allows you to use multiple versions of node simultaneously.
+
+## How to Install node Using nvm
+
+Install the curl tool.
+`sudo apt-get install curl`
+Install nvm with the command below
+`curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash`
+If you're using zsh or another shell, change bash after the pipe (|) to zsh or your preferred shell
+++ At the time of writing, 0.39.0 is the latest version, but it may be updated later.
+Check [this page](https://github.com/nvm-sh/nvm) for updates.
+
+Now nvm is installed.
+You can check if it's installed with `command -v nvm` - if you get a 'command not found' message, try closing and reopening the terminal
+Use `nvm install node` to install the latest version of node, or `nvm install --lts` to install a stable release.
+Running `node --version` will display the installed node version.
+Now that nodejs is installed, enjoy programming and learn more about the nvm tool!

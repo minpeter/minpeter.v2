@@ -1,0 +1,115 @@
+---
+title: "Removing Ads Using Pi-hole"
+date: 2021-09-02 12:59:59 +0900
+tags: ["DNS", "homelab", "pihole", "raspberrypi", "server"]
+lang: ["en"]
+machine_translated: true
+---
+
+## What is Pi-hole?
+
+It's a DNS server that can be installed on Raspberry Pi and Linux-based operating systems.
+But with **ad blocking** added.
+
+Unlike typical Chrome plugins, it blocks ads at the network level, so there's less performance degradation.
+Also, there's an incomparable advantage over plugins - if you set the DNS server to Pi-hole on your router, it applies to the entire network.
+
+**That means it works on smartphones too!**
+
+With advantages like these, you definitely want to set this up, right?
+
+## Installation Process
+
+There are 2 main ways to install it.
+
+1. Using the installation script
+
+   `curl -sSL https://install.pi-hole.net | bash`
+   After entering this, a selection screen will appear.
+   Configure it appropriately.
+   Soon Pi-hole will start running.
+   ~~Low-performance machines like Raspberry Pi Zero~~ would use this method, but since I'm setting it up on a 3B+, I prefer the latter.
+
+2. Running as a container using Docker
+
+   I recommend this method.
+   For models like the 3B+, there's plenty of RAM and other resources left even after running Pi-hole.
+   You can still use the remaining resources with method 1, but using Docker containers allows for cleaner management.
+   First install docker and docker-compose,
+   then create a pihole directory.
+   In that directory, write the docker-compose file as follows.
+
+   ```yaml
+   version: "3"
+   # More info at https://github.com/pi-hole/docker-pi-hole/ and https://docs.pi-hole.net/
+   services:
+   pihole:
+     container_name: pihole
+     image: pihole/pihole:latest
+     ports:
+       - "53:53/tcp"
+       - "53:53/udp"
+       - "67:67/udp"
+       - "80:80/tcp"
+       - "443:443/tcp"
+     environment:
+     TZ: "Asia/Seoul"
+     WEBPASSWORD: "<MY_PASSWORD>"
+     # Volumes store your data between container upgrades
+     volumes:
+       - "./etc-pihole/:/etc/pihole/"
+       - "./etc-dnsmasq.d/:/etc/dnsmasq.d/"
+     dns:
+       - 127.0.0.1
+       - 1.1.1.1
+       - 1.0.0.1
+     # Recommended but not required (DHCP needs NET_ADMIN)
+     #   https://github.com/pi-hole/docker-pi-hole#note-on-capabilities
+     cap_add:
+   ```
+
+   There's only one thing to modify in the above file - replace &lt;MY_PASSWORD&gt; in WEBPASSWORD with your password.
+   (This password is used for admin page login)
+
+   `docker-compose up -d`
+   Run this and Pi-hole will start after a while.
+
+## Pi-hole Configuration
+
+Now Pi-hole installation is complete!
+A few settings are needed for ad blocking. First, let's go to the admin page.
+The admin page opens at `raspberry-pi-ip/admin`.
+If it opens properly, Pi-hole was installed correctly.
+~~The following explanation assumes you're using a router~~
+After confirming it opens, go to your router's configuration page.
+There should be a page for internet settings where you need to modify the `DNS` section.
+There should be spaces to enter primary DNS address and secondary DNS address - enter the Raspberry Pi IP in the primary DNS address.
+**Please don't enter anything in the secondary DNS**
+I struggled for a while following instructions online thinking "why isn't this working"..
+If you enter DNS addresses like 1.1.1.1 or 8.8.8.8 in the secondary DNS, when our carefully set up Pi-hole's ad blocking feature blocks ad image IPs, the router automatically looks up domains from the secondary DNS..
+**So absolutely leave the secondary DNS empty**
+
+## Testing Pi-hole
+
+If you've followed along without issues, ad blocking should now be working.
+But not everything is blocked - only ads registered in Pi-hole's ad blocking list are removed.
+~~You can add more to the list, so let's move on~~
+You can't immediately tell if ads are being blocked properly.
+
+So here's how to test it.
+It's [speedtest.net](https://www.speedtest.net/)!!
+This is an internet speed test site that has tons of ads if Pi-hole isn't working.
+But if Pi-hole is working properly, you shouldn't see any ads on that site.
+If you see ads, try the following 2 things.
+
+1. Please check the secondary DNS;;
+2. Reboot the computer and retry (not the Raspberry Pi running Pi-hole)
+
+This is what I learned while setting up Pi-hole.
+Tomorrow I'll try setting up OpenVPN integration so I can enjoy ad blocking even outside of home.
+
+## References
+
+[pi hole home page](https://pi-hole.net/)
+[Uprooting ads with Pi-Hole](https://kycfeel.github.io/2019/10/06/Pi-Hole%EB%A1%9C-%EA%B4%91%EA%B3%A0-%EB%BF%8C%EB%A6%AC%EB%BD%91%EA%B8%B0/)
+[pihole_test_site](https://www.reddit.com/r/pihole/comments/m1xran/pihole_test_site/)

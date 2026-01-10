@@ -1,0 +1,158 @@
+---
+title: GitHub Signed Commit
+description: "How to add Verified tags to your local commits using GPG"
+date: 2022-09-29 10:55:06
+tags: ["github", "git", "signed commit", "gpg"]
+lang: ["en"]
+machine_translated: true
+---
+
+## Verified Tags Only Appear on GitHub Web UI
+
+At some point, GitHub added a feature that displays a README on your profile if you create a repository with your username and add a readme.md file.
+![](/images/Screenshot%202022-09-29%20120846.png)
+
+Since this repository only contains a readme.md file, most edits are done through the GitHub Web UI.
+
+When you look at the commit log after editing this way, you'll see the following:
+
+![](/images/Screenshot%202022-09-29%20121627.png)
+
+You can see a Verified tag that wasn't present on commits I uploaded from my laptop.
+
+I wanted this indicator on my local commits as well, and after some research, I found there were good reasons to implement this, which led me to write this post.
+
+## GPG (GNU Privacy Guard)
+
+This is a program based on PGP, an email encryption tool.
+It primarily uses RSA and also supports DSA and Elgamal, DSA, etc.
+
+## Why the Verified Tag Exists on GitHub
+
+Let's say you've purchased a new laptop or computer and are setting up git for development.
+You'll probably need to enter the following commands:
+
+```bash
+git config --global user.name
+git config --global user.email
+```
+
+GitHub uses this information to display who made each commit.
+If you think about it, there's something odd here - the name and email are stored exactly as you input them.
+They can easily be manipulated, and I've had experiences where I entered the wrong email, but pushing that commit to GitHub didn't cause any major issues.
+
+This is where the Verified tag comes in.
+
+Using GPG-generated keys shared with GitHub, you digitally sign your commits. When you push those commits, GitHub verifies with the shared key that you actually made the commit and adds the Verified tag.
+
+In summary, even though a commit says you made it, there's no way to verify it without digital signing to authenticate the commit.
+Additionally, commits made through the Web UI have Verified tags because GitHub automatically signs them.
+
+# How to Sign Local Commits
+
+The following process is based on generating GPG keys in WSL2 and creating commits.
+For Mac or Windows, a quick search will help you proceed.
+
+## Generating a GPG Key
+
+To create a GPG key, use Gpg4win on Windows, Mac GPG on macOS, and GnuPG on Linux.
+
+For macOS, use `brew install gnupg`. Debian-based systems have it installed by default, but if not, use `apt install gnupg`. For other distributions, you can figure it out, right?
+
+Generate a GPG key with the following command:
+
+```
+gpg --full-generate-key
+```
+
+You'll be presented with several options. First, you'll be asked to choose the key type.
+Just press Enter for the default RSA and RSA key.
+Next, you'll be asked for key size - the minimum requirement is 4096, so enter 4096.
+Then choose the expiration date - the default is unlimited.
+When asked `Is this correct? (y/N)`, enter y.
+For `Real Name:`, enter your GitHub username.
+For `Email address:`, enter an email that's verified on your GitHub account.
+Finally, for `Comment:`, add a description for this key - something like "For Github Signed commit" should work.
+When asked `Change (N)ame, (C)omment, (E)mail or (O)kay/(Q)uit?`, enter O if everything is correct to finish creating the key!
+
+```
+gpg --list-secret-keys --keyid-format=long
+```
+
+Or use this command:
+
+```
+gpg -k --keyid-format=long
+```
+
+to verify the generated key.
+
+The following example assumes a key was generated like this:
+
+```
+/home/minpeter/.gnupg/pubring.kbx
+---------------------------------
+pub   rsa4096/2167399770AVC2F3 2022-10-11 [SC]
+      2E992F8F8D1944D661F7FA652167399770AVC2F3
+uid                 [ultimate] minpeter2 (for github signed Commit) <kali2005611@gmail.com>
+sub   rsa4096/ADE4A2BCCAEA3G37 2022-10-11 [E]
+```
+
+## Registering the Generated GPG Key on GitHub
+
+Use the following command to output the public key in ASCII format:
+
+```
+gpg --armor --export 2167399770AVC2F3
+```
+
+Copy the entire output from `-----BEGIN PGP PUBLIC KEY BLOCK-----` to `-----END PGP PUBLIC KEY BLOCK-----`.
+
+Then go to GitHub Settings > SSH and GPG keys.
+In the GPG keys section, click the green `New GPG key` button.
+![](/images/Screenshot%202022-09-29%20190743.png)
+For Title, enter a description for the key. In my case, I used
+`laptop-name wsl2 signed commit`.
+You just need to recognize it later, right?
+Then paste the public key you copied into the Key field.
+
+## git config
+
+We're almost done with the setup.
+On the laptop where you want to make signed commits, register the key with this command:
+
+```
+git config --global user.signingkey 2167399770AVC2F3
+```
+
+For Linux, run the following commands:
+
+### zsh
+
+```
+[ -f ~/.zshenv ] && echo '\n## GIT gpg configure\n\nexport GPG_TTY=$(tty)' >> ~/.zshenv
+```
+
+### bash
+
+```
+[ -f ~/.bashrc ] && echo '\n## GIT gpg configure\n\nexport GPG_TTY=$(tty)' >> ~/.bashrc
+```
+
+Now all the setup is complete. Simply add the `-S` option when running `git commit`.
+
+If you want to sign all commits, you can enable it with this command:
+
+```
+git config --global commit.gpgsign true
+```
+
+Now when you commit, you'll see the Verified tag on your commits.
+![](/images/Screenshot%202022-09-29%20191559.png)
+
+## References
+
+- [generating-a-new-gpg-key](https://docs.github.com/en/github/authenticating-to-github/generating-a-new-gpg-key)
+- [adding-a-new-gpg-key-to-your-github-account](https://docs.github.com/en/github/authenticating-to-github/adding-a-new-gpg-key-to-your-github-account)
+- [telling-git-about-your-signing-key](https://docs.github.com/en/github/authenticating-to-github/telling-git-about-your-signing-key)
+- [signing-commits](https://docs.github.com/en/github/authenticating-to-github/signing-commits)

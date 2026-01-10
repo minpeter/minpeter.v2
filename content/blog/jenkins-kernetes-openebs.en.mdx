@@ -1,0 +1,154 @@
+---
+title: Jenkins on Kubernetes with OpenEBS
+description: "Setting up persistent storage for Jenkins on Kubernetes using OpenEBS"
+date: 2022-10-04 20:51:16
+tags: [kubernetes, jenkins, openebs]
+lang: ["en"]
+machine_translated: true
+---
+
+## Why This Article Exists
+
+I got scammed.
+~~Later I realized it wasn't exactly a scam and it can be useful in certain cases... whatever, it's a scam~~
+I read blogs covering `installing Jenkins on Kubernetes` and followed along.
+But after setting everything up:
+
+> Jenkins doesn't need scaling, so it's better to set it up on a separate server :)
+
+Hahahaha. So I'm writing this post because it would be a waste to have studied PersistentVolume for nothing.
+
+## What is Persistent Volume?
+
+In Kubernetes, computing instances and storage are separated.
+Storage is managed as a resource called `PersistentVolume`.
+Here, storage can be local file systems on each node or other file servers.
+This includes hostPath, GlusterFS, CephFS, NFS, local, etc., which I'll mention below.
+
+## The Journey to Finding OpenEBS
+
+Most articles I found about deploying Jenkins on k8s used `hostPath`.
+They almost always mentioned that for actual operations, you should use services like GlusterFS.
+But GlusterFS, while having good performance, had the drawback of requiring at least 3 nodes (at least in my case), and I had no remaining resources on Proxmox.
+CephFS, which is supported by default in Proxmox, was also attempted, but was impossible because there was only 1 Proxmox server node and the LV was already using the entire hard drive.
+Next I tried NFS, planning to run a separate NFS server and mount PVs to it, but gave up due to a bug causing dependency errors on Ubuntu 22.04.
+Of course, if I hadn't found an alternative, I would have set up an NFS server somehow, but I found a good alternative called OpenEBS.
+
+## What is OpenEBS?
+
+Services mentioned above like GlusterFS and CephFS require running separate servers, which is quite a complex task.
+On the other hand, OpenEBS can be installed and used within a k8s cluster.
+OpenEBS creates PVs using Local Disks on each node comprising K8s.
+Therefore, you don't need to configure separate servers or disks.
+\*k3s has local-path Storage similar to OpenEBS Local Path. I'd like to try it later.
+
+## Installing OpenEBS
+
+OpenEBS provides various installation methods, but this time I'll install it using helm.
+You can use other methods, but I used helm because people said it's good.
+
+- If helm is not installed
+  ```bash
+  curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+  ```
+  You can install it easily.
+  In my case, I installed it using asdf-vm.
+
+```bash
+kubectl create ns openebs
+helm repo add openebs https://openebs.github.io/charts
+helm repo update
+helm install -n openebs openebs openebs/openebs
+```
+
+Installation is done with this simple process.
+Check if the installation was successful with the following command:
+
+```bash
+kubectl get all -n openebs
+```
+
+```
+NAME                                              READY   STATUS    RESTARTS      AGE
+pod/openebs-localpv-provisioner-7b4db8497-hc9g5   1/1     Running   3 (55m ago)   4h41m
+pod/openebs-ndm-hzl66                             1/1     Running   2 (87m ago)   103m
+pod/openebs-ndm-ls78h                             1/1     Running   0             4h41m
+pod/openebs-ndm-operator-575c7c66c-5pwpw          1/1     Running   0             4h41m
+pod/openebs-ndm-sfc5w                             1/1     Running   0             4h41m
+
+NAME                         DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR   AGE
+daemonset.apps/openebs-ndm   3         3         3       3            3           <none>          4h41m
+
+NAME                                          READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/openebs-localpv-provisioner   1/1     1            1           4h41m
+deployment.apps/openebs-ndm-operator          1/1     1            1           4h41m
+
+NAME                                                    DESIRED   CURRENT   READY   AGE
+replicaset.apps/openebs-localpv-provisioner-7b4db8497   1         1         1       4h41m
+replicaset.apps/openebs-ndm-operator-575c7c66c          1         1         1       4h41m
+```
+
+If all show READY status like above, the installation was successful.
+
+## Using OpenEBS
+
+Let's test OpenEBS by installing Jenkins as the post title suggests.
+
+Clone the pre-made yaml files:
+
+```bash
+git clone https://github.com/minpeter/jenkins-with-openebs
+```
+
+Then apply them:
+
+```bash
+kubectl create ns ns-jenkins
+kubectl apply -n ns-jenkins -f 00-local-hostpath-sc.yaml
+kubectl apply -n ns-jenkins -f 01-jenkins-leader-pvc.yaml
+kubectl apply -n ns-jenkins -f 02-jenkins-sa-clusteradmin-rbac.yaml
+kubectl apply -n ns-jenkins -f 03-jenkins-dep-serv.yaml
+```
+
+You can check the deployment status with the following command:
+
+```bash
+kubectl get all -n ns-jenkins
+```
+
+Once everything is successfully deployed, access `http://<node-ip>:30500`.
+The node-ip can be any node's IP in the cluster.
+If you can connect successfully, OpenEBS is working correctly.
+
+If you plan to actually operate it:
+
+```bash
+kubectl exec -n ns-jenkins <pod-id> -- cat /var/jenkins_home/secrets/initialAdminPassword
+```
+
+Use this command to check the password and connect.
+
+The &lt;pod-id&gt; above can be found with:
+
+```bash
+kubectl get pod -n ns-jenkins
+```
+
+## Conclusion
+
+In this post, we installed OpenEBS using helm and tested it by installing Jenkins.
+It wasn't the most appropriate example, but it was new to use helm and OpenEBS for the first time.
+However, I haven't organized detailed content about OpenEBS or PV/PVC yet, so I'm not sure if these settings are appropriate for the current situation.
+I should organize content about OpenEBS later and prepare posts about PV and PVC as well.
+My original plan to set up a deployment server got slightly derailed, but I should be satisfied since I learned a lot.
+Of course, for actually setting up the deployment server, I plan to build a Jenkins server using docker and deploy through Jenkins.
+
+## Releasing All Resources in ns-jenkins
+
+```bash
+kubectl delete -n ns-jenkins -f 00-local-hostpath-sc.yaml
+kubectl delete -n ns-jenkins -f 01-jenkins-leader-pvc.yaml
+kubectl delete -n ns-jenkins -f 02-jenkins-sa-clusteradmin-rbac.yaml
+kubectl delete -n ns-jenkins -f 03-jenkins-dep-serv.yaml
+kubectl delete ns ns-jenkins
+```

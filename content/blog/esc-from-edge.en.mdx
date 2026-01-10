@@ -1,0 +1,76 @@
+---
+title: "Escaping from Edge's Dictatorship (TIL)"
+date: 2021-09-05 00:30:00 +0900
+tags: ["EdgeDeflector", "TIL", "chrome", "edge", "windows"]
+lang: ["en"]
+machine_translated: true
+---
+
+## Random Thoughts
+
+Before we start, let me share some random thoughts—my markdown skills are gradually improving.
+Indeed, the power of a blog written in markdown!
+I recommend you create a GitHub Pages blog too if you're reading this.
+
+## The Problem to Solve
+
+We use Windows for many reasons ~~and excuses~~.
+Internet banking, Windows-only programs, the convenience of WSL, convenience from winget, **games**.
+However, every Windows user encounters a certain existence at some point,
+called **MS EDGE**.
+Speaking of our Edge browser, it's the default Windows browser, and it's fast, and the recent update added inactive tab feature to save a lot of memory, and being based on Chromium means you can use almost all Chrome extensions... ~~etc~~ it's a great browser, but
+**I don't need it.**
+Therefore, we want to delete Edge. ~~(It must be done)~~
+However, Windows search features, Cortana, and various other Windows features I don't even know about are integrated with Edge, and deletion is ~~almost~~ impossible.
+~~(I've seen posts about deleting it from the registry—let's not try that)~~
+
+Actually, it's fine to just install Chrome, set it as default browser, and use that.
+But there's one setting that doesn't change—Windows Search.
+Windows Search defaults to Edge, and it can't be changed in the settings panel.
+This is clearly a dictatorship.
+It would be best if Microsoft would kindly stop the dictatorship through an update, but that's not going to happen.
+
+In this post, I'll introduce how to change Windows Search to use Chrome.
+
+## How to Escape Edge's Dictatorship
+
+The method is easier than you think.
+Using a program called EdgeDeflector, we trick Windows to pass the search URL to the default browser instead of Edge.
+Then, a Chrome extension called redirect bing changes the Bing URL to a different search engine URL.
+This way, search results open in the default browser.
+
+1. First, set a browser other than Edge as your Windows default browser.
+   It doesn't have to be Chrome—just set Opera, Whale, or whatever you want.
+   Setting the default browser is a bit more complicated in Windows 11 compared to Windows 10.
+   Follow the link below to set your default browser.
+   [how set default web browser windows 11](https://www.windowscentral.com/how-set-default-web-browser-windows-11)
+2. Next, you need to install Edge Deflector.
+   It's an open source program available on GitHub.
+   Download the latest EdgeDeflector_install.exe file from the page below.
+   [github.com/da2x/EdgeDeflector/releases](https://github.com/da2x/EdgeDeflector/releases)
+   After installation, a page explaining how to configure it will appear.
+   Follow the steps carefully—it won't take long.
+   (An easier way is to just search once and click edgedeflector always use -> confirm)
+3. Install the Chrome extension.
+   Actually, it works with Chrome even without installing this.
+   But the search results are Bing... This is installed to automatically change it to Google or another search engine.
+   Use the link below to install.
+   [Chrometana Pro](https://chrome.google.com/webstore/detail/chrometana-pro-redirect-c/lllggmgeiphnciplalhefnbpddbadfdi/related?hl=ko&gl=US)
+   Or search for "redirect bing" in the [Chrome Web Store](https://chrome.google.com/webstore/category/extensions?utm_source=chrome-ntp-icon&gl=US) and download whichever you want.
+   ~~For some reason, search results only appear when the store region is set to US.
+   It seems Google blocked Korea.~~
+
+## Result
+
+Now try searching!
+You'll see it opens in Chrome ~~or your other default browser~~.
+Now we've escaped a bit more from Edge's dictatorship.
+Thanks to [Daniel Aleksandersen](https://github.com/da2x) and the contributors for making this great program—I'll use Windows a bit more comfortably now.
+
+## References
+
+[EdgeDeflector](https://github.com/da2x/EdgeDeflector)
+[Chrometana Pro](https://chrome.google.com/webstore/detail/chrometana-pro-redirect-c/lllggmgeiphnciplalhefnbpddbadfdi/related?hl=ko&gl=US)
+[Comterman's Computer Stories - How to change Windows 10 search box Bing search to Google. Changing Cortana's Bing search](https://comterman.tistory.com/2134)
+
+~~Later I end up using Edge as my main browser because I actually liked it :D~~

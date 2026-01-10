@@ -1,0 +1,34 @@
+---
+title: "AWS - Introduction to AWS Cloud"
+description: "Learn about data centers, AZs, Regions, and Edge POPs"
+date: 2022-06-15T07:57:25.258Z
+tags: ["aws"]
+categories: "aws"
+lang:
+  - en
+machine_translated: true
+---
+
+Currently, AWS operates 24 Regions, 77 AZs, and 216 Edge POPs.
+
+### Data Center
+
+The physical location where infrastructure such as servers, networks, storage, load balancers, routers, etc. actually exist.
+
+### AZ (Availability Zone)
+
+An abbreviation for Availability Zone, meaning a collection of one or more data centers.
+Data centers within a single AZ are connected to each other via high-speed dedicated networks.
+
+### Region
+
+A collection of multiple AZs that are isolated and physically separated within a given geographic area.
+A Region consists of a minimum of 2 AZs to a maximum of 6 AZs.
+AZs within a Region are connected through Transit Centers.
+To be safe from disasters and calamities, it is recommended to distribute and configure services across multiple AZs.
+
+### Edge POP (Edge)
+
+An abbreviation for Edge Point Of Presence, a separate center that connects the external internet to the AWS global network.
+It consists of Edge Locations and Regional Edge Cache, and services like CloudFront (CDN), Direct Connect, Route 53 (DNS), AWS Shield (DDoS protection), and AWS Global Accelerator operate at the edge.
+![](./edge-pop.png)

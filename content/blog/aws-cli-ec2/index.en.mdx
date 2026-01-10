@@ -1,0 +1,299 @@
+---
+title: "Creating EC2 with AWS CLI"
+description: "Create EC2 instances easily with copy and paste"
+date: 2024-05-10 00:00:00 +0900
+lang: ["en"]
+machine_translated: true
+---
+
+<Callout>
+  This article assumes that AWS CLI is already installed and configured.
+</Callout>
+
+import { ModCodeBlock } from "@/components/code-block";
+
+## Create VPC
+
+<ModCodeBlock
+  template="
+  aws ec2 create-vpc --cidr-block {{cidr-block}}"
+  data={{
+    "cidr-block": "10.10.0.0/16",
+  }}
+/>
+
+![](./2024-05-10-18-50-55.png)
+
+When you create a VPC with the command above, the VPC information will be returned.
+
+## Create Subnet
+
+<ModCodeBlock
+  template="
+    aws ec2 create-subnet --vpc-id {{vpc-id}} \
+    --cidr-block {{cidr-block}}"
+  data={{
+    "vpc-id": "vpc-067f7fb23d3dfd42e",
+    "cidr-block": "10.10.0.0/24",
+  }}
+/>
+
+![](./2024-05-10-18-55-27.png)
+
+When you create a subnet, the subnet information is returned as shown above.
+
+## Create IGW
+
+```
+aws ec2 create-internet-gateway
+```
+
+![](./2024-05-10-18-56-45.png)
+
+Create an internet gateway and note the returned ID.
+
+<ModCodeBlock
+  template="
+    aws ec2 attach-internet-gateway --internet-gateway-id {{igw-id}} \
+    --vpc-id {{vpc-id}}"
+  data={{
+    "igw-id": "igw-02f78a6c0e82cd8ee",
+    "vpc-id": "vpc-067f7fb23d3dfd42e",
+  }}
+/>
+
+Now attach the internet gateway to the VPC.
+
+![](./2024-05-10-18-58-44.png)
+
+If you run it twice and get the message `already attached to network`, it's successful.
+
+## Create Route Table
+
+<ModCodeBlock
+  template="
+    aws ec2 create-route-table --vpc-id {{vpc-id}}"
+  data={{
+    "vpc-id": "vpc-067f7fb23d3dfd42e",
+  }}
+/>
+
+![](./2024-05-10-18-59-53.png)
+
+Create a Route table with the following command.
+
+<ModCodeBlock
+  template="
+    aws ec2 create-route --route-table-id {{route-table-id}} \
+    --destination-cidr-block {{destination-cidr-block}} \
+    --gateway-id {{gateway-id}}"
+  data={{
+    "route-table-id": "rtb-053e6e74ab1744ab0",
+    "destination-cidr-block": "0.0.0.0/0",
+    "gateway-id": "igw-02f78a6c0e82cd8ee",
+  }}
+/>
+
+![](./2024-05-10-19-00-48.png)
+
+The result value `True` is returned.
+
+Now let's associate the subnet with the Route table.
+
+<ModCodeBlock
+  template='
+    aws ec2 describe-subnets --filters "Name=vpc-id,Values={{vpc-id}}" \
+    --query "Subnets[*].{ID:SubnetId,CIDR:CidrBlock}"'
+  data={{
+    "vpc-id": "vpc-067f7fb23d3dfd42e",
+  }}
+/>
+
+![](./2024-05-10-19-01-15.png)
+
+You can check the subnet ID with the following command.
+
+<ModCodeBlock
+  template="
+    aws ec2 associate-route-table --subnet-id {{subnet-id}} \
+    --route-table-id {{route-table-id}}"
+  data={{
+    "subnet-id": "subnet-05fb90e4ff9120ef7",
+    "route-table-id": "rtb-053e6e74ab1744ab0",
+  }}
+/>
+
+![](./2024-05-10-19-02-42.png)
+
+Associate the subnet with the Route table.
+
+<ModCodeBlock
+  template="
+    aws ec2 modify-subnet-attribute --subnet-id {{subnet-id}} \
+    --map-public-ip-on-launch"
+  data={{
+    "subnet-id": "subnet-05fb90e4ff9120ef7",
+  }}
+/>
+
+Use the following command to enable automatic public IP address assignment.
+Since EC2 instance IP addresses change upon restart, this must be configured.
+Otherwise, you need to associate an Elastic IP address with the instance.
+
+## Create SG
+
+<ModCodeBlock
+  template="
+    aws ec2 create-security-group --group-name {{group-name}} \
+    --description {{description}} \
+    --vpc-id {{vpc-id}}"
+  data={{
+    "group-name": "cli-security-group",
+    description: "cli-security-group",
+    "vpc-id": "vpc-067f7fb23d3dfd42e",
+  }}
+/>
+
+![](./2024-05-10-19-04-20.png)
+
+Create a security group with the following command.
+
+<ModCodeBlock
+  template="
+    aws ec2 authorize-security-group-ingress --group-id {{group-id}} \
+    --protocol {{protocol}} \
+    --port {{port}} \
+    --cidr {{cidr}}"
+  data={{
+    "group-id": "sg-0626016b0d2a61414",
+    protocol: "tcp",
+    port: "22",
+    cidr: "0.0.0.0/0",
+  }}
+/>
+
+![](./2024-05-10-19-04-49.png)
+
+Then open port 22 (ssh) in the security group to allow access from anywhere with `0.0.0.0/0`.
+
+## Create Key Pair
+
+<ModCodeBlock
+  template="
+    aws ec2 create-key-pair --key-name {{key-name}} \
+    --query 'KeyMaterial' --output text > {{key-name}}.pem
+
+    chmod 400 {{key-name}}.pem"
+  data={{
+    "key-name": "clikeypair",
+  }}
+/>
+
+Create a key pair and set permissions.
+
+## Create EC2
+
+```
+aws ec2 describe-images --owners self amazon | less
+```
+
+You can find AMIs with the following command. Select an appropriate AMI.
+
+<ModCodeBlock
+  template="
+    aws ec2 run-instances --image-id {{image-id}} \
+    --count 1 \
+    --instance-type t2.micro \
+    --key-name {{key-name}} \
+    --security-group-ids {{security-group-ids}} \
+    --subnet-id {{subnet-id}}"
+  data={{
+    "image-id": "ami-0cb01c18bcde8e856",
+    "key-name": "clikeypair",
+    "security-group-ids": "sg-0626016b0d2a61414",
+    "subnet-id": "subnet-05fb90e4ff9120ef7",
+  }}
+/>
+
+Create an EC2 instance with the following command.
+
+![](./2024-05-10-19-07-31.png)
+
+Note the instance ID output when creating the instance.
+
+<ModCodeBlock
+  template="
+    aws ec2 describe-instances --instance-id {{instance-id}}"
+  data={{
+    "instance-id": "i-09ed4ffc4dcae9a05",
+  }}
+/>
+
+![](./2024-05-10-19-08-49.png)
+
+Wait until the instance state becomes running with the command above.
+
+<ModCodeBlock
+  template="
+    aws ec2 describe-instances --instance-id {{instance-id}} \
+    --query 'Reservations[*].Instances[*].PublicIpAddress' \
+    --output text"
+  data={{
+    "instance-id": "i-09ed4ffc4dcae9a05",
+  }}
+/>
+
+![](./2024-05-10-19-10-23.png)
+
+Check the EC2 instance's public IP with the command above.
+
+<ModCodeBlock
+  template="
+    ssh -i {{key-name}}.pem ec2-user@{{public-ip}}"
+  data={{
+    "key-name": "clikeypair",
+    "public-ip": "34.239.114.18",
+  }}
+/>
+
+Try SSH connection using the key you just created and the EC2 IP.
+
+![](./2024-05-10-19-11-07.png)
+
+You can see that you have successfully connected to the EC2 instance from the CLI.
+
+<ModCodeBlock
+  template="
+    aws ec2 terminate-instances --instance-ids {{instance-id}}
+    aws ec2 delete-subnet --subnet-id {{subnet-id}}
+    aws ec2 delete-route-table --route-table-id {{route-table-id}}
+    aws ec2 detach-internet-gateway --internet-gateway-id {{igw-id}} --vpc-id {{vpc-id}}
+    aws ec2 delete-internet-gateway --internet-gateway-id {{igw-id}}
+    aws ec2 delete-security-group --group-id {{group-id}}
+    aws ec2 delete-vpc --vpc-id {{vpc-id}}"
+  data={{
+    "instance-id": "i-09ed4ffc4dcae9a05",
+    "subnet-id": "subnet-05fb90e4ff9120ef7",
+    "route-table-id": "rtb-053e6e74ab1744ab0",
+    "igw-id": "igw-02f78a6c0e82cd8ee",
+    "vpc-id": "vpc-067f7fb23d3dfd42e",
+    "group-id": "sg-0626016b0d2a61414",
+  }}
+/>
+
+You can delete EC2 instances and security groups in the following order.
+Enter them one at a time as they may not be deleted if entered all at once.
+
+- Delete EC2 instance
+- Delete subnet
+- Delete Route table
+- Detach internet gateway from VPC
+- Delete internet gateway
+- Delete security group
+- Delete VPC
+
+_A better method is to use [nuke](https://chltjdbs.tistory.com/31) to delete everything._
+
+---
+
+ref: https://dev.classmethod.jp/articles/build-ec2-with-aws-cli/

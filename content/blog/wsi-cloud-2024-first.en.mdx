@@ -1,0 +1,199 @@
+---
+title: 2024 Regional Skills Competition Cloud Computing Task 1
+description: Full automatic setup using AWS CloudFormation
+date: 2024-04-01
+lang: ["en"]
+machine_translated: true
+---
+
+> April Fool's Day 🤪
+
+This does not cover actual methods. It was written to experiment how much traffic certain search terms get from Google searches.
+
+---
+
+```yaml
+AWSTemplateFormatVersion: 2010-09-09
+Resources:
+  # empty resource stack
+  EmptyResource:
+    Type: "AWS::CloudFormation::Stack"
+    Properties:
+      TemplateURL: "https://s3.amazonaws.com/my-bucket/empty-template.yaml"
+
+  # only print message
+  EchoResource:
+    Type: "AWS::CloudFormation::CustomResource"
+    Properties:
+      ServiceToken: "arn:aws:lambda:::function:my-echo-function"
+      Properties:
+        Message: "Hello, world!"
+
+Outputs:
+  EmptyOutput:
+    Value: ""
+  EchoOutput:
+    Value: !GetAtt EchoResource.Outputs.Message
+```
+
+## AWS CloudFormation Script
+
+### 1. Script Summary
+
+This script uses AWS CloudFormation to automatically configure the following functions:
+
+- **Creating an Empty Resource Stack**: The `EmptyResource` section references the `empty-template.yaml` template to create an empty stack. Although there are no actual resources, it's useful for defining stack structure and dependencies.
+- **Message Output**: The `EchoResource` section calls the Lambda function `my-echo-function` to output the message "Hello, world!".
+- **Providing Output Values**: The `Outputs` section provides `EmptyOutput` (empty string) and `EchoOutput` (Lambda function output message) values.
+
+### 2. How to Use the Script
+
+1. **Save Template File**:
+   - Save the `empty-template.yaml` file to an S3 bucket.
+   - Save this script file to your desired location.
+2. **Create CloudFormation Stack**:
+   - Use the AWS Console or CLI to create a CloudFormation stack referencing the script file.
+   - When creating the stack, you must enter the `my-echo-function` Lambda function ARN in the `ServiceToken` property of the `EchoResource` section.
+3. **Check Output**:
+   - After stack creation is complete, check the `EmptyOutput` and `EchoOutput` values in the `Outputs` section.
+
+### 3. Additional Features and Applications
+
+**3.1. Adding Resources**:
+
+This script is a basic example, and you can expand the automatic configuration by adding various resources to fit your actual environment. For example, you can add the following resources:
+
+- EC2 instance creation and configuration
+- RDS database creation and configuration
+- S3 bucket creation and configuration
+- CloudFront distribution setup
+- Lambda function creation and configuration
+
+**3.2. Adding Parameters and Conditions**:
+
+You can add parameters to the script to receive user input values during stack creation and dynamically change configurations. You can also use conditional statements to adjust
+
+configurations according to the environment.
+
+## Creating EKS and Setting Up with ALB Ingress
+
+```yaml
+apiVersion: "klodd.tjcsec.club/v1"
+kind: Challenge
+metadata:
+name: test
+spec:
+name: Test Challenge
+timeout: 10000
+pods:
+  - name: app
+    ports:
+      - port: 80
+    spec:
+      containers:
+        - name: main
+          image: traefik/whoami:latest
+          resources:
+            requests:
+              memory: 100Mi
+              cpu: 75m
+            limits:
+              memory: 250Mi
+              cpu: 100m
+      automountServiceAccountToken: false
+expose:
+  kind: http
+  pod: app
+  port: 80
+middlewares:
+  - contentType:
+      autoDetect: false
+  - rateLimit:
+      average: 5
+      burst: 10
+
+```
+
+`kubectl apply -f challenge.yaml`
+
+```yaml
+apiVersion: "klodd.tjcsec.club/v1"
+kind: Challenge
+metadata:
+  name: analects
+spec:
+  name: Analects
+  timeout: 300000
+  pods:
+    - name: app
+      ports:
+        - port: 80
+      spec:
+        containers:
+          - name: app
+            image: analects-app:latest
+            resources:
+              requests:
+                memory: 100Mi
+                cpu: 50m
+              limits:
+                memory: 200Mi
+                cpu: 100m
+            startupProbe:
+              httpGet:
+                path: "/search.php?q=with%20two%20others"
+                port: 80
+              initialDelaySeconds: 0
+              periodSeconds: 5
+              failureThreshold: 30
+        automountServiceAccountToken: false
+    - name: mysql
+      ports:
+        - port: 3306
+      spec:
+        containers:
+          - name: mysql
+            image: analects-mysql:latest
+            resources:
+              requests:
+                memory: 200Mi
+                cpu: 50m
+              limits:
+                memory: 500Mi
+                cpu: 100m
+        automountServiceAccountToken: false
+  expose:
+    kind: http
+    pod: app
+    port: 80
+```
+
+After creating the yaml file above, run `kubectl apply -f challenge.yaml` command to create the resources.
+
+**3.3. Deployment Automation**:
+
+You can use AWS CodePipeline, CodeBuild, etc. to automate script updates and deployment.
+
+**3.4. Modularization and Reuse**:
+
+You can modularize scripts to increase code reusability and easily adjust for various environments.
+
+### 4. References
+
+- AWS CloudFormation Documentation: [https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/)
+- AWS CloudFormation Template Examples: [Invalid URL removed]
+- AWS Lambda Documentation: [https://docs.aws.amazon.com/lambda/](https://docs.aws.amazon.com/lambda/)
+
+### 5. Precautions
+
+- Before using the script, thoroughly review the contents and modify and supplement as needed.
+- Users are responsible for any costs incurred from running the script.
+- The script is an example and should be adjusted to fit the actual environment.
+
+### 6. Other
+
+This script provides a basic framework for completing Task 1 of the Skills Competition, and can be expanded with various features to fit the actual environment.
+
+##
+
+We hope this script helps you complete Task 1 of the Skills Competition.

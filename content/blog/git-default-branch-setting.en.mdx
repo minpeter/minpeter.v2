@@ -1,0 +1,59 @@
+---
+title: "Changing Git Default Branch Settings"
+date: 2023-02-25
+tags: ["github", "git"]
+lang:
+  - en
+machine_translated: true
+---
+
+By default, git is configured to automatically set a branch called master.
+
+However, starting from the Linux kernel, it was decided that the term master should no longer be used, and it's recommended to change it to main.
+
+Anyway, main is now the trend, and it seems like main branch will become the default going forward, so I changed the settings.
+
+### Changing main as the Default on GitHub
+
+First, you need to change the default branch setting to main on GitHub.
+
+[settings - repositories](https://github.com/settings/repositories)
+
+![image](https://user-images.githubusercontent.com/62207008/221243516-6be6d3e0-6280-466e-8172-cc1d04efed17.png)
+
+main - update
+
+However, this only sets main as default for repositories created on GitHub from now on, so repositories already set to master need to be changed individually.
+
+Go to a specific repo's settings - branches
+
+![image](https://user-images.githubusercontent.com/62207008/221243573-73b529b8-7b85-4a67-ba6d-857bbe9dc1b5.png)
+
+Do this for all repos.
+
+I had about 60, so I was able to finish quickly.
+
+### Setting main as Default Locally
+
+In git versions 2.28 and later, the `init.defaultBranch` setting was introduced to change the default branch setting.
+
+Here's how to configure it.
+
+```jsx
+git config --global init.defaultBranch main
+```
+
+The problem is that if you mindlessly ran `sudo apt install git` on ubuntu or other Debian environments, your git version is likely below 2.28.
+
+This can be upgraded with the following method.
+
+```bash
+sudo apt pugre git
+sudo apt autoremove -y
+
+sudo add-apt-repository ppa:git-core/ppa
+sudo apt update
+sudo apt install git
+```
+
+So... goodbye?

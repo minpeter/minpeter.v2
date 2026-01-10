@@ -1,0 +1,112 @@
+---
+title: "AWS - CloudFormation"
+description: "Learn how to declare AWS infrastructure as code with CloudFormation"
+date: 2022-06-15T23:50:15.412Z
+tags: ["aws", "cloudformation"]
+categories: "aws"
+lang:
+  - en
+machine_translated: true
+---
+
+## Theory
+
+### What is CloudFormation?
+
+CloudFormation is a way to declare AWS infrastructure as code.
+You can create or delete AWS infrastructure resources that have been predefined in code.
+A similar service is Terraform, and these are collectively called IaC (Infrastructure as Code).
+
+### Template
+
+A file that defines infrastructure resources to be created in code.
+JSON and YAML formats can be used.
+
+### Creation Order
+
+1. Upload the template to CloudFormation
+2. Execute the stack creation command in CloudFormation
+3. AWS automatically creates resources in the order written in the template
+
+### Deletion Order
+
+1. Execute the stack deletion command in CloudFormation
+2. AWS automatically deletes the infrastructure resources
+
+## Hands-on Lab
+
+### Stack Creation
+
+```yaml
+Parameters:
+  KeyName:
+    Description: Name of an existing EC2 KeyPair to enable SSH access to the instances. Linked to AWS Parameter
+    Type: AWS::EC2::KeyPair::KeyName
+    ConstraintDescription: must be the name of an existing EC2 KeyPair.
+  LatestAmiId:
+    Description: (DO NOT CHANGE)
+    Type: "AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>"
+    Default: "/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2"
+    AllowedValues:
+      - /aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2
+
+Resources:
+  MyInstance:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !Ref LatestAmiId
+      InstanceType: t2.micro
+      KeyName: !Ref KeyName
+      Tags:
+        - Key: Name
+          Value: WebServer
+      SecurityGroups:
+        - !Ref MySG
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          yum install httpd -y
+          systemctl start httpd && systemctl enable httpd
+          echo "<h1>Test Web Server</h1>" > /var/www/html/index.html
+
+  MySG:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Enable HTTP access via port 80 and SSH access via port 22
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+```
+
+Save the above code as test_lab1.yaml and proceed with the following steps
+
+1. Access the [CloudFormation Console](https://ap-northeast-2.console.aws.amazon.com/cloudformation/home?region=ap-northeast-2) and click Create stack
+2. Select Prepared template -> Upload a template file
+3. Specify an arbitrary stack name (CF-TEST)
+4. KeyName: Select the key pair you are using
+
+### Verify Created Resources
+
+1. Access the EC2 Console
+2. Instances -> Instances
+3. Check the WebServer instance IP
+4. Verify SSH and HTTP access
+
+### Stack Deletion
+
+1. Access the CloudFormation Console
+2. Stacks tab
+3. Select the created stack (CF-TEST)
+4. Click Delete
+
+### Verify Deleted Resources
+
+1. Access the EC2 Console
+2. Instances -> Instances
+3. Check the WebServer instance status (Terminated)
