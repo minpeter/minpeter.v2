@@ -1,15 +1,38 @@
 "use client";
 
-import { ExternalLink } from "lucide-react";
+import type { SortedResult } from "fumadocs-core/search";
+import { useDocsSearch } from "fumadocs-core/search/client";
+import { ExternalLink, Loader2, Search, X } from "lucide-react";
 import type { Route } from "next";
 import Link from "next/link";
-import { parseAsString, useQueryState } from "nuqs";
+import { useTranslations } from "next-intl";
+import { debounce, parseAsString, useQueryState } from "nuqs";
+import { useDeferredValue, useEffect, useMemo, useTransition } from "react";
 
 import { Badge } from "@/components/ui/badge";
 import type { postMetadataType } from "@/shared/source";
 import styles from "@/shared/styles/stagger-fade-in.module.css";
 import { formatDate, formatYear } from "@/shared/utils/date";
 import { cn } from "@/shared/utils/tailwind";
+
+/**
+ * Extract unique page URLs from search results
+ */
+function extractMatchedUrls(results: SortedResult[]): Set<string> {
+  const matchedUrls = new Set<string>();
+
+  for (const result of results) {
+    if (result.type === "page") {
+      matchedUrls.add(result.url);
+    } else if (result.type === "heading" || result.type === "text") {
+      // Extract base URL (remove hash)
+      const baseUrl = result.url.split("#")[0];
+      matchedUrls.add(baseUrl);
+    }
+  }
+
+  return matchedUrls;
+}
 
 export function BlogList({
   lang,
@@ -18,24 +41,115 @@ export function BlogList({
   lang: string;
   posts: postMetadataType[];
 }) {
-  const [query] = useQueryState("q", parseAsString.withDefault(""));
-  return <BlogListFallback lang={lang} posts={posts} query={query} />;
+  const t = useTranslations();
+  const [isPending, startTransition] = useTransition();
+
+  // nuqs with debounce for URL updates
+  const [query, setQuery] = useQueryState(
+    "q",
+    parseAsString.withDefault("").withOptions({
+      shallow: false, // Notify server for RSC re-render
+      limitUrlUpdates: debounce(500), // Debounce URL updates
+      startTransition, // Use React transition for non-blocking updates
+    })
+  );
+
+  // Deferred value for expensive search operations
+  const deferredQuery = useDeferredValue(query);
+
+  const { setSearch, query: searchQuery } = useDocsSearch({
+    type: "fetch",
+    api: "/api/search",
+    locale: lang,
+  });
+
+  // Sync deferred query with fumadocs search (debounced)
+  useEffect(() => {
+    setSearch(deferredQuery);
+  }, [deferredQuery, setSearch]);
+
+  // Show loading when query differs from deferred (typing) or API is loading
+  const isSearching =
+    query !== deferredQuery || isPending || searchQuery.isLoading;
+
+  // Filter posts based on search results (use deferredQuery for expensive filtering)
+  const filteredPosts = useMemo(() => {
+    const byLang = posts.filter((post) => post.lang.includes(lang));
+
+    // If no search query, return all posts filtered by language
+    if (!deferredQuery) {
+      return byLang;
+    }
+
+    // If search is loading or empty, filter by title as fallback
+    if (
+      searchQuery.isLoading ||
+      searchQuery.data === "empty" ||
+      !searchQuery.data
+    ) {
+      return byLang.filter((post) =>
+        post.title.toLowerCase().includes(deferredQuery.toLowerCase())
+      );
+    }
+
+    // Use API search results - extract unique page URLs
+    const matchedUrls = extractMatchedUrls(searchQuery.data);
+
+    // Filter posts that match search results
+    const filtered = byLang.filter((post) => matchedUrls.has(post.url));
+
+    // If no matches from API, fallback to title search
+    if (filtered.length === 0) {
+      return byLang.filter((post) =>
+        post.title.toLowerCase().includes(deferredQuery.toLowerCase())
+      );
+    }
+
+    return filtered;
+  }, [posts, lang, deferredQuery, searchQuery.data, searchQuery.isLoading]);
+
+  return (
+    <>
+      <div className="relative mb-6">
+        <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+        <input
+          className="w-full rounded-md border bg-background px-10 py-2 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+          onChange={(e) => setQuery(e.target.value || null)}
+          placeholder={t("searchPlaceholder")}
+          type="text"
+          value={query}
+        />
+        {query && (
+          <div className="absolute top-1/2 right-3 flex h-4 w-4 -translate-y-1/2 items-center justify-center">
+            {isSearching ? (
+              <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
+            ) : (
+              <button
+                className="flex h-4 w-4 items-center justify-center text-muted-foreground hover:text-foreground"
+                onClick={() => setQuery(null)}
+                type="button"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            )}
+          </div>
+        )}
+      </div>
+      <BlogListFallback posts={filteredPosts} query={query} />
+    </>
+  );
 }
 
 export function BlogListFallback({
   posts,
-  query,
-  lang,
+  query: _query,
 }: {
   posts: postMetadataType[];
   query: string | null;
-  lang: string;
 }) {
-  // first filter by language metadata, then by title query
-  const byLang = posts.filter((post) => post.lang.includes(lang));
-  const filteredPosts = byLang.filter((post) =>
-    post.title.toLowerCase().includes((query || "").toLowerCase())
-  );
+  const t = useTranslations();
+  // Posts are already filtered by BlogList component
+  const filteredPosts = posts;
   const yearList = filteredPosts.reduce(
     (acc: Record<string, postMetadataType[]>, post) => {
       const year = formatYear(post.date);
@@ -57,7 +171,7 @@ export function BlogListFallback({
     <div className={cn(styles.stagger_container, styles.slow, "group/list")}>
       {filteredPosts.length === 0 ? (
         <div className="py-8 text-center">
-          <p>검색 결과가 없습니다 :/</p>
+          <p>{t("noSearchResults")}</p>
         </div>
       ) : (
         Object.keys(yearList)
