@@ -1,8 +1,9 @@
 import { type StatsigUser, statsigAdapter } from "@flags-sdk/statsig";
 import type { Identify } from "flags";
 import { dedupe, flag } from "flags/next";
+import { env } from "@/shared/env";
 
-const isFlagsEnabled = !!process.env.FLAGS_SECRET;
+const isFlagsEnabled = !!env.FLAGS_SECRET;
 
 export const identify = dedupe((async () => ({
   customIDs: { stableID: "1234" },

@@ -9,6 +9,7 @@ import { NuqsAdapter } from "nuqs/adapters/next";
 
 import Footer from "@/components/footer";
 import { ThemeProvider } from "@/components/theme-provider";
+import { env } from "@/shared/env";
 import { AritaBuriLocalFont } from "@/shared/font.AritaBuri";
 import styles from "@/shared/styles/header-overlay.module.css";
 import NewMetadata from "@/shared/utils/metadata";
@@ -39,7 +40,9 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const shouldInjectToolbar = process.env.NODE_ENV === "development";
+  const shouldInjectToolbar = env.NODE_ENV === "development";
+  const isProduction = env.NODE_ENV === "production";
+  const isVercel = !!env.VERCEL_ENV;
 
   return (
     // biome-ignore lint/a11y/useHtmlLang: next-intl handles lang attribute via middleware
@@ -81,7 +84,7 @@ export default function RootLayout({
           </ThemeProvider>
         </NextProvider>
       </body>
-      {process.env.NODE_ENV === "production" && process.env.VERCEL && (
+      {isProduction && isVercel && (
         <>
           <Analytics />
           <SpeedInsights />

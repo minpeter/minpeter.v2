@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { getBaseUrl } from "@/shared/env";
+import { siteConfig } from "@/shared/site-config";
 
 export default function NewMetadata({
   title,
@@ -7,42 +9,19 @@ export default function NewMetadata({
   title?: string;
   description?: string;
 }): Metadata {
-  const LOCAL_PORT_FALLBACK = 3000;
-
-  const baseUrl = (() => {
-    if (process.env.PUBLIC_BASE_URL) {
-      return process.env.PUBLIC_BASE_URL;
-    }
-
-    if (process.env.VERCEL_URL) {
-      return `https://${process.env.VERCEL_URL}`;
-    }
-
-    const port = process.env.PORT ?? LOCAL_PORT_FALLBACK;
-    return `http://localhost:${port}`;
-  })();
+  const baseUrl = getBaseUrl();
 
   return {
     metadataBase: new URL(baseUrl),
 
     title,
     description,
-    keywords: [
-      "minpeter",
-      "blog",
-      "development",
-      "web",
-      "frontend",
-      "backend",
-      "server",
-      "cloud",
-      "k8s",
-    ],
+    keywords: siteConfig.keywords,
 
     openGraph: {
       type: "website",
       locale: "ko_KR",
-      siteName: "minpeter",
+      siteName: siteConfig.title,
       title,
       description,
       images: "/og-image.png",

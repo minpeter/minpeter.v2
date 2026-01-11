@@ -1,4 +1,4 @@
-import type { Route } from "next";
+import type { Metadata, Route } from "next";
 import { Suspense } from "react";
 
 import Header from "@/components/header";
@@ -10,11 +10,26 @@ import NewMetadata from "@/shared/utils/metadata";
 
 import { getTranslations } from "next-intl/server";
 import { BlogList, BlogListFallback } from "./list";
+import { RssLink } from "./rss-link";
 
-export const metadata = NewMetadata({
-  title: "minpeter | blog",
-  description: "내가 적은 블로그, 너를 위해 써봤지",
-});
+export async function generateMetadata(
+  props: PageProps<"/[locale]/blog">
+): Promise<Metadata> {
+  const { locale } = await props.params;
+  const baseMetadata = NewMetadata({
+    title: "minpeter | blog",
+    description: "내가 적은 블로그, 너를 위해 써봤지",
+  });
+
+  return {
+    ...baseMetadata,
+    alternates: {
+      types: {
+        "application/rss+xml": `/${locale}/blog/rss.xml`,
+      },
+    },
+  };
+}
 
 export default async function Page(props: PageProps<"/[locale]/blog">) {
   const { locale } = await props.params;
@@ -30,6 +45,9 @@ export default async function Page(props: PageProps<"/[locale]/blog">) {
         link={{ href: `/${locale}` as Route, text: t("backToHome") }}
         title={t("blogPageTitle")}
       />
+      <div className="-mt-8 mb-4 flex justify-end">
+        <RssLink locale={locale} />
+      </div>
       {/* FIXME: node:fs
 Module build failed: UnhandledSchemeError: Reading from "node:fs" is not handled by plugins (Unhandled scheme).
 Webpack supports "data:" and "file:" URIs by default. */}
