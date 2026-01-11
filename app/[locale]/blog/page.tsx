@@ -1,5 +1,4 @@
 import type { Route } from "next";
-import { createLoader, parseAsString } from "nuqs/server";
 import { Suspense } from "react";
 
 import Header from "@/components/header";
@@ -17,15 +16,8 @@ export const metadata = NewMetadata({
   description: "내가 적은 블로그, 너를 위해 써봤지",
 });
 
-const blogSearchParams = {
-  q: parseAsString.withDefault(""),
-};
-
-const loadSearchParams = createLoader(blogSearchParams);
-
 export default async function Page(props: PageProps<"/[locale]/blog">) {
   const { locale } = await props.params;
-  const { q: query } = loadSearchParams(await props.searchParams);
 
   const posts = getPostsMetadata(blog.getPages(locale));
 
@@ -44,11 +36,7 @@ Webpack supports "data:" and "file:" URIs by default. */}
       {/* <Suspense fallback={<BlogSearchFallback />}>
         <BlogSearch lang={locale} />
       </Suspense> */}
-      <Suspense
-        fallback={
-          <BlogListFallback lang={locale} posts={posts} query={query} />
-        }
-      >
+      <Suspense fallback={<BlogListFallback posts={posts} />}>
         <BlogList lang={locale} posts={posts} />
       </Suspense>
     </section>
