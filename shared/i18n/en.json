@@ -7,7 +7,7 @@
   "backToHome": "Home",
   "aboutTitle": "Hello, I'm Woonggi Min :)",
   "aboutMe": "I am currently working as a frontend developer.\nAs a frontend developer, I enjoy learning and applying rapidly changing technologies.\nI also prioritize user experience and strive to provide the best experience for users.",
-  "typingDescription": "The simplest UI for typing practice",
+  "typingDescription": "Not sure if this is what you wanted. Hope you like it",
   "typingGenerating": "Generating...",
   "typingFetchError": "An error occurred while loading sentences.",
   "typingAccuracy": "Accuracy",
@@ -23,5 +23,7 @@
   "prevPost": "Previous",
   "translatedBy": "Translated by Claude Opus 4.5",
   "aiDisclaimer": "AI-generated content may be inaccurate or misleading.",
-  "siteDescription": "written, coded, and designed by minpeter"
+  "siteDescription": "written, coded, and designed by minpeter",
+  "noSearchResults": "No results found :/",
+  "searchPlaceholder": "Search posts..."
 }

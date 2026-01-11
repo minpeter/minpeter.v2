@@ -23,5 +23,7 @@
   "prevPost": "前の記事",
   "translatedBy": "Claude Opus 4.5による翻訳",
   "aiDisclaimer": "AI生成コンテンツは不正確または誤解を招く可能性があります。",
-  "siteDescription": "minpeterが執筆、コーディング、デザイン"
+  "siteDescription": "minpeterが執筆、コーディング、デザイン",
+  "noSearchResults": "検索結果がありません :/",
+  "searchPlaceholder": "検索..."
 }
