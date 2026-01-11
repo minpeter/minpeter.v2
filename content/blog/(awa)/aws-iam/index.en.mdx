@@ -20,7 +20,7 @@ a permission management solution that allows you to manage users and their acces
 
 This is the description on the AWS IAM dashboard.
 IAM stands for Identity and Access Management and uses a key-shaped logo.
-![](/images/a4b4483d-f6e3-4cc0-8fa1-c78a8b440f49-image.png)
+![](./images/a4b4483d-f6e3-4cc0-8fa1-c78a8b440f49-image.png)
 
 IAM is a service(?) that manages sub-accounts with equal or lower permissions than the root account.
 Usage is unlimited and free, and there's no limit on account creation.
@@ -42,7 +42,7 @@ If a department receives more management permissions than necessary, there's no 
 Also, if you're developing a service and for some reason you've written your AWS access key in a .env file.
 And if you forgot to write the .gitignore file when uploading to GitHub and uploaded the .env file as is...
 And if you didn't use IAM and the Root account access key was exposed, you could become the protagonist of stories like this.
-![](/images/bdf34e08-c4e2-4dc0-9a1d-8015fa1aefb5-image.png)
+![](./images/bdf34e08-c4e2-4dc0-9a1d-8015fa1aefb5-image.png)
 
 Of course, there are different situations, but the common point is that keys were leaked through hacking or mistakes.
 IAM exists to prevent such situations or reduce damage.
@@ -51,7 +51,7 @@ This was an assumption about why IAM user accounts are necessary.
 
 ## IAM Credential Types
 
-![](/images/8eab1eb3-bc5e-479b-92b6-6fed61a9d6ce-image.png)
+![](./images/8eab1eb3-bc5e-479b-92b6-6fed61a9d6ce-image.png)
 There are 2 types of IAM AWS credential types.
 Programmatic access using access keys, and AWS Management Console access using passwords.
 From now on, I'll call them key-based and password-based respectively.
