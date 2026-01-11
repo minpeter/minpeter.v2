@@ -30,19 +30,12 @@ function generateRssFeed(locale: Locale): string {
       const pubDate = post.data.date.toUTCString();
       const guid = link;
 
-      // Generate category tags from post tags (if available in frontmatter)
-      const postData = post.data as { tags?: string[] };
-      const categories = (postData.tags ?? [])
-        .map((tag: string) => `      <category>${escapeXml(tag)}</category>`)
-        .join("\n");
-
       return `    <item>
       <title>${title}</title>
       <link>${link}</link>
       <description>${description}</description>
       <pubDate>${pubDate}</pubDate>
       <guid isPermaLink="true">${guid}</guid>
-${categories}
     </item>`;
     })
     .join("\n");
@@ -84,7 +77,7 @@ export async function GET(
   return new Response(feed, {
     headers: {
       "Content-Type": "application/rss+xml; charset=utf-8",
-      "Cache-Control": "public, max-age=3600, s-maxage=3600",
+      "Cache-Control": "public, max-age=86400, s-maxage=86400",
     },
   });
 }
