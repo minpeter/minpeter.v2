@@ -26,7 +26,7 @@ export async function generateMetadata(
     ...baseMetadata,
     alternates: {
       types: {
-        "application/rss+xml": `/${locale}/rss.xml`,
+        "application/rss+xml": `/${locale}/blog/rss.xml`,
       },
     },
   };

@@ -8,7 +8,7 @@ export function RssLink({ locale }: RssLinkProps) {
   return (
     <a
       className="inline-flex items-center gap-1.5 text-gray-500 text-sm transition-colors hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-      href={`/${locale}/rss.xml`}
+      href={`/${locale}/blog/rss.xml`}
       rel="noopener noreferrer"
       target="_blank"
       title="RSS Feed"

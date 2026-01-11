@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     alternates: {
       types: {
         "application/rss+xml": [
-          { url: `/${locale}/rss.xml`, title: `RSS Feed (${locale})` },
+          { url: `/${locale}/blog/rss.xml`, title: `RSS Feed (${locale})` },
         ],
       },
     },

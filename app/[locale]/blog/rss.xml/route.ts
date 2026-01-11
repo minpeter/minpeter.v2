@@ -63,7 +63,7 @@ ${categories}
     <description>${escapeXml(getSiteDescription(locale))}</description>
     <language>${langCode}</language>
     <lastBuildDate>${lastBuildDate}</lastBuildDate>
-    <atom:link href="${baseUrl}/${locale}/rss.xml" rel="self" type="application/rss+xml"/>
+    <atom:link href="${baseUrl}/${locale}/blog/rss.xml" rel="self" type="application/rss+xml"/>
 ${items}
   </channel>
 </rss>`;
