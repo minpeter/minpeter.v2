@@ -45,7 +45,7 @@ export function ImageCarousel({
   }, [api]);
 
   return (
-    <div className={cn("-mt-8", className)}>
+    <div className={cn("-mt-6", className)}>
       <Carousel
         className="w-full"
         opts={{
