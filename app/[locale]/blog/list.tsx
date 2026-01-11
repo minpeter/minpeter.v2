@@ -34,6 +34,18 @@ function extractMatchedUrls(results: SortedResult[]): Set<string> {
   return matchedUrls;
 }
 
+/**
+ * Filter posts by title match
+ */
+function filterByTitle(
+  posts: postMetadataType[],
+  query: string
+): postMetadataType[] {
+  return posts.filter((post) =>
+    post.title.toLowerCase().includes(query.toLowerCase())
+  );
+}
+
 export function BlogList({
   lang,
   posts,
@@ -87,9 +99,7 @@ export function BlogList({
       searchQuery.data === "empty" ||
       !searchQuery.data
     ) {
-      return byLang.filter((post) =>
-        post.title.toLowerCase().includes(deferredQuery.toLowerCase())
-      );
+      return filterByTitle(byLang, deferredQuery);
     }
 
     // Use API search results - extract unique page URLs
@@ -100,9 +110,7 @@ export function BlogList({
 
     // If no matches from API, fallback to title search
     if (filtered.length === 0) {
-      return byLang.filter((post) =>
-        post.title.toLowerCase().includes(deferredQuery.toLowerCase())
-      );
+      return filterByTitle(byLang, deferredQuery);
     }
 
     return filtered;
@@ -135,18 +143,12 @@ export function BlogList({
           </div>
         )}
       </div>
-      <BlogListFallback posts={filteredPosts} query={query} />
+      <BlogListFallback posts={filteredPosts} />
     </>
   );
 }
 
-export function BlogListFallback({
-  posts,
-  query: _query,
-}: {
-  posts: postMetadataType[];
-  query: string | null;
-}) {
+export function BlogListFallback({ posts }: { posts: postMetadataType[] }) {
   const t = useTranslations();
   // Posts are already filtered by BlogList component
   const filteredPosts = posts;
