@@ -11,13 +11,13 @@ machine_translated: true
 ## GitHub Web UIでのみ表示されるVerifiedタグ
 
 GitHubにいつの間にか、自分のニックネームでリポジトリを作成してreadme.mdファイルを作成すると、GitHubプロフィールに表示される機能が追加されました。
-![](/images/Screenshot%202022-09-29%20120846.png)
+![](./images/Screenshot%202022-09-29%20120846.png)
 
 該当リポジトリにはreadme.mdファイルしか存在しないため、GitHub Web UIで編集することがほとんどです。
 
 このような方法で編集した後、コミットログを見ると以下のようになります。
 
-![](/images/Screenshot%202022-09-29%20121627.png)
+![](./images/Screenshot%202022-09-29%20121627.png)
 
 これまでノートPCで作業してアップロードしていたコミットには無かったVerifiedタグが付いているのが確認できます。
 
@@ -111,7 +111,7 @@ gpg --armor --export 2167399770AVC2F3
 
 次にGitHubにアクセスして、Settings > SSH and GPG keysで
 GPG keys領域の緑色の`New GPG key`ボタンをクリックしましょう。
-![](/images/Screenshot%202022-09-29%20190743.png)
+![](./images/Screenshot%202022-09-29%20190743.png)
 TitleにはKeyについての説明などを書けば良いと思います。私の場合は
 `ノートPC名 wsl2 signed commit`としました。
 後で自分だけ分かれば良いのでは...?
@@ -149,7 +149,7 @@ git config --global commit.gpgsign true
 ```
 
 これでコミットしてみると、コミットにVerifiedタグが付いているのが確認できます。
-![](/images/Screenshot%202022-09-29%20191559.png)
+![](./images/Screenshot%202022-09-29%20191559.png)
 
 ## 参考
 

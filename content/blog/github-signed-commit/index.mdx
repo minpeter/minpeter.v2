@@ -7,13 +7,13 @@ tags: ["github", "git", "signed commit", "gpg"]
 ## 깃허브 Web UI에서만 생기는 Verified 태그
 
 깃허브에 어느 순간 자신의 닉네임으로 레포를 생성하고 readme.md 파일을 작성하면 깃허브 프로필에 표시해주는 기능이 생겼다.  
-![](/images/Screenshot%202022-09-29%20120846.png)
+![](./images/Screenshot%202022-09-29%20120846.png)
 
 해당 레포에 readme.md 파일 하나만 존재하니 github Web UI에서 수정하는 경우가 대부분이다.
 
 이런 방식으로 수정한 후 커밋로그를 보면 다음과 같다.
 
-![](/images/Screenshot%202022-09-29%20121627.png)
+![](./images/Screenshot%202022-09-29%20121627.png)
 
 그 동안 노트북에서 작업해서 업로드했던 커밋에는 없는 Verified 태그가 붙어 있는 것을 볼 수 있다.
 
@@ -107,7 +107,7 @@ gpg --armor --export 2167399770AVC2F3
 
 그 다음 Github에 접속해서 Settings > SSH and GPG keys 에서
 GPG keys 영역에 초록색 `New GPG key` 버튼을 눌러주자.  
-![](/images/Screenshot%202022-09-29%20190743.png)
+![](./images/Screenshot%202022-09-29%20190743.png)
 Title에는 Key에 대한 설명.. 같은걸 적어주면 될 것 같아서 나의 경우
 `노트북명 wsl2 signed commit` 이라고 정했다.
 나중에 나만 알아보면 되지 않을까..?
@@ -145,7 +145,7 @@ git config --global commit.gpgsign true
 ```
 
 이제 커밋을 해보면 커밋에 Verified 태그가 생긴 걸 확인할 수 있다.
-![](/images/Screenshot%202022-09-29%20191559.png)
+![](./images/Screenshot%202022-09-29%20191559.png)
 
 ## 참고
 

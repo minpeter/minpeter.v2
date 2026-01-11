@@ -10,13 +10,13 @@ machine_translated: true
 ## Verified Tags Only Appear on GitHub Web UI
 
 At some point, GitHub added a feature that displays a README on your profile if you create a repository with your username and add a readme.md file.
-![](/images/Screenshot%202022-09-29%20120846.png)
+![](./images/Screenshot%202022-09-29%20120846.png)
 
 Since this repository only contains a readme.md file, most edits are done through the GitHub Web UI.
 
 When you look at the commit log after editing this way, you'll see the following:
 
-![](/images/Screenshot%202022-09-29%20121627.png)
+![](./images/Screenshot%202022-09-29%20121627.png)
 
 You can see a Verified tag that wasn't present on commits I uploaded from my laptop.
 
@@ -110,7 +110,7 @@ Copy the entire output from `-----BEGIN PGP PUBLIC KEY BLOCK-----` to `-----END 
 
 Then go to GitHub Settings > SSH and GPG keys.
 In the GPG keys section, click the green `New GPG key` button.
-![](/images/Screenshot%202022-09-29%20190743.png)
+![](./images/Screenshot%202022-09-29%20190743.png)
 For Title, enter a description for the key. In my case, I used
 `laptop-name wsl2 signed commit`.
 You just need to recognize it later, right?
@@ -148,7 +148,7 @@ git config --global commit.gpgsign true
 ```
 
 Now when you commit, you'll see the Verified tag on your commits.
-![](/images/Screenshot%202022-09-29%20191559.png)
+![](./images/Screenshot%202022-09-29%20191559.png)
 
 ## References
 
