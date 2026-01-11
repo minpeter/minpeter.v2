@@ -3,7 +3,7 @@ import createMiddleware from "next-intl/middleware";
 
 import { routing } from "./shared/i18n/routing";
 
-const exclusions = ["/_next/", "/.well-known/", "/."];
+const exclusions = ["/_next/", "/.well-known/", "/.", "/api/"];
 const allowedExts = [".md"];
 const extPattern = /\.[^/]+$/;
 
