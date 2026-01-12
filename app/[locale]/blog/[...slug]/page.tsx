@@ -36,10 +36,31 @@ export async function generateMetadata(
     notFound();
   }
 
-  return NewMetadata({
-    title: page.data.title,
-    description: page.data.description,
-  });
+  const slugPath = slug.join("/");
+
+  // Build hreflang alternates for SEO
+  // Default locale (ko) has no prefix, others have /en/, /ja/
+  const languages: Record<string, string> = {
+    ko: `/blog/${slugPath}`,
+    en: `/en/blog/${slugPath}`,
+    ja: `/ja/blog/${slugPath}`,
+    "x-default": `/blog/${slugPath}`,
+  };
+
+  // Canonical URL based on current locale
+  const canonical =
+    locale === "ko" ? `/blog/${slugPath}` : `/${locale}/blog/${slugPath}`;
+
+  return {
+    ...NewMetadata({
+      title: page.data.title,
+      description: page.data.description,
+    }),
+    alternates: {
+      canonical,
+      languages,
+    },
+  };
 }
 
 export default async function Page(
