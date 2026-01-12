@@ -1,7 +1,13 @@
 /** @type {import('next-sitemap').IConfig} */
 
+const SITE_URL = process.env.SITE_URL || "https://minpeter.uk";
+
+// Supported locales matching routing.ts
+const locales = ["en", "ko", "ja"];
+const defaultLocale = "ko";
+
 // Regex for matching internal Next.js hash paths
-const hashPathPattern = /^(\/ko)?\/[a-f0-9]{32,}/;
+const hashPathPattern = /^(\/(ko|en|ja))?\/[a-f0-9]{32,}/;
 
 /**
  * Get priority based on path
@@ -9,46 +15,87 @@ const hashPathPattern = /^(\/ko)?\/[a-f0-9]{32,}/;
  * @returns {number}
  */
 function getPriority(path) {
-  if (path === "/") {
+  if (path === "/" || path === "/en" || path === "/ja") {
     return 1.0;
   }
-  if (path.startsWith("/blog")) {
+  if (path.includes("/blog")) {
     return 0.8;
   }
   return 0.7;
 }
 
+/**
+ * Extract the base path without locale prefix
+ * @param {string} path
+ * @returns {string}
+ */
+function getBasePath(path) {
+  for (const locale of locales) {
+    if (path === `/${locale}`) {
+      return "/";
+    }
+    if (path.startsWith(`/${locale}/`)) {
+      return path.slice(locale.length + 1);
+    }
+  }
+  return path;
+}
+
+/**
+ * Get the URL for a specific locale
+ * @param {string} basePath
+ * @param {string} locale
+ * @returns {string}
+ */
+function getLocalizedPath(basePath, locale) {
+  if (locale === defaultLocale) {
+    return basePath;
+  }
+  return basePath === "/" ? `/${locale}` : `/${locale}${basePath}`;
+}
+
+/**
+ * Generate alternateRefs for hreflang tags
+ * @param {string} basePath
+ * @returns {Array}
+ */
+function getAlternateRefs(basePath) {
+  return locales.map((locale) => ({
+    href: `${SITE_URL}${getLocalizedPath(basePath, locale)}`,
+    hreflang: locale,
+    hrefIsAbsolute: true,
+  }));
+}
+
 const config = {
-  siteUrl: process.env.SITE_URL || "https://minpeter.uk",
+  siteUrl: SITE_URL,
   generateRobotsTxt: true,
   generateIndexSitemap: false,
 
   // Transform function to handle localePrefix: "as-needed"
   // Korean (default) has no prefix, English and Japanese have prefixes
   transform: (config, path) => {
-    // Skip /en/* and /ja/* paths - only include clean Korean URLs
-    if (path.startsWith("/en") || path.startsWith("/ja")) {
-      return null;
-    }
-
     // Skip internal Next.js paths (hash-like paths, _next, etc.)
     if (hashPathPattern.test(path)) {
       return null;
     }
 
-    // Remove /ko prefix if present (Korean should have no prefix)
-    let cleanPath = path;
+    // Transform /ko/* paths to paths without prefix (Korean is default locale)
+    let loc = path;
     if (path.startsWith("/ko/")) {
-      cleanPath = path.slice(3);
+      loc = path.slice(3); // "/ko/blog/post" -> "/blog/post"
     } else if (path === "/ko") {
-      cleanPath = "/";
+      loc = "/";
     }
 
+    const basePath = getBasePath(path);
+
     return {
-      loc: cleanPath,
-      changefreq: cleanPath === "/" ? "daily" : "weekly",
-      priority: getPriority(cleanPath),
+      loc,
+      changefreq: loc === "/" ? "daily" : "weekly",
+      priority: getPriority(loc),
       lastmod: config.autoLastmod ? new Date().toISOString() : undefined,
+      alternateRefs: getAlternateRefs(basePath),
     };
   },
 
@@ -59,6 +106,7 @@ const config = {
       changefreq: "daily",
       priority: 1.0,
       lastmod: new Date().toISOString(),
+      alternateRefs: getAlternateRefs("/"),
     },
   ],
 
