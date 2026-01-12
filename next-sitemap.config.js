@@ -2,7 +2,8 @@
 
 const SITE_URL = process.env.SITE_URL || "https://minpeter.uk";
 
-// Supported locales matching routing.ts
+// IMPORTANT: Keep in sync with shared/i18n/routing.ts
+// These values are duplicated here because next-sitemap.config.js is CommonJS
 const locales = ["en", "ko", "ja"];
 const defaultLocale = "ko";
 
@@ -60,11 +61,20 @@ function getLocalizedPath(basePath, locale) {
  * @returns {Array}
  */
 function getAlternateRefs(basePath) {
-  return locales.map((locale) => ({
+  const refs = locales.map((locale) => ({
     href: `${SITE_URL}${getLocalizedPath(basePath, locale)}`,
     hreflang: locale,
     hrefIsAbsolute: true,
   }));
+
+  // Add x-default pointing to default locale for users without language preference
+  refs.push({
+    href: `${SITE_URL}${getLocalizedPath(basePath, defaultLocale)}`,
+    hreflang: "x-default",
+    hrefIsAbsolute: true,
+  });
+
+  return refs;
 }
 
 const config = {
