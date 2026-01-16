@@ -10,7 +10,7 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-arita-buri);
+  --font-sans: var(--font-arita-buri), var(--font-shippori-mincho);
   --font-mono: var(--font-geist-mono);
 }
 
