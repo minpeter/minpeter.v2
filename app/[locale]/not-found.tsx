@@ -11,7 +11,7 @@ export default function NotFound() {
     <section>
       <Header
         description={t("404")}
-        link={{ href: `/${locale}` as Route, text: "" }}
+        link={{ href: `/${locale}` as Route, text: t("backToHome") }}
         title="404"
       />
     </section>

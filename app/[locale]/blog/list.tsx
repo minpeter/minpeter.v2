@@ -247,7 +247,7 @@ export function BlogListFallback({ posts }: { posts: postMetadataType[] }) {
 
                       {post.draft ? (
                         <Badge className="h-fit shrink-0" variant="secondary">
-                          Draft
+                          {t("draft")}
                         </Badge>
                       ) : (
                         <div className={cn(itemSytles, "h-fit text-nowrap")}>

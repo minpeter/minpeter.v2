@@ -1,6 +1,7 @@
 import type { Route } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { getTranslations } from "next-intl/server";
 
 import Header from "@/components/header";
 
@@ -11,11 +12,12 @@ export default async function Page(
   props: PageProps<"/[locale]/show/unstructured-0828">
 ) {
   const { locale } = await props.params;
+  const t = await getTranslations();
   return (
     <section className="flex flex-col gap-8">
       <Header
         description="unstructured 250828"
-        link={{ href: `/${locale}/show` as Route, text: "Back" }}
+        link={{ href: `/${locale}/show` as Route, text: t("back") }}
         title="/show/unstructured-0828"
       />
 

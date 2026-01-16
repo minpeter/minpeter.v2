@@ -207,7 +207,7 @@ export default async function Page(
 
           {post.data.draft ? <span aria-hidden="true">•</span> : null}
 
-          {post.data.draft ? <span>draft</span> : null}
+          {post.data.draft ? <span>{t("draft")}</span> : null}
         </div>
 
         <hr className="my-8" />

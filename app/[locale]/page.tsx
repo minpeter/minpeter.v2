@@ -183,14 +183,17 @@ function CarouselImage() {
                   slide.url ? `Open image ${index + 1}` : `Image ${index + 1}`
                 }
                 className="h-full w-full rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                onBlur={() => setGrayscale("grayscale(70%)")}
                 onClick={() => {
                   if (slide.url) {
                     window.open(slide.url);
                   }
                 }}
+                onFocus={() => setGrayscale("grayscale(0)")}
                 onMouseEnter={() => setGrayscale("grayscale(0)")}
                 onMouseLeave={() => setGrayscale("grayscale(70%)")}
                 onTouchEnd={() => setGrayscale("grayscale(70%)")}
+                onTouchStart={() => setGrayscale("grayscale(0)")}
                 type="button"
               >
                 <Image

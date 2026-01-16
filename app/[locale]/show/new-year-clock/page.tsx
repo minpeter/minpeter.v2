@@ -1,17 +1,18 @@
 "use client";
 
 import type { Route } from "next";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Header from "@/components/header";
 
 export default function Page() {
   const locale = useLocale();
+  const t = useTranslations();
   return (
     <section className="flex flex-col gap-3">
       <Header
         description="Countdown to the next year"
-        link={{ href: `/${locale}/show` as Route, text: "Back" }}
+        link={{ href: `/${locale}/show` as Route, text: t("back") }}
         title="/show/new-year-clock"
       />
 

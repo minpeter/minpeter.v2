@@ -1,4 +1,5 @@
 import type { Route } from "next";
+import { getTranslations } from "next-intl/server";
 
 import Header from "@/components/header";
 
@@ -6,11 +7,12 @@ export default async function Page(
   props: PageProps<"/[locale]/show/unstructured">
 ) {
   const { locale } = await props.params;
+  const t = await getTranslations();
   return (
     <section className="flex flex-col gap-8">
       <Header
         description="unstructured"
-        link={{ href: `/${locale}/show` as Route, text: "Back" }}
+        link={{ href: `/${locale}/show` as Route, text: t("back") }}
         title="/show/unstructured"
       />
 
@@ -20,9 +22,9 @@ export default async function Page(
           <div className="absolute inset-0 -rotate-1 transform rounded-sm bg-neutral-600 transition-all duration-300 group-hover:rotate-1" />
           {/* 내용: 기본 상태에는 rotate-1, 호버시 정렬 (rotate-0) */}
           <div className="absolute inset-0 rotate-1 transform rounded-sm bg-neutral-500 p-8 transition-all duration-300 group-hover:-rotate-1">
-            <h1 className="font-extrabold text-2xl text-neutral-200">
+            <h2 className="font-extrabold text-2xl text-neutral-200">
               Hover me
-            </h1>
+            </h2>
           </div>
         </div>
       </div>
