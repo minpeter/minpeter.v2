@@ -4,7 +4,7 @@ import Header from "@/components/header";
 import styles from "@/shared/styles/stagger-fade-in.module.css";
 import { cn } from "@/shared/utils/tailwind";
 
-import { Playground } from "./animated-stack";
+import { PlaygroundWrapper } from "./playground-wrapper";
 
 export default async function Page(
   props: PageProps<"/[locale]/show/tech-stack-ball">
@@ -20,7 +20,7 @@ export default async function Page(
       <div
         className={cn(styles.stagger_container, styles.slow, "flex flex-col")}
       >
-        <Playground h={400} w={800} />
+        <PlaygroundWrapper h={400} w={800} />
       </div>
     </section>
   );

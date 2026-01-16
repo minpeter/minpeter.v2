@@ -76,7 +76,7 @@ export default async function Page(
   if (post?.data.external_url) {
     return <ExternalRedirect url={post.data.external_url} />;
   }
-  posts.sort(
+  const sortedPosts = posts.toSorted(
     (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
   );
 
@@ -86,17 +86,17 @@ export default async function Page(
 
   const MDX = post.data.body;
 
-  type PostWithNavigation = (typeof posts)[0] & {
-    previous: (typeof posts)[0] | null;
-    next: (typeof posts)[0] | null;
+  type PostWithNavigation = (typeof sortedPosts)[0] & {
+    previous: (typeof sortedPosts)[0] | null;
+    next: (typeof sortedPosts)[0] | null;
   };
 
-  const postsIndex = posts.reduce<Record<string, PostWithNavigation>>(
+  const postsIndex = sortedPosts.reduce<Record<string, PostWithNavigation>>(
     (acc, currentPost, index) => {
       acc[currentPost.slugs.join("/")] = {
         ...currentPost,
-        previous: posts[index - 1] || null,
-        next: posts[index + 1] || null,
+        previous: sortedPosts[index - 1] || null,
+        next: sortedPosts[index + 1] || null,
       };
       return acc;
     },

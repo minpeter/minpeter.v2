@@ -183,7 +183,7 @@ export function BlogListFallback({ posts }: { posts: postMetadataType[] }) {
         </div>
       ) : (
         Object.keys(yearList)
-          .reverse()
+          .toReversed()
           .map((year) => (
             <div
               className="group/year flex flex-col gap-2 border-t py-8 last-of-type:border-b sm:flex-row"
@@ -246,7 +246,9 @@ export function BlogListFallback({ posts }: { posts: postMetadataType[] }) {
                       )}
 
                       {post.draft ? (
-                        <Badge variant="secondary">Draft</Badge>
+                        <Badge className="h-fit shrink-0" variant="secondary">
+                          Draft
+                        </Badge>
                       ) : (
                         <div className={cn(itemSytles, "h-fit text-nowrap")}>
                           {formatDate(post.date)}

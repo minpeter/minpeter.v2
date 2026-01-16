@@ -36,7 +36,7 @@ export default function AnimatedText({ data }: { data: string }) {
           .split("")
           .map((_, index) => {
             if (index < iteration) {
-              return text[index];
+              return data[index];
             }
             return letters[
               Math.floor(
@@ -47,7 +47,7 @@ export default function AnimatedText({ data }: { data: string }) {
           .join("")
       );
 
-      if (iteration < text.length) {
+      if (iteration < data.length) {
         iteration += ITERATION_INCREMENT;
         setTimeout(animate, TIMEOUT_BASE_MS / data.length);
       } else {
@@ -56,7 +56,7 @@ export default function AnimatedText({ data }: { data: string }) {
     };
 
     animate();
-  }, [intervalId, isAnimating, text, data]);
+  }, [intervalId, isAnimating, data]);
 
   useEffect(() => {
     const currentRef = ref.current;

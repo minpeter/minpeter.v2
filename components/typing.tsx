@@ -33,7 +33,7 @@ export default function Typing({
         setIsDeleting(true);
       } else if (isDeleting && text === "") {
         setIsDeleting(false);
-        setCount((count + 1) % dynamic.length);
+        setCount((prev) => (prev + 1) % dynamic.length);
       }
     }, speed);
 

@@ -168,7 +168,7 @@ export function Playground({
       ...walls,
       mouseConstraint,
       ...boxes
-        .sort(() => Math.random() - RANDOM_SORT_BIAS)
+        .toSorted(() => Math.random() - RANDOM_SORT_BIAS)
         .slice(SLICE_START_INDEX, MAX_RENDERED_ICONS),
     ]);
 
