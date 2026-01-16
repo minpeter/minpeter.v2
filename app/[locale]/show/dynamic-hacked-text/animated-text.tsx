@@ -12,7 +12,7 @@ const RANDOM_LETTER_MULTIPLIER = 1;
 // license: on github.com/wiscaksono/wiscaksono-site
 
 export default function AnimatedText({ data }: { data: string }) {
-  const [text, setText] = useState(data);
+  const [displayText, setDisplayText] = useState(data);
   const isAnimatingRef = useRef(false);
 
   const handleMouseOver = useCallback(() => {
@@ -24,7 +24,7 @@ export default function AnimatedText({ data }: { data: string }) {
     isAnimatingRef.current = true;
 
     const animate = () => {
-      setText(
+      setDisplayText(
         data
           .split("")
           .map((_, index) => {
@@ -58,7 +58,7 @@ export default function AnimatedText({ data }: { data: string }) {
       onMouseOver={handleMouseOver}
       type="button"
     >
-      {text}
+      {displayText}
     </button>
   );
 }

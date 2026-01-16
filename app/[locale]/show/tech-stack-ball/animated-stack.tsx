@@ -53,11 +53,22 @@ const WALL_SAFE_ZONE = 100;
 const ICON_DIAMETER = 30;
 const ICON_TEXTURE_BASE_DIMENSION = 300;
 const INITIAL_BODY_POSITION = 100;
-const RANDOM_SORT_BIAS = 0.5;
-const SLICE_START_INDEX = 0;
 const MAX_RENDERED_ICONS = 10;
 const MOUSE_CONSTRAINT_STIFFNESS = 0.05;
 const CANVAS_FILTER = "grayscale(1)";
+
+/**
+ * Fisher-Yates shuffle algorithm for reliable array randomization.
+ * Unlike using sort() with Math.random(), this provides uniform distribution.
+ */
+function shuffleArray<T>(array: T[]): T[] {
+  const result = [...array];
+  for (let i = result.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [result[i], result[j]] = [result[j], result[i]];
+  }
+  return result;
+}
 
 export function Playground({
   w,
@@ -167,9 +178,7 @@ export function Playground({
     World.add(engine.world, [
       ...walls,
       mouseConstraint,
-      ...boxes
-        .toSorted(() => Math.random() - RANDOM_SORT_BIAS)
-        .slice(SLICE_START_INDEX, MAX_RENDERED_ICONS),
+      ...shuffleArray(boxes).slice(0, MAX_RENDERED_ICONS),
     ]);
 
     Render.run(render);

@@ -125,7 +125,6 @@ export default function TmpfUI() {
         <Label htmlFor="uploadfiles">Upload Files</Label>
         <div className="flex w-full max-w-md items-center space-x-2">
           <Input
-            accept="*/*"
             id="uploadfiles"
             multiple={true}
             onChange={handleFileChange}
