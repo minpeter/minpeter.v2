@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 
 const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ{}</>믾쾹쵭퀴섫뤱윤チェ・ソユン";
 const ITERATION_STEPS_PER_CHARACTER = 3;
@@ -13,26 +13,19 @@ const RANDOM_LETTER_MULTIPLIER = 1;
 
 export default function AnimatedText({ data }: { data: string }) {
   const [text, setText] = useState(data);
-  const [intervalId] = useState<number | null>(null);
-  const [isAnimating, setIsAnimating] = useState(false);
-
-  const ref = useRef<HTMLButtonElement | null>(null);
+  const isAnimatingRef = useRef(false);
 
   const handleMouseOver = useCallback(() => {
-    if (isAnimating) {
+    if (isAnimatingRef.current) {
       return;
     }
 
     let iteration = 0;
-
-    if (intervalId !== null) {
-      clearTimeout(intervalId);
-    }
+    isAnimatingRef.current = true;
 
     const animate = () => {
-      setIsAnimating(true);
-      setText((prevText) =>
-        prevText
+      setText(
+        data
           .split("")
           .map((_, index) => {
             if (index < iteration) {
@@ -51,32 +44,18 @@ export default function AnimatedText({ data }: { data: string }) {
         iteration += ITERATION_INCREMENT;
         setTimeout(animate, TIMEOUT_BASE_MS / data.length);
       } else {
-        setIsAnimating(false);
+        isAnimatingRef.current = false;
       }
     };
 
     animate();
-  }, [intervalId, isAnimating, data]);
-
-  useEffect(() => {
-    const currentRef = ref.current;
-
-    if (currentRef) {
-      currentRef.addEventListener("mouseover", handleMouseOver);
-    }
-
-    return () => {
-      if (currentRef) {
-        currentRef.removeEventListener("mouseover", handleMouseOver);
-      }
-    };
-  }, [handleMouseOver]);
+  }, [data]);
 
   return (
     <button
       className="cursor-pointer rounded font-bold text-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       onFocus={handleMouseOver}
-      ref={ref}
+      onMouseOver={handleMouseOver}
       type="button"
     >
       {text}
