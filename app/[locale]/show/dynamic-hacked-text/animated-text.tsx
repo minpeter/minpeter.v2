@@ -16,7 +16,7 @@ export default function AnimatedText({ data }: { data: string }) {
   const [intervalId] = useState<number | null>(null);
   const [isAnimating, setIsAnimating] = useState(false);
 
-  const ref = useRef<HTMLHeadingElement | null>(null);
+  const ref = useRef<HTMLButtonElement | null>(null);
 
   const handleMouseOver = useCallback(() => {
     if (isAnimating) {
@@ -73,8 +73,13 @@ export default function AnimatedText({ data }: { data: string }) {
   }, [handleMouseOver]);
 
   return (
-    <span className="font-bold text-lg" ref={ref}>
+    <button
+      className="cursor-pointer rounded font-bold text-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+      onFocus={handleMouseOver}
+      ref={ref}
+      type="button"
+    >
       {text}
-    </span>
+    </button>
   );
 }

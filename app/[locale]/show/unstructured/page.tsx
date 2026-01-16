@@ -15,7 +15,10 @@ export default async function Page(
       />
 
       <div className="h-48 w-full">
-        <div className="group relative h-full w-full cursor-pointer">
+        <div
+          className="group relative h-full w-full cursor-pointer"
+          role="presentation"
+        >
           {/* 배경: 기본 상태에는 -rotate-1, 호버시 정렬 (rotate-0) */}
           <div className="absolute inset-0 -rotate-1 transform rounded-sm bg-neutral-600 transition-all duration-300 group-hover:rotate-1" />
           {/* 내용: 기본 상태에는 rotate-1, 호버시 정렬 (rotate-0) */}
@@ -29,7 +32,10 @@ export default async function Page(
 
       {/* Enhanced 3D layered animated card with twisting effect */}
       <div className="h-48 w-full [perspective:1500px]">
-        <div className="group relative h-full w-full cursor-pointer">
+        <div
+          className="group relative h-full w-full cursor-pointer"
+          role="presentation"
+        >
           <div className="absolute inset-0 flex transform items-center justify-center rounded-sm bg-neutral-600 transition-all duration-500 ease-out group-hover:[transform:translate3d(-15px,-15px,40px)_rotateX(10deg)_rotateY(-5deg)]">
             <span className="font-extrabold text-2xl text-white drop-shadow-md">
               Layer 1
@@ -50,7 +56,10 @@ export default async function Page(
 
       {/* Side-view transition with layer separation effect */}
       <div className="h-48 w-full [perspective:1500px]">
-        <div className="group relative h-full w-full cursor-pointer">
+        <div
+          className="group relative h-full w-full cursor-pointer"
+          role="presentation"
+        >
           {/* Front layer - largest */}
           <div className="absolute inset-0 origin-left transform rounded-sm bg-neutral-700 shadow-lg transition-all duration-700 ease-out group-hover:[transform:translate3d(-20px,-10px,0px)_rotateY(30deg)]">
             <div className="flex h-full p-6">

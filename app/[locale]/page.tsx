@@ -45,7 +45,7 @@ export default function Page() {
           )}
         >
           <Link
-            className="lg:square flex h-40 flex-col justify-between rounded-xl bg-black/5 p-5 transition-colors duration-200 hover:bg-black/10 lg:h-auto dark:bg-white/5 dark:hover:bg-white/10"
+            className="lg:square flex h-40 flex-col justify-between rounded-xl bg-black/5 p-5 transition-colors duration-200 hover:bg-black/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring lg:h-auto dark:bg-white/5 dark:hover:bg-white/10"
             href={`/${locale}/blog` as Route}
           >
             <span className="font-medium text-lg">{t("blogTitle")}</span>
@@ -68,7 +68,7 @@ export default function Page() {
             ].map((item) =>
               item.external ? (
                 <a
-                  className="relative flex aspect-square flex-col rounded-xl bg-black/5 p-3 transition-colors duration-200 hover:bg-black/10 dark:bg-white/5 dark:hover:bg-white/10"
+                  className="relative flex aspect-square flex-col rounded-xl bg-black/5 p-3 transition-colors duration-200 hover:bg-black/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:bg-white/5 dark:hover:bg-white/10"
                   href={item.href}
                   key={item.href}
                   rel="noreferrer noopener"
@@ -86,7 +86,7 @@ export default function Page() {
                 </a>
               ) : (
                 <Link
-                  className="relative flex aspect-square flex-col rounded-xl bg-black/5 p-3 transition-colors duration-200 hover:bg-black/10 dark:bg-white/5 dark:hover:bg-white/10"
+                  className="relative flex aspect-square flex-col rounded-xl bg-black/5 p-3 transition-colors duration-200 hover:bg-black/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:bg-white/5 dark:hover:bg-white/10"
                   href={`/${locale}${item.href}` as Route}
                   key={item.href}
                 >
@@ -121,7 +121,7 @@ export default function Page() {
               ].map((item) => (
                 <a
                   aria-label={`social link to ${item.href}`}
-                  className="flex aspect-square items-center justify-center rounded-xl bg-black/5 p-3 transition-colors duration-200 hover:bg-black/10 dark:bg-white/5 dark:hover:bg-white/10"
+                  className="flex aspect-square items-center justify-center rounded-xl bg-black/5 p-3 transition-colors duration-200 hover:bg-black/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:bg-white/5 dark:hover:bg-white/10"
                   href={item.href}
                   key={item.href}
                   rel="noreferrer noopener"
@@ -171,14 +171,11 @@ function CarouselImage() {
         {slides.map((slide, index) => (
           <CarouselItem key={slide.id}>
             <AspectRatio ratio={1}>
-              <Image
-                alt={`Main image ${index + 1}`}
-                className={cn(
-                  "h-full w-full cursor-pointer rounded-lg object-cover grayscale-70 transition-filter duration-1000",
-                  grayscale === "grayscale(0)" && "grayscale-0"
-                )}
-                height={300}
-                loading="lazy"
+              <button
+                aria-label={
+                  slide.url ? `Open image ${index + 1}` : `Image ${index + 1}`
+                }
+                className="h-full w-full rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                 onClick={() => {
                   if (slide.url) {
                     window.open(slide.url);
@@ -187,10 +184,21 @@ function CarouselImage() {
                 onMouseEnter={() => setGrayscale("grayscale(0)")}
                 onMouseLeave={() => setGrayscale("grayscale(70%)")}
                 onTouchEnd={() => setGrayscale("grayscale(70%)")}
-                placeholder="blur"
-                src={slide.image}
-                width={300}
-              />
+                type="button"
+              >
+                <Image
+                  alt={`Main image ${index + 1}`}
+                  className={cn(
+                    "h-full w-full rounded-lg object-cover grayscale-70 transition-filter duration-1000",
+                    grayscale === "grayscale(0)" && "grayscale-0"
+                  )}
+                  height={300}
+                  loading="lazy"
+                  placeholder="blur"
+                  src={slide.image}
+                  width={300}
+                />
+              </button>
             </AspectRatio>
           </CarouselItem>
         ))}

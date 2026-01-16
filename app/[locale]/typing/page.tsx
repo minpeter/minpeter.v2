@@ -245,6 +245,8 @@ export default function Page() {
         </button>
 
         <input
+          aria-label="Typing input"
+          autoComplete="off"
           autoFocus
           className="pointer-events-none absolute inset-0 h-full w-full opacity-0"
           onCompositionEnd={handleCompositionEnd}

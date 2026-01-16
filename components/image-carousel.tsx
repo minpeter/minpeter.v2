@@ -82,7 +82,7 @@ export function ImageCarousel({
           <button
             aria-label={`Go to slide ${index + 1}`}
             className={cn(
-              "h-1.5 w-1.5 rounded-full transition-all",
+              "h-1.5 w-1.5 rounded-full transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
               current === index
                 ? "w-3 bg-foreground"
                 : "bg-muted-foreground/30 hover:bg-muted-foreground/50"

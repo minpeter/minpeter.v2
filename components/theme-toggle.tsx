@@ -13,7 +13,7 @@ export function ModeToggle() {
   return (
     <button
       aria-label="Toggle theme"
-      className="relative flex h-6 w-6 items-center justify-center"
+      className="relative flex h-6 w-6 items-center justify-center rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       onClick={toggleTheme}
       type="button"
     >

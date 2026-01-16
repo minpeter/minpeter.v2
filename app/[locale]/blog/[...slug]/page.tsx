@@ -127,7 +127,7 @@ export default async function Page(
                 <a
                   className={cn(
                     "my-1 block",
-                    "animation:enter w-fit rounded-md px-0.5 hover:bg-secondary",
+                    "animation:enter w-fit rounded-md px-0.5 hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                     "box-decoration-clone px-2 py-1"
                   )}
                   href={item.url}
@@ -219,7 +219,7 @@ export default async function Page(
         <div className="flex justify-between">
           {postsIndex[post.slugs.join("/")].previous ? (
             <Link
-              className="rounded-md px-2 py-1 text-primary hover:bg-secondary"
+              className="max-w-[45%] truncate rounded-md px-2 py-1 text-primary hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               href={
                 `${postsIndex[post.slugs.join("/")].previous?.url}` as Route
               }
@@ -232,7 +232,7 @@ export default async function Page(
 
           {postsIndex[post.slugs.join("/")].next ? (
             <Link
-              className="rounded-md px-2 py-1 text-primary hover:bg-secondary"
+              className="max-w-[45%] truncate rounded-md px-2 py-1 text-primary hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               href={`${postsIndex[post.slugs.join("/")].next?.url}` as Route}
             >
               {postsIndex[post.slugs.join("/")].next?.data.title} →

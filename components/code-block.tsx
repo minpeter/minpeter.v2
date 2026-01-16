@@ -178,7 +178,7 @@ export function ModCodeBlock({
   return (
     <div className="relative flex flex-col gap-1">
       <button
-        className="absolute top-3 right-3 rounded-md border bg-card px-2 py-1 text-xs focus-visible:outline-2"
+        className="absolute top-3 right-3 rounded-md border bg-card px-2 py-1 text-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         onClick={handleCopy}
         type="button"
       >
@@ -205,8 +205,9 @@ export function ModCodeBlock({
                 return (
                   <input
                     aria-label={`Value for ${segment.content}`}
+                    autoComplete="off"
                     autoFocus
-                    className="inline h-5 rounded-md bg-secondary px-1 py-0.5"
+                    className="inline h-5 rounded-md bg-secondary px-1 py-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                     key={segment.id}
                     onBlur={() => setActiveSegmentIndex(null)}
                     onChange={(event) => {
@@ -229,7 +230,7 @@ export function ModCodeBlock({
 
               return (
                 <button
-                  className="cursor-pointer rounded-md bg-secondary px-1 py-0.5 text-blue-500 hover:bg-blue-500 hover:text-white"
+                  className="cursor-pointer rounded-md bg-secondary px-1 py-0.5 text-blue-500 hover:bg-blue-500 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                   key={segment.id}
                   onClick={() => setActiveSegmentIndex(index)}
                   type="button"
@@ -272,7 +273,7 @@ export function CodeBlock({ code }: { code: string; language?: string }) {
   return (
     <div className="relative">
       <button
-        className="absolute top-3 right-3 rounded-md border bg-card px-2 py-1 text-xs focus-visible:outline-2"
+        className="absolute top-3 right-3 rounded-md border bg-card px-2 py-1 text-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         onClick={handleCopy}
         type="button"
       >

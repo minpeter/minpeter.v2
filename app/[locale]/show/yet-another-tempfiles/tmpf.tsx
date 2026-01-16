@@ -125,12 +125,15 @@ export default function TmpfUI() {
         <Label htmlFor="uploadfiles">Upload Files</Label>
         <div className="flex w-full max-w-md items-center space-x-2">
           <Input
+            accept="*/*"
             id="uploadfiles"
             multiple={true}
             onChange={handleFileChange}
             type="file"
           />
-          <Button onClick={handleUpload}>Upload</Button>
+          <Button onClick={handleUpload} type="button">
+            Upload
+          </Button>
         </div>
       </div>
 
@@ -144,7 +147,11 @@ export default function TmpfUI() {
               <code className={codeVariants()}>{uploaded?.folderId}</code>{" "}
               uploaded
             </p>
-            <Button onClick={handleDownloadAll}>
+            <Button
+              aria-label="Download all files"
+              onClick={handleDownloadAll}
+              type="button"
+            >
               <DownloadIcon className="h-4 w-4" />
             </Button>
           </div>
@@ -153,7 +160,7 @@ export default function TmpfUI() {
             {uploaded?.files.map((f) => (
               <li key={f.fileName}>
                 <a
-                  className="flex items-center space-x-2 hover:underline"
+                  className="flex items-center space-x-2 rounded hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                   href={BACKEND(
                     API_SUFFIX.VIEW(uploaded?.folderId ?? "", f.fileName)
                   )}

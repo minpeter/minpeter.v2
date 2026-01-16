@@ -188,12 +188,14 @@ export function Playground({
 
   return (
     <canvas
+      aria-label="Interactive physics simulation with technology stack icons"
       className={cn(
         "rounded-lg border bg-card text-card-foreground shadow-xs",
         className
       )}
       height={h}
       ref={canvasRef}
+      role="img"
       style={{
         filter: CANVAS_FILTER,
       }}

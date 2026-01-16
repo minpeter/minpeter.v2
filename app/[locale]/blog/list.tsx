@@ -119,9 +119,14 @@ export function BlogList({
   return (
     <>
       <div className="relative mb-6">
+        <label className="sr-only" htmlFor="blog-search">
+          {t("searchPlaceholder")}
+        </label>
         <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
         <input
+          autoComplete="off"
           className="w-full rounded-md border bg-background px-10 py-2 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+          id="blog-search"
           onChange={(e) => setQuery(e.target.value || null)}
           placeholder={t("searchPlaceholder")}
           type="text"
@@ -133,7 +138,8 @@ export function BlogList({
               <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
             ) : (
               <button
-                className="flex h-4 w-4 items-center justify-center text-muted-foreground hover:text-foreground"
+                aria-label="Clear search"
+                className="flex h-4 w-4 items-center justify-center rounded text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                 onClick={() => setQuery(null)}
                 type="button"
               >
@@ -199,14 +205,17 @@ export function BlogListFallback({ posts }: { posts: postMetadataType[] }) {
                     >
                       {post.external_url ? (
                         <a
-                          className={cn(itemSytles, "inline-flex items-center")}
+                          className={cn(
+                            itemSytles,
+                            "inline-flex items-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                          )}
                           href={post.external_url}
                           rel="noopener noreferrer"
                           target="_blank"
                         >
                           <span
                             className={cn(
-                              "inline box-decoration-clone px-1 py-1",
+                              "line-clamp-2 inline box-decoration-clone px-1 py-1",
                               itemSytles
                             )}
                           >
@@ -219,12 +228,15 @@ export function BlogListFallback({ posts }: { posts: postMetadataType[] }) {
                         </a>
                       ) : (
                         <Link
-                          className={cn(itemSytles, "inline-flex items-center")}
+                          className={cn(
+                            itemSytles,
+                            "inline-flex items-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                          )}
                           href={post.url as Route}
                         >
                           <span
                             className={cn(
-                              "inline box-decoration-clone px-1 py-1",
+                              "line-clamp-2 inline box-decoration-clone px-1 py-1",
                               itemSytles
                             )}
                           >
