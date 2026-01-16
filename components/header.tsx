@@ -1,8 +1,11 @@
 "use client";
 
 import type { Route } from "next";
+import type { ReactNode } from "react";
+
 import styles from "@/shared/styles/stagger-fade-in.module.css";
 import { cn } from "@/shared/utils/tailwind";
+
 import { LanguageSelector } from "./language-selector";
 import { Backlink } from "./link";
 
@@ -13,9 +16,15 @@ interface HeaderProps {
     href: Route;
     text: string;
   };
+  rightContent?: ReactNode;
 }
 
-export default function Header({ title, description, link }: HeaderProps) {
+export default function Header({
+  title,
+  description,
+  link,
+  rightContent,
+}: HeaderProps) {
   return (
     <header
       className={cn("relative z-10 mb-10 space-y-1", styles.stagger_container)}
@@ -32,7 +41,11 @@ export default function Header({ title, description, link }: HeaderProps) {
           {title || "minpeter"}
         </h1>
 
-        <LanguageSelector />
+        <div className="flex items-center gap-1 text-gray-500">
+          {rightContent}
+          {rightContent && <span>/</span>}
+          <LanguageSelector />
+        </div>
       </div>
       {description ? (
         <p className="w-full text-gray-400 text-sm">{description}</p>

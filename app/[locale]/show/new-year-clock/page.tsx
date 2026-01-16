@@ -97,7 +97,7 @@ function Countdown() {
   );
 
   return (
-    <div className="whitespace-pre-wrap rounded-xl text-sm">
+    <div className="whitespace-pre-wrap rounded-xl text-sm tabular-nums">
       {hasTimeLeft ? (
         <>
           {remainingTime.days}일 {remainingTime.hours}시간{" "}

@@ -43,11 +43,9 @@ export default async function Page(props: PageProps<"/[locale]/blog">) {
       <Header
         description={t("blogPageDescription")}
         link={{ href: `/${locale}` as Route, text: t("backToHome") }}
+        rightContent={<RssLink locale={locale} />}
         title={t("blogPageTitle")}
       />
-      <div className="-mt-8 mb-4 flex justify-end">
-        <RssLink locale={locale} />
-      </div>
       {/* FIXME: node:fs
 Module build failed: UnhandledSchemeError: Reading from "node:fs" is not handled by plugins (Unhandled scheme).
 Webpack supports "data:" and "file:" URIs by default. */}

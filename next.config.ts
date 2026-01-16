@@ -11,6 +11,13 @@ const nextConfig: NextConfig = {
   reactCompiler: true,
   experimental: {
     turbopackFileSystemCacheForDev: true,
+    optimizePackageImports: [
+      "lucide-react",
+      "@radix-ui/react-icons",
+      "react-icons",
+      "@react-three/drei",
+      "@react-three/fiber",
+    ],
   },
   logging: {
     fetches: {

@@ -28,6 +28,38 @@ import { cn } from "@/shared/utils/tailwind";
 
 const Lickitung = dynamic(() => import("@/components/lickitung"));
 
+// Hoisted static data outside component to prevent re-creation on every render (rendering-hoist-jsx)
+const SOCIAL_LINKS = [
+  {
+    href: "https://github.com/minpeter",
+    icon: <GitHubLogoIcon className="h-4 w-4" />,
+    label: "GitHub",
+  },
+  {
+    href: "https://instagram.com/minpeter2",
+    icon: <InstagramLogoIcon className="h-4 w-4" />,
+    label: "Instagram",
+  },
+  {
+    href: "https://linkedin.com/in/minpeter/",
+    icon: <LinkedInLogoIcon className="h-4 w-4" />,
+    label: "LinkedIn",
+  },
+] as const;
+
+const CAROUSEL_SLIDES = [
+  {
+    id: "spotlight-video",
+    image: mainImage1,
+    url: null,
+  },
+  {
+    id: "spotlight-showcase",
+    image: mainImage2,
+    url: "/73e3da8fa7a397e7b1bc36efabb2cbb265524a75d7d5e6d1620b9e10e694257",
+  },
+] as const;
+
 export default function Page() {
   const t = useTranslations();
   const locale = useLocale();
@@ -45,7 +77,7 @@ export default function Page() {
           )}
         >
           <Link
-            className="lg:square flex h-40 flex-col justify-between rounded-xl bg-black/5 p-5 transition-colors duration-200 hover:bg-black/10 lg:h-auto dark:bg-white/5 dark:hover:bg-white/10"
+            className="lg:square flex h-40 flex-col justify-between rounded-xl bg-black/5 p-5 transition-colors duration-200 hover:bg-black/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring lg:h-auto dark:bg-white/5 dark:hover:bg-white/10"
             href={`/${locale}/blog` as Route}
           >
             <span className="font-medium text-lg">{t("blogTitle")}</span>
@@ -68,7 +100,7 @@ export default function Page() {
             ].map((item) =>
               item.external ? (
                 <a
-                  className="relative flex aspect-square flex-col rounded-xl bg-black/5 p-3 transition-colors duration-200 hover:bg-black/10 dark:bg-white/5 dark:hover:bg-white/10"
+                  className="relative flex aspect-square flex-col rounded-xl bg-black/5 p-3 transition-colors duration-200 hover:bg-black/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:bg-white/5 dark:hover:bg-white/10"
                   href={item.href}
                   key={item.href}
                   rel="noreferrer noopener"
@@ -86,7 +118,7 @@ export default function Page() {
                 </a>
               ) : (
                 <Link
-                  className="relative flex aspect-square flex-col rounded-xl bg-black/5 p-3 transition-colors duration-200 hover:bg-black/10 dark:bg-white/5 dark:hover:bg-white/10"
+                  className="relative flex aspect-square flex-col rounded-xl bg-black/5 p-3 transition-colors duration-200 hover:bg-black/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:bg-white/5 dark:hover:bg-white/10"
                   href={`/${locale}${item.href}` as Route}
                   key={item.href}
                 >
@@ -105,23 +137,10 @@ export default function Page() {
             </div>
 
             <div className="grid grid-cols-3 gap-2">
-              {[
-                {
-                  href: "https://github.com/minpeter",
-                  icon: <GitHubLogoIcon className="h-4 w-4" />,
-                },
-                {
-                  href: "https://instagram.com/minpeter2",
-                  icon: <InstagramLogoIcon className="h-4 w-4" />,
-                },
-                {
-                  href: "https://linkedin.com/in/minpeter/",
-                  icon: <LinkedInLogoIcon className="h-4 w-4" />,
-                },
-              ].map((item) => (
+              {SOCIAL_LINKS.map((item) => (
                 <a
-                  aria-label={`social link to ${item.href}`}
-                  className="flex aspect-square items-center justify-center rounded-xl bg-black/5 p-3 transition-colors duration-200 hover:bg-black/10 dark:bg-white/5 dark:hover:bg-white/10"
+                  aria-label={`${item.label} profile`}
+                  className="flex aspect-square items-center justify-center rounded-xl bg-black/5 p-3 transition-colors duration-200 hover:bg-black/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:bg-white/5 dark:hover:bg-white/10"
                   href={item.href}
                   key={item.href}
                   rel="noreferrer noopener"
@@ -152,33 +171,18 @@ export default function Page() {
 
 function CarouselImage() {
   const [grayscale, setGrayscale] = useState("grayscale(1)");
-  const slides = [
-    {
-      id: "spotlight-video",
-      image: mainImage1,
-      url: null,
-    },
-    {
-      id: "spotlight-showcase",
-      image: mainImage2,
-      url: "/73e3da8fa7a397e7b1bc36efabb2cbb265524a75d7d5e6d1620b9e10e694257",
-    },
-  ];
 
   return (
     <Carousel>
       <CarouselContent>
-        {slides.map((slide, index) => (
+        {CAROUSEL_SLIDES.map((slide, index) => (
           <CarouselItem key={slide.id}>
             <AspectRatio ratio={1}>
-              <Image
-                alt={`Main image ${index + 1}`}
-                className={cn(
-                  "h-full w-full cursor-pointer rounded-lg object-cover grayscale-70 transition-filter duration-1000",
-                  grayscale === "grayscale(0)" && "grayscale-0"
-                )}
-                height={300}
-                loading="lazy"
+              <button
+                aria-label={
+                  slide.url ? `Open image ${index + 1}` : `Image ${index + 1}`
+                }
+                className="h-full w-full rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                 onClick={() => {
                   if (slide.url) {
                     window.open(slide.url);
@@ -187,10 +191,21 @@ function CarouselImage() {
                 onMouseEnter={() => setGrayscale("grayscale(0)")}
                 onMouseLeave={() => setGrayscale("grayscale(70%)")}
                 onTouchEnd={() => setGrayscale("grayscale(70%)")}
-                placeholder="blur"
-                src={slide.image}
-                width={300}
-              />
+                type="button"
+              >
+                <Image
+                  alt={`Main image ${index + 1}`}
+                  className={cn(
+                    "h-full w-full rounded-lg object-cover grayscale-70 transition-filter duration-1000",
+                    grayscale === "grayscale(0)" && "grayscale-0"
+                  )}
+                  height={300}
+                  loading="lazy"
+                  placeholder="blur"
+                  src={slide.image}
+                  width={300}
+                />
+              </button>
             </AspectRatio>
           </CarouselItem>
         ))}

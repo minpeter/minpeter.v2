@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 
 const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ{}</>믾쾹쵭퀴섫뤱윤チェ・ソユン";
 const ITERATION_STEPS_PER_CHARACTER = 3;
@@ -12,31 +12,24 @@ const RANDOM_LETTER_MULTIPLIER = 1;
 // license: on github.com/wiscaksono/wiscaksono-site
 
 export default function AnimatedText({ data }: { data: string }) {
-  const [text, setText] = useState(data);
-  const [intervalId] = useState<number | null>(null);
-  const [isAnimating, setIsAnimating] = useState(false);
-
-  const ref = useRef<HTMLHeadingElement | null>(null);
+  const [displayText, setDisplayText] = useState(data);
+  const isAnimatingRef = useRef(false);
 
   const handleMouseOver = useCallback(() => {
-    if (isAnimating) {
+    if (isAnimatingRef.current) {
       return;
     }
 
     let iteration = 0;
-
-    if (intervalId !== null) {
-      clearTimeout(intervalId);
-    }
+    isAnimatingRef.current = true;
 
     const animate = () => {
-      setIsAnimating(true);
-      setText((prevText) =>
-        prevText
+      setDisplayText(
+        data
           .split("")
           .map((_, index) => {
             if (index < iteration) {
-              return text[index];
+              return data[index];
             }
             return letters[
               Math.floor(
@@ -47,34 +40,25 @@ export default function AnimatedText({ data }: { data: string }) {
           .join("")
       );
 
-      if (iteration < text.length) {
+      if (iteration < data.length) {
         iteration += ITERATION_INCREMENT;
         setTimeout(animate, TIMEOUT_BASE_MS / data.length);
       } else {
-        setIsAnimating(false);
+        isAnimatingRef.current = false;
       }
     };
 
     animate();
-  }, [intervalId, isAnimating, text, data]);
-
-  useEffect(() => {
-    const currentRef = ref.current;
-
-    if (currentRef) {
-      currentRef.addEventListener("mouseover", handleMouseOver);
-    }
-
-    return () => {
-      if (currentRef) {
-        currentRef.removeEventListener("mouseover", handleMouseOver);
-      }
-    };
-  }, [handleMouseOver]);
+  }, [data]);
 
   return (
-    <span className="font-bold text-lg" ref={ref}>
-      {text}
-    </span>
+    <button
+      className="cursor-pointer rounded font-bold text-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+      onFocus={handleMouseOver}
+      onMouseOver={handleMouseOver}
+      type="button"
+    >
+      {displayText}
+    </button>
   );
 }

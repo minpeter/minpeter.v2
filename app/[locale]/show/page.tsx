@@ -43,7 +43,7 @@ export default async function Page(props: PageProps<"/[locale]/show">) {
       >
         {showcasePaths.map((path) => (
           <Link
-            className="underline"
+            className="rounded underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             href={`/${locale}${path}` as Route}
             key={path}
           >

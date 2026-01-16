@@ -81,7 +81,7 @@ export function LanguageSelector() {
                   className={cn(
                     "block w-full cursor-pointer rounded-sm px-3 py-2 text-left text-sm",
                     "transition-colors duration-150",
-                    "focus:outline-none",
+                    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                     {
                       "bg-secondary font-medium text-primary": isActive,
                       "text-muted-foreground hover:bg-secondary hover:text-primary focus:bg-secondary focus:text-primary":

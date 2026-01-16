@@ -23,7 +23,7 @@ export default function Footer({ className }: { className?: string }) {
       <p className="text-gray-400 text-sm">
         written by{" "}
         <Link
-          className="rounded-md px-0.5 text-gray-400 text-sm underline hover:bg-secondary/100"
+          className="rounded-md px-0.5 text-gray-400 text-sm underline hover:bg-secondary/100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           href="/about"
         >
           minpeter
@@ -31,7 +31,7 @@ export default function Footer({ className }: { className?: string }) {
         </Link>
         {" • "}
         <a
-          className="rounded-md px-0.5 text-gray-400 text-sm underline hover:bg-secondary/100"
+          className="rounded-md px-0.5 text-gray-400 text-sm underline hover:bg-secondary/100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           href="https://github.com/minpeter/minpeter.uk"
           rel="noopener noreferrer"
           target="_blank"

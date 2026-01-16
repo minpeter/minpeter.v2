@@ -4,7 +4,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { VercelToolbar } from "@vercel/toolbar/next";
 import { NextProvider } from "fumadocs-core/framework/next";
 import type { Viewport } from "next";
-import { Geist_Mono } from "next/font/google";
+import { Geist_Mono, Shippori_Mincho } from "next/font/google";
 import { NuqsAdapter } from "nuqs/adapters/next";
 
 import Footer from "@/components/footer";
@@ -35,6 +35,12 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const shipporiMincho = Shippori_Mincho({
+  variable: "--font-shippori-mincho",
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+});
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -50,6 +56,7 @@ export default function RootLayout({
       <body
         className={cn(
           AritaBuriLocalFont.variable,
+          shipporiMincho.variable,
           geistMono.variable,
           "antialiased"
         )}
