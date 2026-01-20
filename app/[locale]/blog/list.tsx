@@ -160,7 +160,7 @@ export function BlogListFallback({ posts }: { posts: postMetadataType[] }) {
   const filteredPosts = posts;
   const yearList = filteredPosts.reduce(
     (acc: Record<string, postMetadataType[]>, post) => {
-      const year = formatYear(post.date);
+      const year = formatYear(post.published);
 
       if (!acc[year]) {
         acc[year] = [];
@@ -251,7 +251,7 @@ export function BlogListFallback({ posts }: { posts: postMetadataType[] }) {
                         </Badge>
                       ) : (
                         <div className={cn(itemSytles, "h-fit text-nowrap")}>
-                          {formatDate(post.date)}
+                          {formatDate(post.published)}
                         </div>
                       )}
                     </li>

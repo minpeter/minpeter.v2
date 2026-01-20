@@ -14,10 +14,28 @@ export const { docs, meta } = defineDocs({
   docs: {
     schema: frontmatterSchema.extend({
       draft: z.boolean().optional().default(false),
-      date: z
+      published: z
         .string()
         .or(z.date())
         .transform((value, context) => {
+          try {
+            return new Date(value);
+          } catch {
+            context.addIssue({
+              code: z.ZodIssueCode.custom,
+              message: "Invalid date",
+            });
+            return z.NEVER;
+          }
+        }),
+      drafted: z
+        .string()
+        .or(z.date())
+        .optional()
+        .transform((value, context) => {
+          if (value === undefined) {
+            return undefined;
+          }
           try {
             return new Date(value);
           } catch {

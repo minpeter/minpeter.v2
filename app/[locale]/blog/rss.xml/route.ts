@@ -20,14 +20,14 @@ function generateRssFeed(locale: Locale): string {
 
   const sortedPosts = posts
     .filter((post) => !post.data.draft)
-    .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+    .sort((a, b) => b.data.published.getTime() - a.data.published.getTime());
 
   const items = sortedPosts
     .map((post) => {
       const title = escapeXml(post.data.title ?? "Untitled");
       const link = `${baseUrl}${post.url}`;
       const description = escapeXml(post.data.description ?? "");
-      const pubDate = post.data.date.toUTCString();
+      const pubDate = post.data.published.toUTCString();
       const guid = link;
 
       return `    <item>

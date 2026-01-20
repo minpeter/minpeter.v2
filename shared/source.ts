@@ -9,7 +9,8 @@ import {
 
 export type BlogFrontmatter = PageData & {
   draft: boolean;
-  date: Date;
+  published: Date;
+  drafted?: Date;
   lastModified?: Date;
   external_url?: string;
   lang: string[];
@@ -39,7 +40,8 @@ export interface postMetadataType {
   url: string;
   title: string;
   draft: boolean;
-  date: Date;
+  published: Date;
+  drafted?: Date;
   external_url?: string;
   lang: string[];
 }
@@ -50,7 +52,8 @@ export function getPostMetadata(post: blogType): postMetadataType {
       url: "",
       title: "",
       draft: false,
-      date: new Date(),
+      published: new Date(),
+      drafted: undefined,
       external_url: undefined,
       lang: ["ko"],
     };
@@ -60,7 +63,8 @@ export function getPostMetadata(post: blogType): postMetadataType {
     url: post.url,
     title: post.data.title ?? "",
     draft: post.data.draft,
-    date: post.data.date,
+    published: post.data.published,
+    drafted: post.data.drafted,
     external_url: post.data.external_url,
     lang: post.data.lang.length ? post.data.lang : ["ko"],
   };
@@ -68,6 +72,6 @@ export function getPostMetadata(post: blogType): postMetadataType {
 
 export function getPostsMetadata(posts: blogListType): postMetadataType[] {
   return posts
-    .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+    .sort((a, b) => b.data.published.getTime() - a.data.published.getTime())
     .map((post) => getPostMetadata(post));
 }

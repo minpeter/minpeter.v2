@@ -77,7 +77,9 @@ export default async function Page(
     return <ExternalRedirect url={post.data.external_url} />;
   }
   const sortedPosts = posts.toSorted(
-    (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+    (a, b) =>
+      new Date(b.data.published).getTime() -
+      new Date(a.data.published).getTime()
   );
 
   if (!post) {
@@ -108,7 +110,7 @@ export default async function Page(
       <Header
         description={
           post.data.description === undefined
-            ? formatDateLong(post.data.date)
+            ? formatDateLong(post.data.published)
             : post.data.description
         }
         link={{ href: `/${locale}/blog` as Route, text: t("backToBlog") }}
@@ -186,11 +188,23 @@ export default async function Page(
       </DocsBody>
 
       <section className="mt-32">
-        <div className="mb-8 flex flex-row items-center gap-2 text-muted-foreground text-sm">
+        <div className="mb-8 flex flex-row flex-wrap items-center gap-2 text-muted-foreground text-sm">
+          {post.data.drafted ? (
+            <>
+              <div className="flex gap-2">
+                <span>{t("draftedDate")}:</span>
+                <time dateTime={new Date(post.data.drafted).toISOString()}>
+                  {formatDateLong(post.data.drafted)}
+                </time>
+              </div>
+              <span aria-hidden="true">•</span>
+            </>
+          ) : null}
+
           <div className="flex gap-2">
-            <span>{t("writeDate")}:</span>
-            <time dateTime={new Date(post.data.date).toISOString()}>
-              {formatDateLong(post.data.date)}
+            <span>{t("publishedDate")}:</span>
+            <time dateTime={new Date(post.data.published).toISOString()}>
+              {formatDateLong(post.data.published)}
             </time>
           </div>
 
