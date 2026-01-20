@@ -32,25 +32,14 @@ _(e.g., [NousResearch/Hermes-3-Llama-3.1-8B](https://huggingface.co/NousResearch
 
 핵심 아이디어는 **버퍼링 메커니즘**을 추가하는 것입니다:
 
-1. `<tool_call>` 태그를 구성하는 토큰 배열(`["<", "tool", "_call", ">"]`)을 미리 정의
-2. 스트리밍 중 해당 토큰이 들어오면 버퍼에 저장
-3. 마지막 토큰(`>`)이 오면 버퍼를 비우고 완성된 태그 반환
-4. 중간에 다른 토큰이 오면 버퍼와 함께 일반 텍스트로 반환
+1. 스트리밍 출력에서 `<`로 시작하는 부분 문자열을 감지
+2. `<tool_call>` 또는 `</tool_call>`이 완성될 때까지 버퍼에 저장
+3. 완성되면 tool call로 파싱, 아니면 일반 텍스트로 출력
 
 ```python
-# Very simple idea: when encountering tokens like <, tool, _call, >,
-# <, /, tool, _call, >, store them in a buffer.
-# When the last token is encountered, empty the buffer and return it.
-# If a token appears in an incorrect sequence while storing in the buffer,
-# return the preceding buffer along with the token.
 def tool_call_delta_buffer(self, delta_text: str):
-    # If the sequence of tool_call_start or tool_call_end tokens is not yet
-    # complete, fill the buffer with the token and return "".
     if (delta_text in self.tool_call_start_token_array
             or delta_text in self.tool_call_end_token_array):
-        # If delta_text is the last token of tool_call_start_token or
-        # tool_call_end_token, empty the buffer and return
-        # the buffered text + delta_text.
         if (delta_text == self.tool_call_start_token_array[-1]
                 or delta_text == self.tool_call_end_token_array[-1]):
             buffered_text = self.buffered_delta_text
@@ -82,23 +71,27 @@ vLLM 메인테이너 [@aarnphm](https://github.com/aarnphm)으로부터 테스�
 
 테스트를 위해 직접 fine-tuning한 모델 [minpeter/LoRA-Llama-3.2-1B-tool-vllm-ci](https://huggingface.co/minpeter/LoRA-Llama-3.2-1B-tool-vllm-ci)를 사용한 e2e 테스트를 작성했습니다.
 
+처음 테스트를 작성할때 기존에 학습 해뒀던 3b 모델 [minpeter/m-3b-v1-iteration-00-sf-xlam-09](https://huggingface.co/minpeter/m-3b-v1-iteration-00-sf-xlam-09)를 이용해서 e2e 테스트를 작성하였는데, 뭔가 이후에 바로 리뷰를 해주시진 않아서 "maybe a very small finetune llama3.2-1b would work here." 라고 언급한 내용이 기억나 이것 때문에 안되나 하는 마음에 llama 3.2-1b 기반으로 모델을 학습시켜서 [교체](https://github.com/vllm-project/vllm/pull/16890/changes/e3a7d323c3d495f3d4bba8506c0223ab877bf723)했던 기억이 납니다.
+
 ### 3. 머지 (8월 16일)
 
-약 4개월간의 리뷰 과정을 거쳐 최종 머지되었습니다.
+약 4개월간의 기다림을 거쳐 최종 머지되었습니다.
+
+approved 이후에 메인테이너분이 PR에 대해서 auto-merge 를 켜주셨는데, 당시에 업스트림에 문제로 인해서 몇가지 CI가 실패하던 상황이였고, 머지를 위해서는 전부 pass를 받아야했는데, 이걸 재시도할 방법이 없어서 main branch에 커밋 생길때마다 update this branch 를 누르면서 제발 성공해라 기도를 한 3트 하고 겨우 머지 되었습니다.
 
 ## 배운 점
 
 ### 오픈소스 기여는 인내가 필요하다
 
 PR 제출부터 머지까지 약 4개월이 걸렸습니다. 대형 오픈소스 프로젝트는 많은 PR이 쌓여있고, 메인테이너들도 바쁘기 때문에 시간이 걸릴 수 있습니다.
+생각 이상으로 더 느긋한 마음 가짐으로 기다리는 것이 중요한 것 같습니다.
 
-### 테스트의 중요성
+물론 저는 기다림과는 거리가 멀어서 vllm slack까지 찾아가서 #feat-tool-calling 체널에서 리뷰해줘를 외치긴 했지만,, 이게 도움이 됐는지는 사실 잘 모르겠습니다.
 
-"It works on my machine"은 충분하지 않습니다. 재현 가능한 테스트 케이스와 테스트용 모델을 제공해야 리뷰어가 검증할 수 있습니다.
+### READ CONTRIBUTING.md
 
-### 작은 것부터 시작하기
-
-처음부터 대규모 변경을 시도하기보다, 별도 레포에서 프로토타입을 만들어 검증한 후 업스트림하는 방식이 효과적이었습니다.
+보통 여기에 적힌 글은 PR 올리기 전에 정독하고 뭔가 하는게 좋겠다는 생각이 들었습니다.
+사소하게는 PR title 컨벤션, DCO 동의부터 린팅 같은 디테일까지, 리뷰어가 저와 같은 snake case 컨벤션도 안지킨 PR을 하루에 몇십개씩 보면 무슨 마음일지 생각하면서 코드를 한번 더 검토해보면 모두가 행복한 세상이 될 거 같다는 생각이 들었습니다.
 
 ## 마무리
 
