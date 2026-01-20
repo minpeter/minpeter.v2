@@ -1,21 +1,22 @@
 ---
 title: vLLM 오픈소스 기여 후기
-description: PR 제출부터 머지까지, 4개월간의 vLLM 컨트리뷰션 과정
+description: PR 제출부터 머지까지, 4개월간의 vLLM 기여 과정
 drafted: 2025-08-19
 published: 2026-01-21
 ---
 
 ## 개요
 
-vLLM은 LLM 추론을 위한 대표적인 오픈소스 프로젝트입니다. 이번에 HermesToolParser의 개선 사항을 [PR #16890](https://github.com/vllm-project/vllm/pull/16890)으로 기여하여 메인 브랜치에 머지되었습니다.
+vLLM은 LLM 추론을 위한 대표적인 오픈소스 프로젝트입니다. 작년에 Hermes2ProToolParser의 개선 사항을 [PR #16890](https://github.com/vllm-project/vllm/pull/16890)로 기여하여 메인 브랜치에 머지되었습니다.
 
 이 글에서는 기여하게 된 배경과 구현 내용, 그리고 오픈소스 기여 과정에서 배운 점을 공유합니다.
 
 ## 문제 상황
 
-vLLM의 기존 HermesToolParser는 `<tool_call>`과 `</tool_call>` 태그가 **별도의 special token**으로 정의된 모델에서만 정상 동작했습니다.
+vLLM의 기존 Hermes2ProToolParser는 `<tool_call>`과 `</tool_call>` 태그가 토크나이저 상에서 **별도의 special token**으로 정의된 모델에서만 정상 동작했습니다.
+_(e.g., [NousResearch/Hermes-3-Llama-3.1-8B](https://huggingface.co/NousResearch/Hermes-3-Llama-3.1-8B/blob/main/tokenizer_config.json), llama 3 토크나이저를 편집하여 128002, 128013 토큰을 도구 호출용으로 할당함.)_
 
-하지만 Llama와 같은 모델을 Hermes 포맷으로 fine-tuning하면, 이 태그들이 special token이 아닌 일반 텍스트로 토큰화됩니다. 예를 들어:
+하지만 Llama와 같은 모델을 별도의 토크나이저 편집 없이 Hermes 포맷으로 fine-tuning하면, 이 태그들이 special token이 아닌 일반 텍스트로 토큰화됩니다. 예를 들어:
 
 ```
 "<tool_call>" → ["<", "tool", "_", "call", ">"]
@@ -23,9 +24,11 @@ vLLM의 기존 HermesToolParser는 `<tool_call>`과 `</tool_call>` 태그가 **�
 
 이렇게 여러 토큰으로 분리되면 기존 파서가 tool call을 제대로 감지하지 못하는 문제가 발생했습니다.
 
+물론 NousResearch에서 한 것처럼 reserved_special_token 의 일부를 편집하여 별도의 도구 호출 용도의 special token를 할당한 후 학습할 수도 있지만, 저의 자체적인 모델 학습 실험에 따르면 Full Fine-tuning이 아닌 LoRA 같은 학습 방법을 활용한 경우, 추가된 special token를 충분히 학습하지 못하고 special token를 추가하지 않고 학습한 모델 대비 벤치마크 성능이 하락하는 모습을 보여줬습니다.
+
 ## 해결 방법
 
-이 문제를 해결하기 위해 [hermes-llama-parse](https://github.com/minpeter/hermes-llama-parse) 레포에서 먼저 프로토타입을 구현했습니다.
+이 문제를 해결하기 위해 vllm의 [Tool Parser Plugin](https://docs.vllm.ai/en/latest/features/tool_calling/#how-to-write-a-tool-parser-plugin) 기능을 활용하여, [minpeter/hermes-llama-parse](https://github.com/minpeter/hermes-llama-parse) 레포에서 먼저 프로토타입을 구현했습니다.
 
 핵심 아이디어는 **버퍼링 메커니즘**을 추가하는 것입니다:
 
