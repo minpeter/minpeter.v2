@@ -1,0 +1,125 @@
+---
+title: vLLMオープンソース貢献記
+description: PR提出からマージまで、4ヶ月間のvLLM貢献プロセス
+drafted: 2025-08-19
+published: 2026-01-21
+machine_translated: true
+---
+
+## 概要
+
+vLLMはLLM推論のための代表的なオープンソースプロジェクトです。2025年4月、Hermes2ProToolParserの改善を[PR #16890](https://github.com/vllm-project/vllm/pull/16890)として提出し、8月にmainブランチにマージされました。
+
+この記事では、貢献に至った背景と実装内容、そしてオープンソース貢献の過程で学んだことを共有します。
+
+## 問題状況
+
+当時、私は個人プロジェクトとしてtool calling特化モデルを学習していました。xLAM、BitAgent、ToolACEなど3B〜8B規模のモデルが[BFCL（Berkeley Function Calling Leaderboard）](https://gorilla.cs.berkeley.edu/leaderboard.html)で上位を記録していた時期で、私も同様の規模でどこまで性能を引き上げられるか実験していました。
+
+学習を終えてvLLMで推論テストを行っていたところ、ベンチマークスコアが予想よりかなり低く出ました。モデルの問題かと思いデバッグを始めたところ、実はパーサー側の問題でした。
+
+vLLMの既存のHermes2ProToolParserは、`<tool_call>`と`</tool_call>`タグがトークナイザーで**別途のspecial token**として定義されているモデルでのみ正常に動作していました。
+
+例えば、[NousResearch/Hermes-3-Llama-3.1-8B](https://huggingface.co/NousResearch/Hermes-3-Llama-3.1-8B/blob/main/tokenizer_config.json)はLlama 3トークナイザーを編集し、128002、128013トークンをツール呼び出し用に割り当てたケースです。
+
+しかし、Llama系モデルを別途のトークナイザー編集なしにHermesフォーマットでfine-tuningすると、これらのタグはspecial tokenではなく通常のテキストとしてトークン化されます。
+
+```
+"<tool_call>" → ["<", "tool", "_", "call", ">"]
+```
+
+このように複数のトークン（またはストリーミングデルタ）に分離されると、既存のパーサーがtool callを正しく検出できない問題が発生しました。
+
+もちろんNousResearchのように`reserved_special_token`の一部を編集してツール呼び出し専用のspecial tokenを割り当てて学習することもできます。ただし、私の実験ではLoRAで学習する場合、special tokenを追加せずに学習したモデルと比較してむしろ性能が低下する傾向を確認しました。
+
+<details>
+<summary>なぜLoRAではspecial tokenがうまく学習されないのか？</summary>
+
+新しいトークンをトークナイザーに追加すると、そのトークンのembeddingを学習する必要があります。Axolotlでは`lora_modules_to_save`に`embed_tokens`（トークン→エンベディング）と`lm_head`（エンベディング→トークン確率）を指定することでこの問題を解決できます。この設定はPEFTの`modules_to_save`を使用し、指定されたモジュールはLoRAではなくfull fine-tuningで学習されます。
+
+学習自体はうまくいきますが、embedding matrix全体がチェックポイントに含まれるため、adapterファイルがGB級に大きくなります。LoRA本来の利点である小さいファイルサイズと、他のbase modelにadapterだけを入れ替えて適用できる柔軟性が失われることになります。
+
+逆にこの設定なしで学習するとLoRAの利点は維持されますが、新しく追加したspecial tokenのembeddingは学習されません。実験の結果、special tokenを追加してembeddingまで学習させた場合（[minpeter/QLoRA-Llama-3.2-1B-chatml-tool-v3](https://huggingface.co/minpeter/QLoRA-Llama-3.2-1B-chatml-tool-v3)）と既存のトークン組み合わせで学習した場合（[minpeter/QLoRA-Llama-3.2-1B-chatml-tool-v4](https://huggingface.co/minpeter/QLoRA-Llama-3.2-1B-chatml-tool-v4)）の間に有意な性能差はありませんでした。
+
+結局、トークナイザーを編集せずに既存のトークン組み合わせで学習することが、LoRA環境ではより実用的な選択でした。
+
+</details>
+
+## 解決方法
+
+すぐにベンチマークを実行する必要があったため、まずvLLMの[Tool Parser Plugin](https://docs.vllm.ai/en/latest/features/tool_calling/#how-to-write-a-tool-parser-plugin)機能を活用して[minpeter/hermes-llama-parse](https://github.com/minpeter/hermes-llama-parse)でプロトタイプを実装しました。完成してみるとメインストリームに上げても良さそうなクオリティだったので、vLLMにPRとして提出することにしました。
+
+核心アイデアは**バッファリングメカニズム**を追加することです。ストリーミング出力は一度に`<tool_call>`が丸ごと入ってくるのではなく、中間単位（デルタ）で分割されて入ってくる場合があります。この時、タグ開始の可能性が見えたらバッファに蓄積し、タグが完成した時点でのみパーサーに渡すようにしました。
+
+1. ストリーミング出力で`<`で始まる区間が現れたらバッファリング開始
+2. `<tool_call>`または`</tool_call>`が完成するまでバッファに蓄積
+3. 完成したらtool callとしてパースし、最終的に完成しなければ通常のテキストとして処理
+
+以下はバッファリングロジックの核心部分です。
+
+```python
+def tool_call_delta_buffer(self, delta_text: str):
+    if (delta_text in self.tool_call_start_token_array
+            or delta_text in self.tool_call_end_token_array):
+        if (delta_text == self.tool_call_start_token_array[-1]
+                or delta_text == self.tool_call_end_token_array[-1]):
+            buffered_text = self.buffered_delta_text
+            self.buffered_delta_text = ""
+            return buffered_text + delta_text
+        else:
+            self.buffered_delta_text = self.buffered_delta_text + delta_text
+            return ""
+    else:
+        if self.buffered_delta_text:
+            buffered_text = self.buffered_delta_text
+            self.buffered_delta_text = ""
+            return buffered_text + delta_text
+        else:
+            return delta_text
+```
+
+## vLLM貢献プロセス
+
+### 1. PR提出（4月20日）
+
+hermes-llama-parseで検証された実装をvLLMにPRとして提出しました。
+
+### 2. コードレビュー（6月）
+
+vLLMメンテナー[@aarnphm](https://github.com/aarnphm)からテストケース追加の要請を受けました。
+
+> "Is there a test fine-tuned model that we can use to test this?"
+
+テストのために直接fine-tuningしたモデル[minpeter/LoRA-Llama-3.2-1B-tool-vllm-ci](https://huggingface.co/minpeter/LoRA-Llama-3.2-1B-tool-vllm-ci)を使用してe2eテストを作成しました。
+
+最初は既に学習していた3Bモデル（[minpeter/m-3b-v1-iteration-00-sf-xlam-09](https://huggingface.co/minpeter/m-3b-v1-iteration-00-sf-xlam-09)）でe2eテストを作成しましたが、レビューがすぐには進みませんでした。以前メンテナーが「maybe a very small finetune llama3.2-1b would work here.」と言及していたことを思い出し、もしかしてモデルサイズのせいでレビューが遅れているのかと考えました。そこでLlama 3.2 1Bベースで新たに学習して[モデルを変更](https://github.com/vllm-project/vllm/pull/16890/changes/e3a7d323c3d495f3d4bba8506c0223ab877bf723)した記憶があります。
+
+### 3. マージ（8月16日）
+
+約4ヶ月間の待機の末、最終的にマージされました。
+
+Approved後、メンテナーがPRにauto-mergeを有効にしてくれましたが、当時アップストリームの問題により一部のCIが失敗していた状況でした。マージのためにはすべてのCIが通過する必要がありましたが、私の側から再試行する方法がなく、mainブランチにコミットが発生するたびに`Update branch`を押しながら3回ほど待ち、ようやくマージされました。
+
+## 学んだこと
+
+### オープンソース貢献には忍耐が必要
+
+PR提出からマージまで約4ヶ月かかりました。大規模オープンソースプロジェクトはPRが多く溜まっており、メンテナーも忙しいため処理に時間がかかることがあります。思ったよりもっとのんびりした気持ちで待つことが重要だと感じました。
+
+もちろん私は待つことが苦手なので、vLLM Slackの`#feat-tool-calling`チャンネルまで探してレビューをお願いしましたが、これが役に立ったかどうかはよくわかりません。
+
+### CONTRIBUTING.mdを（しっかり）読もう
+
+PRを上げる前に`CONTRIBUTING.md`を精読する習慣が本当に重要だと感じました。PRタイトルの規約、DCO署名、リンティングなど、細かい点が思ったより多いです。レビュアーが1日に数十件のPRを見る状況を考えると、些細な規約（例：`snake_case`）まで一度確認するだけでも、お互いがずっと楽になれると思いました。
+
+## まとめ
+
+今回の貢献により、vLLMでHermesフォーマットでfine-tuningされたLlamaベースモデルのtool callingが正常に動作するようになりました。これでトークナイザーを別途編集しなくても、Hermesフォーマットのtool callがストリーミングで安定してパースされます。
+
+オープンソース貢献は実際にやってみると思ったより敷居が低いです。使いながら不便な点を見つけたら、それが貢献の出発点になり得ます。
+
+## 関連リンク
+
+- [vLLM PR #16890](https://github.com/vllm-project/vllm/pull/16890)
+- [hermes-llama-parse（オリジナル実装）](https://github.com/minpeter/hermes-llama-parse)
+- [テストモデル（HuggingFace）](https://huggingface.co/minpeter/LoRA-Llama-3.2-1B-tool-vllm-ci)

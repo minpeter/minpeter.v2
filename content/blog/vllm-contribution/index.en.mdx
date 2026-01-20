@@ -1,0 +1,125 @@
+---
+title: My vLLM Open Source Contribution Story
+description: From PR submission to merge - a 4-month journey contributing to vLLM
+drafted: 2025-08-19
+published: 2026-01-21
+machine_translated: true
+---
+
+## Overview
+
+vLLM is a leading open-source project for LLM inference. In April 2025, I contributed improvements to the Hermes2ProToolParser via [PR #16890](https://github.com/vllm-project/vllm/pull/16890), which was merged into the main branch in August.
+
+In this post, I'll share the background that led to this contribution, the implementation details, and what I learned throughout the open-source contribution process.
+
+## The Problem
+
+At the time, I was working on a personal project training a tool calling specialized model. It was a period when models like xLAM, BitAgent, and ToolACE in the 3B~8B range were ranking high on the [BFCL (Berkeley Function Calling Leaderboard)](https://gorilla.cs.berkeley.edu/leaderboard.html), and I was experimenting to see how far I could push performance at a similar scale.
+
+After finishing training and running inference tests with vLLM, my benchmark scores came out much lower than expected. Thinking it might be a model issue, I started debugging—only to discover it was actually a parser problem.
+
+vLLM's existing Hermes2ProToolParser only worked correctly when the `<tool_call>` and `</tool_call>` tags were defined as **separate special tokens** in the tokenizer.
+
+For example, [NousResearch/Hermes-3-Llama-3.1-8B](https://huggingface.co/NousResearch/Hermes-3-Llama-3.1-8B/blob/main/tokenizer_config.json) is a case where they edited the Llama 3 tokenizer to assign tokens 128002 and 128013 for tool calling.
+
+However, when fine-tuning Llama-based models in the Hermes format without editing the tokenizer, these tags are tokenized as regular text rather than special tokens.
+
+```
+"<tool_call>" → ["<", "tool", "_", "call", ">"]
+```
+
+When split into multiple tokens (or streaming deltas) like this, the existing parser failed to properly detect tool calls.
+
+Of course, you could also edit some `reserved_special_token` entries like NousResearch did to assign dedicated special tokens for tool calling and train with those. However, in my experiments, when training with LoRA, I observed that performance actually declined compared to models trained without adding special tokens.
+
+<details>
+<summary>Why don't special tokens train well with LoRA?</summary>
+
+When you add new tokens to the tokenizer, you need to train their embeddings. In Axolotl, you can solve this by specifying `embed_tokens` (token→embedding) and `lm_head` (embedding→token probability) in `lora_modules_to_save`. This setting uses PEFT's `modules_to_save`, and the specified modules are trained with full fine-tuning, not LoRA.
+
+Training works fine this way, but the entire embedding matrix gets included in the checkpoint, causing the adapter file to grow to GB-scale. You lose LoRA's inherent advantages: small file size and the flexibility to swap adapters across different base models.
+
+Conversely, training without this setting preserves LoRA's advantages, but the embeddings for newly added special tokens won't be learned. In my experiments, there was no significant performance difference between training with special tokens and embedding learning ([minpeter/QLoRA-Llama-3.2-1B-chatml-tool-v3](https://huggingface.co/minpeter/QLoRA-Llama-3.2-1B-chatml-tool-v3)) versus training with existing token combinations ([minpeter/QLoRA-Llama-3.2-1B-chatml-tool-v4](https://huggingface.co/minpeter/QLoRA-Llama-3.2-1B-chatml-tool-v4)).
+
+Ultimately, training with existing token combinations without editing the tokenizer turned out to be the more practical choice in a LoRA environment.
+
+</details>
+
+## The Solution
+
+Since I needed to run benchmarks immediately, I first implemented a prototype using vLLM's [Tool Parser Plugin](https://docs.vllm.ai/en/latest/features/tool_calling/#how-to-write-a-tool-parser-plugin) feature at [minpeter/hermes-llama-parse](https://github.com/minpeter/hermes-llama-parse). Once I finished it, I realized it was good enough quality to submit to the mainsteam, so I submitted it as a PR to vLLM.
+
+The core idea is adding a **buffering mechanism**. Streaming output doesn't always arrive with `<tool_call>` as a complete unit—it often comes in intermediate units (deltas). When a potential tag start is detected, we accumulate it in a buffer and only pass it to the parser when the tag is complete.
+
+1. When a segment starting with `<` appears in streaming output, start buffering
+2. Accumulate in the buffer until `<tool_call>` or `</tool_call>` is complete
+3. Once complete, parse as a tool call; if it never completes, treat as regular text
+
+Here's the core buffering logic.
+
+```python
+def tool_call_delta_buffer(self, delta_text: str):
+    if (delta_text in self.tool_call_start_token_array
+            or delta_text in self.tool_call_end_token_array):
+        if (delta_text == self.tool_call_start_token_array[-1]
+                or delta_text == self.tool_call_end_token_array[-1]):
+            buffered_text = self.buffered_delta_text
+            self.buffered_delta_text = ""
+            return buffered_text + delta_text
+        else:
+            self.buffered_delta_text = self.buffered_delta_text + delta_text
+            return ""
+    else:
+        if self.buffered_delta_text:
+            buffered_text = self.buffered_delta_text
+            self.buffered_delta_text = ""
+            return buffered_text + delta_text
+        else:
+            return delta_text
+```
+
+## The Contribution Process
+
+### 1. PR Submission (April 20th)
+
+I submitted the validated implementation from hermes-llama-parse as a PR to vLLM.
+
+### 2. Code Review (June)
+
+I received a request from vLLM maintainer [@aarnphm](https://github.com/aarnphm) to add test cases.
+
+> "Is there a test fine-tuned model that we can use to test this?"
+
+I wrote e2e tests using a model I fine-tuned specifically for testing: [minpeter/LoRA-Llama-3.2-1B-tool-vllm-ci](https://huggingface.co/minpeter/LoRA-Llama-3.2-1B-tool-vllm-ci).
+
+Initially, I wrote e2e tests using a 3B model I had trained earlier ([minpeter/m-3b-v1-iteration-00-sf-xlam-09](https://huggingface.co/minpeter/m-3b-v1-iteration-00-sf-xlam-09)), but the review didn't proceed immediately. I remembered the maintainer had previously mentioned "maybe a very small finetune llama3.2-1b would work here," so I wondered if the model size was causing the delay. I then trained a new model based on Llama 3.2 1B and [swapped out the model](https://github.com/vllm-project/vllm/pull/16890/changes/e3a7d323c3d495f3d4bba8506c0223ab877bf723).
+
+### 3. Merge (August 16th)
+
+After about 4 months of waiting, it was finally merged.
+
+After approval, the maintainer enabled auto-merge on the PR, but at that time some CI tests were failing due to upstream issues. All CI tests needed to pass for the merge, but I had no way to retry from my side. I ended up clicking `Update branch` about three times whenever commits were pushed to main, and finally got it merged.
+
+## Lessons Learned
+
+### Open Source Contribution Requires Patience
+
+It took about 4 months from PR submission to merge. Large open-source projects have many PRs queued up, and maintainers are busy, so processing can take time. I learned that waiting with a more relaxed mindset is important—more so than I initially thought.
+
+Of course, I'm not great at waiting, so I did track down the `#feat-tool-calling` channel on vLLM Slack to ask for a review. I'm not sure if that actually helped.
+
+### Read CONTRIBUTING.md (Thoroughly)
+
+I realized how important it is to carefully read `CONTRIBUTING.md` before submitting a PR. PR title conventions, DCO signing, linting—there are more details than you'd expect. Considering that reviewers look at dozens of PRs a day, just double-checking minor conventions (like `snake_case`) can make things much easier for everyone.
+
+## Conclusion
+
+Through this contribution, tool calling now works correctly in vLLM for Llama-based models fine-tuned in the Hermes format. You no longer need to edit the tokenizer separately—Hermes format tool calls are now parsed reliably in streaming.
+
+Open-source contribution is more accessible than you might think. If you find something inconvenient while using a project, that could be the starting point for your contribution.
+
+## Related Links
+
+- [vLLM PR #16890](https://github.com/vllm-project/vllm/pull/16890)
+- [hermes-llama-parse (Original Implementation)](https://github.com/minpeter/hermes-llama-parse)
+- [Test Model (HuggingFace)](https://huggingface.co/minpeter/LoRA-Llama-3.2-1B-tool-vllm-ci)
