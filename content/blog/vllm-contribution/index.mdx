@@ -13,6 +13,10 @@ vLLM은 LLM 추론을 위한 대표적인 오픈소스 프로젝트입니다. 20
 
 ## 문제 상황
 
+당시 저는 개인 프로젝트로 tool calling 특화 모델을 학습하고 있었습니다. xLAM, BitAgent, ToolACE 등 3B~8B 규모 모델들이 [BFCL(Berkeley Function Calling Leaderboard)](https://gorilla.cs.berkeley.edu/leaderboard.html) 상위권을 기록하던 시기였고, 저도 비슷한 규모에서 어디까지 성능을 끌어올릴 수 있는지 실험하고 있었습니다.
+
+학습을 마치고 vLLM으로 추론 테스트를 하던 중, 벤치마크 점수가 예상보다 한참 낮게 나왔습니다. 모델 문제인가 싶어 디버깅을 시작했는데, 알고 보니 파서 쪽 문제였습니다.
+
 vLLM의 기존 Hermes2ProToolParser는 `<tool_call>`과 `</tool_call>` 태그가 토크나이저에서 **별도의 special token**으로 정의된 모델에서만 정상 동작했습니다.
 
 예를 들어, [NousResearch/Hermes-3-Llama-3.1-8B](https://huggingface.co/NousResearch/Hermes-3-Llama-3.1-8B/blob/main/tokenizer_config.json)는 Llama 3 토크나이저를 편집해 128002, 128013 토큰을 도구 호출용으로 할당한 케이스입니다.
@@ -25,11 +29,24 @@ vLLM의 기존 Hermes2ProToolParser는 `<tool_call>`과 `</tool_call>` 태그가
 
 이렇게 여러 토큰(또는 스트리밍 델타)으로 분리되면, 기존 파서가 tool call을 제대로 감지하지 못하는 문제가 발생했습니다.
 
-물론 NousResearch처럼 `reserved_special_token` 일부를 편집해 도구 호출 전용 special token을 할당한 뒤 학습할 수도 있습니다. 다만 제 모델 학습 실험에서는 full fine-tuning이 아닌 LoRA와 같은 방법을 쓸 경우, 추가된 special token을 충분히 학습하지 못해 **special token을 추가하지 않고 학습한 모델 대비 벤치마크 성능이 하락**하는 경향을 확인했습니다.
+물론 NousResearch처럼 `reserved_special_token` 일부를 편집해 도구 호출 전용 special token을 할당한 뒤 학습할 수도 있습니다. 다만 제 실험에서는 LoRA로 학습할 경우, special token을 추가하지 않고 학습한 모델 대비 오히려 성능이 떨어지는 경향을 확인했습니다.
+
+<details>
+<summary>왜 LoRA에서 special token이 잘 학습되지 않는가?</summary>
+
+새로운 토큰을 토크나이저에 추가하면, 해당 토큰의 embedding을 학습해야 합니다. Axolotl에서는 `lora_modules_to_save`에 `embed_tokens`(토큰→임베딩)와 `lm_head`(임베딩→토큰 확률)를 지정해 이 문제를 해결할 수 있습니다. 이 설정은 PEFT의 `modules_to_save`를 사용하며, 지정된 모듈은 LoRA가 아닌 full fine-tuning으로 학습됩니다.
+
+학습 자체는 잘 되지만, embedding matrix 전체가 체크포인트에 포함되면서 adapter 파일이 GB급으로 커집니다. LoRA 본연의 장점인 작은 파일 크기와, 다른 base model에 adapter만 교체해서 적용할 수 있는 유연성이 사라지는 셈이죠.
+
+반대로 이 설정 없이 학습하면 LoRA의 장점은 유지되지만, 새로 추가한 special token의 embedding이 학습되지 않습니다. 실험 결과, special token을 추가해서 embedding까지 학습시킨 경우([minpeter/QLoRA-Llama-3.2-1B-chatml-tool-v3](https://huggingface.co/minpeter/QLoRA-Llama-3.2-1B-chatml-tool-v3))와 기존 토큰 조합으로 학습한 경우([minpeter/QLoRA-Llama-3.2-1B-chatml-tool-v4](https://huggingface.co/minpeter/QLoRA-Llama-3.2-1B-chatml-tool-v4)) 사이에 유의미한 성능 차이도 없었습니다.
+
+결국 토크나이저를 편집하지 않고 기존 토큰 조합으로 학습하는 것이 LoRA 환경에서는 더 실용적인 선택이었습니다.
+
+</details>
 
 ## 해결 방법
 
-이 문제를 해결하기 위해 vLLM의 [Tool Parser Plugin](https://docs.vllm.ai/en/latest/features/tool_calling/#how-to-write-a-tool-parser-plugin) 기능을 활용했습니다. 먼저 [minpeter/hermes-llama-parse](https://github.com/minpeter/hermes-llama-parse) 레포에서 프로토타입을 구현해 검증한 뒤, 이를 vLLM에 반영하는 방식으로 진행했습니다.
+당장 벤치마크를 돌려야 했기에, 먼저 vLLM의 [Tool Parser Plugin](https://docs.vllm.ai/en/latest/features/tool_calling/#how-to-write-a-tool-parser-plugin) 기능을 활용해 [minpeter/hermes-llama-parse](https://github.com/minpeter/hermes-llama-parse)에서 프로토타입을 구현했습니다. 막상 완성하고 보니 메인스트림에 올려도 될 만한 퀄리티 같아서, 이를 vLLM에 PR로 제출하게 되었습니다.
 
 핵심 아이디어는 **버퍼링 메커니즘**을 추가하는 것입니다. 스트리밍 출력은 한 번에 `<tool_call>`이 통째로 들어오지 않고, 중간 단위(delta)로 쪼개져 들어오는 경우가 있습니다. 이때 태그 시작 가능성이 보이면 버퍼에 누적했다가, 태그가 완성되는 시점에만 파서로 넘겨주도록 했습니다.
 
