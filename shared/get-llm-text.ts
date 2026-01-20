@@ -29,7 +29,7 @@ export async function getLLMText(page: blogType, full = false) {
 
   // Add metadata
   sections.push(
-    `Published: ${page.data.date.toISOString()}`,
+    `Published: ${page.data.published.toISOString()}`,
     "", // Empty line separator
     processedContent
   );
