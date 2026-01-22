@@ -26,7 +26,10 @@ import mainImage2 from "@/public/assets/images/main-image-2.png";
 import styles from "@/shared/styles/stagger-fade-in.module.css";
 import { cn } from "@/shared/utils/tailwind";
 
-const Lickitung = dynamic(() => import("@/components/lickitung"));
+const Lickitung = dynamic(() => import("@/components/lickitung"), {
+  ssr: false,
+  loading: () => <Skeleton className="aspect-3/2 h-full w-full" />,
+});
 
 // Hoisted static data outside component to prevent re-creation on every render (rendering-hoist-jsx)
 const SOCIAL_LINKS = [
