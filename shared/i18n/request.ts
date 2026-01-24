@@ -44,11 +44,12 @@ export default getRequestConfig(async ({ requestLocale }) => {
     };
   }
 
-  const [currentMessages, defaultMessages] = await Promise.all([
-    import(`./${locale}.json`),
-    import(`./${routing.defaultLocale}.json`),
-  ]);
-  const messages = deepmerge(defaultMessages.default, currentMessages.default, {
+  const [{ default: currentMessages }, { default: defaultMessages }] =
+    await Promise.all([
+      import(`./${locale}.json`),
+      import(`./${routing.defaultLocale}.json`),
+    ]);
+  const messages = deepmerge(defaultMessages, currentMessages, {
     arrayMerge: (_destination, source) => source,
   });
   return {
