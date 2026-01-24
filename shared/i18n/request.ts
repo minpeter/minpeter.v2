@@ -33,21 +33,25 @@ export default getRequestConfig(async ({ requestLocale }) => {
     ? requested
     : routing.defaultLocale;
 
-  // Load current locale messages
-  const currentMessages = (await import(`./${locale}.json`)).default;
-
   // If current locale is not the default, merge with fallback messages
   // This ensures missing translations fall back to the default locale (ko)
   // ref: https://next-intl-80nf5cxec-amann.vercel.app/docs/usage/error-handling#fallbacks-from-other-locales
-  let messages = currentMessages;
-  if (locale !== routing.defaultLocale) {
-    const defaultMessages = (await import(`./${routing.defaultLocale}.json`))
-      .default;
-    messages = deepmerge(defaultMessages, currentMessages, {
-      arrayMerge: (_destination, source) => source,
-    });
+  if (locale === routing.defaultLocale) {
+    const messages = (await import(`./${locale}.json`)).default;
+    return {
+      locale,
+      messages,
+    };
   }
 
+  const [{ default: currentMessages }, { default: defaultMessages }] =
+    await Promise.all([
+      import(`./${locale}.json`),
+      import(`./${routing.defaultLocale}.json`),
+    ]);
+  const messages = deepmerge(defaultMessages, currentMessages, {
+    arrayMerge: (_destination, source) => source,
+  });
   return {
     locale,
     messages,

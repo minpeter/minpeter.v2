@@ -24,9 +24,10 @@ const showcasePaths = [
 export default async function Page(props: PageProps<"/[locale]/show">) {
   const { locale } = await props.params;
 
-  const enabled = await createFeatureGate("test_flag")(); //Disabled by default, edit in the Statsig console
-
-  const t = await getTranslations();
+  const [enabled, t] = await Promise.all([
+    createFeatureGate("test_flag")(), //Disabled by default, edit in the Statsig console
+    getTranslations(),
+  ]);
   return (
     <section className="flex flex-col gap-3">
       <Header
