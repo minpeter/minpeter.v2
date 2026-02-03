@@ -28,7 +28,6 @@ export function LanguageSelector() {
     handleMouseLeave,
     handleContentMouseEnter,
     handleContentMouseLeave,
-    handleTriggerClick,
     handleOpenChange,
   } = useHoverDropdown();
 
@@ -46,7 +45,6 @@ export function LanguageSelector() {
             "transition-colors duration-150",
             "focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           )}
-          onClick={handleTriggerClick}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
           ref={triggerRef}

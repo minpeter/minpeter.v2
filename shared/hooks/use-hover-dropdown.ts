@@ -19,7 +19,6 @@ interface UseHoverDropdownReturn {
   handleMouseLeave: () => void;
   handleContentMouseEnter: () => void;
   handleContentMouseLeave: () => void;
-  handleTriggerClick: () => void;
   handleOpenChange: (open: boolean) => void;
 }
 
@@ -41,10 +40,40 @@ export function useHoverDropdown(
   const openTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const isMouseInSafeZoneRef = useRef(false);
+  const lastInteractionRef = useRef<
+    "mouse" | "touch" | "pen" | "keyboard" | null
+  >(null);
 
   // Detect touch device on mount
   useEffect(() => {
     setIsTouchDevice("ontouchstart" in window || navigator.maxTouchPoints > 0);
+  }, []);
+
+  // Track last interaction type for desktop keyboard access
+  useEffect(() => {
+    const handlePointerDown = (e: PointerEvent) => {
+      const pointerType =
+        e.pointerType === "mouse" ||
+        e.pointerType === "touch" ||
+        e.pointerType === "pen"
+          ? e.pointerType
+          : "mouse";
+      lastInteractionRef.current = pointerType;
+    };
+
+    const handleKeyDown = () => {
+      lastInteractionRef.current = "keyboard";
+    };
+
+    window.addEventListener("pointerdown", handlePointerDown, {
+      passive: true,
+    });
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("pointerdown", handlePointerDown);
+      window.removeEventListener("keydown", handleKeyDown);
+    };
   }, []);
 
   // Clear timeouts on unmount
@@ -172,21 +201,21 @@ export function useHoverDropdown(
     }, openDelay);
   }, [isTouchDevice, openDelay]);
 
-  // For touch devices, toggle on click
-  const handleTriggerClick = useCallback(() => {
-    if (isTouchDevice) {
-      setIsOpen((prev) => !prev);
-    }
-  }, [isTouchDevice]);
-
-  // Handle Radix's onOpenChange - only use for touch devices
+  // Touch devices: allow click/keyboard to toggle. Desktop: ignore opens (hover only),
+  // but allow closes (outside click / Escape) and keyboard opens to be reflected.
   const handleOpenChange = useCallback(
     (open: boolean) => {
-      // On PC, we control state via hover handlers, ignore Radix's changes
-      if (!isTouchDevice) {
+      if (isTouchDevice) {
+        setIsOpen(open);
         return;
       }
-      setIsOpen(open);
+      if (!open) {
+        setIsOpen(false);
+        return;
+      }
+      if (lastInteractionRef.current === "keyboard") {
+        setIsOpen(true);
+      }
     },
     [isTouchDevice]
   );
@@ -201,7 +230,6 @@ export function useHoverDropdown(
     handleMouseLeave,
     handleContentMouseEnter,
     handleContentMouseLeave,
-    handleTriggerClick,
     handleOpenChange,
   };
 }
