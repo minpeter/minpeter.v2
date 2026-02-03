@@ -19,7 +19,6 @@ interface UseHoverDropdownReturn {
   handleMouseLeave: () => void;
   handleContentMouseEnter: () => void;
   handleContentMouseLeave: () => void;
-  handleTriggerClick: () => void;
   handleOpenChange: (open: boolean) => void;
 }
 
@@ -172,24 +171,10 @@ export function useHoverDropdown(
     }, openDelay);
   }, [isTouchDevice, openDelay]);
 
-  // For touch devices, toggle on click
-  const handleTriggerClick = useCallback(() => {
-    if (isTouchDevice) {
-      setIsOpen((prev) => !prev);
-    }
-  }, [isTouchDevice]);
-
-  // Handle Radix's onOpenChange - only use for touch devices
-  const handleOpenChange = useCallback(
-    (open: boolean) => {
-      // On PC, we control state via hover handlers, ignore Radix's changes
-      if (!isTouchDevice) {
-        return;
-      }
-      setIsOpen(open);
-    },
-    [isTouchDevice]
-  );
+  // Let Radix handle click/keyboard toggles, while hover controls desktop UX.
+  const handleOpenChange = useCallback((open: boolean) => {
+    setIsOpen(open);
+  }, []);
 
   return {
     isOpen,
@@ -201,7 +186,6 @@ export function useHoverDropdown(
     handleMouseLeave,
     handleContentMouseEnter,
     handleContentMouseLeave,
-    handleTriggerClick,
     handleOpenChange,
   };
 }
