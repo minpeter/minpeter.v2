@@ -171,10 +171,20 @@ export function useHoverDropdown(
     }, openDelay);
   }, [isTouchDevice, openDelay]);
 
-  // Let Radix handle click/keyboard toggles, while hover controls desktop UX.
-  const handleOpenChange = useCallback((open: boolean) => {
-    setIsOpen(open);
-  }, []);
+  // Touch devices: allow click/keyboard to toggle. Desktop: ignore opens (hover only),
+  // but allow closes (outside click / Escape) to be reflected.
+  const handleOpenChange = useCallback(
+    (open: boolean) => {
+      if (isTouchDevice) {
+        setIsOpen(open);
+        return;
+      }
+      if (!open) {
+        setIsOpen(false);
+      }
+    },
+    [isTouchDevice]
+  );
 
   return {
     isOpen,
