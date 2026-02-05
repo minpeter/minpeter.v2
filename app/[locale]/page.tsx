@@ -3,7 +3,6 @@
 import {
   CookieIcon,
   GitHubLogoIcon,
-  InstagramLogoIcon,
   LinkedInLogoIcon,
 } from "@radix-ui/react-icons";
 import { CodeIcon, ExternalLinkIcon, KeyboardIcon } from "lucide-react";
@@ -13,6 +12,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
 import { Suspense, useState } from "react";
+import { SiX } from "react-icons/si";
 import Header from "@/components/header";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import {
@@ -39,9 +39,9 @@ const SOCIAL_LINKS = [
     label: "GitHub",
   },
   {
-    href: "https://instagram.com/minpeter2",
-    icon: <InstagramLogoIcon className="h-4 w-4" />,
-    label: "Instagram",
+    href: "https://x.com/minpeterx",
+    icon: <SiX className="h-4 w-4" />,
+    label: "X",
   },
   {
     href: "https://linkedin.com/in/minpeter/",
