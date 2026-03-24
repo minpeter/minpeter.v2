@@ -35,8 +35,16 @@ const englishConfig = {
 };
 
 export async function nextSentencesGenerator(locale: "ko" | "en") {
+  const startTime = Date.now();
   const { text } = await generateText({
     ...(locale === "ko" ? koreanConfig : englishConfig),
+  });
+
+  const duration = Date.now() - startTime;
+  console.info("[typing-action]", {
+    locale,
+    duration,
+    timestamp: new Date().toISOString(),
   });
 
   return text;

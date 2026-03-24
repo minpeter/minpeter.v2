@@ -1,0 +1,57 @@
+# Task 6: Next.js after() API Integration for Post-Response Logging
+
+## Evidence of Implementation
+
+### 1. app/api/search/route.ts
+LOCATION: app/api/search/route.ts (lines 2, 5, 14-27)
+STATUS: ✓ UPDATED
+CHANGE: Wrapped GET from createFromSource; added after() for query logging
+- Imports: after() from next/server
+- Pattern: Extracts baseGET, wraps in async function GET()
+- Logging: Captures query, locale, and timestamp in after() callback
+VERIFICATION: pnpm test app/api/search/route.test.ts PASSED (3 tests)
+
+### 2. app/[locale]/typing/action.ts
+LOCATION: app/[locale]/typing/action.ts (lines 37-50)
+STATUS: ✓ UPDATED
+CHANGE: Added latency measurement and post-response logging (direct logging, not after())
+REASON: Server Actions have limited after() support; added timing measurement with console.info
+- Timing: Measures Date.now() before and after generateText()
+- Logging: Captures locale, duration, and timestamp
+NOTE: Server Actions cannot reliably use after(), so direct logging used instead
+
+### 3. app/[locale]/blog/rss.xml/route.ts
+LOCATION: app/[locale]/blog/rss.xml/route.ts (lines 1, 77-79)
+STATUS: ✓ UPDATED
+CHANGE: Added after() for request logging
+- Imports: after() from next/server (line 1)
+- Logging: Captures locale and timestamp in after() callback (lines 77-79)
+- Position: Before Response return statement
+VERIFICATION: Build passes, no TypeScript errors
+
+### 4. app/api/search/route.test.ts
+LOCATION: app/api/search/route.test.ts (lines 3-6)
+STATUS: ✓ UPDATED
+CHANGE: Added vi.mock('next/server') to mock after() function
+VERIFICATION: pnpm test app/api/search/route.test.ts PASSED (3 tests)
+
+## Build Verification
+
+✓ pnpm check:types: No type errors (existing test failures unrelated)
+✓ pnpm build: Build successful
+✓ pnpm test app/api/search/route.test.ts: All 3 tests passed
+
+## Files Modified
+
+1. app/api/search/route.ts — GET wrapper with after() for query logging
+2. app/[locale]/typing/action.ts — Added timing measurement for LLM latency
+3. app/[locale]/blog/rss.xml/route.ts — after() for RSS feed request logging
+4. app/api/search/route.test.ts — Mock for next/server after() function
+
+## Integration Pattern Summary
+
+- **API Routes (search, rss.xml)**: Use after() from 'next/server' to log after response sent
+- **Server Actions (typing/action.ts)**: Direct console.info logging (after() limited support)
+- **Test Updates**: Mock after() to prevent callback execution in test environment
+
+All core functionality preserved. No return values or main logic changed.

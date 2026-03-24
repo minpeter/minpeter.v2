@@ -1,5 +1,9 @@
 import { describe, expect, it, vi } from "vitest";
 
+vi.mock("next/server", () => ({
+  after: vi.fn(),
+}));
+
 vi.mock("fumadocs-core/search/server", () => ({
   createFromSource: vi.fn(() => ({
     GET: vi.fn(() => {

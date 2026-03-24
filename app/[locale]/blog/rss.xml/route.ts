@@ -1,3 +1,4 @@
+import { after } from "next/server";
 import { getBaseUrl } from "@/shared/env";
 import { routing } from "@/shared/i18n/routing";
 import { getSiteDescription, siteConfig } from "@/shared/site-config";
@@ -73,6 +74,10 @@ export async function GET(
   }
 
   const feed = generateRssFeed(locale as Locale);
+
+  after(() => {
+    console.info("[rss]", { locale, timestamp: new Date().toISOString() });
+  });
 
   return new Response(feed, {
     headers: {
