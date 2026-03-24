@@ -205,3 +205,80 @@
     user-select: none;
   }
 }
+
+/* ============================================
+   View Transitions API — Foundation
+   ============================================ */
+
+/* Default: smooth crossfade for all page transitions */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 300ms;
+  animation-timing-function: ease-in-out;
+}
+
+/* Shared Element Transition defaults (for blog title morphing) */
+::view-transition-group(*) {
+  animation-duration: 350ms;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Directional slide animations (for transitionTypes) */
+@keyframes slide-out-left {
+  to {
+    transform: translateX(-30%);
+    opacity: 0;
+  }
+}
+@keyframes slide-in-right {
+  from {
+    transform: translateX(30%);
+    opacity: 0;
+  }
+}
+@keyframes slide-out-right {
+  to {
+    transform: translateX(30%);
+    opacity: 0;
+  }
+}
+@keyframes slide-in-left {
+  from {
+    transform: translateX(-30%);
+    opacity: 0;
+  }
+}
+
+/* slide-forward: navigating to next post */
+html:active-view-transition-type(slide-forward) {
+  &::view-transition-old(root) {
+    animation: 300ms ease-in both slide-out-left;
+  }
+  &::view-transition-new(root) {
+    animation: 300ms ease-out both slide-in-right;
+  }
+}
+
+/* slide-back: navigating to previous post */
+html:active-view-transition-type(slide-back) {
+  &::view-transition-old(root) {
+    animation: 300ms ease-in both slide-out-right;
+  }
+  &::view-transition-new(root) {
+    animation: 300ms ease-out both slide-in-left;
+  }
+}
+
+/* ============================================
+   Accessibility: Respect reduced motion preference
+   CRITICAL: This must be present for a11y compliance
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+  ::view-transition-group(*) {
+    animation: none !important;
+  }
+}

@@ -20,6 +20,7 @@ const nextConfig: NextConfig = {
     ],
     sri: { algorithm: "sha256" },
     prefetchInlining: true,
+    viewTransition: true,
   },
   logging: {
     fetches: {
