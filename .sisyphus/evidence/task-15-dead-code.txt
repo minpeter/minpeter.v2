@@ -1,0 +1,36 @@
+TASK 15: Remove dead code and fix @ts-ignore
+Date: 2026-03-24
+
+CHANGES COMPLETED:
+✓ Deleted app/[locale]/blog/search.tsx (entirely commented out)
+✓ Removed commented-out import from app/[locale]/blog/page.tsx (line 9)
+✓ Removed commented-out JSX block from app/[locale]/blog/page.tsx (lines 49-54)
+✓ Fixed @ts-ignore in app/[locale]/blog/[...slug]/page.tsx (line 140-142)
+  - Replaced @ts-ignore with proper isValidElement() type guard
+  - Used ReactElement<any> type casting for proper type safety
+
+VERIFICATION:
+✓ grep -r "@ts-ignore" app/ returns empty
+✓ grep -r "BlogSearch" app/ returns empty
+✓ search.tsx deleted successfully
+✓ pnpm build completed successfully
+✓ pnpm check:types passed
+✓ pnpm check:biome passed
+✓ pnpm test passed (6 test files, 40 tests)
+
+FILES MODIFIED:
+1. app/[locale]/blog/page.tsx
+   - Removed: // import { BlogSearch, BlogSearchFallback } from "./search";
+   - Removed: {/* FIXME: node:fs ... */} comment block
+   - Removed: {/* <Suspense fallback...BlogSearch /> */} JSX block
+
+2. app/[locale]/blog/[...slug]/page.tsx
+   - Added: import { isValidElement } from "react";
+   - Added: ReactElement to type imports
+   - Changed: {/* @ts-ignore */}{item.title?.props.children}
+   - To: {isValidElement(item.title) ? (item.title as ReactElement<any>).props.children : item.title}
+
+3. .sisyphus/boulder.json
+   - Fixed formatting (added newline at EOF)
+
+CI GATE STATUS: ✓ PASSED

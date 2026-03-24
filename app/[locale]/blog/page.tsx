@@ -1,14 +1,10 @@
 import type { Metadata, Route } from "next";
+import { getTranslations } from "next-intl/server";
 import { Suspense } from "react";
-
 import Header from "@/components/header";
 import { blog, getPostsMetadata } from "@/shared/source";
 import styles from "@/shared/styles/stagger-fade-in.module.css";
 import NewMetadata from "@/shared/utils/metadata";
-
-// import { BlogSearch, BlogSearchFallback } from "./search";
-
-import { getTranslations } from "next-intl/server";
 import { BlogList, BlogListFallback } from "./list";
 import { RssLink } from "./rss-link";
 
@@ -46,12 +42,6 @@ export default async function Page(props: PageProps<"/[locale]/blog">) {
         rightContent={<RssLink locale={locale} />}
         title={t("blogPageTitle")}
       />
-      {/* FIXME: node:fs
-Module build failed: UnhandledSchemeError: Reading from "node:fs" is not handled by plugins (Unhandled scheme).
-Webpack supports "data:" and "file:" URIs by default. */}
-      {/* <Suspense fallback={<BlogSearchFallback />}>
-        <BlogSearch lang={locale} />
-      </Suspense> */}
       <Suspense fallback={<BlogListFallback posts={posts} />}>
         <BlogList lang={locale} posts={posts} />
       </Suspense>

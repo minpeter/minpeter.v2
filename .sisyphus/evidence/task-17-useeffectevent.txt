@@ -1,0 +1,36 @@
+TASK 17: Refactor use-hover-dropdown.ts to use useEffectEvent
+================================================
+
+FILE: shared/hooks/use-hover-dropdown.ts
+
+CHANGES MADE:
+1. ✅ Added useEffectEvent import from "react"
+   Line 3: import { useCallback, useEffect, useEffectEvent, useRef, useState } from "react";
+
+2. ✅ Converted isInSafeTriangle from useCallback to useEffectEvent
+   Lines 92-112: Replaced useCallback wrapper with useEffectEvent
+   - Removed [safeTrianglePadding] dependency array
+   - Function implementation unchanged
+   - safeTrianglePadding accessed directly from closure scope
+
+3. ✅ Removed isInSafeTriangle from useEffect dependencies
+   Line 139: Changed from [isOpen, isTouchDevice, isInSafeTriangle]
+            to [isOpen, isTouchDevice]
+   - useEffectEvent callbacks are stable and don't belong in dependency arrays
+
+VERIFICATION:
+✓ LSP diagnostics: No errors on use-hover-dropdown.ts
+✓ pnpm test: 40 tests passed in 299ms
+✓ Type checking: No errors related to our changes
+✓ Biome linting: No errors related to our changes
+✓ Public API: Unchanged - same return type and exports
+
+NOTE: Pre-existing build issues in the project (Turbopack issue in image-carousel.tsx, 
+TypeScript error in blog page) are unrelated to this refactor.
+
+SUCCESS CRITERIA MET:
+- useEffectEvent imported and used ✓
+- isInSafeTriangle converted from useCallback to useEffectEvent ✓
+- isInSafeTriangle removed from dependency array ✓
+- Hook public API unchanged ✓
+- Tests pass ✓

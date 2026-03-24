@@ -968,7 +968,7 @@ Wave FINAL (After ALL tasks — 4 parallel reviews, then user okay):
   - Files: `package.json`, `pnpm-lock.yaml`
   - Pre-commit: `pnpm check:types && pnpm check:biome && pnpm test && pnpm build`
 
-- [ ] 14. Next.js Config — Adopt New Experimental Flags + Logging
+- [x] 14. Next.js Config — Adopt New Experimental Flags + Logging
 
   **What to do**:
   - Update `next.config.ts` to adopt new 16.2 features:

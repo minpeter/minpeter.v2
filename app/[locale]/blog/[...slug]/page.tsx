@@ -8,7 +8,8 @@ import type { Route } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
-import type { ComponentProps } from "react";
+import type { ComponentProps, ReactElement } from "react";
+import { isValidElement } from "react";
 import ExternalRedirect from "@/components/external-redirect";
 import Header from "@/components/header";
 import { MachineTranslationNotice } from "@/components/machine-translation-notice";
@@ -137,8 +138,9 @@ export default async function Page(
                   key={item.url}
                   style={{ marginLeft: `${(item.depth - 1) * 1}rem` }}
                 >
-                  {/* @ts-ignore */}
-                  {item.title?.props.children}
+                  {isValidElement(item.title)
+                    ? (item.title as ReactElement<any>).props.children
+                    : item.title}
                 </a>
               ))}
             </nav>
