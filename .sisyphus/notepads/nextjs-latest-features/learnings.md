@@ -21,3 +21,13 @@
 
 ### Evidence Location
 - `.sisyphus/evidence/nextjs-latest-features/` for this plan
+
+## Task 5: Loading UI Skeletons
+- Used Next.js `loading.tsx` conventions for automatic route transition skeleton states.
+- Handled React `key` iteration properly to prevent React hydration errors in skeleton arrays.
+- Implemented basic testing to confirm rendering without errors.
+
+## Task 4: App Router Error Boundaries
+- `app/[locale]/error.tsx` and nested `app/[locale]/blog/[...slug]/error.tsx` must start with `"use client"` for Next.js App Router error boundary support.
+- Error boundary components can safely log incoming `error` objects in `useEffect`, expose `reset()` retry actions, and avoid `next-intl` hooks to keep fallback UI resilient.
+- Vitest stays on the default Node environment globally, so each React boundary test needs the required `// @vitest-environment jsdom` file header.
