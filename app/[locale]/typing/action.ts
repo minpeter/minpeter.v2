@@ -2,7 +2,6 @@
 
 import { friendli } from "@friendliai/ai-provider";
 import { generateText } from "ai";
-import { after } from "next/server";
 
 const koreanConfig = {
   model: friendli("meta-llama-3.1-8b-instruct"),
@@ -36,18 +35,8 @@ const englishConfig = {
 };
 
 export async function nextSentencesGenerator(locale: "ko" | "en") {
-  const startTime = Date.now();
   const { text } = await generateText({
     ...(locale === "ko" ? koreanConfig : englishConfig),
-  });
-
-  after(() => {
-    const duration = Date.now() - startTime;
-    console.info("[typing-action]", {
-      locale,
-      duration,
-      timestamp: new Date().toISOString(),
-    });
   });
 
   return text;

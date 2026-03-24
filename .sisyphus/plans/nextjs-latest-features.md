@@ -69,13 +69,13 @@ Next.js 16.x의 미활용 최신 기능들을 안전하게 도입하여 UX(View 
 - 각 기능별 Vitest 테스트
 
 ### Definition of Done
-- [ ] `pnpm build` 성공, 에러 없음
-- [ ] `pnpm check:types` (tsc --noEmit) 통과
-- [ ] `pnpm test` 전체 통과
-- [ ] 모든 페이지 정상 렌더링 확인 (Playwright)
-- [ ] View Transitions 크로스페이드 동작 확인
-- [ ] 에러 바운더리 트리거 시 복구 UI 표시 확인
-- [ ] loading.tsx 스켈레톤 표시 확인
+- [x] `pnpm build` 성공, 에러 없음
+- [x] `pnpm check:types` (tsc --noEmit) 통과
+- [x] `pnpm test` 전체 통과 (54/54)
+- [x] 모든 페이지 정상 렌더링 확인 (Playwright 스크린샷 캡처됨)
+- [x] View Transitions 크로스페이드 동작 확인
+- [x] 에러 바운더리 트리거 시 복구 UI 표시 확인
+- [x] loading.tsx 스켈레톤 표시 확인
 
 ### Must Have
 - `prefers-reduced-motion` 미디어 쿼리로 View Transitions 비활성화
@@ -1015,19 +1015,19 @@ Wave FINAL (After ALL tasks — 4 parallel reviews, then user okay):
 
 > 4 review agents run in PARALLEL. ALL must APPROVE. Present consolidated results to user and get explicit "okay" before completing.
 
-- [ ] F1. **Plan Compliance Audit** — `oracle`
+- [x] F1. **Plan Compliance Audit** — `oracle`
   Read the plan end-to-end. For each "Must Have": verify implementation exists (read file, curl endpoint, run command). For each "Must NOT Have": search codebase for forbidden patterns — reject with file:line if found. Check evidence files exist in .sisyphus/evidence/. Compare deliverables against plan.
   Output: `Must Have [N/N] | Must NOT Have [N/N] | Tasks [N/N] | VERDICT: APPROVE/REJECT`
 
-- [ ] F2. **Code Quality Review** — `unspecified-high`
+- [x] F2. **Code Quality Review** — `unspecified-high`
   Run `tsc --noEmit` + linter + `pnpm test`. Review all changed files for: `as any`/`@ts-ignore`, empty catches, console.log in prod, commented-out code, unused imports. Check AI slop: excessive comments, over-abstraction, generic names.
   Output: `Build [PASS/FAIL] | Lint [PASS/FAIL] | Tests [N pass/N fail] | Files [N clean/N issues] | VERDICT`
 
-- [ ] F3. **Real Manual QA** — `unspecified-high` (+ `playwright` skill)
+- [x] F3. **Real Manual QA** — `unspecified-high` (+ `playwright` skill)
   Start from clean state. Execute EVERY QA scenario from EVERY task — follow exact steps, capture evidence. Test cross-task integration (View Transitions + loading states, error boundaries + instrumentation). Test edge cases: empty state, invalid routes, rapid navigation. Save to `.sisyphus/evidence/final-qa/`.
   Output: `Scenarios [N/N pass] | Integration [N/N] | Edge Cases [N tested] | VERDICT`
 
-- [ ] F4. **Scope Fidelity Check** — `deep`
+- [x] F4. **Scope Fidelity Check** — `deep`
   For each task: read "What to do", read actual diff (git log/diff). Verify 1:1 — everything in spec was built (no missing), nothing beyond spec was built (no creep). Check "Must NOT do" compliance. Detect cross-task contamination.
   Output: `Tasks [N/N compliant] | Contamination [CLEAN/N issues] | Unaccounted [CLEAN/N files] | VERDICT`
 
@@ -1060,14 +1060,14 @@ pnpm test                     # Expected: all tests pass
 ```
 
 ### Final Checklist
-- [ ] All "Must Have" present
-- [ ] All "Must NOT Have" absent
-- [ ] All tests pass
-- [ ] View Transitions crossfade works on page navigation
-- [ ] Blog title Shared Element morph works list ↔ post
-- [ ] Error boundaries render recovery UI on error
-- [ ] Loading skeletons show during route transitions
-- [ ] after() executes without blocking response
-- [ ] instrumentation.ts register() fires on server startup
-- [ ] prefers-reduced-motion disables all transitions
-- [ ] Build output: 기존 정적(○) 페이지가 동적(ƒ)으로 변경되지 않음 (Suspense 있는 페이지가 PPR(◐)로 변경되는 것은 정상)
+- [x] All "Must Have" present
+- [x] All "Must NOT Have" absent
+- [x] All tests pass (54/54)
+- [x] View Transitions crossfade works on page navigation
+- [x] Blog title Shared Element morph works list ↔ post
+- [x] Error boundaries render recovery UI on error
+- [x] Loading skeletons show during route transitions
+- [x] after() executes without blocking response
+- [x] instrumentation.ts register() fires on server startup
+- [x] prefers-reduced-motion disables all transitions
+- [x] Build output: 기존 정적(○) 페이지가 동적(ƒ)으로 변경되지 않음 (Suspense 있는 페이지가 PPR(◐)로 변경되는 것은 정상)
