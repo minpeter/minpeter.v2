@@ -1098,7 +1098,7 @@ Wave FINAL (After ALL tasks — 4 parallel reviews, then user okay):
   - Files: `app/[locale]/blog/search.tsx` (deleted), `app/[locale]/blog/page.tsx`, `app/[locale]/blog/[...slug]/page.tsx`
   - Pre-commit: `pnpm check:types && pnpm check:biome && pnpm test && pnpm build`
 
-- [ ] 16. Standardize Zod Imports — env.ts zod/v4 → zod
+- [x] 16. Standardize Zod Imports — env.ts zod/v4 → zod
 
   **What to do**:
   - Change `shared/env.ts:2` from `import { z } from "zod/v4"` to `import { z } from "zod"`

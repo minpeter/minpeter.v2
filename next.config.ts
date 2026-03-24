@@ -18,11 +18,14 @@ const nextConfig: NextConfig = {
       "@react-three/drei",
       "@react-three/fiber",
     ],
+    sri: { algorithm: "sha256" },
+    prefetchInlining: true,
   },
   logging: {
     fetches: {
       fullUrl: true,
     },
+    browserToTerminal: "error",
   },
   images: {
     formats: ["image/avif", "image/webp"],

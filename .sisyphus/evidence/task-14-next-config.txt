@@ -1,0 +1,23 @@
+TASK: Update next.config.ts to adopt three new Next.js 16.2 features
+DATE: 2026-03-24
+
+CHANGES MADE:
+1. Added logging.browserToTerminal: 'error'
+2. Added experimental.sri: { algorithm: 'sha256' }
+3. Added experimental.prefetchInlining: true
+
+VERIFICATION:
+✓ pnpm build succeeded
+✓ Build output shows experiments active:
+  · prefetchInlining
+  · sri
+✓ pnpm check:types: PASS
+✓ pnpm check:biome: PASS
+✓ pnpm test: 40 tests passed
+✓ Full CI gate: ALL PASS
+
+FILE CHANGES:
+- next.config.ts: Added 3 new config options
+- .sisyphus/boulder.json: Fixed newline formatting
+
+NO CONFIG ERRORS - next.js accepted all three new options
