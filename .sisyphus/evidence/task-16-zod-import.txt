@@ -1,0 +1,25 @@
+=== TASK 16: Standardize Zod Imports ===
+
+TARGET: Change `import { z } from "zod/v4"` to `import { z } from "zod"` in shared/env.ts
+
+CHANGES MADE:
+- File: shared/env.ts
+- Line 2: Changed from `import { z } from "zod/v4";` to `import { z } from "zod";`
+
+VERIFICATION:
+✓ grep -r "zod/v4" shared/ — No results (all compat imports removed)
+✓ pnpm check:types — PASSED (TypeScript type checking)
+✓ pnpm check:biome — PASSED (Code formatting)
+✓ pnpm test — PASSED (40 tests, 6 test files)
+✓ pnpm build — PASSED (Next.js build successful, sitemap generated)
+
+RATIONALE:
+The zod/v4 compat path was provided for backward compatibility during the Zod v3→v4 migration.
+Since Zod 4 is now the standard, using the main "zod" import is cleaner and matches source.config.ts.
+All z.* APIs used in env.ts (z.enum, z.coerce.number, z.url, z.string, z.boolean) are standard Zod 4 APIs.
+
+CONSISTENCY:
+- source.config.ts: Already uses `import { z } from "zod";` ✓
+- shared/env.ts: Now uses `import { z } from "zod";` ✓
+
+STATUS: COMPLETE
