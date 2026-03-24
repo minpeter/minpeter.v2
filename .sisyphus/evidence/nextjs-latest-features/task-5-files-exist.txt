@@ -1,0 +1,3 @@
+-rw-r--r--@ 1 minpeter  staff  473 Mar 24 19:12 app/[locale]/blog/[...slug]/loading.tsx
+-rw-r--r--@ 1 minpeter  staff  810 Mar 24 19:11 app/[locale]/blog/loading.tsx
+-rw-r--r--@ 1 minpeter  staff  386 Mar 24 19:19 app/[locale]/show/loading.tsx
