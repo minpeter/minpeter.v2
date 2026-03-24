@@ -18,6 +18,7 @@ import styles from "@/shared/styles/stagger-fade-in.module.css";
 import { formatDateLong } from "@/shared/utils/date";
 import NewMetadata from "@/shared/utils/metadata";
 import { cn } from "@/shared/utils/tailwind";
+import { NavLink } from "./nav-link";
 
 export function generateStaticParams({
   params,
@@ -239,25 +240,25 @@ export default async function Page(
         </div>
         <div className="flex justify-between">
           {postsIndex[post.slugs.join("/")].previous ? (
-            <Link
+            <NavLink
               className="max-w-[45%] truncate rounded-md px-2 py-1 text-primary hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               href={
                 `${postsIndex[post.slugs.join("/")].previous?.url}` as Route
               }
             >
               ← {postsIndex[post.slugs.join("/")].previous?.data.title}
-            </Link>
+            </NavLink>
           ) : (
             <div />
           )}
 
           {postsIndex[post.slugs.join("/")].next ? (
-            <Link
+            <NavLink
               className="max-w-[45%] truncate rounded-md px-2 py-1 text-primary hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               href={`${postsIndex[post.slugs.join("/")].next?.url}` as Route}
             >
               {postsIndex[post.slugs.join("/")].next?.data.title} →
-            </Link>
+            </NavLink>
           ) : null}
         </div>
       </section>

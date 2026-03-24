@@ -14,6 +14,7 @@ interface HeaderProps {
   link?: {
     href: Route;
     text: string;
+    onNavigate?: (e: React.MouseEvent) => void;
   };
   rightContent?: ReactNode;
   title?: string;
@@ -31,7 +32,11 @@ export default function Header({
     >
       {link ? (
         <div>
-          <Backlink href={link.href} text={link.text} />
+          <Backlink
+            href={link.href}
+            onNavigate={link.onNavigate}
+            text={link.text}
+          />
         </div>
       ) : (
         <div className="invisible">.</div>

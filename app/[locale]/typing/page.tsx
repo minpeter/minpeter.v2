@@ -121,6 +121,26 @@ export default function Page() {
     setIsTransitioning(false);
   }, [resetInput, cancelStats]);
 
+  const handleNavigateAway = useCallback(
+    (e: React.MouseEvent) => {
+      if (userInput.length > 0) {
+        e.preventDefault();
+      }
+    },
+    [userInput.length]
+  );
+
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (userInput.length > 0) {
+        e.preventDefault();
+        e.returnValue = "";
+      }
+    };
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+  }, [userInput.length]);
+
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLInputElement>) => {
       switch (e.key) {
@@ -160,7 +180,11 @@ export default function Page() {
     <section className={`${styles.stagger_container} flex flex-col gap-12`}>
       <Header
         description={t("typingDescription")}
-        link={{ href: `/${locale}` as Route, text: t("backToHome") }}
+        link={{
+          href: `/${locale}` as Route,
+          text: t("backToHome"),
+          onNavigate: handleNavigateAway,
+        }}
         title="Peter's Typing practice"
       />
       <div className="relative flex w-full flex-col items-center justify-center">

@@ -250,7 +250,7 @@ Wave FINAL (After ALL tasks — 4 parallel reviews, then user okay):
   - Files: `instrumentation.ts`, `instrumentation.test.ts`
   - Pre-commit: `pnpm test instrumentation.test.ts`
 
-- [ ] 2. 테스트 인프라 확장 — @testing-library/react + jsdom 설정
+- [x] 2. 테스트 인프라 확장 — @testing-library/react + jsdom 설정
 
   **What to do**:
   - `@testing-library/react`, `@testing-library/jest-dom`, `jsdom` devDependency 설치
@@ -320,7 +320,7 @@ Wave FINAL (After ALL tasks — 4 parallel reviews, then user okay):
   - Files: `package.json`, `pnpm-lock.yaml`, `__tests__/setup-smoke.test.tsx`
   - Pre-commit: `pnpm test`
 
-- [ ] 3. View Transitions CSS 기반 작업 + 접근성
+- [x] 3. View Transitions CSS 기반 작업 + 접근성
 
   **What to do**:
   - TDD: CSS가 올바르게 포함되는지 확인하는 테스트 (파일 존재 + 내용 검증)
@@ -404,7 +404,7 @@ Wave FINAL (After ALL tasks — 4 parallel reviews, then user okay):
   - Files: `app/globals.css`, `next.config.ts`
   - Pre-commit: `pnpm check:types`
 
-- [ ] 4. error.tsx 에러 바운더리 + 테스트
+- [x] 4. error.tsx 에러 바운더리 + 테스트
 
   **What to do**:
   - TDD: 에러 바운더리 컴포넌트가 에러 메시지와 복구 버튼을 렌더링하는지 테스트 (jsdom 환경)
@@ -493,7 +493,7 @@ Wave FINAL (After ALL tasks — 4 parallel reviews, then user okay):
   - Files: `app/[locale]/error.tsx`, `app/[locale]/blog/[...slug]/error.tsx`, test files
   - Pre-commit: `pnpm test error.test`
 
-- [ ] 5. loading.tsx 스켈레톤 UI + 테스트
+- [x] 5. loading.tsx 스켈레톤 UI + 테스트
 
   **What to do**:
   - TDD: 스켈레톤 컴포넌트가 올바른 DOM 구조를 렌더링하는지 테스트 (jsdom 환경)
@@ -581,7 +581,7 @@ Wave FINAL (After ALL tasks — 4 parallel reviews, then user okay):
   - Files: `app/[locale]/blog/loading.tsx`, `app/[locale]/blog/[...slug]/loading.tsx`, `app/[locale]/show/loading.tsx`, test files
   - Pre-commit: `pnpm test loading.test`
 
-- [ ] 6. after() API 통합 + 테스트
+- [x] 6. after() API 통합 + 테스트
 
   **What to do**:
   - TDD: after() 콜백이 호출되는지 확인하는 테스트

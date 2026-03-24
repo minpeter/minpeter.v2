@@ -1,0 +1,32 @@
+
+> minpeter.v2@0.0.0 build /Users/minpeter/github.com/minpeter/minpeter.v2
+> next build
+
+▲ Next.js 16.2.1 (Turbopack)
+- Environments: .env.local
+- Cache Components enabled
+- Experiments (use with caution):
+  · optimizePackageImports
+  ✓ prefetchInlining
+  · sri
+  ✓ viewTransition
+
+  Creating an optimized production build ...
+[MDX] generated files in 15.16816700000004ms
+✓ Compiled successfully in 34.6s
+  Running TypeScript ...
+Failed to type check.
+
+./components/header.tsx:37:13
+Type error: Type '{ href: Route; onNavigate: ((e: MouseEvent<Element, MouseEvent>) => void) | undefined; text: string; }' is not assignable to type 'IntrinsicAttributes & { text: string; href: Route; ariaLabel?: string | undefined; }'.
+  Property 'onNavigate' does not exist on type 'IntrinsicAttributes & { text: string; href: Route; ariaLabel?: string | undefined; }'.
+
+  [90m35 |[0m           <[33mBacklink[0m
+  [90m36 |[0m             href={link.href}
+[31m[1m>[0m [90m37 |[0m             onNavigate={link.onNavigate}
+  [90m   |[0m             [31m[1m^[0m
+  [90m38 |[0m             text={link.text}
+  [90m39 |[0m           />
+  [90m40 |[0m         </div>
+Next.js build worker exited with code: 1 and signal: null
+ ELIFECYCLE  Command failed with exit code 1.

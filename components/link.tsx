@@ -6,10 +6,12 @@ export function Backlink({
   text = "plz input text props",
   href,
   ariaLabel,
+  onNavigate,
 }: {
   text: string;
   href: Route;
   ariaLabel?: string;
+  onNavigate?: (e: React.MouseEvent) => void;
 }) {
   const trimmedText = text.trim();
   const resolvedAriaLabel =
@@ -20,6 +22,7 @@ export function Backlink({
       aria-label={resolvedAriaLabel}
       className="animation:enter w-fit rounded-md px-0.5 text-gray-400 text-sm underline hover:bg-secondary/100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       href={href}
+      onClick={onNavigate}
     >
       <ArrowTopLeftIcon className="mr-0.5 mb-1 inline h-3 w-3" />
       {text}

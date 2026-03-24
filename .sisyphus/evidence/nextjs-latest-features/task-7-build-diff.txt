@@ -1,0 +1,124 @@
+6a7
+> - Cache Components enabled
+13d13
+< [MDX] generated files in 11.841999999999985ms
+15c15,16
+< ✓ Compiled successfully in 48s
+---
+> [MDX] generated files in 15.16816700000004ms
+> ✓ Compiled successfully in 34.6s
+17,24c18
+<   Finished TypeScript in 2.7s ...
+<   Collecting page data using 9 workers ...
+<   Generating static pages using 9 workers (0/212) ...
+<   Generating static pages using 9 workers (53/212) 
+<   Generating static pages using 9 workers (106/212) 
+<   Generating static pages using 9 workers (159/212) 
+< ✓ Generating static pages using 9 workers (212/212) in 1325ms
+<   Finalizing page optimization ...
+---
+> Failed to type check.
+26,87c20,22
+< Route (app)
+< ┌ ○ /
+< ├ ○ /_not-found
+< ├ ƒ /.well-known/vercel/flags
+< ├ ● /[locale]
+< │ ├ /en
+< │ ├ /ko
+< │ └ /ja
+< ├ ƒ /[locale]/[...rest]
+< ├ ● /[locale]/73e3da8fa7a397e7b1bc36efabb2cbb265524a75d7d5e6d1620b9e10e694257
+< │ ├ /en/73e3da8fa7a397e7b1bc36efabb2cbb265524a75d7d5e6d1620b9e10e694257
+< │ ├ /ko/73e3da8fa7a397e7b1bc36efabb2cbb265524a75d7d5e6d1620b9e10e694257
+< │ └ /ja/73e3da8fa7a397e7b1bc36efabb2cbb265524a75d7d5e6d1620b9e10e694257
+< ├ ● /[locale]/blog
+< │ ├ /en/blog
+< │ ├ /ko/blog
+< │ └ /ja/blog
+< ├ ● /[locale]/blog/[...slug]
+< │ ├ /en/blog/ai-sdk-playground-tutorial:friendli
+< │ ├ /en/blog/google-calendar-agent-1:friendli
+< │ ├ /en/blog/google-calendar-agent-2:friendli
+< │ └ [+165 more paths]
+< ├ ● /[locale]/blog/llms.md/[...slug]
+< ├ ƒ /[locale]/blog/rss.xml
+< ├ ● /[locale]/resume
+< │ ├ /en/resume
+< │ ├ /ko/resume
+< │ └ /ja/resume
+< ├ ƒ /[locale]/show
+< ├ ● /[locale]/show/dynamic-hacked-text
+< │ ├ /en/show/dynamic-hacked-text
+< │ ├ /ko/show/dynamic-hacked-text
+< │ └ /ja/show/dynamic-hacked-text
+< ├ ● /[locale]/show/model-card-artwork
+< │ ├ /en/show/model-card-artwork
+< │ ├ /ko/show/model-card-artwork
+< │ └ /ja/show/model-card-artwork
+< ├ ● /[locale]/show/new-year-clock
+< │ ├ /en/show/new-year-clock
+< │ ├ /ko/show/new-year-clock
+< │ └ /ja/show/new-year-clock
+< ├ ● /[locale]/show/tech-stack-ball
+< │ ├ /en/show/tech-stack-ball
+< │ ├ /ko/show/tech-stack-ball
+< │ └ /ja/show/tech-stack-ball
+< ├ ● /[locale]/show/unstructured
+< │ ├ /en/show/unstructured
+< │ ├ /ko/show/unstructured
+< │ └ /ja/show/unstructured
+< ├ ● /[locale]/show/unstructured-0828
+< │ ├ /en/show/unstructured-0828
+< │ ├ /ko/show/unstructured-0828
+< │ └ /ja/show/unstructured-0828
+< ├ ● /[locale]/show/yet-another-tempfiles
+< │ ├ /en/show/yet-another-tempfiles
+< │ ├ /ko/show/yet-another-tempfiles
+< │ └ /ja/show/yet-another-tempfiles
+< ├ ● /[locale]/typing
+< │ ├ /en/typing
+< │ ├ /ko/typing
+< │ └ /ja/typing
+< └ ƒ /api/search
+---
+> ./components/header.tsx:37:13
+> Type error: Type '{ href: Route; onNavigate: ((e: MouseEvent<Element, MouseEvent>) => void) | undefined; text: string; }' is not assignable to type 'IntrinsicAttributes & { text: string; href: Route; ariaLabel?: string | undefined; }'.
+>   Property 'onNavigate' does not exist on type 'IntrinsicAttributes & { text: string; href: Route; ariaLabel?: string | undefined; }'.
+89,114c24,32
+< 
+< ƒ Proxy (Middleware)
+< 
+< ○  (Static)   prerendered as static content
+< ●  (SSG)      prerendered as static HTML (uses generateStaticParams)
+< ƒ  (Dynamic)  server-rendered on demand
+< 
+< 
+< > minpeter.v2@0.0.0 postbuild /Users/minpeter/github.com/minpeter/minpeter.v2
+< > next-sitemap
+< 
+< ✨ [next-sitemap] Loading next-sitemap config: file:///Users/minpeter/github.com/minpeter/minpeter.v2/next-sitemap.config.js
+< ✅ [next-sitemap] Generation completed
+< ┌───────────────┬────────┐
+< │ (index)       │ Values │
+< ├───────────────┼────────┤
+< │ indexSitemaps │ 0      │
+< │ sitemaps      │ 1      │
+< └───────────────┴────────┘
+< -----------------------------------------------------
+<  SITEMAPS 
+< -----------------------------------------------------
+< 
+<    ○ https://minpeter.uk/sitemap.xml
+< 
+< 
+---
+>   [90m35 |[0m           <[33mBacklink[0m
+>   [90m36 |[0m             href={link.href}
+> [31m[1m>[0m [90m37 |[0m             onNavigate={link.onNavigate}
+>   [90m   |[0m             [31m[1m^[0m
+>   [90m38 |[0m             text={link.text}
+>   [90m39 |[0m           />
+>   [90m40 |[0m         </div>
+> Next.js build worker exited with code: 1 and signal: null
+>  ELIFECYCLE  Command failed with exit code 1.

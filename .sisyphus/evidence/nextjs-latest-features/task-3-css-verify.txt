@@ -1,0 +1,14 @@
+/Users/minpeter/github.com/minpeter/minpeter.v2/app/globals.css:::view-transition-old(root),
+/Users/minpeter/github.com/minpeter/minpeter.v2/app/globals.css:::view-transition-new(root) {
+/Users/minpeter/github.com/minpeter/minpeter.v2/app/globals.css:::view-transition-group(*) {
+/Users/minpeter/github.com/minpeter/minpeter.v2/app/globals.css:html:active-view-transition-type(slide-forward) {
+/Users/minpeter/github.com/minpeter/minpeter.v2/app/globals.css:  &::view-transition-old(root) {
+/Users/minpeter/github.com/minpeter/minpeter.v2/app/globals.css:  &::view-transition-new(root) {
+/Users/minpeter/github.com/minpeter/minpeter.v2/app/globals.css:html:active-view-transition-type(slide-back) {
+/Users/minpeter/github.com/minpeter/minpeter.v2/app/globals.css:  &::view-transition-old(root) {
+/Users/minpeter/github.com/minpeter/minpeter.v2/app/globals.css:  &::view-transition-new(root) {
+/Users/minpeter/github.com/minpeter/minpeter.v2/app/globals.css:@media (prefers-reduced-motion: reduce) {
+/Users/minpeter/github.com/minpeter/minpeter.v2/app/globals.css:  ::view-transition-old(*),
+/Users/minpeter/github.com/minpeter/minpeter.v2/app/globals.css:  ::view-transition-new(*) {
+/Users/minpeter/github.com/minpeter/minpeter.v2/app/globals.css:  ::view-transition-group(*) {
+/Users/minpeter/github.com/minpeter/minpeter.v2/next.config.ts:    viewTransition: true,

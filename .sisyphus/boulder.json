@@ -3,7 +3,14 @@
   "started_at": "2026-03-24T09:55:45.813Z",
   "session_ids": [
     "ses_2e105cc5fffej8YNOUR6w6Fcib",
-    "ses_2e0b7b61cffeQgbpylUFcfta9L"
+    "ses_2e0b7b61cffeQgbpylUFcfta9L",
+    "ses_2e0b453bdffepg32v1tX1b5dCJ",
+    "ses_2e0b3ebebffesFX94frL26r7XE",
+    "ses_2e0ae144fffeWHLG1uEDvMNJvC",
+    "ses_2e0ae4000ffegX6ESK3dqg87GB",
+    "ses_2e0aedf51ffeo4W2efOaODrPwI",
+    "ses_2e0af4347ffeofIUfUlhVhQcnb",
+    "ses_2e09d01b4ffepOb5bpKYcCTnZT"
   ],
   "plan_name": "nextjs-latest-features",
   "agent": "atlas"

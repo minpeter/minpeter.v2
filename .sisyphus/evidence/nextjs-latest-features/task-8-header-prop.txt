@@ -1,0 +1,5 @@
+/Users/minpeter/github.com/minpeter/minpeter.v2/components/header.tsx:    onNavigate?: (e: React.MouseEvent) => void;
+/Users/minpeter/github.com/minpeter/minpeter.v2/components/header.tsx:            onNavigate={link.onNavigate}
+/Users/minpeter/github.com/minpeter/minpeter.v2/components/link.tsx:  onNavigate,
+/Users/minpeter/github.com/minpeter/minpeter.v2/components/link.tsx:  onNavigate?: (e: React.MouseEvent) => void;
+/Users/minpeter/github.com/minpeter/minpeter.v2/components/link.tsx:      onClick={onNavigate}
