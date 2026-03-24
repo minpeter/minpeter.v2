@@ -647,7 +647,7 @@ Wave FINAL (After ALL tasks — 4 parallel reviews, then user okay):
   - Files: `package.json`, `pnpm-lock.yaml`
   - Pre-commit: `pnpm check:types && pnpm check:biome && pnpm test && pnpm build`
 
-- [ ] 9. Sugar-high 1.0.0 Upgrade (TDD — verify snapshot)
+- [x] 9. Sugar-high 1.0.0 Upgrade (TDD — verify snapshot)
 
   **What to do**:
   - Run `pnpm add sugar-high@1.0.0`
@@ -700,7 +700,7 @@ Wave FINAL (After ALL tasks — 4 parallel reviews, then user okay):
   - Files: `package.json`, `pnpm-lock.yaml`, possibly `components/code-block.test.ts` (snapshot update)
   - Pre-commit: `pnpm check:types && pnpm check:biome && pnpm test && pnpm build`
 
-- [ ] 10. Lucide-react 1.0.1 Upgrade + Icon Audit
+- [x] 10. Lucide-react 1.0.1 Upgrade + Icon Audit
 
   **What to do**:
   - BEFORE upgrading: Audit all lucide-react imports across the codebase
@@ -770,7 +770,7 @@ Wave FINAL (After ALL tasks — 4 parallel reviews, then user okay):
   - Files: `package.json`, `pnpm-lock.yaml`
   - Pre-commit: `pnpm check:types && pnpm check:biome && pnpm test && pnpm build`
 
-- [ ] 11. @vercel/analytics 2.0.1 + @vercel/speed-insights 2.0.0
+- [x] 11. @vercel/analytics 2.0.1 + @vercel/speed-insights 2.0.0
 
   **What to do**:
   - Run `pnpm add @vercel/analytics@2.0.1 @vercel/speed-insights@2.0.0`
@@ -822,7 +822,7 @@ Wave FINAL (After ALL tasks — 4 parallel reviews, then user okay):
   - Files: `package.json`, `pnpm-lock.yaml`
   - Pre-commit: `pnpm check:types && pnpm check:biome && pnpm test && pnpm build`
 
-- [ ] 12. Fumadocs Atomic Upgrade — core 16.7.5, ui 16.7.5, mdx 14.2.11, docgen 3.0.8
+- [x] 12. Fumadocs Atomic Upgrade — core 16.7.5, ui 16.7.5, mdx 14.2.11, docgen 3.0.8
 
   **What to do**:
   - This is the HIGHEST RISK upgrade. All 4 fumadocs packages must be upgraded together.
@@ -918,7 +918,7 @@ Wave FINAL (After ALL tasks — 4 parallel reviews, then user okay):
   - Files: `package.json`, `pnpm-lock.yaml`, possibly `app/[locale]/blog/list.tsx` (if search API changed), possibly `app/api/search/route.ts`
   - Pre-commit: `pnpm check:types && pnpm check:biome && pnpm test && pnpm build`
 
-- [ ] 13. Knip 6.0.4 Upgrade
+- [x] 13. Knip 6.0.4 Upgrade
 
   **What to do**:
   - Run `pnpm add -D knip@6.0.4`
