@@ -1038,7 +1038,7 @@ Wave FINAL (After ALL tasks — 4 parallel reviews, then user okay):
   - Files: `next.config.ts`
   - Pre-commit: `pnpm check:types && pnpm check:biome && pnpm test && pnpm build`
 
-- [ ] 15. Remove Dead Code — search.tsx + Fix @ts-ignore in Blog Slug Page
+- [x] 15. Remove Dead Code — search.tsx + Fix @ts-ignore in Blog Slug Page
 
   **What to do**:
   - Delete `app/[locale]/blog/search.tsx` — entirely commented out, exports nothing (`export {};`)
@@ -1153,7 +1153,7 @@ Wave FINAL (After ALL tasks — 4 parallel reviews, then user okay):
   - Files: `shared/env.ts`
   - Pre-commit: `pnpm check:types && pnpm check:biome && pnpm test && pnpm build`
 
-- [ ] 17. useEffectEvent Refactor in useHoverDropdown
+- [x] 17. useEffectEvent Refactor in useHoverDropdown
 
   **What to do**:
   - Refactor `shared/hooks/use-hover-dropdown.ts` to use React 19.2's `useEffectEvent`
