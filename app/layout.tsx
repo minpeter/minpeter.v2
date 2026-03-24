@@ -6,6 +6,7 @@ import { NextProvider } from "fumadocs-core/framework/next";
 import type { Viewport } from "next";
 import { Geist_Mono, Shippori_Mincho } from "next/font/google";
 import { NuqsAdapter } from "nuqs/adapters/next";
+import { Suspense } from "react";
 
 import Footer from "@/components/footer";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -68,26 +69,28 @@ export default function RootLayout({
             disableTransitionOnChange
             enableSystem
           >
-            <NuqsAdapter>
-              <main
-                className={cn(
-                  "font-sans",
-                  "relative mx-auto min-h-screen w-full max-w-3xl px-4 py-8"
-                )}
-              >
-                <div
+            <Suspense>
+              <NuqsAdapter>
+                <main
                   className={cn(
-                    styles.scroll_responsive_header,
-                    "pointer-events-none fixed inset-x-0 top-0 z-10 h-40"
+                    "font-sans",
+                    "relative mx-auto min-h-screen w-full max-w-3xl px-4 py-8"
                   )}
-                />
+                >
+                  <div
+                    className={cn(
+                      styles.scroll_responsive_header,
+                      "pointer-events-none fixed inset-x-0 top-0 z-10 h-40"
+                    )}
+                  />
 
-                {children}
-                {shouldInjectToolbar ? <VercelToolbar /> : null}
-              </main>
+                  {children}
+                  {shouldInjectToolbar ? <VercelToolbar /> : null}
+                </main>
 
-              <Footer />
-            </NuqsAdapter>
+                <Footer />
+              </NuqsAdapter>
+            </Suspense>
           </ThemeProvider>
         </NextProvider>
       </body>
