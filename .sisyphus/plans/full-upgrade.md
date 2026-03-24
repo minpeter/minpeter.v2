@@ -1211,7 +1211,7 @@ Wave FINAL (After ALL tasks — 4 parallel reviews, then user okay):
   - Files: `shared/hooks/use-hover-dropdown.ts`
   - Pre-commit: `pnpm check:types && pnpm check:biome && pnpm test && pnpm build`
 
-- [ ] 18. TypeScript 6.0.2 Upgrade + tsconfig Migration
+- [x] 18. TypeScript 6.0.2 Upgrade + tsconfig Migration
 
   **What to do**:
   - This is the FINAL upgrade, done after everything else is stable
