@@ -1,10 +1,11 @@
 export async function register() {
+  await Promise.resolve();
   console.info("[instrumentation] Server initialized");
 }
 
-export async function onRequestError(
+export function onRequestError(
   err: Error,
-  request: Request,
+  _request: Request,
   context: { routerKind: string; routePath: string; routeType: string }
 ) {
   console.error("[instrumentation] Request error:", {

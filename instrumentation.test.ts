@@ -11,7 +11,9 @@ describe("instrumentation", () => {
   });
 
   it("register logs initialization message", async () => {
-    const consoleSpy = vi.spyOn(console, "info").mockImplementation(() => {});
+    const consoleSpy = vi
+      .spyOn(console, "info")
+      .mockImplementation(() => undefined);
     await register();
     expect(consoleSpy).toHaveBeenCalledWith(
       "[instrumentation] Server initialized"
@@ -24,7 +26,9 @@ describe("instrumentation", () => {
   });
 
   it("onRequestError logs error info with context", async () => {
-    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+    const consoleSpy = vi
+      .spyOn(console, "error")
+      .mockImplementation(() => undefined);
     const mockErr = new Error("Test error");
     const mockRequest = new Request("http://localhost/blog");
     const mockContext = {

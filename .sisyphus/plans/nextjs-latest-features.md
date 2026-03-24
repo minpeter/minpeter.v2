@@ -912,7 +912,7 @@ Wave FINAL (After ALL tasks — 4 parallel reviews, then user okay):
   - Files: `app/[locale]/layout.tsx`
   - Pre-commit: `pnpm build`
 
-- [ ] 10. View Transitions Shared Element (블로그 제목 모핑)
+- [x] 10. View Transitions Shared Element (블로그 제목 모핑)
 
   **What to do**:
   - 블로그 목록 페이지(`app/[locale]/blog/list.tsx`)에서:

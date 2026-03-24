@@ -2,6 +2,7 @@
 
 import { friendli } from "@friendliai/ai-provider";
 import { generateText } from "ai";
+import { after } from "next/server";
 
 const koreanConfig = {
   model: friendli("meta-llama-3.1-8b-instruct"),
@@ -40,11 +41,13 @@ export async function nextSentencesGenerator(locale: "ko" | "en") {
     ...(locale === "ko" ? koreanConfig : englishConfig),
   });
 
-  const duration = Date.now() - startTime;
-  console.info("[typing-action]", {
-    locale,
-    duration,
-    timestamp: new Date().toISOString(),
+  after(() => {
+    const duration = Date.now() - startTime;
+    console.info("[typing-action]", {
+      locale,
+      duration,
+      timestamp: new Date().toISOString(),
+    });
   });
 
   return text;
