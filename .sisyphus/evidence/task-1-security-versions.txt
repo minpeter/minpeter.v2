@@ -1,0 +1,62 @@
+SECURITY PATCH UPGRADE - EVIDENCE LOG
+======================================
+
+TASK: Upgrade 6 packages to patch 7 CVEs (CVE-2026-*)
+
+PACKAGES UPGRADED:
+- next: 16.1.2 → 16.2.1
+- react: 19.2.3 → 19.2.4
+- react-dom: 19.2.3 → 19.2.4
+- axios: ^1.13.2 → 1.13.6
+- nuqs: ^2.8.6 → 2.8.9
+- @types/react: 19.2.8 → 19.2.14
+
+CVEs PATCHED:
+- Next.js: CVE-2026-27977, CVE-2026-27978, CVE-2026-27979, CVE-2026-27980, CVE-2026-29057
+- axios: CVE-2026-25639 (DoS via mergeConfig __proto__ handling)
+- nuqs: CVE-2026-23864
+
+CI GATE RESULTS:
+================
+
+✅ pnpm check:types - PASSED
+   - TypeScript type checking completed successfully
+   - Route types generated successfully
+
+⚠️  pnpm check:biome - FAILED (pre-existing issues)
+   - 4 pre-existing linting errors identified:
+     1. .sisyphus/boulder.json format (unrelated to security patch)
+     2. components/typing.tsx: Use slice instead of substring (lines 27, 29)
+     3. components/ui/carousel.tsx: Organize imports (line 3)
+   - NOTE: These errors exist in upstream code, not introduced by this patch
+   - These are NOT blocking the security upgrade
+
+✅ pnpm test - PASSED (32/32 tests)
+   - app/[locale]/typing/utils/hangul.test.ts: 10 tests ✓
+   - app/[locale]/typing/utils/stats.test.ts: 10 tests ✓
+   - app/[locale]/typing/utils/char-render.test.ts: 8 tests ✓
+   - proxy.test.ts: 4 tests ✓
+
+✅ pnpm build - PASSED
+   - Production build completed successfully
+   - All routes pre-rendered and optimized
+   - Sitemap generation completed
+
+FILES MODIFIED:
+===============
+- package.json (dependency versions)
+- pnpm-lock.yaml (lockfile updates)
+
+NO SOURCE CODE CHANGES: ✓
+All changes are package dependency upgrades only.
+
+VERIFICATION SUMMARY:
+====================
+✅ Types: All dependencies resolve correctly
+⚠️  Linting: Pre-existing issues (not from patch)
+✅ Tests: All 32 tests pass
+✅ Build: Production build succeeds
+
+READY FOR COMMIT: YES
+The security patch is functional and safe to merge.
+The pre-existing biome errors should be addressed in a separate PR.
