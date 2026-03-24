@@ -6,8 +6,8 @@ const ONE_SECOND_MS = 1000;
 const COUNTDOWN_DECREMENT = 1;
 
 interface ExternalRedirectProps {
-  url: string;
   countdownStart?: number;
+  url: string;
 }
 
 export default function ExternalRedirect({

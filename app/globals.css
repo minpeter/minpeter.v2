@@ -85,9 +85,8 @@
 
   /* Handle */
   ::-webkit-scrollbar-thumb {
-    @apply rounded;
-
     background: var(--scroll-bar-color);
+    @apply rounded;
   }
 
   ::selection {

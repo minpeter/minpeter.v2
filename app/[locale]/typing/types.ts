@@ -1,40 +1,40 @@
 export interface CharRenderParams {
   char: string;
-  index: number;
-  userInput: string;
-  isComposing: boolean;
   composingText: string;
   currentSentenceIndex: number;
+  index: number;
+  isComposing: boolean;
+  userInput: string;
 }
 
 export interface CharRenderState {
-  key: string;
-  display: string;
   className: string;
+  display: string;
+  key: string;
 }
 
 export interface DisplayCharOptions {
   baseChar: string;
-  typedChar: string;
-  isTyped: boolean;
+  composingText: string;
   isComposingHere: boolean;
   isSpace: boolean;
-  isWrongSpace: boolean;
+  isTyped: boolean;
   isTypedSpace: boolean;
-  composingText: string;
+  isWrongSpace: boolean;
+  typedChar: string;
 }
 
 export interface TypingStats {
-  wpm: number;
   accuracy: number;
-  lastWpm: number;
   lastAccuracy: number;
+  lastWpm: number;
+  wpm: number;
 }
 
 export interface TypingInputState {
-  userInput: string;
-  isComposing: boolean;
   composingText: string;
   isAllSelected: boolean;
+  isComposing: boolean;
   isTransitioning: boolean;
+  userInput: string;
 }

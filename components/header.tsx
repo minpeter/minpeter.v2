@@ -10,13 +10,13 @@ import { LanguageSelector } from "./language-selector";
 import { Backlink } from "./link";
 
 interface HeaderProps {
-  title?: string;
   description?: string;
   link?: {
     href: Route;
     text: string;
   };
   rightContent?: ReactNode;
+  title?: string;
 }
 
 export default function Header({

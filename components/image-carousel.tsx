@@ -12,10 +12,10 @@ import {
 import { cn } from "@/shared/utils/tailwind";
 
 interface ImageCarouselProps {
-  images: string[];
   alt?: string;
   className?: string;
   height?: number;
+  images: string[];
 }
 
 export function ImageCarousel({

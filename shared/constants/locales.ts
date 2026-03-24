@@ -3,8 +3,8 @@ import type { routing } from "@/shared/i18n/routing";
 export type LocaleCode = (typeof routing.locales)[number];
 
 export interface LocaleLabel {
-  short: string;
   native: string;
+  short: string;
 }
 
 export const LOCALE_LABELS: Record<LocaleCode, LocaleLabel> = {

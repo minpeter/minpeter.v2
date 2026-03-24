@@ -4,22 +4,22 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { isPointInTriangle } from "@/shared/utils/geometry";
 
 interface UseHoverDropdownOptions {
-  openDelay?: number;
   closeDelay?: number;
+  openDelay?: number;
   safeTrianglePadding?: number;
 }
 
 interface UseHoverDropdownReturn {
-  isOpen: boolean;
-  setIsOpen: (open: boolean) => void;
-  isTouchDevice: boolean;
-  triggerRef: React.RefObject<HTMLButtonElement | null>;
   contentRef: React.RefObject<HTMLDivElement | null>;
-  handleMouseEnter: () => void;
-  handleMouseLeave: () => void;
   handleContentMouseEnter: () => void;
   handleContentMouseLeave: () => void;
+  handleMouseEnter: () => void;
+  handleMouseLeave: () => void;
   handleOpenChange: (open: boolean) => void;
+  isOpen: boolean;
+  isTouchDevice: boolean;
+  setIsOpen: (open: boolean) => void;
+  triggerRef: React.RefObject<HTMLButtonElement | null>;
 }
 
 export function useHoverDropdown(

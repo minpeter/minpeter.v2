@@ -24,9 +24,9 @@ export default function Typing({
   useEffect(() => {
     const timeout = setTimeout(() => {
       if (isDeleting) {
-        setText((dynamic[count] + postfix).substring(0, text.length - 1));
+        setText((dynamic[count] + postfix).slice(0, text.length - 1));
       } else {
-        setText((dynamic[count] + postfix).substring(0, text.length + 1));
+        setText((dynamic[count] + postfix).slice(0, text.length + 1));
       }
 
       if (!isDeleting && text === dynamic[count] + postfix) {

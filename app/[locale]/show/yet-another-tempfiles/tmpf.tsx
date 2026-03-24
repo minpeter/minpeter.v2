@@ -51,10 +51,10 @@ export async function downloadFile(folderId: string, fileName: string) {
 }
 
 interface UploadResponse {
-  folderId: string;
   files: Array<{
     fileName: string;
   }>;
+  folderId: string;
 }
 
 export async function uploadFile(file: File[]): Promise<UploadResponse | null> {

@@ -37,13 +37,13 @@ export type blogListType = ReturnType<typeof blog.getPages>;
 export type blogType = ReturnType<typeof blog.getPage>;
 
 export interface postMetadataType {
-  url: string;
-  title: string;
   draft: boolean;
-  published: Date;
   drafted?: Date;
   external_url?: string;
   lang: string[];
+  published: Date;
+  title: string;
+  url: string;
 }
 
 export function getPostMetadata(post: blogType): postMetadataType {
