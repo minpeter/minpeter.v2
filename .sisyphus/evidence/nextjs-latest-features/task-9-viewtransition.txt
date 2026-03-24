@@ -1,0 +1,2 @@
+import { ViewTransition } from "react";
+      <ViewTransition>{children}</ViewTransition>

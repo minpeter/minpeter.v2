@@ -8,7 +8,14 @@ import type { Route } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
-import type { ComponentProps, ReactNode } from "react";
+import type { ComponentProps, FC, ReactNode } from "react";
+import { ViewTransition as _ViewTransition } from "react";
+
+const ViewTransition = _ViewTransition as unknown as FC<{
+  name: string;
+  children?: ReactNode;
+}>;
+
 import { isValidElement } from "react";
 import ExternalRedirect from "@/components/external-redirect";
 import Header from "@/components/header";
@@ -118,6 +125,7 @@ export default async function Page(
         }
         link={{ href: `/${locale}/blog` as Route, text: t("backToBlog") }}
         title={post.data.title}
+        titleTransitionName={`blog-title-${post.url.replace(/\//g, "-")}`}
       />
 
       {post.data.machine_translated && (
@@ -211,9 +219,11 @@ export default async function Page(
 
           <div className="flex gap-2">
             <span>{t("publishedDate")}:</span>
-            <time dateTime={new Date(post.data.published).toISOString()}>
-              {formatDateLong(post.data.published)}
-            </time>
+            <ViewTransition name={`blog-date-${post.url.replace(/\//g, "-")}`}>
+              <time dateTime={new Date(post.data.published).toISOString()}>
+                {formatDateLong(post.data.published)}
+              </time>
+            </ViewTransition>
           </div>
 
           {post.data.lastModified ? <span aria-hidden="true">•</span> : null}
@@ -245,6 +255,7 @@ export default async function Page(
               href={
                 `${postsIndex[post.slugs.join("/")].previous?.url}` as Route
               }
+              transitionTypes={["slide-back"]}
             >
               ← {postsIndex[post.slugs.join("/")].previous?.data.title}
             </NavLink>
@@ -256,6 +267,7 @@ export default async function Page(
             <NavLink
               className="max-w-[45%] truncate rounded-md px-2 py-1 text-primary hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               href={`${postsIndex[post.slugs.join("/")].next?.url}` as Route}
+              transitionTypes={["slide-forward"]}
             >
               {postsIndex[post.slugs.join("/")].next?.data.title} →
             </NavLink>

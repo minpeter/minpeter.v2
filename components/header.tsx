@@ -1,7 +1,13 @@
 "use client";
 
 import type { Route } from "next";
-import type { ReactNode } from "react";
+import type { FC, ReactNode } from "react";
+import { ViewTransition as _ViewTransition } from "react";
+
+const ViewTransition = _ViewTransition as unknown as FC<{
+  name: string;
+  children?: ReactNode;
+}>;
 
 import styles from "@/shared/styles/stagger-fade-in.module.css";
 import { cn } from "@/shared/utils/tailwind";
@@ -18,10 +24,12 @@ interface HeaderProps {
   };
   rightContent?: ReactNode;
   title?: string;
+  titleTransitionName?: string;
 }
 
 export default function Header({
   title,
+  titleTransitionName,
   description,
   link,
   rightContent,
@@ -43,7 +51,13 @@ export default function Header({
       )}
       <div className="flex flex-row justify-between">
         <h1 className="flex flex-wrap items-center break-all text-bold">
-          {title || "minpeter"}
+          {titleTransitionName ? (
+            <ViewTransition name={titleTransitionName}>
+              {title || "minpeter"}
+            </ViewTransition>
+          ) : (
+            title || "minpeter"
+          )}
         </h1>
 
         <div className="flex items-center gap-1 text-gray-500">

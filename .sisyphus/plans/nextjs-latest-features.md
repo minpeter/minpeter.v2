@@ -669,7 +669,7 @@ Wave FINAL (After ALL tasks — 4 parallel reviews, then user okay):
   - Files: `app/api/search/route.ts`, `app/[locale]/typing/action.ts`, `app/[locale]/blog/rss.xml/route.ts`, test files
   - Pre-commit: `pnpm test`
 
-- [ ] 7. cacheComponents: true 활성화 + 빌드 검증
+- [x] 7. cacheComponents: true 활성화 + 빌드 검증
 
   **What to do**:
   - **사전 작업**: `pnpm build 2>&1` 출력을 파일로 저장 (before 스냅샷)
@@ -750,7 +750,7 @@ Wave FINAL (After ALL tasks — 4 parallel reviews, then user okay):
   - Files: `next.config.ts`
   - Pre-commit: `pnpm build && pnpm test`
 
-- [ ] 8. Navigation Hooks (onNavigate + useLinkStatus) + 테스트
+- [x] 8. Navigation Hooks (onNavigate + useLinkStatus) + 테스트
 
   **What to do**:
   - TDD: Navigation Hook 동작 테스트 (jsdom 환경)
@@ -836,7 +836,7 @@ Wave FINAL (After ALL tasks — 4 parallel reviews, then user okay):
   - Files: `components/header.tsx`, `app/[locale]/typing/page.tsx`, `app/[locale]/blog/[...slug]/page.tsx`, test files
   - Pre-commit: `pnpm test`
 
-- [ ] 9. View Transitions 기본 crossfade (layout ViewTransition 래핑)
+- [x] 9. View Transitions 기본 crossfade (layout ViewTransition 래핑)
 
   **What to do**:
   - `app/[locale]/layout.tsx`에 `<ViewTransition>` 래핑 추가

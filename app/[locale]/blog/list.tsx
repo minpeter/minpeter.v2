@@ -7,7 +7,19 @@ import type { Route } from "next";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { debounce, parseAsString, useQueryState } from "nuqs";
-import { useDeferredValue, useEffect, useMemo, useTransition } from "react";
+import type { FC, ReactNode } from "react";
+import {
+  ViewTransition as _ViewTransition,
+  useDeferredValue,
+  useEffect,
+  useMemo,
+  useTransition,
+} from "react";
+
+const ViewTransition = _ViewTransition as unknown as FC<{
+  name: string;
+  children?: ReactNode;
+}>;
 
 import { Badge } from "@/components/ui/badge";
 import type { postMetadataType } from "@/shared/source";
@@ -234,14 +246,18 @@ export function BlogListFallback({ posts }: { posts: postMetadataType[] }) {
                           )}
                           href={post.url as Route}
                         >
-                          <span
-                            className={cn(
-                              "line-clamp-2 inline box-decoration-clone px-1 py-1",
-                              itemSytles
-                            )}
+                          <ViewTransition
+                            name={`blog-title-${post.url.replace(/\//g, "-")}`}
                           >
-                            {post.title}
-                          </span>
+                            <span
+                              className={cn(
+                                "line-clamp-2 inline box-decoration-clone px-1 py-1",
+                                itemSytles
+                              )}
+                            >
+                              {post.title}
+                            </span>
+                          </ViewTransition>
                         </Link>
                       )}
 
@@ -250,9 +266,13 @@ export function BlogListFallback({ posts }: { posts: postMetadataType[] }) {
                           {t("draft")}
                         </Badge>
                       ) : (
-                        <div className={cn(itemSytles, "h-fit text-nowrap")}>
-                          {formatDate(post.published)}
-                        </div>
+                        <ViewTransition
+                          name={`blog-date-${post.url.replace(/\//g, "-")}`}
+                        >
+                          <div className={cn(itemSytles, "h-fit text-nowrap")}>
+                            {formatDate(post.published)}
+                          </div>
+                        </ViewTransition>
                       )}
                     </li>
                   ))}
