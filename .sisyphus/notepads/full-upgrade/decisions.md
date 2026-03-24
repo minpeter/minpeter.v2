@@ -1,0 +1,2 @@
+- 2026-03-24: Kept existing blog search client invocation unchanged because the current fetch-mode API remains valid on fumadocs-core 16.7.5 and passed type checks/tests.
+- 2026-03-24: Applied a narrow type-bridge cast for MDX `img` props to `ComponentProps<typeof ImageZoom>` instead of broader markdown/renderer refactors to keep upgrade scope minimal.

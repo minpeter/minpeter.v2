@@ -1,0 +1,1 @@
+- 2026-03-24: High-risk dependency upgrades introduced indirect type-surface changes outside the explicitly targeted search code path; verification had to include full type/build gates before considering migration complete.
