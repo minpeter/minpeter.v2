@@ -1,6 +1,12 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useEffectEvent,
+  useRef,
+  useState,
+} from "react";
 import { isPointInTriangle } from "@/shared/utils/geometry";
 
 interface UseHoverDropdownOptions {
@@ -89,7 +95,7 @@ export function useHoverDropdown(
   }, []);
 
   // Check if mouse is in safe triangle zone
-  const isInSafeTriangle = useCallback(() => {
+  const isInSafeTriangle = useEffectEvent(() => {
     if (!(triggerRef.current && contentRef.current)) {
       return false;
     }
@@ -109,7 +115,7 @@ export function useHoverDropdown(
     const c2y = contentRect.top;
 
     return isPointInTriangle(mx, my, tx, ty, c1x, c1y, c2x, c2y);
-  }, [safeTrianglePadding]);
+  });
 
   // Handle mouse movement for safe triangle
   useEffect(() => {
@@ -136,7 +142,7 @@ export function useHoverDropdown(
 
     document.addEventListener("mousemove", handleMouseMove);
     return () => document.removeEventListener("mousemove", handleMouseMove);
-  }, [isOpen, isTouchDevice, isInSafeTriangle]);
+  }, [isOpen, isTouchDevice]);
 
   const handleMouseEnter = useCallback(() => {
     if (isTouchDevice) {
