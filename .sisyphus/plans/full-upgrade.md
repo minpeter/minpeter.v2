@@ -379,7 +379,7 @@ Wave FINAL (After ALL tasks — 4 parallel reviews, then user okay):
   - Files: `app/api/search/route.test.ts`
   - Pre-commit: `pnpm test`
 
-- [ ] 4. Tailwind Ecosystem Upgrade — tailwindcss 4.2.2, @tailwindcss/postcss 4.2.2, tailwind-merge 3.5.0
+- [x] 4. Tailwind Ecosystem Upgrade — tailwindcss 4.2.2, @tailwindcss/postcss 4.2.2, tailwind-merge 3.5.0
 
   **What to do**:
   - Run `pnpm add -D tailwindcss@4.2.2 @tailwindcss/postcss@4.2.2 tailwind-merge@3.5.0`
@@ -429,7 +429,7 @@ Wave FINAL (After ALL tasks — 4 parallel reviews, then user okay):
   - Files: `package.json`, `pnpm-lock.yaml`
   - Pre-commit: `pnpm check:types && pnpm check:biome && pnpm test && pnpm build`
 
-- [ ] 5. Dev Tools Upgrade — vitest 4.1.1, @vitest/ui 4.1.1, biome 2.4.8, ultracite 7.3.2
+- [x] 5. Dev Tools Upgrade — vitest 4.1.1, @vitest/ui 4.1.1, biome 2.4.8, ultracite 7.3.2
 
   **What to do**:
   - First check ultracite 7.3.2 + biome 2.4.8 compatibility: `pnpm add -D ultracite@7.3.2` then verify
@@ -493,7 +493,7 @@ Wave FINAL (After ALL tasks — 4 parallel reviews, then user okay):
   - Files: `package.json`, `pnpm-lock.yaml`
   - Pre-commit: `pnpm check:types && pnpm check:biome && pnpm test && pnpm build`
 
-- [ ] 6. AI/Vercel Ecosystem Upgrade — ai 6.0.137, @friendliai/ai-provider 1.1.8, @vercel/toolbar 0.2.2, flags 4.0.5
+- [x] 6. AI/Vercel Ecosystem Upgrade — ai 6.0.137, @friendliai/ai-provider 1.1.8, @vercel/toolbar 0.2.2, flags 4.0.5
 
   **What to do**:
   - Run `pnpm add ai@6.0.137 @friendliai/ai-provider@1.1.8 @vercel/toolbar@0.2.2 flags@4.0.5`
@@ -547,7 +547,7 @@ Wave FINAL (After ALL tasks — 4 parallel reviews, then user okay):
   - Files: `package.json`, `pnpm-lock.yaml`
   - Pre-commit: `pnpm check:types && pnpm check:biome && pnpm test && pnpm build`
 
-- [ ] 7. Misc Safe Upgrades — next-intl 4.8.3, three 0.183.2, @types/three, zod 4.3.6, @t3-oss/env-nextjs 0.13.11, vite-tsconfig-paths 6.1.1
+- [x] 7. Misc Safe Upgrades — next-intl 4.8.3, three 0.183.2, @types/three, zod 4.3.6, @t3-oss/env-nextjs 0.13.11, vite-tsconfig-paths 6.1.1
 
   **What to do**:
   - Run `pnpm add next-intl@4.8.3 three@0.183.2 zod@4.3.6 @t3-oss/env-nextjs@0.13.11`
@@ -600,7 +600,7 @@ Wave FINAL (After ALL tasks — 4 parallel reviews, then user okay):
   - Files: `package.json`, `pnpm-lock.yaml`
   - Pre-commit: `pnpm check:types && pnpm check:biome && pnpm test && pnpm build`
 
-- [ ] 8. @next/* Packages Upgrade — @next/third-parties 16.2.1, @next/bundle-analyzer 16.2.1
+- [x] 8. @next/* Packages Upgrade — @next/third-parties 16.2.1, @next/bundle-analyzer 16.2.1
 
   **What to do**:
   - Run `pnpm add @next/third-parties@16.2.1 && pnpm add -D @next/bundle-analyzer@16.2.1`
