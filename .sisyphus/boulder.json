@@ -1,22 +1,10 @@
 {
-  "active_plan": "/Users/minpeter/github.com/minpeter/minpeter.v2/.sisyphus/plans/full-upgrade.md",
-  "started_at": "2026-03-24T07:06:27.391Z",
+  "active_plan": "/Users/minpeter/github.com/minpeter/minpeter.v2/.sisyphus/plans/nextjs-latest-features.md",
+  "started_at": "2026-03-24T09:55:45.813Z",
   "session_ids": [
-    "ses_2e17fdf53ffelda2g6ohreRxSU",
-    "ses_2e153cce9ffemGxMrl7rZMt380",
-    "ses_2e150decaffeBqbyos5uI5C2SZ",
-    "ses_2e150a216ffeGWJfdcMz4z3aNW",
-    "ses_2e14de0e0ffeliGX6cYMBeYUtL",
-    "ses_2e14585e4ffeAACNzgPHg5xkb3",
-    "ses_2e13f44cdffezJnwgFYzkpMGTs",
-    "ses_2e13d3779ffeqmXh50k7I2tiDx",
-    "ses_2e139e6efffe1Rxik4MS3bAtuQ",
-    "ses_2e13a3339ffeQKykN7VLoHU937",
-    "ses_2e132f94fffef12cPfNykw35j4",
-    "ses_2e12a971fffeMSI1t4dp68jzdu",
-    "ses_2e12a6abfffehnihX9USJyvVfm",
-    "ses_2e12a0cbeffeOmNiVYPfH6DnHE"
+    "ses_2e105cc5fffej8YNOUR6w6Fcib",
+    "ses_2e0b7b61cffeQgbpylUFcfta9L"
   ],
-  "plan_name": "full-upgrade",
+  "plan_name": "nextjs-latest-features",
   "agent": "atlas"
 }

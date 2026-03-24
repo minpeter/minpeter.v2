@@ -1,0 +1,7 @@
+Legend: production dependency, optional only, dev only
+
+minpeter.v2@0.0.0 /Users/minpeter/github.com/minpeter/minpeter.v2 (PRIVATE)
+
+devDependencies:
+@testing-library/react 16.3.2
+jsdom 29.0.1
