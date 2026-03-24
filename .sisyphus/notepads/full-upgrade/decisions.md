@@ -1,2 +1,4 @@
 - 2026-03-24: Kept existing blog search client invocation unchanged because the current fetch-mode API remains valid on fumadocs-core 16.7.5 and passed type checks/tests.
 - 2026-03-24: Applied a narrow type-bridge cast for MDX `img` props to `ComponentProps<typeof ImageZoom>` instead of broader markdown/renderer refactors to keep upgrade scope minimal.
+- 2026-03-24: Kept TypeScript at 6.0.2 (no escape hatch), because `pnpm check:types` succeeded and no third-party declaration breakages surfaced under current config.
+- 2026-03-24: Kept `moduleResolution: "bundler"` and only migrated `target` from ES2017 to ES2022 in `tsconfig.json` per TS 6 migration requirements.

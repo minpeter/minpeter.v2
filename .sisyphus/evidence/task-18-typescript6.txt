@@ -1,0 +1,52 @@
+Task: 18 - TypeScript 6.0.2 upgrade + tsconfig migration
+Date: 2026-03-24
+
+1) Dependency upgrade
+- Command: `pnpm add -D typescript@6.0.2`
+- Result: success
+- package.json changed: `typescript` from `^5.9.3` to `6.0.2`
+- Note: pnpm reported peer-range warnings:
+  - `next-intl@4.8.3` expects `typescript@^5.0.0`
+  - `vite-tsconfig-paths@6.1.1` via `tsconfck@3.1.6` expects `typescript@^5.0.0`
+
+2) tsconfig migration
+- File: `tsconfig.json`
+- Change: `compilerOptions.target` from `ES2017` -> `ES2022`
+- Preserved:
+  - `strict: true`
+  - `moduleResolution: "bundler"`
+  - `skipLibCheck: true`
+
+3) Type check decision (escape hatch evaluation)
+- Command: `pnpm check:types`
+- Result: PASS (zero TypeScript errors)
+- Categorization:
+  - Our code errors: none
+  - Third-party type errors: none
+- Decision: Keep TypeScript 6.0.2 (escape hatch NOT triggered)
+
+4) Full CI gate
+- Command: `pnpm check:types && pnpm check:biome && pnpm test && pnpm build`
+- Result: FAIL at `pnpm check:biome`
+- Biome findings:
+  - `.sisyphus/boulder.json` formatting issue
+  - `app/[locale]/blog/[...slug]/page.tsx` lint `noExplicitAny`
+- Verification: `git diff -- "app/[locale]/blog/[...slug]/page.tsx" ".sisyphus/boulder.json"` returned no output (pre-existing, unrelated to this task)
+
+5) Additional validation run
+- Command: `pnpm test && pnpm build`
+- Result: PASS
+  - Tests: 6 files, 40 tests passed
+  - Build: success (`next build` + `next-sitemap`)
+
+6) LSP diagnostics on changed files
+- `package.json`: clean
+- `pnpm-lock.yaml`: clean
+- `tsconfig.json`: clean
+
+Conclusion
+- Option A path selected and implemented:
+  - `typescript@6.0.2` installed
+  - `tsconfig.json` target migrated to `ES2022`
+  - `pnpm check:types` passes with zero errors
+- Remaining blocker to fully green combined gate is pre-existing Biome issues in untouched files.

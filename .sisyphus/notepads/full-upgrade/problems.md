@@ -1,1 +1,2 @@
 - 2026-03-24: High-risk dependency upgrades introduced indirect type-surface changes outside the explicitly targeted search code path; verification had to include full type/build gates before considering migration complete.
+- 2026-03-24: Repository baseline currently fails `pnpm check:biome` on files untouched by this task, preventing a fully green combined gate despite successful TS/type/test/build validation.
