@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "postinstall": "fumadocs-mdx",
-    "dev": "next dev -p 8200",
+    "dev": "portless minpeter next dev",
     "start": "next start -p 8200",
     "build": "next build",
     "postbuild": "next-sitemap",
