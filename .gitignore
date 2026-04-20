@@ -46,3 +46,4 @@ public/robots.txt
 
 # next-intl
 shared/i18n/*.d.json.ts
+.omx/
