@@ -1,6 +1,7 @@
 import type { TOCItemType } from "fumadocs-core/toc";
 import { Callout } from "fumadocs-ui/components/callout";
-import { ImageZoom } from "fumadocs-ui/components/image-zoom";
+import type { SafeImageZoomProps } from "@/components/safe-image-zoom";
+import { SafeImageZoom } from "@/components/safe-image-zoom";
 import { Tab, Tabs } from "fumadocs-ui/components/tabs";
 import defaultMdxComponents from "fumadocs-ui/mdx";
 import { DocsBody } from "fumadocs-ui/page";
@@ -163,8 +164,8 @@ export default async function Page(
             components={{
               ...defaultMdxComponents,
               img: (imageProps) => (
-                <ImageZoom
-                  {...(imageProps as ComponentProps<typeof ImageZoom>)}
+                <SafeImageZoom
+                  {...(imageProps as SafeImageZoomProps)}
                 />
               ),
               Tab,
