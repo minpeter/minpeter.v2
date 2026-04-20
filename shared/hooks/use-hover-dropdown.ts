@@ -83,16 +83,17 @@ export function useHoverDropdown(
   }, []);
 
   // Clear timeouts on unmount
-  useEffect(() => {
-    return () => {
+  useEffect(
+    () => () => {
       if (openTimeoutRef.current) {
         clearTimeout(openTimeoutRef.current);
       }
       if (closeTimeoutRef.current) {
         clearTimeout(closeTimeoutRef.current);
       }
-    };
-  }, []);
+    },
+    []
+  );
 
   // Check if mouse is in safe triangle zone
   const isInSafeTriangle = useEffectEvent(() => {

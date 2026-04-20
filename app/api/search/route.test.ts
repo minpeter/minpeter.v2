@@ -2,14 +2,14 @@ import { describe, expect, it, vi } from "vitest";
 
 vi.mock("fumadocs-core/search/server", () => ({
   createFromSource: vi.fn(() => ({
-    GET: vi.fn(() => {
-      return Promise.resolve(
+    GET: vi.fn(() =>
+      Promise.resolve(
         new Response(JSON.stringify({ results: [] }), {
           status: 200,
           headers: { "Content-Type": "application/json" },
         })
-      );
-    }),
+      )
+    ),
   })),
 }));
 
