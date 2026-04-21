@@ -34,7 +34,7 @@ export const { docs, meta } = defineDocs({
         .optional()
         .transform((value, context) => {
           if (value === undefined) {
-            return undefined;
+            return;
           }
           try {
             return new Date(value);

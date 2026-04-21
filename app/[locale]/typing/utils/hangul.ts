@@ -145,6 +145,5 @@ export const disassembleHangul = (char: string): string[] => {
   return result;
 };
 
-export const disassembleString = (str: string): string[] => {
-  return str.split("").flatMap(disassembleHangul);
-};
+export const disassembleString = (str: string): string[] =>
+  str.split("").flatMap(disassembleHangul);

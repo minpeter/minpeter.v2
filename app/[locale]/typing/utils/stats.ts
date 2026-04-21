@@ -26,9 +26,8 @@ export const calculateWPM = (input: string, elapsedSeconds: number): number => {
   return Math.round(wordsTyped / minutes);
 };
 
-export const calculateCPM = (wpm: number): number => {
-  return Math.round(wpm * WPM_WORD_LENGTH);
-};
+export const calculateCPM = (wpm: number): number =>
+  Math.round(wpm * WPM_WORD_LENGTH);
 
 export const calculateAccuracy = (input: string, target: string): number => {
   if (input.length === 0) {

@@ -28,9 +28,8 @@ export function useTypingStats(
   const unitLabel = unitConfig.unit;
 
   const getDisplayValue = useCallback(
-    (wpmValue: number) => {
-      return unitLabel === "CPM" ? calculateCPM(wpmValue) : wpmValue;
-    },
+    (wpmValue: number) =>
+      unitLabel === "CPM" ? calculateCPM(wpmValue) : wpmValue,
     [unitLabel]
   );
 
