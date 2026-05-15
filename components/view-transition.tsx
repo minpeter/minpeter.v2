@@ -24,6 +24,12 @@ import React from "react";
  *   By using `import * as React from "react"` we avoid any named import that
  *   would require the augmentation, allowing us to fully delete `react-canary.d.ts`.
  *
+ * Robustness:
+ *   We perform a runtime check for the experimental `ViewTransition` on React.
+ *   If not present (e.g. certain SSR scenarios, flag disabled, or future React
+ *   versions), we gracefully fall back to a React Fragment. This prevents
+ *   potential crashes as noted in automated review feedback.
+ *
  * When upstream types are updated (future React 19.x or 20), we can simplify to:
  *   import { ViewTransition } from "react";
  *   export { ViewTransition };
@@ -42,5 +48,15 @@ export interface ViewTransitionProps {
 }
 
 // biome-ignore lint/suspicious/noExplicitAny: React 19.2 ViewTransition not fully typed yet
-export const ViewTransition: FC<ViewTransitionProps> = (React as any)
-  .ViewTransition;
+const RawViewTransition = (React as any).ViewTransition;
+
+/**
+ * Safe wrapper around React's experimental ViewTransition.
+ *
+ * Falls back to a plain fragment if the experimental API is not available
+ * (different React channel, SSR without the flag, etc.). This prevents
+ * runtime crashes as suggested in review feedback.
+ */
+export const ViewTransition: FC<ViewTransitionProps> = RawViewTransition
+  ? (props) => <RawViewTransition {...props} />
+  : ({ children }) => <>{children}</>;
