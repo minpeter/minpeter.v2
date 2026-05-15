@@ -1,13 +1,8 @@
 "use client";
 
 import type { Route } from "next";
-import type { FC, ReactNode } from "react";
-import { ViewTransition as _ViewTransition } from "react";
-
-const ViewTransition = _ViewTransition as unknown as FC<{
-  name: string;
-  children?: ReactNode;
-}>;
+import type { ReactNode } from "react";
+import { ViewTransition } from "@/components/view-transition";
 
 import styles from "@/shared/styles/stagger-fade-in.module.css";
 import { cn } from "@/shared/utils/tailwind";

@@ -46,6 +46,7 @@ const FIRST_DAY = 1;
 const NEXT_YEAR_OFFSET = 1;
 
 function Countdown() {
+  "use no memo";
   const targetTimestamp = useMemo(() => {
     const currentYear = new Date().getFullYear();
     return new Date(

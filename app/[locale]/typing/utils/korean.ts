@@ -18,7 +18,7 @@ export const isKorean = (char: string): boolean => {
 export const isSpecialChar = (char: string): boolean =>
   SPECIAL_CHAR_PATTERN.test(char);
 
-export const getLastChar = (value: string): string => value.at(-1) ?? "";
+const getLastChar = (value: string): string => value.at(-1) ?? "";
 
 export const mergeInputWithComposition = (
   currentInput: string,

@@ -1,4 +1,3 @@
-import { remarkInstall } from "fumadocs-docgen";
 import {
   type DefaultMDXOptions,
   defineConfig,
@@ -60,7 +59,7 @@ export const { docs, meta } = defineDocs({
 });
 
 const mdxOptions: DefaultMDXOptions = {
-  remarkPlugins: [remarkInstall],
+  remarkPlugins: [],
   rehypePlugins: (v) => [...v],
   development: process.env.NODE_ENV === "development",
 };

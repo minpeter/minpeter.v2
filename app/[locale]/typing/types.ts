@@ -23,18 +23,3 @@ export interface DisplayCharOptions {
   isWrongSpace: boolean;
   typedChar: string;
 }
-
-export interface TypingStats {
-  accuracy: number;
-  lastAccuracy: number;
-  lastWpm: number;
-  wpm: number;
-}
-
-export interface TypingInputState {
-  composingText: string;
-  isAllSelected: boolean;
-  isComposing: boolean;
-  isTransitioning: boolean;
-  userInput: string;
-}

@@ -8,18 +8,12 @@ import type { Route } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
-import type { ComponentProps, FC, ReactNode } from "react";
-import { ViewTransition as _ViewTransition } from "react";
-
-const ViewTransition = _ViewTransition as unknown as FC<{
-  name: string;
-  children?: ReactNode;
-}>;
-
+import type { ComponentProps, ReactNode } from "react";
 import { isValidElement } from "react";
 import ExternalRedirect from "@/components/external-redirect";
 import Header from "@/components/header";
 import { MachineTranslationNotice } from "@/components/machine-translation-notice";
+import { ViewTransition } from "@/components/view-transition";
 import { blog } from "@/shared/source";
 import styles from "@/shared/styles/stagger-fade-in.module.css";
 import { formatDateLong } from "@/shared/utils/date";

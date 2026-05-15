@@ -12,6 +12,7 @@ const RANDOM_LETTER_MULTIPLIER = 1;
 // license: on github.com/wiscaksono/wiscaksono-site
 
 export default function AnimatedText({ data }: { data: string }) {
+  "use no memo";
   const [displayText, setDisplayText] = useState(data);
   const isAnimatingRef = useRef(false);
 
