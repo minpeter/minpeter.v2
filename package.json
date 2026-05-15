@@ -44,6 +44,7 @@
     "embla-carousel-react": "^8.6.0",
     "flags": "^4.0.6",
     "fumadocs-core": "16.8.11",
+    "fumadocs-docgen": "^3.0.10",
     "fumadocs-mdx": "15.0.5",
     "fumadocs-ui": "16.8.11",
     "lucide-react": "^1.16.0",
