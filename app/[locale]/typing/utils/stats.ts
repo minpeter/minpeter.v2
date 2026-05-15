@@ -9,9 +9,6 @@ export const TYPING_UNITS = {
   en: { unit: "WPM", scale: 1 },
 } as const;
 
-export type TypingUnit =
-  (typeof TYPING_UNITS)[keyof typeof TYPING_UNITS]["unit"];
-
 export const calculateWPM = (input: string, elapsedSeconds: number): number => {
   if (elapsedSeconds <= 0 || input.length === 0) {
     return 0;

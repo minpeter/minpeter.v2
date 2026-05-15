@@ -5,7 +5,7 @@ import { env } from "@/shared/env";
 
 const isFlagsEnabled = !!env.FLAGS_SECRET;
 
-export const identify = dedupe((async () => ({
+const identify = dedupe((async () => ({
   customIDs: { stableID: "1234" },
   // add any additional user properties you collect here
 })) satisfies Identify<StatsigUser>);

@@ -8,7 +8,7 @@ const shouldPrefetchSentences = (
   totalSentences: number
 ) => currentIndex >= totalSentences - SENTENCE_PREFETCH_THRESHOLD;
 
-export const hasNextSentence = (currentIndex: number, totalSentences: number) =>
+const hasNextSentence = (currentIndex: number, totalSentences: number) =>
   currentIndex < totalSentences - 1;
 
 export function useTypingSentences(

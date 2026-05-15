@@ -30,7 +30,7 @@ const axiosInstance = axios.create({
   baseURL: TMPF_API_BASE,
 });
 
-export async function downloadFile(folderId: string, fileName: string) {
+async function downloadFile(folderId: string, fileName: string) {
   await axiosInstance
     .get(API_SUFFIX.DOWNLOAD(folderId, fileName), { responseType: "blob" })
     .then((response) => {
@@ -57,7 +57,7 @@ interface UploadResponse {
   folderId: string;
 }
 
-export async function uploadFile(file: File[]): Promise<UploadResponse | null> {
+async function uploadFile(file: File[]): Promise<UploadResponse | null> {
   const formData = new FormData();
   for (const f of file) {
     formData.append("file", f);

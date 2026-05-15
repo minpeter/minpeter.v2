@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
 import type { ReactNode } from "react";
-import { ViewTransition } from "react";
+import { ViewTransition } from "@/components/view-transition";
 import { routing } from "@/shared/i18n/routing";
 
 type Locale = (typeof routing.locales)[number];

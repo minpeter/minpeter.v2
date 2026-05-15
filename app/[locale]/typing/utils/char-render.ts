@@ -5,7 +5,7 @@ import type {
 } from "../types";
 import { isKorean } from "./korean";
 
-export const resolveDisplayChar = ({
+const resolveDisplayChar = ({
   baseChar,
   typedChar,
   isTyped,
@@ -30,7 +30,7 @@ export const resolveDisplayChar = ({
   return baseChar;
 };
 
-export const isRenderCorrect = (
+const isRenderCorrect = (
   baseChar: string,
   typedChar: string,
   isTyped: boolean
@@ -46,7 +46,7 @@ export const isRenderCorrect = (
   return baseChar.toLowerCase() === typedChar.toLowerCase();
 };
 
-export const buildClassName = (
+const buildClassName = (
   isTyped: boolean,
   isCurrentTyping: boolean,
   isComposingHere: boolean,

@@ -7,21 +7,9 @@ import type { Route } from "next";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { debounce, parseAsString, useQueryState } from "nuqs";
-import type { FC, ReactNode } from "react";
-import {
-  ViewTransition as _ViewTransition,
-  useDeferredValue,
-  useEffect,
-  useMemo,
-  useTransition,
-} from "react";
-
-const ViewTransition = _ViewTransition as unknown as FC<{
-  name: string;
-  children?: ReactNode;
-}>;
-
+import { useDeferredValue, useEffect, useMemo, useTransition } from "react";
 import { Badge } from "@/components/ui/badge";
+import { ViewTransition } from "@/components/view-transition";
 import type { postMetadataType } from "@/shared/source";
 import styles from "@/shared/styles/stagger-fade-in.module.css";
 import { formatDate, formatYear } from "@/shared/utils/date";
