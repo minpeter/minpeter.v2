@@ -1,4 +1,15 @@
 {
   "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
-  "extends": ["ultracite/biome/core", "ultracite/biome/next"]
+  "extends": ["ultracite/biome/core", "ultracite/biome/next"],
+  "overrides": [
+    {
+      // Lint SVGs for correctness/a11y (Biome 2.5 parses them as HTML), but
+      // don't run the HTML formatter or attribute-sort assist on generated
+      // graphics assets (e.g. minified Excalidraw exports) — reformatting them
+      // is pure churn and corrupts `white-space: pre` text positioning.
+      "includes": ["**/*.svg"],
+      "formatter": { "enabled": false },
+      "assist": { "enabled": false }
+    }
+  ]
 }
