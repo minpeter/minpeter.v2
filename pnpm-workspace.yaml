@@ -1,0 +1,16 @@
+packages:
+  - "."
+
+minimumReleaseAge: 1440
+trustPolicy: no-downgrade
+
+overrides:
+  postcss: "8.5.16"
+  ua-parser-js: "1.0.39"
+  uuid: "11.1.1"
+
+allowBuilds:
+  '@parcel/watcher': true
+  '@swc/core': true
+  esbuild: true
+  sharp: true
