@@ -3,10 +3,11 @@ trustPolicy: no-downgrade
 
 overrides:
   # statsig-node-lite declares ua-parser-js ^1.0.33, which would resolve to
-  # 1.0.41 — but 1.0.40+ were published without provenance attestation, so
-  # trustPolicy rejects them (ERR_PNPM_TRUST_DOWNGRADE) and resolution hard-
-  # fails. 1.0.39 is the newest attested release; bump when a newer attested
-  # 1.x appears.
+  # 1.0.41 — but trustPolicy hard-fails on it (ERR_PNPM_TRUST_DOWNGRADE):
+  # trust checks compare by publish date, and 1.0.40/1.0.41 shipped without
+  # provenance after the attested 2.0.0 stable (2024-11). 1.0.39 predates it
+  # and passes. Bump when a 1.x with provenance appears (or statsig moves to
+  # the attested 2.x line).
   "statsig-node-lite>ua-parser-js": "1.0.39"
   # statsig-node-lite declares uuid ^8.3.2 (deprecated upstream); uuid's own
   # deprecation notice recommends v11 for CJS consumers. Scoped so no other
