@@ -1,16 +1,26 @@
-packages:
-  - "."
-
 minimumReleaseAge: 1440
 trustPolicy: no-downgrade
 
 overrides:
-  postcss: "8.5.16"
-  ua-parser-js: "1.0.39"
-  uuid: "11.1.1"
+  # statsig-node-lite declares ua-parser-js ^1.0.33, which would resolve to
+  # 1.0.41 — but 1.0.40+ were published without provenance attestation, so
+  # trustPolicy rejects them (ERR_PNPM_TRUST_DOWNGRADE) and resolution hard-
+  # fails. 1.0.39 is the newest attested release; bump when a newer attested
+  # 1.x appears.
+  "statsig-node-lite>ua-parser-js": "1.0.39"
+  # statsig-node-lite declares uuid ^8.3.2 (deprecated upstream); uuid's own
+  # deprecation notice recommends v11 for CJS consumers. Scoped so no other
+  # dependency is affected. Drop once statsig-node-lite updates its range.
+  "statsig-node-lite>uuid": "^11.1.1"
+
+peerDependencyRules:
+  allowedVersions:
+    # tsconfck (via vite-tsconfig-paths) declares typescript ^5 but works with
+    # the TypeScript 6 this repo uses; silence the unmet-peer warning.
+    "tsconfck>typescript": "^6.0.0"
 
 allowBuilds:
-  '@parcel/watcher': true
-  '@swc/core': true
+  "@parcel/watcher": true
+  "@swc/core": true
   esbuild: true
   sharp: true
