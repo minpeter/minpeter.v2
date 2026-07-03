@@ -56,8 +56,8 @@ importers:
         specifier: ^0.2.6
         version: 0.2.6(@vercel/analytics@2.0.1(next@16.2.10(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react@19.2.7))(@vercel/speed-insights@2.0.0(next@16.2.10(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react@19.2.7))(next@16.2.10(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(vite@8.1.3(@types/node@26.1.0)(esbuild@0.28.1)(jiti@2.7.0)(yaml@2.9.0))
       ai:
-        specifier: ^7.0.11
-        version: 7.0.11(zod@4.4.3)
+        specifier: ^7.0.14
+        version: 7.0.14(zod@4.4.3)
       axios:
         specifier: ^1.18.1
         version: 1.18.1
@@ -192,8 +192,8 @@ importers:
         specifier: ^6.0.3
         version: 6.0.3
       ultracite:
-        specifier: 7.8.3
-        version: 7.8.3
+        specifier: 7.8.4
+        version: 7.8.4
       vite-tsconfig-paths:
         specifier: ^6.1.1
         version: 6.1.1(typescript@6.0.3)(vite@8.1.3(@types/node@26.1.0)(esbuild@0.28.1)(jiti@2.7.0)(yaml@2.9.0))
@@ -203,8 +203,8 @@ importers:
 
 packages:
 
-  '@ai-sdk/gateway@4.0.8':
-    resolution: {integrity: sha512-esHzojMp+LllqOnEu6sYa6NKOmPcE5UObPV61LE6L2QAzCH6WHMgTS+Q/HF5HU3lVUWsHtkDzN7TNqMfv/ecCg==}
+  '@ai-sdk/gateway@4.0.11':
+    resolution: {integrity: sha512-ZdZzQnBxYfjJpWpSNkV+rRWycwTBhxyvwGvxcwx9g+WQoy3MK2xNahSySEgP9hD/X2xY9jkjd0xB67oDE3rLMA==}
     engines: {node: '>=22'}
     peerDependencies:
       zod: ^3.25.76 || ^4.1.8
@@ -221,8 +221,8 @@ packages:
     peerDependencies:
       zod: ^3.25.76 || ^4.1.8
 
-  '@ai-sdk/provider-utils@5.0.3':
-    resolution: {integrity: sha512-El0JOXXGcHFe6+owJ1UV0VgB9XtdivP8vcZni+rUIt6lt+cBHCnUdddaA6LE2avJGJ5AD0uXSY+uAvRL2tSvgw==}
+  '@ai-sdk/provider-utils@5.0.5':
+    resolution: {integrity: sha512-oI0t3dvCoqWNV1I8o1Rybi2DXDvHES5r/TrwtJW90tuFLVepgJlftPxrcjh8vaSvjqC2diTuA2vXyjKAyHJm4A==}
     engines: {node: '>=22'}
     peerDependencies:
       zod: ^3.25.76 || ^4.1.8
@@ -231,8 +231,8 @@ packages:
     resolution: {integrity: sha512-Q3BZ27qfpYqnCYGvE3vt+Qi6LGOF9R5Nmzn+9JoM1lCRsD9mYaIhfJLkSunN48nfGXJ6n+XNV0J/XVpqGQl7Dw==}
     engines: {node: '>=18'}
 
-  '@ai-sdk/provider@4.0.1':
-    resolution: {integrity: sha512-6p3C/vGqVIjcptBu1DnVd/BZJ2wWmV9TUv9192vT6ZvT9KNED8EwRTqyqFpoQZKgSbMDSvBSq3dqR524Nt/Crw==}
+  '@ai-sdk/provider@4.0.2':
+    resolution: {integrity: sha512-pfPoy9J1B1xV7cqJ8MYHOsDYrMv5tR3+EMNfI249OhkD2uRakvav3Fo7XpD2luuN/YNCBY7KfEQc7vEV7KEtyw==}
     engines: {node: '>=22'}
 
   '@alloc/quick-lru@5.2.0':
@@ -2515,8 +2515,8 @@ packages:
     resolution: {integrity: sha512-RZNwNclF7+MS/8bDg70amg32dyeZGZxiDuQmZxKLAlQjr3jGyLx+4Kkk58UO7D2QdgFIQCovuSuZESne6RG6XQ==}
     engines: {node: '>= 6.0.0'}
 
-  ai@7.0.11:
-    resolution: {integrity: sha512-ecCtume1NKJG/8oIkV8G26KL9jmFJRx6+Gjx2260FcDZqIUGPiF1uBoNeGy4S1vxbHmFxUul4D7axqiXZZ1XuA==}
+  ai@7.0.14:
+    resolution: {integrity: sha512-qA82fZyD4xh9IDB+s3SvwbjwjR+GGRmJjTYMwON1uROj8vPDIQbPTZLLq6ZWTVESn9daeH1GMv0zKfVLwNU2sQ==}
     engines: {node: '>=22'}
     peerDependencies:
       zod: ^3.25.76 || ^4.1.8
@@ -3926,6 +3926,10 @@ packages:
     resolution: {integrity: sha512-QP88BAKvMam/3NxH6vj2o21R6MjxZUAd6nlwAS/pnGvN9IVLocLHxGYIzFhg6fUQ+5th6P4dv4eW9jX3DSIj7A==}
     engines: {node: '>=12'}
 
+  picomatch@4.0.5:
+    resolution: {integrity: sha512-RvwwcruNjI1ncT5xRakeyS9Lf8lcItv34KD+aif+VH9kduAyfYBipGh12274xtenIPZ119/R9BdTBa8gAwSh0A==}
+    engines: {node: '>=12'}
+
   pidtree@1.0.0:
     resolution: {integrity: sha512-avfAvjB9Dd0wdj3rjJX//yS+G79OO0KrS5pJHFJENjYGX6N4SMgEDBBI/yFy0lloOYSaC6XQxzpOAMPfSYFV/Q==}
     engines: {node: '>=18'}
@@ -4362,8 +4366,8 @@ packages:
     resolution: {integrity: sha512-k24RCVWlEcjkdOxYmVJgeD/0a1TiSpqLg+ZalVGV9lsnr4yqu0w7tX/x2xX6G4zpkgQnRf89lxuZ1wsbjXM8lw==}
     hasBin: true
 
-  ultracite@7.8.3:
-    resolution: {integrity: sha512-Fsj9aYJfh57uDB6DrdKVafKhF0QNekwqTrZKoTMYePjZp1npyFCnfZVj2SnPZdOcxAGHJfmLYUIDq0YPh8acVA==}
+  ultracite@7.8.4:
+    resolution: {integrity: sha512-Lqd1k8sr7xT3QY+2x6qA72TFkA3r1Z7QvCUbOFBOeGAVdwBG43RPSvhTuEpZOgbdINFBcJ/v6dK2tyT4inPDTQ==}
     hasBin: true
     peerDependencies:
       oxfmt: '>=0.1.0'
@@ -4669,10 +4673,10 @@ packages:
 
 snapshots:
 
-  '@ai-sdk/gateway@4.0.8(zod@4.4.3)':
+  '@ai-sdk/gateway@4.0.11(zod@4.4.3)':
     dependencies:
-      '@ai-sdk/provider': 4.0.1
-      '@ai-sdk/provider-utils': 5.0.3(zod@4.4.3)
+      '@ai-sdk/provider': 4.0.2
+      '@ai-sdk/provider-utils': 5.0.5(zod@4.4.3)
       '@vercel/oidc': 3.2.0
       zod: 4.4.3
 
@@ -4689,9 +4693,9 @@ snapshots:
       eventsource-parser: 3.1.0
       zod: 4.4.3
 
-  '@ai-sdk/provider-utils@5.0.3(zod@4.4.3)':
+  '@ai-sdk/provider-utils@5.0.5(zod@4.4.3)':
     dependencies:
-      '@ai-sdk/provider': 4.0.1
+      '@ai-sdk/provider': 4.0.2
       '@standard-schema/spec': 1.1.0
       '@workflow/serde': 4.1.0
       eventsource-parser: 3.1.0
@@ -4701,7 +4705,7 @@ snapshots:
     dependencies:
       json-schema: 0.4.0
 
-  '@ai-sdk/provider@4.0.1':
+  '@ai-sdk/provider@4.0.2':
     dependencies:
       json-schema: 0.4.0
 
@@ -6491,11 +6495,11 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  ai@7.0.11(zod@4.4.3):
+  ai@7.0.14(zod@4.4.3):
     dependencies:
-      '@ai-sdk/gateway': 4.0.8(zod@4.4.3)
-      '@ai-sdk/provider': 4.0.1
-      '@ai-sdk/provider-utils': 5.0.3(zod@4.4.3)
+      '@ai-sdk/gateway': 4.0.11(zod@4.4.3)
+      '@ai-sdk/provider': 4.0.2
+      '@ai-sdk/provider-utils': 5.0.5(zod@4.4.3)
       zod: 4.4.3
 
   ajv@8.20.0:
@@ -8209,6 +8213,8 @@ snapshots:
 
   picomatch@4.0.4: {}
 
+  picomatch@4.0.5: {}
+
   pidtree@1.0.0: {}
 
   po-parser@2.1.1: {}
@@ -8691,7 +8697,7 @@ snapshots:
 
   ua-parser-js@1.0.39: {}
 
-  ultracite@7.8.3:
+  ultracite@7.8.4:
     dependencies:
       '@clack/prompts': 1.6.0
       commander: 15.0.0
@@ -8810,7 +8816,7 @@ snapshots:
   vite@8.1.3(@types/node@26.1.0)(esbuild@0.28.1)(jiti@2.7.0)(yaml@2.9.0):
     dependencies:
       lightningcss: 1.32.0
-      picomatch: 4.0.4
+      picomatch: 4.0.5
       postcss: 8.5.16
       rolldown: 1.1.4
       tinyglobby: 0.2.17

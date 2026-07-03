@@ -34,7 +34,7 @@
     "@vercel/analytics": "^2.0.1",
     "@vercel/speed-insights": "^2.0.0",
     "@vercel/toolbar": "^0.2.6",
-    "ai": "^7.0.11",
+    "ai": "^7.0.14",
     "axios": "^1.18.1",
     "babel-plugin-react-compiler": "^1.0.0",
     "class-variance-authority": "^0.7.1",
@@ -81,7 +81,7 @@
     "tailwindcss": "^4.3.2",
     "tailwindcss-animate": "^1.0.7",
     "typescript": "^6.0.3",
-    "ultracite": "7.8.3",
+    "ultracite": "7.8.4",
     "vite-tsconfig-paths": "^6.1.1",
     "vitest": "^4.1.9"
   },
