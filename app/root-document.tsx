@@ -94,9 +94,7 @@ export function RootDocument({ children, lang }: RootDocumentProps) {
             <Analytics />
             <SpeedInsights />
           </>
-        ) : (
-          <Analytics debug={false} />
-        )}
+        ) : null}
       </body>
       <GoogleAnalytics gaId="G-8L34G6HSJS" />
     </html>

@@ -13,6 +13,7 @@ const nextConfig: NextConfig = {
     root: process.cwd(),
   },
   experimental: {
+    globalNotFound: true,
     turbopackFileSystemCacheForDev: true,
     optimizePackageImports: [
       "lucide-react",
