@@ -21,6 +21,8 @@ import NewMetadata from "@/shared/utils/metadata";
 import { cn } from "@/shared/utils/tailwind";
 import { NavLink } from "./nav-link";
 
+export const dynamicParams = false;
+
 export function generateStaticParams({
   params,
 }: {
@@ -70,27 +72,24 @@ export async function generateMetadata(
 export default async function Page(
   props: PageProps<"/[locale]/blog/[...slug]">
 ) {
-  const [{ locale, slug }, t] = await Promise.all([
-    props.params,
-    getTranslations(),
-  ]);
-
+  const { locale, slug } = await props.params;
   const post = blog.getPage(slug, locale);
-  const posts = blog.getPages(locale);
+
+  if (!post) {
+    notFound();
+  }
 
   if (post?.data.external_url) {
     return <ExternalRedirect url={post.data.external_url} />;
   }
+
+  const [posts, t] = [blog.getPages(locale), await getTranslations()];
   const internalPosts = posts.filter((item) => !item.data.external_url);
   const sortedPosts = internalPosts.toSorted(
     (a, b) =>
       new Date(b.data.published).getTime() -
       new Date(a.data.published).getTime()
   );
-
-  if (!post) {
-    notFound();
-  }
 
   const MDX = post.data.body;
 

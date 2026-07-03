@@ -18,7 +18,8 @@ describe("Proxy", () => {
     expect(shouldExclude("/favicon.ico")).toEqual(true);
     expect(shouldExclude("/_next/static")).toEqual(true);
     expect(shouldExclude("/_next/image")).toEqual(true);
-    expect(shouldExclude("/subpath/test.gltf")).toEqual(true);
+    expect(shouldExclude("/assets/images/main-image-1.jpg")).toEqual(true);
+    expect(shouldExclude("/Lickitung.gltf")).toEqual(true);
     expect(shouldExclude("/.well-known/vercel/flags")).toEqual(true);
   });
 
@@ -27,6 +28,8 @@ describe("Proxy", () => {
     expect(shouldExclude("/test.md")).toEqual(false);
     expect(shouldExclude("/subpath/test")).toEqual(false);
     expect(shouldExclude("/subpath/test.md")).toEqual(false);
+    expect(shouldExclude("/not-a-real-route.json")).toEqual(false);
+    expect(shouldExclude("/subpath/test.gltf")).toEqual(false);
   });
 
   it("should proxy", async () => {
