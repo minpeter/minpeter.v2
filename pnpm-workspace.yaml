@@ -1,3 +1,5 @@
+# pnpm 11 default, kept explicit; keep in sync with cooldown.default-days
+# in .github/dependabot.yml (1440 min = 1 day).
 minimumReleaseAge: 1440
 trustPolicy: no-downgrade
 
