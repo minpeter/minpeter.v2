@@ -10,7 +10,7 @@ const TAB_REPLACEMENT = "    ";
 const COPY_STATUS_RESET_DELAY_MS = 1000;
 const EDITABLE_INPUT_PADDING_CH = 2;
 const MIN_EDITABLE_CONTENT_LENGTH = 1;
-const COPY_ERROR_LABEL = "Copy failed";
+export const COPY_ERROR_LABEL = "Copy failed";
 
 type CopyStatus = "idle" | "copied" | "error";
 
@@ -18,7 +18,7 @@ type TemplateSegment =
   | { id: string; type: "static"; content: string }
   | { id: string; type: "dynamic"; content: string };
 
-async function copyToClipboard(content: string) {
+export async function copyToClipboard(content: string) {
   await copy(content);
 }
 
@@ -63,7 +63,7 @@ function parseTemplate(template: string): TemplateSegment[] {
   return segments;
 }
 
-function useCopyStatus() {
+export function useCopyStatus() {
   const [status, setStatus] = useState<CopyStatus>("idle");
 
   useEffect(() => {
@@ -116,7 +116,7 @@ function getInputWidth(value: string) {
   return `${effectiveLength + EDITABLE_INPUT_PADDING_CH}ch`;
 }
 
-function getCopyLabel(status: CopyStatus) {
+export function getCopyLabel(status: CopyStatus) {
   if (status === "copied") {
     return "Copied";
   }
@@ -177,8 +177,8 @@ export function ModCodeBlock({
       >
         {copyLabel}
       </button>
-      <pre className="mb-0">
-        <div style={{ overflowX: "auto" }}>
+      <div style={{ overflowX: "auto" }}>
+        <pre className="mb-0">
           <code>
             {segments.map((segment, index) => {
               if (segment.type === "static") {
@@ -234,8 +234,8 @@ export function ModCodeBlock({
               );
             })}
           </code>
-        </div>
-      </pre>
+        </pre>
+      </div>
       <p className="mb-4 pl-1 text-gray-500 text-xs">
         *파란색 텍스트를 클릭하면 간편하게 수정 후 복사할 수 있습니다.
       </p>

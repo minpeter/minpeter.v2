@@ -7,14 +7,11 @@ describe("nextSentencesGenerator", () => {
     vi.unstubAllEnvs();
   });
 
-  it("rotates fallback sentences when no generation token is configured", async () => {
+  it("avoids excluded fallback sentences when no generation token is configured", async () => {
     vi.stubEnv("FRIENDLI_TOKEN", "");
-    vi.spyOn(Math, "random").mockReturnValue(0);
 
-    const [firstSentence, secondSentence] = await Promise.all([
-      nextSentencesGenerator("en"),
-      nextSentencesGenerator("en"),
-    ]);
+    const firstSentence = await nextSentencesGenerator("en");
+    const secondSentence = await nextSentencesGenerator("en", [firstSentence]);
 
     expect(firstSentence).not.toBe(secondSentence);
   });

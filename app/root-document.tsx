@@ -78,7 +78,10 @@ export function RootDocument({ children, lang }: RootDocumentProps) {
                 >
                   <div
                     aria-hidden="true"
-                    className={styles["header-overlay-root"]}
+                    className={cn(
+                      styles.scroll_responsive_header,
+                      "pointer-events-none fixed inset-x-0 top-0 z-10 h-40"
+                    )}
                   />
                   {children}
                   {shouldInjectDevTools ? <VercelToolbar /> : null}

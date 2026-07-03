@@ -23,7 +23,7 @@ describe("useTypingSentences", () => {
     );
 
     await waitFor(() => {
-      expect(mockedNextSentencesGenerator).toHaveBeenCalledTimes(2);
+      expect(mockedNextSentencesGenerator).toHaveBeenCalledTimes(1);
     });
     await waitFor(() => {
       expect(result.current.fetchError).toBe("Could not fetch sentences");
@@ -37,7 +37,6 @@ describe("useTypingSentences", () => {
     mockedNextSentencesGenerator
       .mockResolvedValueOnce("first sentence")
       .mockResolvedValueOnce("second sentence")
-      .mockRejectedValueOnce("prefetch failed")
       .mockRejectedValueOnce("prefetch failed")
       .mockResolvedValueOnce("third sentence")
       .mockResolvedValueOnce("fourth sentence");

@@ -37,9 +37,13 @@ export function useTypingSentences(
 
     try {
       const generatorLocale = locale === "ko" ? "ko" : "en";
-      const [sentence1, sentence2] = await Promise.all([
-        nextSentencesGenerator(generatorLocale),
-        nextSentencesGenerator(generatorLocale),
+      const sentence1 = await nextSentencesGenerator(
+        generatorLocale,
+        sentences
+      );
+      const sentence2 = await nextSentencesGenerator(generatorLocale, [
+        ...sentences,
+        sentence1,
       ]);
       setSentences((prev) => [...prev, sentence1, sentence2]);
     } catch {
