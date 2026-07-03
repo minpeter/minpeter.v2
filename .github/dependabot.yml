@@ -4,6 +4,12 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+    # Keep in sync with minimumReleaseAge (1440 min = 1 day) in pnpm-workspace.yaml
+    # so weekly version updates never propose a version pnpm's resolver refuses
+    # as too new. Security updates ignore cooldown and may still fail resolution
+    # until the patch ages past minimumReleaseAge — intended; retry after 24h.
+    cooldown:
+      default-days: 1
     groups:
       dependencies:
         patterns:
