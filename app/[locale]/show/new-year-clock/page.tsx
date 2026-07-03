@@ -2,7 +2,7 @@
 
 import type { Route } from "next";
 import { useLocale, useTranslations } from "next-intl";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { type ReactNode, useEffect, useState } from "react";
 import Header from "@/components/header";
 
 export default function Page() {
@@ -45,69 +45,82 @@ const JANUARY_INDEX = 0;
 const FIRST_DAY = 1;
 const NEXT_YEAR_OFFSET = 1;
 
+function getNextYearTimestamp() {
+  const currentYear = new Date().getFullYear();
+  return new Date(
+    currentYear + NEXT_YEAR_OFFSET,
+    JANUARY_INDEX,
+    FIRST_DAY
+  ).getTime();
+}
+
+function calculateTimeLeft(targetTimestamp: number): TimeLeft {
+  const now = Date.now();
+  const difference = targetTimestamp - now;
+
+  if (difference <= 0) {
+    return ZERO_TIME_LEFT;
+  }
+
+  const millisecondsPerMinute = MILLISECONDS_PER_SECOND * SECONDS_PER_MINUTE;
+  const millisecondsPerHour = millisecondsPerMinute * MINUTES_PER_HOUR;
+  const millisecondsPerDay = millisecondsPerHour * HOURS_PER_DAY;
+
+  return {
+    days: Math.floor(difference / millisecondsPerDay),
+    hours: Math.floor((difference / millisecondsPerHour) % HOURS_PER_DAY),
+    minutes: Math.floor(
+      (difference / millisecondsPerMinute) % SECONDS_PER_MINUTE
+    ),
+    seconds: Math.floor(
+      (difference / MILLISECONDS_PER_SECOND) % SECONDS_PER_MINUTE
+    ),
+  };
+}
+
 function Countdown() {
   "use no memo";
-  const targetTimestamp = useMemo(() => {
-    const currentYear = new Date().getFullYear();
-    return new Date(
-      currentYear + NEXT_YEAR_OFFSET,
-      JANUARY_INDEX,
-      FIRST_DAY
-    ).getTime();
-  }, []);
-
-  const calculateTimeLeft = useCallback((): TimeLeft => {
-    const now = Date.now();
-    const difference = targetTimestamp - now;
-
-    if (difference <= 0) {
-      return ZERO_TIME_LEFT;
-    }
-
-    const millisecondsPerMinute = MILLISECONDS_PER_SECOND * SECONDS_PER_MINUTE;
-    const millisecondsPerHour = millisecondsPerMinute * MINUTES_PER_HOUR;
-    const millisecondsPerDay = millisecondsPerHour * HOURS_PER_DAY;
-
-    return {
-      days: Math.floor(difference / millisecondsPerDay),
-      hours: Math.floor((difference / millisecondsPerHour) % HOURS_PER_DAY),
-      minutes: Math.floor(
-        (difference / millisecondsPerMinute) % SECONDS_PER_MINUTE
-      ),
-      seconds: Math.floor(
-        (difference / MILLISECONDS_PER_SECOND) % SECONDS_PER_MINUTE
-      ),
-    };
-  }, [targetTimestamp]);
-
-  const [remainingTime, setRemainingTime] =
-    useState<TimeLeft>(calculateTimeLeft);
+  const [targetTimestamp] = useState(getNextYearTimestamp);
+  const [remainingTime, setRemainingTime] = useState<TimeLeft | null>(null);
 
   useEffect(() => {
+    const updateRemainingTime = () => {
+      setRemainingTime(calculateTimeLeft(targetTimestamp));
+    };
+
+    updateRemainingTime();
     const intervalId = window.setInterval(() => {
-      setRemainingTime(calculateTimeLeft());
+      updateRemainingTime();
     }, TIMER_INTERVAL_MS);
 
     return () => {
       window.clearInterval(intervalId);
     };
-  }, [calculateTimeLeft]);
+  }, [targetTimestamp]);
 
-  const hasTimeLeft = useMemo(
-    () => Object.values(remainingTime).some((value) => value > 0),
-    [remainingTime]
-  );
+  const hasTimeLeft =
+    remainingTime !== null &&
+    Object.values(remainingTime).some((value) => value > 0);
+
+  let countdownContent: ReactNode = "--일 --시간 --분 --초";
+
+  if (remainingTime !== null && hasTimeLeft) {
+    countdownContent = (
+      <>
+        {remainingTime.days}일 {remainingTime.hours}시간 {remainingTime.minutes}
+        분 {remainingTime.seconds}초
+      </>
+    );
+  } else if (remainingTime !== null) {
+    countdownContent = "Happy New Year!";
+  }
 
   return (
-    <div className="whitespace-pre-wrap rounded-xl text-sm tabular-nums">
-      {hasTimeLeft ? (
-        <>
-          {remainingTime.days}일 {remainingTime.hours}시간{" "}
-          {remainingTime.minutes}분 {remainingTime.seconds}초
-        </>
-      ) : (
-        "Happy New Year!"
-      )}
+    <div
+      aria-live="polite"
+      className="whitespace-pre-wrap rounded-xl text-sm tabular-nums"
+    >
+      {countdownContent}
     </div>
   );
 }

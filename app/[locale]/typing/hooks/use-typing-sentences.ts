@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useEffectEvent, useRef, useState } from "react";
 import { nextSentencesGenerator } from "../action";
 
 const SENTENCE_PREFETCH_THRESHOLD = 3;
@@ -20,51 +20,56 @@ export function useTypingSentences(
   const [isFetching, setIsFetching] = useState(false);
   const [fetchError, setFetchError] = useState<string | null>(null);
   const hasFetchedInitial = useRef(false);
+  const isFetchingRef = useRef(false);
 
   const currentSentence = sentences[currentSentenceIndex] ?? "";
   const isInitialLoading = sentences.length === 0 && !fetchError;
 
-  const fetchNewSentences = useCallback(async () => {
-    if (isFetching) {
+  const fetchNewSentences = async () => {
+    if (isFetchingRef.current) {
       return;
     }
 
+    isFetchingRef.current = true;
+    setIsFetching(true);
+    setFetchError(null);
+
     try {
-      setIsFetching(true);
-      setFetchError(null);
       const generatorLocale = locale === "ko" ? "ko" : "en";
       const [sentence1, sentence2] = await Promise.all([
         nextSentencesGenerator(generatorLocale),
         nextSentencesGenerator(generatorLocale),
       ]);
       setSentences((prev) => [...prev, sentence1, sentence2]);
-    } catch {
+      isFetchingRef.current = false;
+      setIsFetching(false);
+    } catch (error) {
+      if (!(error instanceof Error)) {
+        throw error;
+      }
       setFetchError(getErrorMessage());
-    } finally {
+      isFetchingRef.current = false;
       setIsFetching(false);
     }
-  }, [isFetching, locale, getErrorMessage]);
+  };
 
-  const advanceToNextSentence = useCallback(() => {
-    setCurrentSentenceIndex((prev) => prev + 1);
-  }, []);
+  const fetchInitialSentences = useEffectEvent(fetchNewSentences);
+
+  const advanceToNextSentence = () => {
+    const nextIndex = currentSentenceIndex + 1;
+    setCurrentSentenceIndex(nextIndex);
+
+    if (shouldPrefetchSentences(nextIndex, sentences.length)) {
+      fetchNewSentences();
+    }
+  };
 
   useEffect(() => {
     if (!hasFetchedInitial.current) {
       hasFetchedInitial.current = true;
-      fetchNewSentences();
+      fetchInitialSentences();
     }
-  }, [fetchNewSentences]);
-
-  useEffect(() => {
-    if (
-      sentences.length > 0 &&
-      shouldPrefetchSentences(currentSentenceIndex, sentences.length) &&
-      !isFetching
-    ) {
-      fetchNewSentences();
-    }
-  }, [currentSentenceIndex, sentences.length, isFetching, fetchNewSentences]);
+  }, []);
 
   return {
     sentences,
@@ -74,7 +79,6 @@ export function useTypingSentences(
     isInitialLoading,
     fetchError,
     advanceToNextSentence,
-    fetchNewSentences,
     shouldPrefetch: shouldPrefetchSentences(
       currentSentenceIndex,
       sentences.length

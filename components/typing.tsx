@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function Typing({
   staticText,
@@ -8,42 +8,65 @@ export default function Typing({
   staticText: string;
   dynamic: string[];
 }) {
-  const [text, setText] = useState("");
-  const [count, setCount] = useState(0);
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
+  const [text, setText] = useState(dynamic[0] ?? "");
+  const textRef = useRef(dynamic[0] ?? "");
+  const countRef = useRef(0);
+  const isDeletingRef = useRef(false);
 
   const speed = 200;
 
   const postfix = " . . .";
 
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      if (isDeleting) {
-        setText((dynamic[count] + postfix).slice(0, text.length - 1));
+    if (dynamic.length === 0) {
+      textRef.current = "";
+      countRef.current = 0;
+      isDeletingRef.current = false;
+      return;
+    }
+
+    let timeout: ReturnType<typeof setTimeout>;
+
+    const tick = () => {
+      const count = countRef.current % dynamic.length;
+      countRef.current = count;
+      const dynamicText = dynamic[count] ?? "";
+      const targetText = dynamicText + postfix;
+      const currentText = textRef.current;
+      let nextText: string;
+
+      if (isDeletingRef.current) {
+        if (currentText.length === 0) {
+          isDeletingRef.current = false;
+          const nextCount = (count + 1) % dynamic.length;
+          countRef.current = nextCount;
+          const nextDynamicText = dynamic[nextCount] ?? "";
+          nextText = (nextDynamicText + postfix).slice(0, 1);
+        } else {
+          nextText = targetText.slice(0, currentText.length - 1);
+        }
+      } else if (currentText.length >= targetText.length) {
+        isDeletingRef.current = true;
+        nextText = targetText.slice(0, targetText.length - 1);
       } else {
-        setText((dynamic[count] + postfix).slice(0, text.length + 1));
+        nextText = targetText.slice(0, currentText.length + 1);
       }
 
-      if (!isDeleting && text === dynamic[count] + postfix) {
-        setIsDeleting(true);
-      } else if (isDeleting && text === "") {
-        setIsDeleting(false);
-        setCount((prev) => (prev + 1) % dynamic.length);
-      }
-    }, speed);
+      textRef.current = nextText;
+      setText(nextText);
+
+      timeout = setTimeout(tick, speed);
+    };
+
+    timeout = setTimeout(tick, speed);
 
     return () => clearTimeout(timeout);
-  }, [text, isDeleting, count, dynamic]);
+  }, [dynamic, postfix, speed]);
 
   return (
     <>
       {staticText}
-      {isClient ? text : dynamic[0]}
+      {dynamic.length === 0 ? "" : text}
     </>
   );
 }

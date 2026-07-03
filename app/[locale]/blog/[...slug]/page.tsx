@@ -70,8 +70,10 @@ export async function generateMetadata(
 export default async function Page(
   props: PageProps<"/[locale]/blog/[...slug]">
 ) {
-  const { locale, slug } = await props.params;
-  const t = await getTranslations();
+  const [{ locale, slug }, t] = await Promise.all([
+    props.params,
+    getTranslations(),
+  ]);
 
   const post = blog.getPage(slug, locale);
   const posts = blog.getPages(locale);
@@ -80,7 +82,8 @@ export default async function Page(
   if (post?.data.external_url) {
     return <ExternalRedirect url={post.data.external_url} />;
   }
-  const sortedPosts = posts.toSorted(
+  const internalPosts = posts.filter((item) => !item.data.external_url);
+  const sortedPosts = internalPosts.toSorted(
     (a, b) =>
       new Date(b.data.published).getTime() -
       new Date(a.data.published).getTime()
@@ -151,7 +154,15 @@ export default async function Page(
         )}
       </aside>
       <DocsBody>
-        <div style={{ wordBreak: "break-word", overflowWrap: "break-word" }}>
+        <div
+          className="[&_a]:[overflow-wrap:anywhere] [&_code]:[overflow-wrap:anywhere] [&_kbd]:[overflow-wrap:anywhere] [&_samp]:[overflow-wrap:anywhere]"
+          data-blog-body=""
+          lang={locale}
+          style={{
+            overflowWrap: "normal",
+            wordBreak: "keep-all",
+          }}
+        >
           <MDX
             className="mdx"
             components={{

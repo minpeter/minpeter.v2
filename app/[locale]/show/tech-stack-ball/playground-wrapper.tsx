@@ -1,24 +1,48 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useMemo } from "react";
+import type { CSSProperties } from "react";
 
 import { Skeleton } from "@/components/ui/skeleton";
 
-export function PlaygroundWrapper({ h, w }: { h: number; w: number }) {
-  const Playground = useMemo(
-    () =>
-      dynamic(() => import("./animated-stack").then((mod) => mod.Playground), {
-        ssr: false,
-        loading: () => (
-          <Skeleton
-            className="rounded-lg"
-            style={{ height: `${h}px`, width: `${w}px` }}
-          />
-        ),
-      }),
-    [h, w]
-  );
+interface PlaygroundProps {
+  readonly h: number;
+  readonly w: number;
+}
 
-  return <Playground h={h} w={w} />;
+interface PlaygroundFrameStyle extends CSSProperties {
+  readonly "--playground-aspect-ratio": string;
+  readonly "--playground-height": string;
+  readonly "--playground-width": string;
+}
+
+const playgroundSkeletonStyle = {
+  aspectRatio: "var(--playground-aspect-ratio)",
+  height: "auto",
+  maxWidth: "100%",
+  width: "var(--playground-width)",
+} satisfies CSSProperties;
+
+const Playground = dynamic<PlaygroundProps>(
+  () => import("./animated-stack").then((mod) => mod.Playground),
+  {
+    ssr: false,
+    loading: () => (
+      <Skeleton className="rounded-lg" style={playgroundSkeletonStyle} />
+    ),
+  }
+);
+
+export function PlaygroundWrapper({ h, w }: PlaygroundProps) {
+  const playgroundFrameStyle: PlaygroundFrameStyle = {
+    "--playground-aspect-ratio": `${w} / ${h}`,
+    "--playground-height": `${h}px`,
+    "--playground-width": `${w}px`,
+  };
+
+  return (
+    <div className="contents" style={playgroundFrameStyle}>
+      <Playground h={h} w={w} />
+    </div>
+  );
 }

@@ -2,7 +2,7 @@
 
 import type { Route } from "next";
 import { useLocale, useTranslations } from "next-intl";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useEffectEvent, useState } from "react";
 import Header from "@/components/header";
 import { Skeleton } from "@/components/ui/skeleton";
 import styles from "@/shared/styles/stagger-fade-in.module.css";
@@ -28,8 +28,6 @@ export default function Page() {
     isInitialLoading,
     fetchError,
     advanceToNextSentence,
-    fetchNewSentences,
-    shouldPrefetch,
     hasNext,
   } = useTypingSentences(locale, () => t("typingFetchError"));
 
@@ -37,6 +35,8 @@ export default function Page() {
     userInput,
     isComposing,
     composingText,
+    typingStartedAt,
+    typingUpdatedAt,
     inputRef,
     currentInputWithComposition,
     resetInput,
@@ -56,17 +56,25 @@ export default function Page() {
     unitLabel,
     shouldShowStats,
     resetStats,
-    cancelStats,
-  } = useTypingStats(userInput, composingText, currentSentence);
+  } = useTypingStats(
+    userInput,
+    composingText,
+    currentSentence,
+    typingStartedAt,
+    typingUpdatedAt
+  );
 
-  const scheduleSentenceAdvance = useCallback(() => {
+  const scheduleSentenceAdvance = () => {
     setTimeout(() => {
       resetInput();
       resetStats();
       advanceToNextSentence();
       setIsTransitioning(false);
     }, TRANSITION_DELAY_MS);
-  }, [resetInput, resetStats, advanceToNextSentence]);
+  };
+  const scheduleSentenceAdvanceFromEffect = useEffectEvent(
+    scheduleSentenceAdvance
+  );
 
   useEffect(() => {
     if (isTransitioning) {
@@ -90,45 +98,35 @@ export default function Page() {
     }
 
     setIsTransitioning(true);
-    scheduleSentenceAdvance();
+    scheduleSentenceAdvanceFromEffect();
   }, [
     accuracy,
     currentInputWithComposition,
     currentSentence,
     hasNext,
     isTransitioning,
-    scheduleSentenceAdvance,
   ]);
 
-  const handleEnterPress = useCallback(() => {
+  const handleEnterPress = () => {
     if (!hasNext) {
       return false;
     }
 
     setIsTransitioning(true);
-
-    if (shouldPrefetch) {
-      fetchNewSentences();
-    }
-
     scheduleSentenceAdvance();
     return true;
-  }, [hasNext, shouldPrefetch, fetchNewSentences, scheduleSentenceAdvance]);
+  };
 
-  const handleReset = useCallback(() => {
+  const handleReset = () => {
     resetInput();
-    cancelStats();
     setIsTransitioning(false);
-  }, [resetInput, cancelStats]);
+  };
 
-  const handleNavigateAway = useCallback(
-    (e: React.MouseEvent) => {
-      if (userInput.length > 0) {
-        e.preventDefault();
-      }
-    },
-    [userInput.length]
-  );
+  const handleNavigateAway = (e: React.MouseEvent) => {
+    if (userInput.length > 0) {
+      e.preventDefault();
+    }
+  };
 
   useEffect(() => {
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
@@ -141,40 +139,31 @@ export default function Page() {
     return () => window.removeEventListener("beforeunload", handleBeforeUnload);
   }, [userInput.length]);
 
-  const handleKeyDown = useCallback(
-    (e: React.KeyboardEvent<HTMLInputElement>) => {
-      switch (e.key) {
-        case "Enter":
-          if (!isTransitioning && handleEnterPress()) {
-            e.preventDefault();
-          }
-          break;
-        case "Backspace":
-          if (handleBackspace()) {
-            e.preventDefault();
-          }
-          break;
-        case "a":
-          if (e.ctrlKey || e.metaKey) {
-            e.preventDefault();
-            handleSelectAll();
-          }
-          break;
-        case "Escape":
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    switch (e.key) {
+      case "Enter":
+        if (!isTransitioning && handleEnterPress()) {
           e.preventDefault();
-          handleReset();
-          break;
-        default:
-      }
-    },
-    [
-      handleEnterPress,
-      handleBackspace,
-      handleSelectAll,
-      handleReset,
-      isTransitioning,
-    ]
-  );
+        }
+        break;
+      case "Backspace":
+        if (handleBackspace()) {
+          e.preventDefault();
+        }
+        break;
+      case "a":
+        if (e.ctrlKey || e.metaKey) {
+          e.preventDefault();
+          handleSelectAll();
+        }
+        break;
+      case "Escape":
+        e.preventDefault();
+        handleReset();
+        break;
+      default:
+    }
+  };
 
   return (
     <section className={`${styles.stagger_container} flex flex-col gap-12`}>
@@ -271,7 +260,6 @@ export default function Page() {
         <input
           aria-label="Typing input"
           autoComplete="off"
-          autoFocus
           className="pointer-events-none absolute inset-0 h-full w-full opacity-0"
           onCompositionEnd={handleCompositionEnd}
           onCompositionStart={handleCompositionStart}

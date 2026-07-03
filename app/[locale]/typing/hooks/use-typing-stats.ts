@@ -1,5 +1,5 @@
 import { useLocale } from "next-intl";
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
 import {
   calculateAccuracy,
   calculateCPM,
@@ -12,12 +12,11 @@ const MILLISECONDS_PER_SECOND = 1000;
 export function useTypingStats(
   userInput: string,
   composingText: string,
-  currentSentence: string
+  currentSentence: string,
+  typingStartedAt: number | null,
+  typingUpdatedAt: number | null
 ) {
   const locale = useLocale();
-  const [startTime, setStartTime] = useState<number | null>(null);
-  const [wpm, setWpm] = useState(0);
-  const [accuracy, setAccuracy] = useState(0);
   const [lastWpm, setLastWpm] = useState(0);
   const [lastAccuracy, setLastAccuracy] = useState(0);
 
@@ -27,50 +26,24 @@ export function useTypingStats(
     TYPING_UNITS[locale as keyof typeof TYPING_UNITS] || TYPING_UNITS.en;
   const unitLabel = unitConfig.unit;
 
-  const getDisplayValue = useCallback(
-    (wpmValue: number) =>
-      unitLabel === "CPM" ? calculateCPM(wpmValue) : wpmValue,
-    [unitLabel]
-  );
+  const elapsedSeconds =
+    typingStartedAt === null || typingUpdatedAt === null
+      ? 0
+      : (typingUpdatedAt - typingStartedAt) / MILLISECONDS_PER_SECOND;
+  const wpm = calculateWPM(currentInput, elapsedSeconds);
+  const accuracy = calculateAccuracy(currentInput, currentSentence);
 
-  useEffect(() => {
-    if (!startTime && currentInput.length > 0) {
-      setStartTime(Date.now());
-      setLastWpm(0);
-      setLastAccuracy(0);
-      return;
-    }
+  const getDisplayValue = (wpmValue: number) =>
+    unitLabel === "CPM" ? calculateCPM(wpmValue) : wpmValue;
 
-    if (startTime && currentInput.length > 0) {
-      const elapsedSeconds = (Date.now() - startTime) / MILLISECONDS_PER_SECOND;
-      const currentWPM = calculateWPM(currentInput, elapsedSeconds);
-      const currentAccuracy = calculateAccuracy(currentInput, currentSentence);
-      setWpm(currentWPM);
-      setAccuracy(currentAccuracy);
-    } else if (startTime && currentInput.length === 0) {
-      setStartTime(null);
-      setWpm(0);
-      setAccuracy(0);
-    }
-  }, [startTime, currentSentence, currentInput]);
-
-  const resetStats = useCallback(() => {
+  const resetStats = () => {
     if (wpm > 0) {
       setLastWpm(wpm);
     }
     if (accuracy > 0) {
       setLastAccuracy(accuracy);
     }
-    setStartTime(null);
-    setWpm(0);
-    setAccuracy(0);
-  }, [wpm, accuracy]);
-
-  const cancelStats = useCallback(() => {
-    setStartTime(null);
-    setWpm(0);
-    setAccuracy(0);
-  }, []);
+  };
 
   const currentDisplayValue = getDisplayValue(wpm);
   const lastDisplayValue = getDisplayValue(lastWpm);
@@ -86,6 +59,5 @@ export function useTypingStats(
     unitLabel,
     shouldShowStats: wpm > 0 || lastWpm > 0,
     resetStats,
-    cancelStats,
   };
 }

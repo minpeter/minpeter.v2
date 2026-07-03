@@ -2,7 +2,7 @@
 
 import { DownloadIcon, EyeOpenIcon } from "@radix-ui/react-icons";
 import axios from "axios";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -80,18 +80,19 @@ async function uploadFile(file: File[]): Promise<UploadResponse | null> {
 }
 
 export default function TmpfUI() {
-  const [file, setFile] = useState<File[] | null>(null);
+  const fileRef = useRef<File[] | null>(null);
   const [uploaded, setUploaded] = useState<UploadResponse | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      setFile(Array.from(e.target.files));
+      fileRef.current = Array.from(e.target.files);
     }
   };
 
   const handleUpload = async () => {
+    const file = fileRef.current;
     if (!file) {
       return;
     }
@@ -109,9 +110,10 @@ export default function TmpfUI() {
     if (!(uploaded?.folderId && Array.isArray(uploaded.files))) {
       return;
     }
-    for (const item of uploaded.files) {
-      await downloadFile(uploaded.folderId, item.fileName);
-    }
+    const { files, folderId } = uploaded;
+    await Promise.all(
+      files.map((item) => downloadFile(folderId, item.fileName))
+    );
   };
 
   const hasUploadedFiles =

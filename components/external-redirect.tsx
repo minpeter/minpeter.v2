@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useReducer } from "react";
 
 const DEFAULT_COUNTDOWN_START = 3;
 const ONE_SECOND_MS = 1000;
@@ -10,18 +10,22 @@ interface ExternalRedirectProps {
   url: string;
 }
 
+function countdownReducer(count: number) {
+  return count - COUNTDOWN_DECREMENT;
+}
+
 export default function ExternalRedirect({
   url,
   countdownStart = DEFAULT_COUNTDOWN_START,
 }: ExternalRedirectProps) {
-  const [count, setCount] = useState(countdownStart);
+  const [count, decrementCount] = useReducer(countdownReducer, countdownStart);
 
   useEffect(() => {
     if (count <= 0) {
       window.location.href = url;
     } else {
       const timer = window.setTimeout(() => {
-        setCount((previous) => previous - COUNTDOWN_DECREMENT);
+        decrementCount();
       }, ONE_SECOND_MS);
 
       return () => {

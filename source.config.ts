@@ -46,7 +46,7 @@ export const { docs, meta } = defineDocs({
             return z.NEVER;
           }
         }),
-      external_url: z.string().url().optional(),
+      external_url: z.url().optional(),
       lang: z
         .array(z.enum(routing.locales))
         .optional()

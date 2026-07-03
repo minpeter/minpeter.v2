@@ -5,6 +5,7 @@ import { VercelToolbar } from "@vercel/toolbar/next";
 import { NextProvider } from "fumadocs-core/framework/next";
 import type { Viewport } from "next";
 import { Geist_Mono, Shippori_Mincho } from "next/font/google";
+import Script from "next/script";
 import { NuqsAdapter } from "nuqs/adapters/next";
 import { Suspense } from "react";
 
@@ -12,6 +13,7 @@ import Footer from "@/components/footer";
 import { ThemeProvider } from "@/components/theme-provider";
 import { env } from "@/shared/env";
 import { AritaBuriLocalFont } from "@/shared/font.AritaBuri";
+import { routing } from "@/shared/i18n/routing";
 import styles from "@/shared/styles/header-overlay.module.css";
 import NewMetadata from "@/shared/utils/metadata";
 import { cn } from "@/shared/utils/tailwind";
@@ -52,8 +54,16 @@ export default function RootLayout({
   const isVercel = !!env.VERCEL_ENV;
 
   return (
-    // biome-ignore lint/a11y/useHtmlLang: next-intl handles lang attribute via middleware
-    <html suppressHydrationWarning>
+    <html lang={routing.defaultLocale} suppressHydrationWarning>
+      <head>
+        {process.env.NODE_ENV === "development" && (
+          <Script
+            crossOrigin="anonymous"
+            src="//unpkg.com/react-grab/dist/index.global.js"
+            strategy="beforeInteractive"
+          />
+        )}
+      </head>
       <body
         className={cn(
           AritaBuriLocalFont.variable,

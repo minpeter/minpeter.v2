@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import {
   Carousel,
@@ -10,6 +11,8 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { cn } from "@/shared/utils/tailwind";
+
+const IMAGE_WIDTH_RATIO = 1.5;
 
 interface ImageCarouselProps {
   alt?: string;
@@ -61,14 +64,15 @@ export function ImageCarousel({
               key={src}
             >
               <div className="overflow-hidden rounded-lg">
-                {/* biome-ignore lint/performance/noImgElement: using img for dynamic external images */}
-                {/* biome-ignore lint/correctness/useImageSize: height is set via style prop */}
-                <img
+                <Image
                   alt={`${alt} ${index + 1}`}
                   className="block h-full w-auto object-contain"
+                  height={height}
                   loading="lazy"
+                  sizes="(max-width: 768px) 100vw, 768px"
                   src={src}
-                  style={{ height: `${height}px` }}
+                  style={{ height: `${height}px`, width: "auto" }}
+                  width={Math.round(height * IMAGE_WIDTH_RATIO)}
                 />
               </div>
             </CarouselItem>

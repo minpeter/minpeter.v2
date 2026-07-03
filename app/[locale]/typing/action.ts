@@ -3,6 +3,17 @@
 import { friendli } from "@friendliai/ai-provider";
 import { generateText } from "ai";
 
+const fallbackSentences = {
+  ko: [
+    "작은 개선이 쌓이면 어느 날 훨씬 나은 경험이 됩니다.",
+    "차분하게 읽고 정확하게 입력하는 습관을 연습합니다.",
+  ],
+  en: [
+    "Small improvements become a better experience over time.",
+    "Practice typing with steady focus and clear intention.",
+  ],
+} as const;
+
 const koreanConfig = {
   model: friendli("meta-llama-3.1-8b-instruct"),
   temperature: 1.5,
@@ -34,7 +45,17 @@ const englishConfig = {
   },
 };
 
+function getFallbackSentence(locale: "ko" | "en") {
+  const sentences = fallbackSentences[locale];
+  const index = Math.floor(Math.random() * sentences.length);
+  return sentences[index] ?? sentences[0];
+}
+
 export async function nextSentencesGenerator(locale: "ko" | "en") {
+  if (!process.env.FRIENDLI_TOKEN) {
+    return getFallbackSentence(locale);
+  }
+
   const { text } = await generateText({
     ...(locale === "ko" ? koreanConfig : englishConfig),
   });

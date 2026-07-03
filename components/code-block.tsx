@@ -1,7 +1,7 @@
 "use client";
 
 import copy from "clipboard-copy";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { highlight } from "sugar-high";
 
 const TEMPLATE_TOKEN_REGEX = /{{([^}]+)}}/g;
@@ -133,41 +133,36 @@ export function ModCodeBlock({
   data,
 }: {
   template: string;
-  data: { [key: string]: string };
+  data: Record<string, string>;
 }) {
-  const segments = useMemo(() => parseTemplate(template), [template]);
-  const [values, setValues] = useState(data);
+  const segments = parseTemplate(template);
+  const [editedValues, setEditedValues] = useState<Record<string, string>>({});
   const [activeSegmentIndex, setActiveSegmentIndex] = useState<number | null>(
     null
   );
   const { status, markCopied, markError } = useCopyStatus();
-
-  useEffect(() => {
-    setValues(data);
-  }, [data]);
-
-  useEffect(() => {
-    if (activeSegmentIndex === null) {
-      return;
-    }
-    if (activeSegmentIndex >= segments.length) {
-      setActiveSegmentIndex(null);
-    }
-  }, [activeSegmentIndex, segments.length]);
+  const visibleActiveSegmentIndex =
+    activeSegmentIndex === null || activeSegmentIndex >= segments.length
+      ? null
+      : activeSegmentIndex;
 
   const handleCopy = async () => {
+    const values = { ...data, ...editedValues };
     const compiled = buildTemplateOutput(segments, values);
 
     try {
       await copyToClipboard(compiled);
       markCopied();
-    } catch {
+    } catch (error) {
+      if (!(error instanceof Error)) {
+        throw error;
+      }
       markError();
     }
   };
 
   const handleSegmentChange = (key: string, value: string) => {
-    setValues((prev) => ({
+    setEditedValues((prev) => ({
       ...prev,
       [key]: value,
     }));
@@ -200,13 +195,13 @@ export function ModCodeBlock({
                 );
               }
 
-              const segmentValue = values[segment.content] ?? "";
-              if (activeSegmentIndex === index) {
+              const segmentValue =
+                editedValues[segment.content] ?? data[segment.content] ?? "";
+              if (visibleActiveSegmentIndex === index) {
                 return (
                   <input
                     aria-label={`Value for ${segment.content}`}
                     autoComplete="off"
-                    autoFocus
                     className="inline h-5 rounded-md bg-secondary px-1 py-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                     key={segment.id}
                     onBlur={() => setActiveSegmentIndex(null)}
@@ -218,6 +213,9 @@ export function ModCodeBlock({
                         event.preventDefault();
                         (event.target as HTMLInputElement).blur();
                       }
+                    }}
+                    ref={(inputElement) => {
+                      inputElement?.focus();
                     }}
                     style={{ width: getInputWidth(segmentValue) }}
                     type="text"
@@ -257,13 +255,16 @@ export function ModCodeBlock({
 export function CodeBlock({ code }: { code: string; language?: string }) {
   const { status, markCopied, markError } = useCopyStatus();
   const isMultiline = code.includes(MULTILINE_SEPARATOR);
-  const highlightedCode = useMemo(() => highlight(code), [code]);
+  const highlightedCode = highlight(code);
 
   const handleCopy = async () => {
     try {
       await copyToClipboard(code);
       markCopied();
-    } catch {
+    } catch (error) {
+      if (!(error instanceof Error)) {
+        throw error;
+      }
       markError();
     }
   };
