@@ -78,7 +78,6 @@ export default async function Page(
   const post = blog.getPage(slug, locale);
   const posts = blog.getPages(locale);
 
-  // Redirect to external URL if provided
   if (post?.data.external_url) {
     return <ExternalRedirect url={post.data.external_url} />;
   }
@@ -95,22 +94,14 @@ export default async function Page(
 
   const MDX = post.data.body;
 
-  type PostWithNavigation = (typeof sortedPosts)[0] & {
-    previous: (typeof sortedPosts)[0] | null;
-    next: (typeof sortedPosts)[0] | null;
-  };
-
-  const postsIndex = sortedPosts.reduce<Record<string, PostWithNavigation>>(
-    (acc, currentPost, index) => {
-      acc[currentPost.slugs.join("/")] = {
-        ...currentPost,
-        previous: sortedPosts[index - 1] || null,
-        next: sortedPosts[index + 1] || null,
-      };
-      return acc;
-    },
-    {}
+  const currentPostPath = post.slugs.join("/");
+  const currentPostIndex = sortedPosts.findIndex(
+    (item) => item.slugs.join("/") === currentPostPath
   );
+  const previousPost =
+    currentPostIndex > 0 ? sortedPosts[currentPostIndex - 1] : null;
+  const nextPost =
+    currentPostIndex >= 0 ? sortedPosts[currentPostIndex + 1] : null;
 
   return (
     <section className={styles.stagger_container}>
@@ -159,7 +150,7 @@ export default async function Page(
           data-blog-body=""
           lang={locale}
           style={{
-            overflowWrap: "normal",
+            overflowWrap: "break-word",
             wordBreak: "keep-all",
           }}
         >
@@ -254,27 +245,25 @@ export default async function Page(
           </h2>
         </div>
         <div className="flex justify-between">
-          {postsIndex[post.slugs.join("/")].previous ? (
+          {previousPost ? (
             <NavLink
               className="max-w-[45%] truncate rounded-md px-2 py-1 text-primary hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              href={
-                `${postsIndex[post.slugs.join("/")].previous?.url}` as Route
-              }
+              href={previousPost.url as Route}
               transitionTypes={["slide-back"]}
             >
-              ← {postsIndex[post.slugs.join("/")].previous?.data.title}
+              ← {previousPost.data.title}
             </NavLink>
           ) : (
             <div />
           )}
 
-          {postsIndex[post.slugs.join("/")].next ? (
+          {nextPost ? (
             <NavLink
               className="max-w-[45%] truncate rounded-md px-2 py-1 text-primary hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              href={`${postsIndex[post.slugs.join("/")].next?.url}` as Route}
+              href={nextPost.url as Route}
               transitionTypes={["slide-forward"]}
             >
-              {postsIndex[post.slugs.join("/")].next?.data.title} →
+              {nextPost.data.title} →
             </NavLink>
           ) : null}
         </div>

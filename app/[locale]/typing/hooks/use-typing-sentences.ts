@@ -20,6 +20,7 @@ export function useTypingSentences(
   const [isFetching, setIsFetching] = useState(false);
   const [fetchError, setFetchError] = useState<string | null>(null);
   const hasFetchedInitial = useRef(false);
+  const hasAdvancedSentence = useRef(false);
   const isFetchingRef = useRef(false);
 
   const currentSentence = sentences[currentSentenceIndex] ?? "";
@@ -41,27 +42,24 @@ export function useTypingSentences(
         nextSentencesGenerator(generatorLocale),
       ]);
       setSentences((prev) => [...prev, sentence1, sentence2]);
-      isFetchingRef.current = false;
-      setIsFetching(false);
-    } catch (error) {
-      if (!(error instanceof Error)) {
-        throw error;
-      }
+    } catch {
       setFetchError(getErrorMessage());
+    } finally {
       isFetchingRef.current = false;
       setIsFetching(false);
     }
   };
 
   const fetchInitialSentences = useEffectEvent(fetchNewSentences);
-
-  const advanceToNextSentence = () => {
-    const nextIndex = currentSentenceIndex + 1;
-    setCurrentSentenceIndex(nextIndex);
-
-    if (shouldPrefetchSentences(nextIndex, sentences.length)) {
+  const fetchPrefetchSentences = useEffectEvent((sentenceIndex: number) => {
+    if (shouldPrefetchSentences(sentenceIndex, sentences.length)) {
       fetchNewSentences();
     }
+  });
+
+  const advanceToNextSentence = () => {
+    hasAdvancedSentence.current = true;
+    setCurrentSentenceIndex((currentIndex) => currentIndex + 1);
   };
 
   useEffect(() => {
@@ -71,6 +69,12 @@ export function useTypingSentences(
     }
   }, []);
 
+  useEffect(() => {
+    if (hasAdvancedSentence.current) {
+      fetchPrefetchSentences(currentSentenceIndex);
+    }
+  }, [currentSentenceIndex]);
+
   return {
     sentences,
     currentSentence,
@@ -79,6 +83,7 @@ export function useTypingSentences(
     isInitialLoading,
     fetchError,
     advanceToNextSentence,
+    fetchMoreSentences: fetchNewSentences,
     shouldPrefetch: shouldPrefetchSentences(
       currentSentenceIndex,
       sentences.length

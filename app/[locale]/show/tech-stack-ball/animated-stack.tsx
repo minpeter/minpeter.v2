@@ -1,4 +1,5 @@
 "use client";
+"use no memo";
 
 import {
   Bodies,
@@ -61,10 +62,6 @@ const ICON_INITIAL_SPEED = 1.35;
 const MOUSE_CONSTRAINT_STIFFNESS = 0.05;
 const CANVAS_FILTER = "grayscale(1)";
 
-/**
- * Fisher-Yates shuffle algorithm for reliable array randomization.
- * Unlike using sort() with Math.random(), this provides uniform distribution.
- */
 function shuffleArray<T>(array: T[]): T[] {
   const result = [...array];
   for (let i = result.length - 1; i > 0; i--) {
@@ -221,8 +218,6 @@ export function Playground({
       Render.stop(render);
       Runner.stop(runner);
       Engine.clear(engine);
-      // render.canvas = null;
-      // render.context = null;
       render.textures = {};
     };
   }, [w, h]);

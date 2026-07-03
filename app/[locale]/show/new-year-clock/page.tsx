@@ -2,7 +2,7 @@
 
 import type { Route } from "next";
 import { useLocale, useTranslations } from "next-intl";
-import { type ReactNode, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "@/components/header";
 
 export default function Page() {
@@ -81,7 +81,9 @@ function calculateTimeLeft(targetTimestamp: number): TimeLeft {
 function Countdown() {
   "use no memo";
   const [targetTimestamp] = useState(getNextYearTimestamp);
-  const [remainingTime, setRemainingTime] = useState<TimeLeft | null>(null);
+  const [remainingTime, setRemainingTime] = useState<TimeLeft>(() =>
+    calculateTimeLeft(targetTimestamp)
+  );
 
   useEffect(() => {
     const updateRemainingTime = () => {
@@ -98,28 +100,18 @@ function Countdown() {
     };
   }, [targetTimestamp]);
 
-  const hasTimeLeft =
-    remainingTime !== null &&
-    Object.values(remainingTime).some((value) => value > 0);
-
-  let countdownContent: ReactNode = "--일 --시간 --분 --초";
-
-  if (remainingTime !== null && hasTimeLeft) {
-    countdownContent = (
-      <>
-        {remainingTime.days}일 {remainingTime.hours}시간 {remainingTime.minutes}
-        분 {remainingTime.seconds}초
-      </>
-    );
-  } else if (remainingTime !== null) {
-    countdownContent = "Happy New Year!";
-  }
+  const hasTimeLeft = Object.values(remainingTime).some((value) => value > 0);
+  const countdownContent = hasTimeLeft ? (
+    <>
+      {remainingTime.days}일 {remainingTime.hours}시간 {remainingTime.minutes}분{" "}
+      {remainingTime.seconds}초
+    </>
+  ) : (
+    "Happy New Year!"
+  );
 
   return (
-    <div
-      aria-live="polite"
-      className="whitespace-pre-wrap rounded-xl text-sm tabular-nums"
-    >
+    <div className="whitespace-pre-wrap rounded-xl text-sm tabular-nums">
       {countdownContent}
     </div>
   );

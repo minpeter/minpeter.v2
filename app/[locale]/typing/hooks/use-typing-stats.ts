@@ -21,6 +21,7 @@ export function useTypingStats(
   const [lastAccuracy, setLastAccuracy] = useState(0);
 
   const currentInput = userInput + composingText;
+  const hasCurrentInput = currentInput.length > 0;
 
   const unitConfig =
     TYPING_UNITS[locale as keyof typeof TYPING_UNITS] || TYPING_UNITS.en;
@@ -37,17 +38,20 @@ export function useTypingStats(
     unitLabel === "CPM" ? calculateCPM(wpmValue) : wpmValue;
 
   const resetStats = () => {
-    if (wpm > 0) {
+    if (hasCurrentInput) {
       setLastWpm(wpm);
-    }
-    if (accuracy > 0) {
       setLastAccuracy(accuracy);
     }
   };
 
+  const clearStats = () => {
+    setLastWpm(0);
+    setLastAccuracy(0);
+  };
+
   const currentDisplayValue = getDisplayValue(wpm);
   const lastDisplayValue = getDisplayValue(lastWpm);
-  const displayValue = wpm > 0 ? currentDisplayValue : lastDisplayValue;
+  const displayValue = hasCurrentInput ? currentDisplayValue : lastDisplayValue;
 
   return {
     wpm,
@@ -55,9 +59,10 @@ export function useTypingStats(
     lastWpm,
     lastAccuracy,
     displayValue,
-    displayAccuracy: accuracy > 0 ? accuracy : lastAccuracy,
+    displayAccuracy: hasCurrentInput ? accuracy : lastAccuracy,
     unitLabel,
-    shouldShowStats: wpm > 0 || lastWpm > 0,
+    shouldShowStats: hasCurrentInput || lastWpm > 0,
     resetStats,
+    clearStats,
   };
 }

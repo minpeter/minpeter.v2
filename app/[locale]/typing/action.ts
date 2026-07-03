@@ -14,6 +14,13 @@ const fallbackSentences = {
   ],
 } as const;
 
+type TypingLocale = keyof typeof fallbackSentences;
+
+const fallbackSentenceIndexes: Record<TypingLocale, number> = {
+  ko: 0,
+  en: 0,
+};
+
 const koreanConfig = {
   model: friendli("meta-llama-3.1-8b-instruct"),
   temperature: 1.5,
@@ -45,13 +52,14 @@ const englishConfig = {
   },
 };
 
-function getFallbackSentence(locale: "ko" | "en") {
+function getFallbackSentence(locale: TypingLocale) {
   const sentences = fallbackSentences[locale];
-  const index = Math.floor(Math.random() * sentences.length);
+  const index = fallbackSentenceIndexes[locale] % sentences.length;
+  fallbackSentenceIndexes[locale] += 1;
   return sentences[index] ?? sentences[0];
 }
 
-export async function nextSentencesGenerator(locale: "ko" | "en") {
+export async function nextSentencesGenerator(locale: TypingLocale) {
   if (!process.env.FRIENDLI_TOKEN) {
     return getFallbackSentence(locale);
   }

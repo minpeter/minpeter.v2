@@ -8,7 +8,7 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   typedRoutes: true,
   cacheComponents: false,
-  reactCompiler: true, // React Compiler enabled globally; risky 3D/physics demos in app/[locale]/show/ and components/lickitung protected by "use no memo" directives (see modernization PR)
+  reactCompiler: true,
   turbopack: {
     root: process.cwd(),
   },

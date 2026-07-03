@@ -3,35 +3,17 @@ import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { VercelToolbar } from "@vercel/toolbar/next";
 import { NextProvider } from "fumadocs-core/framework/next";
-import type { Viewport } from "next";
 import { Geist_Mono, Shippori_Mincho } from "next/font/google";
 import Script from "next/script";
 import { NuqsAdapter } from "nuqs/adapters/next";
-import { Suspense } from "react";
+import { type ReactNode, Suspense } from "react";
 
 import Footer from "@/components/footer";
 import { ThemeProvider } from "@/components/theme-provider";
 import { env } from "@/shared/env";
 import { AritaBuriLocalFont } from "@/shared/font.AritaBuri";
-import { routing } from "@/shared/i18n/routing";
 import styles from "@/shared/styles/header-overlay.module.css";
-import NewMetadata from "@/shared/utils/metadata";
 import { cn } from "@/shared/utils/tailwind";
-
-import "./globals.css";
-
-export const metadata = NewMetadata({
-  title: "minpeter",
-  description: "이 웹에서 가장 멋진 사이트가 될거야~",
-});
-
-export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
-    { media: "(prefers-color-scheme: dark)", color: "#0a0a0b" },
-  ],
-  colorScheme: "light dark",
-};
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
@@ -44,25 +26,32 @@ const shipporiMincho = Shippori_Mincho({
   weight: ["400", "500", "600"],
 });
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  const shouldInjectToolbar = env.NODE_ENV === "development";
+const REACT_GRAB_SCRIPT_SRC =
+  "https://unpkg.com/react-grab@0.1.47/dist/index.global.js";
+const REACT_GRAB_SCRIPT_INTEGRITY =
+  "sha256-N9ZzcnqywEotWZk5PhMpU5N3zfVzXaABUWaqjSqVWJw=";
+
+interface RootDocumentProps {
+  readonly children: ReactNode;
+  readonly lang: string;
+}
+
+export function RootDocument({ children, lang }: RootDocumentProps) {
+  const shouldInjectDevTools = env.NODE_ENV === "development";
   const isProduction = env.NODE_ENV === "production";
   const isVercel = !!env.VERCEL_ENV;
 
   return (
-    <html lang={routing.defaultLocale} suppressHydrationWarning>
+    <html lang={lang} suppressHydrationWarning>
       <head>
-        {process.env.NODE_ENV === "development" && (
+        {shouldInjectDevTools ? (
           <Script
             crossOrigin="anonymous"
-            src="//unpkg.com/react-grab/dist/index.global.js"
+            integrity={REACT_GRAB_SCRIPT_INTEGRITY}
+            src={REACT_GRAB_SCRIPT_SRC}
             strategy="beforeInteractive"
           />
-        )}
+        ) : null}
       </head>
       <body
         className={cn(
@@ -88,14 +77,11 @@ export default function RootLayout({
                   )}
                 >
                   <div
-                    className={cn(
-                      styles.scroll_responsive_header,
-                      "pointer-events-none fixed inset-x-0 top-0 z-10 h-40"
-                    )}
+                    aria-hidden="true"
+                    className={styles["header-overlay-root"]}
                   />
-
                   {children}
-                  {shouldInjectToolbar ? <VercelToolbar /> : null}
+                  {shouldInjectDevTools ? <VercelToolbar /> : null}
                 </main>
 
                 <Footer />
@@ -103,13 +89,15 @@ export default function RootLayout({
             </Suspense>
           </ThemeProvider>
         </NextProvider>
+        {isProduction && isVercel ? (
+          <>
+            <Analytics />
+            <SpeedInsights />
+          </>
+        ) : (
+          <Analytics debug={false} />
+        )}
       </body>
-      {isProduction && isVercel && (
-        <>
-          <Analytics />
-          <SpeedInsights />
-        </>
-      )}
       <GoogleAnalytics gaId="G-8L34G6HSJS" />
     </html>
   );

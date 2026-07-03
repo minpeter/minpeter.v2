@@ -9,6 +9,7 @@ import styles from "@/shared/styles/stagger-fade-in.module.css";
 import { useTypingInput } from "./hooks/use-typing-input";
 import { useTypingSentences } from "./hooks/use-typing-sentences";
 import { useTypingStats } from "./hooks/use-typing-stats";
+import { TypingHints, TypingStatus } from "./typing-status";
 import { buildCharRenderState } from "./utils/char-render";
 
 const MIN_ACCURACY_THRESHOLD = 85;
@@ -28,6 +29,7 @@ export default function Page() {
     isInitialLoading,
     fetchError,
     advanceToNextSentence,
+    fetchMoreSentences,
     hasNext,
   } = useTypingSentences(locale, () => t("typingFetchError"));
 
@@ -56,6 +58,7 @@ export default function Page() {
     unitLabel,
     shouldShowStats,
     resetStats,
+    clearStats,
   } = useTypingStats(
     userInput,
     composingText,
@@ -109,7 +112,8 @@ export default function Page() {
 
   const handleEnterPress = () => {
     if (!hasNext) {
-      return false;
+      fetchMoreSentences();
+      return true;
     }
 
     setIsTransitioning(true);
@@ -119,6 +123,7 @@ export default function Page() {
 
   const handleReset = () => {
     resetInput();
+    clearStats();
     setIsTransitioning(false);
   };
 
@@ -211,55 +216,29 @@ export default function Page() {
             )}
           </div>
 
-          <div className="flex items-center gap-2 text-gray-400 text-sm">
-            <span>
-              {currentSentenceIndex + 1} / {sentences.length}
-            </span>
-            {shouldShowStats ? (
-              <>
-                <span className="text-gray-500">•</span>
-                <span>
-                  {displayValue} {t(unitLabel)}
-                </span>
-                <span className="text-gray-500">•</span>
-                <span>
-                  {displayAccuracy}% {t("typingAccuracy")}
-                </span>
-              </>
-            ) : null}
-            {isFetching ? (
-              <>
-                <span className="text-gray-500">•</span>
-                <span>{t("typingGenerating")}</span>
-              </>
-            ) : null}
-            {fetchError ? (
-              <>
-                <span className="text-gray-500">•</span>
-                <span className="text-pink-400">{fetchError}</span>
-              </>
-            ) : null}
-          </div>
+          <TypingStatus
+            accuracyText={t("typingAccuracy")}
+            currentPosition={currentSentenceIndex + 1}
+            displayAccuracy={displayAccuracy}
+            displayValue={displayValue}
+            fetchError={fetchError}
+            generatingText={t("typingGenerating")}
+            isFetching={isFetching}
+            sentenceCount={sentences.length}
+            shouldShowStats={shouldShowStats}
+            unitText={t(unitLabel)}
+          />
 
-          <div className="mt-2 flex flex-wrap justify-center gap-3 text-gray-500 text-xs">
-            <span>
-              <kbd className="rounded bg-gray-700 px-1.5 py-0.5 font-mono text-gray-300">
-                Enter
-              </kbd>{" "}
-              {t("typingHintEnter")}
-            </span>
-            <span>
-              <kbd className="rounded bg-gray-700 px-1.5 py-0.5 font-mono text-gray-300">
-                Esc
-              </kbd>{" "}
-              {t("typingHintEsc")}
-            </span>
-          </div>
+          <TypingHints
+            enterText={t("typingHintEnter")}
+            resetText={t("typingHintEsc")}
+          />
         </button>
 
         <input
           aria-label="Typing input"
           autoComplete="off"
+          autoFocus
           className="pointer-events-none absolute inset-0 h-full w-full opacity-0"
           onCompositionEnd={handleCompositionEnd}
           onCompositionStart={handleCompositionStart}

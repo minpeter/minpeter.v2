@@ -22,6 +22,7 @@ export default function Typing({
       textRef.current = "";
       countRef.current = 0;
       isDeletingRef.current = false;
+      setText("");
       return;
     }
 

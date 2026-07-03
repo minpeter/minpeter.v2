@@ -12,7 +12,6 @@ interface PlaygroundProps {
 
 interface PlaygroundFrameStyle extends CSSProperties {
   readonly "--playground-aspect-ratio": string;
-  readonly "--playground-height": string;
   readonly "--playground-width": string;
 }
 
@@ -36,7 +35,6 @@ const Playground = dynamic<PlaygroundProps>(
 export function PlaygroundWrapper({ h, w }: PlaygroundProps) {
   const playgroundFrameStyle: PlaygroundFrameStyle = {
     "--playground-aspect-ratio": `${w} / ${h}`,
-    "--playground-height": `${h}px`,
     "--playground-width": `${w}px`,
   };
 

@@ -72,6 +72,7 @@ export function ImageCarousel({
                   sizes="(max-width: 768px) 100vw, 768px"
                   src={src}
                   style={{ height: `${height}px`, width: "auto" }}
+                  unoptimized
                   width={Math.round(height * IMAGE_WIDTH_RATIO)}
                 />
               </div>
