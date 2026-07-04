@@ -6,8 +6,7 @@ import Header from "@/components/header";
 export default async function Page(
   props: PageProps<"/[locale]/show/unstructured">
 ) {
-  const { locale } = await props.params;
-  const t = await getTranslations();
+  const [{ locale }, t] = await Promise.all([props.params, getTranslations()]);
   return (
     <section className="flex flex-col gap-8">
       <Header

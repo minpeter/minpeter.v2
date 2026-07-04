@@ -22,9 +22,8 @@ const showcasePaths = [
 ] as const;
 
 export default async function Page(props: PageProps<"/[locale]/show">) {
-  const { locale } = await props.params;
-
-  const [enabled, t] = await Promise.all([
+  const [{ locale }, enabled, t] = await Promise.all([
+    props.params,
     createFeatureGate("test_flag")(), //Disabled by default, edit in the Statsig console
     getTranslations(),
   ]);

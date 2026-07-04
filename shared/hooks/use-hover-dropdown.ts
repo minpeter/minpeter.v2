@@ -1,13 +1,57 @@
 "use client";
 
 import {
-  useCallback,
   useEffect,
   useEffectEvent,
   useRef,
   useState,
+  useSyncExternalStore,
 } from "react";
 import { isPointInTriangle } from "@/shared/utils/geometry";
+
+const TOUCH_POINTER_QUERY = "(any-pointer: coarse)";
+
+const noopUnsubscribe = (): void => undefined;
+
+function hasTouchPointer(): boolean {
+  return (
+    typeof window.matchMedia === "function" &&
+    window.matchMedia(TOUCH_POINTER_QUERY).matches
+  );
+}
+
+function getTouchDeviceSnapshot(): boolean {
+  if (typeof window === "undefined") {
+    return false;
+  }
+
+  return (
+    "ontouchstart" in window ||
+    navigator.maxTouchPoints > 0 ||
+    hasTouchPointer()
+  );
+}
+
+function getServerTouchDeviceSnapshot(): boolean {
+  return false;
+}
+
+function subscribeToTouchDevice(onStoreChange: () => void): () => void {
+  if (
+    typeof window === "undefined" ||
+    typeof window.matchMedia !== "function"
+  ) {
+    return noopUnsubscribe;
+  }
+
+  const touchPointerQuery = window.matchMedia(TOUCH_POINTER_QUERY);
+
+  touchPointerQuery.addEventListener("change", onStoreChange);
+
+  return () => {
+    touchPointerQuery.removeEventListener("change", onStoreChange);
+  };
+}
 
 interface UseHoverDropdownOptions {
   closeDelay?: number;
@@ -38,7 +82,11 @@ export function useHoverDropdown(
   } = options;
 
   const [isOpen, setIsOpen] = useState(false);
-  const [isTouchDevice, setIsTouchDevice] = useState(false);
+  const isTouchDevice = useSyncExternalStore(
+    subscribeToTouchDevice,
+    getTouchDeviceSnapshot,
+    getServerTouchDeviceSnapshot
+  );
 
   const triggerRef = useRef<HTMLButtonElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -49,11 +97,6 @@ export function useHoverDropdown(
   const lastInteractionRef = useRef<
     "mouse" | "touch" | "pen" | "keyboard" | null
   >(null);
-
-  // Detect touch device on mount
-  useEffect(() => {
-    setIsTouchDevice("ontouchstart" in window || navigator.maxTouchPoints > 0);
-  }, []);
 
   // Track last interaction type for desktop keyboard access
   useEffect(() => {
@@ -145,7 +188,7 @@ export function useHoverDropdown(
     return () => document.removeEventListener("mousemove", handleMouseMove);
   }, [isOpen, isTouchDevice]);
 
-  const handleMouseEnter = useCallback(() => {
+  const handleMouseEnter = () => {
     if (isTouchDevice) {
       return;
     }
@@ -163,9 +206,9 @@ export function useHoverDropdown(
         openTimeoutRef.current = null;
       }, openDelay);
     }
-  }, [isTouchDevice, isOpen, openDelay]);
+  };
 
-  const handleMouseLeave = useCallback(() => {
+  const handleMouseLeave = () => {
     if (isTouchDevice) {
       return;
     }
@@ -184,9 +227,9 @@ export function useHoverDropdown(
       }
       closeTimeoutRef.current = null;
     }, closeDelay);
-  }, [isTouchDevice, closeDelay]);
+  };
 
-  const handleContentMouseEnter = useCallback(() => {
+  const handleContentMouseEnter = () => {
     if (isTouchDevice) {
       return;
     }
@@ -195,9 +238,9 @@ export function useHoverDropdown(
       clearTimeout(closeTimeoutRef.current);
       closeTimeoutRef.current = null;
     }
-  }, [isTouchDevice]);
+  };
 
-  const handleContentMouseLeave = useCallback(() => {
+  const handleContentMouseLeave = () => {
     if (isTouchDevice) {
       return;
     }
@@ -206,26 +249,23 @@ export function useHoverDropdown(
       setIsOpen(false);
       closeTimeoutRef.current = null;
     }, openDelay);
-  }, [isTouchDevice, openDelay]);
+  };
 
   // Touch devices: allow click/keyboard to toggle. Desktop: ignore opens (hover only),
   // but allow closes (outside click / Escape) and keyboard opens to be reflected.
-  const handleOpenChange = useCallback(
-    (open: boolean) => {
-      if (isTouchDevice) {
-        setIsOpen(open);
-        return;
-      }
-      if (!open) {
-        setIsOpen(false);
-        return;
-      }
-      if (lastInteractionRef.current === "keyboard") {
-        setIsOpen(true);
-      }
-    },
-    [isTouchDevice]
-  );
+  const handleOpenChange = (open: boolean) => {
+    if (isTouchDevice) {
+      setIsOpen(open);
+      return;
+    }
+    if (!open) {
+      setIsOpen(false);
+      return;
+    }
+    if (lastInteractionRef.current === "keyboard") {
+      setIsOpen(true);
+    }
+  };
 
   return {
     isOpen,

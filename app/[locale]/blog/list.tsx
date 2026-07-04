@@ -7,7 +7,7 @@ import type { Route } from "next";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { debounce, parseAsString, useQueryState } from "nuqs";
-import { useDeferredValue, useEffect, useMemo, useTransition } from "react";
+import { useDeferredValue, useEffect, useTransition } from "react";
 import { Badge } from "@/components/ui/badge";
 import { ViewTransition } from "@/components/view-transition";
 import type { postMetadataType } from "@/shared/source";
@@ -84,37 +84,25 @@ export function BlogList({
   const isSearching =
     query !== deferredQuery || isPending || searchQuery.isLoading;
 
-  // Filter posts based on search results (use deferredQuery for expensive filtering)
-  const filteredPosts = useMemo(() => {
-    const byLang = posts.filter((post) => post.lang.includes(lang));
+  const byLang = posts.filter((post) => post.lang.includes(lang));
+  let filteredPosts = byLang;
 
-    // If no search query, return all posts filtered by language
-    if (!deferredQuery) {
-      return byLang;
-    }
-
-    // If search is loading or empty, filter by title as fallback
+  if (deferredQuery) {
     if (
       searchQuery.isLoading ||
       searchQuery.data === "empty" ||
       !searchQuery.data
     ) {
-      return filterByTitle(byLang, deferredQuery);
+      filteredPosts = filterByTitle(byLang, deferredQuery);
+    } else {
+      const matchedUrls = extractMatchedUrls(searchQuery.data);
+      const bySearchResult = byLang.filter((post) => matchedUrls.has(post.url));
+      filteredPosts =
+        bySearchResult.length === 0
+          ? filterByTitle(byLang, deferredQuery)
+          : bySearchResult;
     }
-
-    // Use API search results - extract unique page URLs
-    const matchedUrls = extractMatchedUrls(searchQuery.data);
-
-    // Filter posts that match search results
-    const filtered = byLang.filter((post) => matchedUrls.has(post.url));
-
-    // If no matches from API, fallback to title search
-    if (filtered.length === 0) {
-      return filterByTitle(byLang, deferredQuery);
-    }
-
-    return filtered;
-  }, [posts, lang, deferredQuery, searchQuery.data, searchQuery.isLoading]);
+  }
 
   return (
     <>

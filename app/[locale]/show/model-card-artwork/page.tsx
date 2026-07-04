@@ -9,8 +9,7 @@ import { modelCardArtworks } from "./assets";
 export default async function Page(
   props: PageProps<"/[locale]/show/model-card-artwork">
 ) {
-  const { locale } = await props.params;
-  const t = await getTranslations();
+  const [{ locale }, t] = await Promise.all([props.params, getTranslations()]);
   return (
     <section className="flex flex-col gap-3">
       <Header

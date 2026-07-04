@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import {
   buildFinalInputAfterComposition,
   isSpecialChar,
@@ -15,13 +15,27 @@ export function useTypingInput(
   const [isComposing, setIsComposing] = useState(false);
   const [composingText, setComposingText] = useState("");
   const [isAllSelected, setIsAllSelected] = useState(false);
+  const [typingStartedAt, setTypingStartedAt] = useState<number | null>(null);
+  const [typingUpdatedAt, setTypingUpdatedAt] = useState<number | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const resetInput = useCallback(() => {
+  const markTypingUpdated = () => {
+    const now = Date.now();
+    setTypingStartedAt((current) => current ?? now);
+    setTypingUpdatedAt(now);
+  };
+
+  const clearTypingClock = () => {
+    setTypingStartedAt(null);
+    setTypingUpdatedAt(null);
+  };
+
+  const resetInput = () => {
     setUserInput("");
     setComposingText("");
     setIsComposing(false);
     setIsAllSelected(false);
+    clearTypingClock();
     if (inputRef.current) {
       inputRef.current.value = "";
       inputRef.current.blur();
@@ -29,95 +43,104 @@ export function useTypingInput(
         inputRef.current?.focus();
       }, INPUT_FOCUS_DELAY_MS);
     }
-  }, []);
+  };
 
-  const focusInput = useCallback(() => {
+  const focusInput = () => {
     if (!isTransitioning) {
       inputRef.current?.focus();
     }
-  }, [isTransitioning]);
+  };
 
-  const handleInput = useCallback(
-    (e: React.FormEvent<HTMLInputElement>) => {
-      const nativeEvent = e.nativeEvent as InputEvent;
+  const handleInput = (e: React.FormEvent<HTMLInputElement>) => {
+    const nativeEvent = e.nativeEvent as InputEvent;
 
-      if (isTransitioning) {
-        e.preventDefault();
-        return;
+    if (isTransitioning) {
+      e.preventDefault();
+      return;
+    }
+
+    const input = e.currentTarget.value;
+
+    if (nativeEvent.isComposing || isComposing) {
+      if (!isSpecialChar(input)) {
+        markTypingUpdated();
+        setComposingText(input);
       }
+      return;
+    }
 
-      const input = e.currentTarget.value;
+    const nextInput = mergeInputWithComposition(
+      userInput,
+      composingText,
+      input
+    );
 
-      if (nativeEvent.isComposing || isComposing) {
-        if (!isSpecialChar(input)) {
-          setComposingText(input);
-        }
-        return;
+    if (composingText) {
+      setComposingText("");
+    }
+
+    if (nextInput.length <= currentSentence.length) {
+      if (nextInput.length === 0) {
+        clearTypingClock();
+      } else {
+        markTypingUpdated();
       }
+      setUserInput(nextInput);
+    }
 
-      const nextInput = mergeInputWithComposition(
-        userInput,
-        composingText,
-        input
-      );
+    e.currentTarget.value = "";
+  };
 
-      if (composingText) {
-        setComposingText("");
-      }
-
-      if (nextInput.length <= currentSentence.length) {
-        setUserInput(nextInput);
-      }
-
-      e.currentTarget.value = "";
-    },
-    [isTransitioning, isComposing, userInput, composingText, currentSentence]
-  );
-
-  const handleCompositionStart = useCallback(() => {
+  const handleCompositionStart = () => {
     if (!isTransitioning) {
       setIsComposing(true);
       setComposingText("");
     }
-  }, [isTransitioning]);
+  };
 
-  const handleCompositionUpdate = useCallback(
-    (e: React.CompositionEvent<HTMLInputElement>) => {
-      if (!isTransitioning) {
-        setComposingText(e.data || "");
+  const handleCompositionUpdate = (
+    e: React.CompositionEvent<HTMLInputElement>
+  ) => {
+    if (!isTransitioning) {
+      if (e.data) {
+        markTypingUpdated();
       }
-    },
-    [isTransitioning]
-  );
+      setComposingText(e.data || "");
+    }
+  };
 
-  const handleCompositionEnd = useCallback(
-    (e: React.CompositionEvent<HTMLInputElement>) => {
-      if (isTransitioning) {
-        return;
-      }
+  const handleCompositionEnd = (
+    e: React.CompositionEvent<HTMLInputElement>
+  ) => {
+    if (isTransitioning) {
+      return;
+    }
 
-      setIsComposing(false);
+    setIsComposing(false);
 
-      if (composingText) {
-        const finalInput = buildFinalInputAfterComposition(
-          userInput,
-          composingText,
-          currentSentence
-        );
+    if (composingText) {
+      const finalInput = buildFinalInputAfterComposition(
+        userInput,
+        composingText,
+        currentSentence
+      );
 
-        if (finalInput.length <= currentSentence.length) {
-          setUserInput(finalInput);
+      if (finalInput.length <= currentSentence.length) {
+        if (finalInput.length === 0) {
+          clearTypingClock();
+        } else {
+          markTypingUpdated();
         }
-
-        setComposingText("");
+        setUserInput(finalInput);
       }
 
-      e.currentTarget.value = "";
-    },
-    [isTransitioning, composingText, userInput, currentSentence]
-  );
+      setComposingText("");
+    }
 
-  const handleBackspace = useCallback(() => {
+    e.currentTarget.value = "";
+  };
+
+  const handleBackspace = () => {
     if (isComposing || userInput.length === 0) {
       return false;
     }
@@ -125,16 +148,23 @@ export function useTypingInput(
     if (isAllSelected) {
       setUserInput("");
       setIsAllSelected(false);
+      clearTypingClock();
     } else {
-      setUserInput((prev) => prev.slice(0, -1));
+      const nextInput = userInput.slice(0, -1);
+      if (nextInput.length === 0) {
+        clearTypingClock();
+      } else {
+        markTypingUpdated();
+      }
+      setUserInput(nextInput);
     }
 
     return true;
-  }, [isComposing, userInput, isAllSelected]);
+  };
 
-  const handleSelectAll = useCallback(() => {
+  const handleSelectAll = () => {
     setIsAllSelected(true);
-  }, []);
+  };
 
   const currentInputWithComposition = isComposing
     ? userInput + composingText
@@ -145,6 +175,8 @@ export function useTypingInput(
     isComposing,
     composingText,
     isAllSelected,
+    typingStartedAt,
+    typingUpdatedAt,
     inputRef,
     currentInputWithComposition,
     resetInput,

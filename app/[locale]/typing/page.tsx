@@ -2,13 +2,14 @@
 
 import type { Route } from "next";
 import { useLocale, useTranslations } from "next-intl";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useEffectEvent, useState } from "react";
 import Header from "@/components/header";
 import { Skeleton } from "@/components/ui/skeleton";
 import styles from "@/shared/styles/stagger-fade-in.module.css";
 import { useTypingInput } from "./hooks/use-typing-input";
 import { useTypingSentences } from "./hooks/use-typing-sentences";
 import { useTypingStats } from "./hooks/use-typing-stats";
+import { TypingHints, TypingStatus } from "./typing-status";
 import { buildCharRenderState } from "./utils/char-render";
 
 const MIN_ACCURACY_THRESHOLD = 85;
@@ -28,8 +29,7 @@ export default function Page() {
     isInitialLoading,
     fetchError,
     advanceToNextSentence,
-    fetchNewSentences,
-    shouldPrefetch,
+    fetchMoreSentences,
     hasNext,
   } = useTypingSentences(locale, () => t("typingFetchError"));
 
@@ -37,6 +37,8 @@ export default function Page() {
     userInput,
     isComposing,
     composingText,
+    typingStartedAt,
+    typingUpdatedAt,
     inputRef,
     currentInputWithComposition,
     resetInput,
@@ -56,17 +58,26 @@ export default function Page() {
     unitLabel,
     shouldShowStats,
     resetStats,
-    cancelStats,
-  } = useTypingStats(userInput, composingText, currentSentence);
+    clearStats,
+  } = useTypingStats(
+    userInput,
+    composingText,
+    currentSentence,
+    typingStartedAt,
+    typingUpdatedAt
+  );
 
-  const scheduleSentenceAdvance = useCallback(() => {
+  const scheduleSentenceAdvance = () => {
     setTimeout(() => {
       resetInput();
       resetStats();
       advanceToNextSentence();
       setIsTransitioning(false);
     }, TRANSITION_DELAY_MS);
-  }, [resetInput, resetStats, advanceToNextSentence]);
+  };
+  const scheduleSentenceAdvanceFromEffect = useEffectEvent(
+    scheduleSentenceAdvance
+  );
 
   useEffect(() => {
     if (isTransitioning) {
@@ -90,45 +101,37 @@ export default function Page() {
     }
 
     setIsTransitioning(true);
-    scheduleSentenceAdvance();
+    scheduleSentenceAdvanceFromEffect();
   }, [
     accuracy,
     currentInputWithComposition,
     currentSentence,
     hasNext,
     isTransitioning,
-    scheduleSentenceAdvance,
   ]);
 
-  const handleEnterPress = useCallback(() => {
+  const handleEnterPress = () => {
     if (!hasNext) {
-      return false;
+      fetchMoreSentences();
+      return true;
     }
 
     setIsTransitioning(true);
-
-    if (shouldPrefetch) {
-      fetchNewSentences();
-    }
-
     scheduleSentenceAdvance();
     return true;
-  }, [hasNext, shouldPrefetch, fetchNewSentences, scheduleSentenceAdvance]);
+  };
 
-  const handleReset = useCallback(() => {
+  const handleReset = () => {
     resetInput();
-    cancelStats();
+    clearStats();
     setIsTransitioning(false);
-  }, [resetInput, cancelStats]);
+  };
 
-  const handleNavigateAway = useCallback(
-    (e: React.MouseEvent) => {
-      if (userInput.length > 0) {
-        e.preventDefault();
-      }
-    },
-    [userInput.length]
-  );
+  const handleNavigateAway = (e: React.MouseEvent) => {
+    if (userInput.length > 0) {
+      e.preventDefault();
+    }
+  };
 
   useEffect(() => {
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
@@ -141,40 +144,31 @@ export default function Page() {
     return () => window.removeEventListener("beforeunload", handleBeforeUnload);
   }, [userInput.length]);
 
-  const handleKeyDown = useCallback(
-    (e: React.KeyboardEvent<HTMLInputElement>) => {
-      switch (e.key) {
-        case "Enter":
-          if (!isTransitioning && handleEnterPress()) {
-            e.preventDefault();
-          }
-          break;
-        case "Backspace":
-          if (handleBackspace()) {
-            e.preventDefault();
-          }
-          break;
-        case "a":
-          if (e.ctrlKey || e.metaKey) {
-            e.preventDefault();
-            handleSelectAll();
-          }
-          break;
-        case "Escape":
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    switch (e.key) {
+      case "Enter":
+        if (!isTransitioning && handleEnterPress()) {
           e.preventDefault();
-          handleReset();
-          break;
-        default:
-      }
-    },
-    [
-      handleEnterPress,
-      handleBackspace,
-      handleSelectAll,
-      handleReset,
-      isTransitioning,
-    ]
-  );
+        }
+        break;
+      case "Backspace":
+        if (handleBackspace()) {
+          e.preventDefault();
+        }
+        break;
+      case "a":
+        if (e.ctrlKey || e.metaKey) {
+          e.preventDefault();
+          handleSelectAll();
+        }
+        break;
+      case "Escape":
+        e.preventDefault();
+        handleReset();
+        break;
+      default:
+    }
+  };
 
   return (
     <section className={`${styles.stagger_container} flex flex-col gap-12`}>
@@ -222,50 +216,23 @@ export default function Page() {
             )}
           </div>
 
-          <div className="flex items-center gap-2 text-gray-400 text-sm">
-            <span>
-              {currentSentenceIndex + 1} / {sentences.length}
-            </span>
-            {shouldShowStats ? (
-              <>
-                <span className="text-gray-500">•</span>
-                <span>
-                  {displayValue} {t(unitLabel)}
-                </span>
-                <span className="text-gray-500">•</span>
-                <span>
-                  {displayAccuracy}% {t("typingAccuracy")}
-                </span>
-              </>
-            ) : null}
-            {isFetching ? (
-              <>
-                <span className="text-gray-500">•</span>
-                <span>{t("typingGenerating")}</span>
-              </>
-            ) : null}
-            {fetchError ? (
-              <>
-                <span className="text-gray-500">•</span>
-                <span className="text-pink-400">{fetchError}</span>
-              </>
-            ) : null}
-          </div>
+          <TypingStatus
+            accuracyText={t("typingAccuracy")}
+            currentPosition={currentSentenceIndex + 1}
+            displayAccuracy={displayAccuracy}
+            displayValue={displayValue}
+            fetchError={fetchError}
+            generatingText={t("typingGenerating")}
+            isFetching={isFetching}
+            sentenceCount={sentences.length}
+            shouldShowStats={shouldShowStats}
+            unitText={t(unitLabel)}
+          />
 
-          <div className="mt-2 flex flex-wrap justify-center gap-3 text-gray-500 text-xs">
-            <span>
-              <kbd className="rounded bg-gray-700 px-1.5 py-0.5 font-mono text-gray-300">
-                Enter
-              </kbd>{" "}
-              {t("typingHintEnter")}
-            </span>
-            <span>
-              <kbd className="rounded bg-gray-700 px-1.5 py-0.5 font-mono text-gray-300">
-                Esc
-              </kbd>{" "}
-              {t("typingHintEsc")}
-            </span>
-          </div>
+          <TypingHints
+            enterText={t("typingHintEnter")}
+            resetText={t("typingHintEsc")}
+          />
         </button>
 
         <input

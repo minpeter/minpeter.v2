@@ -4,12 +4,21 @@ import createMiddleware from "next-intl/middleware";
 import { routing } from "./shared/i18n/routing";
 
 const exclusions = ["/_next/", "/.well-known/", "/.", "/api/"];
-const allowedExts = [".md"];
-const extPattern = /\.[^/]+$/;
+const publicAssetPrefixes = ["/assets/"];
+const publicAssetPaths = new Set([
+  "/Lickitung.gltf",
+  "/favicon.ico",
+  "/naver2d846b9f797451003a82b4505217b4c0.html",
+  "/og-image.png",
+  "/robots.txt",
+  "/sitemap.xml",
+  "/studio_small_03_1k.hdr",
+]);
 
 export const shouldExclude = (path: string) =>
   exclusions.some((p) => path.startsWith(p)) ||
-  (extPattern.test(path) && !allowedExts.some((ext) => path.endsWith(ext)));
+  publicAssetPrefixes.some((p) => path.startsWith(p)) ||
+  publicAssetPaths.has(path);
 
 export function proxy(request: NextRequest) {
   if (shouldExclude(request.nextUrl.pathname)) {

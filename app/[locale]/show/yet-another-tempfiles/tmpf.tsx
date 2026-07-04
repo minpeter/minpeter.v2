@@ -80,24 +80,22 @@ async function uploadFile(file: File[]): Promise<UploadResponse | null> {
 }
 
 export default function TmpfUI() {
-  const [file, setFile] = useState<File[] | null>(null);
+  const [files, setFiles] = useState<File[] | null>(null);
   const [uploaded, setUploaded] = useState<UploadResponse | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      setFile(Array.from(e.target.files));
-    }
+    setFiles(e.target.files ? Array.from(e.target.files) : null);
   };
 
   const handleUpload = async () => {
-    if (!file) {
+    if (!(files && files.length > 0)) {
       return;
     }
     setError(null);
     setLoading(true);
-    const response = await uploadFile(file);
+    const response = await uploadFile(files);
     setUploaded(response);
     if (!response) {
       setError("Upload failed. Please try again.");
@@ -109,9 +107,10 @@ export default function TmpfUI() {
     if (!(uploaded?.folderId && Array.isArray(uploaded.files))) {
       return;
     }
-    for (const item of uploaded.files) {
-      await downloadFile(uploaded.folderId, item.fileName);
-    }
+    const { files, folderId } = uploaded;
+    await Promise.all(
+      files.map((item) => downloadFile(folderId, item.fileName))
+    );
   };
 
   const hasUploadedFiles =
@@ -130,7 +129,11 @@ export default function TmpfUI() {
             onChange={handleFileChange}
             type="file"
           />
-          <Button onClick={handleUpload} type="button">
+          <Button
+            disabled={loading || !(files && files.length > 0)}
+            onClick={handleUpload}
+            type="button"
+          >
             Upload
           </Button>
         </div>

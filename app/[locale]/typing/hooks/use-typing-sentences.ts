@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useEffectEvent, useRef, useState } from "react";
 import { nextSentencesGenerator } from "../action";
 
 const SENTENCE_PREFETCH_THRESHOLD = 3;
@@ -20,51 +20,64 @@ export function useTypingSentences(
   const [isFetching, setIsFetching] = useState(false);
   const [fetchError, setFetchError] = useState<string | null>(null);
   const hasFetchedInitial = useRef(false);
+  const hasAdvancedSentence = useRef(false);
+  const isFetchingRef = useRef(false);
 
   const currentSentence = sentences[currentSentenceIndex] ?? "";
   const isInitialLoading = sentences.length === 0 && !fetchError;
 
-  const fetchNewSentences = useCallback(async () => {
-    if (isFetching) {
+  const fetchNewSentences = async () => {
+    if (isFetchingRef.current) {
       return;
     }
 
+    isFetchingRef.current = true;
+    setIsFetching(true);
+    setFetchError(null);
+
     try {
-      setIsFetching(true);
-      setFetchError(null);
       const generatorLocale = locale === "ko" ? "ko" : "en";
-      const [sentence1, sentence2] = await Promise.all([
-        nextSentencesGenerator(generatorLocale),
-        nextSentencesGenerator(generatorLocale),
+      const sentence1 = await nextSentencesGenerator(
+        generatorLocale,
+        sentences
+      );
+      const sentence2 = await nextSentencesGenerator(generatorLocale, [
+        ...sentences,
+        sentence1,
       ]);
       setSentences((prev) => [...prev, sentence1, sentence2]);
     } catch {
       setFetchError(getErrorMessage());
     } finally {
+      isFetchingRef.current = false;
       setIsFetching(false);
     }
-  }, [isFetching, locale, getErrorMessage]);
+  };
 
-  const advanceToNextSentence = useCallback(() => {
-    setCurrentSentenceIndex((prev) => prev + 1);
-  }, []);
+  const fetchInitialSentences = useEffectEvent(fetchNewSentences);
+  const fetchPrefetchSentences = useEffectEvent((sentenceIndex: number) => {
+    if (shouldPrefetchSentences(sentenceIndex, sentences.length)) {
+      fetchNewSentences();
+    }
+  });
+
+  const advanceToNextSentence = () => {
+    hasAdvancedSentence.current = true;
+    setCurrentSentenceIndex((currentIndex) => currentIndex + 1);
+  };
 
   useEffect(() => {
     if (!hasFetchedInitial.current) {
       hasFetchedInitial.current = true;
-      fetchNewSentences();
+      fetchInitialSentences();
     }
-  }, [fetchNewSentences]);
+  }, []);
 
   useEffect(() => {
-    if (
-      sentences.length > 0 &&
-      shouldPrefetchSentences(currentSentenceIndex, sentences.length) &&
-      !isFetching
-    ) {
-      fetchNewSentences();
+    if (hasAdvancedSentence.current) {
+      fetchPrefetchSentences(currentSentenceIndex);
     }
-  }, [currentSentenceIndex, sentences.length, isFetching, fetchNewSentences]);
+  }, [currentSentenceIndex]);
 
   return {
     sentences,
@@ -74,7 +87,7 @@ export function useTypingSentences(
     isInitialLoading,
     fetchError,
     advanceToNextSentence,
-    fetchNewSentences,
+    fetchMoreSentences: fetchNewSentences,
     shouldPrefetch: shouldPrefetchSentences(
       currentSentenceIndex,
       sentences.length

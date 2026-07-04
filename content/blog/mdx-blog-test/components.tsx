@@ -61,7 +61,10 @@ export function Counter() {
         {count === HEART_COUNT || count === INFINITY_COUNT ? " - 🫵🩷♾️" : ""}
       </p>
       <div className="space-x-1">
-        <Button onClick={() => setCount(count + 1)} variant={"secondary"}>
+        <Button
+          onClick={() => setCount((currentCount) => currentCount + 1)}
+          variant={"secondary"}
+        >
           Count Up
         </Button>
         <Button onClick={() => setCount(0)} variant={"outline"}>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useRef, useState } from "react";
+import { useRef, useState } from "react";
 
 const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ{}</>믾쾹쵭퀴섫뤱윤チェ・ソユン";
 const ITERATION_STEPS_PER_CHARACTER = 3;
@@ -13,10 +13,11 @@ const RANDOM_LETTER_MULTIPLIER = 1;
 
 export default function AnimatedText({ data }: { data: string }) {
   "use no memo";
-  const [displayText, setDisplayText] = useState(data);
+  const [animatedText, setAnimatedText] = useState<string | null>(null);
   const isAnimatingRef = useRef(false);
+  const displayText = animatedText ?? data;
 
-  const handleMouseOver = useCallback(() => {
+  const handleMouseOver = () => {
     if (isAnimatingRef.current) {
       return;
     }
@@ -25,7 +26,7 @@ export default function AnimatedText({ data }: { data: string }) {
     isAnimatingRef.current = true;
 
     const animate = () => {
-      setDisplayText(
+      setAnimatedText(
         data
           .split("")
           .map((_, index) => {
@@ -45,12 +46,13 @@ export default function AnimatedText({ data }: { data: string }) {
         iteration += ITERATION_INCREMENT;
         setTimeout(animate, TIMEOUT_BASE_MS / data.length);
       } else {
+        setAnimatedText(null);
         isAnimatingRef.current = false;
       }
     };
 
     animate();
-  }, [data]);
+  };
 
   return (
     <button
