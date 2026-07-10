@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { type MouseEvent, useCallback, useEffect, useState } from "react";
 import {
   Carousel,
   type CarouselApi,
@@ -29,6 +29,18 @@ export function ImageCarousel({
 }: ImageCarouselProps) {
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState(0);
+  const handleIndicatorClick = useCallback(
+    (event: MouseEvent<HTMLButtonElement>) => {
+      const slideIndex = Number.parseInt(
+        event.currentTarget.dataset.slideIndex ?? "",
+        10
+      );
+      if (!Number.isNaN(slideIndex)) {
+        api?.scrollTo(slideIndex);
+      }
+    },
+    [api]
+  );
 
   useEffect(() => {
     if (!api) {
@@ -92,8 +104,9 @@ export function ImageCarousel({
                 ? "w-3 bg-foreground"
                 : "bg-muted-foreground/30 hover:bg-muted-foreground/50"
             )}
+            data-slide-index={index}
             key={src}
-            onClick={() => api?.scrollTo(index)}
+            onClick={handleIndicatorClick}
             type="button"
           />
         ))}

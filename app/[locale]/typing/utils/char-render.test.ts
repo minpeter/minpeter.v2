@@ -4,11 +4,11 @@ import { buildCharRenderState } from "./char-render";
 describe("문자 렌더링 유틸리티", () => {
   const baseParams = {
     char: "가",
-    index: 0,
-    userInput: "",
-    isComposing: false,
     composingText: "",
     currentSentenceIndex: 0,
+    index: 0,
+    isComposing: false,
+    userInput: "",
   };
 
   it("입력하지 않은 글자는 흐리게 표시된다", () => {
@@ -34,8 +34,8 @@ describe("문자 렌더링 유틸리티", () => {
   it("올바르게 입력한 글자는 초록색으로 표시된다", () => {
     const state = buildCharRenderState({
       ...baseParams,
-      userInput: "가",
       index: 0,
+      userInput: "가",
     });
     expect(state.display).toBe("가");
     expect(state.className).toContain("text-emerald-400");
@@ -45,8 +45,8 @@ describe("문자 렌더링 유틸리티", () => {
   it("틀리게 입력한 글자는 분홍색으로 표시된다", () => {
     const state = buildCharRenderState({
       ...baseParams,
-      userInput: "나",
       index: 0,
+      userInput: "나",
     });
     expect(state.display).toBe("나");
     expect(state.className).toContain("text-pink-400");
@@ -55,10 +55,10 @@ describe("문자 렌더링 유틸리티", () => {
   it("한글 조합 중인 글자는 밑줄이 표시된다", () => {
     const state = buildCharRenderState({
       ...baseParams,
-      userInput: "",
+      composingText: "ㄱ",
       index: 0,
       isComposing: true,
-      composingText: "ㄱ",
+      userInput: "",
     });
     expect(state.display).toBe("ㄱ");
     expect(state.className).toContain("border-b-2");
@@ -68,8 +68,8 @@ describe("문자 렌더링 유틸리티", () => {
     const state = buildCharRenderState({
       ...baseParams,
       char: " ",
-      userInput: " ",
       index: 0,
+      userInput: " ",
     });
     expect(state.display).toBe(" ");
     expect(state.className).toContain("text-emerald-400");
@@ -79,8 +79,8 @@ describe("문자 렌더링 유틸리티", () => {
     const state = buildCharRenderState({
       ...baseParams,
       char: "가",
-      userInput: " ",
       index: 0,
+      userInput: " ",
     });
     expect(state.display).toBe("_");
     expect(state.className).toContain("text-pink-400");
@@ -90,8 +90,8 @@ describe("문자 렌더링 유틸리티", () => {
     const state = buildCharRenderState({
       ...baseParams,
       char: " ",
-      userInput: "가",
       index: 0,
+      userInput: "가",
     });
     expect(state.display).toBe("_");
     expect(state.className).toContain("text-pink-400");

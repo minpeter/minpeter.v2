@@ -26,11 +26,11 @@ const blogSource = toFumadocsSource<BlogPageData, BlogMetaData>(
 );
 
 export const blog = loader(blogSource, {
+  baseUrl: "/blog",
   i18n: {
     defaultLanguage: "ko",
     languages: ["ko", "en", "ja"],
   },
-  baseUrl: "/blog",
 });
 
 export type blogListType = ReturnType<typeof blog.getPages>;
@@ -49,24 +49,24 @@ export interface postMetadataType {
 function getPostMetadata(post: blogType): postMetadataType {
   if (!post) {
     return {
-      url: "",
-      title: "",
       draft: false,
-      published: new Date(),
       drafted: undefined,
       external_url: undefined,
       lang: ["ko"],
+      published: new Date(),
+      title: "",
+      url: "",
     };
   }
 
   return {
-    url: post.url,
-    title: post.data.title ?? "",
     draft: post.data.draft,
-    published: post.data.published,
     drafted: post.data.drafted,
     external_url: post.data.external_url,
     lang: post.data.lang.length ? post.data.lang : ["ko"],
+    published: post.data.published,
+    title: post.data.title ?? "",
+    url: post.url,
   };
 }
 

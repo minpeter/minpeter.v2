@@ -9,11 +9,16 @@ import {
 } from "@radix-ui/react-dropdown-menu";
 import { GlobeIcon } from "@radix-ui/react-icons";
 import { useLocale } from "next-intl";
+import { useCallback } from "react";
 import { LOCALE_LABELS } from "@/shared/constants/locales";
 import { useHoverDropdown } from "@/shared/hooks/use-hover-dropdown";
 import { Link, usePathname } from "@/shared/i18n/navigation";
 import { routing } from "@/shared/i18n/routing";
 import { cn } from "@/shared/utils/tailwind";
+
+function preventCloseAutoFocus(event: Event) {
+  event.preventDefault();
+}
 
 export function LanguageSelector() {
   const locale = useLocale();
@@ -33,6 +38,9 @@ export function LanguageSelector() {
 
   const currentLabel =
     LOCALE_LABELS[locale as keyof typeof LOCALE_LABELS] || LOCALE_LABELS.ko;
+  const handleItemClick = useCallback(() => {
+    setIsOpen(false);
+  }, [setIsOpen]);
 
   return (
     <Root modal={false} onOpenChange={handleOpenChange} open={isOpen}>
@@ -63,7 +71,7 @@ export function LanguageSelector() {
             "fade-in-0 zoom-in-95 data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 animate-in data-[state=closed]:animate-out",
             "data-[side=bottom]:slide-in-from-top-2 data-[side=top]:slide-in-from-bottom-2"
           )}
-          onCloseAutoFocus={(e) => e.preventDefault()}
+          onCloseAutoFocus={preventCloseAutoFocus}
           onMouseEnter={handleContentMouseEnter}
           onMouseLeave={handleContentMouseLeave}
           ref={contentRef}
@@ -71,7 +79,7 @@ export function LanguageSelector() {
         >
           {routing.locales.map((l) => {
             const isActive = locale === l;
-            const label = LOCALE_LABELS[l] || { short: l, native: l };
+            const label = LOCALE_LABELS[l] || { native: l, short: l };
 
             return (
               <Item asChild key={l}>
@@ -88,7 +96,7 @@ export function LanguageSelector() {
                   )}
                   href={pathname}
                   locale={l}
-                  onClick={() => setIsOpen(false)}
+                  onClick={handleItemClick}
                 >
                   {label.native}
                 </Link>

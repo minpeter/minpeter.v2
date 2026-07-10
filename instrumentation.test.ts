@@ -32,8 +32,8 @@ describe("instrumentation", () => {
     const mockErr = new Error("Test error");
     const mockRequest = new Request("http://localhost/blog");
     const mockContext = {
-      routerKind: "App",
       routePath: "/blog",
+      routerKind: "App",
       routeType: "render",
     };
 

@@ -2,13 +2,15 @@
 
 import { SunIcon } from "@radix-ui/react-icons";
 import { useTheme } from "next-themes";
+import { useCallback } from "react";
 import { FiMoon } from "react-icons/fi";
 
 export function ModeToggle() {
   const { setTheme, theme } = useTheme();
 
-  const toggleTheme = () =>
-    theme === "dark" ? setTheme("light") : setTheme("dark");
+  const toggleTheme = useCallback(() => {
+    setTheme(theme === "dark" ? "light" : "dark");
+  }, [setTheme, theme]);
 
   return (
     <button

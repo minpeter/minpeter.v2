@@ -7,7 +7,13 @@ import type { Route } from "next";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { debounce, parseAsString, useQueryState } from "nuqs";
-import { useDeferredValue, useEffect, useTransition } from "react";
+import {
+  type ChangeEvent,
+  useCallback,
+  useDeferredValue,
+  useEffect,
+  useTransition,
+} from "react";
 import { Badge } from "@/components/ui/badge";
 import { ViewTransition } from "@/components/view-transition";
 import type { postMetadataType } from "@/shared/source";
@@ -26,7 +32,7 @@ function extractMatchedUrls(results: SortedResult[]): Set<string> {
       matchedUrls.add(result.url);
     } else if (result.type === "heading" || result.type === "text") {
       // Extract base URL (remove hash)
-      const baseUrl = result.url.split("#")[0];
+      const [baseUrl] = result.url.split("#");
       matchedUrls.add(baseUrl);
     }
   }
@@ -60,8 +66,8 @@ export function BlogList({
   const [query, setQuery] = useQueryState(
     "q",
     parseAsString.withDefault("").withOptions({
-      shallow: false, // Notify server for RSC re-render
       limitUrlUpdates: debounce(500), // Debounce URL updates
+      shallow: false, // Notify server for RSC re-render
       startTransition, // Use React transition for non-blocking updates
     })
   );
@@ -70,9 +76,9 @@ export function BlogList({
   const deferredQuery = useDeferredValue(query);
 
   const { setSearch, query: searchQuery } = useDocsSearch({
-    type: "fetch",
     api: "/api/search",
     locale: lang,
+    type: "fetch",
   });
 
   // Sync deferred query with fumadocs search (debounced)
@@ -83,6 +89,16 @@ export function BlogList({
   // Show loading when query differs from deferred (typing) or API is loading
   const isSearching =
     query !== deferredQuery || isPending || searchQuery.isLoading;
+
+  const handleQueryChange = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      setQuery(event.target.value || null);
+    },
+    [setQuery]
+  );
+  const handleQueryClear = useCallback(() => {
+    setQuery(null);
+  }, [setQuery]);
 
   const byLang = posts.filter((post) => post.lang.includes(lang));
   let filteredPosts = byLang;
@@ -115,7 +131,7 @@ export function BlogList({
           autoComplete="off"
           className="w-full rounded-md border bg-background px-10 py-2 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
           id="blog-search"
-          onChange={(e) => setQuery(e.target.value || null)}
+          onChange={handleQueryChange}
           placeholder={t("searchPlaceholder")}
           type="text"
           value={query}
@@ -128,7 +144,7 @@ export function BlogList({
               <button
                 aria-label="Clear search"
                 className="flex h-4 w-4 items-center justify-center rounded text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                onClick={() => setQuery(null)}
+                onClick={handleQueryClear}
                 type="button"
               >
                 <X className="h-4 w-4" />

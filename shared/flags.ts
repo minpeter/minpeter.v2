@@ -16,10 +16,10 @@ export const createFeatureGate = (key: string) => {
   }
 
   return flag<boolean, StatsigUser>({
-    key,
     adapter: statsigAdapter.featureGate((gate) => gate.value, {
       exposureLogging: true,
     }),
     identify,
+    key,
   });
 };

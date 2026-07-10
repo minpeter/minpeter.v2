@@ -1,7 +1,8 @@
 "use client";
 
 import copy from "clipboard-copy";
-import { useEffect, useState } from "react";
+import type { ChangeEvent, KeyboardEvent, MouseEvent } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 const TEMPLATE_TOKEN_REGEX = /{{([^}]+)}}/g;
 const LEADING_NEWLINE = "\n";
@@ -36,17 +37,17 @@ function parseTemplate(template: string): TemplateSegment[] {
 
     if (matchIndex > lastIndex) {
       segments.push({
+        content: normalizedTemplate.slice(lastIndex, matchIndex),
         id: `static-${segmentIndex}`,
         type: "static",
-        content: normalizedTemplate.slice(lastIndex, matchIndex),
       });
       segmentIndex += 1;
     }
 
     segments.push({
+      content: match[1],
       id: `dynamic-${segmentIndex}`,
       type: "dynamic",
-      content: match[1],
     });
     segmentIndex += 1;
     lastIndex = matchIndex + match[0].length;
@@ -54,9 +55,9 @@ function parseTemplate(template: string): TemplateSegment[] {
 
   if (lastIndex < normalizedTemplate.length) {
     segments.push({
+      content: normalizedTemplate.slice(lastIndex),
       id: `static-${segmentIndex}`,
       type: "static",
-      content: normalizedTemplate.slice(lastIndex),
     });
   }
 
@@ -77,15 +78,15 @@ export function useCopyStatus() {
     return () => window.clearTimeout(timeoutId);
   }, [status]);
 
-  const markCopied = () => {
+  const markCopied = useCallback(() => {
     setStatus("copied");
-  };
+  }, []);
 
-  const markError = () => {
+  const markError = useCallback(() => {
     setStatus("error");
-  };
+  }, []);
 
-  return { status, markCopied, markError };
+  return { markCopied, markError, status };
 }
 
 function buildTemplateOutput(
@@ -133,7 +134,7 @@ export function ModCodeBlock({
   template: string;
   data: Record<string, string>;
 }) {
-  const segments = parseTemplate(template);
+  const segments = useMemo(() => parseTemplate(template), [template]);
   const [editedValues, setEditedValues] = useState<Record<string, string>>({});
   const [activeSegmentIndex, setActiveSegmentIndex] = useState<number | null>(
     null
@@ -144,7 +145,7 @@ export function ModCodeBlock({
       ? null
       : activeSegmentIndex;
 
-  const handleCopy = async () => {
+  const handleCopy = useCallback(async () => {
     const values = { ...data, ...editedValues };
     const compiled = buildTemplateOutput(segments, values);
 
@@ -157,14 +158,46 @@ export function ModCodeBlock({
       }
       markError();
     }
-  };
+  }, [data, editedValues, markCopied, markError, segments]);
 
-  const handleSegmentChange = (key: string, value: string) => {
-    setEditedValues((prev) => ({
-      ...prev,
-      [key]: value,
-    }));
-  };
+  const handleSegmentBlur = useCallback(() => {
+    setActiveSegmentIndex(null);
+  }, []);
+
+  const handleSegmentChange = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      const { segmentKey } = event.currentTarget.dataset;
+      if (!segmentKey) {
+        return;
+      }
+      const { value } = event.currentTarget;
+      setEditedValues((previousValues) => ({
+        ...previousValues,
+        [segmentKey]: value,
+      }));
+    },
+    []
+  );
+
+  const handleSegmentKeyDown = useCallback(
+    (event: KeyboardEvent<HTMLInputElement>) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        event.currentTarget.blur();
+      }
+    },
+    []
+  );
+
+  const handleSegmentActivate = useCallback(
+    (event: MouseEvent<HTMLButtonElement>) => {
+      const segmentIndex = Number(event.currentTarget.dataset.segmentIndex);
+      if (Number.isSafeInteger(segmentIndex)) {
+        setActiveSegmentIndex(segmentIndex);
+      }
+    },
+    []
+  );
 
   const copyLabel = getCopyLabel(status);
 
@@ -202,17 +235,11 @@ export function ModCodeBlock({
                     autoComplete="off"
                     autoFocus
                     className="inline h-5 rounded-md bg-secondary px-1 py-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    data-segment-key={segment.content}
                     key={segment.id}
-                    onBlur={() => setActiveSegmentIndex(null)}
-                    onChange={(event) => {
-                      handleSegmentChange(segment.content, event.target.value);
-                    }}
-                    onKeyDown={(event) => {
-                      if (event.key === "Enter") {
-                        event.preventDefault();
-                        (event.target as HTMLInputElement).blur();
-                      }
-                    }}
+                    onBlur={handleSegmentBlur}
+                    onChange={handleSegmentChange}
+                    onKeyDown={handleSegmentKeyDown}
                     style={{ width: getInputWidth(segmentValue) }}
                     type="text"
                     value={segmentValue}
@@ -225,8 +252,9 @@ export function ModCodeBlock({
               return (
                 <button
                   className="cursor-pointer rounded-md bg-secondary px-1 py-0.5 text-blue-500 hover:bg-blue-500 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  data-segment-index={index}
                   key={segment.id}
-                  onClick={() => setActiveSegmentIndex(index)}
+                  onClick={handleSegmentActivate}
                   type="button"
                 >
                   {displayValue}

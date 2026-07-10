@@ -25,10 +25,10 @@ const playgroundSkeletonStyle = {
 const Playground = dynamic<PlaygroundProps>(
   () => import("./animated-stack").then((mod) => mod.Playground),
   {
-    ssr: false,
     loading: () => (
       <Skeleton className="rounded-lg" style={playgroundSkeletonStyle} />
     ),
+    ssr: false,
   }
 );
 

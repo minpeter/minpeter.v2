@@ -6,7 +6,12 @@ import {
   Text,
   useGLTF,
 } from "@react-three/drei";
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import {
+  Canvas,
+  type ThreeElements,
+  useFrame,
+  useThree,
+} from "@react-three/fiber";
 import { Suspense, useRef } from "react";
 import type { BufferGeometry } from "three";
 
@@ -60,6 +65,14 @@ interface Rotatable {
   };
 }
 
+function DirectionalLight(props: ThreeElements["directionalLight"]) {
+  return <directionalLight {...props} />;
+}
+
+function Mesh(props: ThreeElements["mesh"]) {
+  return <mesh {...props} />;
+}
+
 const calculateAspectRatio = (ratio: string) => {
   const [width, height] = ratio.split("/").map(Number);
   return `${(height / width) * PERCENTAGE_MULTIPLIER}%`;
@@ -76,19 +89,19 @@ export default function Lickitung({ aspect = "3/2" }) {
           camera={{ fov: CAMERA_FIELD_OF_VIEW }}
           dpr={[DEVICE_PIXEL_RATIO_MIN, DEVICE_PIXEL_RATIO_MAX]}
           gl={{
-            powerPreference: "high-performance",
             antialias: false, // 안티앨리어싱 비활성화
+            powerPreference: "high-performance",
           }} // 디바이스 픽셀 비율 하향 조정
           performance={{ min: PERFORMANCE_MINIMUM }} // 최소 성능 임계값 증가
           style={{
-            width: "100%",
-            height: "100%",
             display: "block",
+            height: "100%",
+            width: "100%",
           }}
         >
           <Suspense fallback={null}>
             <Model />
-            <directionalLight
+            <DirectionalLight
               intensity={DIRECTIONAL_LIGHT_INTENSITY}
               position={DIRECTIONAL_LIGHT_POSITION}
             />
@@ -111,12 +124,12 @@ export function Model() {
   const torus = useRef<Rotatable | null>(null);
 
   const materialProps = {
-    thickness: MATERIAL_THICKNESS,
-    roughness: MATERIAL_ROUGHNESS,
-    transmission: MATERIAL_TRANSMISSION,
-    ior: MATERIAL_IOR,
-    chromaticAberration: MATERIAL_CHROMATIC_ABERRATION,
     backside: true,
+    chromaticAberration: MATERIAL_CHROMATIC_ABERRATION,
+    ior: MATERIAL_IOR,
+    roughness: MATERIAL_ROUGHNESS,
+    thickness: MATERIAL_THICKNESS,
+    transmission: MATERIAL_TRANSMISSION,
   };
 
   useFrame(() => {
@@ -142,21 +155,21 @@ export function Model() {
         {"VUD ❤️\n\nflag{1ICK17un6_1o8-2}\n\nNULL"}
       </Text>
 
-      <mesh
+      <Mesh
         castShadow={false}
         frustumCulled={true}
         geometry={nodes.mesh_0.geometry}
         position={MESH_POSITION}
-        receiveShadow={false} // 시야 밖 렌더링 방지
-        ref={torus} // 그림자 비활성화
+        receiveShadow={false}
+        ref={torus}
         rotation={[MESH_ROTATION_X, 0, 0]}
       >
         <MeshTransmissionMaterial
           {...materialProps}
-          clearcoat={MATERIAL_CLEARCOAT} // 약간의 자체 발광 추가
-          emissiveIntensity={MATERIAL_EMISSIVE_INTENSITY} // 광택 추가
+          clearcoat={MATERIAL_CLEARCOAT}
+          emissiveIntensity={MATERIAL_EMISSIVE_INTENSITY}
         />
-      </mesh>
+      </Mesh>
     </group>
   );
 }

@@ -12,29 +12,29 @@ export default function NewMetadata({
   const baseUrl = getBaseUrl();
 
   return {
+    description,
+    formatDetection: {
+      telephone: false,
+    },
+    keywords: siteConfig.keywords,
     metadataBase: new URL(baseUrl),
 
-    title,
-    description,
-    keywords: siteConfig.keywords,
-
     openGraph: {
-      type: "website",
+      description,
+      images: "/og-image.png",
       locale: "ko_KR",
       siteName: siteConfig.title,
       title,
-      description,
-      images: "/og-image.png",
+      type: "website",
     },
+
+    title,
     twitter: {
       card: "summary_large_image",
-      title,
-      description,
       creator: "@minpeter",
+      description,
       images: "/og-image.png",
-    },
-    formatDetection: {
-      telephone: false,
+      title,
     },
   };
 }

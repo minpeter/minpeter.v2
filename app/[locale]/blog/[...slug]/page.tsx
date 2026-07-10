@@ -47,9 +47,9 @@ export async function generateMetadata(
   // Build hreflang alternates for SEO
   // Default locale (ko) has no prefix, others have /en/, /ja/
   const languages: Record<string, string> = {
-    ko: `/blog/${slugPath}`,
     en: `/en/blog/${slugPath}`,
     ja: `/ja/blog/${slugPath}`,
+    ko: `/blog/${slugPath}`,
     "x-default": `/blog/${slugPath}`,
   };
 
@@ -59,8 +59,8 @@ export async function generateMetadata(
 
   return {
     ...NewMetadata({
-      title: page.data.title,
       description: page.data.description,
+      title: page.data.title,
     }),
     alternates: {
       canonical,
@@ -157,14 +157,6 @@ export default async function Page(
             className="mdx"
             components={{
               ...defaultMdxComponents,
-              img: (imageProps) => (
-                <ImageZoom
-                  {...(imageProps as ComponentProps<typeof ImageZoom>)}
-                />
-              ),
-              Tab,
-              Tabs,
-              Callout,
               a: (anchorProps) => {
                 const { href, children, ...rest } = anchorProps;
                 const h = href as string | undefined;
@@ -193,6 +185,14 @@ export default async function Page(
                   </a>
                 );
               },
+              Callout,
+              img: (imageProps) => (
+                <ImageZoom
+                  {...(imageProps as ComponentProps<typeof ImageZoom>)}
+                />
+              ),
+              Tab,
+              Tabs,
             }}
           />
         </div>

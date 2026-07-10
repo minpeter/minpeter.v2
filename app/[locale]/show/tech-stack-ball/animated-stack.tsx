@@ -64,7 +64,7 @@ const CANVAS_FILTER = "grayscale(1)";
 
 function shuffleArray<T>(array: T[]): T[] {
   const result = [...array];
-  for (let i = result.length - 1; i > 0; i--) {
+  for (let i = result.length - 1; i > 0; i -= 1) {
     const j = Math.floor(Math.random() * (i + 1));
     [result[i], result[j]] = [result[j], result[i]];
   }
@@ -95,12 +95,12 @@ export function Playground({
     engine.gravity.scale = GRAVITY_SCALE;
 
     const render = Render.create({
-      engine,
       canvas,
+      engine,
       options: {
-        width: w,
-        height: h,
         background: CANVAS_BACKGROUND,
+        height: h,
+        width: w,
         wireframes: false,
       },
     });
@@ -116,28 +116,28 @@ export function Playground({
     const wallSafeZone = WALL_SAFE_ZONE;
     const wallPositions = [
       {
+        h: wallThickness,
+        w: w + wallSafeZone,
         x: w / 2,
         y: h - wallOffset,
-        w: w + wallSafeZone,
-        h: wallThickness,
       },
       {
+        h: wallThickness,
+        w: w + wallSafeZone,
         x: w / 2,
         y: wallOffset,
-        w: w + wallSafeZone,
-        h: wallThickness,
       },
       {
+        h: h + wallSafeZone,
+        w: wallThickness,
         x: wallOffset,
         y: h / 2,
-        w: wallThickness,
-        h: h + wallSafeZone,
       },
       {
+        h: h + wallSafeZone,
+        w: wallThickness,
         x: w - wallOffset,
         y: h / 2,
-        w: wallThickness,
-        h: h + wallSafeZone,
       },
     ];
 
@@ -165,7 +165,6 @@ export function Playground({
         iconSize,
         {
           frictionAir: ICON_FRICTION_AIR,
-          restitution: 0.9,
           render: {
             sprite: {
               texture: `/assets/images/stack-icon/${icon}`,
@@ -173,6 +172,7 @@ export function Playground({
               yScale: iconScale,
             },
           },
+          restitution: 0.9,
         }
       );
 
@@ -198,13 +198,13 @@ export function Playground({
 
     const mouse = Mouse.create(render.canvas);
     const mouseConstraint = MouseConstraint.create(engine, {
-      mouse,
       constraint: {
-        stiffness: MOUSE_CONSTRAINT_STIFFNESS,
         render: {
           visible: false,
         },
+        stiffness: MOUSE_CONSTRAINT_STIFFNESS,
       },
+      mouse,
     });
 
     World.add(engine.world, [...walls, mouseConstraint, ...boxes]);

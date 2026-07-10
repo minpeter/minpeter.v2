@@ -13,10 +13,10 @@ const TMPF_API_BASE = "https://api.tmpf.me";
 // const TMPF_API_BASE = "http://localhost:5001";
 
 const API_SUFFIX = {
-  UPLOAD: "/upload",
   DOWNLOAD(folderId: string, fileName: string) {
     return `/dl/${folderId}/${fileName}`;
   },
+  UPLOAD: "/upload",
   VIEW(folderId: string, fileName: string) {
     return `/view/${folderId}/${fileName}`;
   },
@@ -46,8 +46,6 @@ async function downloadFile(folderId: string, fileName: string) {
       document.body.removeChild(a);
     })
     .catch((error) => error);
-
-  return;
 }
 
 interface UploadResponse {
@@ -107,9 +105,9 @@ export default function TmpfUI() {
     if (!(uploaded?.folderId && Array.isArray(uploaded.files))) {
       return;
     }
-    const { files, folderId } = uploaded;
+    const { files: uploadedFiles, folderId } = uploaded;
     await Promise.all(
-      files.map((item) => downloadFile(folderId, item.fileName))
+      uploadedFiles.map((item) => downloadFile(folderId, item.fileName))
     );
   };
 

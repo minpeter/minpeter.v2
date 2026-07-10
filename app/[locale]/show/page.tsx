@@ -8,8 +8,8 @@ import NewMetadata from "@/shared/utils/metadata";
 import { cn } from "@/shared/utils/tailwind";
 
 export const metadata = NewMetadata({
-  title: "minpeter | showcase",
   description: "A graveyard of components made with care but never used",
+  title: "minpeter | showcase",
 });
 
 const showcasePaths = [

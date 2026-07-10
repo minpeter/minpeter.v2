@@ -13,8 +13,8 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const { locale } = await props.params;
   const baseMetadata = NewMetadata({
-    title: "minpeter | blog",
     description: "내가 적은 블로그, 너를 위해 써봤지",
+    title: "minpeter | blog",
   });
 
   return {
