@@ -13,7 +13,7 @@ import React from "react";
  *   top-level transition context when combined with `experimental.viewTransition: true`
  *   in next.config.mts.
  *
- * Why the `any` cast?
+ * Why the compatibility cast?
  *   React 19.2.6 ships the runtime `ViewTransition` (enabled via Next.js flag),
  *   but the TypeScript definitions in "react" / "@types/react" do not export
  *   `ViewTransition` yet (or do not include the `name` prop and other VT-specific
@@ -47,8 +47,12 @@ export interface ViewTransitionProps {
   // They are currently unused in this codebase.
 }
 
-// biome-ignore lint/suspicious/noExplicitAny: React 19.2 ViewTransition not fully typed yet
-const RawViewTransition = (React as any).ViewTransition;
+interface ReactWithViewTransition {
+  ViewTransition?: FC<ViewTransitionProps>;
+}
+
+const { ViewTransition: RawViewTransition } =
+  React as unknown as ReactWithViewTransition;
 
 /**
  * Safe wrapper around React's experimental ViewTransition.

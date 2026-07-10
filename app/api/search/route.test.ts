@@ -5,8 +5,8 @@ vi.mock("fumadocs-core/search/server", () => ({
     GET: vi.fn(() =>
       Promise.resolve(
         new Response(JSON.stringify({ results: [] }), {
-          status: 200,
           headers: { "Content-Type": "application/json" },
+          status: 200,
         })
       )
     ),
@@ -36,9 +36,9 @@ describe("Search API Route", () => {
     expect(createFromSource).toHaveBeenCalled();
     expect(createFromSource).toHaveBeenCalledWith(blog, {
       localeMap: {
-        ko: "english",
         en: "english",
         ja: "english",
+        ko: "english",
       },
     });
   });

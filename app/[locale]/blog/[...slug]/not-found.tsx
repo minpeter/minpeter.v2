@@ -3,11 +3,11 @@ import type { Route } from "next";
 import Header from "@/components/header";
 
 export default function NotFound({
-  params,
+  params = { locale: "ko" },
 }: {
   params?: { locale: "ko" | "en" };
 }) {
-  const locale = params?.locale ?? "ko";
+  const { locale } = params;
   return (
     <section>
       <Header

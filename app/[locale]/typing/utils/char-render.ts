@@ -90,13 +90,13 @@ export const buildCharRenderState = ({
 
   const display = resolveDisplayChar({
     baseChar: char,
-    typedChar,
-    isTyped,
+    composingText,
     isComposingHere,
     isSpace,
-    isWrongSpace,
+    isTyped,
     isTypedSpace,
-    composingText,
+    isWrongSpace,
+    typedChar,
   });
 
   const isCorrect = isRenderCorrect(char, typedChar, isTyped);
@@ -108,8 +108,8 @@ export const buildCharRenderState = ({
   );
 
   return {
-    key: `${currentSentenceIndex}-${index}-${char}`,
-    display,
     className,
+    display,
+    key: `${currentSentenceIndex}-${index}-${char}`,
   };
 };

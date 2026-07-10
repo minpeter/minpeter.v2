@@ -268,15 +268,15 @@ export function useHoverDropdown(
   };
 
   return {
-    isOpen,
-    setIsOpen,
-    isTouchDevice,
-    triggerRef,
     contentRef,
-    handleMouseEnter,
-    handleMouseLeave,
     handleContentMouseEnter,
     handleContentMouseLeave,
+    handleMouseEnter,
+    handleMouseLeave,
     handleOpenChange,
+    isOpen,
+    isTouchDevice,
+    setIsOpen,
+    triggerRef,
   };
 }

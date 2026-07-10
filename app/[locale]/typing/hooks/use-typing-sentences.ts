@@ -80,18 +80,18 @@ export function useTypingSentences(
   }, [currentSentenceIndex]);
 
   return {
-    sentences,
+    advanceToNextSentence,
     currentSentence,
     currentSentenceIndex,
+    fetchError,
+    fetchMoreSentences: fetchNewSentences,
+    hasNext: hasNextSentence(currentSentenceIndex, sentences.length),
     isFetching,
     isInitialLoading,
-    fetchError,
-    advanceToNextSentence,
-    fetchMoreSentences: fetchNewSentences,
+    sentences,
     shouldPrefetch: shouldPrefetchSentences(
       currentSentenceIndex,
       sentences.length
     ),
-    hasNext: hasNextSentence(currentSentenceIndex, sentences.length),
   };
 }

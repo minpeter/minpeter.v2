@@ -13,15 +13,15 @@ export const formats = {
       year: "numeric",
     },
   },
-  number: {
-    precise: {
-      maximumFractionDigits: 5,
-    },
-  },
   list: {
     enumeration: {
       style: "long",
       type: "conjunction",
+    },
+  },
+  number: {
+    precise: {
+      maximumFractionDigits: 5,
     },
   },
 } satisfies Formats;

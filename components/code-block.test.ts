@@ -1,5 +1,9 @@
+// @vitest-environment jsdom
+import { render } from "@testing-library/react";
+import { createElement } from "react";
 import { highlight } from "sugar-high";
 import { describe, expect, it } from "vitest";
+import { CodeBlock } from "./code-block";
 
 describe("highlight() from sugar-high@0.9.5", () => {
   it("should highlight simple variable declaration", () => {
@@ -40,5 +44,17 @@ describe("highlight() from sugar-high@0.9.5", () => {
     const code = "";
     const result = highlight(code);
     expect(result).toBe("");
+  });
+});
+
+describe("CodeBlock", () => {
+  it("renders highlighted source as text instead of executable HTML", () => {
+    const code = '<script>alert("xss")</script>';
+    const { container } = render(createElement(CodeBlock, { code }));
+    const codeElement = container.querySelector("code");
+
+    expect(codeElement?.textContent).toBe(code);
+    expect(codeElement?.querySelector("script")).toBeNull();
+    expect(codeElement?.querySelector(".sh__line")).not.toBeNull();
   });
 });

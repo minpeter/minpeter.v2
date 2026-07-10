@@ -16,13 +16,13 @@ import styles from "@/shared/styles/header-overlay.module.css";
 import { cn } from "@/shared/utils/tailwind";
 
 const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
   subsets: ["latin"],
+  variable: "--font-geist-mono",
 });
 
 const shipporiMincho = Shippori_Mincho({
-  variable: "--font-shippori-mincho",
   subsets: ["latin"],
+  variable: "--font-shippori-mincho",
   weight: ["400", "500", "600"],
 });
 

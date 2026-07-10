@@ -171,21 +171,21 @@ export function useTypingInput(
     : userInput;
 
   return {
-    userInput,
-    isComposing,
     composingText,
-    isAllSelected,
-    typingStartedAt,
-    typingUpdatedAt,
-    inputRef,
     currentInputWithComposition,
-    resetInput,
     focusInput,
-    handleInput,
+    handleBackspace,
+    handleCompositionEnd,
     handleCompositionStart,
     handleCompositionUpdate,
-    handleCompositionEnd,
-    handleBackspace,
+    handleInput,
     handleSelectAll,
+    inputRef,
+    isAllSelected,
+    isComposing,
+    resetInput,
+    typingStartedAt,
+    typingUpdatedAt,
+    userInput,
   };
 }

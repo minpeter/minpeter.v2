@@ -63,28 +63,47 @@ function getLocalizedPath(basePath, locale) {
 function getAlternateRefs(basePath) {
   const refs = locales.map((locale) => ({
     href: `${SITE_URL}${getLocalizedPath(basePath, locale)}`,
-    hreflang: locale,
     hrefIsAbsolute: true,
+    hreflang: locale,
   }));
 
   // Add x-default pointing to default locale for users without language preference
   refs.push({
     href: `${SITE_URL}${getLocalizedPath(basePath, defaultLocale)}`,
-    hreflang: "x-default",
     hrefIsAbsolute: true,
+    hreflang: "x-default",
   });
 
   return refs;
 }
 
 const config = {
-  siteUrl: SITE_URL,
-  generateRobotsTxt: true,
+  // Manually add homepage (sometimes missed by auto-discovery)
+  additionalPaths: () => [
+    {
+      alternateRefs: getAlternateRefs("/"),
+      changefreq: "daily",
+      lastmod: new Date().toISOString(),
+      loc: "/",
+      priority: 1.0,
+    },
+  ],
   generateIndexSitemap: false,
+  generateRobotsTxt: true,
+
+  robotsTxtOptions: {
+    policies: [
+      {
+        allow: "/",
+        userAgent: "*",
+      },
+    ],
+  },
+  siteUrl: SITE_URL,
 
   // Transform function to handle localePrefix: "as-needed"
   // Korean (default) has no prefix, English and Japanese have prefixes
-  transform: (config, path) => {
+  transform: (sitemapConfig, path) => {
     // Skip internal Next.js paths (hash-like paths, _next, etc.)
     if (hashPathPattern.test(path)) {
       return null;
@@ -101,32 +120,12 @@ const config = {
     const basePath = getBasePath(path);
 
     return {
-      loc,
-      changefreq: loc === "/" ? "daily" : "weekly",
-      priority: getPriority(loc),
-      lastmod: config.autoLastmod ? new Date().toISOString() : undefined,
       alternateRefs: getAlternateRefs(basePath),
+      changefreq: loc === "/" ? "daily" : "weekly",
+      lastmod: sitemapConfig.autoLastmod ? new Date().toISOString() : undefined,
+      loc,
+      priority: getPriority(loc),
     };
-  },
-
-  // Manually add homepage (sometimes missed by auto-discovery)
-  additionalPaths: () => [
-    {
-      loc: "/",
-      changefreq: "daily",
-      priority: 1.0,
-      lastmod: new Date().toISOString(),
-      alternateRefs: getAlternateRefs("/"),
-    },
-  ],
-
-  robotsTxtOptions: {
-    policies: [
-      {
-        userAgent: "*",
-        allow: "/",
-      },
-    ],
   },
 };
 

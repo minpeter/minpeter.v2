@@ -145,7 +145,8 @@ export default function Page() {
   }, [userInput.length]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    switch (e.key) {
+    const key: string = e.key;
+    switch (key) {
       case "Enter":
         if (!isTransitioning && handleEnterPress()) {
           e.preventDefault();
@@ -176,8 +177,8 @@ export default function Page() {
         description={t("typingDescription")}
         link={{
           href: `/${locale}` as Route,
-          text: t("backToHome"),
           onNavigate: handleNavigateAway,
+          text: t("backToHome"),
         }}
         title="Peter's Typing practice"
       />
@@ -200,11 +201,11 @@ export default function Page() {
               currentSentence.split("").map((char, index) => {
                 const { key, display, className } = buildCharRenderState({
                   char,
-                  index,
-                  userInput,
-                  isComposing,
                   composingText,
                   currentSentenceIndex,
+                  index,
+                  isComposing,
+                  userInput,
                 });
 
                 return (

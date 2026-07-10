@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 
@@ -12,10 +12,10 @@ export function SimpleButton() {
   const [toggle, setToggle] = useState(false);
   const [count, setCount] = useState(0);
 
-  const handleClick = () => {
+  const handleClick = useCallback(() => {
     setToggle((prevToggle) => !prevToggle);
     setCount((prevCount) => prevCount + 1);
-  };
+  }, []);
 
   let buttonLabel = "Push me!!";
   if (count >= PUSHED_THRESHOLD) {
@@ -53,6 +53,12 @@ export function Ip() {
 
 export function Counter() {
   const [count, setCount] = useState(0);
+  const handleCountUp = useCallback(() => {
+    setCount((currentCount) => currentCount + 1);
+  }, []);
+  const handleReset = useCallback(() => {
+    setCount(0);
+  }, []);
 
   return (
     <div className="space-y-2">
@@ -61,13 +67,10 @@ export function Counter() {
         {count === HEART_COUNT || count === INFINITY_COUNT ? " - 🫵🩷♾️" : ""}
       </p>
       <div className="space-x-1">
-        <Button
-          onClick={() => setCount((currentCount) => currentCount + 1)}
-          variant={"secondary"}
-        >
+        <Button onClick={handleCountUp} variant={"secondary"}>
           Count Up
         </Button>
-        <Button onClick={() => setCount(0)} variant={"outline"}>
+        <Button onClick={handleReset} variant={"outline"}>
           Reset
         </Button>
       </div>

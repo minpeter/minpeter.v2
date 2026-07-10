@@ -5,7 +5,14 @@ import useEmblaCarousel, {
   type UseEmblaCarouselType,
 } from "embla-carousel-react";
 import type { ComponentProps, KeyboardEvent } from "react";
-import { createContext, use, useEffect, useEffectEvent, useState } from "react";
+import {
+  createContext,
+  use,
+  useCallback,
+  useEffect,
+  useEffectEvent,
+  useState,
+} from "react";
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/shared/utils/tailwind";
@@ -70,23 +77,26 @@ function Carousel({
     setCanScrollNext(carouselApi.canScrollNext());
   });
 
-  const scrollPrev = () => {
+  const scrollPrev = useCallback(() => {
     api?.scrollPrev();
-  };
+  }, [api]);
 
-  const scrollNext = () => {
+  const scrollNext = useCallback(() => {
     api?.scrollNext();
-  };
+  }, [api]);
 
-  const handleKeyDown = (event: KeyboardEvent<HTMLElement>) => {
-    if (event.key === "ArrowLeft") {
-      event.preventDefault();
-      scrollPrev();
-    } else if (event.key === "ArrowRight") {
-      event.preventDefault();
-      scrollNext();
-    }
-  };
+  const handleKeyDown = useCallback(
+    (event: KeyboardEvent<HTMLElement>) => {
+      if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        scrollPrev();
+      } else if (event.key === "ArrowRight") {
+        event.preventDefault();
+        scrollNext();
+      }
+    },
+    [scrollNext, scrollPrev]
+  );
 
   useEffect(() => {
     if (!(api && setApi)) {
@@ -112,15 +122,15 @@ function Carousel({
   return (
     <CarouselContext.Provider
       value={{
-        carouselRef,
         api,
+        canScrollNext,
+        canScrollPrev,
+        carouselRef,
         opts,
         orientation:
           orientation || (opts?.axis === "y" ? "vertical" : "horizontal"),
-        scrollPrev,
         scrollNext,
-        canScrollPrev,
-        canScrollNext,
+        scrollPrev,
       }}
     >
       <section

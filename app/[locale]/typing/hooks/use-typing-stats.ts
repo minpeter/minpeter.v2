@@ -54,15 +54,15 @@ export function useTypingStats(
   const displayValue = hasCurrentInput ? currentDisplayValue : lastDisplayValue;
 
   return {
-    wpm,
     accuracy,
-    lastWpm,
-    lastAccuracy,
-    displayValue,
-    displayAccuracy: hasCurrentInput ? accuracy : lastAccuracy,
-    unitLabel,
-    shouldShowStats: hasCurrentInput || lastWpm > 0,
-    resetStats,
     clearStats,
+    displayAccuracy: hasCurrentInput ? accuracy : lastAccuracy,
+    displayValue,
+    lastAccuracy,
+    lastWpm,
+    resetStats,
+    shouldShowStats: hasCurrentInput || lastWpm > 0,
+    unitLabel,
+    wpm,
   };
 }

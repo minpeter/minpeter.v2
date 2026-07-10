@@ -41,9 +41,9 @@ function generateRssFeed(locale: Locale): string {
     .join("\n");
 
   const langCodeMap: Record<Locale, string> = {
-    ko: "ko-KR",
-    ja: "ja-JP",
     en: "en-US",
+    ja: "ja-JP",
+    ko: "ko-KR",
   };
   const langCode = langCodeMap[locale];
   const lastBuildDate = new Date().toUTCString();
@@ -76,8 +76,8 @@ export async function GET(
 
   return new Response(feed, {
     headers: {
-      "Content-Type": "application/rss+xml; charset=utf-8",
       "Cache-Control": "public, max-age=86400, s-maxage=86400",
+      "Content-Type": "application/rss+xml; charset=utf-8",
     },
   });
 }

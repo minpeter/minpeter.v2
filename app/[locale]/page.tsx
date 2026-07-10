@@ -11,7 +11,7 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
-import { Suspense, useState } from "react";
+import { type MouseEvent, Suspense, useCallback, useState } from "react";
 import { SiX } from "react-icons/si";
 import Header from "@/components/header";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
@@ -27,8 +27,8 @@ import styles from "@/shared/styles/stagger-fade-in.module.css";
 import { cn } from "@/shared/utils/tailwind";
 
 const Lickitung = dynamic(() => import("@/components/lickitung"), {
-  ssr: false,
   loading: () => <Skeleton className="aspect-3/2 h-full w-full" />,
+  ssr: false,
 });
 
 // Hoisted static data outside component to prevent re-creation on every render (rendering-hoist-jsx)
@@ -91,14 +91,14 @@ export default function Page() {
             {[
               {
                 href: "/typing",
-                text: t("typingTitle"),
                 icon: <KeyboardIcon className="h-4 w-4" />,
+                text: t("typingTitle"),
               },
               {
-                href: "https://ip.minpeter.uk/",
-                text: t("ipTitle"),
-                icon: <CodeIcon className="h-4 w-4" />,
                 external: true,
+                href: "https://ip.minpeter.uk/",
+                icon: <CodeIcon className="h-4 w-4" />,
+                text: t("ipTitle"),
               },
             ].map((item) =>
               item.external ? (
@@ -174,6 +174,21 @@ export default function Page() {
 
 function CarouselImage() {
   const [grayscale, setGrayscale] = useState("grayscale(1)");
+  const handleGrayscaleDisable = useCallback(() => {
+    setGrayscale("grayscale(0)");
+  }, []);
+  const handleGrayscaleEnable = useCallback(() => {
+    setGrayscale("grayscale(70%)");
+  }, []);
+  const handleSlideClick = useCallback(
+    (event: MouseEvent<HTMLButtonElement>) => {
+      const { url } = event.currentTarget.dataset;
+      if (url) {
+        window.open(url);
+      }
+    },
+    []
+  );
 
   return (
     <Carousel>
@@ -186,17 +201,14 @@ function CarouselImage() {
                   slide.url ? `Open image ${index + 1}` : `Image ${index + 1}`
                 }
                 className="h-full w-full rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                onBlur={() => setGrayscale("grayscale(70%)")}
-                onClick={() => {
-                  if (slide.url) {
-                    window.open(slide.url);
-                  }
-                }}
-                onFocus={() => setGrayscale("grayscale(0)")}
-                onMouseEnter={() => setGrayscale("grayscale(0)")}
-                onMouseLeave={() => setGrayscale("grayscale(70%)")}
-                onTouchEnd={() => setGrayscale("grayscale(70%)")}
-                onTouchStart={() => setGrayscale("grayscale(0)")}
+                data-url={slide.url ?? undefined}
+                onBlur={handleGrayscaleEnable}
+                onClick={handleSlideClick}
+                onFocus={handleGrayscaleDisable}
+                onMouseEnter={handleGrayscaleDisable}
+                onMouseLeave={handleGrayscaleEnable}
+                onTouchEnd={handleGrayscaleEnable}
+                onTouchStart={handleGrayscaleDisable}
                 type="button"
               >
                 <Image

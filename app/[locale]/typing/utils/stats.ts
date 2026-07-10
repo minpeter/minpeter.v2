@@ -5,8 +5,8 @@ const SECONDS_PER_MINUTE = 60;
 const PERCENTAGE_MULTIPLIER = 100;
 
 export const TYPING_UNITS = {
-  ko: { unit: "CPM", scale: 5 },
-  en: { unit: "WPM", scale: 1 },
+  en: { scale: 1, unit: "WPM" },
+  ko: { scale: 5, unit: "CPM" },
 } as const;
 
 export const calculateWPM = (input: string, elapsedSeconds: number): number => {
