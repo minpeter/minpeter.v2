@@ -11,13 +11,30 @@ const SHOW_ITEMS = [
 
 export default function Loading() {
   return (
-    <div className="flex flex-col gap-3">
-      <Skeleton className="h-8 w-32" />
-      <div className="flex flex-col gap-2">
+    <div className="showcase-page">
+      <header className="showcase-header">
+        <div className="fieldnotes-nav">
+          <Skeleton className="h-8 w-8 rounded-lg" />
+          <Skeleton className="h-3 w-12" />
+        </div>
+        <div className="showcase-intro">
+          <Skeleton className="mb-3 h-3 w-16 rounded-sm" />
+          <Skeleton className="mb-3 h-6 w-48 rounded-sm" />
+          <Skeleton className="h-4 w-full max-w-sm rounded-sm" />
+        </div>
+      </header>
+
+      <nav aria-label="Loading projects" className="showcase-list">
         {SHOW_ITEMS.map((key) => (
-          <Skeleton className="h-6 w-48" key={key} />
+          <div className="showcase-item-link" key={key}>
+            <div className="showcase-item-top">
+              <Skeleton className="h-4 w-44 rounded-sm" />
+              <Skeleton className="h-3 w-3 rounded-sm" />
+            </div>
+            <Skeleton className="h-3 w-64 max-w-full rounded-sm" />
+          </div>
         ))}
-      </div>
+      </nav>
     </div>
   );
 }

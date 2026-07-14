@@ -179,7 +179,7 @@ export default function Page() {
   };
 
   return (
-    <section className={`${styles.stagger_container} flex flex-col gap-12`}>
+    <section className={`${styles.stagger_container} flex flex-col`}>
       <Header
         description={t("typingDescription")}
         link={{
@@ -189,13 +189,13 @@ export default function Page() {
         }}
         title="Peter's Typing practice"
       />
-      <div className="relative flex w-full flex-col items-center justify-center">
+      <div className="relative mx-auto flex w-full max-w-2xl flex-col items-center justify-center border-foreground/20 border-y py-16 sm:py-24">
         <button
-          className="flex w-full flex-col items-center justify-center gap-4 rounded-md p-4 text-left outline-none focus-visible:ring-2"
+          className="flex w-full flex-col items-center justify-center gap-6 p-4 text-left outline-none focus-visible:ring-2"
           onClick={focusInput}
           type="button"
         >
-          <div className="font-mono text-2xl">
+          <div className="font-mono text-xl sm:text-2xl">
             {isInitialLoading ? (
               <div className="flex flex-wrap justify-center gap-3">
                 <Skeleton className="h-8 w-24" />

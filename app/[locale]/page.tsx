@@ -1,208 +1,109 @@
-"use client";
-
-import {
-  CookieIcon,
-  GitHubLogoIcon,
-  LinkedInLogoIcon,
-} from "@radix-ui/react-icons";
-import { KeyboardIcon } from "lucide-react";
 import type { Route } from "next";
 import { useLocale, useTranslations } from "next-intl";
-import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
-import { Suspense, useCallback, useState } from "react";
-import type { MouseEvent } from "react";
-import { SiX } from "react-icons/si";
 
-import Header from "@/components/header";
-import { AspectRatio } from "@/components/ui/aspect-ratio";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-} from "@/components/ui/carousel";
-import { Skeleton } from "@/components/ui/skeleton";
-import mainImage1 from "@/public/assets/images/main-image-1.jpg";
-import mainImage2 from "@/public/assets/images/main-image-2.png";
-import { cn } from "@/shared/utils/tailwind";
-
-import styles from "@/shared/styles/stagger-fade-in.module.css";
-
-const Lickitung = dynamic(() => import("@/components/lickitung"), {
-  loading: () => <Skeleton className="aspect-3/2 h-full w-full" />,
-  ssr: false,
-});
-
-// Hoisted static data outside component to prevent re-creation on every render (rendering-hoist-jsx)
-const SOCIAL_LINKS = [
+const SECTIONS = [
   {
-    href: "https://github.com/minpeter",
-    icon: <GitHubLogoIcon className="h-4 w-4" />,
-    label: "GitHub",
+    description:
+      "Technical notes, tutorials, and lessons from building software.",
+    href: "/blog",
+    title: "Development notes",
   },
   {
-    href: "https://x.com/minpeterx",
-    icon: <SiX className="h-4 w-4" />,
-    label: "X",
+    description: "Small prototypes, visual toys, and interface studies.",
+    href: "/show",
+    title: "Interactive experiments",
   },
   {
-    href: "https://linkedin.com/in/minpeter/",
-    icon: <LinkedInLogoIcon className="h-4 w-4" />,
-    label: "LinkedIn",
+    description: "Type generated sentences and track your speed and accuracy.",
+    href: "/typing",
+    title: "Typing practice",
+  },
+  {
+    description: "Work history and background — coming soon.",
+    href: "/resume",
+    title: "Resume (in progress)",
   },
 ] as const;
 
-const CAROUSEL_SLIDES = [
+const SOCIAL_LINKS = [
+  { href: "https://github.com/minpeter", label: "GitHub", slug: "/minpeter" },
+  { href: "https://x.com/minpeterx", label: "X", slug: "/minpeterx" },
   {
-    id: "spotlight-video",
-    image: mainImage1,
-    url: null,
-  },
-  {
-    id: "spotlight-showcase",
-    image: mainImage2,
-    url: "/73e3da8fa7a397e7b1bc36efabb2cbb265524a75d7d5e6d1620b9e10e694257",
+    href: "https://linkedin.com/in/minpeter/",
+    label: "LinkedIn",
+    slug: "/in/minpeter",
   },
 ] as const;
 
 export default function Page() {
-  const t = useTranslations();
   const locale = useLocale();
+  const t = useTranslations();
 
   return (
-    <section className="flex flex-col gap-3">
-      <Header description={t("siteDescription")} title="minpeter 🇰🇷" />
-      <div className={cn(styles.stagger_container, styles.slow)}>
-        <div
-          className={cn(
-            styles.stagger_container,
-            styles.slow,
-            // The parent layout already has a width constraint, so setting a width constraint here is unnecessary.
-            "grid w-full grid-cols-1 gap-2 lg:grid-cols-2"
-          )}
+    <section className="home-page mx-auto flex w-full max-w-lg flex-1 flex-col pt-24 pb-12 sm:pt-28">
+      <header className="mb-16">
+        <Link
+          aria-label="minpeter home"
+          className="home-logo-link mb-6 inline-flex hover:opacity-60"
+          href={`/${locale}` as Route}
         >
+          <Image
+            alt=""
+            aria-hidden="true"
+            className="home-logo"
+            height={32}
+            priority
+            src="/assets/signature-mark.svg"
+            width={32}
+          />
+        </Link>
+        <h1 className="text-base leading-tight tracking-[-0.035em]">
+          <span className="font-semibold text-foreground">MINPETER</span>
+          <span className="text-muted-foreground"> — Software designer</span>
+        </h1>
+        <p className="mt-4 max-w-md text-[15px] leading-[1.35] text-foreground/85 tracking-[-0.02em]">
+          {t("siteDescription")} — building interfaces and websites for a
+          living.
+        </p>
+      </header>
+
+      <nav aria-label="Explore" className="home-links">
+        {SECTIONS.map(({ description, href, title }) => (
           <Link
-            className="lg:square flex h-40 flex-col justify-between rounded-xl bg-black/5 p-5 transition-colors duration-200 hover:bg-black/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring lg:h-auto dark:bg-white/5 dark:hover:bg-white/10"
-            href={`/${locale}/blog` as Route}
+            className="home-link group"
+            href={`/${locale}${href}` as Route}
+            key={href}
           >
-            <span className="font-medium text-lg">{t("blogTitle")}</span>
-            <CookieIcon className="h-6 w-6" />
+            <span className="home-link-title">{title}</span>
+            <span className="home-link-description">{description}</span>
           </Link>
-
-          <div className="grid grid-cols-2 gap-2">
-            {[
-              {
-                href: "/typing",
-                icon: <KeyboardIcon className="h-4 w-4" />,
-                text: t("typingTitle"),
-              },
-            ].map((item) => (
-              <Link
-                className="relative flex aspect-square flex-col rounded-xl bg-black/5 p-3 transition-colors duration-200 hover:bg-black/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:bg-white/5 dark:hover:bg-white/10"
-                href={`/${locale}${item.href}` as Route}
-                key={item.href}
-              >
-                <div className="absolute top-3 left-3 flex items-center gap-1.5">
-                  {item.icon}
-                </div>
-                <span className="mt-auto self-start text-sm">{item.text}</span>
-              </Link>
-            ))}
-
-            <div className="gap-2">
-              <CarouselImage />
-            </div>
-
-            <div className="grid grid-cols-3 gap-2">
-              {SOCIAL_LINKS.map((item) => (
-                <a
-                  aria-label={`${item.label} profile`}
-                  className="flex aspect-square items-center justify-center rounded-xl bg-black/5 p-3 transition-colors duration-200 hover:bg-black/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:bg-white/5 dark:hover:bg-white/10"
-                  href={item.href}
-                  key={item.href}
-                  rel="noreferrer noopener"
-                  target="_blank"
-                >
-                  <div className="flex items-center gap-1.5">{item.icon}</div>
-                </a>
-              ))}
-
-              <Link
-                aria-label="Project Showcase Link"
-                className="col-span-3"
-                href={`/${locale}/show` as Route}
-              >
-                <Suspense
-                  fallback={<Skeleton className="aspect-3/2 h-full w-full" />}
-                >
-                  <Lickitung aspect="3/2" />
-                </Suspense>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function CarouselImage() {
-  const [grayscale, setGrayscale] = useState("grayscale(1)");
-  const handleGrayscaleDisable = useCallback(() => {
-    setGrayscale("grayscale(0)");
-  }, []);
-  const handleGrayscaleEnable = useCallback(() => {
-    setGrayscale("grayscale(70%)");
-  }, []);
-  const handleSlideClick = useCallback(
-    (event: MouseEvent<HTMLButtonElement>) => {
-      const { url } = event.currentTarget.dataset;
-      if (url) {
-        window.open(url);
-      }
-    },
-    []
-  );
-
-  return (
-    <Carousel>
-      <CarouselContent>
-        {CAROUSEL_SLIDES.map((slide, index) => (
-          <CarouselItem key={slide.id}>
-            <AspectRatio ratio={1}>
-              <button
-                aria-label={
-                  slide.url ? `Open image ${index + 1}` : `Image ${index + 1}`
-                }
-                className="h-full w-full rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                data-url={slide.url ?? undefined}
-                onBlur={handleGrayscaleEnable}
-                onClick={handleSlideClick}
-                onFocus={handleGrayscaleDisable}
-                onMouseEnter={handleGrayscaleDisable}
-                onMouseLeave={handleGrayscaleEnable}
-                onTouchEnd={handleGrayscaleEnable}
-                onTouchStart={handleGrayscaleDisable}
-                type="button"
-              >
-                <Image
-                  alt={`Main image ${index + 1}`}
-                  className={cn(
-                    "h-full w-full rounded-lg object-cover grayscale-70 transition-filter duration-1000",
-                    grayscale === "grayscale(0)" && "grayscale-0"
-                  )}
-                  height={300}
-                  loading="lazy"
-                  placeholder="blur"
-                  src={slide.image}
-                  width={300}
-                />
-              </button>
-            </AspectRatio>
-          </CarouselItem>
         ))}
-      </CarouselContent>
-    </Carousel>
+      </nav>
+
+      <section className="mt-16" aria-labelledby="connect-title">
+        <h2
+          className="mb-5 text-[13px] text-muted-foreground tracking-[-0.02em]"
+          id="connect-title"
+        >
+          Connect
+        </h2>
+        <nav aria-label="Social links" className="flex flex-col gap-3">
+          {SOCIAL_LINKS.map(({ href, label, slug }) => (
+            <a
+              className="home-social-link group"
+              href={href}
+              key={href}
+              rel="noreferrer"
+              target="_blank"
+            >
+              <span>{label}</span>
+              <span className="text-muted-foreground">{slug}</span>
+            </a>
+          ))}
+        </nav>
+      </section>
+    </section>
   );
 }
