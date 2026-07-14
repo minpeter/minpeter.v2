@@ -39,7 +39,7 @@ async function downloadFile(folderId: string, fileName: string) {
       a.href = url;
       a.download = fileName;
 
-      document.body.appendChild(a);
+      document.body.append(a);
       a.click();
 
       window.URL.revokeObjectURL(url);
@@ -49,9 +49,9 @@ async function downloadFile(folderId: string, fileName: string) {
 }
 
 interface UploadResponse {
-  files: Array<{
+  files: {
     fileName: string;
-  }>;
+  }[];
   folderId: string;
 }
 
@@ -84,7 +84,7 @@ export default function TmpfUI() {
   const [error, setError] = useState<string | null>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFiles(e.target.files ? Array.from(e.target.files) : null);
+    setFiles(e.target.files ? [...e.target.files] : null);
   };
 
   const handleUpload = async () => {

@@ -1,19 +1,24 @@
 import { describe, expect, it, vi } from "vitest";
 
-vi.mock("fumadocs-core/search/server", () => ({
+// @ts-expect-error -- the test only needs the search route's GET handler.
+vi.mock(import("fumadocs-core/search/server"), () => ({
   createFromSource: vi.fn(() => ({
     GET: vi.fn(() =>
       Promise.resolve(
-        new Response(JSON.stringify({ results: [] }), {
-          headers: { "Content-Type": "application/json" },
-          status: 200,
-        })
+        Response.json(
+          { results: [] },
+          {
+            headers: { "Content-Type": "application/json" },
+            status: 200,
+          }
+        )
       )
     ),
   })),
 }));
 
-vi.mock("@/shared/source", () => ({
+// @ts-expect-error -- the test only needs the loader's getPages method.
+vi.mock(import("@/shared/source"), () => ({
   blog: {
     getPages: vi.fn(() => []),
   },
@@ -24,7 +29,7 @@ describe("Search API Route", () => {
     const { GET } = await import("./route");
 
     expect(GET).toBeDefined();
-    expect(typeof GET).toBe("function");
+    expect(GET).toBeTypeOf("function");
   });
 
   it("should call createFromSource with correct arguments", async () => {

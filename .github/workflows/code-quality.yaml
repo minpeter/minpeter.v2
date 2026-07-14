@@ -8,9 +8,7 @@ on:
       - main
 
 permissions:
-  actions: read
   contents: read
-  pull-requests: write
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
@@ -44,8 +42,8 @@ jobs:
         run: |
           pnpm check:types
 
-  biome:
-    name: Biome
+  oxlint:
+    name: Oxlint
     timeout-minutes: 15
     runs-on: ubuntu-latest
 
@@ -67,9 +65,35 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Run Biome check
+      - name: Run Oxlint check
         run: |
-          pnpm check:biome
+          pnpm check:oxlint
+
+  build:
+    name: Production build
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+
+      - name: Use Node.js 22
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build production site
+        run: pnpm build
 
   test:
     name: Test

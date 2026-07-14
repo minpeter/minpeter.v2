@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+
 import { buildCharRenderState } from "./char-render";
 
 describe("문자 렌더링 유틸리티", () => {

@@ -10,7 +10,8 @@ import Typing from "@/components/typing";
 import { ModCodeBlock } from "@/components/code-block";
 
 <Callout>
-  This is a post for experimenting with MDX components that can be used on this blog.
+  This is a post for experimenting with MDX components that can be used on this
+  blog.
   {"\n"}
   If you're looking for practical content, feel free to skip this.
 </Callout>
@@ -28,8 +29,7 @@ import { SimpleButton, Ip, Counter } from "./components";
 
 Now that I can use components in the blog, I want to run some experiments.
 
-First, let's test an inline code block `console.log("Hello, World!")`.
-Next is a regular code block test
+First, let's test an inline code block `console.log("Hello, World!")`. Next is a regular code block test
 
 ```
 console.log("Hello, World!")
@@ -121,8 +121,7 @@ export function Counter() {
   }}
 />
 
-Above, you can use `vpc-id`, `cidr-block`, `availability-zone` as variables with ModCodeBlock.
-The format used is as follows:
+Above, you can use `vpc-id`, `cidr-block`, `availability-zone` as variables with ModCodeBlock. The format used is as follows:
 
 ```
 <ModCodeBlock
@@ -140,8 +139,7 @@ The format used is as follows:
 
 Here, `{{%TAB}}` was added for tabs. Such features can be added later if needed.
 
-A feature of ModCodeBlock is that it allows readers to easily modify values that need to be changed before copying a command.
-This makes it easier for readers to follow along with blog posts centered around CLI.
+A feature of ModCodeBlock is that it allows readers to easily modify values that need to be changed before copying a command. This makes it easier for readers to follow along with blog posts centered around CLI.
 
 This is the first practical MDX component added. To make it available by default in all posts, I modified `app/blog/[slug]/post.tsx` as follows:
 
@@ -298,5 +296,4 @@ console.log("Hello, World!");
 
 **3. Style**
 
-![](./images/68d0b1b0-36cd-4f22-a6ea-e769c3eb8e7c-image.png)
-{/* ![](images/Untitled-1.png) */}
+![](./images/68d0b1b0-36cd-4f22-a6ea-e769c3eb8e7c-image.png) {/* ![](images/Untitled-1.png) */}

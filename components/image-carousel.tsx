@@ -1,15 +1,17 @@
 "use client";
 
 import Image from "next/image";
-import { type MouseEvent, useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import type { MouseEvent } from "react";
+
 import {
   Carousel,
-  type CarouselApi,
   CarouselContent,
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import type { CarouselApi } from "@/components/ui/carousel";
 import { cn } from "@/shared/utils/tailwind";
 
 const IMAGE_WIDTH_RATIO = 1.5;
@@ -31,9 +33,8 @@ export function ImageCarousel({
   const [current, setCurrent] = useState(0);
   const handleIndicatorClick = useCallback(
     (event: MouseEvent<HTMLButtonElement>) => {
-      const slideIndex = Number.parseInt(
-        event.currentTarget.dataset.slideIndex ?? "",
-        10
+      const slideIndex = Math.trunc(
+        Number(event.currentTarget.dataset.slideIndex ?? "")
       );
       if (!Number.isNaN(slideIndex)) {
         api?.scrollTo(slideIndex);

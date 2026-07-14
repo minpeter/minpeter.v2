@@ -5,21 +5,24 @@ import { Tab, Tabs } from "fumadocs-ui/components/tabs";
 import defaultMdxComponents from "fumadocs-ui/mdx";
 import { DocsBody } from "fumadocs-ui/page";
 import type { Route } from "next";
+import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getTranslations } from "next-intl/server";
 import type { ComponentProps, ReactNode } from "react";
 import { isValidElement } from "react";
+
 import ExternalRedirect from "@/components/external-redirect";
 import Header from "@/components/header";
 import { MachineTranslationNotice } from "@/components/machine-translation-notice";
 import { ViewTransition } from "@/components/view-transition";
 import { blog } from "@/shared/source";
-import styles from "@/shared/styles/stagger-fade-in.module.css";
 import { formatDateLong } from "@/shared/utils/date";
 import NewMetadata from "@/shared/utils/metadata";
 import { cn } from "@/shared/utils/tailwind";
+
 import { NavLink } from "./nav-link";
+
+import styles from "@/shared/styles/stagger-fade-in.module.css";
 
 export const dynamicParams = false;
 
@@ -100,7 +103,7 @@ export default async function Page(
   const previousPost =
     currentPostIndex > 0 ? sortedPosts[currentPostIndex - 1] : null;
   const nextPost =
-    currentPostIndex >= 0 ? sortedPosts[currentPostIndex + 1] : null;
+    currentPostIndex === -1 ? null : sortedPosts[currentPostIndex + 1];
 
   return (
     <section className={styles.stagger_container}>
@@ -112,7 +115,7 @@ export default async function Page(
         }
         link={{ href: `/${locale}/blog` as Route, text: t("backToBlog") }}
         title={post.data.title}
-        titleTransitionName={`blog-title-${post.url.replace(/\//g, "-")}`}
+        titleTransitionName={`blog-title-${post.url.replaceAll("/", "-")}`}
       />
 
       {post.data.machine_translated && (
@@ -157,6 +160,9 @@ export default async function Page(
             className="mdx"
             components={{
               ...defaultMdxComponents,
+              Callout,
+              Tab,
+              Tabs,
               a: (anchorProps) => {
                 const { href, children, ...rest } = anchorProps;
                 const h = href as string | undefined;
@@ -185,14 +191,11 @@ export default async function Page(
                   </a>
                 );
               },
-              Callout,
               img: (imageProps) => (
                 <ImageZoom
                   {...(imageProps as ComponentProps<typeof ImageZoom>)}
                 />
               ),
-              Tab,
-              Tabs,
             }}
           />
         </div>
@@ -214,7 +217,7 @@ export default async function Page(
 
           <div className="flex gap-2">
             <span>{t("publishedDate")}:</span>
-            <ViewTransition name={`blog-date-${post.url.replace(/\//g, "-")}`}>
+            <ViewTransition name={`blog-date-${post.url.replaceAll("/", "-")}`}>
               <time dateTime={new Date(post.data.published).toISOString()}>
                 {formatDateLong(post.data.published)}
               </time>

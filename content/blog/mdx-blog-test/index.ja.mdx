@@ -29,8 +29,7 @@ import { SimpleButton, Ip, Counter } from "./components";
 
 これでブログでコンポーネントを使用できるようになったので、いくつかの実験をしてみようと思う。
 
-まずインラインコードブロックテスト `console.log("Hello, World!")` をしてみよう。
-次は一般的なコードブロックテスト
+まずインラインコードブロックテスト `console.log("Hello, World!")` をしてみよう。次は一般的なコードブロックテスト
 
 ```
 console.log("Hello, World!")
@@ -122,8 +121,7 @@ export function Counter() {
   }}
 />
 
-上でModCodeBlockを使って`vpc-id`、`cidr-block`、`availability-zone`を変数として使用できる。
-このとき使用される形式はこうだ。
+上でModCodeBlockを使って`vpc-id`、`cidr-block`、`availability-zone`を変数として使用できる。このとき使用される形式はこうだ。
 
 ```
 <ModCodeBlock
@@ -141,8 +139,7 @@ export function Counter() {
 
 ここで`{{%TAB}}`はタブのために追加した。今後必要な場合、このような機能を追加できる。
 
-ModCodeBlockの特徴としては、あるコマンドを読者がコピーする前に変更しなければならない値を簡単に修正してからコピーできるということだ。
-こうすればCLIを中心に進むブログ記事を書くとき、読者が簡単についてこれるようになる。
+ModCodeBlockの特徴としては、あるコマンドを読者がコピーする前に変更しなければならない値を簡単に修正してからコピーできるということだ。こうすればCLIを中心に進むブログ記事を書くとき、読者が簡単についてこれるようになる。
 
 初めて追加された実用的な用途のMDXコンポーネントだ。これを基本的にすべての投稿で活用できるように`app/blog/[slug]/post.tsx`を次のように修正した。
 
@@ -299,5 +296,4 @@ console.log("Hello, World!");
 
 **3. スタイル**
 
-![](./images/68d0b1b0-36cd-4f22-a6ea-e769c3eb8e7c-image.png)
-{/* ![](images/Untitled-1.png) */}
+![](./images/68d0b1b0-36cd-4f22-a6ea-e769c3eb8e7c-image.png) {/* ![](images/Untitled-1.png) */}

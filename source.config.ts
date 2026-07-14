@@ -1,12 +1,13 @@
 import { remarkInstall } from "fumadocs-docgen";
 import {
-  type DefaultMDXOptions,
   defineConfig,
   defineDocs,
   frontmatterSchema,
 } from "fumadocs-mdx/config";
+import type { DefaultMDXOptions } from "fumadocs-mdx/config";
 import lastModified from "fumadocs-mdx/plugins/last-modified";
 import { z } from "zod";
+
 import { routing } from "./shared/i18n/routing";
 
 export const { docs, meta } = defineDocs({

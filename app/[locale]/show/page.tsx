@@ -1,11 +1,13 @@
 import type { Route } from "next";
-import Link from "next/link";
 import { getTranslations } from "next-intl/server";
+import Link from "next/link";
+
 import Header from "@/components/header";
 import { createFeatureGate } from "@/shared/flags";
-import styles from "@/shared/styles/stagger-fade-in.module.css";
 import NewMetadata from "@/shared/utils/metadata";
 import { cn } from "@/shared/utils/tailwind";
+
+import styles from "@/shared/styles/stagger-fade-in.module.css";
 
 export const metadata = NewMetadata({
   description: "A graveyard of components made with care but never used",

@@ -1,6 +1,9 @@
 import { getProviderData } from "@flags-sdk/statsig";
-import { type ApiData, verifyAccess, version } from "flags";
-import { type NextRequest, NextResponse } from "next/server";
+import { verifyAccess, version } from "flags";
+import type { ApiData } from "flags";
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
+
 import { env } from "@/shared/env";
 
 export async function GET(request: NextRequest) {

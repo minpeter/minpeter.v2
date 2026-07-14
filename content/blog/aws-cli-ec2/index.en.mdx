@@ -136,9 +136,7 @@ Associate the subnet with the Route table.
   }}
 />
 
-Use the following command to enable automatic public IP address assignment.
-Since EC2 instance IP addresses change upon restart, this must be configured.
-Otherwise, you need to associate an Elastic IP address with the instance.
+Use the following command to enable automatic public IP address assignment. Since EC2 instance IP addresses change upon restart, this must be configured. Otherwise, you need to associate an Elastic IP address with the instance.
 
 ## Create SG
 
@@ -184,10 +182,10 @@ Then open port 22 (ssh) in the security group to allow access from anywhere with
     --query 'KeyMaterial' --output text > {{key-name}}.pem
 
     chmod 400 {{key-name}}.pem"
-  data={{
+
+data={{
     "key-name": "clikeypair",
-  }}
-/>
+  }} />
 
 Create a key pair and set permissions.
 
@@ -281,8 +279,7 @@ You can see that you have successfully connected to the EC2 instance from the CL
   }}
 />
 
-You can delete EC2 instances and security groups in the following order.
-Enter them one at a time as they may not be deleted if entered all at once.
+You can delete EC2 instances and security groups in the following order. Enter them one at a time as they may not be deleted if entered all at once.
 
 - Delete EC2 instance
 - Delete subnet

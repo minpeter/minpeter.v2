@@ -1,13 +1,14 @@
 // @vitest-environment jsdom
 import { act, renderHook } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
+
 import { useTypingStats } from "./use-typing-stats";
 
-vi.mock("next-intl", () => ({
+vi.mock(import("next-intl"), () => ({
   useLocale: () => "en",
 }));
 
-describe("useTypingStats", () => {
+describe(useTypingStats, () => {
   it("shows current zero accuracy instead of stale completed sentence accuracy", () => {
     const { rerender, result } = renderHook(
       ({ target, userInput }) => useTypingStats(userInput, "", target, 0, 6000),
@@ -52,14 +53,14 @@ describe("useTypingStats", () => {
       userInput: "",
     });
 
-    expect(result.current.shouldShowStats).toBe(true);
+    expect(result.current.shouldShowStats).toBeTruthy();
     expect(result.current.displayAccuracy).toBe(100);
 
     act(() => {
       result.current.clearStats();
     });
 
-    expect(result.current.shouldShowStats).toBe(false);
+    expect(result.current.shouldShowStats).toBeFalsy();
     expect(result.current.displayValue).toBe(0);
     expect(result.current.displayAccuracy).toBe(0);
   });

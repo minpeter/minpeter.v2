@@ -4,22 +4,19 @@ import type { SortedResult } from "fumadocs-core/search";
 import { useDocsSearch } from "fumadocs-core/search/client";
 import { ExternalLink, Loader2, Search, X } from "lucide-react";
 import type { Route } from "next";
-import Link from "next/link";
 import { useTranslations } from "next-intl";
+import Link from "next/link";
 import { debounce, parseAsString, useQueryState } from "nuqs";
-import {
-  type ChangeEvent,
-  useCallback,
-  useDeferredValue,
-  useEffect,
-  useTransition,
-} from "react";
+import { useCallback, useDeferredValue, useEffect, useTransition } from "react";
+import type { ChangeEvent } from "react";
+
 import { Badge } from "@/components/ui/badge";
 import { ViewTransition } from "@/components/view-transition";
 import type { postMetadataType } from "@/shared/source";
-import styles from "@/shared/styles/stagger-fade-in.module.css";
 import { formatDate, formatYear } from "@/shared/utils/date";
 import { cn } from "@/shared/utils/tailwind";
+
+import styles from "@/shared/styles/stagger-fade-in.module.css";
 
 /**
  * Extract unique page URLs from search results
@@ -239,7 +236,7 @@ export function BlogListFallback({ posts }: { posts: postMetadataType[] }) {
                           href={post.url as Route}
                         >
                           <ViewTransition
-                            name={`blog-title-${post.url.replace(/\//g, "-")}`}
+                            name={`blog-title-${post.url.replaceAll("/", "-")}`}
                           >
                             <span
                               className={cn(
@@ -259,7 +256,7 @@ export function BlogListFallback({ posts }: { posts: postMetadataType[] }) {
                         </Badge>
                       ) : (
                         <ViewTransition
-                          name={`blog-date-${post.url.replace(/\//g, "-")}`}
+                          name={`blog-date-${post.url.replaceAll("/", "-")}`}
                         >
                           <div className={cn(itemSytles, "h-fit text-nowrap")}>
                             {formatDate(post.published)}

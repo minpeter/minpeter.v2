@@ -15,15 +15,11 @@ machine_translated: true
 
 ## 1. k8s-ctrlr & k8s-node 作成
 
-先ほど作成したテンプレートを利用してk8s-ctrlrとk8s-nodeを作成します。
-起動後、cloud-init設定が進行するまでしばらく待ちます。
+先ほど作成したテンプレートを利用してk8s-ctrlrとk8s-nodeを作成します。起動後、cloud-init設定が進行するまでしばらく待ちます。
 
 ## 2. 静的IP設定
 
-k8s-ctrlrとk8s-nodeの静的IPを設定します。
-やはりnetplanを使用します。
-状況によって異なりますが、一般的なルーターの一般的な単一コンピューターで作成されたProxmoxではほぼ同様でしょう。
-ファイル修正前に念のためバックアップしておきます。
+k8s-ctrlrとk8s-nodeの静的IPを設定します。やはりnetplanを使用します。状況によって異なりますが、一般的なルーターの一般的な単一コンピューターで作成されたProxmoxではほぼ同様でしょう。ファイル修正前に念のためバックアップしておきます。
 
 ```bash
 sudo cp /etc/netplan/01-netcfg.yaml{,.bak}
@@ -43,9 +39,7 @@ ethernets:
       addresses: [192.168.0.120, 1.1.1.1]
 ```
 
-私の場合は192.168.0.120でpi.holeによるローカルDNSサーバーを運用中なので、これをnameserverに追加しています。
-k8s-ctrlrは`192.168.0.180`、k8s-nodeは`192.168.0.185`に設定しました。
-適用します。
+私の場合は192.168.0.120でpi.holeによるローカルDNSサーバーを運用中なので、これをnameserverに追加しています。k8s-ctrlrは`192.168.0.180`、k8s-nodeは`192.168.0.185`に設定しました。適用します。
 
 ```bash
 sudo netplan apply
@@ -118,8 +112,7 @@ sudo apt-get install -y kubelet kubeadm kubectl
 sudo apt-mark hold kubelet kubeadm kubectl
 ```
 
-上から順にキーを取得し、kubernetes aptリポジトリを追加し、kubernetesパッケージをインストールします。
-[公式マニュアル](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/#installing-kubeadm-kubelet-and-kubectl)の変更が確認されたら修正します。
+上から順にキーを取得し、kubernetes aptリポジトリを追加し、kubernetesパッケージをインストールします。 [公式マニュアル](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/#installing-kubeadm-kubelet-and-kubectl)の変更が確認されたら修正します。
 
 ## 6. k8s-nodeをテンプレートに
 
@@ -137,19 +130,11 @@ sudo ln -s /etc/machine-id /var/lib/dbus/machine-id
 
 その後、電源を切ってWeb UIでConvert to Templateをクリックします。
 
-テンプレートに変換されたら、好きな数だけワーカーを作成できます。
-ここではk8s-node-1、k8s-node-2の2つを作成しましょう。
+テンプレートに変換されたら、好きな数だけワーカーを作成できます。ここではk8s-node-1、k8s-node-2の2つを作成しましょう。
 
 ## 8. VM仕様の変更
 
-k8s-ctrlr、k8s-node-1、k8s-node-2の仕様を変更します。
-すべての電源を切り、Web UIで仕様を変更します。
-Proxmoxを実行しているサーバーの仕様に応じて変更すればよいですが、k8s-ctrlrの場合は2CPU、4GB、k8s-node-1、k8s-node-2の場合は2CPU、2GBが理想的だそうです。
-サーバーの仕様が不足している場合は、すべて2CPUに2GBに設定しましょう。
-これが最小仕様です。
-そして仕様が良くても、RAMを増やすよりもワーカーをさらに作成する方が良いそうですが...私は知らなくてもいいのではないでしょうか？
-設定が完了したら、再びすべての電源を入れましょう。
-また、テンプレートから複製したVMの場合、静的IPが解除されてDHCPになっているはずなので、必要であれば静的IPに変更しましょう。
+k8s-ctrlr、k8s-node-1、k8s-node-2の仕様を変更します。すべての電源を切り、Web UIで仕様を変更します。Proxmoxを実行しているサーバーの仕様に応じて変更すればよいですが、k8s-ctrlrの場合は2CPU、4GB、k8s-node-1、k8s-node-2の場合は2CPU、2GBが理想的だそうです。サーバーの仕様が不足している場合は、すべて2CPUに2GBに設定しましょう。これが最小仕様です。そして仕様が良くても、RAMを増やすよりもワーカーをさらに作成する方が良いそうですが...私は知らなくてもいいのではないでしょうか？設定が完了したら、再びすべての電源を入れましょう。また、テンプレートから複製したVMの場合、静的IPが解除されてDHCPになっているはずなので、必要であれば静的IPに変更しましょう。
 
 ## 9. クラスター作成
 
@@ -210,13 +195,11 @@ k8s-node-2   Ready    <none>                 10m   v1.21.1
 
 ## Kubernetesを使用する
 
-クラスターを苦労して作成しましたが、これから何をすればいいでしょうか？
-Kubernetesを使用してWebサーバーをデプロイしてみましょう。
+クラスターを苦労して作成しましたが、これから何をすればいいでしょうか？Kubernetesを使用してWebサーバーをデプロイしてみましょう。
 
 ### 1. nginx Podのデプロイ
 
-nginx Podを1つ作成してデプロイしてみましょう。
-k8s-ctrlrでpod.yamlファイルに以下のように記述します。
+nginx Podを1つ作成してデプロイしてみましょう。k8s-ctrlrでpod.yamlファイルに以下のように記述します。
 
 ```yaml
 apiVersion: v1
@@ -261,11 +244,7 @@ curl 10.244.1.2:80
 
 ### 2. nginx Serviceの作成
 
-しかし、このようにPodに直接アクセスするのは良くありません。
-Podは再起動または削除されるとIPが変わるからです。
-また、クラスター内部へのアクセスはどのノードからでも可能ですが、外部からは不可能です。
-このような問題を解決するためにServiceを作成します。
-k8s-ctrlrでservice-nodeport.yamlファイルに以下のように記述します。
+しかし、このようにPodに直接アクセスするのは良くありません。Podは再起動または削除されるとIPが変わるからです。また、クラスター内部へのアクセスはどのノードからでも可能ですが、外部からは不可能です。このような問題を解決するためにServiceを作成します。k8s-ctrlrでservice-nodeport.yamlファイルに以下のように記述します。
 
 ```yaml
 apiVersion: v1
@@ -321,10 +300,7 @@ curl 192.168.0.190:30080
 
 ## まとめ
 
-今回の投稿ではKubernetesをインストールしてnginxをデプロイする方法を学びました。
-次の投稿ではKubernetesの他の機能について学びたいと思います。
-ingress、configmap、secret、volume、deployment、statefulsetなどについて学びたいと思います。
-また可能であれば、Jenkinsを使用したCI/CDを構築してみたいと思います。
+今回の投稿ではKubernetesをインストールしてnginxをデプロイする方法を学びました。次の投稿ではKubernetesの他の機能について学びたいと思います。ingress、configmap、secret、volume、deployment、statefulsetなどについて学びたいと思います。また可能であれば、Jenkinsを使用したCI/CDを構築してみたいと思います。
 
 ## 参考資料
 

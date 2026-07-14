@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+
 import { getBaseUrl } from "@/shared/env";
 import { siteConfig } from "@/shared/site-config";
 

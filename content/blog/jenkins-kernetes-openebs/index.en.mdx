@@ -9,10 +9,7 @@ machine_translated: true
 
 ## Why This Article Exists
 
-I got scammed.
-~~Later I realized it wasn't exactly a scam and it can be useful in certain cases... whatever, it's a scam~~
-I read blogs covering `installing Jenkins on Kubernetes` and followed along.
-But after setting everything up:
+I got scammed. ~~Later I realized it wasn't exactly a scam and it can be useful in certain cases... whatever, it's a scam~~ I read blogs covering `installing Jenkins on Kubernetes` and followed along. But after setting everything up:
 
 > Jenkins doesn't need scaling, so it's better to set it up on a separate server :)
 
@@ -20,39 +17,25 @@ Hahahaha. So I'm writing this post because it would be a waste to have studied P
 
 ## What is Persistent Volume?
 
-In Kubernetes, computing instances and storage are separated.
-Storage is managed as a resource called `PersistentVolume`.
-Here, storage can be local file systems on each node or other file servers.
-This includes hostPath, GlusterFS, CephFS, NFS, local, etc., which I'll mention below.
+In Kubernetes, computing instances and storage are separated. Storage is managed as a resource called `PersistentVolume`. Here, storage can be local file systems on each node or other file servers. This includes hostPath, GlusterFS, CephFS, NFS, local, etc., which I'll mention below.
 
 ## The Journey to Finding OpenEBS
 
-Most articles I found about deploying Jenkins on k8s used `hostPath`.
-They almost always mentioned that for actual operations, you should use services like GlusterFS.
-But GlusterFS, while having good performance, had the drawback of requiring at least 3 nodes (at least in my case), and I had no remaining resources on Proxmox.
-CephFS, which is supported by default in Proxmox, was also attempted, but was impossible because there was only 1 Proxmox server node and the LV was already using the entire hard drive.
-Next I tried NFS, planning to run a separate NFS server and mount PVs to it, but gave up due to a bug causing dependency errors on Ubuntu 22.04.
-Of course, if I hadn't found an alternative, I would have set up an NFS server somehow, but I found a good alternative called OpenEBS.
+Most articles I found about deploying Jenkins on k8s used `hostPath`. They almost always mentioned that for actual operations, you should use services like GlusterFS. But GlusterFS, while having good performance, had the drawback of requiring at least 3 nodes (at least in my case), and I had no remaining resources on Proxmox. CephFS, which is supported by default in Proxmox, was also attempted, but was impossible because there was only 1 Proxmox server node and the LV was already using the entire hard drive. Next I tried NFS, planning to run a separate NFS server and mount PVs to it, but gave up due to a bug causing dependency errors on Ubuntu 22.04. Of course, if I hadn't found an alternative, I would have set up an NFS server somehow, but I found a good alternative called OpenEBS.
 
 ## What is OpenEBS?
 
-Services mentioned above like GlusterFS and CephFS require running separate servers, which is quite a complex task.
-On the other hand, OpenEBS can be installed and used within a k8s cluster.
-OpenEBS creates PVs using Local Disks on each node comprising K8s.
-Therefore, you don't need to configure separate servers or disks.
-\*k3s has local-path Storage similar to OpenEBS Local Path. I'd like to try it later.
+Services mentioned above like GlusterFS and CephFS require running separate servers, which is quite a complex task. On the other hand, OpenEBS can be installed and used within a k8s cluster. OpenEBS creates PVs using Local Disks on each node comprising K8s. Therefore, you don't need to configure separate servers or disks. \*k3s has local-path Storage similar to OpenEBS Local Path. I'd like to try it later.
 
 ## Installing OpenEBS
 
-OpenEBS provides various installation methods, but this time I'll install it using helm.
-You can use other methods, but I used helm because people said it's good.
+OpenEBS provides various installation methods, but this time I'll install it using helm. You can use other methods, but I used helm because people said it's good.
 
 - If helm is not installed
   ```bash
   curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
   ```
-  You can install it easily.
-  In my case, I installed it using asdf-vm.
+  You can install it easily. In my case, I installed it using asdf-vm.
 
 ```bash
 kubectl create ns openebs
@@ -61,8 +44,7 @@ helm repo update
 helm install -n openebs openebs openebs/openebs
 ```
 
-Installation is done with this simple process.
-Check if the installation was successful with the following command:
+Installation is done with this simple process. Check if the installation was successful with the following command:
 
 ```bash
 kubectl get all -n openebs
@@ -116,9 +98,7 @@ You can check the deployment status with the following command:
 kubectl get all -n ns-jenkins
 ```
 
-Once everything is successfully deployed, access `http://<node-ip>:30500`.
-The node-ip can be any node's IP in the cluster.
-If you can connect successfully, OpenEBS is working correctly.
+Once everything is successfully deployed, access `http://<node-ip>:30500`. The node-ip can be any node's IP in the cluster. If you can connect successfully, OpenEBS is working correctly.
 
 If you plan to actually operate it:
 
@@ -136,12 +116,7 @@ kubectl get pod -n ns-jenkins
 
 ## Conclusion
 
-In this post, we installed OpenEBS using helm and tested it by installing Jenkins.
-It wasn't the most appropriate example, but it was new to use helm and OpenEBS for the first time.
-However, I haven't organized detailed content about OpenEBS or PV/PVC yet, so I'm not sure if these settings are appropriate for the current situation.
-I should organize content about OpenEBS later and prepare posts about PV and PVC as well.
-My original plan to set up a deployment server got slightly derailed, but I should be satisfied since I learned a lot.
-Of course, for actually setting up the deployment server, I plan to build a Jenkins server using docker and deploy through Jenkins.
+In this post, we installed OpenEBS using helm and tested it by installing Jenkins. It wasn't the most appropriate example, but it was new to use helm and OpenEBS for the first time. However, I haven't organized detailed content about OpenEBS or PV/PVC yet, so I'm not sure if these settings are appropriate for the current situation. I should organize content about OpenEBS later and prepare posts about PV and PVC as well. My original plan to set up a deployment server got slightly derailed, but I should be satisfied since I learned a lot. Of course, for actually setting up the deployment server, I plan to build a Jenkins server using docker and deploy through Jenkins.
 
 ## Releasing All Resources in ns-jenkins
 

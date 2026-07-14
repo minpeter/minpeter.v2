@@ -3,14 +3,15 @@
 import type { CSSProperties } from "react";
 import { Fragment, useCallback } from "react";
 import { generate, tokenize } from "sugar-high";
+
 import {
   COPY_ERROR_LABEL,
   copyToClipboard,
-  ModCodeBlock as EditableCodeBlock,
   getCopyLabel,
   useCopyStatus,
 } from "./mod-code-block";
 
+export { ModCodeBlock } from "./mod-code-block";
 const MULTILINE_SEPARATOR = "\n";
 
 interface HighlightTextNode {
@@ -66,8 +67,6 @@ function HighlightedCode({ code }: { code: string }) {
     );
   });
 }
-
-export const ModCodeBlock = EditableCodeBlock;
 
 export function CodeBlock({ code }: { code: string; language?: string }) {
   const { status, markCopied, markError } = useCopyStatus();

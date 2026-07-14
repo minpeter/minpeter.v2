@@ -1,16 +1,17 @@
 // @vitest-environment jsdom
 import { act, renderHook, waitFor } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
+
 import { nextSentencesGenerator } from "../action";
 import { useTypingSentences } from "./use-typing-sentences";
 
-vi.mock("../action", () => ({
+vi.mock(import("../action"), () => ({
   nextSentencesGenerator: vi.fn(),
 }));
 
 const mockedNextSentencesGenerator = vi.mocked(nextSentencesGenerator);
 
-describe("useTypingSentences", () => {
+describe(useTypingSentences, () => {
   afterEach(() => {
     vi.clearAllMocks();
   });
@@ -23,14 +24,14 @@ describe("useTypingSentences", () => {
     );
 
     await waitFor(() => {
-      expect(mockedNextSentencesGenerator).toHaveBeenCalledTimes(1);
+      expect(mockedNextSentencesGenerator).toHaveBeenCalledOnce();
     });
     await waitFor(() => {
       expect(result.current.fetchError).toBe("Could not fetch sentences");
     });
 
-    expect(result.current.isFetching).toBe(false);
-    expect(result.current.isInitialLoading).toBe(false);
+    expect(result.current.isFetching).toBeFalsy();
+    expect(result.current.isInitialLoading).toBeFalsy();
   });
 
   it("allows retrying sentence fetches after a failed end-of-buffer prefetch", async () => {
@@ -46,7 +47,7 @@ describe("useTypingSentences", () => {
     );
 
     await waitFor(() => {
-      expect(result.current.sentences).toEqual([
+      expect(result.current.sentences).toStrictEqual([
         "first sentence",
         "second sentence",
       ]);
@@ -65,13 +66,13 @@ describe("useTypingSentences", () => {
     });
 
     await waitFor(() => {
-      expect(result.current.sentences).toEqual([
+      expect(result.current.sentences).toStrictEqual([
         "first sentence",
         "second sentence",
         "third sentence",
         "fourth sentence",
       ]);
     });
-    expect(result.current.fetchError).toBe(null);
+    expect(result.current.fetchError).toBeNull();
   });
 });

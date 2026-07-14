@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+
 import {
   disassembleHangul,
   disassembleString,
@@ -40,24 +41,24 @@ describe("한글 유틸리티", () => {
 
   describe("disassembleHangul (한글 자소 분해)", () => {
     it("받침 없는 글자를 분해한다", () => {
-      expect(disassembleHangul("가")).toEqual(["ㄱ", "ㅏ"]);
-      expect(disassembleHangul("너")).toEqual(["ㄴ", "ㅓ"]);
+      expect(disassembleHangul("가")).toStrictEqual(["ㄱ", "ㅏ"]);
+      expect(disassembleHangul("너")).toStrictEqual(["ㄴ", "ㅓ"]);
     });
 
     it("홑받침 있는 글자를 분해한다", () => {
-      expect(disassembleHangul("각")).toEqual(["ㄱ", "ㅏ", "ㄱ"]);
-      expect(disassembleHangul("녕")).toEqual(["ㄴ", "ㅕ", "ㅇ"]);
+      expect(disassembleHangul("각")).toStrictEqual(["ㄱ", "ㅏ", "ㄱ"]);
+      expect(disassembleHangul("녕")).toStrictEqual(["ㄴ", "ㅕ", "ㅇ"]);
     });
 
     it("겹받침 있는 글자를 완전 분해한다", () => {
-      expect(disassembleHangul("닭")).toEqual(["ㄷ", "ㅏ", "ㄹ", "ㄱ"]);
-      expect(disassembleHangul("삶")).toEqual(["ㅅ", "ㅏ", "ㄹ", "ㅁ"]);
-      expect(disassembleHangul("없")).toEqual(["ㅇ", "ㅓ", "ㅂ", "ㅅ"]);
+      expect(disassembleHangul("닭")).toStrictEqual(["ㄷ", "ㅏ", "ㄹ", "ㄱ"]);
+      expect(disassembleHangul("삶")).toStrictEqual(["ㅅ", "ㅏ", "ㄹ", "ㅁ"]);
+      expect(disassembleHangul("없")).toStrictEqual(["ㅇ", "ㅓ", "ㅂ", "ㅅ"]);
     });
 
     it("한글이 아닌 문자는 그대로 반환한다", () => {
-      expect(disassembleHangul("a")).toEqual(["a"]);
-      expect(disassembleHangul(".")).toEqual(["."]);
+      expect(disassembleHangul("a")).toStrictEqual(["a"]);
+      expect(disassembleHangul(".")).toStrictEqual(["."]);
     });
   });
 
@@ -82,7 +83,7 @@ describe("한글 유틸리티", () => {
         "ㅏ",
         ".",
       ];
-      expect(disassembleString(input)).toEqual(expected);
+      expect(disassembleString(input)).toStrictEqual(expected);
     });
   });
 });

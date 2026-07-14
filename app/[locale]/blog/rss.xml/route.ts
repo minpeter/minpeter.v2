@@ -7,11 +7,11 @@ type Locale = (typeof routing.locales)[number];
 
 function escapeXml(text: string): string {
   return text
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&apos;");
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&apos;");
 }
 
 function generateRssFeed(locale: Locale): string {
@@ -20,7 +20,9 @@ function generateRssFeed(locale: Locale): string {
 
   const sortedPosts = posts
     .filter((post) => !post.data.draft)
-    .sort((a, b) => b.data.published.getTime() - a.data.published.getTime());
+    .toSorted(
+      (a, b) => b.data.published.getTime() - a.data.published.getTime()
+    );
 
   const items = sortedPosts
     .map((post) => {

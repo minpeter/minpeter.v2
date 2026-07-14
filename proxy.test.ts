@@ -1,12 +1,13 @@
 import { getRewrittenUrl, isRewrite } from "next/experimental/testing/server";
 import { NextRequest, NextResponse } from "next/server";
 import { describe, expect, it, vi } from "vitest";
+
 import { proxy, shouldExclude } from "./proxy";
 
 const TEST_TARGET_DOMAIN = "https://minpeter.uk";
 const NEXT_INTL_MIDDLEWARE_REWRITE = `${TEST_TARGET_DOMAIN}/HIT/NEXT-INTL`;
 
-vi.mock("next-intl/middleware", () => ({
+vi.mock(import("next-intl/middleware"), () => ({
   default: vi.fn(
     () => () => NextResponse.rewrite(NEXT_INTL_MIDDLEWARE_REWRITE)
   ),
@@ -14,36 +15,38 @@ vi.mock("next-intl/middleware", () => ({
 
 describe("Proxy", () => {
   it("should exclude", () => {
-    expect(shouldExclude("/robots.txt")).toEqual(true);
-    expect(shouldExclude("/favicon.ico")).toEqual(true);
-    expect(shouldExclude("/_next/static")).toEqual(true);
-    expect(shouldExclude("/_next/image")).toEqual(true);
-    expect(shouldExclude("/assets/images/main-image-1.jpg")).toEqual(true);
-    expect(shouldExclude("/Lickitung.gltf")).toEqual(true);
-    expect(shouldExclude("/.well-known/vercel/flags")).toEqual(true);
+    expect(shouldExclude("/robots.txt")).toBeTruthy();
+    expect(shouldExclude("/favicon.ico")).toBeTruthy();
+    expect(shouldExclude("/_next/static")).toBeTruthy();
+    expect(shouldExclude("/_next/image")).toBeTruthy();
+    expect(shouldExclude("/assets/images/main-image-1.jpg")).toBeTruthy();
+    expect(shouldExclude("/Lickitung.gltf")).toBeTruthy();
+    expect(shouldExclude("/.well-known/vercel/flags")).toBeTruthy();
   });
 
   it("should not exclude", () => {
-    expect(shouldExclude("/test")).toEqual(false);
-    expect(shouldExclude("/test.md")).toEqual(false);
-    expect(shouldExclude("/subpath/test")).toEqual(false);
-    expect(shouldExclude("/subpath/test.md")).toEqual(false);
-    expect(shouldExclude("/not-a-real-route.json")).toEqual(false);
-    expect(shouldExclude("/subpath/test.gltf")).toEqual(false);
+    expect(shouldExclude("/test")).toBeFalsy();
+    expect(shouldExclude("/test.md")).toBeFalsy();
+    expect(shouldExclude("/subpath/test")).toBeFalsy();
+    expect(shouldExclude("/subpath/test.md")).toBeFalsy();
+    expect(shouldExclude("/not-a-real-route.json")).toBeFalsy();
+    expect(shouldExclude("/subpath/test.gltf")).toBeFalsy();
   });
 
   it("should proxy", async () => {
     const request = new NextRequest(`${TEST_TARGET_DOMAIN}/test`);
     const response = await proxy(request);
 
-    expect(isRewrite(response)).toEqual(true);
-    expect(getRewrittenUrl(response)).toEqual(NEXT_INTL_MIDDLEWARE_REWRITE);
+    expect(isRewrite(response)).toBeTruthy();
+    expect(getRewrittenUrl(response)).toStrictEqual(
+      NEXT_INTL_MIDDLEWARE_REWRITE
+    );
   });
 
   it("should not proxy", async () => {
     const request = new NextRequest(`${TEST_TARGET_DOMAIN}/robots.txt`);
     const response = await proxy(request);
 
-    expect(isRewrite(response)).toEqual(false);
+    expect(isRewrite(response)).toBeFalsy();
   });
 });

@@ -1,4 +1,5 @@
 import { useEffect, useEffectEvent, useRef, useState } from "react";
+
 import { nextSentencesGenerator } from "../action";
 
 const SENTENCE_PREFETCH_THRESHOLD = 3;

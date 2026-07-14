@@ -27,8 +27,7 @@ export default function AnimatedText({ data }: { data: string }) {
 
     const animate = () => {
       setAnimatedText(
-        data
-          .split("")
+        [...data]
           .map((_, index) => {
             if (index < iteration) {
               return data[index];

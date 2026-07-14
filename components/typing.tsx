@@ -48,7 +48,7 @@ export default function Typing({
         }
       } else if (currentText.length >= targetText.length) {
         isDeletingRef.current = true;
-        nextText = targetText.slice(0, targetText.length - 1);
+        nextText = targetText.slice(0, -1);
       } else {
         nextText = targetText.slice(0, currentText.length + 1);
       }

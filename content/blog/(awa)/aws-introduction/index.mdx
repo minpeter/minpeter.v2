@@ -14,18 +14,12 @@ categories: "aws"
 
 ### AZ (가용 영역)
 
-Availability Zone의 약자로 한 개 이상의 데이터 센터들의 모음을 의미한다.
-한개의 AZ 안에 있는 데이터센터는 서로 초고속 전용망으로 연결되어 있다.
+Availability Zone의 약자로 한 개 이상의 데이터 센터들의 모음을 의미한다. 한개의 AZ 안에 있는 데이터센터는 서로 초고속 전용망으로 연결되어 있다.
 
 ### Region (리전)
 
-해당 지리적인 영역 내에서 격리되고 물리적으로 분리된 여러 개의 AZ의 모음을 의미한다.
-리전의 최소 2개의 AZ에서 최대 6개의 AZ로 구성된다.
-리전 안에서 AZ끼리는 트랜짓 센터를 통해서 연결되어 있다.
-재난이나 재해로부터 안전하기 위해서 서비스를 여러 개의 AZ에 분산하여 구성하는 것이 좋습니다.
+해당 지리적인 영역 내에서 격리되고 물리적으로 분리된 여러 개의 AZ의 모음을 의미한다. 리전의 최소 2개의 AZ에서 최대 6개의 AZ로 구성된다. 리전 안에서 AZ끼리는 트랜짓 센터를 통해서 연결되어 있다. 재난이나 재해로부터 안전하기 위해서 서비스를 여러 개의 AZ에 분산하여 구성하는 것이 좋습니다.
 
 ### Edge POP (엣지)
 
-Edge Point Of Presense의 약자로 외부 인터넷과 AWS 글로벌 네트워크망을 연결하는 별도의 센터이다.
-Edge Location과 Regional Edge Cache로 구성되며 CloudFront(CDN), Direct Connect, Route 53(DNS), AWS shield(DDoS protection), AWS Global Accelerator가 엣지에서 동작한다.
-![](./edge-pop.png)
+Edge Point Of Presense의 약자로 외부 인터넷과 AWS 글로벌 네트워크망을 연결하는 별도의 센터이다. Edge Location과 Regional Edge Cache로 구성되며 CloudFront(CDN), Direct Connect, Route 53(DNS), AWS shield(DDoS protection), AWS Global Accelerator가 엣지에서 동작한다. ![](./edge-pop.png)

@@ -3,14 +3,17 @@
 import type { Route } from "next";
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useEffectEvent, useState } from "react";
+
 import Header from "@/components/header";
 import { Skeleton } from "@/components/ui/skeleton";
-import styles from "@/shared/styles/stagger-fade-in.module.css";
+
 import { useTypingInput } from "./hooks/use-typing-input";
 import { useTypingSentences } from "./hooks/use-typing-sentences";
 import { useTypingStats } from "./hooks/use-typing-stats";
 import { TypingHints, TypingStatus } from "./typing-status";
 import { buildCharRenderState } from "./utils/char-render";
+
+import styles from "@/shared/styles/stagger-fade-in.module.css";
 
 const MIN_ACCURACY_THRESHOLD = 85;
 const TRANSITION_DELAY_MS = 300;
@@ -145,28 +148,32 @@ export default function Page() {
   }, [userInput.length]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    const key: string = e.key;
+    const { key } = e;
     switch (key) {
-      case "Enter":
+      case "Enter": {
         if (!isTransitioning && handleEnterPress()) {
           e.preventDefault();
         }
         break;
-      case "Backspace":
+      }
+      case "Backspace": {
         if (handleBackspace()) {
           e.preventDefault();
         }
         break;
-      case "a":
+      }
+      case "a": {
         if (e.ctrlKey || e.metaKey) {
           e.preventDefault();
           handleSelectAll();
         }
         break;
-      case "Escape":
+      }
+      case "Escape": {
         e.preventDefault();
         handleReset();
         break;
+      }
       default:
     }
   };
@@ -198,7 +205,7 @@ export default function Page() {
                 <Skeleton className="h-8 w-28" />
               </div>
             ) : (
-              currentSentence.split("").map((char, index) => {
+              [...currentSentence].map((char, index) => {
                 const { key, display, className } = buildCharRenderState({
                   char,
                   composingText,

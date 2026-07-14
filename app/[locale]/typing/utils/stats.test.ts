@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+
 import { calculateAccuracy, calculateCPM, calculateWPM } from "./stats";
 
 describe("타자 통계 유틸리티", () => {

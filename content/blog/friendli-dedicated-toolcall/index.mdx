@@ -13,73 +13,69 @@ draft: false
   title="본 게시글은 FriendliAI와 직접적인 연관이 없습니다, 글에 내용과 설명 모두 개인적인 의견이며, FriendliAI의 의견을 대변하지 않습니다."
 />
 
-
 FriendliAI의 완전관리형 모델 서빙 제품인 Friendli Dedicated Endpoints(FDE)는 안정적이고 편리한 모델 서빙을 제공합니다. 특히 함수 호출 설정이 자동으로 감지되어 활성화되는 기능을 지원하여, 개발자가 별도의 복잡한 설정 없이도 쉽게 function calling을 구현할 수 있습니다.
-
 
 ## 함수 호출이 지원되는 모델 배포하기
 
 대부분의 최신 모델들은 함수 호출을 기본적으로 지원합니다. `Qwen/Qwen3-30B-A3B` 모델을 예시로, 다음과 같은 간단한 절차로 함수 호출이 가능한 엔드포인트를 배포할 수 있습니다.
 
-1. **모델 선택 및 확인**: 모델 선택 후 Features > Tool call: Supported 표시를 확인합니다.
-   ![](./images/qwen3-native-toolcall.png)
+1. **모델 선택 및 확인**: 모델 선택 후 Features > Tool call: Supported 표시를 확인합니다. ![](./images/qwen3-native-toolcall.png)
 
-2. **엔드포인트 ID 확인**: 배포가 완료되면 Endpoint Overview에서 Endpoint ID(e.g., `dep0hyjaasjus3o`)를 확인합니다.
-   ![](./images/native-endpoint-overview.png)
+2. **엔드포인트 ID 확인**: 배포가 완료되면 Endpoint Overview에서 Endpoint ID(e.g., `dep0hyjaasjus3o`)를 확인합니다. ![](./images/native-endpoint-overview.png)
 
 3. **API 테스트**: [`FRIENDLI_TOKEN`](https://friendli.ai/suite/setting/tokens)을 발급받은 후, 다음과 같이 API 요청을 통해 테스트합니다.
 
-	```plaintext
-	curl https://api.friendli.ai/dedicated/v1/chat/completions \
-	-H "Content-Type: application/json" \
-	// [!code highlight:1]
-	-H "Authorization: Bearer $FRIENDLI_TOKEN" \
-	-d '{
-	// [!code highlight:1]
-		"model": "dep0hyjaasjus3o",
-		"messages": [
-			{"role": "user", "content": "서울 날씨 알려줘"}
-		],
-		"tools": [
-		{
-			"type": "function",
-			"function": {
-			"name": "get_weather",
-			"description": "도시의 현재 날씨를 가져옴",
-			"parameters": {
-				"type": "object",
-				"properties": {
-				"location": {"type": "string"}
-				},
-				"required": ["location"]
-			}
-			}
-		}
-		],
-		"tool_choice": "auto"
-	}' | jq .choices[].message
-	```
+   ```plaintext
+   curl https://api.friendli.ai/dedicated/v1/chat/completions \
+   -H "Content-Type: application/json" \
+   // [!code highlight:1]
+   -H "Authorization: Bearer $FRIENDLI_TOKEN" \
+   -d '{
+   // [!code highlight:1]
+   	"model": "dep0hyjaasjus3o",
+   	"messages": [
+   		{"role": "user", "content": "서울 날씨 알려줘"}
+   	],
+   	"tools": [
+   	{
+   		"type": "function",
+   		"function": {
+   		"name": "get_weather",
+   		"description": "도시의 현재 날씨를 가져옴",
+   		"parameters": {
+   			"type": "object",
+   			"properties": {
+   			"location": {"type": "string"}
+   			},
+   			"required": ["location"]
+   		}
+   		}
+   	}
+   	],
+   	"tool_choice": "auto"
+   }' | jq .choices[].message
+   ```
 
 4. **결과 확인**: 성공적으로 함수가 호출되면 다음과 같은 응답을 받을 수 있습니다.
 
-	```json
-	{
-		"content": "\n\n",
-		"reasoning_content": "\nOkay, the user is asking for the weather in Seoul. Let me check the tools available. There's a function called get_weather that takes a location parameter. Since the user mentioned \"서울\" which is Seoul, I need to call that function with the location set to Seoul. I should make sure the arguments are correctly formatted in JSON. Alright, the required parameter is location, so I'll structure the tool call accordingly.\n",
-		"role": "assistant",
-		// [!code highlight:10]
-		"tool_calls": [
-			{
-				"function": {
-					"arguments": "{\"location\": \"서울\"}",
-					"name": "get_weather"
-				},
-				"id": "call_XIl0NYYMh9jRLhUdhF2OtTjE",
-				"type": "function"
-			}
-		]
-	}
-	```
+   ```json
+   {
+     "content": "\n\n",
+     "reasoning_content": "\nOkay, the user is asking for the weather in Seoul. Let me check the tools available. There's a function called get_weather that takes a location parameter. Since the user mentioned \"서울\" which is Seoul, I need to call that function with the location set to Seoul. I should make sure the arguments are correctly formatted in JSON. Alright, the required parameter is location, so I'll structure the tool call accordingly.\n",
+     "role": "assistant",
+     // [!code highlight:10]
+     "tool_calls": [
+       {
+         "function": {
+           "arguments": "{\"location\": \"서울\"}",
+           "name": "get_weather"
+         },
+         "id": "call_XIl0NYYMh9jRLhUdhF2OtTjE",
+         "type": "function"
+       }
+     ]
+   }
+   ```
 
 이처럼 별도의 복잡한 설정 없이도 함수 호출이 가능한 엔드포인트를 손쉽게 배포할 수 있습니다.
 
@@ -113,10 +109,8 @@ FriendliAI의 완전관리형 모델 서빙 제품인 Friendli Dedicated Endpoin
 
 먼저 각 모델의 기본 구조를 파악해야 합니다. 모델마다 상황이 다릅니다:
 
-- Case 1: 원래부터 tool call 로직이 없는 모델
-`google/gemma-3-27b-it` 같은 모델은 애초에 tool call을 위한 로직이 템플릿에 포함되어 있지 않습니다. 이런 경우 기존 템플릿을 그대로 사용할 수 있어서 작업이 간단합니다.
-- Case 2: 호환되지 않는 tool call 형식을 사용하는 모델
-`GLM-4.5-Air` 같은 모델은 이미 tool call 기능이 구현되어 있지만, FDE 엔진에서 지원하지 않는 형식을 사용합니다. 이런 경우 기존의 tool call 로직을 제거하여 순수한 대화 템플릿으로 만들어야 합니다.
+- Case 1: 원래부터 tool call 로직이 없는 모델 `google/gemma-3-27b-it` 같은 모델은 애초에 tool call을 위한 로직이 템플릿에 포함되어 있지 않습니다. 이런 경우 기존 템플릿을 그대로 사용할 수 있어서 작업이 간단합니다.
+- Case 2: 호환되지 않는 tool call 형식을 사용하는 모델 `GLM-4.5-Air` 같은 모델은 이미 tool call 기능이 구현되어 있지만, FDE 엔진에서 지원하지 않는 형식을 사용합니다. 이런 경우 기존의 tool call 로직을 제거하여 순수한 대화 템플릿으로 만들어야 합니다.
 
 <Tabs items={['gemma-3-27b-it', 'GLM-4.5-Air', 'GLM-4.5-Air (diff)']}>
   <Tab value="gemma-3-27b-it">
@@ -134,36 +128,11 @@ FriendliAI의 완전관리형 모델 서빙 제품인 Friendli Dedicated Endpoin
 	{%- set loop_messages = messages -%}
 {%- endif -%}
 
-{%- for message in loop_messages -%}
-	{%- if message["role"] == "user" != (loop.index0 % 2 == 0) -%}
-		{{- raise_exception("Conversation roles must alternate user/assistant/user/assistant/...") -}}
-	{%- endif -%}
-	{%- if message["role"] == "assistant" -%}
-		{%- set role = "model" -%}
-	{%- else -%}
-		{%- set role = message["role"] -%}
-	{%- endif -%}
-	{{- "<start_of_turn>" + role + "\n" + (first_user_prefix if loop.first else "") -}}
-	{%- if message["content"] is string -%}
-		{{- message["content"] | trim -}}
-	{%- elif message["content"] is iterable -%}
-		{%- for item in message["content"] -%}
-			{%- if item["type"] == "image" -%}
-				{{- "<start_of_image>" -}}
-			{%- elif item["type"] == "text" -%}
-				{{- item["text"] | trim -}}
-			{%- endif -%}
-		{%- endfor -%}
-	{%- else -%}
-		{{- raise_exception("Invalid content type") -}}
-	{%- endif -%}
-	{{- "<end_of_turn>\n" -}}
-{%- endfor -%}
+{%- for message in loop_messages -%} {%- if message["role"] == "user" != (loop.index0 % 2 == 0) -%} {{- raise_exception("Conversation roles must alternate user/assistant/user/assistant/...") -}} {%- endif -%} {%- if message["role"] == "assistant" -%} {%- set role = "model" -%} {%- else -%} {%- set role = message["role"] -%} {%- endif -%} {{- "<start_of_turn>" + role + "\n" + (first_user_prefix if loop.first else "") -}} {%- if message["content"] is string -%} {{- message["content"] | trim -}} {%- elif message["content"] is iterable -%} {%- for item in message["content"] -%} {%- if item["type"] == "image" -%} {{- "<start_of_image>" -}} {%- elif item["type"] == "text" -%} {{- item["text"] | trim -}} {%- endif -%} {%- endfor -%} {%- else -%} {{- raise_exception("Invalid content type") -}} {%- endif -%} {{- "<end_of_turn>\n" -}} {%- endfor -%}
 
-{%- if add_generation_prompt -%}
-	{{- "<start_of_turn>model\n" -}}
-{%- endif -%}
-```
+{%- if add_generation_prompt -%} {{- "<start_of_turn>model\n" -}} {%- endif -%}
+
+````
   </Tab>
   <Tab value="GLM-4.5-Air">
 ```jinja
@@ -224,7 +193,7 @@ FriendliAI의 완전관리형 모델 서빙 제품인 Friendli Dedicated Endpoin
 	{{- "<|assistant|>" -}}
 	{{- "\n<think></think>" if enable_thinking is defined and not enable_thinking else "" -}}
 {%- endif -%}
-```
+````
 
   </Tab>
   <Tab value="GLM-4.5-Air (diff)">
@@ -331,8 +300,7 @@ FriendliAI의 완전관리형 모델 서빙 제품인 Friendli Dedicated Endpoin
 
 #### 2단계: 호환 가능한 tool call 기능 추가하기
 
-순수한 템플릿을 준비했다면, 이제 FDE 엔진에서 인식할 수 있는 형식으로 tool call 기능을 추가해야 합니다. 가장 널리 사용되는 형식은 [Hermes Function Calling Standard](https://github.com/NousResearch/Hermes-Function-Calling) 형식입니다.
-이 형식의 핵심 특징은 다음과 같습니다:
+순수한 템플릿을 준비했다면, 이제 FDE 엔진에서 인식할 수 있는 형식으로 tool call 기능을 추가해야 합니다. 가장 널리 사용되는 형식은 [Hermes Function Calling Standard](https://github.com/NousResearch/Hermes-Function-Calling) 형식입니다. 이 형식의 핵심 특징은 다음과 같습니다:
 
 - Tool 정의: `<tools>...</tools>` XML 태그 내에 JSON 형식으로 정의
 - Tool 호출: `<tool_call>{"name": "함수명", "arguments": {...}}</tool_call>` 형식으로 호출
@@ -381,69 +349,11 @@ FriendliAI의 완전관리형 모델 서빙 제품인 Friendli Dedicated Endpoin
 	{%- endif -%}
 {%- endif -%}
 
-{%- for message in loop_messages -%}
-	{%- if message["role"] == "tool" -%}
-		{%- if loop.first or (loop_messages[loop.index0 - 1]["role"] != "tool") -%}
-			{{- "<start_of_turn>user\n" -}}
-		{%- endif -%}
-		{{- "<tool_response>\n" -}}
-		{%- if message["content"] is string -%}
-			{{- message["content"] | trim -}}
-		{%- else -%}
-			{{- message["content"][0]["text"] | trim -}}
-		{%- endif -%}
-		{{- "\n</tool_response>" -}}
-		{%- if loop.last or (loop_messages[loop.index0 + 1]["role"] != "tool") -%}
-			{{- "<end_of_turn>\n" -}}
-		{%- endif -%}
-	{%- elif message["role"] in ["user", "assistant"] -%}
-		{%- if message["role"] == "user" != ((loop.index0 - (loop_messages[:loop.index0] | selectattr("role", "equalto", "tool") | list | length)) % 2 == 0) -%}
-			{{- raise_exception("Conversation roles must alternate user/assistant/user/assistant/... (excluding tool messages)") -}}
-		{%- endif -%}
-		{%- if message["role"] == "assistant" -%}
-			{%- set role = "model" -%}
-		{%- else -%}
-			{%- set role = message["role"] -%}
-		{%- endif -%}
-		{{- "<start_of_turn>" + role + "\n" + (first_user_prefix if loop.first and role == "user" else "") -}}
-		{%- if message["content"] is string -%}
-			{{- message["content"] | trim -}}
-		{%- elif message["content"] is iterable -%}
-			{%- for item in message["content"] -%}
-				{%- if item["type"] == "image" -%}
-					{{- "<start_of_image>" -}}
-				{%- elif item["type"] == "text" -%}
-					{{- item["text"] | trim -}}
-				{%- endif -%}
-			{%- endfor -%}
-		{%- else -%}
-			{{- raise_exception("Invalid content type") -}}
-		{%- endif -%}
-		{%- if message["role"] == "assistant" and message.get("tool_calls") -%}
-			{%- for tool_call in message["tool_calls"] -%}
-				{{- "\n" -}}
-				{%- if tool_call.get("function") -%}
-					{%- set tool_call = tool_call["function"] -%}
-				{%- endif -%}
-				{{- "<tool_call>\n{\"name\": \"" -}}
-				{{- tool_call["name"] -}}
-				{{- "\", \"arguments\": " -}}
-				{%- if tool_call["arguments"] is string -%}
-					{{- tool_call["arguments"] -}}
-				{%- else -%}
-					{{- tool_call["arguments"] | tojson -}}
-				{%- endif -%}
-				{{- "}\n</tool_call>" -}}
-			{%- endfor -%}
-		{%- endif -%}
-		{{- "<end_of_turn>\n" -}}
-	{%- endif -%}
-{%- endfor -%}
+{%- for message in loop_messages -%} {%- if message["role"] == "tool" -%} {%- if loop.first or (loop_messages[loop.index0 - 1]["role"] != "tool") -%} {{- "<start_of_turn>user\n" -}} {%- endif -%} {{- "<tool_response>\n" -}} {%- if message["content"] is string -%} {{- message["content"] | trim -}} {%- else -%} {{- message["content"][0]["text"] | trim -}} {%- endif -%} {{- "\n</tool_response>" -}} {%- if loop.last or (loop_messages[loop.index0 + 1]["role"] != "tool") -%} {{- "<end_of_turn>\n" -}} {%- endif -%} {%- elif message["role"] in ["user", "assistant"] -%} {%- if message["role"] == "user" != ((loop.index0 - (loop_messages[:loop.index0] | selectattr("role", "equalto", "tool") | list | length)) % 2 == 0) -%} {{- raise_exception("Conversation roles must alternate user/assistant/user/assistant/... (excluding tool messages)") -}} {%- endif -%} {%- if message["role"] == "assistant" -%} {%- set role = "model" -%} {%- else -%} {%- set role = message["role"] -%} {%- endif -%} {{- "<start_of_turn>" + role + "\n" + (first_user_prefix if loop.first and role == "user" else "") -}} {%- if message["content"] is string -%} {{- message["content"] | trim -}} {%- elif message["content"] is iterable -%} {%- for item in message["content"] -%} {%- if item["type"] == "image" -%} {{- "<start_of_image>" -}} {%- elif item["type"] == "text" -%} {{- item["text"] | trim -}} {%- endif -%} {%- endfor -%} {%- else -%} {{- raise_exception("Invalid content type") -}} {%- endif -%} {%- if message["role"] == "assistant" and message.get("tool_calls") -%} {%- for tool_call in message["tool_calls"] -%} {{- "\n" -}} {%- if tool_call.get("function") -%} {%- set tool_call = tool_call["function"] -%} {%- endif -%} {{- "<tool_call>\n{\"name\": \"" -}} {{- tool_call["name"] -}} {{- "\", \"arguments\": " -}} {%- if tool_call["arguments"] is string -%} {{- tool_call["arguments"] -}} {%- else -%} {{- tool_call["arguments"] | tojson -}} {%- endif -%} {{- "}\n</tool_call>" -}} {%- endfor -%} {%- endif -%} {{- "<end_of_turn>\n" -}} {%- endif -%} {%- endfor -%}
 
-{%- if add_generation_prompt -%}
-	{{- "<start_of_turn>model\n" -}}
-{%- endif -%}
-```
+{%- if add_generation_prompt -%} {{- "<start_of_turn>model\n" -}} {%- endif -%}
+
+````
   </Tab>
   <Tab value="GLM-4.5-Air">
 ```jinja
@@ -549,7 +459,8 @@ FriendliAI의 완전관리형 모델 서빙 제품인 Friendli Dedicated Endpoin
 	{{- "<|assistant|>" -}}
 	{{- "\n<think></think>" if enable_thinking is defined and not enable_thinking else "" -}}
 {%- endif -%}
-```
+````
+
   </Tab>
   <Tab value="GLM-4.5-Air (diff)">
 ```diff
@@ -661,74 +572,70 @@ FriendliAI의 완전관리형 모델 서빙 제품인 Friendli Dedicated Endpoin
 
 수정된 템플릿을 활용하여 실제로 함수 호출이 지원되지 않던 모델을 배포하는 과정을 단계별로 살펴보겠습니다.
 
-1. **모델 상태 확인**: 먼저 모델을 선택한 후 "Tool call: Not supported" 상태임을 확인합니다.
-   ![](./images/glm-default-unsupported.png)
+1. **모델 상태 확인**: 먼저 모델을 선택한 후 "Tool call: Not supported" 상태임을 확인합니다. ![](./images/glm-default-unsupported.png)
 
-2. **커스텀 템플릿 적용**: "Custom chat template"을 선택하고 작성한 chat template을 붙여넣습니다.
-   ![](./images/custom-template-modal.png)
+2. **커스텀 템플릿 적용**: "Custom chat template"을 선택하고 작성한 chat template을 붙여넣습니다. ![](./images/custom-template-modal.png)
 
-3. **설정 오버라이드**: "Override"를 선택한 후 tool call 정보가 "unknown"으로 표시되는지 확인합니다.
-   ![](./images/glm-custom-template-unknown.png)
+3. **설정 오버라이드**: "Override"를 선택한 후 tool call 정보가 "unknown"으로 표시되는지 확인합니다. ![](./images/glm-custom-template-unknown.png)
 
-4. **배포 완료 확인**: 배포가 완료된 후 Overview에서 tool call이 "supported"로 변경되었는지 확인합니다.
-   ![](./images/override-endpoint-overview.png)
+4. **배포 완료 확인**: 배포가 완료된 후 Overview에서 tool call이 "supported"로 변경되었는지 확인합니다. ![](./images/override-endpoint-overview.png)
 
 5. **API 테스트**: 이전과 동일한 방식으로 API 호출을 통해 테스트합니다.
-	```text
-	curl https://api.friendli.ai/dedicated/v1/chat/completions \
-	-H "Content-Type: application/json" \
-	// [!code highlight:1]
-	-H "Authorization: Bearer $FRIENDLI_TOKEN" \
-	-d '{
-	// [!code highlight:1]
-		"model": "depp771mey8y1se",
-		"messages": [
-		{"role": "user", "content": "서울 날씨 알려줘"}
-		],
-		"tools": [
-		{
-			"type": "function",
-			"function": {
-			"name": "get_weather",
-			"description": "도시의 현재 날씨를 가져옴",
-			"parameters": {
-				"type": "object",
-				"properties": {
-				"location": {"type": "string"}
-				},
-				"required": ["location"]
-			}
-			}
-		}
-		],
-		"tool_choice": "auto"
-	}' | jq .choices[].message
-	```
+
+   ```text
+   curl https://api.friendli.ai/dedicated/v1/chat/completions \
+   -H "Content-Type: application/json" \
+   // [!code highlight:1]
+   -H "Authorization: Bearer $FRIENDLI_TOKEN" \
+   -d '{
+   // [!code highlight:1]
+   	"model": "depp771mey8y1se",
+   	"messages": [
+   	{"role": "user", "content": "서울 날씨 알려줘"}
+   	],
+   	"tools": [
+   	{
+   		"type": "function",
+   		"function": {
+   		"name": "get_weather",
+   		"description": "도시의 현재 날씨를 가져옴",
+   		"parameters": {
+   			"type": "object",
+   			"properties": {
+   			"location": {"type": "string"}
+   			},
+   			"required": ["location"]
+   		}
+   		}
+   	}
+   	],
+   	"tool_choice": "auto"
+   }' | jq .choices[].message
+   ```
 
 6. **성공 결과 확인**: 이제 기존에 지원되지 않던 GLM-4.5-Air 모델에서도 성공적으로 함수 호출이 가능해집니다:
-	```json
-	{
-		"content": "\n\n서울의 현재 날씨를 확인해 드리겠습니다.\n",
-		"reasoning_content": "사용자가 서울의 날씨를 알려달라고 요청했습니다. 제가 가진 `get_weather` 함수를 사용할 수 있습니다. 이 함수는 location 파라미터가 필요하며, 사용자가 \"서울\"이라는 위치를 명시적으로 언급했습니다.\n\n함수를 호출할 때 \"서울\"을 location 파라미터로 전달해야 합니다.",
-		"role": "assistant",
-		// [!code highlight:10]
-		"tool_calls": [
-			{
-				"function": {
-						"arguments": "{\"location\": \"서울\"}",
-						"name": "get_weather"
-				},
-				"id": "call_oaNZe3tgKLLgv5aUMFQNBTRr",
-				"type": "function"
-			}
-		]
-	}
-	```
+   ```json
+   {
+     "content": "\n\n서울의 현재 날씨를 확인해 드리겠습니다.\n",
+     "reasoning_content": "사용자가 서울의 날씨를 알려달라고 요청했습니다. 제가 가진 `get_weather` 함수를 사용할 수 있습니다. 이 함수는 location 파라미터가 필요하며, 사용자가 \"서울\"이라는 위치를 명시적으로 언급했습니다.\n\n함수를 호출할 때 \"서울\"을 location 파라미터로 전달해야 합니다.",
+     "role": "assistant",
+     // [!code highlight:10]
+     "tool_calls": [
+       {
+         "function": {
+           "arguments": "{\"location\": \"서울\"}",
+           "name": "get_weather"
+         },
+         "id": "call_oaNZe3tgKLLgv5aUMFQNBTRr",
+         "type": "function"
+       }
+     ]
+   }
+   ```
 
 ### 활용 범위의 확장
 
 이러한 방식을 응용하면 매우 흥미로운 결과를 얻을 수 있습니다. 심지어 함수 호출 학습을 전혀 받지 않은 `mistralai/Mistral-7B-Instruct-v0.1` 같은 초기 모델에서도 어느 정도 준수한 함수 호출 성능을 보여주는 것을 확인할 수 있습니다.
-
 
 ## 마치며
 
@@ -738,4 +645,3 @@ Friendli Dedicated Endpoints는 모델 배포부터 함수 호출 설정까지 �
 지원되지 않는 모델의 경우에도 Custom Chat Template 기능을 통해 수동으로 함수 호출을 활성화할 수 있습니다. 이는 단순히 기존 제약을 우회하는 것을 넘어서, 다양한 모델의 잠재력을 최대한 활용할 수 있는 강력한 기능입니다.
 
 결과적으로 FDE는 함수 호출 지원 여부에 관계없이 거의 모든 모델에서 도구 호출 기능을 활용할 수 있는 유연성과 확장성을 제공한다고 할 수 있습니다. 이러한 특징은 AI 에이전트 개발과 복합적인 AI 워크플로우 구축에 있어 매우 큰 가치를 제공합니다.
-

@@ -1,5 +1,6 @@
 import { ArrowTopRightIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
+
 import { cn } from "@/shared/utils/tailwind";
 
 import { ModeToggle } from "./theme-toggle";

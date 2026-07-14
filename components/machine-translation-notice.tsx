@@ -1,6 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+
 import { cn } from "@/shared/utils/tailwind";
 
 function ClaudeIcon({ size = 16 }: { size?: number }) {

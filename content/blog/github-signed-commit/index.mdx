@@ -67,8 +67,7 @@ gpg --full-generate-key
 다음은 키 사이즈를 입력하라고 나오는데 최소 조건이 4096이라고 하니 4096를 입력해주자.  
 그 다음은 유효기간을 선택해야하는데 기본값은 무제한이다.  
 `Is this correct? (y/N)` 라는 질문이 나오면 y를 입력해주자  
-`Real Name:` 은 깃허브 닉네임을 입력해주고,
-`Email address:`에는 깃허브 계정에 등록하여 인증된 이메일를 입력하자.  
+`Real Name:` 은 깃허브 닉네임을 입력해주고, `Email address:`에는 깃허브 계정에 등록하여 인증된 이메일를 입력하자.  
 마지막으로 `Comment:`에 지금 생성한 키에 대한 설명을 작성하면 되는데 "For Github Signed commit" 정도로 적어두면 될 것 같다.  
 `Change (N)ame, (C)omment, (E)mail or (O)kay/(Q)uit?` 이라는 질문이 나오면 잘못 입력한 내용이 없는 경우 O를 입력해 키 생성을 마무리 해주자!!
 
@@ -105,18 +104,12 @@ gpg --armor --export 2167399770AVC2F3
 
 출력 결과 전체 그러니까 `-----BEGIN PGP PUBLIC KEY BLOCK-----` 부터 `-----END PGP PUBLIC KEY BLOCK-----` 까지 복사해준다.
 
-그 다음 Github에 접속해서 Settings > SSH and GPG keys 에서
-GPG keys 영역에 초록색 `New GPG key` 버튼을 눌러주자.  
-![](./images/Screenshot%202022-09-29%20190743.png)
-Title에는 Key에 대한 설명.. 같은걸 적어주면 될 것 같아서 나의 경우
-`노트북명 wsl2 signed commit` 이라고 정했다.
-나중에 나만 알아보면 되지 않을까..?
-그리고 Key 부분에 방금 복사해온 퍼블릭 키를 붙여주면 된다.
+그 다음 Github에 접속해서 Settings > SSH and GPG keys 에서 GPG keys 영역에 초록색 `New GPG key` 버튼을 눌러주자.  
+![](./images/Screenshot%202022-09-29%20190743.png) Title에는 Key에 대한 설명.. 같은걸 적어주면 될 것 같아서 나의 경우 `노트북명 wsl2 signed commit` 이라고 정했다. 나중에 나만 알아보면 되지 않을까..? 그리고 Key 부분에 방금 복사해온 퍼블릭 키를 붙여주면 된다.
 
 ## git config
 
-이제 설정이 거의 끝나간다.
-signed commit를 할 노트북에서 아래 명령어를 이용해 key를 등록해주자.
+이제 설정이 거의 끝나간다. signed commit를 할 노트북에서 아래 명령어를 이용해 key를 등록해주자.
 
 ```
 git config --global user.signingkey 2167399770AVC2F3
@@ -144,8 +137,7 @@ git config --global user.signingkey 2167399770AVC2F3
 git config --global commit.gpgsign true
 ```
 
-이제 커밋을 해보면 커밋에 Verified 태그가 생긴 걸 확인할 수 있다.
-![](./images/Screenshot%202022-09-29%20191559.png)
+이제 커밋을 해보면 커밋에 Verified 태그가 생긴 걸 확인할 수 있다. ![](./images/Screenshot%202022-09-29%20191559.png)
 
 ## 참고
 

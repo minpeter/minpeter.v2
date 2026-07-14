@@ -10,6 +10,7 @@ import {
 import { GlobeIcon } from "@radix-ui/react-icons";
 import { useLocale } from "next-intl";
 import { useCallback } from "react";
+
 import { LOCALE_LABELS } from "@/shared/constants/locales";
 import { useHoverDropdown } from "@/shared/hooks/use-hover-dropdown";
 import { Link, usePathname } from "@/shared/i18n/navigation";

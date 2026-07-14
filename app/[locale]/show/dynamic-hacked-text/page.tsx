@@ -1,10 +1,11 @@
 import type { Route } from "next";
 
 import Header from "@/components/header";
-import styles from "@/shared/styles/stagger-fade-in.module.css";
 import { cn } from "@/shared/utils/tailwind";
 
 import AnimatedText from "./animated-text";
+
+import styles from "@/shared/styles/stagger-fade-in.module.css";
 
 export default async function Page(
   props: PageProps<"/[locale]/show/dynamic-hacked-text">

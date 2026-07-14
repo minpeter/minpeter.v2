@@ -2,13 +2,14 @@
 
 import type { Route } from "next";
 import type { ReactNode } from "react";
-import { ViewTransition } from "@/components/view-transition";
 
-import styles from "@/shared/styles/stagger-fade-in.module.css";
+import { ViewTransition } from "@/components/view-transition";
 import { cn } from "@/shared/utils/tailwind";
 
 import { LanguageSelector } from "./language-selector";
 import { Backlink } from "./link";
+
+import styles from "@/shared/styles/stagger-fade-in.module.css";
 
 interface HeaderProps {
   description?: string;

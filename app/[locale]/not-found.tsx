@@ -2,6 +2,7 @@
 
 import type { Route } from "next";
 import { useLocale, useTranslations } from "next-intl";
+
 import Header from "@/components/header";
 
 export default function NotFound() {
