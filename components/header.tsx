@@ -55,7 +55,7 @@ export default function Header({
         </div>
       </div>
       <div className="mt-12 sm:mt-16">
-        <h1 className="home-section-title flex flex-wrap items-center break-all">
+        <h1 className="home-section-title flex flex-wrap items-center break-words">
           {titleTransitionName ? (
             <ViewTransition name={titleTransitionName}>
               {title || "minpeter"}
