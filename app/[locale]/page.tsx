@@ -16,11 +16,6 @@ const SECTIONS = [
     title: "Interactive experiments",
   },
   {
-    description: "Type generated sentences and track your speed and accuracy.",
-    href: "/typing",
-    title: "Typing practice",
-  },
-  {
     description: "Work history and background — coming soon.",
     href: "/resume",
     title: "Resume (in progress)",

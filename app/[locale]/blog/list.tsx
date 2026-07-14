@@ -83,7 +83,7 @@ export function BlogList({
     setSearch(deferredQuery);
   }, [deferredQuery, setSearch]);
 
-  // Show loading when query differs from deferred (typing) or API is loading
+  // Show loading while the query is being deferred or the API is loading
   const isSearching =
     query !== deferredQuery || isPending || searchQuery.isLoading;
 
