@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 import { Skeleton } from "@/components/ui/skeleton";
 
 const SHOW_ITEMS = [
@@ -11,10 +13,20 @@ const SHOW_ITEMS = [
 
 export default function Loading() {
   return (
-    <div className="showcase-page">
+    <div aria-busy="true" className="showcase-page">
       <header className="showcase-header">
         <div className="fieldnotes-nav">
-          <Skeleton className="h-8 w-8 rounded-lg" />
+          <div aria-hidden="true" className="fieldnotes-logo-link">
+            <Image
+              alt=""
+              aria-hidden="true"
+              className="fieldnotes-logo"
+              height={32}
+              priority
+              src="/assets/signature-mark.svg"
+              width={32}
+            />
+          </div>
           <Skeleton className="h-3 w-12" />
         </div>
         <div className="showcase-intro">
@@ -24,7 +36,7 @@ export default function Loading() {
         </div>
       </header>
 
-      <nav aria-label="Loading projects" className="showcase-list">
+      <div className="showcase-list">
         {SHOW_ITEMS.map((key) => (
           <div className="showcase-item-link" key={key}>
             <div className="showcase-item-top">
@@ -34,7 +46,7 @@ export default function Loading() {
             <Skeleton className="h-3 w-64 max-w-full rounded-sm" />
           </div>
         ))}
-      </nav>
+      </div>
     </div>
   );
 }

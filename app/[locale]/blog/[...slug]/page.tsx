@@ -14,6 +14,7 @@ import { isValidElement } from "react";
 import ExternalRedirect from "@/components/external-redirect";
 import Header from "@/components/header";
 import { MachineTranslationNotice } from "@/components/machine-translation-notice";
+import { MediaGrid } from "@/components/media-grid";
 import { ViewTransition } from "@/components/view-transition";
 import { blog } from "@/shared/source";
 import { formatDateLong } from "@/shared/utils/date";
@@ -106,13 +107,9 @@ export default async function Page(
     currentPostIndex === -1 ? null : sortedPosts[currentPostIndex + 1];
 
   return (
-    <section className={styles.stagger_container}>
+    <section className={cn(styles.stagger_container, "blog-post-page")}>
       <Header
-        description={
-          post.data.description === undefined
-            ? formatDateLong(post.data.published)
-            : post.data.description
-        }
+        description={formatDateLong(post.data.published)}
         link={{ href: `/${locale}/blog` as Route, text: t("backToBlog") }}
         title={post.data.title}
         titleTransitionName={`blog-title-${post.url.replaceAll("/", "-")}`}
@@ -161,6 +158,7 @@ export default async function Page(
             components={{
               ...defaultMdxComponents,
               Callout,
+              MediaGrid,
               Tab,
               Tabs,
               a: (anchorProps) => {
@@ -241,11 +239,6 @@ export default async function Page(
         </div>
 
         <hr className="my-8" />
-        <div className="mb-8 flex flex-col items-center justify-center">
-          <h2 className="opacity-60">
-            {`${t("prevPost")} / ${t("nextPost")}`}
-          </h2>
-        </div>
         <div className="flex justify-between">
           {previousPost ? (
             <NavLink

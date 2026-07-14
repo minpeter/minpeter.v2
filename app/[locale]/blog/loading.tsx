@@ -1,14 +1,26 @@
+import Image from "next/image";
+
 import { Skeleton } from "@/components/ui/skeleton";
 
-const YEAR_GROUPS = ["group-1", "group-2", "group-3"] as const;
-const POSTS = ["post-1", "post-2"] as const;
+const YEAR_GROUPS = ["group-1", "group-2", "group-3", "group-4"] as const;
+const POSTS = ["post-1", "post-2", "post-3"] as const;
 
 export default function Loading() {
   return (
-    <div className="fieldnotes-page">
+    <div aria-busy="true" className="fieldnotes-page">
       <header className="fieldnotes-header">
         <div className="fieldnotes-nav">
-          <Skeleton className="h-8 w-8 rounded-lg" />
+          <div aria-hidden="true" className="fieldnotes-logo-link">
+            <Image
+              alt=""
+              aria-hidden="true"
+              className="fieldnotes-logo"
+              height={32}
+              priority
+              src="/assets/signature-mark.svg"
+              width={32}
+            />
+          </div>
           <div className="flex items-center gap-2">
             <Skeleton className="h-3 w-8" />
             <Skeleton className="h-3 w-8" />

@@ -19,7 +19,7 @@ export default function Footer({
       )}
     >
       <p className="font-mono text-[11px] text-muted-foreground uppercase tracking-[0.08em]">
-        © {new Date().getFullYear()} Min Woonggi ·
+        © {new Date().getFullYear()} Woonggi Min ·
         <Link
           className="underline decoration-foreground/30 underline-offset-4 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           href={locale === "ko" ? "/blog" : `/${locale}/blog`}
