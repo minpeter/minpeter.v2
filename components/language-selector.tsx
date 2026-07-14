@@ -54,8 +54,8 @@ export function LanguageSelector() {
             "transition-colors duration-150",
             "focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           )}
-          onMouseEnter={handleMouseEnter}
-          onMouseLeave={handleMouseLeave}
+          onPointerEnter={handleMouseEnter}
+          onPointerLeave={handleMouseLeave}
           ref={triggerRef}
           type="button"
         >
@@ -73,8 +73,8 @@ export function LanguageSelector() {
             "data-[side=bottom]:slide-in-from-top-2 data-[side=top]:slide-in-from-bottom-2"
           )}
           onCloseAutoFocus={preventCloseAutoFocus}
-          onMouseEnter={handleContentMouseEnter}
-          onMouseLeave={handleContentMouseLeave}
+          onPointerEnter={handleContentMouseEnter}
+          onPointerLeave={handleContentMouseLeave}
           ref={contentRef}
           sideOffset={5}
         >
