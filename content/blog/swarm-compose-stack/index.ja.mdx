@@ -10,11 +10,7 @@ machine_translated: true
 
 ## SwarmでCompose
 
-前回、runコマンドと似たserviceコマンドを使ってSwarmにコンテナを起動し、スケールを調整しました。
-今回はcomposeコマンドと似たstackについて学びましょう。
-スタックとは、1つ以上のサービスをグループにまとめた単位で、アプリケーション全体の構成を定義します。
-簡単に言えば、Swarmで動作する（スケール機能が含まれた）composeだと考えましょう。
-また、特徴としてcomposeと同様に同じネットワークに含まれます。
+前回、runコマンドと似たserviceコマンドを使ってSwarmにコンテナを起動し、スケールを調整しました。今回はcomposeコマンドと似たstackについて学びましょう。スタックとは、1つ以上のサービスをグループにまとめた単位で、アプリケーション全体の構成を定義します。簡単に言えば、Swarmで動作する（スケール機能が含まれた）composeだと考えましょう。また、特徴としてcomposeと同様に同じネットワークに含まれます。
 
 まずネットワークを1つ作成しましょう。
 
@@ -23,9 +19,7 @@ $ docker exec -it manager \
 docker network create --driver=overlay --attachable test
 ```
 
-testという名前のネットワークを作成しました。
-次にstack-composeファイルを作成しましょう。
-**docker-stack.yaml**
+testという名前のネットワークを作成しました。次にstack-composeファイルを作成しましょう。 **docker-stack.yaml**
 
 ```yaml
 version: "3"
@@ -71,8 +65,7 @@ $ docker exec -it manager \
 docker stack deploy -c /docker-stack.yaml echo
 ```
 
-これで`hello, flask!`を出力するシンプルなページが8080ポートで起動しました。
-デプロイされたサービスを確認しましょう。
+これで`hello, flask!`を出力するシンプルなページが8080ポートで起動しました。デプロイされたサービスを確認しましょう。
 
 ```
 $ docker exec -it manager \
@@ -88,4 +81,4 @@ docker stack ps echo
 
 ## 参考資料
 
-[Swarmを利用したDockerコンテナデプロイ_2](https://cornswrold.tistory.com/515?category=930033)
+[Swarmを利用したDockerコンテナデプロイ\_2](https://cornswrold.tistory.com/515?category=930033)

@@ -3,6 +3,7 @@ import { render } from "@testing-library/react";
 import { createElement } from "react";
 import { highlight } from "sugar-high";
 import { describe, expect, it } from "vitest";
+
 import { CodeBlock } from "./code-block";
 
 describe("highlight() from sugar-high@0.9.5", () => {
@@ -35,7 +36,7 @@ describe("highlight() from sugar-high@0.9.5", () => {
   it("should return HTML string with span tags", () => {
     const code = "const x = 1;";
     const result = highlight(code);
-    expect(typeof result).toBe("string");
+    expect(result).toBeTypeOf("string");
     expect(result).toContain("<span");
     expect(result).toContain("</span>");
   });
@@ -47,7 +48,7 @@ describe("highlight() from sugar-high@0.9.5", () => {
   });
 });
 
-describe("CodeBlock", () => {
+describe(CodeBlock, () => {
   it("renders highlighted source as text instead of executable HTML", () => {
     const code = '<script>alert("xss")</script>';
     const { container } = render(createElement(CodeBlock, { code }));

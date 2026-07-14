@@ -6,10 +6,7 @@ tags: [kubernetes, jenkins, openebs]
 
 ## 이 글의 존재 이유
 
-사기 당했다.
-~~나중에 보니 사기까진 아니고 특정 경우에는 유용하게 사용할 수 있다는... 아 몰라 사기야~~
-`kubernetes에 jenkins를 설치`를 주제로 다루는 블로그들을 봤고, 따라해봤다.
-근데 정작 전부 구성하고 나니
+사기 당했다. ~~나중에 보니 사기까진 아니고 특정 경우에는 유용하게 사용할 수 있다는... 아 몰라 사기야~~ `kubernetes에 jenkins를 설치`를 주제로 다루는 블로그들을 봤고, 따라해봤다. 근데 정작 전부 구성하고 나니
 
 > jenkins 그거 스케일링 필요없어서 별도 서버에 구성하는게 더 좋아요 ㅎ
 
@@ -18,14 +15,11 @@ tags: [kubernetes, jenkins, openebs]
 ## Persistent Volume이란?
 
 쿠버네티스에서는 컴퓨팅 인스턴스와 스토리지를 구분한다.  
-이때 스토리지는 `PersistentVolume`이라는 리소스로 관리된다.
-여기서 스토리지는 각 노드의 로컬 파일 시스템일 수도 다른 파일 서버일 수도 있다.
-아래서 언급할 hostPath, GlusterFS, CephFS, NFS, local 등이 이에 해당한다.
+이때 스토리지는 `PersistentVolume`이라는 리소스로 관리된다. 여기서 스토리지는 각 노드의 로컬 파일 시스템일 수도 다른 파일 서버일 수도 있다. 아래서 언급할 hostPath, GlusterFS, CephFS, NFS, local 등이 이에 해당한다.
 
 ## openEBS를 찾기까지
 
-k8s에 젠킨스를 올리기 위해서 찾아본 글이 대부분은 `hostPath`를 사용했다.
-그 중 거의 항상 언급되는 말이 실제로 운용할 때는 GlusterFS 같은 서비스를 이용해야한다는 것이었다.  
+k8s에 젠킨스를 올리기 위해서 찾아본 글이 대부분은 `hostPath`를 사용했다. 그 중 거의 항상 언급되는 말이 실제로 운용할 때는 GlusterFS 같은 서비스를 이용해야한다는 것이었다.  
 근데 GlusterFS가 성능이 좋을 지언정 최소 3개의 노드를 운용해야 된다는 단점이 있었고 (적어도 나의 경우에는) Proxmox에 남은 자원이 없었다.  
 Proxmox에서 기본으로 지원하는 CephFS도 시도해봤지만 Proxmox 서버 노드가 1개이고 이미 LV가 하드 전체를 이용하고 있어서 불가능했다.  
 그 다음으로 시도한 것이 NFS인데 별도의 NFS 서버를 운용하면서 그 서버에 PV를 마운트하려 했지만 ubuntu 22.04 버전에 depencency 어쩌고 하면서 실패하는 버그 때문에 포기하고 다른 방법을 찾았다.  
@@ -33,11 +27,7 @@ Proxmox에서 기본으로 지원하는 CephFS도 시도해봤지만 Proxmox 서
 
 ## openEBS란?
 
-위에서 언급된 GlusterFS, CephFS 등은 별도의 서버를 운용해야하는데 이는 상당히 복잡한 작업에 속한다.
-반면 openEBS는 k8s 클러스터 내부에 설치하여 사용할 수 있다.
-openEBS는 K8s를 구성하는 각 노드의 Local Disk를 이용하여 PV를 생성한다.
-따라서 별도의 서버나 디스크를 구성하지 않아도 된다.
-\*k3s에서는 openEBS Local Path와 유사한 local-path Storage가 존재한다고 한다. 나중에 사용해 보고 싶다.
+위에서 언급된 GlusterFS, CephFS 등은 별도의 서버를 운용해야하는데 이는 상당히 복잡한 작업에 속한다. 반면 openEBS는 k8s 클러스터 내부에 설치하여 사용할 수 있다. openEBS는 K8s를 구성하는 각 노드의 Local Disk를 이용하여 PV를 생성한다. 따라서 별도의 서버나 디스크를 구성하지 않아도 된다. \*k3s에서는 openEBS Local Path와 유사한 local-path Storage가 존재한다고 한다. 나중에 사용해 보고 싶다.
 
 ## openEBS 설치
 
@@ -58,8 +48,7 @@ helm repo update
 helm install -n openebs openebs openebs/openebs
 ```
 
-이걸로 간단하게 설치가 끝난다.
-다음 명령어로 설치가 잘 되었는지 확인해보자.
+이걸로 간단하게 설치가 끝난다. 다음 명령어로 설치가 잘 되었는지 확인해보자.
 
 ```bash
 kubectl get all -n openebs
@@ -113,9 +102,7 @@ kubectl apply -n ns-jenkins -f 03-jenkins-dep-serv.yaml
 kubectl get all -n ns-jenkins
 ```
 
-전부 성공적으로 배포되었으면 `http://<node-ip>:30500`으로 접속해보자.
-이때 node-ip는 클러스터를 구성하는 어떤 노드의 ip 든지 상관없이 접속이 가능하다.
-잘 접속이 되면 openEBS가 잘 동작하는 것이다.
+전부 성공적으로 배포되었으면 `http://<node-ip>:30500`으로 접속해보자. 이때 node-ip는 클러스터를 구성하는 어떤 노드의 ip 든지 상관없이 접속이 가능하다. 잘 접속이 되면 openEBS가 잘 동작하는 것이다.
 
 만약 실제로 운용할 생각이라면
 

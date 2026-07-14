@@ -6,14 +6,16 @@ import { NextProvider } from "fumadocs-core/framework/next";
 import { Geist_Mono, Shippori_Mincho } from "next/font/google";
 import Script from "next/script";
 import { NuqsAdapter } from "nuqs/adapters/next";
-import { type ReactNode, Suspense } from "react";
+import { Suspense } from "react";
+import type { ReactNode } from "react";
 
 import Footer from "@/components/footer";
 import { ThemeProvider } from "@/components/theme-provider";
 import { env } from "@/shared/env";
 import { AritaBuriLocalFont } from "@/shared/font.AritaBuri";
-import styles from "@/shared/styles/header-overlay.module.css";
 import { cn } from "@/shared/utils/tailwind";
+
+import styles from "@/shared/styles/header-overlay.module.css";
 
 const geistMono = Geist_Mono({
   subsets: ["latin"],

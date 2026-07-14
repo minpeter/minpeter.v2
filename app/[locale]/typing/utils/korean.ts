@@ -8,7 +8,7 @@ import {
 const SPECIAL_CHAR_PATTERN = /[.,!?]/;
 
 export const isKorean = (char: string): boolean => {
-  const code = char.charCodeAt(0);
+  const code = char.codePointAt(0) ?? 0;
   return (
     (code >= HANGUL_SYLLABLE_START && code <= HANGUL_SYLLABLE_END) ||
     (code >= HANGUL_JAMO_START && code <= HANGUL_JAMO_END)

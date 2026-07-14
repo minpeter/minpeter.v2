@@ -5,14 +5,16 @@ import {
   GitHubLogoIcon,
   LinkedInLogoIcon,
 } from "@radix-ui/react-icons";
-import { CodeIcon, ExternalLinkIcon, KeyboardIcon } from "lucide-react";
+import { KeyboardIcon } from "lucide-react";
 import type { Route } from "next";
+import { useLocale, useTranslations } from "next-intl";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
-import { useLocale, useTranslations } from "next-intl";
-import { type MouseEvent, Suspense, useCallback, useState } from "react";
+import { Suspense, useCallback, useState } from "react";
+import type { MouseEvent } from "react";
 import { SiX } from "react-icons/si";
+
 import Header from "@/components/header";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import {
@@ -23,8 +25,9 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import mainImage1 from "@/public/assets/images/main-image-1.jpg";
 import mainImage2 from "@/public/assets/images/main-image-2.png";
-import styles from "@/shared/styles/stagger-fade-in.module.css";
 import { cn } from "@/shared/utils/tailwind";
+
+import styles from "@/shared/styles/stagger-fade-in.module.css";
 
 const Lickitung = dynamic(() => import("@/components/lickitung"), {
   loading: () => <Skeleton className="aspect-3/2 h-full w-full" />,
@@ -94,46 +97,18 @@ export default function Page() {
                 icon: <KeyboardIcon className="h-4 w-4" />,
                 text: t("typingTitle"),
               },
-              {
-                external: true,
-                href: "https://ip.minpeter.uk/",
-                icon: <CodeIcon className="h-4 w-4" />,
-                text: t("ipTitle"),
-              },
-            ].map((item) =>
-              item.external ? (
-                <a
-                  className="relative flex aspect-square flex-col rounded-xl bg-black/5 p-3 transition-colors duration-200 hover:bg-black/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:bg-white/5 dark:hover:bg-white/10"
-                  href={item.href}
-                  key={item.href}
-                  rel="noreferrer noopener"
-                  target="_blank"
-                >
-                  <div className="absolute top-3 left-3 flex items-center gap-1.5">
-                    {item.icon}
-                  </div>
-                  <div className="absolute top-3 right-3 flex items-center gap-1.5">
-                    <ExternalLinkIcon className="h-3 w-3" />
-                  </div>
-                  <span className="mt-auto self-start text-sm">
-                    {item.text}
-                  </span>
-                </a>
-              ) : (
-                <Link
-                  className="relative flex aspect-square flex-col rounded-xl bg-black/5 p-3 transition-colors duration-200 hover:bg-black/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:bg-white/5 dark:hover:bg-white/10"
-                  href={`/${locale}${item.href}` as Route}
-                  key={item.href}
-                >
-                  <div className="absolute top-3 left-3 flex items-center gap-1.5">
-                    {item.icon}
-                  </div>
-                  <span className="mt-auto self-start text-sm">
-                    {item.text}
-                  </span>
-                </Link>
-              )
-            )}
+            ].map((item) => (
+              <Link
+                className="relative flex aspect-square flex-col rounded-xl bg-black/5 p-3 transition-colors duration-200 hover:bg-black/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:bg-white/5 dark:hover:bg-white/10"
+                href={`/${locale}${item.href}` as Route}
+                key={item.href}
+              >
+                <div className="absolute top-3 left-3 flex items-center gap-1.5">
+                  {item.icon}
+                </div>
+                <span className="mt-auto self-start text-sm">{item.text}</span>
+              </Link>
+            ))}
 
             <div className="gap-2">
               <CarouselImage />

@@ -12,9 +12,7 @@ describe("app/[locale]/error.tsx", () => {
   it("renders recovery UI, shows digest, logs the error, and retries", () => {
     const reset = vi.fn();
     const error = Object.assign(new Error("boom"), { digest: "digest-123" });
-    const consoleError = vi
-      .spyOn(console, "error")
-      .mockImplementation(() => undefined);
+    const consoleError = vi.spyOn(console, "error").mockReturnValue();
 
     render(<LocaleErrorBoundary error={error} reset={reset} />);
 
@@ -26,7 +24,7 @@ describe("app/[locale]/error.tsx", () => {
 
     fireEvent.click(screen.getByRole("button", { name: "다시 시도" }));
 
-    expect(reset).toHaveBeenCalledTimes(1);
+    expect(reset).toHaveBeenCalledOnce();
 
     const homeLink = screen.getByRole("link", { name: "홈으로 돌아가기" });
     expect(homeLink.getAttribute("href")).toBe("/");
@@ -35,7 +33,7 @@ describe("app/[locale]/error.tsx", () => {
   it("does not render a digest section when no digest is available", () => {
     const reset = vi.fn();
     const error = new Error("boom");
-    vi.spyOn(console, "error").mockImplementation(() => undefined);
+    vi.spyOn(console, "error").mockReturnValue();
 
     render(<LocaleErrorBoundary error={error} reset={reset} />);
 

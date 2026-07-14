@@ -1,18 +1,20 @@
-import { type StatsigUser, statsigAdapter } from "@flags-sdk/statsig";
+import { statsigAdapter } from "@flags-sdk/statsig";
+import type { StatsigUser } from "@flags-sdk/statsig";
 import type { Identify } from "flags";
 import { dedupe, flag } from "flags/next";
+
 import { env } from "@/shared/env";
 
 const isFlagsEnabled = !!env.FLAGS_SECRET;
 
-const identify = dedupe((async () => ({
+const identify = dedupe((() => ({
   customIDs: { stableID: "1234" },
   // add any additional user properties you collect here
 })) satisfies Identify<StatsigUser>);
 
 export const createFeatureGate = (key: string) => {
   if (!isFlagsEnabled) {
-    return async () => false;
+    return () => false;
   }
 
   return flag<boolean, StatsigUser>({

@@ -1,7 +1,8 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
+
 import { nextSentencesGenerator } from "./action";
 
-describe("nextSentencesGenerator", () => {
+describe(nextSentencesGenerator, () => {
   afterEach(() => {
     vi.restoreAllMocks();
     vi.unstubAllEnvs();

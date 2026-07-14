@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 import { render } from "@testing-library/react";
 import { expect, test } from "vitest";
+
 import Loading from "./loading";
 
 test("renders blog list loading skeleton", () => {

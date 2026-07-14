@@ -106,7 +106,7 @@ const JUNGSUNG_CHARS = [
 ];
 
 export const getCharStrokeCount = (char: string): number => {
-  const code = char.charCodeAt(0);
+  const code = char.codePointAt(0) ?? 0;
 
   if (code < HANGUL_SYLLABLE_START || code > HANGUL_SYLLABLE_END) {
     return 1;
@@ -119,7 +119,7 @@ export const getCharStrokeCount = (char: string): number => {
 };
 
 export const disassembleHangul = (char: string): string[] => {
-  const code = char.charCodeAt(0);
+  const code = char.codePointAt(0) ?? 0;
 
   if (code < HANGUL_SYLLABLE_START || code > HANGUL_SYLLABLE_END) {
     return [char];
@@ -146,4 +146,4 @@ export const disassembleHangul = (char: string): string[] => {
 };
 
 export const disassembleString = (str: string): string[] =>
-  str.split("").flatMap(disassembleHangul);
+  [...str].flatMap(disassembleHangul);

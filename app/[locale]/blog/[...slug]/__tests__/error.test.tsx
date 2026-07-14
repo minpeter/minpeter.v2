@@ -12,9 +12,7 @@ describe("app/[locale]/blog/[...slug]/error.tsx", () => {
   it("renders blog recovery UI, logs the error, and links back to the blog list", () => {
     const reset = vi.fn();
     const error = new Error("failed to load post");
-    const consoleError = vi
-      .spyOn(console, "error")
-      .mockImplementation(() => undefined);
+    const consoleError = vi.spyOn(console, "error").mockReturnValue();
 
     render(<BlogPostErrorBoundary error={error} reset={reset} />);
 
@@ -25,7 +23,7 @@ describe("app/[locale]/blog/[...slug]/error.tsx", () => {
 
     fireEvent.click(screen.getByRole("button", { name: "다시 시도" }));
 
-    expect(reset).toHaveBeenCalledTimes(1);
+    expect(reset).toHaveBeenCalledOnce();
 
     const blogLink = screen.getByRole("link", { name: "글 목록으로 돌아가기" });
     expect(blogLink.getAttribute("href")).toBe("/blog");

@@ -27,9 +27,7 @@ Now I'll introduce how I built my blog. There are actually many ways to use GitH
 
 ## Installing Ruby
 
-I don't use or know how to use Ruby, but after a quick search, I found there are several installation methods.
-Among them was a Ruby version manager called rvm, and expecting it to be as convenient as nvm for NodeJS, I proceeded with installation using rvm.
-**If you're using zsh + oh my zsh environment, I recommend using a different installation method instead of rvm**
+I don't use or know how to use Ruby, but after a quick search, I found there are several installation methods. Among them was a Ruby version manager called rvm, and expecting it to be as convenient as nvm for NodeJS, I proceeded with installation using rvm. **If you're using zsh + oh my zsh environment, I recommend using a different installation method instead of rvm**
 
 I recommend referring to the official documentation at [rvm.io](https://rvm.io/rvm/install), but here's a brief explanation:
 
@@ -45,8 +43,7 @@ After running these commands and restarting the terminal, the rvm command should
 
 However... there's a small problem here. If you use zsh, you need to configure it through the [zsh installation process](https://rvm.io/integration/zsh), which is not only difficult, but the official page actually recommends not using rvm if you use oh-my-zsh, which almost all zsh users use..
 
-For someone like me who uses the zsh + oh-my-zsh combination, this was the worst.
-[![](./assets/zsh+ohmyzsh-bug.png)](https://rvm.io/integration/zsh)
+For someone like me who uses the zsh + oh-my-zsh combination, this was the worst. [![](./assets/zsh+ohmyzsh-bug.png)](https://rvm.io/integration/zsh)
 
 Actually, back when I didn't know about this issue,
 
@@ -80,8 +77,7 @@ Then access 127.0.0.1:4000 in your browser and you should see the blog.
 
 ## Setting Up the Theme
 
-The theme I applied is called [chirpy](https://github.com/cotes2020/jekyll-theme-chirpy).
-It's well explained in the GitHub repo's README file, so I'll explain briefly.
+The theme I applied is called [chirpy](https://github.com/cotes2020/jekyll-theme-chirpy). It's well explained in the GitHub repo's README file, so I'll explain briefly.
 
 You need to create or edit the `Gemfile` and add the following line at the bottom:
 
@@ -118,22 +114,16 @@ Move to the folder where the chirpy theme is installed using this command, and c
 └──  index.html
 ```
 
-Copy these files to your project folder (overwrite if duplicates exist).
-Now when you run the server, the basic chirpy theme should be running on local port 4000.
-The following steps are difficult to explain.
-Find and modify the \_config.yml file appropriately with your name, email, etc., modify about.md, and when you run the server, you should see the applied changes!!
+Copy these files to your project folder (overwrite if duplicates exist). Now when you run the server, the basic chirpy theme should be running on local port 4000. The following steps are difficult to explain. Find and modify the \_config.yml file appropriately with your name, email, etc., modify about.md, and when you run the server, you should see the applied changes!!
 
 - Note: If an index.md file exists, you need to delete it for proper operation.
 - To write posts, create files in the \_posts directory in the format `date-post-title.md`.
 
 ## Deploying to GitHub Pages
 
-At this point, I made a decision.
-Actually, among the many (not that many) static site generators, the reason I chose Jekyll, which uses Ruby that I've never seen before, is because GitHub Pages strongly supports it.. but the theme I chose apparently cannot be built directly due to some build option within GitHub.
+At this point, I made a decision. Actually, among the many (not that many) static site generators, the reason I chose Jekyll, which uses Ruby that I've never seen before, is because GitHub Pages strongly supports it.. but the theme I chose apparently cannot be built directly due to some build option within GitHub.
 
-Therefore, I need to use `GitHub Actions`.
-The idea is to build with Actions, then create a separate branch with the build content and register that branch with GitHub Pages...
-Actually, if you use this method, there's no problem using other static site generators!!
+Therefore, I need to use `GitHub Actions`. The idea is to build with Actions, then create a separate branch with the build content and register that branch with GitHub Pages... Actually, if you use this method, there's no problem using other static site generators!!
 
 So! With the rvm zsh issue and the secret of GitHub Pages combined.. I'm thinking of using this blog for a while and then moving to Hugo, a site generator made with Go..
 
@@ -141,5 +131,4 @@ So! With the rvm zsh issue and the secret of GitHub Pages combined.. I'm thinkin
 
 ---
 
-Added on November 27, 2023
-I now use a blog made with Next.js, but if you're planning to deploy a site to GitHub Pages using a static site generator, using GitHub Actions for deployment is the recommended option. The theme setup part of this post can still be followed, but for deployment, you should find another blog post. (Oh wait, reading this again, I didn't write the explanation anyway..?)
+Added on November 27, 2023 I now use a blog made with Next.js, but if you're planning to deploy a site to GitHub Pages using a static site generator, using GitHub Actions for deployment is the recommended option. The theme setup part of this post can still be followed, but for deployment, you should find another blog post. (Oh wait, reading this again, I didn't write the explanation anyway..?)

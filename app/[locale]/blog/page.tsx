@@ -1,12 +1,15 @@
 import type { Metadata, Route } from "next";
 import { getTranslations } from "next-intl/server";
 import { Suspense } from "react";
+
 import Header from "@/components/header";
 import { blog, getPostsMetadata } from "@/shared/source";
-import styles from "@/shared/styles/stagger-fade-in.module.css";
 import NewMetadata from "@/shared/utils/metadata";
+
 import { BlogList, BlogListFallback } from "./list";
 import { RssLink } from "./rss-link";
+
+import styles from "@/shared/styles/stagger-fade-in.module.css";
 
 export async function generateMetadata(
   props: PageProps<"/[locale]/blog">

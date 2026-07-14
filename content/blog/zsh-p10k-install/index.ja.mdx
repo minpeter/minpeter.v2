@@ -10,12 +10,7 @@ machine_translated: true
 
 ## zshとoh-my-zsh、p10kの関係
 
-zshはbashのようなシェルを置き換える、美的な部分を加えてくれるシェルです。
-~~（少なくとも私にはそう感じられました）~~
-ここでoh-my-zshが登場しますが、zshにthemeとpluginを設定できるようにしてくれます。
-そしてoh-my-zshのテーマとして登場するのがp10kです。
-利点としては~~かっこよくて！~~カスタマイズ可能なことです！！！
-公式フォントをインストールすると、ディストリビューションのロゴやgit関連の絵文字やフォルダアイコンがターミナルに表示されるなど、面白い機能もあります。
+zshはbashのようなシェルを置き換える、美的な部分を加えてくれるシェルです。 ~~（少なくとも私にはそう感じられました）~~ ここでoh-my-zshが登場しますが、zshにthemeとpluginを設定できるようにしてくれます。そしてoh-my-zshのテーマとして登場するのがp10kです。利点としては~~かっこよくて！~~カスタマイズ可能なことです！！！公式フォントをインストールすると、ディストリビューションのロゴやgit関連の絵文字やフォルダアイコンがターミナルに表示されるなど、面白い機能もあります。
 
 ## zshインストール
 
@@ -33,8 +28,7 @@ Fedoraでは`sudo dnf install zsh`でインストールできます。
 sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 ```
 
-そうです、全てのディストリビューションで同じだと思います。
-途中でzshをデフォルトシェルに変更するためパスワードを入力するよう求められますが、当然入力しましょう
+そうです、全てのディストリビューションで同じだと思います。途中でzshをデフォルトシェルに変更するためパスワードを入力するよう求められますが、当然入力しましょう
 
 ## power level 10k (p10k) インストール
 
@@ -48,13 +42,11 @@ git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-~
 
 `vim ~/.zshrc` 他のエディタが使いやすければそのエディタを使用すればいいです。
 
-`ZSH_THEME="robbyrussell"` -> `ZSH_THEME="powerlevel10k/powerlevel10k"`
-に修正すればいいです
+`ZSH_THEME="robbyrussell"` -> `ZSH_THEME="powerlevel10k/powerlevel10k"` に修正すればいいです
 
 ## フォントインストール
 
-ここでフォントを選択する必要があります。
-基本的にpowerlineを含む等幅フォントであれば何でも構いませんが、`D2coding`、`MesloLGS NF`、`Fira Code`の中から選択することをおすすめします。
+ここでフォントを選択する必要があります。基本的にpowerlineを含む等幅フォントであれば何でも構いませんが、`D2coding`、`MesloLGS NF`、`Fira Code`の中から選択することをおすすめします。
 
 ちなみに`MesloLGS NF`がp10k公式フォントで、このフォントをインストールするとアイコンを表示するオプションが生成されます。
 
@@ -68,8 +60,4 @@ git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-~
 
 ## 参考資料
 
-[abdfnx/oh-my-zsh-powerlevel10k-cool-terminal-1no0](https://dev.to/abdfnx/oh-my-zsh-powerlevel10k-cool-terminal-1no0)
-[ruddms936/zsh-設置](https://velog.io/@ruddms936/zsh-%EC%84%A4%EC%B9%98)
-[FiraCode](https://github.com/tonsky/FiraCode)
-[D2coding](https://github.com/naver/d2codingfont)
-[MesloLGS NF](https://github.com/romkatv/powerlevel10k/#user-content-fonts)
+[abdfnx/oh-my-zsh-powerlevel10k-cool-terminal-1no0](https://dev.to/abdfnx/oh-my-zsh-powerlevel10k-cool-terminal-1no0) [ruddms936/zsh-設置](https://velog.io/@ruddms936/zsh-%EC%84%A4%EC%B9%98) [FiraCode](https://github.com/tonsky/FiraCode) [D2coding](https://github.com/naver/d2codingfont) [MesloLGS NF](https://github.com/romkatv/powerlevel10k/#user-content-fonts)

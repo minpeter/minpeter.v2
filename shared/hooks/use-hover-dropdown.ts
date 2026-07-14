@@ -7,6 +7,7 @@ import {
   useState,
   useSyncExternalStore,
 } from "react";
+
 import { isPointInTriangle } from "@/shared/utils/geometry";
 
 const TOUCH_POINTER_QUERY = "(any-pointer: coarse)";

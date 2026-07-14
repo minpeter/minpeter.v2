@@ -17,7 +17,7 @@ const hashPathPattern = /^(\/(ko|en|ja))?\/[a-f0-9]{32,}/;
  */
 function getPriority(path) {
   if (path === "/" || path === "/en" || path === "/ja") {
-    return 1.0;
+    return 1;
   }
   if (path.includes("/blog")) {
     return 0.8;
@@ -85,7 +85,7 @@ const config = {
       changefreq: "daily",
       lastmod: new Date().toISOString(),
       loc: "/",
-      priority: 1.0,
+      priority: 1,
     },
   ],
   generateIndexSitemap: false,

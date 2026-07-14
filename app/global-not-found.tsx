@@ -1,4 +1,5 @@
 import { routing } from "@/shared/i18n/routing";
+
 import "./globals.css";
 import { RootDocument } from "./root-document";
 

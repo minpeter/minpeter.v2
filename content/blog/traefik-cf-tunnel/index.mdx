@@ -12,15 +12,13 @@ description: 인터넷과 도커가 홈랩에 전부입니다, 무엇이 더 필
 
 ## 서론
 
-홈랩을 처음 시작하거나, 기존 설정을 다시 구성할 때는 간단하면서도 유연한 설정이 중요합니다.
-이 글에서는 Raspberry Pi 같은 소규모 환경부터 Proxmox 기반의 환경까지 대응할 수 있는 실용적인 솔루션을 소개합니다.
+홈랩을 처음 시작하거나, 기존 설정을 다시 구성할 때는 간단하면서도 유연한 설정이 중요합니다. 이 글에서는 Raspberry Pi 같은 소규모 환경부터 Proxmox 기반의 환경까지 대응할 수 있는 실용적인 솔루션을 소개합니다.
 
 여기서 우리는 복잡한 네트워크 설정이나 포트 포워딩, SSL 인증서 발급, 고정 IP 같은 제약 없이 홈랩을 인터넷에 공개하는 방법을 다룹니다.
 
 "준비물은 단 두 가지, 인터넷과 Docker뿐입니다."
 
-Cloudflare Tunnel을 활용하면, 네트워크 권한 없이도 안정적으로 프로젝트를 인터넷에 연결할 수 있습니다.
-이는 DDNS나 포트포워딩 없이도 SSL이 적용된 안정적인 접속을 제공합니다. Cloudflare Tunnel과 Traefik을 연결해 이 모든 기능을 구현할 수 있습니다.
+Cloudflare Tunnel을 활용하면, 네트워크 권한 없이도 안정적으로 프로젝트를 인터넷에 연결할 수 있습니다. 이는 DDNS나 포트포워딩 없이도 SSL이 적용된 안정적인 접속을 제공합니다. Cloudflare Tunnel과 Traefik을 연결해 이 모든 기능을 구현할 수 있습니다.
 
 이제 구체적인 방법을 살펴보겠습니다!
 
@@ -236,12 +234,12 @@ DOMAIN1_ZONE_ID=<DOMAIN1_ZONE_ID>
 CF_TOKEN=<CF_TOKEN>
 ```
 
-| TUNNEL_TOKEN    | 위에서 발급 받았던 cf tunnel의 토큰입니다. 그대로 붙여 넣어줍시다.                                                                         |
-| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| TARGET_DOMAIN   | 동적으로 추가될 레코드의 값입니다. 위에서 와일드 카드 도메인을 등록할떄 사용한 “Tunnel ID.cfargotunnel.com” 값을 그대로 입력해주면 됩니다. |
-| DOMAIN1         | 동적으로 트래킹 해 줄 도메인의 이름입니다. “yourdomain.xyz” 이 되겠습니다.                                                                 |
-| DOMAIN1_ZONE_ID | “yourdomain.xyz”의 cloudflare 상의 zone_id 입니다. 아래에서 구하는 방법을 설명하겠습니다.                                                  |
-| CF_TOKEN        | cloudflare에 api token입니다. 레코드를 업데이트하는 권한이 있어야합니다. 아래에서 바로 발급 받겠습니다.                                    |
+| TUNNEL_TOKEN | 위에서 발급 받았던 cf tunnel의 토큰입니다. 그대로 붙여 넣어줍시다. |
+| --- | --- |
+| TARGET_DOMAIN | 동적으로 추가될 레코드의 값입니다. 위에서 와일드 카드 도메인을 등록할떄 사용한 “Tunnel ID.cfargotunnel.com” 값을 그대로 입력해주면 됩니다. |
+| DOMAIN1 | 동적으로 트래킹 해 줄 도메인의 이름입니다. “yourdomain.xyz” 이 되겠습니다. |
+| DOMAIN1_ZONE_ID | “yourdomain.xyz”의 cloudflare 상의 zone_id 입니다. 아래에서 구하는 방법을 설명하겠습니다. |
+| CF_TOKEN | cloudflare에 api token입니다. 레코드를 업데이트하는 권한이 있어야합니다. 아래에서 바로 발급 받겠습니다. |
 
 ### DOMAIN1_ZONE_ID
 
@@ -332,10 +330,8 @@ services:
 ## 한계점, 발전 가능성
 
 1. “X-Forwarded-For” 해더가 똑바로 forward 되지 않습니다. 다만 “Cf-Connecting-Ip” 와 같은 헤더를 통해 대체할 수 있습니다.
-2. “_.yourdomain.xyz” (root wildcard record) 대신 “_.str.yourdomain.xyz” 같은 연결된 서브도메인 wildcard를 처리할 수 없습니다.
-   이는 cloudflare에서 인증서 발급을 안해주기 때문이고, tunnel를 사용하는 한 해결방법이 없습니다. 다시 포트포워딩을 하여 DNS only + 자체 인증서 방식으로 해결하여야 합니다.
+2. “_.yourdomain.xyz” (root wildcard record) 대신 “_.str.yourdomain.xyz” 같은 연결된 서브도메인 wildcard를 처리할 수 없습니다. 이는 cloudflare에서 인증서 발급을 안해주기 때문이고, tunnel를 사용하는 한 해결방법이 없습니다. 다시 포트포워딩을 하여 DNS only + 자체 인증서 방식으로 해결하여야 합니다.
 3. 아마도 최대 용량 제한이 존재합니다. cloudflare proxy 기능은 Free 티어의 경우 100MB 입니다.
-4. Tunnel은 http 뿐만 아니라 https, tcp 커넥션도 터널링합니다. 에컨데 잘 활용하면 db 커넥션을 공유하는 용으로도 활용할 수 있습니다.
-   traefik에 한정하지 말고 다양한 가능성을 탐구해 볼 수 있습니다.
+4. Tunnel은 http 뿐만 아니라 https, tcp 커넥션도 터널링합니다. 에컨데 잘 활용하면 db 커넥션을 공유하는 용으로도 활용할 수 있습니다. traefik에 한정하지 말고 다양한 가능성을 탐구해 볼 수 있습니다.
 
 이러나 저러나, 매우 재미있는 기능인 것은 확실합니다. 이제 스스로 더 나아가봅시다.

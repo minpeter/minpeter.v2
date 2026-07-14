@@ -1,4 +1,5 @@
 import type { Viewport } from "next";
+
 import NewMetadata from "@/shared/utils/metadata";
 
 export const metadata = NewMetadata({

@@ -8,28 +8,19 @@ lang: ["en"]
 machine_translated: true
 ---
 
-You probably have at least one backend you've built yourself.
-In my case, I had [api.tmpf.me](https://api.tmpf.me), but there was one thing I felt was lacking.
+You probably have at least one backend you've built yourself. In my case, I had [api.tmpf.me](https://api.tmpf.me), but there was one thing I felt was lacking.
 
-That was `user access logging..` - the work of recording users who access the service.
-It might not be strictly necessary, but let's assume it is as we read this article.
+That was `user access logging..` - the work of recording users who access the service. It might not be strictly necessary, but let's assume it is as we read this article.
 
-First, there can be various infrastructure configurations.
-Among them, when the client and server communicate directly:
+First, there can be various infrastructure configurations. Among them, when the client and server communicate directly:
 
-This can be handled very simply.
-Just parse and use the RemoteAddr field.
+This can be handled very simply. Just parse and use the RemoteAddr field.
 
-As shown in the image below, `211.104.53.76` is the client's IP.
-(My IP while writing this article)
-![It's a Starbucks IP.. let's not harass it.](./images/Untitled.png)
+As shown in the image below, `211.104.53.76` is the client's IP. (My IP while writing this article) ![It's a Starbucks IP.. let's not harass it.](./images/Untitled.png)
 
-Second case:
-When there's a proxy server between the client and server.
-In this case, there's something new you need to know - the X-Forwarded-For header.
+Second case: When there's a proxy server between the client and server. In this case, there's something new you need to know - the X-Forwarded-For header.
 
-This header is a ~~de facto~~ standard header created to pass the RemoteAddr (which would be lost when passing through proxies) to services behind the proxy.
-The following screenshot shows a whoami service running behind 2 reverse proxies.
+This header is a ~~de facto~~ standard header created to pass the RemoteAddr (which would be lost when passing through proxies) to services behind the proxy. The following screenshot shows a whoami service running behind 2 reverse proxies.
 
 ![](./images/Untitled-1.png)
 
@@ -37,11 +28,9 @@ Looking closely, there are 2 places where the original client IP can be found: t
 
 First, let's exclude `Cf-Connecting-Ip` since it only applies when using Cloudflare's Proxied records, and take a closer look at the `X-Forwarded-For` header below.
 
-The first value is clearly the client IP. So what's the next value?
-It's the Cloudflare proxy server's IP, and the RemoteAddr (which was the client IP above) is the IP of traefik, the reverse proxy after Cloudflare.
+The first value is clearly the client IP. So what's the next value? It's the Cloudflare proxy server's IP, and the RemoteAddr (which was the client IP above) is the IP of traefik, the reverse proxy after Cloudflare.
 
-The IPs differ from the image above, but it has the following structure:
-![](./images/Untitled-2024-02-13-1709.svg)
+The IPs differ from the image above, but it has the following structure: ![](./images/Untitled-2024-02-13-1709.svg)
 
 The X-Forwarded-For header works by appending the existing RemoteAddr to the X-Forwarded-For header when passing through each proxy, with the proxy server's IP becoming the RemoteAddr.
 
@@ -82,29 +71,24 @@ Of course, proxy C might not exist depending on the case, and the client's actua
 
 According to the logic above, if the XFF header is set, read the first value of the XFF header. So the value added by the user spoofing becomes recognized as the actual IP.
 
-This is a problem.
-Therefore, separate logic is needed to handle this...
-I found out how most production programs solve this problem.
+This is a problem. Therefore, separate logic is needed to handle this... I found out how most production programs solve this problem.
 
-Create a new setting value FORWARDED.
-This setting value is a number representing the following:
+Create a new setting value FORWARDED. This setting value is a number representing the following:
 
-| Number | Meaning                                                                         |
-| ------ | ------------------------------------------------------------------------------- |
-| 0      | No reverse proxy, uses RemoteAddr.                                              |
-| 1      | 1 reverse proxy in front of the service, uses the -1st value of XFF header.     |
-| ..     | ..                                                                              |
-| 3      | 3 reverse proxies in front of the service, uses the -3rd value of XFF header.   |
-| 4      | 4 reverse proxies in front of the service, uses the -4th value of XFF header.   |
-| ..     | ..                                                                              |
+| Number | Meaning |
+| --- | --- |
+| 0 | No reverse proxy, uses RemoteAddr. |
+| 1 | 1 reverse proxy in front of the service, uses the -1st value of XFF header. |
+| .. | .. |
+| 3 | 3 reverse proxies in front of the service, uses the -3rd value of XFF header. |
+| 4 | 4 reverse proxies in front of the service, uses the -4th value of XFF header. |
+| .. | .. |
 
 This way, even if users manipulate the header value, requests exceeding the setting value are simply ignored, so it's not affected.
 
-For example, if traffic reaches the service through Cloudflare and traefik, set the FORWARDED environment variable to 2 and use the -2nd value of the XFF header array.
-This means values arbitrarily added by users are ignored.
+For example, if traffic reaches the service through Cloudflare and traefik, set the FORWARDED environment variable to 2 and use the -2nd value of the XFF header array. This means values arbitrarily added by users are ignored.
 
-But as mentioned earlier, this method isn't perfect.
-Because an additional setting value was added, it's impossible to adapt and serve in all environments.
+But as mentioned earlier, this method isn't perfect. Because an additional setting value was added, it's impossible to adapt and serve in all environments.
 
 ---
 

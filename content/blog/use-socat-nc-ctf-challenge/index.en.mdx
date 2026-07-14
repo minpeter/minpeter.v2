@@ -8,12 +8,9 @@ machine_translated: true
 
 ## Overview
 
-When solving various CTF challenges and Dreamhack problems, you often encounter addresses like this:
-`nc pwnable.kr 9000`
-\*BOF challenge from pwnable.kr
+When solving various CTF challenges and Dreamhack problems, you often encounter addresses like this: `nc pwnable.kr 9000` \*BOF challenge from pwnable.kr
 
-Using a utility called netcat, you can remotely execute programs on the server, which made me wonder:
-"How do they create and deploy challenges in this format?"
+Using a utility called netcat, you can remotely execute programs on the server, which made me wonder: "How do they create and deploy challenges in this format?"
 
 So I looked into it.
 
@@ -21,15 +18,9 @@ So I looked into it.
 
 **Use SOCAT**
 
-The first method I discovered was to develop a socket server directly.
-This was actually quite good, but only for simple message output.
-But thinking about it, even the BOF challenge mentioned above performs various input/output operations multiple times, and there's no way they implemented all of this with a socket server.
-Looking at the source code provided alongside the nc address confirmed my suspicions.
-**There was no socket-related code at all.**
+The first method I discovered was to develop a socket server directly. This was actually quite good, but only for simple message output. But thinking about it, even the BOF challenge mentioned above performs various input/output operations multiple times, and there's no way they implemented all of this with a socket server. Looking at the source code provided alongside the nc address confirmed my suspicions. **There was no socket-related code at all.**
 
-Then I found the answer in GoogleCTF.
-I noticed a program called socat written in the CMD of a challenge Dockerfile.
-I had a gut feeling this was the nc server-related utility I didn't know about.
+Then I found the answer in GoogleCTF. I noticed a program called socat written in the CMD of a challenge Dockerfile. I had a gut feeling this was the nc server-related utility I didn't know about.
 
 ### Multipurpose Relay (SOcket CAT)
 
@@ -38,15 +29,11 @@ A command-line based utility that establishes two bidirectional byte streams and
 Because streams can consist of various types of data sinks and sources (see address types) and many address options can be applied to streams, socat can be used for various purposes.
 ```
 
-That's what it says.
-You can think of it as an advanced version of netcat.
+That's what it says. You can think of it as an advanced version of netcat.
 
 ## Installing Socat
 
-On Ubuntu, you can install it as follows:
-`apt-get install socat`
-On Mac, assuming brew is installed:
-`brew install socat`
+On Ubuntu, you can install it as follows: `apt-get install socat` On Mac, assuming brew is installed: `brew install socat`
 
 Since this article is about deploying challenges using socat, I won't use socat directly or go into deep detail.
 
@@ -71,8 +58,7 @@ except ValueError:
 
 ```
 
-As you can see, this is a simple program that provides the flag when you enter 1395.
-If you're thinking of creating a CTF challenge after reading this, you can replace it with your challenge file.
+As you can see, this is a simple program that provides the flag when you enter 1395. If you're thinking of creating a CTF challenge after reading this, you can replace it with your challenge file.
 
 Now write a Dockerfile for deployment.
 
@@ -157,11 +143,8 @@ main.py is the same as above.
 
 Now compress this folder and upload it to the CTF.
 
-I hope this helps anyone creating CTF challenges.
-Thank you to everyone who read this far.
+I hope this helps anyone creating CTF challenges. Thank you to everyone who read this far.
 
 ## Note
 
-The section above about uploading challenges to CTF was entirely written by GitHub Copilot.
-Honestly, I was amazed at how well it matched the context and how natural the sentences were.
-Long live AI?
+The section above about uploading challenges to CTF was entirely written by GitHub Copilot. Honestly, I was amazed at how well it matched the context and how natural the sentences were. Long live AI?

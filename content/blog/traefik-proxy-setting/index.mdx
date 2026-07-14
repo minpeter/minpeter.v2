@@ -126,21 +126,11 @@ curl -H Host:ip.docker.localhost 127.0.0.1
 
 하지만 요청은 Host 헤더에 의해 iplogger 컨테이너로 라우팅되어 정상적으로 응답이 돌아왔다.
 
-- 번외 : traefik.me
-  Host 헤더에 대한 이해를 돕기 위해 설명하려 한다.
-  위에서는 Host 헤더를 직접 수정하여 요청을 전송하였지만 유저가 이런 요청을 보내기에는 다소 무리가 있다.
-  따라서 DNS 설정을 하여 도메인으로 접속을 하게 될 텐데 이렇게 하면 Host 헤더가 자동으로 생성된다.
-  이걸 연습해볼 수 있는 방법이 바로 traefik.me이다.
-  traefik.me는 무조건 127.0.0.1라고 답하는 도메인이다.
-  ![Untitled](./images/image2.png)
-  [ip.traefik.me](http://ip.traefik.me)의 경우에도 dns 조회 결과는 127.0.0.1 이다.
-  이를 이용하면 다음과 같이 요청을 보내 볼 수 있다.
+- 번외 : traefik.me Host 헤더에 대한 이해를 돕기 위해 설명하려 한다. 위에서는 Host 헤더를 직접 수정하여 요청을 전송하였지만 유저가 이런 요청을 보내기에는 다소 무리가 있다. 따라서 DNS 설정을 하여 도메인으로 접속을 하게 될 텐데 이렇게 하면 Host 헤더가 자동으로 생성된다. 이걸 연습해볼 수 있는 방법이 바로 traefik.me이다. traefik.me는 무조건 127.0.0.1라고 답하는 도메인이다. ![Untitled](./images/image2.png) [ip.traefik.me](http://ip.traefik.me)의 경우에도 dns 조회 결과는 127.0.0.1 이다. 이를 이용하면 다음과 같이 요청을 보내 볼 수 있다.
   ```bash
   curl ip.traefik.me
   ```
-  ![Untitled](./images/image3.png)
-  브라우저로 [http://ip.traefik.me/](http://ip.traefik.me/) 에 접속하면 다음과 같은 웹 페이지도 볼 수 있다.
-  ![Untitled](./images/image4.png)
+  ![Untitled](./images/image3.png) 브라우저로 [http://ip.traefik.me/](http://ip.traefik.me/) 에 접속하면 다음과 같은 웹 페이지도 볼 수 있다. ![Untitled](./images/image4.png)
 
 이제 로컬에서 해볼 수 있는 기초 과정을 마쳤다.
 

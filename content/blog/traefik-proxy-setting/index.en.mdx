@@ -121,8 +121,7 @@ Now, let's use Traefik to access the `iplogger` service:
 curl -H Host:ip.docker.localhost 127.0.0.1
 ```
 
-This command sends an HTTP request to `localhost:80` with a Host header set to `ip.docker.localhost`.
-The response should look something like this:
+This command sends an HTTP request to `localhost:80` with a Host header set to `ip.docker.localhost`. The response should look something like this:
 
 ![Untitled](./images/image1.png)
 
@@ -132,16 +131,13 @@ Although port 80 is bound to the Traefik container, the request is routed to the
 
 To clarify the concept of the Host header, consider this explanation:
 
-In the earlier example, we manually modified the Host header, which is not practical for end users.
-In a real-world scenario, DNS configuration would handle this, enabling users to access services via domain names, which automatically sets the Host header.
+In the earlier example, we manually modified the Host header, which is not practical for end users. In a real-world scenario, DNS configuration would handle this, enabling users to access services via domain names, which automatically sets the Host header.
 
-A useful practice tool for this is the `traefik.me` domain.
-The `traefik.me` domain always resolves to `127.0.0.1`.
+A useful practice tool for this is the `traefik.me` domain. The `traefik.me` domain always resolves to `127.0.0.1`.
 
 ![Untitled](./images/image2.png)
 
-For example, [ip.traefik.me](http://ip.traefik.me) also resolves to `127.0.0.1`.
-You can use this to send requests like the following:
+For example, [ip.traefik.me](http://ip.traefik.me) also resolves to `127.0.0.1`. You can use this to send requests like the following:
 
 ```bash
 curl ip.traefik.me

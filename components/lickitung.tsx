@@ -6,12 +6,8 @@ import {
   Text,
   useGLTF,
 } from "@react-three/drei";
-import {
-  Canvas,
-  type ThreeElements,
-  useFrame,
-  useThree,
-} from "@react-three/fiber";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import type { ThreeElements } from "@react-three/fiber";
 import { Suspense, useRef } from "react";
 import type { BufferGeometry } from "three";
 

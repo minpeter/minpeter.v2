@@ -29,7 +29,7 @@ const koreanConfig = {
   prompt: "Please create a phrase for typing practice, just one sentence.",
   providerOptions: {
     friendli: {
-      regex: "[ ,.?!0-9\uac00-\ud7af]*",
+      regex: "[ ,.?!0-9\uAC00-\uD7AF]*",
     },
   },
   system: `Please use only Korean.
@@ -55,14 +55,11 @@ const englishConfig = {
 };
 
 function getContentHash(values: readonly string[]) {
-  return values
-    .join("\n")
-    .split("")
-    .reduce(
-      (hash, char) =>
-        (hash * HASH_MULTIPLIER + char.charCodeAt(0)) % HASH_MODULUS,
-      0
-    );
+  return [...values.join("\n")].reduce(
+    (hash, char) =>
+      (hash * HASH_MULTIPLIER + (char.codePointAt(0) ?? 0)) % HASH_MODULUS,
+    0
+  );
 }
 
 function getFallbackSentence(

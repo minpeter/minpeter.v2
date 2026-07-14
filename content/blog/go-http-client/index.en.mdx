@@ -11,16 +11,15 @@ machine_translated: true
 
 HTTP is a session-less protocol based on client-server architecture and operates at the application layer.
 
-It uses TCP as its underlying transport protocol.
-\*With the release of HTTP/3 in July 2021, HTTP now supports UDP as well as TCP.
+It uses TCP as its underlying transport protocol. \*With the release of HTTP/3 in July 2021, HTTP now supports UDP as well as TCP.
 
 ### Uniform Resource Identifier (URL)
 
 An address-like identifier used by clients to find web servers and identify requested resources.
 
-| Scheme   | Authority            | Path       | Query Parameter                | Query Parameter                 | Fragment             |
-| -------- | -------------------- | ---------- | ------------------------------ | ------------------------------- | -------------------- |
-| scheme:// | user:password@       | host:port/path | ?key1=value1                  | &key2=value2                    | #table_of_contents   |
+| Scheme | Authority | Path | Query Parameter | Query Parameter | Fragment |
+| --- | --- | --- | --- | --- | --- |
+| scheme:// | user:password@ | host:port/path | ?key1=value1 | &key2=value2 | #table_of_contents |
 
 As shown in the table above, URLs on the internet typically contain at minimum a scheme and hostname.
 
@@ -69,19 +68,21 @@ Using Go's net/http package, you can create HTTP requests with just the HTTP met
 
 ### Types of Request Methods
 
-| GET     | Requests a server resource.                                                                                                        |
-| ------- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| HEAD    | Requests headers containing resource information in case the resource is larger than expected.                                      |
-| POST    | Used when adding a resource to the server.                                                                                          |
-| PUT     | Used to update or replace an existing resource on the server.                                                                       |
-| PATCH   | Used to modify part of an existing resource on the server.                                                                          |
-| DELETE  | Used to remove a resource from the server.                                                                                          |
-| OPTIONS | Used to find out what methods exist for a specific resource on the server.                                                          |
+| GET | Requests a server resource. |
+| --- | --- |
+| HEAD | Requests headers containing resource information in case the resource is larger than expected. |
+| POST | Used when adding a resource to the server. |
+| PUT | Used to update or replace an existing resource on the server. |
+| PATCH | Used to modify part of an existing resource on the server. |
+| DELETE | Used to remove a resource from the server. |
+| OPTIONS | Used to find out what methods exist for a specific resource on the server. |
 | CONNECT | Requests HTTP tunneling from a web server or establishes a TCP session with a target destination to enable data proxying between client and destination. |
-| TRACE   | Asks the web server to echo the request without processing it.                                                                       |
+| TRACE | Asks the web server to echo the request without processing it. |
 
 <aside>
-Before supporting the TRACE method server-side, learn about the role TRACE plays in XST (Cross-Site Tracking) attacks. In XST attacks, attackers use XSS to steal authenticated users' credentials.
+  Before supporting the TRACE method server-side, learn about the role TRACE
+  plays in XST (Cross-Site Tracking) attacks. In XST attacks, attackers use XSS
+  to steal authenticated users' credentials.
 </aside>
 
 The methods above aren't mandatory for all servers to implement exactly, so some web servers may not implement them correctly. It's best to verify before use.
@@ -219,8 +220,7 @@ A GET request is sent to this server's URL using the Get helper function, but si
 
 ![](./images/Untitled-1.png)
 
-With the test maximum time set to 30 seconds, you can see it terminates at 30 seconds with an error.
-The book describes this as "Go's test runner timed out and aborted the test, printing a stack trace."
+With the test maximum time set to 30 seconds, you can see it terminates at 30 seconds with an error. The book describes this as "Go's test runner timed out and aborted the test, printing a stack trace."
 
 Now let's add a timeout to the connection using a deadline context, and also implement canceling the connection with a cancel function after timeout.
 

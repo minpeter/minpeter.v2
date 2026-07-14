@@ -1,9 +1,10 @@
 import { describe, expect, it, vi } from "vitest";
+
 import { onRequestError, register } from "./instrumentation";
 
 describe("instrumentation", () => {
   it("exports register function", () => {
-    expect(typeof register).toBe("function");
+    expect(register).toBeTypeOf("function");
   });
 
   it("register is async and runs without throwing", async () => {
@@ -11,9 +12,7 @@ describe("instrumentation", () => {
   });
 
   it("register logs initialization message", async () => {
-    const consoleSpy = vi
-      .spyOn(console, "info")
-      .mockImplementation(() => undefined);
+    const consoleSpy = vi.spyOn(console, "info").mockReturnValue();
     await register();
     expect(consoleSpy).toHaveBeenCalledWith(
       "[instrumentation] Server initialized"
@@ -22,19 +21,17 @@ describe("instrumentation", () => {
   });
 
   it("exports onRequestError function", () => {
-    expect(typeof onRequestError).toBe("function");
+    expect(onRequestError).toBeTypeOf("function");
   });
 
   it("onRequestError logs error info with context", async () => {
-    const consoleSpy = vi
-      .spyOn(console, "error")
-      .mockImplementation(() => undefined);
+    const consoleSpy = vi.spyOn(console, "error").mockReturnValue();
     const mockErr = new Error("Test error");
     const mockRequest = new Request("http://localhost/blog");
     const mockContext = {
       routePath: "/blog",
-      routerKind: "App",
       routeType: "render",
+      routerKind: "App",
     };
 
     await onRequestError(mockErr, mockRequest, mockContext);

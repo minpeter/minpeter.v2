@@ -1,9 +1,8 @@
 "use client";
 
 import { ArrowLeftIcon, ArrowRightIcon } from "@radix-ui/react-icons";
-import useEmblaCarousel, {
-  type UseEmblaCarouselType,
-} from "embla-carousel-react";
+import useEmblaCarousel from "embla-carousel-react";
+import type { UseEmblaCarouselType } from "embla-carousel-react";
 import type { ComponentProps, KeyboardEvent } from "react";
 import {
   createContext,

@@ -1,20 +1,18 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
+import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
+
 import { ViewTransition } from "@/components/view-transition";
 import { routing } from "@/shared/i18n/routing";
+
 import "../globals.css";
 import { RootDocument } from "../root-document";
-import {
-  metadata as rootMetadata,
-  viewport as rootViewport,
-} from "../root-metadata";
+import { metadata as rootMetadata } from "../root-metadata";
 
+export { viewport } from "../root-metadata";
 type Locale = (typeof routing.locales)[number];
-
-export const viewport = rootViewport;
 
 interface Props {
   children: ReactNode;

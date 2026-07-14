@@ -9,8 +9,7 @@ machine_translated: true
 
 ## Verified Tags Only Appear on GitHub Web UI
 
-At some point, GitHub added a feature that displays a README on your profile if you create a repository with your username and add a readme.md file.
-![](./images/Screenshot%202022-09-29%20120846.png)
+At some point, GitHub added a feature that displays a README on your profile if you create a repository with your username and add a readme.md file. ![](./images/Screenshot%202022-09-29%20120846.png)
 
 Since this repository only contains a readme.md file, most edits are done through the GitHub Web UI.
 
@@ -24,34 +23,28 @@ I wanted this indicator on my local commits as well, and after some research, I 
 
 ## GPG (GNU Privacy Guard)
 
-This is a program based on PGP, an email encryption tool.
-It primarily uses RSA and also supports DSA and Elgamal, DSA, etc.
+This is a program based on PGP, an email encryption tool. It primarily uses RSA and also supports DSA and Elgamal, DSA, etc.
 
 ## Why the Verified Tag Exists on GitHub
 
-Let's say you've purchased a new laptop or computer and are setting up git for development.
-You'll probably need to enter the following commands:
+Let's say you've purchased a new laptop or computer and are setting up git for development. You'll probably need to enter the following commands:
 
 ```bash
 git config --global user.name
 git config --global user.email
 ```
 
-GitHub uses this information to display who made each commit.
-If you think about it, there's something odd here - the name and email are stored exactly as you input them.
-They can easily be manipulated, and I've had experiences where I entered the wrong email, but pushing that commit to GitHub didn't cause any major issues.
+GitHub uses this information to display who made each commit. If you think about it, there's something odd here - the name and email are stored exactly as you input them. They can easily be manipulated, and I've had experiences where I entered the wrong email, but pushing that commit to GitHub didn't cause any major issues.
 
 This is where the Verified tag comes in.
 
 Using GPG-generated keys shared with GitHub, you digitally sign your commits. When you push those commits, GitHub verifies with the shared key that you actually made the commit and adds the Verified tag.
 
-In summary, even though a commit says you made it, there's no way to verify it without digital signing to authenticate the commit.
-Additionally, commits made through the Web UI have Verified tags because GitHub automatically signs them.
+In summary, even though a commit says you made it, there's no way to verify it without digital signing to authenticate the commit. Additionally, commits made through the Web UI have Verified tags because GitHub automatically signs them.
 
 # How to Sign Local Commits
 
-The following process is based on generating GPG keys in WSL2 and creating commits.
-For Mac or Windows, a quick search will help you proceed.
+The following process is based on generating GPG keys in WSL2 and creating commits. For Mac or Windows, a quick search will help you proceed.
 
 ## Generating a GPG Key
 
@@ -65,15 +58,7 @@ Generate a GPG key with the following command:
 gpg --full-generate-key
 ```
 
-You'll be presented with several options. First, you'll be asked to choose the key type.
-Just press Enter for the default RSA and RSA key.
-Next, you'll be asked for key size - the minimum requirement is 4096, so enter 4096.
-Then choose the expiration date - the default is unlimited.
-When asked `Is this correct? (y/N)`, enter y.
-For `Real Name:`, enter your GitHub username.
-For `Email address:`, enter an email that's verified on your GitHub account.
-Finally, for `Comment:`, add a description for this key - something like "For Github Signed commit" should work.
-When asked `Change (N)ame, (C)omment, (E)mail or (O)kay/(Q)uit?`, enter O if everything is correct to finish creating the key!
+You'll be presented with several options. First, you'll be asked to choose the key type. Just press Enter for the default RSA and RSA key. Next, you'll be asked for key size - the minimum requirement is 4096, so enter 4096. Then choose the expiration date - the default is unlimited. When asked `Is this correct? (y/N)`, enter y. For `Real Name:`, enter your GitHub username. For `Email address:`, enter an email that's verified on your GitHub account. Finally, for `Comment:`, add a description for this key - something like "For Github Signed commit" should work. When asked `Change (N)ame, (C)omment, (E)mail or (O)kay/(Q)uit?`, enter O if everything is correct to finish creating the key!
 
 ```
 gpg --list-secret-keys --keyid-format=long
@@ -108,18 +93,11 @@ gpg --armor --export 2167399770ABC2F3
 
 Copy the entire output from `-----BEGIN PGP PUBLIC KEY BLOCK-----` to `-----END PGP PUBLIC KEY BLOCK-----`.
 
-Then go to GitHub Settings > SSH and GPG keys.
-In the GPG keys section, click the green `New GPG key` button.
-![](./images/Screenshot%202022-09-29%20190743.png)
-For Title, enter a description for the key. In my case, I used
-`laptop-name wsl2 signed commit`.
-You just need to recognize it later, right?
-Then paste the public key you copied into the Key field.
+Then go to GitHub Settings > SSH and GPG keys. In the GPG keys section, click the green `New GPG key` button. ![](./images/Screenshot%202022-09-29%20190743.png) For Title, enter a description for the key. In my case, I used `laptop-name wsl2 signed commit`. You just need to recognize it later, right? Then paste the public key you copied into the Key field.
 
 ## git config
 
-We're almost done with the setup.
-On the laptop where you want to make signed commits, register the key with this command:
+We're almost done with the setup. On the laptop where you want to make signed commits, register the key with this command:
 
 ```
 git config --global user.signingkey 2167399770ABC2F3
@@ -147,8 +125,7 @@ If you want to sign all commits, you can enable it with this command:
 git config --global commit.gpgsign true
 ```
 
-Now when you commit, you'll see the Verified tag on your commits.
-![](./images/Screenshot%202022-09-29%20191559.png)
+Now when you commit, you'll see the Verified tag on your commits. ![](./images/Screenshot%202022-09-29%20191559.png)
 
 ## References
 

@@ -14,9 +14,10 @@ export const calculateWPM = (input: string, elapsedSeconds: number): number => {
     return 0;
   }
 
-  const effectiveLength = input
-    .split("")
-    .reduce((acc, char) => acc + getCharStrokeCount(char), 0);
+  const effectiveLength = [...input].reduce(
+    (acc, char) => acc + getCharStrokeCount(char),
+    0
+  );
 
   const wordsTyped = effectiveLength / WPM_WORD_LENGTH;
   const minutes = elapsedSeconds / SECONDS_PER_MINUTE;

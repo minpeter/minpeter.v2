@@ -48,7 +48,7 @@ export function Ip() {
       });
   }, []);
 
-  return <span>Your IP: {ip ? ip : "Loading..."}</span>;
+  return <span>Your IP: {ip || "Loading..."}</span>;
 }
 
 export function Counter() {

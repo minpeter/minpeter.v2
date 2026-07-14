@@ -129,21 +129,11 @@ curl -H Host:ip.docker.localhost 127.0.0.1
 
 しかし、リクエストはHostヘッダーによってiploggerコンテナにルーティングされ、正常に応答が返ってきました。
 
-- 番外：traefik.me
-  Hostヘッダーの理解を助けるために説明します。
-  上では、Hostヘッダーを直接修正してリクエストを送信しましたが、ユーザーがこのようなリクエストを送るのはやや無理があります。
-  したがって、DNS設定をしてドメインでアクセスすることになりますが、こうするとHostヘッダーが自動的に生成されます。
-  これを練習できる方法がまさにtraefik.meです。
-  traefik.meは必ず127.0.0.1と答えるドメインです。
-  ![Untitled](./images/image2.png)
-  [ip.traefik.me](http://ip.traefik.me)の場合もDNS照会結果は127.0.0.1です。
-  これを利用すると、次のようにリクエストを送ることができます。
+- 番外：traefik.me Hostヘッダーの理解を助けるために説明します。上では、Hostヘッダーを直接修正してリクエストを送信しましたが、ユーザーがこのようなリクエストを送るのはやや無理があります。したがって、DNS設定をしてドメインでアクセスすることになりますが、こうするとHostヘッダーが自動的に生成されます。これを練習できる方法がまさにtraefik.meです。traefik.meは必ず127.0.0.1と答えるドメインです。 ![Untitled](./images/image2.png) [ip.traefik.me](http://ip.traefik.me)の場合もDNS照会結果は127.0.0.1です。これを利用すると、次のようにリクエストを送ることができます。
   ```bash
   curl ip.traefik.me
   ```
-  ![Untitled](./images/image3.png)
-  ブラウザで[http://ip.traefik.me/](http://ip.traefik.me/)にアクセスすると、次のようなWebページも見ることができます。
-  ![Untitled](./images/image4.png)
+  ![Untitled](./images/image3.png) ブラウザで[http://ip.traefik.me/](http://ip.traefik.me/)にアクセスすると、次のようなWebページも見ることができます。 ![Untitled](./images/image4.png)
 
 これでローカルでできる基礎過程を終えました。
 

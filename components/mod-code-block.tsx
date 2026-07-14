@@ -221,7 +221,7 @@ export function ModCodeBlock({
               if (segment.content === TAB_PLACEHOLDER) {
                 return (
                   <span key={segment.id}>
-                    {TAB_REPLACEMENT.replace(/ /g, "\u00a0")}
+                    {TAB_REPLACEMENT.replaceAll(" ", "\u00A0")}
                   </span>
                 );
               }

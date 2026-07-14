@@ -3,6 +3,7 @@
 import type { Route } from "next";
 import Link, { useLinkStatus } from "next/link";
 import type { ReactNode } from "react";
+
 import { cn } from "@/shared/utils/tailwind";
 
 export function NavLink({

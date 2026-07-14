@@ -3,6 +3,7 @@
 import type { Route } from "next";
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
+
 import Header from "@/components/header";
 
 export default function Page() {

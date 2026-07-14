@@ -1,11 +1,11 @@
-import { docs, meta } from "fumadocs-mdx:collections/server";
 import type { MetaData, PageData } from "fumadocs-core/source";
 import { loader } from "fumadocs-core/source";
-import {
-  type DocCollectionEntry,
-  type MetaCollectionEntry,
-  toFumadocsSource,
+import { toFumadocsSource } from "fumadocs-mdx/runtime/server";
+import type {
+  DocCollectionEntry,
+  MetaCollectionEntry,
 } from "fumadocs-mdx/runtime/server";
+import { docs, meta } from "fumadocs-mdx:collections/server";
 
 type BlogFrontmatter = PageData & {
   draft: boolean;
@@ -72,6 +72,6 @@ function getPostMetadata(post: blogType): postMetadataType {
 
 export function getPostsMetadata(posts: blogListType): postMetadataType[] {
   return posts
-    .sort((a, b) => b.data.published.getTime() - a.data.published.getTime())
+    .toSorted((a, b) => b.data.published.getTime() - a.data.published.getTime())
     .map((post) => getPostMetadata(post));
 }

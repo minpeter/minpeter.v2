@@ -40,15 +40,13 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   reactCompiler: true,
 
-  rewrites: async () => {
-    return [
-      // AI/LLM endpoints for blog content
-      {
-        destination: "/:locale/blog/llms.md/:path*",
-        source: "/:locale/blog/:path*.md",
-      },
-    ];
-  },
+  rewrites: () => [
+    // AI/LLM endpoints for blog content
+    {
+      destination: "/:locale/blog/llms.md/:path*",
+      source: "/:locale/blog/:path*.md",
+    },
+  ],
   turbopack: {
     root: process.cwd(),
   },

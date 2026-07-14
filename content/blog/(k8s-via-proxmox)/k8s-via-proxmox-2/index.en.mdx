@@ -213,13 +213,11 @@ The cluster creation process ends here.
 
 ## Using Kubernetes
 
-We've created a cluster with some effort, but what should we do now?
-Let's deploy a web server using Kubernetes.
+We've created a cluster with some effort, but what should we do now? Let's deploy a web server using Kubernetes.
 
 ### 1. Deploying nginx pod
 
-Let's create and deploy a single nginx pod.
-On k8s-ctrlr, create a pod.yaml file with the following content:
+Let's create and deploy a single nginx pod. On k8s-ctrlr, create a pod.yaml file with the following content:
 
 ```yaml
 apiVersion: v1
@@ -264,11 +262,7 @@ curl 10.244.1.2:80
 
 ### 2. Creating nginx service
 
-However, directly accessing pods is not recommended.
-This is because pods get new IPs when they restart or are deleted.
-Also, while cluster internal access is possible from any node, external access is not.
-To solve these issues, we create a service.
-On k8s-ctrlr, create a service-nodeport.yaml file with the following content:
+However, directly accessing pods is not recommended. This is because pods get new IPs when they restart or are deleted. Also, while cluster internal access is possible from any node, external access is not. To solve these issues, we create a service. On k8s-ctrlr, create a service-nodeport.yaml file with the following content:
 
 ```yaml
 apiVersion: v1
@@ -324,10 +318,7 @@ While on AWS you can use loadbalancer type instead of nodeport type to access th
 
 ## Conclusion
 
-In this post, we learned how to install Kubernetes and deploy nginx.
-In the next post, we'll explore other Kubernetes features.
-We'll look at ingress, configmap, secret, volume, deployment, statefulset, etc.
-Also, if possible, we'll try to set up CI/CD using Jenkins.
+In this post, we learned how to install Kubernetes and deploy nginx. In the next post, we'll explore other Kubernetes features. We'll look at ingress, configmap, secret, volume, deployment, statefulset, etc. Also, if possible, we'll try to set up CI/CD using Jenkins.
 
 ## References
 

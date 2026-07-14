@@ -17,18 +17,12 @@ machine_translated: true
 
 ### AZ（アベイラビリティーゾーン）
 
-Availability Zoneの略で、1つ以上のデータセンターの集合を意味します。
-1つのAZ内にあるデータセンターは互いに超高速専用回線で接続されています。
+Availability Zoneの略で、1つ以上のデータセンターの集合を意味します。1つのAZ内にあるデータセンターは互いに超高速専用回線で接続されています。
 
 ### Region（リージョン）
 
-該当する地理的な領域内で分離され、物理的に分離された複数のAZの集合を意味します。
-リージョンは最低2つのAZから最大6つのAZで構成されます。
-リージョン内でAZ同士はトランジットセンターを通じて接続されています。
-災害や災難から安全であるために、サービスを複数のAZに分散して構成することが推奨されます。
+該当する地理的な領域内で分離され、物理的に分離された複数のAZの集合を意味します。リージョンは最低2つのAZから最大6つのAZで構成されます。リージョン内でAZ同士はトランジットセンターを通じて接続されています。災害や災難から安全であるために、サービスを複数のAZに分散して構成することが推奨されます。
 
 ### エッジPOP
 
-Edge Point Of Presenceの略で、外部インターネットとAWSグローバルネットワーク網を接続する別のセンターです。
-Edge LocationとRegional Edge Cacheで構成され、CloudFront（CDN）、Direct Connect、Route 53（DNS）、AWS Shield（DDoS protection）、AWS Global Acceleratorがエッジで動作します。
-![](./edge-pop.png)
+Edge Point Of Presenceの略で、外部インターネットとAWSグローバルネットワーク網を接続する別のセンターです。Edge LocationとRegional Edge Cacheで構成され、CloudFront（CDN）、Direct Connect、Route 53（DNS）、AWS Shield（DDoS protection）、AWS Global Acceleratorがエッジで動作します。 ![](./edge-pop.png)

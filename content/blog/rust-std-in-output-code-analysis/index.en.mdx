@@ -21,8 +21,7 @@ fn main() {
 }
 ```
 
-The code above is a Rust solution for the Baekjoon problem `a / b`.
-It looks quite dizzying, so let's briefly look at the C version:
+The code above is a Rust solution for the Baekjoon problem `a / b`. It looks quite dizzying, so let's briefly look at the C version:
 
 ```c
 #include <stdio.h>
@@ -35,21 +34,12 @@ int main(void) {
 
 Compared to Rust, it's really simple.
 
-So why does Rust require so much code?
-It's to prevent **errors**.
-Let's consider what happens if the user inputs `e 2`:
-In Rust, `expect()` generates an error and terminates.
-In C, it outputs a strange value like `0.673556`.
+So why does Rust require so much code? It's to prevent **errors**. Let's consider what happens if the user inputs `e 2`: In Rust, `expect()` generates an error and terminates. In C, it outputs a strange value like `0.673556`.
 
 Right... I don't know which is better yet, but it's true that Rust's way is inconvenient (unfamiliar).
 
 ## Rust Syntax Explanation
 
-`let mut b = String::new();` Creates a mutable String type variable b.
-`io::stdin().read_line(&mut b).expect("Failed to read line");` Reads a line and stores it at the address of b.
-`let b: Vec<f64> = b.split_whitespace()` Not fully understood yet, will update when I learn more Rust (probably splits by whitespace and stores in Vec format, which is like an array).
-`.map(|x| x.trim().parse().expect("Plese type a number!"))` Uses map to iterate over each element of Vec type b, removes whitespace with `trim()` (is this even necessary?), and converts to numeric type with `parse()`.
-`.collect::<Vec<_>>();` Not sure yet...
+`let mut b = String::new();` Creates a mutable String type variable b. `io::stdin().read_line(&mut b).expect("Failed to read line");` Reads a line and stores it at the address of b. `let b: Vec<f64> = b.split_whitespace()` Not fully understood yet, will update when I learn more Rust (probably splits by whitespace and stores in Vec format, which is like an array). `.map(|x| x.trim().parse().expect("Plese type a number!"))` Uses map to iterate over each element of Vec type b, removes whitespace with `trim()` (is this even necessary?), and converts to numeric type with `parse()`. `.collect::<Vec<_>>();` Not sure yet...
 
-I'm still a Rust beginner, so I clearly need more study.
-Will there come a day when I use Rust as naturally as Python?
+I'm still a Rust beginner, so I clearly need more study. Will there come a day when I use Rust as naturally as Python?
