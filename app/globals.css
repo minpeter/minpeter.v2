@@ -559,6 +559,8 @@
   }
 
   .home-logo {
+    width: 2rem;
+    height: 2rem;
     transition: filter 300ms ease;
   }
 
