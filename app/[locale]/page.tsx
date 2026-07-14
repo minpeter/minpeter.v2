@@ -56,7 +56,7 @@ export default function Page() {
         </Link>
         <h1 className="text-base leading-tight tracking-[-0.035em]">
           <span className="font-semibold text-foreground">MINPETER</span>
-          <span className="text-muted-foreground"> — Software designer</span>
+          <span className="text-muted-foreground"> — Software engineer</span>
         </h1>
         <p className="mt-4 max-w-md text-[15px] leading-[1.35] text-foreground/85 tracking-[-0.02em]">
           {t("siteDescription")} — building interfaces and websites for a
