@@ -3,7 +3,7 @@ import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { VercelToolbar } from "@vercel/toolbar/next";
 import { NextProvider } from "fumadocs-core/framework/next";
-import { Geist_Mono, Shippori_Mincho } from "next/font/google";
+import { Geist, Geist_Mono, Shippori_Mincho } from "next/font/google";
 import Script from "next/script";
 import { NuqsAdapter } from "nuqs/adapters/next";
 import { Suspense } from "react";
@@ -15,11 +15,15 @@ import { env } from "@/shared/env";
 import { AritaBuriLocalFont } from "@/shared/font.AritaBuri";
 import { cn } from "@/shared/utils/tailwind";
 
-import styles from "@/shared/styles/header-overlay.module.css";
-
 const geistMono = Geist_Mono({
   subsets: ["latin"],
   variable: "--font-geist-mono",
+});
+
+const geist = Geist({
+  subsets: ["latin"],
+  variable: "--font-geist",
+  weight: ["400", "500", "600"],
 });
 
 const shipporiMincho = Shippori_Mincho({
@@ -60,36 +64,25 @@ export function RootDocument({ children, lang }: RootDocumentProps) {
           AritaBuriLocalFont.variable,
           shipporiMincho.variable,
           geistMono.variable,
-          "antialiased"
+          geist.variable,
+          "flex min-h-screen flex-col antialiased"
         )}
       >
         <NextProvider>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="dark"
-            disableTransitionOnChange
-            enableSystem
-          >
+          <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
             <Suspense>
               <NuqsAdapter>
                 <main
                   className={cn(
                     "font-sans",
-                    "relative mx-auto min-h-screen w-full max-w-3xl px-4 py-8"
+                    "relative mx-auto flex w-full max-w-4xl flex-1 flex-col px-5 sm:px-8 lg:px-12"
                   )}
                 >
-                  <div
-                    aria-hidden="true"
-                    className={cn(
-                      styles.scroll_responsive_header,
-                      "pointer-events-none fixed inset-x-0 top-0 z-10 h-40"
-                    )}
-                  />
                   {children}
                   {shouldInjectDevTools ? <VercelToolbar /> : null}
                 </main>
 
-                <Footer />
+                <Footer locale={lang} />
               </NuqsAdapter>
             </Suspense>
           </ThemeProvider>

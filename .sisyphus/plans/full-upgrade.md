@@ -3,32 +3,35 @@
 ## TL;DR
 
 > **Quick Summary**: Upgrade all ~50 dependencies to latest stable, patch 7 CVEs, adopt Next.js 16.2/TS 6.0/fumadocs 16.7 new features, and refactor dead code — all with TDD.
-> 
+>
 > **Deliverables**:
+>
 > - All dependencies at latest stable versions
 > - 7 CVE security patches applied
 > - New features adopted (Next.js experimental flags, TS 6.0, fumadocs renderer API)
 > - Dead code removed, @ts-ignore resolved, zod import standardized
 > - All existing 4 tests pass + new tests added
-> 
-> **Estimated Effort**: XL
-> **Parallel Execution**: YES - 4 phases, multiple waves per phase
-> **Critical Path**: Security patches → Safe minors → Major bumps (fumadocs search most risky) → Feature adoption → TS 6.0
+>
+> **Estimated Effort**: XL **Parallel Execution**: YES - 4 phases, multiple waves per phase **Critical Path**: Security patches → Safe minors → Major bumps (fumadocs search most risky) → Feature adoption → TS 6.0
 
 ---
 
 ## Context
 
 ### Original Request
+
 Upgrade all Next.js and dependency patch notes to latest, adopt maximum new features, update all dependencies, refactor maximally. TDD approach.
 
 ### Interview Summary
+
 **Key Discussions**:
+
 - User wants maximum adoption — no specific exclusions
 - TDD approach with vitest (infrastructure already exists)
 - Project is a personal blog/portfolio with i18n (ko/en/ja), Three.js 3D models, blog search, typing practice
 
 **Research Findings** (6 parallel librarian investigations):
+
 - Next.js 16.1.2 → 16.2.1: 5 CVE patches, 87% faster dev server, prefetchInlining, SRI, browserToTerminal logging
 - React 19.2.3 → 19.2.4: Server Actions DoS hardening
 - fumadocs 16.4.7 → 16.7.5: Search client API redesign (biggest breaking change), renderer API slots
@@ -37,7 +40,9 @@ Upgrade all Next.js and dependency patch notes to latest, adopt maximum new feat
 - axios 1.13.2 → 1.13.6: CVE-2026-25639 DoS vulnerability
 
 ### Metis Review
+
 **Identified Gaps** (addressed):
+
 - Zod import inconsistency: `source.config.ts` uses `"zod"`, `env.ts` uses `"zod/v4"` — both paths planned
 - 4 test files exist (not 1): proxy.test.ts + 3 typing utility tests — all gated
 - TS 6.0 ecosystem readiness unvalidated — deferred to final phase with escape hatch
@@ -52,9 +57,11 @@ Upgrade all Next.js and dependency patch notes to latest, adopt maximum new feat
 ## Work Objectives
 
 ### Core Objective
+
 Upgrade all dependencies to latest stable versions while preserving existing functionality, adopt valuable new features, and clean up technical debt — using TDD to ensure zero regressions.
 
 ### Concrete Deliverables
+
 - Updated `package.json` with all latest stable versions
 - Updated `pnpm-lock.yaml`
 - Modified config files: `next.config.ts`, `tsconfig.json`, `source.config.ts`, `biome.jsonc`
@@ -63,6 +70,7 @@ Upgrade all dependencies to latest stable versions while preserving existing fun
 - Cleaned dead code
 
 ### Definition of Done
+
 - [x] `pnpm check:types` passes
 - [x] `pnpm check:biome` passes
 - [x] `pnpm test` passes (all tests including new ones)
@@ -72,6 +80,7 @@ Upgrade all dependencies to latest stable versions while preserving existing fun
 - [x] No commented-out dead code
 
 ### Must Have
+
 - All security vulnerabilities patched (7 CVEs)
 - All existing 4 test files pass after every commit
 - Production build succeeds after every commit
@@ -81,6 +90,7 @@ Upgrade all dependencies to latest stable versions while preserving existing fun
 - RSS feed generates correctly
 
 ### Must NOT Have (Guardrails)
+
 - Do NOT adopt React `<Activity>` component (no concrete use case)
 - Do NOT adopt Temporal types (polyfill ecosystem not ready)
 - Do NOT add `remark-llms` plugin (new feature, separate PR)
@@ -97,16 +107,20 @@ Upgrade all dependencies to latest stable versions while preserving existing fun
 > **ZERO HUMAN INTERVENTION** — ALL verification is agent-executed. No exceptions.
 
 ### Test Decision
+
 - **Infrastructure exists**: YES (vitest 4.0.17 → 4.1.1)
 - **Automated tests**: TDD (write test → upgrade → verify)
 - **Framework**: vitest
 - **TDD**: Each major upgrade gets a pre-upgrade snapshot/smoke test
 
 ### QA Policy
+
 Every task MUST run the full CI gate:
+
 ```bash
 pnpm check:types && pnpm check:biome && pnpm test && pnpm build
 ```
+
 Evidence saved to `.sisyphus/evidence/task-{N}-{scenario-slug}.{ext}`.
 
 - **Build verification**: `pnpm build` (includes next-sitemap postbuild)
@@ -157,27 +171,27 @@ Wave FINAL (After ALL tasks — 4 parallel reviews, then user okay):
 
 ### Dependency Matrix
 
-| Task | Depends On | Blocks | Wave |
-|------|-----------|--------|------|
-| 1 | — | 4-8, 2 | 1 |
-| 2 | — | 9 | 1 |
-| 3 | — | 12 | 1 |
-| 4 | 1 | 14 | 2 |
-| 5 | 1 | 13 | 2 |
-| 6 | 1 | — | 2 |
-| 7 | 1 | 16 | 2 |
-| 8 | 1 | — | 2 |
-| 9 | 2 | — | 3 |
-| 10 | 1 | — | 3 |
-| 11 | 1 | — | 3 |
-| 12 | 3 | — | 3 |
-| 13 | 5 | — | 3 |
-| 14 | 4, 8 | 18 | 4 |
-| 15 | 12 | — | 4 |
-| 16 | 7 | 18 | 4 |
-| 17 | 1 | — | 4 |
-| 18 | 14, 16 | F1-F4 | 4 |
-| F1-F4 | 18 | — | FINAL |
+| Task  | Depends On | Blocks | Wave  |
+| ----- | ---------- | ------ | ----- |
+| 1     | —          | 4-8, 2 | 1     |
+| 2     | —          | 9      | 1     |
+| 3     | —          | 12     | 1     |
+| 4     | 1          | 14     | 2     |
+| 5     | 1          | 13     | 2     |
+| 6     | 1          | —      | 2     |
+| 7     | 1          | 16     | 2     |
+| 8     | 1          | —      | 2     |
+| 9     | 2          | —      | 3     |
+| 10    | 1          | —      | 3     |
+| 11    | 1          | —      | 3     |
+| 12    | 3          | —      | 3     |
+| 13    | 5          | —      | 3     |
+| 14    | 4, 8       | 18     | 4     |
+| 15    | 12         | —      | 4     |
+| 16    | 7          | 18     | 4     |
+| 17    | 1          | —      | 4     |
+| 18    | 14, 16     | F1-F4  | 4     |
+| F1-F4 | 18         | —      | FINAL |
 
 ### Agent Dispatch Summary
 
@@ -219,7 +233,7 @@ Wave FINAL (After ALL tasks — 4 parallel reviews, then user okay):
   - `package.json:54` — Current nuqs version
   - `package.json:70` — Current @types/react version
   - Next.js 16.2.1 release: CVE-2026-27977, CVE-2026-27978, CVE-2026-27979, CVE-2026-27980, CVE-2026-29057
-  - axios CVE-2026-25639: DoS via `mergeConfig` __proto__ handling
+  - axios CVE-2026-25639: DoS via `mergeConfig` **proto** handling
   - nuqs CVE-2026-23864: dependency security fix
 
   **Acceptance Criteria**:
@@ -229,6 +243,7 @@ Wave FINAL (After ALL tasks — 4 parallel reviews, then user okay):
   - [ ] `pnpm build` succeeds
 
   **QA Scenarios**:
+
   ```
   Scenario: Security patches applied — verify package versions
     Tool: Bash
@@ -299,6 +314,7 @@ Wave FINAL (After ALL tasks — 4 parallel reviews, then user okay):
   - [ ] Snapshot files generated in `__snapshots__/` or inline
 
   **QA Scenarios**:
+
   ```
   Scenario: Snapshot test captures current sugar-high output
     Tool: Bash
@@ -362,6 +378,7 @@ Wave FINAL (After ALL tasks — 4 parallel reviews, then user okay):
   - [ ] Test validates the search route exports a GET handler
 
   **QA Scenarios**:
+
   ```
   Scenario: Search API smoke test passes
     Tool: Bash
@@ -411,6 +428,7 @@ Wave FINAL (After ALL tasks — 4 parallel reviews, then user okay):
   - [ ] `pnpm check:types && pnpm check:biome && pnpm test && pnpm build` passes
 
   **QA Scenarios**:
+
   ```
   Scenario: Tailwind CSS compilation works
     Tool: Bash
@@ -463,6 +481,7 @@ Wave FINAL (After ALL tasks — 4 parallel reviews, then user okay):
   - [ ] Full CI gate passes
 
   **QA Scenarios**:
+
   ```
   Scenario: Biome + ultracite compatibility check
     Tool: Bash
@@ -528,6 +547,7 @@ Wave FINAL (After ALL tasks — 4 parallel reviews, then user okay):
   - [ ] No import errors
 
   **QA Scenarios**:
+
   ```
   Scenario: AI/Vercel packages upgrade verification
     Tool: Bash
@@ -583,6 +603,7 @@ Wave FINAL (After ALL tasks — 4 parallel reviews, then user okay):
   - [ ] Full CI gate passes
 
   **QA Scenarios**:
+
   ```
   Scenario: Misc packages upgrade verification
     Tool: Bash
@@ -630,6 +651,7 @@ Wave FINAL (After ALL tasks — 4 parallel reviews, then user okay):
   - [ ] Full CI gate passes
 
   **QA Scenarios**:
+
   ```
   Scenario: @next/* packages upgrade verification
     Tool: Bash
@@ -680,6 +702,7 @@ Wave FINAL (After ALL tasks — 4 parallel reviews, then user okay):
   - [ ] `pnpm check:types && pnpm check:biome && pnpm test && pnpm build` passes
 
   **QA Scenarios**:
+
   ```
   Scenario: Sugar-high v1.0.0 backward compatibility
     Tool: Bash
@@ -741,6 +764,7 @@ Wave FINAL (After ALL tasks — 4 parallel reviews, then user okay):
   - [ ] Full CI gate passes
 
   **QA Scenarios**:
+
   ```
   Scenario: All lucide-react icon imports still resolve
     Tool: Bash
@@ -803,6 +827,7 @@ Wave FINAL (After ALL tasks — 4 parallel reviews, then user okay):
   - [ ] Full CI gate passes
 
   **QA Scenarios**:
+
   ```
   Scenario: Vercel analytics/speed-insights v2 import compatibility
     Tool: Bash
@@ -875,6 +900,7 @@ Wave FINAL (After ALL tasks — 4 parallel reviews, then user okay):
   - [ ] Full CI gate passes
 
   **QA Scenarios**:
+
   ```
   Scenario: Fumadocs search client still works
     Tool: Bash
@@ -950,6 +976,7 @@ Wave FINAL (After ALL tasks — 4 parallel reviews, then user okay):
   - [ ] Full CI gate passes
 
   **QA Scenarios**:
+
   ```
   Scenario: Knip 6.0 runs successfully
     Tool: Bash
@@ -1007,6 +1034,7 @@ Wave FINAL (After ALL tasks — 4 parallel reviews, then user okay):
   - [ ] Full CI gate passes
 
   **QA Scenarios**:
+
   ```
   Scenario: New experimental flags don't break build
     Tool: Bash
@@ -1079,6 +1107,7 @@ Wave FINAL (After ALL tasks — 4 parallel reviews, then user okay):
   - [ ] `grep -r "@ts-ignore" app/` returns no results
 
   **QA Scenarios**:
+
   ```
   Scenario: Dead code removed, no @ts-ignore remaining
     Tool: Bash
@@ -1134,6 +1163,7 @@ Wave FINAL (After ALL tasks — 4 parallel reviews, then user okay):
   - [ ] Environment validation still works correctly
 
   **QA Scenarios**:
+
   ```
   Scenario: Zod import standardized
     Tool: Bash
@@ -1191,6 +1221,7 @@ Wave FINAL (After ALL tasks — 4 parallel reviews, then user okay):
   - [ ] `pnpm check:types && pnpm check:biome && pnpm test && pnpm build` passes
 
   **QA Scenarios**:
+
   ```
   Scenario: useEffectEvent refactor preserves behavior
     Tool: Bash
@@ -1260,6 +1291,7 @@ Wave FINAL (After ALL tasks — 4 parallel reviews, then user okay):
   - [ ] If escape hatch: TypeScript stays at 5.9.3 with documented reasons
 
   **QA Scenarios**:
+
   ```
   Scenario: TypeScript 6.0 full compatibility check
     Tool: Bash
@@ -1298,28 +1330,20 @@ Wave FINAL (After ALL tasks — 4 parallel reviews, then user okay):
 
 > 4 review agents run in PARALLEL. ALL must APPROVE. Present consolidated results to user and get explicit "okay" before completing.
 
-- [x] F1. **Plan Compliance Audit** — `oracle`
-  Read the plan end-to-end. For each "Must Have": verify implementation exists (read file, curl endpoint, run command). For each "Must NOT Have": search codebase for forbidden patterns — reject with file:line if found. Check evidence files exist in .sisyphus/evidence/. Compare deliverables against plan.
-  Output: `Must Have [N/N] | Must NOT Have [N/N] | Tasks [N/N] | VERDICT: APPROVE/REJECT`
+- [x] F1. **Plan Compliance Audit** — `oracle` Read the plan end-to-end. For each "Must Have": verify implementation exists (read file, curl endpoint, run command). For each "Must NOT Have": search codebase for forbidden patterns — reject with file:line if found. Check evidence files exist in .sisyphus/evidence/. Compare deliverables against plan. Output: `Must Have [N/N] | Must NOT Have [N/N] | Tasks [N/N] | VERDICT: APPROVE/REJECT`
 
-- [x] F2. **Code Quality Review** — `unspecified-high`
-  Run `pnpm check:types` + `pnpm check:biome` + `pnpm test`. Review all changed files for: `as any`/`@ts-ignore`, empty catches, console.log in prod, commented-out code, unused imports. Check AI slop: excessive comments, over-abstraction, generic names.
-  Output: `Build [PASS/FAIL] | Lint [PASS/FAIL] | Tests [N pass/N fail] | Files [N clean/N issues] | VERDICT`
+- [x] F2. **Code Quality Review** — `unspecified-high` Run `pnpm check:types` + `pnpm check:biome` + `pnpm test`. Review all changed files for: `as any`/`@ts-ignore`, empty catches, console.log in prod, commented-out code, unused imports. Check AI slop: excessive comments, over-abstraction, generic names. Output: `Build [PASS/FAIL] | Lint [PASS/FAIL] | Tests [N pass/N fail] | Files [N clean/N issues] | VERDICT`
 
-- [x] F3. **Real Manual QA** — `unspecified-high` (+ `playwright` skill)
-  Start dev server. Execute EVERY QA scenario from EVERY task — follow exact steps, capture evidence. Test cross-task integration. Test edge cases: empty search, invalid locale, 404 pages. Save to `.sisyphus/evidence/final-qa/`.
-  Output: `Scenarios [N/N pass] | Integration [N/N] | Edge Cases [N tested] | VERDICT`
+- [x] F3. **Real Manual QA** — `unspecified-high` (+ `playwright` skill) Start dev server. Execute EVERY QA scenario from EVERY task — follow exact steps, capture evidence. Test cross-task integration. Test edge cases: empty search, invalid locale, 404 pages. Save to `.sisyphus/evidence/final-qa/`. Output: `Scenarios [N/N pass] | Integration [N/N] | Edge Cases [N tested] | VERDICT`
 
-- [x] F4. **Scope Fidelity Check** — `deep`
-  For each task: read "What to do", read actual diff (git log/diff). Verify 1:1 — everything in spec was built, nothing beyond spec was built. Check "Must NOT do" compliance. Detect cross-task contamination. Flag unaccounted changes.
-  Output: `Tasks [N/N compliant] | Contamination [CLEAN/N issues] | Unaccounted [CLEAN/N files] | VERDICT`
+- [x] F4. **Scope Fidelity Check** — `deep` For each task: read "What to do", read actual diff (git log/diff). Verify 1:1 — everything in spec was built, nothing beyond spec was built. Check "Must NOT do" compliance. Detect cross-task contamination. Flag unaccounted changes. Output: `Tasks [N/N compliant] | Contamination [CLEAN/N issues] | Unaccounted [CLEAN/N files] | VERDICT`
 
 ---
 
 ## Commit Strategy
 
 | Phase | Commit Message | Files | Gate |
-|-------|---------------|-------|------|
+| --- | --- | --- | --- |
 | 1 | `fix(deps): patch security vulnerabilities (CVE-2026-*)` | package.json, pnpm-lock.yaml | full CI |
 | 2-TDD | `test(sugar-high): add highlight() snapshot before v1.0 upgrade` | new test file | pnpm test |
 | 2-TDD | `test(fumadocs): add search API smoke test before upgrade` | new test file | pnpm test |
@@ -1344,6 +1368,7 @@ Wave FINAL (After ALL tasks — 4 parallel reviews, then user okay):
 ## Success Criteria
 
 ### Verification Commands
+
 ```bash
 pnpm check:types    # Expected: no errors
 pnpm check:biome    # Expected: no errors
@@ -1352,6 +1377,7 @@ pnpm build          # Expected: build succeeds with postbuild sitemap
 ```
 
 ### Final Checklist
+
 - [x] All "Must Have" present
 - [x] All "Must NOT Have" absent
 - [x] All 4+ test files pass (6 files, 40 tests)

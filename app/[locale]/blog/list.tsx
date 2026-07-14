@@ -13,7 +13,7 @@ import type { ChangeEvent } from "react";
 import { Badge } from "@/components/ui/badge";
 import { ViewTransition } from "@/components/view-transition";
 import type { postMetadataType } from "@/shared/source";
-import { formatDate, formatYear } from "@/shared/utils/date";
+import { formatYear } from "@/shared/utils/date";
 import { cn } from "@/shared/utils/tailwind";
 
 import styles from "@/shared/styles/stagger-fade-in.module.css";
@@ -83,7 +83,7 @@ export function BlogList({
     setSearch(deferredQuery);
   }, [deferredQuery, setSearch]);
 
-  // Show loading when query differs from deferred (typing) or API is loading
+  // Show loading while the query is being deferred or the API is loading
   const isSearching =
     query !== deferredQuery || isPending || searchQuery.isLoading;
 
@@ -119,14 +119,14 @@ export function BlogList({
 
   return (
     <>
-      <div className="relative mb-6">
+      <div className="fieldnotes-search">
         <label className="sr-only" htmlFor="blog-search">
           {t("searchPlaceholder")}
         </label>
         <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
         <input
           autoComplete="off"
-          className="w-full rounded-md border bg-background px-10 py-2 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+          className="w-full bg-transparent px-10 py-4 text-sm placeholder:text-muted-foreground focus:outline-none"
           id="blog-search"
           onChange={handleQueryChange}
           placeholder={t("searchPlaceholder")}
@@ -150,12 +150,18 @@ export function BlogList({
           </div>
         )}
       </div>
-      <BlogListFallback posts={filteredPosts} />
+      <BlogListFallback lang={lang} posts={filteredPosts} />
     </>
   );
 }
 
-export function BlogListFallback({ posts }: { posts: postMetadataType[] }) {
+export function BlogListFallback({
+  lang = "en",
+  posts,
+}: {
+  lang?: string;
+  posts: postMetadataType[];
+}) {
   const t = useTranslations();
   // Posts are already filtered by BlogList component
   const filteredPosts = posts;
@@ -173,11 +179,12 @@ export function BlogListFallback({ posts }: { posts: postMetadataType[] }) {
     {}
   );
 
-  const itemSytles =
-    "group-hover/year:opacity-100! group-hover/post:bg-secondary/100 group-hover/list:opacity-60 rounded-md";
+  const itemSytles = "transition-opacity duration-200";
 
   return (
-    <div className={cn(styles.stagger_container, styles.slow, "group/list")}>
+    <div
+      className={cn(styles.stagger_container, styles.slow, "fieldnotes-list")}
+    >
       {filteredPosts.length === 0 ? (
         <div className="py-8 text-center">
           <p>{t("noSearchResults")}</p>
@@ -186,90 +193,103 @@ export function BlogListFallback({ posts }: { posts: postMetadataType[] }) {
         Object.keys(yearList)
           .toReversed()
           .map((year) => (
-            <div
-              className="group/year flex flex-col gap-2 border-t py-8 last-of-type:border-b sm:flex-row"
-              key={year}
-            >
-              <div className="w-24">
-                <h2 className="w-fit rounded-md px-2 opacity-60 group-hover/year:bg-secondary/100">
-                  {year}
-                </h2>
-              </div>
-              {
-                <ul
-                  className={cn(styles.stagger_container, "w-full space-y-3")}
-                >
-                  {yearList[year].map((post: postMetadataType) => (
-                    <li
-                      className="group/post flex justify-between space-x-4"
-                      key={post.url}
-                    >
-                      {post.external_url ? (
-                        <a
+            <section className="fieldnotes-year" key={year}>
+              <h2 className="fieldnotes-year-heading">{year}</h2>
+              <ul
+                className={cn(
+                  styles.stagger_container,
+                  "fieldnotes-year-posts"
+                )}
+              >
+                {yearList[year].map((post: postMetadataType) => (
+                  <li className="fieldnotes-item" key={post.url}>
+                    {post.external_url ? (
+                      <a
+                        className={cn(
+                          itemSytles,
+                          "fieldnotes-item-link focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                        )}
+                        href={post.external_url}
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
+                        <span
                           className={cn(
-                            itemSytles,
-                            "inline-flex items-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                            "fieldnotes-item-title line-clamp-2",
+                            itemSytles
                           )}
-                          href={post.external_url}
-                          rel="noopener noreferrer"
-                          target="_blank"
+                        >
+                          {post.title}
+                          <ExternalLink
+                            className="ml-1 inline-block pb-1 opacity-60"
+                            size={16}
+                          />
+                        </span>
+                        {post.draft ? (
+                          <Badge className="h-fit shrink-0" variant="secondary">
+                            {t("draft")}
+                          </Badge>
+                        ) : (
+                          <time
+                            className="fieldnotes-item-date"
+                            dateTime={post.published.toISOString()}
+                          >
+                            {formatPostDate(post.published, lang)}
+                          </time>
+                        )}
+                      </a>
+                    ) : (
+                      <Link
+                        className={cn(
+                          itemSytles,
+                          "fieldnotes-item-link focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                        )}
+                        href={post.url as Route}
+                      >
+                        <ViewTransition
+                          name={`blog-title-${post.url.replaceAll("/", "-")}`}
                         >
                           <span
                             className={cn(
-                              "line-clamp-2 inline box-decoration-clone px-1 py-1",
+                              "fieldnotes-item-title line-clamp-2",
                               itemSytles
                             )}
                           >
                             {post.title}
-                            <ExternalLink
-                              className="ml-1 inline-block pb-1 opacity-60"
-                              size={16}
-                            />
                           </span>
-                        </a>
-                      ) : (
-                        <Link
-                          className={cn(
-                            itemSytles,
-                            "inline-flex items-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                          )}
-                          href={post.url as Route}
-                        >
-                          <ViewTransition
-                            name={`blog-title-${post.url.replaceAll("/", "-")}`}
-                          >
-                            <span
-                              className={cn(
-                                "line-clamp-2 inline box-decoration-clone px-1 py-1",
-                                itemSytles
-                              )}
-                            >
-                              {post.title}
-                            </span>
-                          </ViewTransition>
-                        </Link>
-                      )}
-
-                      {post.draft ? (
-                        <Badge className="h-fit shrink-0" variant="secondary">
-                          {t("draft")}
-                        </Badge>
-                      ) : (
-                        <ViewTransition
-                          name={`blog-date-${post.url.replaceAll("/", "-")}`}
-                        >
-                          <div className={cn(itemSytles, "h-fit text-nowrap")}>
-                            {formatDate(post.published)}
-                          </div>
                         </ViewTransition>
-                      )}
-                    </li>
-                  ))}
-                </ul>
-              }
-            </div>
+                        {post.draft ? (
+                          <Badge className="h-fit shrink-0" variant="secondary">
+                            {t("draft")}
+                          </Badge>
+                        ) : (
+                          <ViewTransition
+                            name={`blog-date-${post.url.replaceAll("/", "-")}`}
+                          >
+                            <time
+                              className="fieldnotes-item-date"
+                              dateTime={post.published.toISOString()}
+                            >
+                              {formatPostDate(post.published, lang)}
+                            </time>
+                          </ViewTransition>
+                        )}
+                      </Link>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </section>
           ))
       )}
     </div>
   );
+}
+
+function formatPostDate(date: Date, locale: string) {
+  return new Intl.DateTimeFormat(locale, {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  }).format(date);
 }

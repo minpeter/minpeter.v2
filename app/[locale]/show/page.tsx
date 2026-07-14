@@ -1,26 +1,48 @@
 import type { Route } from "next";
 import { getTranslations } from "next-intl/server";
+import Image from "next/image";
 import Link from "next/link";
 
-import Header from "@/components/header";
+import { LanguageSelector } from "@/components/language-selector";
 import { createFeatureGate } from "@/shared/flags";
 import NewMetadata from "@/shared/utils/metadata";
-import { cn } from "@/shared/utils/tailwind";
-
-import styles from "@/shared/styles/stagger-fade-in.module.css";
 
 export const metadata = NewMetadata({
   description: "A graveyard of components made with care but never used",
   title: "minpeter | showcase",
 });
 
-const showcasePaths = [
-  "/show/yet-another-tempfiles",
-  "/show/tech-stack-ball",
-  "/show/dynamic-hacked-text",
-  "/show/new-year-clock",
-  "/show/model-card-artwork",
-  "/show/unstructured",
+const SHOWCASE_ITEMS = [
+  {
+    description: "A simpler frontend for temporary files.",
+    path: "/show/yet-another-tempfiles",
+    title: "Yet another tempfiles",
+  },
+  {
+    description: "A spinning inventory of the tools behind this site.",
+    path: "/show/tech-stack-ball",
+    title: "Tech stack ball",
+  },
+  {
+    description: "Hover over the letters and watch them react.",
+    path: "/show/dynamic-hacked-text",
+    title: "Dynamic hacked text",
+  },
+  {
+    description: "A live countdown to the next year.",
+    path: "/show/new-year-clock",
+    title: "New year clock",
+  },
+  {
+    description: "Artwork studies for language model cards.",
+    path: "/show/model-card-artwork",
+    title: "Model card artwork",
+  },
+  {
+    description: "Experiments in layered motion and depth.",
+    path: "/show/unstructured",
+    title: "Unstructured",
+  },
 ] as const;
 
 export default async function Page(props: PageProps<"/[locale]/show">) {
@@ -30,31 +52,56 @@ export default async function Page(props: PageProps<"/[locale]/show">) {
     getTranslations(),
   ]);
   return (
-    <section className="flex flex-col gap-3">
-      <Header
-        description="Just things I did"
-        link={{ href: `/${locale}` as Route, text: t("backToHome") }}
-        title="showcase"
-      />
-      <div
-        className={cn(
-          styles.stagger_container,
-          styles.fast,
-          "flex flex-col gap-2"
-        )}
-      >
-        {showcasePaths.map((path) => (
+    <section className="showcase-page">
+      <header className="showcase-header">
+        <nav aria-label="Showcase navigation" className="fieldnotes-nav">
           <Link
-            className="rounded underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            aria-label={t("backToHome")}
+            className="fieldnotes-logo-link"
+            href={`/${locale}` as Route}
+          >
+            <Image
+              alt=""
+              aria-hidden="true"
+              className="fieldnotes-logo"
+              height={32}
+              priority
+              src="/assets/signature-mark.svg"
+              width={32}
+            />
+          </Link>
+          <LanguageSelector />
+        </nav>
+        <div className="showcase-intro">
+          <p className="showcase-kicker">Showcase</p>
+          <h1 className="showcase-title">Small experiments</h1>
+          <p className="showcase-description">
+            Interactive pieces, prototypes, and things made for the fun of it.
+          </p>
+        </div>
+      </header>
+
+      <nav aria-label="Projects" className="showcase-list">
+        {SHOWCASE_ITEMS.map(({ description, path, title }) => (
+          <Link
+            className="showcase-item-link"
             href={`/${locale}${path}` as Route}
             key={path}
           >
-            {path}
+            <span className="showcase-item-top">
+              <span className="showcase-item-title">{title}</span>
+              <span aria-hidden="true" className="showcase-item-arrow">
+                ↗
+              </span>
+            </span>
+            <span className="showcase-item-description">{description}</span>
           </Link>
         ))}
 
-        <div>test_flag is {enabled ? "on" : "off"}</div>
-      </div>
+        {enabled ? (
+          <div className="showcase-flag-status">test flag is on</div>
+        ) : null}
+      </nav>
     </section>
   );
 }

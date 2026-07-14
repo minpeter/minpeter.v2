@@ -1,6 +1,7 @@
 "use client";
 
 import type { Route } from "next";
+import Link from "next/link";
 import type { ReactNode } from "react";
 
 import { ViewTransition } from "@/components/view-transition";
@@ -32,21 +33,29 @@ export default function Header({
 }: HeaderProps) {
   return (
     <header
-      className={cn("relative z-10 mb-10 space-y-1", styles.stagger_container)}
+      className={cn(
+        "relative z-10 mx-auto mb-16 w-full max-w-2xl border-foreground/20 border-b pb-10 sm:mb-20",
+        styles.stagger_container
+      )}
     >
-      {link ? (
-        <div>
+      <div className="flex items-center justify-between font-mono text-[11px] uppercase tracking-[-0.05em]">
+        {link ? (
           <Backlink
             href={link.href}
             onNavigate={link.onNavigate}
             text={link.text}
           />
+        ) : (
+          <Link href="/">minpeter</Link>
+        )}
+        <div className="flex items-center gap-2 text-muted-foreground">
+          {rightContent}
+          {rightContent ? <span>·</span> : null}
+          <LanguageSelector />
         </div>
-      ) : (
-        <div className="invisible">.</div>
-      )}
-      <div className="flex flex-row justify-between">
-        <h1 className="flex flex-wrap items-center break-all text-bold">
+      </div>
+      <div className="mt-12 sm:mt-16">
+        <h1 className="home-section-title flex flex-wrap items-center break-words">
           {titleTransitionName ? (
             <ViewTransition name={titleTransitionName}>
               {title || "minpeter"}
@@ -55,16 +64,12 @@ export default function Header({
             title || "minpeter"
           )}
         </h1>
-
-        <div className="flex items-center gap-1 text-gray-500">
-          {rightContent}
-          {rightContent && <span>/</span>}
-          <LanguageSelector />
-        </div>
+        {description ? (
+          <p className="mt-5 max-w-lg text-[15px] leading-relaxed text-muted-foreground sm:text-base">
+            {description}
+          </p>
+        ) : null}
       </div>
-      {description ? (
-        <p className="w-full text-gray-400 text-sm">{description}</p>
-      ) : null}
     </header>
   );
 }

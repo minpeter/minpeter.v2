@@ -120,8 +120,9 @@ export default function TmpfUI() {
     <div className="flex flex-col items-center space-y-4">
       <div className="grid w-full max-w-md items-center gap-1.5">
         <Label htmlFor="uploadfiles">Upload Files</Label>
-        <div className="flex w-full max-w-md items-center space-x-2">
+        <div className="flex w-full max-w-md flex-wrap items-center gap-2">
           <Input
+            className="min-w-0 flex-1"
             id="uploadfiles"
             multiple={true}
             onChange={handleFileChange}
@@ -141,10 +142,12 @@ export default function TmpfUI() {
       {loading ? <p>Uploading...</p> : null}
       {hasUploadedFiles ? (
         <>
-          <div className="flex flex-row items-center space-x-4">
-            <p>
+          <div className="flex max-w-full flex-wrap items-center gap-x-4 gap-y-2">
+            <p className="min-w-0 max-w-full break-words">
               Folder{" "}
-              <code className={codeVariants()}>{uploaded?.folderId}</code>{" "}
+              <code className={`${codeVariants()} break-all`}>
+                {uploaded?.folderId}
+              </code>{" "}
               uploaded
             </p>
             <Button
@@ -156,19 +159,19 @@ export default function TmpfUI() {
             </Button>
           </div>
 
-          <ul>
+          <ul className="w-full min-w-0 max-w-full">
             {uploaded?.files.map((f) => (
               <li key={f.fileName}>
                 <a
-                  className="flex items-center space-x-2 rounded hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  className="flex min-w-0 items-center gap-2 rounded hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                   href={BACKEND(
                     API_SUFFIX.VIEW(uploaded?.folderId ?? "", f.fileName)
                   )}
                   rel="noreferrer noopener"
                   target="_blank"
                 >
-                  <span>{f.fileName}</span>
-                  <EyeOpenIcon className="h-4 w-4" />
+                  <span className="min-w-0 break-all">{f.fileName}</span>
+                  <EyeOpenIcon className="h-4 w-4 shrink-0" />
                 </a>
               </li>
             ))}

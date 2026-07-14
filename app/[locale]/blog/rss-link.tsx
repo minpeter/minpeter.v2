@@ -10,6 +10,7 @@ export function RssLink({ locale }: RssLinkProps) {
   return (
     <a
       className={cn(
+        "fieldnotes-rss",
         "flex items-center gap-1 rounded-md px-2 py-1 text-sm",
         "text-gray-500 hover:bg-secondary hover:text-primary",
         "transition-colors duration-150",
