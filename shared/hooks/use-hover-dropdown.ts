@@ -7,6 +7,7 @@ import {
   useState,
   useSyncExternalStore,
 } from "react";
+import type { PointerEvent as ReactPointerEvent } from "react";
 
 import { isPointInTriangle } from "@/shared/utils/geometry";
 
@@ -62,10 +63,10 @@ interface UseHoverDropdownOptions {
 
 interface UseHoverDropdownReturn {
   contentRef: React.RefObject<HTMLDivElement | null>;
-  handleContentMouseEnter: () => void;
-  handleContentMouseLeave: () => void;
-  handleMouseEnter: () => void;
-  handleMouseLeave: () => void;
+  handleContentMouseEnter: (event: ReactPointerEvent<HTMLDivElement>) => void;
+  handleContentMouseLeave: (event: ReactPointerEvent<HTMLDivElement>) => void;
+  handleMouseEnter: (event: ReactPointerEvent<HTMLButtonElement>) => void;
+  handleMouseLeave: (event: ReactPointerEvent<HTMLButtonElement>) => void;
   handleOpenChange: (open: boolean) => void;
   isOpen: boolean;
   isTouchDevice: boolean;
@@ -164,7 +165,7 @@ export function useHoverDropdown(
 
   // Handle mouse movement for safe triangle
   useEffect(() => {
-    if (!isOpen || isTouchDevice) {
+    if (!isOpen) {
       return;
     }
 
@@ -187,10 +188,10 @@ export function useHoverDropdown(
 
     document.addEventListener("mousemove", handleMouseMove);
     return () => document.removeEventListener("mousemove", handleMouseMove);
-  }, [isOpen, isTouchDevice]);
+  }, [isOpen]);
 
-  const handleMouseEnter = () => {
-    if (isTouchDevice) {
+  const handleMouseEnter = (event: ReactPointerEvent<HTMLButtonElement>) => {
+    if (event.pointerType === "touch") {
       return;
     }
 
@@ -209,8 +210,8 @@ export function useHoverDropdown(
     }
   };
 
-  const handleMouseLeave = () => {
-    if (isTouchDevice) {
+  const handleMouseLeave = (event: ReactPointerEvent<HTMLButtonElement>) => {
+    if (event.pointerType === "touch") {
       return;
     }
 
@@ -230,8 +231,10 @@ export function useHoverDropdown(
     }, closeDelay);
   };
 
-  const handleContentMouseEnter = () => {
-    if (isTouchDevice) {
+  const handleContentMouseEnter = (
+    event: ReactPointerEvent<HTMLDivElement>
+  ) => {
+    if (event.pointerType === "touch") {
       return;
     }
 
@@ -241,15 +244,17 @@ export function useHoverDropdown(
     }
   };
 
-  const handleContentMouseLeave = () => {
-    if (isTouchDevice) {
+  const handleContentMouseLeave = (
+    event: ReactPointerEvent<HTMLDivElement>
+  ) => {
+    if (event.pointerType === "touch") {
       return;
     }
 
     closeTimeoutRef.current = setTimeout(() => {
       setIsOpen(false);
       closeTimeoutRef.current = null;
-    }, openDelay);
+    }, closeDelay);
   };
 
   // Touch devices: allow click/keyboard to toggle. Desktop: ignore opens (hover only),
