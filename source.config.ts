@@ -17,6 +17,7 @@ export const { docs, meta } = defineDocs({
       includeProcessedMarkdown: true,
     },
     schema: frontmatterSchema.extend({
+      ai_generated_by: z.string().optional(),
       draft: z.boolean().optional().default(false),
       drafted: z
         .string()

@@ -115,8 +115,11 @@ export default async function Page(
         titleTransitionName={`blog-title-${post.url.replaceAll("/", "-")}`}
       />
 
-      {post.data.machine_translated && (
-        <MachineTranslationNotice className="mb-6" />
+      {(post.data.machine_translated || post.data.ai_generated_by) && (
+        <MachineTranslationNotice
+          className="mb-6"
+          generatedBy={post.data.ai_generated_by}
+        />
       )}
 
       <aside className="fixed top-36 left-8 hidden w-72 2xl:block">

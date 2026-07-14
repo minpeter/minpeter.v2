@@ -8,6 +8,7 @@ import type {
 import { docs, meta } from "fumadocs-mdx:collections/server";
 
 type BlogFrontmatter = PageData & {
+  ai_generated_by?: string;
   draft: boolean;
   published: Date;
   drafted?: Date;
