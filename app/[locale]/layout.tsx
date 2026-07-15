@@ -6,6 +6,8 @@ import type { ReactNode } from "react";
 
 import { ViewTransition } from "@/components/view-transition";
 import { routing } from "@/shared/i18n/routing";
+import { getSiteDescription } from "@/shared/site-config";
+import NewMetadata, { getLocalizedPath } from "@/shared/utils/metadata";
 
 import "../globals.css";
 import { RootDocument } from "../root-document";
@@ -25,18 +27,28 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
+  const baseMetadata = NewMetadata({
+    description: getSiteDescription(locale as Locale),
+    locale,
+    path: "/",
+    title: "minpeter",
+  });
 
   return {
-    ...rootMetadata,
+    ...baseMetadata,
     alternates: {
-      ...rootMetadata.alternates,
+      ...baseMetadata.alternates,
       types: {
-        ...rootMetadata.alternates?.types,
+        ...baseMetadata.alternates?.types,
         "application/rss+xml": [
-          { title: `RSS Feed (${locale})`, url: `/${locale}/blog/rss.xml` },
+          {
+            title: `RSS Feed (${locale})`,
+            url: getLocalizedPath(locale, "/blog/rss.xml"),
+          },
         ],
       },
     },
+    metadataBase: rootMetadata.metadataBase,
   };
 }
 

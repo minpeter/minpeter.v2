@@ -1,7 +1,21 @@
-import type { Route } from "next";
+import type { Metadata, Route } from "next";
 import { getTranslations } from "next-intl/server";
 
 import Header from "@/components/header";
+import NewMetadata from "@/shared/utils/metadata";
+
+export async function generateMetadata(
+  props: PageProps<"/[locale]/show/unstructured">
+): Promise<Metadata> {
+  const { locale } = await props.params;
+
+  return NewMetadata({
+    description: "Experiments in layered motion and depth.",
+    locale,
+    path: "/show/unstructured",
+    title: "minpeter | unstructured",
+  });
+}
 
 export default async function Page(
   props: PageProps<"/[locale]/show/unstructured">

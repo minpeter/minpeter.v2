@@ -24,6 +24,11 @@ describe("Proxy", () => {
     expect(shouldExclude("/.well-known/vercel/flags")).toBeTruthy();
   });
 
+  it("should exclude metadata image routes", () => {
+    expect(shouldExclude("/ko/show/opengraph-image")).toBeTruthy();
+    expect(shouldExclude("/en/resume/twitter-image")).toBeTruthy();
+  });
+
   it("should not exclude", () => {
     expect(shouldExclude("/test")).toBeFalsy();
     expect(shouldExclude("/test.md")).toBeFalsy();

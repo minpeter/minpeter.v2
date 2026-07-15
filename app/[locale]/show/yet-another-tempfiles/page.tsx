@@ -1,11 +1,25 @@
-import type { Route } from "next";
+import type { Metadata, Route } from "next";
 
 import Header from "@/components/header";
+import NewMetadata from "@/shared/utils/metadata";
 import { cn } from "@/shared/utils/tailwind";
 
 import TmpfUI from "./tmpf";
 
 import styles from "@/shared/styles/stagger-fade-in.module.css";
+
+export async function generateMetadata(
+  props: PageProps<"/[locale]/show/yet-another-tempfiles">
+): Promise<Metadata> {
+  const { locale } = await props.params;
+
+  return NewMetadata({
+    description: "A simpler frontend for temporary files.",
+    locale,
+    path: "/show/yet-another-tempfiles",
+    title: "minpeter | yet another tempfiles",
+  });
+}
 
 export default async function Page(
   props: PageProps<"/[locale]/show/yet-another-tempfiles">

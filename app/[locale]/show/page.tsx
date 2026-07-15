@@ -1,4 +1,4 @@
-import type { Route } from "next";
+import type { Metadata, Route } from "next";
 import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 import Link from "next/link";
@@ -7,10 +7,18 @@ import { LanguageSelector } from "@/components/language-selector";
 import { createFeatureGate } from "@/shared/flags";
 import NewMetadata from "@/shared/utils/metadata";
 
-export const metadata = NewMetadata({
-  description: "A graveyard of components made with care but never used",
-  title: "minpeter | showcase",
-});
+export async function generateMetadata(
+  props: PageProps<"/[locale]/show">
+): Promise<Metadata> {
+  const { locale } = await props.params;
+
+  return NewMetadata({
+    description: "A graveyard of components made with care but never used",
+    locale,
+    path: "/show",
+    title: "minpeter | showcase",
+  });
+}
 
 const SHOWCASE_ITEMS = [
   {

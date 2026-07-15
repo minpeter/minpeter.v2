@@ -1,3 +1,14 @@
+import NewMetadata from "@/shared/utils/metadata";
+
+export const metadata = NewMetadata({
+  description: "Page not found :/",
+  image: {
+    alt: "minpeter | 404",
+    url: "/og/not-found",
+  },
+  title: "minpeter | 404",
+});
+
 export default function NotFound() {
   return (
     <div>

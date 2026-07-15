@@ -1,12 +1,26 @@
-import type { Route } from "next";
+import type { Metadata, Route } from "next";
 import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 import Link from "next/link";
 
 import Header from "@/components/header";
+import NewMetadata from "@/shared/utils/metadata";
 
 import SaaSComponentImage from "./saas-component.png";
 import SaaSPageImage from "./saas-page.png";
+
+export async function generateMetadata(
+  props: PageProps<"/[locale]/show/unstructured-0828">
+): Promise<Metadata> {
+  const { locale } = await props.params;
+
+  return NewMetadata({
+    description: "An archived study in layered interface composition.",
+    locale,
+    path: "/show/unstructured-0828",
+    title: "minpeter | unstructured 0828",
+  });
+}
 
 export default async function Page(
   props: PageProps<"/[locale]/show/unstructured-0828">
