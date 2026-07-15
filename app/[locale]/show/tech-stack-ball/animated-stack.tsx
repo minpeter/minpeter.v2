@@ -4,19 +4,19 @@
 import {
   Bodies,
   Body,
+  Composite,
   Engine,
   Events,
   Mouse,
   MouseConstraint,
   Render,
   Runner,
-  World,
 } from "matter-js";
 import { useEffect, useRef } from "react";
 
 import { cn } from "@/shared/utils/tailwind";
 
-const stackIcon = [
+const STACK_ICONS = [
   "AWS.png",
   "Arch Linux.png",
   "Oh my zsh.png",
@@ -48,18 +48,33 @@ const stackIcon = [
 ];
 
 const GRAVITY_X = 0;
-const GRAVITY_Y = 0;
-const GRAVITY_SCALE = 0;
+const GRAVITY_Y = 1;
+const GRAVITY_SCALE = 0.001;
 const CANVAS_BACKGROUND = "transparent";
 const WALL_THICKNESS = 100;
 const WALL_SAFE_ZONE = 100;
-const ICON_DIAMETER = 30;
-const ICON_TEXTURE_BASE_DIMENSION = 300;
+const WALL_FRICTION = 0.2;
+const WALL_RESTITUTION = 0.2;
+const MIN_ICON_SIZE = 24;
+const MAX_ICON_SIZE = 36;
+const ICON_WIDTH_RATIO = 0.07;
+const ICON_TEXTURE_BASE_DIMENSION = 512;
+const GITHUB_TEXTURE_WIDTH = 230;
+const GITHUB_TEXTURE_HEIGHT = 225;
 const MAX_RENDERED_ICONS = 16;
-const ICON_CENTER_PULL = 0.000004;
-const ICON_FRICTION_AIR = 0.025;
-const ICON_INITIAL_SPEED = 1.35;
-const MOUSE_CONSTRAINT_STIFFNESS = 0.05;
+const ICON_FRICTION = 0.08;
+const ICON_FRICTION_AIR = 0.015;
+const ICON_FRICTION_STATIC = 0.25;
+const ICON_RESTITUTION = 0.35;
+const MOUSE_CONSTRAINT_STIFFNESS = 0.2;
+const MOUSE_CONSTRAINT_DAMPING = 0.1;
+const MOUSE_CONSTRAINT_ANGULAR_STIFFNESS = 0.1;
+const MAX_ICON_SPEED = 18;
+const MAX_ICON_ANGULAR_SPEED = 0.35;
+const MAX_PIXEL_RATIO = 2;
+const POSITION_ITERATIONS = 8;
+const VELOCITY_ITERATIONS = 6;
+const CONSTRAINT_ITERATIONS = 4;
 const CANVAS_FILTER = "grayscale(1)";
 
 function shuffleArray<T>(array: T[]): T[] {
@@ -69,6 +84,44 @@ function shuffleArray<T>(array: T[]): T[] {
     [result[i], result[j]] = [result[j], result[i]];
   }
   return result;
+}
+
+function getIconSize(width: number) {
+  return Math.max(
+    MIN_ICON_SIZE,
+    Math.min(MAX_ICON_SIZE, width * ICON_WIDTH_RATIO)
+  );
+}
+
+function getIconTextureScale(icon: string, iconSize: number) {
+  if (icon === "GitHub.png") {
+    return {
+      x: iconSize / GITHUB_TEXTURE_WIDTH,
+      y: iconSize / GITHUB_TEXTURE_HEIGHT,
+    };
+  }
+
+  return {
+    x: iconSize / ICON_TEXTURE_BASE_DIMENSION,
+    y: iconSize / ICON_TEXTURE_BASE_DIMENSION,
+  };
+}
+
+function removeMouseListeners(canvas: HTMLCanvasElement, mouse: Mouse) {
+  const handlers = mouse as Mouse & {
+    mousedown: EventListener;
+    mousemove: EventListener;
+    mouseup: EventListener;
+    mousewheel: EventListener;
+  };
+
+  canvas.removeEventListener("mousemove", handlers.mousemove);
+  canvas.removeEventListener("mousedown", handlers.mousedown);
+  canvas.removeEventListener("mouseup", handlers.mouseup);
+  canvas.removeEventListener("wheel", handlers.mousewheel);
+  canvas.removeEventListener("touchmove", handlers.mousemove);
+  canvas.removeEventListener("touchstart", handlers.mousedown);
+  canvas.removeEventListener("touchend", handlers.mouseup);
 }
 
 export function Playground({
@@ -89,7 +142,12 @@ export function Playground({
       return;
     }
 
-    const engine = Engine.create();
+    const engine = Engine.create({
+      constraintIterations: CONSTRAINT_ITERATIONS,
+      enableSleeping: true,
+      positionIterations: POSITION_ITERATIONS,
+      velocityIterations: VELOCITY_ITERATIONS,
+    });
     engine.gravity.x = GRAVITY_X;
     engine.gravity.y = GRAVITY_Y;
     engine.gravity.scale = GRAVITY_SCALE;
@@ -100,16 +158,19 @@ export function Playground({
       options: {
         background: CANVAS_BACKGROUND,
         height: h,
+        pixelRatio: Math.min(window.devicePixelRatio || 1, MAX_PIXEL_RATIO),
         width: w,
         wireframes: false,
       },
     });
 
     const wallProperties = {
+      friction: WALL_FRICTION,
       isStatic: true,
       render: {
         visible: false,
       },
+      restitution: WALL_RESTITUTION,
     };
     const wallThickness = WALL_THICKNESS;
     const wallOffset = -(wallThickness / 2);
@@ -151,54 +212,51 @@ export function Playground({
       )
     );
 
-    const center = { x: w / 2, y: h / 2 };
-    const iconSize = ICON_DIAMETER;
-    const iconScale = iconSize / ICON_TEXTURE_BASE_DIMENSION;
-    const selectedIcons = shuffleArray(stackIcon).slice(0, MAX_RENDERED_ICONS);
-    const boxes = selectedIcons.map((icon, index) => {
-      const angle = (index / selectedIcons.length) * Math.PI * 2;
-      const radiusByRing = [0.16, 0.27, 0.36][index % 3] ?? 0.27;
-      const radius = Math.min(w, h) * radiusByRing;
-      const body = Bodies.circle(
-        center.x + Math.cos(angle) * radius,
-        center.y + Math.sin(angle) * radius * 0.72,
-        iconSize,
+    const selectedIcons = shuffleArray(STACK_ICONS).slice(
+      0,
+      MAX_RENDERED_ICONS
+    );
+    const iconSize = getIconSize(w);
+    const iconRadius = iconSize / 2;
+    const columnCount = Math.ceil(Math.sqrt(selectedIcons.length * (w / h)));
+    const rowCount = Math.ceil(selectedIcons.length / columnCount);
+    const horizontalSpacing = w / (columnCount + 1);
+    const verticalSpawnArea = Math.min(h * 0.5, rowCount * iconSize * 1.75);
+    const verticalSpacing = verticalSpawnArea / (rowCount + 1);
+    const icons = selectedIcons.map((icon, index) => {
+      const column = index % columnCount;
+      const row = Math.floor(index / columnCount);
+      const textureScale = getIconTextureScale(icon, iconSize);
+
+      return Bodies.circle(
+        (column + 1) * horizontalSpacing,
+        iconRadius + (row + 1) * verticalSpacing,
+        iconRadius,
         {
+          angle: ((index % 5) - 2) * 0.08,
+          friction: ICON_FRICTION,
           frictionAir: ICON_FRICTION_AIR,
+          frictionStatic: ICON_FRICTION_STATIC,
+          label: icon,
           render: {
             sprite: {
               texture: `/assets/images/stack-icon/${icon}`,
-              xScale: iconScale,
-              yScale: iconScale,
+              xScale: textureScale.x,
+              yScale: textureScale.y,
             },
           },
-          restitution: 0.9,
+          restitution: ICON_RESTITUTION,
         }
       );
-
-      Body.setVelocity(body, {
-        x: -Math.sin(angle) * ICON_INITIAL_SPEED,
-        y: Math.cos(angle) * ICON_INITIAL_SPEED,
-      });
-      Body.setAngularVelocity(body, index % 2 === 0 ? 0.025 : -0.025);
-
-      return body;
     });
 
-    const keepIconsCentered = () => {
-      for (const body of boxes) {
-        Body.applyForce(body, body.position, {
-          x: (center.x - body.position.x) * body.mass * ICON_CENTER_PULL,
-          y: (center.y - body.position.y) * body.mass * ICON_CENTER_PULL,
-        });
-      }
-    };
-
-    Events.on(engine, "beforeUpdate", keepIconsCentered);
-
     const mouse = Mouse.create(render.canvas);
+    // Matter.js parses the canvas data attribute with parseInt, which breaks
+    // pointer coordinates on fractional device pixel ratios such as 1.25.
+    mouse.pixelRatio = render.options.pixelRatio ?? 1;
     const mouseConstraint = MouseConstraint.create(engine, {
       constraint: {
+        damping: MOUSE_CONSTRAINT_DAMPING,
         render: {
           visible: false,
         },
@@ -206,17 +264,76 @@ export function Playground({
       },
       mouse,
     });
+    const draggableConstraint =
+      mouseConstraint.constraint as typeof mouseConstraint.constraint & {
+        angularStiffness: number;
+      };
+    draggableConstraint.angularStiffness = MOUSE_CONSTRAINT_ANGULAR_STIFFNESS;
+    const limitIconVelocity = () => {
+      for (const icon of icons) {
+        // Preserve direct manipulation and only cap the released body's throw.
+        if (mouseConstraint.body === icon) {
+          continue;
+        }
 
-    World.add(engine.world, [...walls, mouseConstraint, ...boxes]);
+        if (Body.getSpeed(icon) > MAX_ICON_SPEED) {
+          Body.setSpeed(icon, MAX_ICON_SPEED);
+        }
 
-    Render.run(render);
+        if (Body.getAngularSpeed(icon) > MAX_ICON_ANGULAR_SPEED) {
+          Body.setAngularSpeed(icon, MAX_ICON_ANGULAR_SPEED);
+        }
+      }
+    };
+
+    Events.on(engine, "beforeUpdate", limitIconVelocity);
+
+    Composite.add(engine.world, [...walls, mouseConstraint, ...icons]);
+
     const runner = Runner.create();
-    Runner.run(runner, engine);
+    let isCanvasVisible = true;
+    let isPageVisible = !document.hidden;
+    let isRunning = false;
+
+    const syncRunningState = () => {
+      const shouldRun = isCanvasVisible && isPageVisible;
+
+      if (shouldRun && !isRunning) {
+        Render.run(render);
+        Runner.run(runner, engine);
+        isRunning = true;
+      } else if (!shouldRun && isRunning) {
+        Render.stop(render);
+        Runner.stop(runner);
+        isRunning = false;
+      }
+    };
+
+    const intersectionObserver = new IntersectionObserver(
+      ([entry]) => {
+        isCanvasVisible = entry?.isIntersecting ?? false;
+        syncRunningState();
+      },
+      { threshold: 0.01 }
+    );
+    const handleVisibilityChange = () => {
+      isPageVisible = !document.hidden;
+      syncRunningState();
+    };
+
+    intersectionObserver.observe(canvas);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    syncRunningState();
 
     return () => {
-      Events.off(engine, "beforeUpdate", keepIconsCentered);
+      intersectionObserver.disconnect();
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
       Render.stop(render);
       Runner.stop(runner);
+      Events.off(engine, "beforeUpdate", limitIconVelocity);
+      removeMouseListeners(canvas, mouse);
+      Mouse.clearSourceEvents(mouse);
+      Composite.clear(engine.world, false, true);
       Engine.clear(engine);
       render.textures = {};
     };
@@ -226,7 +343,7 @@ export function Playground({
     <canvas
       aria-label="Interactive physics simulation with technology stack icons"
       className={cn(
-        "h-auto w-full max-w-full rounded-lg border bg-card text-card-foreground shadow-xs",
+        "h-auto w-full max-w-full touch-none cursor-grab rounded-lg border bg-card text-card-foreground shadow-xs active:cursor-grabbing",
         className
       )}
       height={h}

@@ -1,28 +1,36 @@
 import type { Route } from "next";
+import { getTranslations } from "next-intl/server";
 
-import Header from "@/components/header";
-import { cn } from "@/shared/utils/tailwind";
+import { ShowcaseDetailHeader } from "@/components/showcase-detail-header";
+import NewMetadata from "@/shared/utils/metadata";
 
 import { PlaygroundWrapper } from "./playground-wrapper";
 
-import styles from "@/shared/styles/stagger-fade-in.module.css";
+export const metadata = NewMetadata({
+  description: "A spinning inventory of the tools behind this site.",
+  title: "minpeter | tech stack ball",
+});
 
 export default async function Page(
   props: PageProps<"/[locale]/show/tech-stack-ball">
 ) {
-  const { locale } = await props.params;
+  const [{ locale }, t] = await Promise.all([props.params, getTranslations()]);
+
   return (
-    <section className="flex flex-col gap-3">
-      <Header
-        description="예전엔 이게 인덱스 페이지에 있었는데, 이제는 여기에 있어요"
-        link={{ href: `/${locale}/show` as Route, text: "showcase로 돌아가기" }}
-        title="/show/tech-stack-ball"
+    <section className="showcase-page">
+      <ShowcaseDetailHeader
+        backLabel={t("back")}
+        description="A draggable, floating inventory of tools used to build this site."
+        href={`/${locale}/show` as Route}
+        kicker="Physics study"
+        title="Tech stack ball"
       />
-      <div
-        className={cn(styles.stagger_container, styles.slow, "flex flex-col")}
-      >
-        <PlaygroundWrapper h={400} w={800} />
-      </div>
+
+      <PlaygroundWrapper
+        className="rounded-none border-0 bg-transparent shadow-none"
+        h={400}
+        w={800}
+      />
     </section>
   );
 }

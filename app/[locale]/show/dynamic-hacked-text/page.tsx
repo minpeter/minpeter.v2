@@ -1,24 +1,32 @@
 import type { Route } from "next";
+import { getTranslations } from "next-intl/server";
 
-import Header from "@/components/header";
-import { cn } from "@/shared/utils/tailwind";
+import { ShowcaseDetailHeader } from "@/components/showcase-detail-header";
+import NewMetadata from "@/shared/utils/metadata";
 
 import AnimatedText from "./animated-text";
 
-import styles from "@/shared/styles/stagger-fade-in.module.css";
+export const metadata = NewMetadata({
+  description: "Hover over the letters and watch them react.",
+  title: "minpeter | dynamic hacked text",
+});
 
 export default async function Page(
   props: PageProps<"/[locale]/show/dynamic-hacked-text">
 ) {
-  const { locale } = await props.params;
+  const [{ locale }, t] = await Promise.all([props.params, getTranslations()]);
+
   return (
-    <section className="flex flex-col gap-3">
-      <Header
-        description="글자 위에 마우스를 가져다 놓아보세요"
-        link={{ href: `/${locale}/show` as Route, text: "showcase로 돌아가기" }}
-        title="/show/dynamic-hacked-text"
+    <section className="showcase-page">
+      <ShowcaseDetailHeader
+        backLabel={t("back")}
+        description="Move across the letters and watch the text reconstruct itself."
+        href={`/${locale}/show` as Route}
+        kicker="Interaction study"
+        title="Dynamic hacked text"
       />
-      <div className={cn(styles.stagger_container, styles.slow)}>
+
+      <div className="flex min-h-56 items-center justify-center rounded-lg border border-foreground/10 bg-secondary/35 px-5">
         <AnimatedText data={"Hello world"} />
       </div>
     </section>
