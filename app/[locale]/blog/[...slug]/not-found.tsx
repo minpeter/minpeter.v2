@@ -2,12 +2,12 @@ import type { Metadata, Route } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 
 import Header from "@/components/header";
-import NewMetadata, { getLocalizedPath } from "@/shared/utils/metadata";
+import { createMetadata, getLocalizedPath } from "@/shared/utils/metadata";
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale();
 
-  return NewMetadata({
+  return createMetadata({
     description: "Page not found :/",
     image: {
       alt: "minpeter | 404",

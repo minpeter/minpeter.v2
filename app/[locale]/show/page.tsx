@@ -5,14 +5,15 @@ import Link from "next/link";
 
 import { LanguageSelector } from "@/components/language-selector";
 import { createFeatureGate } from "@/shared/flags";
-import NewMetadata from "@/shared/utils/metadata";
+import { createMetadata, resolveLocale } from "@/shared/utils/metadata";
 
 export async function generateMetadata(
   props: PageProps<"/[locale]/show">
 ): Promise<Metadata> {
-  const { locale } = await props.params;
+  const { locale: routeLocale } = await props.params;
+  const locale = resolveLocale(routeLocale);
 
-  return NewMetadata({
+  return createMetadata({
     description: "A graveyard of components made with care but never used",
     locale,
     path: "/show",

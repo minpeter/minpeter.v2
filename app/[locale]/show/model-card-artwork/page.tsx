@@ -3,16 +3,17 @@ import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 
 import Header from "@/components/header";
-import NewMetadata from "@/shared/utils/metadata";
+import { createMetadata, resolveLocale } from "@/shared/utils/metadata";
 
 import { modelCardArtworks } from "./assets";
 
 export async function generateMetadata(
   props: PageProps<"/[locale]/show/model-card-artwork">
 ): Promise<Metadata> {
-  const { locale } = await props.params;
+  const { locale: routeLocale } = await props.params;
+  const locale = resolveLocale(routeLocale);
 
-  return NewMetadata({
+  return createMetadata({
     description: "Artwork studies for language model cards.",
     locale,
     path: "/show/model-card-artwork",

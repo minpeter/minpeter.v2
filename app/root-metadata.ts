@@ -3,10 +3,10 @@ import type { Viewport } from "next";
 import { getBaseUrl } from "@/shared/env";
 import { routing } from "@/shared/i18n/routing";
 import { getSiteDescription } from "@/shared/site-config";
-import NewMetadata from "@/shared/utils/metadata";
+import { createMetadata } from "@/shared/utils/metadata";
 
 export const metadata = {
-  ...NewMetadata({
+  ...createMetadata({
     description: getSiteDescription(routing.defaultLocale),
     locale: routing.defaultLocale,
     path: "/",

@@ -3,14 +3,15 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { LanguageSelector } from "@/components/language-selector";
-import NewMetadata from "@/shared/utils/metadata";
+import { createMetadata, resolveLocale } from "@/shared/utils/metadata";
 
 export async function generateMetadata(
   props: PageProps<"/[locale]/resume">
 ): Promise<Metadata> {
-  const { locale } = await props.params;
+  const { locale: routeLocale } = await props.params;
+  const locale = resolveLocale(routeLocale);
 
-  return NewMetadata({
+  return createMetadata({
     description: "Work history and background — coming soon.",
     locale,
     path: "/resume",

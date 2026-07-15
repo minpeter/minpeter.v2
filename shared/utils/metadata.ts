@@ -1,21 +1,20 @@
 import type { Metadata } from "next";
 
+import type { LocaleCode } from "@/shared/constants/locales";
 import { routing } from "@/shared/i18n/routing";
 import { ogImageSize } from "@/shared/og-image";
 import { siteConfig } from "@/shared/site-config";
-
-type Locale = (typeof routing.locales)[number];
 
 const openGraphLocales = {
   en: "en_US",
   ja: "ja_JP",
   ko: "ko_KR",
-} satisfies Record<Locale, string>;
+} satisfies Record<LocaleCode, string>;
 
-const isLocale = (value: string): value is Locale =>
+const isLocale = (value: string): value is LocaleCode =>
   routing.locales.some((locale) => locale === value);
 
-const normalizeLocale = (locale: string | undefined): Locale =>
+export const resolveLocale = (locale: string | undefined): LocaleCode =>
   locale && isLocale(locale) ? locale : routing.defaultLocale;
 
 const normalizePath = (path: string) => {
@@ -27,7 +26,7 @@ const normalizePath = (path: string) => {
 };
 
 export const getLocalizedPath = (locale: string, path: string) => {
-  const resolvedLocale = normalizeLocale(locale);
+  const resolvedLocale = resolveLocale(locale);
   const resolvedPath = normalizePath(path);
 
   if (resolvedLocale === routing.defaultLocale) {
@@ -56,7 +55,7 @@ interface MetadataImage {
   url: string;
 }
 
-export default function NewMetadata({
+export function createMetadata({
   article,
   description,
   image,
@@ -67,11 +66,11 @@ export default function NewMetadata({
   article?: ArticleMetadata;
   description?: string;
   image?: MetadataImage;
-  locale?: string;
+  locale?: LocaleCode;
   path?: string;
   title?: string;
 }): Metadata {
-  const resolvedLocale = normalizeLocale(locale);
+  const resolvedLocale = resolveLocale(locale);
   const localizedPath = path
     ? getLocalizedPath(resolvedLocale, path)
     : undefined;

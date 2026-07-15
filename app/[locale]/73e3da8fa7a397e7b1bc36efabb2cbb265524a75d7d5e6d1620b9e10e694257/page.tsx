@@ -1,7 +1,7 @@
 import type { Metadata, Route } from "next";
 
 import { Backlink } from "@/components/link";
-import NewMetadata from "@/shared/utils/metadata";
+import { createMetadata, resolveLocale } from "@/shared/utils/metadata";
 import { cn } from "@/shared/utils/tailwind";
 
 import styles from "@/shared/styles/stagger-fade-in.module.css";
@@ -9,9 +9,10 @@ import styles from "@/shared/styles/stagger-fade-in.module.css";
 export async function generateMetadata(
   props: PageProps<"/[locale]/73e3da8fa7a397e7b1bc36efabb2cbb265524a75d7d5e6d1620b9e10e694257">
 ): Promise<Metadata> {
-  const { locale } = await props.params;
+  const { locale: routeLocale } = await props.params;
+  const locale = resolveLocale(routeLocale);
 
-  return NewMetadata({
+  return createMetadata({
     description: "동짓달 기나긴 밤을 한 허리를 베어내어",
     locale,
     path: "/73e3da8fa7a397e7b1bc36efabb2cbb265524a75d7d5e6d1620b9e10e694257",

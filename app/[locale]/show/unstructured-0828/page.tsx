@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import Header from "@/components/header";
-import NewMetadata from "@/shared/utils/metadata";
+import { createMetadata, resolveLocale } from "@/shared/utils/metadata";
 
 import SaaSComponentImage from "./saas-component.png";
 import SaaSPageImage from "./saas-page.png";
@@ -12,9 +12,10 @@ import SaaSPageImage from "./saas-page.png";
 export async function generateMetadata(
   props: PageProps<"/[locale]/show/unstructured-0828">
 ): Promise<Metadata> {
-  const { locale } = await props.params;
+  const { locale: routeLocale } = await props.params;
+  const locale = resolveLocale(routeLocale);
 
-  return NewMetadata({
+  return createMetadata({
     description: "An archived study in layered interface composition.",
     locale,
     path: "/show/unstructured-0828",

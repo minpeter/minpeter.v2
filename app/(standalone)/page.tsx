@@ -1,6 +1,6 @@
-import NewMetadata from "@/shared/utils/metadata";
+import { createMetadata } from "@/shared/utils/metadata";
 
-export const metadata = NewMetadata({
+export const metadata = createMetadata({
   description: "minpeter's personal website",
   locale: "ko",
   path: "/",

@@ -19,7 +19,11 @@ import { ViewTransition } from "@/components/view-transition";
 import { siteConfig } from "@/shared/site-config";
 import { blog } from "@/shared/source";
 import { formatDateLong } from "@/shared/utils/date";
-import NewMetadata, { getLocalizedPath } from "@/shared/utils/metadata";
+import {
+  createMetadata,
+  getLocalizedPath,
+  resolveLocale,
+} from "@/shared/utils/metadata";
 import { cn } from "@/shared/utils/tailwind";
 
 import { NavLink } from "./nav-link";
@@ -41,10 +45,11 @@ export function generateStaticParams({
 export async function generateMetadata(
   props: PageProps<"/[locale]/blog/[...slug]">
 ) {
-  const { locale, slug } = await props.params;
+  const { locale: rawLocale, slug } = await props.params;
+  const locale = resolveLocale(rawLocale);
   const page = blog.getPage(slug, locale);
   if (!page) {
-    return NewMetadata({
+    return createMetadata({
       description: "Page not found :/",
       image: {
         alt: "minpeter | 404",
@@ -58,7 +63,7 @@ export async function generateMetadata(
   const slugPath = slug.join("/");
   const title = page.data.title ?? siteConfig.title;
 
-  return NewMetadata({
+  return createMetadata({
     article: {
       authors: [siteConfig.author],
       modifiedTime: page.data.lastModified

@@ -1,7 +1,7 @@
 import type { Metadata, Route } from "next";
 
 import Header from "@/components/header";
-import NewMetadata from "@/shared/utils/metadata";
+import { createMetadata, resolveLocale } from "@/shared/utils/metadata";
 import { cn } from "@/shared/utils/tailwind";
 
 import { PlaygroundWrapper } from "./playground-wrapper";
@@ -11,9 +11,10 @@ import styles from "@/shared/styles/stagger-fade-in.module.css";
 export async function generateMetadata(
   props: PageProps<"/[locale]/show/tech-stack-ball">
 ): Promise<Metadata> {
-  const { locale } = await props.params;
+  const { locale: routeLocale } = await props.params;
+  const locale = resolveLocale(routeLocale);
 
-  return NewMetadata({
+  return createMetadata({
     description: "A spinning inventory of the tools behind this site.",
     locale,
     path: "/show/tech-stack-ball",

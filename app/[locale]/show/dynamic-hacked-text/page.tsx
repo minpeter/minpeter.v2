@@ -1,7 +1,7 @@
 import type { Metadata, Route } from "next";
 
 import Header from "@/components/header";
-import NewMetadata from "@/shared/utils/metadata";
+import { createMetadata, resolveLocale } from "@/shared/utils/metadata";
 import { cn } from "@/shared/utils/tailwind";
 
 import AnimatedText from "./animated-text";
@@ -11,9 +11,10 @@ import styles from "@/shared/styles/stagger-fade-in.module.css";
 export async function generateMetadata(
   props: PageProps<"/[locale]/show/dynamic-hacked-text">
 ): Promise<Metadata> {
-  const { locale } = await props.params;
+  const { locale: routeLocale } = await props.params;
+  const locale = resolveLocale(routeLocale);
 
-  return NewMetadata({
+  return createMetadata({
     description: "Hover over the letters and watch them react.",
     locale,
     path: "/show/dynamic-hacked-text",

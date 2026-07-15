@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
 
-import NewMetadata, { getLocalizedPath } from "./metadata";
+import { createMetadata, getLocalizedPath, resolveLocale } from "./metadata";
 
 describe("shared metadata", () => {
   it("builds locale-aware canonical and Open Graph metadata", () => {
-    const metadata = NewMetadata({
+    const metadata = createMetadata({
       description: "Showcase",
       locale: "en",
       path: "/show",
@@ -29,7 +29,7 @@ describe("shared metadata", () => {
   });
 
   it("adds complete metadata for an explicitly supplied image", () => {
-    const metadata = NewMetadata({
+    const metadata = createMetadata({
       image: { alt: "minpeter | 404", url: "/og/not-found" },
       title: "minpeter | 404",
     });
@@ -55,14 +55,14 @@ describe("shared metadata", () => {
   });
 
   it("does not override file-based metadata images when no image is supplied", () => {
-    const metadata = NewMetadata({ title: "minpeter | showcase" });
+    const metadata = createMetadata({ title: "minpeter | showcase" });
 
     expect(metadata.openGraph).not.toHaveProperty("images");
     expect(metadata.twitter).not.toHaveProperty("images");
   });
 
   it("creates article metadata for blog posts", () => {
-    const metadata = NewMetadata({
+    const metadata = createMetadata({
       article: {
         authors: ["minpeter"],
         modifiedTime: "2026-07-15T00:00:00.000Z",
@@ -86,5 +86,10 @@ describe("shared metadata", () => {
     expect(getLocalizedPath("ko", "/resume")).toBe("/resume");
     expect(getLocalizedPath("en", "/resume")).toBe("/en/resume");
     expect(getLocalizedPath("ja", "/")).toBe("/ja");
+  });
+
+  it("resolves unsupported route locales to the default locale", () => {
+    expect(resolveLocale("en")).toBe("en");
+    expect(resolveLocale("unsupported")).toBe("ko");
   });
 });
