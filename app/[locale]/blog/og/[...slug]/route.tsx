@@ -88,15 +88,25 @@ const getTitleTokens = (title: string) => {
 };
 
 const CatMark = () => (
-  <svg
-    height={104}
-    viewBox="0 0 118 104"
-    width={118}
-    xmlns="http://www.w3.org/2000/svg"
+  <div
+    style={{
+      display: "flex",
+      flexShrink: 0,
+      height: 104,
+      minWidth: 118,
+      width: 118,
+    }}
   >
-    <path d={catPaths.face} fill="#f7f7f2" />
-    <path d={catPaths.eyes} fill="#050505" />
-  </svg>
+    <svg
+      height={104}
+      viewBox="0 0 118 104"
+      width={118}
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path d={catPaths.face} fill="#f7f7f2" />
+      <path d={catPaths.eyes} fill="#050505" />
+    </svg>
+  </div>
 );
 
 const OgImage = ({
