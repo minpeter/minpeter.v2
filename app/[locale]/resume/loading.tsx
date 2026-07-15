@@ -1,11 +1,23 @@
+import Image from "next/image";
+
 import { Skeleton } from "@/components/ui/skeleton";
 
 export default function Loading() {
   return (
-    <div className="showcase-page resume-page">
+    <div aria-busy="true" className="showcase-page resume-page">
       <header className="showcase-header">
         <div className="fieldnotes-nav">
-          <Skeleton className="h-8 w-8 rounded-lg" />
+          <div aria-hidden="true" className="fieldnotes-logo-link">
+            <Image
+              alt=""
+              aria-hidden="true"
+              className="fieldnotes-logo"
+              height={32}
+              priority
+              src="/assets/signature-mark.svg"
+              width={32}
+            />
+          </div>
           <Skeleton className="h-3 w-12" />
         </div>
         <div className="showcase-intro">
