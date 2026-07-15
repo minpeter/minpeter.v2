@@ -6,9 +6,11 @@ import { siteConfig } from "@/shared/site-config";
 export default function NewMetadata({
   title,
   description,
+  image = "/og-image.png",
 }: {
   title?: string;
   description?: string;
+  image?: string;
 }): Metadata {
   const baseUrl = getBaseUrl();
 
@@ -22,7 +24,7 @@ export default function NewMetadata({
 
     openGraph: {
       description,
-      images: "/og-image.png",
+      images: image,
       locale: "ko_KR",
       siteName: siteConfig.title,
       title,
@@ -34,7 +36,7 @@ export default function NewMetadata({
       card: "summary_large_image",
       creator: "@minpeter",
       description,
-      images: "/og-image.png",
+      images: image,
       title,
     },
   };

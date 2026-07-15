@@ -46,6 +46,8 @@ export async function generateMetadata(
   }
 
   const slugPath = slug.join("/");
+  const ogImage =
+    locale === "ko" ? `/blog/og/${slugPath}` : `/${locale}/blog/og/${slugPath}`;
 
   // Build hreflang alternates for SEO
   // Default locale (ko) has no prefix, others have /en/, /ja/
@@ -63,6 +65,7 @@ export async function generateMetadata(
   return {
     ...NewMetadata({
       description: page.data.description,
+      image: ogImage,
       title: page.data.title,
     }),
     alternates: {
