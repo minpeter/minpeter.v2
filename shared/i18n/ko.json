@@ -1,22 +1,193 @@
 {
-  "404": "길을 잃었습니다.. 아직 잘할 수 있어요, 천천히 다시 해봅시다.",
+  "404": "페이지를 찾을 수 없습니다.",
   "blogTitle": "개발 이야기와 일상을 기록하는 공간",
   "back": "뒤로",
   "backToBlog": "글 목록으로",
   "backToHome": "홈으로",
   "aboutTitle": "안녕하세요, 민웅기입니다 :)",
-  "aboutMe": "현재는 프론트엔드 개발자로 일하고 있습니다.\n프론트엔드 개발자로서 빠르게 변화하는 기술을 배우고 적용하는 것을 즐깁니다.\n또한, 사용자 경험을 중요시하며 사용자에게 최고의 경험을 제공하기 위해 노력합니다.",
+  "aboutMe": "소프트웨어 엔지니어로 일하고 있습니다.\n새로운 기술을 배우고 아이디어를 유용한 소프트웨어로 구현하는 것을 즐깁니다.\n제가 만든 것을 사용하는 사람에게 명확하고 세심한 경험을 제공하려고 합니다.",
   "blogPageTitle": "민웅기의 개발 노트",
   "blogPageDescription": "내가 적은 블로그, 너를 위해 써봤지",
   "publishedDate": "발행",
   "draftedDate": "초안",
   "lastModifiedDate": "수정",
   "draft": "초안",
-  "nextPost": "다음글",
-  "prevPost": "이전글",
+  "nextPost": "다음 글",
+  "prevPost": "이전 글",
   "translatedBy": "Claude Opus 4.5로 번역됨",
   "aiDisclaimer": "AI가 생성한 콘텐츠는 부정확하거나 오해의 소지가 있을 수 있습니다.",
-  "siteDescription": "minpeter가 작성하고, 코딩하고, 디자인함",
+  "generatedBy": "{model}로 생성됨",
+  "common": {
+    "blogNavigation": "블로그 탐색",
+    "clearSearch": "검색어 지우기",
+    "selectLanguage": "언어 선택",
+    "toggleTheme": "테마 전환",
+    "previousSlide": "이전 슬라이드",
+    "nextSlide": "다음 슬라이드",
+    "rssFeed": "RSS 피드",
+    "notes": "글",
+    "source": "소스"
+  },
+  "errors": {
+    "general": {
+      "kicker": "오류 처리",
+      "title": "오류가 발생했습니다",
+      "description": "잠시 후 다시 시도하거나 홈으로 이동해 다른 페이지를 확인해 주세요.",
+      "digestLabel": "오류 ID",
+      "retry": "다시 시도",
+      "back": "홈으로 돌아가기"
+    },
+    "blog": {
+      "kicker": "블로그 오류",
+      "title": "글을 불러오지 못했습니다",
+      "description": "요청한 글을 표시하는 중 문제가 발생했습니다. 다시 시도하거나 글 목록으로 돌아가세요.",
+      "retry": "다시 시도",
+      "back": "글 목록으로 돌아가기"
+    }
+  },
+  "externalRedirect": {
+    "message": "{count}초 후 외부 링크로 이동합니다…",
+    "link": "자동으로 이동하지 않으면 여기를 누르세요."
+  },
+  "resume": {
+    "navigationLabel": "이력서 페이지 탐색",
+    "kicker": "이력서",
+    "title": "작성 중",
+    "description": "유용한 내용을 담은 이력서를 정리하고 있습니다.",
+    "statusTitle": "곧 공개합니다.",
+    "statusDescription": "그동안은 이 사이트에서 제가 무엇을 하고 있는지 더 잘 확인할 수 있습니다.",
+    "homeLabel": "홈으로",
+    "metadataDescription": "경력과 활동 이력 — 곧 공개합니다."
+  },
+  "showcase": {
+    "navigationLabel": "쇼케이스 탐색",
+    "projectsLabel": "프로젝트",
+    "kicker": "쇼케이스",
+    "title": "작은 실험들",
+    "description": "재미로 만든 인터랙티브 작업과 프로토타입, 여러 가지 실험입니다.",
+    "featureEnabled": "테스트 기능이 켜져 있습니다.",
+    "detailNavigationLabel": "{title} 페이지 탐색",
+    "items": {
+      "tempfiles": {
+        "title": "Yet another tempfiles",
+        "summary": "임시 파일을 위한 더 단순한 프런트엔드.",
+        "kicker": "도구 실험",
+        "description": "임시 파일을 바로 업로드하는 작고 단순한 인터페이스입니다.",
+        "notice": "파일은 tmpf.me에 업로드되며 URL을 아는 누구나 접근할 수 있습니다.",
+        "uploadLabel": "파일 업로드",
+        "uploadButton": "업로드",
+        "connectionError": "연결 상태를 확인하고 잠시 후 다시 시도해 주세요.",
+        "uploadFailed": "업로드 실패 — {error}",
+        "uploading": "파일을 업로드하는 중…",
+        "folderLabel": "폴더",
+        "uploadedLabel": "업로드 완료",
+        "downloadAll": "모든 파일 다운로드"
+      },
+      "techStack": {
+        "title": "Tech stack ball",
+        "summary": "이 사이트를 만드는 데 쓴 도구들을 돌아가는 공으로 표현한 실험.",
+        "kicker": "물리 실험",
+        "description": "이 사이트를 만드는 데 쓴 도구를 드래그할 수 있는 부유 객체로 표현했습니다.",
+        "instruction": "아이콘을 드래그하고 움직임을 지켜보세요.",
+        "replay": "다시 실행",
+        "simulationLabel": "기술 스택 아이콘으로 구성된 인터랙티브 물리 시뮬레이션"
+      },
+      "dynamicText": {
+        "title": "Dynamic hacked text",
+        "summary": "글자 위에 마우스를 올려 반응을 확인하는 실험.",
+        "kicker": "상호작용 실험",
+        "description": "글자 위로 포인터를 움직이면 텍스트가 다시 조립되는 모습을 볼 수 있습니다."
+      },
+      "newYear": {
+        "title": "New year clock",
+        "summary": "다음 해까지 남은 시간을 실시간으로 보여 주는 카운트다운.",
+        "kicker": "시간 실험",
+        "description": "다가오는 1월 1일까지 남은 시간을 실시간으로 보여 줍니다.",
+        "days": "일",
+        "hours": "시간",
+        "minutes": "분",
+        "seconds": "초",
+        "timerLabel": "새해까지 {days}일 {hours}시간 {minutes}분 {seconds}초 남음",
+        "caption": "{year}년 1월 1일까지 남은 시간입니다.",
+        "happy": "새해 복 많이 받으세요!"
+      },
+      "modelCard": {
+        "title": "Model card artwork",
+        "summary": "언어 모델 카드를 위한 아트워크 실험.",
+        "kicker": "아트워크 실험",
+        "description": "언어 모델 출시 카드를 위해 만든 비주얼 실험입니다.",
+        "credits": "이미지 출처",
+        "creditNous": "원본 이미지 © 2024 NousResearch Corp. All rights reserved.",
+        "creditIshigami": "원본 이미지 © 2025 이시가미 아키라. All rights reserved."
+      },
+      "unstructured": {
+        "title": "Unstructured",
+        "summary": "겹친 움직임과 깊이감을 탐구한 실험.",
+        "kicker": "모션 실험",
+        "description": "겹친 인터페이스와 움직임, 깊이감을 자유롭게 탐구한 실험입니다.",
+        "counterRotation": "반대 회전",
+        "counterRotationLabel": "마우스를 올리면 서로 반대 방향으로 회전하는 두 카드",
+        "hoverMe": "마우스를 올려 보세요",
+        "depthSeparation": "깊이 분리",
+        "depthSeparationLabel": "마우스를 올리면 3차원 공간으로 분리되는 세 카드",
+        "layer1": "레이어 1",
+        "layer2": "레이어 2",
+        "layer3": "레이어 3",
+        "sideView": "측면 뷰",
+        "sideViewLabel": "마우스를 올리면 세 개의 측면 레이어로 펼쳐지는 카드",
+        "front": "앞면",
+        "middle": "중간",
+        "back1": "뒷면 1",
+        "back2": "뒷면 2"
+      },
+      "unstructured0828": {
+        "title": "Unstructured 0828",
+        "summary": "겹친 제품 인터페이스의 원근감을 탐구한 실험.",
+        "kicker": "원근 실험",
+        "description": "겹친 제품 인터페이스로 원근감을 탐구한 실험입니다.",
+        "imageAlt": "겹친 SaaS 인터페이스",
+        "overlayAlt": "부유하는 SaaS 인터페이스 패널",
+        "instruction": "떠 있는 패널을 누르면 연결된 모델 페이지가 열립니다."
+      }
+    }
+  },
+  "modCodeBlock": {
+    "copy": "복사",
+    "copied": "복사됨",
+    "retryCopy": "복사 다시 시도",
+    "copyFailed": "복사 실패",
+    "valueFor": "{name} 값",
+    "enterValue": "{name} 입력",
+    "instruction": "파란색 텍스트를 눌러 수정한 뒤 복사할 수 있습니다."
+  },
+  "home": {
+    "homeLabel": "minpeter 홈",
+    "role": "소프트웨어 엔지니어",
+    "introduction": "글을 쓰고, 디자인하고, 코드를 짭니다. 아이디어를 소프트웨어로 구현합니다.",
+    "exploreLabel": "둘러보기",
+    "sections": {
+      "developmentNotes": {
+        "title": "개발 노트",
+        "description": "기술 메모와 튜토리얼, 소프트웨어를 만들며 배운 것들."
+      },
+      "interactiveExperiments": {
+        "title": "인터랙티브 실험",
+        "description": "작은 프로토타입과 시각적 놀이, 인터페이스 실험."
+      },
+      "resume": {
+        "title": "이력서 (작성 중)",
+        "description": "경력과 활동 이력 — 곧 공개합니다."
+      }
+    },
+    "socialTitle": "소셜",
+    "socialLabel": "소셜 링크"
+  },
+  "notFound": {
+    "navigationLabel": "404 페이지 탐색",
+    "title": "페이지를 찾을 수 없습니다",
+    "description": "주소가 잘못되었거나 페이지가 이동했을 수 있습니다."
+  },
+  "siteDescription": "minpeter의 글, 디자인, 코드",
   "noSearchResults": "검색 결과가 없습니다 :/",
   "searchPlaceholder": "검색어를 입력하세요..."
 }

@@ -1,5 +1,6 @@
 "use client";
 
+import { useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
 import { useEffect } from "react";
 
@@ -9,6 +10,8 @@ interface ErrorPageProps {
 }
 
 export default function LocaleErrorBoundary({ error, reset }: ErrorPageProps) {
+  const locale = useLocale();
+  const t = useTranslations("errors.general");
   useEffect(() => {
     console.error(error);
   }, [error]);
@@ -19,19 +22,21 @@ export default function LocaleErrorBoundary({ error, reset }: ErrorPageProps) {
         <div className="space-y-4">
           <div className="space-y-2">
             <p className="font-medium text-muted-foreground text-sm">
-              Error boundary
+              {t("kicker")}
             </p>
             <h1 className="text-2xl text-foreground tracking-tight">
-              오류가 발생했습니다
+              {t("title")}
             </h1>
             <p className="text-muted-foreground text-sm sm:text-base">
-              잠시 후 다시 시도하거나 홈으로 이동해 다른 페이지를 확인해 주세요.
+              {t("description")}
             </p>
           </div>
 
           {error.digest ? (
             <div className="rounded-lg bg-background/70 px-4 py-3">
-              <p className="text-muted-foreground text-xs">오류 ID</p>
+              <p className="text-muted-foreground text-xs">
+                {t("digestLabel")}
+              </p>
               <p className="font-mono text-sm">{error.digest}</p>
             </div>
           ) : null}
@@ -42,13 +47,13 @@ export default function LocaleErrorBoundary({ error, reset }: ErrorPageProps) {
               onClick={reset}
               type="button"
             >
-              다시 시도
+              {t("retry")}
             </button>
             <Link
               className="inline-flex items-center justify-center rounded-lg border border-border/60 bg-background px-4 py-2 font-medium text-foreground transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              href="/"
+              href={`/${locale}`}
             >
-              홈으로 돌아가기
+              {t("back")}
             </Link>
           </div>
         </div>

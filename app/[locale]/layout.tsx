@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
-import { getMessages, setRequestLocale } from "next-intl/server";
+import {
+  getMessages,
+  getTranslations,
+  setRequestLocale,
+} from "next-intl/server";
 import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
 
@@ -30,6 +34,7 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale: routeLocale } = await params;
   const locale = resolveLocale(routeLocale);
+  const t = await getTranslations({ locale });
   const baseMetadata = createMetadata({
     description: getSiteDescription(locale),
     locale,
@@ -45,7 +50,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         ...baseMetadata.alternates?.types,
         "application/rss+xml": [
           {
-            title: `RSS Feed (${locale})`,
+            title: `${t("common.rssFeed")} (${locale})`,
             url: getLocalizedPath(locale, "/blog/rss.xml"),
           },
         ],

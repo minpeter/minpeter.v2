@@ -1,6 +1,7 @@
 "use client";
 
 import copy from "clipboard-copy";
+import { useTranslations } from "next-intl";
 import type { ChangeEvent, KeyboardEvent, MouseEvent } from "react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
@@ -134,6 +135,7 @@ export function ModCodeBlock({
   template: string;
   data: Record<string, string>;
 }) {
+  const t = useTranslations("modCodeBlock");
   const segments = useMemo(() => parseTemplate(template), [template]);
   const [editedValues, setEditedValues] = useState<Record<string, string>>({});
   const [activeSegmentIndex, setActiveSegmentIndex] = useState<number | null>(
@@ -199,7 +201,12 @@ export function ModCodeBlock({
     []
   );
 
-  const copyLabel = getCopyLabel(status);
+  let copyLabel = t("copy");
+  if (status === "copied") {
+    copyLabel = t("copied");
+  } else if (status === "error") {
+    copyLabel = t("retryCopy");
+  }
 
   return (
     <div className="relative flex flex-col gap-1">
@@ -231,7 +238,7 @@ export function ModCodeBlock({
               if (visibleActiveSegmentIndex === index) {
                 return (
                   <input
-                    aria-label={`Value for ${segment.content}`}
+                    aria-label={t("valueFor", { name: segment.content })}
                     autoComplete="off"
                     autoFocus
                     className="inline h-5 rounded-md bg-secondary px-1 py-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
@@ -247,7 +254,8 @@ export function ModCodeBlock({
                 );
               }
 
-              const displayValue = segmentValue || `Enter ${segment.content}`;
+              const displayValue =
+                segmentValue || t("enterValue", { name: segment.content });
 
               return (
                 <button
@@ -264,12 +272,10 @@ export function ModCodeBlock({
           </code>
         </pre>
       </div>
-      <p className="mb-4 pl-1 text-gray-500 text-xs">
-        *파란색 텍스트를 클릭하면 간편하게 수정 후 복사할 수 있습니다.
-      </p>
+      <p className="mb-4 pl-1 text-gray-500 text-xs">*{t("instruction")}</p>
       {status === "error" && (
         <output className="pl-1 text-destructive text-xs">
-          {COPY_ERROR_LABEL}
+          {t("copyFailed")}
         </output>
       )}
     </div>

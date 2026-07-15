@@ -139,7 +139,7 @@ export function BlogList({
               <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
             ) : (
               <button
-                aria-label="Clear search"
+                aria-label={t("common.clearSearch")}
                 className="flex h-4 w-4 items-center justify-center rounded text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                 onClick={handleQueryClear}
                 type="button"

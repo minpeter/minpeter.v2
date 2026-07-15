@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 
 interface TimeLeft {
@@ -61,6 +62,7 @@ function calculateTimeLeft(targetTimestamp: number): TimeLeft {
 
 export function Countdown() {
   "use no memo";
+  const t = useTranslations("showcase.items.newYear");
   const [targetTimestamp] = useState(getNextYearTimestamp);
   const [remainingTime, setRemainingTime] = useState<TimeLeft>(() =>
     calculateTimeLeft(targetTimestamp)
@@ -84,23 +86,28 @@ export function Countdown() {
 
   const hasTimeLeft = Object.values(remainingTime).some((value) => value > 0);
   const units = [
-    { label: "Days", value: remainingTime.days },
-    { label: "Hours", value: remainingTime.hours },
-    { label: "Minutes", value: remainingTime.minutes },
-    { label: "Seconds", value: remainingTime.seconds },
+    { label: t("days"), value: remainingTime.days },
+    { label: t("hours"), value: remainingTime.hours },
+    { label: t("minutes"), value: remainingTime.minutes },
+    { label: t("seconds"), value: remainingTime.seconds },
   ] as const;
 
   if (!hasTimeLeft) {
     return (
       <div className="rounded-lg border border-foreground/10 bg-secondary/35 px-5 py-12 text-center">
-        <p className="text-xl tracking-[-0.035em]">Happy New Year!</p>
+        <p className="text-xl tracking-[-0.035em]">{t("happy")}</p>
       </div>
     );
   }
 
   return (
     <div
-      aria-label={`${remainingTime.days} days, ${remainingTime.hours} hours, ${remainingTime.minutes} minutes, and ${remainingTime.seconds} seconds until the new year`}
+      aria-label={t("timerLabel", {
+        days: String(remainingTime.days),
+        hours: String(remainingTime.hours),
+        minutes: String(remainingTime.minutes),
+        seconds: String(remainingTime.seconds),
+      })}
       className="grid grid-cols-2 gap-x-5 gap-y-8 sm:grid-cols-4"
       role="timer"
     >
@@ -115,7 +122,9 @@ export function Countdown() {
         </div>
       ))}
       <p className="col-span-full text-[0.6875rem] text-muted-foreground leading-relaxed">
-        Counting down to January 1, {new Date(targetTimestamp).getFullYear()}.
+        {t("caption", {
+          year: String(new Date(targetTimestamp).getFullYear()),
+        })}
       </p>
     </div>
   );

@@ -12,9 +12,10 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const { locale: routeLocale } = await props.params;
   const locale = resolveLocale(routeLocale);
+  const t = await getTranslations({ locale });
 
   return createMetadata({
-    description: "A graveyard of components made with care but never used",
+    description: t("showcase.description"),
     locale,
     path: "/show",
     title: "minpeter | showcase",
@@ -23,34 +24,28 @@ export async function generateMetadata(
 
 const SHOWCASE_ITEMS = [
   {
-    description: "A simpler frontend for temporary files.",
+    key: "tempfiles",
     path: "/show/yet-another-tempfiles",
-    title: "Yet another tempfiles",
   },
   {
-    description: "A spinning inventory of the tools behind this site.",
+    key: "techStack",
     path: "/show/tech-stack-ball",
-    title: "Tech stack ball",
   },
   {
-    description: "Hover over the letters and watch them react.",
+    key: "dynamicText",
     path: "/show/dynamic-hacked-text",
-    title: "Dynamic hacked text",
   },
   {
-    description: "A live countdown to the next year.",
+    key: "newYear",
     path: "/show/new-year-clock",
-    title: "New year clock",
   },
   {
-    description: "Artwork studies for language model cards.",
+    key: "modelCard",
     path: "/show/model-card-artwork",
-    title: "Model card artwork",
   },
   {
-    description: "Experiments in layered motion and depth.",
+    key: "unstructured",
     path: "/show/unstructured",
-    title: "Unstructured",
   },
 ] as const;
 
@@ -63,7 +58,10 @@ export default async function Page(props: PageProps<"/[locale]/show">) {
   return (
     <section className="showcase-page">
       <header className="showcase-header">
-        <nav aria-label="Showcase navigation" className="fieldnotes-nav">
+        <nav
+          aria-label={t("showcase.navigationLabel")}
+          className="fieldnotes-nav"
+        >
           <Link
             aria-label={t("backToHome")}
             className="fieldnotes-logo-link"
@@ -82,33 +80,37 @@ export default async function Page(props: PageProps<"/[locale]/show">) {
           <LanguageSelector />
         </nav>
         <div className="showcase-intro">
-          <p className="showcase-kicker">Showcase</p>
-          <h1 className="showcase-title">Small experiments</h1>
-          <p className="showcase-description">
-            Interactive pieces, prototypes, and things made for the fun of it.
-          </p>
+          <p className="showcase-kicker">{t("showcase.kicker")}</p>
+          <h1 className="showcase-title">{t("showcase.title")}</h1>
+          <p className="showcase-description">{t("showcase.description")}</p>
         </div>
       </header>
 
-      <nav aria-label="Projects" className="showcase-list">
-        {SHOWCASE_ITEMS.map(({ description, path, title }) => (
+      <nav aria-label={t("showcase.projectsLabel")} className="showcase-list">
+        {SHOWCASE_ITEMS.map(({ key, path }) => (
           <Link
             className="showcase-item-link"
             href={`/${locale}${path}` as Route}
             key={path}
           >
             <span className="showcase-item-top">
-              <span className="showcase-item-title">{title}</span>
+              <span className="showcase-item-title">
+                {t(`showcase.items.${key}.title`)}
+              </span>
               <span aria-hidden="true" className="showcase-item-arrow">
                 ↗
               </span>
             </span>
-            <span className="showcase-item-description">{description}</span>
+            <span className="showcase-item-description">
+              {t(`showcase.items.${key}.summary`)}
+            </span>
           </Link>
         ))}
 
         {enabled ? (
-          <div className="showcase-flag-status">test flag is on</div>
+          <div className="showcase-flag-status">
+            {t("showcase.featureEnabled")}
+          </div>
         ) : null}
       </nav>
     </section>

@@ -12,6 +12,7 @@ import {
   Render,
   Runner,
 } from "matter-js";
+import { useTranslations } from "next-intl";
 import { useEffect, useRef } from "react";
 
 import { cn } from "@/shared/utils/tailwind";
@@ -133,6 +134,7 @@ export function Playground({
   h: number;
   className?: string;
 }) {
+  const t = useTranslations("showcase.items.techStack");
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -341,7 +343,7 @@ export function Playground({
 
   return (
     <canvas
-      aria-label="Interactive physics simulation with technology stack icons"
+      aria-label={t("simulationLabel")}
       className={cn(
         "h-auto w-full max-w-full touch-none cursor-grab rounded-lg border bg-card text-card-foreground shadow-xs active:cursor-grabbing",
         className

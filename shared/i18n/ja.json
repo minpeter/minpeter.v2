@@ -1,22 +1,193 @@
 {
-  "404": "迷子になりました..まだ大丈夫、ゆっくりやり直しましょう。",
+  "404": "ページが見つかりません。",
   "blogTitle": "開発の話と日常を記録する空間",
   "back": "戻る",
   "backToBlog": "記事一覧へ",
   "backToHome": "ホームへ",
   "aboutTitle": "こんにちは、ミン・ウンギです :)",
-  "aboutMe": "現在、フロントエンド開発者として働いています。\nフロントエンド開発者として、急速に変化する技術を学び、適用することを楽しんでいます。\nまた、ユーザー体験を重視し、ユーザーに最高の体験を提供するために努力しています。",
+  "aboutMe": "ソフトウェアエンジニアとして働いています。\n新しい技術を学び、アイデアを役に立つソフトウェアにすることを楽しんでいます。\n作ったものを使う人に、わかりやすく丁寧な体験を届けたいと考えています。",
   "blogPageTitle": "Peterの開発ノート",
-  "blogPageDescription": "私が書いたブログ、あなたのために書いてみました",
+  "blogPageDescription": "ソフトウェアや技術、日々の学びを記録しています。",
   "publishedDate": "公開",
-  "draftedDate": "草案",
+  "draftedDate": "下書き",
   "lastModifiedDate": "更新",
   "draft": "下書き",
   "nextPost": "次の記事",
   "prevPost": "前の記事",
   "translatedBy": "Claude Opus 4.5による翻訳",
   "aiDisclaimer": "AI生成コンテンツは不正確または誤解を招く可能性があります。",
-  "siteDescription": "minpeterが執筆、コーディング、デザイン",
+  "generatedBy": "{model}による生成",
+  "common": {
+    "blogNavigation": "ブログのナビゲーション",
+    "clearSearch": "検索語をクリア",
+    "selectLanguage": "言語を選択",
+    "toggleTheme": "テーマを切り替え",
+    "previousSlide": "前のスライド",
+    "nextSlide": "次のスライド",
+    "rssFeed": "RSSフィード",
+    "notes": "記事",
+    "source": "ソース"
+  },
+  "errors": {
+    "general": {
+      "kicker": "エラー処理",
+      "title": "エラーが発生しました",
+      "description": "しばらくしてから再度お試しいただくか、ホームに戻って別のページをご覧ください。",
+      "digestLabel": "エラーID",
+      "retry": "再試行",
+      "back": "ホームに戻る"
+    },
+    "blog": {
+      "kicker": "ブログエラー",
+      "title": "記事を読み込めませんでした",
+      "description": "記事の表示中に問題が発生しました。再度お試しいただくか、記事一覧にお戻りください。",
+      "retry": "再試行",
+      "back": "記事一覧に戻る"
+    }
+  },
+  "externalRedirect": {
+    "message": "{count}秒後に外部リンクへ移動します…",
+    "link": "自動的に移動しない場合は、ここをクリックしてください。"
+  },
+  "resume": {
+    "navigationLabel": "履歴書ページのナビゲーション",
+    "kicker": "履歴書",
+    "title": "作成中",
+    "description": "役に立つ内容になるよう、履歴書を整えています。",
+    "statusTitle": "近日公開。",
+    "statusDescription": "それまでは、このサイトで今取り組んでいることをご覧いただけます。",
+    "homeLabel": "ホームへ",
+    "metadataDescription": "経歴とプロフィール — 近日公開。"
+  },
+  "showcase": {
+    "navigationLabel": "ショーケースのナビゲーション",
+    "projectsLabel": "プロジェクト",
+    "kicker": "ショーケース",
+    "title": "小さな実験",
+    "description": "楽しみながら作ったインタラクティブな作品、プロトタイプ、そしてさまざまな実験です。",
+    "featureEnabled": "テスト機能が有効です。",
+    "detailNavigationLabel": "{title}ページのナビゲーション",
+    "items": {
+      "tempfiles": {
+        "title": "Yet another tempfiles",
+        "summary": "一時ファイルのための、よりシンプルなフロントエンド。",
+        "kicker": "ユーティリティ実験",
+        "description": "一時ファイルをアップロードするための、小さくシンプルなインターフェースです。",
+        "notice": "ファイルはtmpf.meにアップロードされ、URLを知っている人なら誰でもアクセスできる場合があります。",
+        "uploadLabel": "ファイルをアップロード",
+        "uploadButton": "アップロード",
+        "connectionError": "接続を確認し、しばらくしてから再度お試しください。",
+        "uploadFailed": "アップロード失敗 — {error}",
+        "uploading": "ファイルをアップロード中…",
+        "folderLabel": "フォルダ",
+        "uploadedLabel": "アップロード完了",
+        "downloadAll": "すべてのファイルをダウンロード"
+      },
+      "techStack": {
+        "title": "Tech stack ball",
+        "summary": "このサイトを支えるツールを、回転するボールで表現した実験。",
+        "kicker": "物理実験",
+        "description": "このサイトで使っているツールを、ドラッグできる浮遊オブジェクトで表現しました。",
+        "instruction": "アイコンをドラッグして、物理運動を楽しんでください。",
+        "replay": "もう一度",
+        "simulationLabel": "技術スタックのアイコンを使ったインタラクティブな物理シミュレーション"
+      },
+      "dynamicText": {
+        "title": "Dynamic hacked text",
+        "summary": "文字にカーソルを合わせ、その反応を観察する実験。",
+        "kicker": "インタラクション実験",
+        "description": "文字の上でポインターを動かすと、テキストが再構築されていきます。"
+      },
+      "newYear": {
+        "title": "New year clock",
+        "summary": "新年までの時間をリアルタイムで表示するカウントダウン。",
+        "kicker": "時間の実験",
+        "description": "次の1月1日までの残り時間をリアルタイムで表示します。",
+        "days": "日",
+        "hours": "時間",
+        "minutes": "分",
+        "seconds": "秒",
+        "timerLabel": "新年まであと{days}日{hours}時間{minutes}分{seconds}秒",
+        "caption": "{year}年1月1日までのカウントダウンです。",
+        "happy": "あけましておめでとうございます！"
+      },
+      "modelCard": {
+        "title": "Model card artwork",
+        "summary": "言語モデルカードのためのアートワーク実験。",
+        "kicker": "アートワーク実験",
+        "description": "言語モデルのローンチカードのために作ったビジュアルスタディです。",
+        "credits": "画像クレジット",
+        "creditNous": "元画像 © 2024 NousResearch Corp. All rights reserved.",
+        "creditIshigami": "元画像 © 2025 イシガミ アキラ. All rights reserved."
+      },
+      "unstructured": {
+        "title": "Unstructured",
+        "summary": "レイヤーの動きと奥行きを探る実験。",
+        "kicker": "モーション実験",
+        "description": "重なり合うインターフェース、動き、奥行きを自由に試した実験です。",
+        "counterRotation": "逆回転",
+        "counterRotationLabel": "ホバーすると互いに逆方向へ回転する2枚のカード",
+        "hoverMe": "ホバーしてください",
+        "depthSeparation": "奥行きの分離",
+        "depthSeparationLabel": "ホバーすると3次元空間に分離する3枚のカード",
+        "layer1": "レイヤー1",
+        "layer2": "レイヤー2",
+        "layer3": "レイヤー3",
+        "sideView": "サイドビュー",
+        "sideViewLabel": "ホバーすると3枚のサイドレイヤーに開くカード",
+        "front": "フロント",
+        "middle": "ミドル",
+        "back1": "バック1",
+        "back2": "バック2"
+      },
+      "unstructured0828": {
+        "title": "Unstructured 0828",
+        "summary": "レイヤー化された製品インターフェースの遠近感を探る実験。",
+        "kicker": "遠近感の実験",
+        "description": "重なり合う製品インターフェースで遠近感を試した実験です。",
+        "imageAlt": "重なり合うSaaSインターフェース",
+        "overlayAlt": "浮遊するSaaSインターフェースパネル",
+        "instruction": "浮遊するパネルを選択すると、参照先のモデルページが開きます。"
+      }
+    }
+  },
+  "modCodeBlock": {
+    "copy": "コピー",
+    "copied": "コピー済み",
+    "retryCopy": "コピーを再試行",
+    "copyFailed": "コピーに失敗しました",
+    "valueFor": "{name}の値",
+    "enterValue": "{name}を入力",
+    "instruction": "青いテキストを選択し、編集してからコピーできます。"
+  },
+  "home": {
+    "homeLabel": "minpeter ホーム",
+    "role": "ソフトウェアエンジニア",
+    "introduction": "文章を書き、デザインし、コードを書きます。アイデアをソフトウェアとして形にします。",
+    "exploreLabel": "サイトを見る",
+    "sections": {
+      "developmentNotes": {
+        "title": "開発ノート",
+        "description": "ソフトウェア開発で得た技術メモ、チュートリアル、学び。"
+      },
+      "interactiveExperiments": {
+        "title": "インタラクティブな実験",
+        "description": "小さなプロトタイプ、視覚的な遊び、インターフェースの試作。"
+      },
+      "resume": {
+        "title": "履歴書（準備中）",
+        "description": "経歴とプロフィール — 近日公開。"
+      }
+    },
+    "socialTitle": "ソーシャル",
+    "socialLabel": "ソーシャルリンク"
+  },
+  "notFound": {
+    "navigationLabel": "404ページのナビゲーション",
+    "title": "ページが見つかりません",
+    "description": "URLが間違っているか、ページが移動した可能性があります。"
+  },
+  "siteDescription": "minpeterの文章、デザイン、コード",
   "noSearchResults": "検索結果がありません :/",
   "searchPlaceholder": "検索..."
 }

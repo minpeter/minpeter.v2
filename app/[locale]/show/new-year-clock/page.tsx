@@ -11,9 +11,10 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const { locale: routeLocale } = await props.params;
   const locale = resolveLocale(routeLocale);
+  const t = await getTranslations({ locale });
 
   return createMetadata({
-    description: "A live countdown to the next year.",
+    description: t("showcase.items.newYear.summary"),
     locale,
     path: "/show/new-year-clock",
     title: "minpeter | new year clock",
@@ -29,10 +30,13 @@ export default async function Page(
     <section className="showcase-page">
       <ShowcaseDetailHeader
         backLabel={t("back")}
-        description="A live countdown that keeps its eyes on the next January first."
+        description={t("showcase.items.newYear.description")}
         href={`/${locale}/show` as Route}
-        kicker="Time study"
-        title="New year clock"
+        kicker={t("showcase.items.newYear.kicker")}
+        navigationLabel={t("showcase.detailNavigationLabel", {
+          title: t("showcase.items.newYear.title"),
+        })}
+        title={t("showcase.items.newYear.title")}
       />
 
       <Countdown />

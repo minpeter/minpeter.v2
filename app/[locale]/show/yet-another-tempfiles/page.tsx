@@ -11,9 +11,10 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const { locale: routeLocale } = await props.params;
   const locale = resolveLocale(routeLocale);
+  const t = await getTranslations({ locale });
 
   return createMetadata({
-    description: "A simpler frontend for temporary files.",
+    description: t("showcase.items.tempfiles.summary"),
     locale,
     path: "/show/yet-another-tempfiles",
     title: "minpeter | yet another tempfiles",
@@ -29,17 +30,20 @@ export default async function Page(
     <section className="showcase-page">
       <ShowcaseDetailHeader
         backLabel={t("back")}
-        description="A small, direct interface for uploading temporary files."
+        description={t("showcase.items.tempfiles.description")}
         href={`/${locale}/show` as Route}
-        kicker="Utility study"
-        title="Yet another tempfiles"
+        kicker={t("showcase.items.tempfiles.kicker")}
+        navigationLabel={t("showcase.detailNavigationLabel", {
+          title: t("showcase.items.tempfiles.title"),
+        })}
+        title={t("showcase.items.tempfiles.title")}
       />
 
       <div className="rounded-lg border border-foreground/10 bg-secondary/25 p-5 sm:p-6">
         <TmpfUI />
       </div>
       <p className="mt-3 text-[0.6875rem] text-muted-foreground leading-relaxed">
-        Files are uploaded to tmpf.me and may be publicly accessible by URL.
+        {t("showcase.items.tempfiles.notice")}
       </p>
     </section>
   );
