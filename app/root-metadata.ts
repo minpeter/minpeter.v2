@@ -1,11 +1,19 @@
 import type { Viewport } from "next";
 
-import NewMetadata from "@/shared/utils/metadata";
+import { getBaseUrl } from "@/shared/env";
+import { routing } from "@/shared/i18n/routing";
+import { getSiteDescription } from "@/shared/site-config";
+import { createMetadata } from "@/shared/utils/metadata";
 
-export const metadata = NewMetadata({
-  description: "이 웹에서 가장 멋진 사이트가 될거야~",
-  title: "minpeter",
-});
+export const metadata = {
+  ...createMetadata({
+    description: getSiteDescription(routing.defaultLocale),
+    locale: routing.defaultLocale,
+    path: "/",
+    title: "minpeter",
+  }),
+  metadataBase: new URL(getBaseUrl()),
+};
 
 export const viewport: Viewport = {
   colorScheme: "light dark",

@@ -1,15 +1,24 @@
-import type { Route } from "next";
+import type { Metadata, Route } from "next";
 import { getTranslations } from "next-intl/server";
 
 import { ShowcaseDetailHeader } from "@/components/showcase-detail-header";
-import NewMetadata from "@/shared/utils/metadata";
+import { createMetadata, resolveLocale } from "@/shared/utils/metadata";
 
 import AnimatedText from "./animated-text";
 
-export const metadata = NewMetadata({
-  description: "Hover over the letters and watch them react.",
-  title: "minpeter | dynamic hacked text",
-});
+export async function generateMetadata(
+  props: PageProps<"/[locale]/show/dynamic-hacked-text">
+): Promise<Metadata> {
+  const { locale: routeLocale } = await props.params;
+  const locale = resolveLocale(routeLocale);
+
+  return createMetadata({
+    description: "Hover over the letters and watch them react.",
+    locale,
+    path: "/show/dynamic-hacked-text",
+    title: "minpeter | dynamic hacked text",
+  });
+}
 
 export default async function Page(
   props: PageProps<"/[locale]/show/dynamic-hacked-text">

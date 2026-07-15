@@ -16,9 +16,14 @@ import Header from "@/components/header";
 import { MachineTranslationNotice } from "@/components/machine-translation-notice";
 import { MediaGrid } from "@/components/media-grid";
 import { ViewTransition } from "@/components/view-transition";
+import { siteConfig } from "@/shared/site-config";
 import { blog } from "@/shared/source";
 import { formatDateLong } from "@/shared/utils/date";
-import NewMetadata from "@/shared/utils/metadata";
+import {
+  createMetadata,
+  getLocalizedPath,
+  resolveLocale,
+} from "@/shared/utils/metadata";
 import { cn } from "@/shared/utils/tailwind";
 
 import { NavLink } from "./nav-link";
@@ -40,40 +45,41 @@ export function generateStaticParams({
 export async function generateMetadata(
   props: PageProps<"/[locale]/blog/[...slug]">
 ) {
-  const { locale, slug } = await props.params;
+  const { locale: rawLocale, slug } = await props.params;
+  const locale = resolveLocale(rawLocale);
   const page = blog.getPage(slug, locale);
   if (!page) {
-    notFound();
+    return createMetadata({
+      description: "Page not found :/",
+      image: {
+        alt: "minpeter | 404",
+        url: getLocalizedPath(locale, "/og/not-found"),
+      },
+      locale,
+      title: "minpeter | 404",
+    });
   }
 
   const slugPath = slug.join("/");
-  const ogImage =
-    locale === "ko" ? `/blog/og/${slugPath}` : `/${locale}/blog/og/${slugPath}`;
+  const title = page.data.title ?? siteConfig.title;
 
-  // Build hreflang alternates for SEO
-  // Default locale (ko) has no prefix, others have /en/, /ja/
-  const languages: Record<string, string> = {
-    en: `/en/blog/${slugPath}`,
-    ja: `/ja/blog/${slugPath}`,
-    ko: `/blog/${slugPath}`,
-    "x-default": `/blog/${slugPath}`,
-  };
-
-  // Canonical URL based on current locale
-  const canonical =
-    locale === "ko" ? `/blog/${slugPath}` : `/${locale}/blog/${slugPath}`;
-
-  return {
-    ...NewMetadata({
-      description: page.data.description,
-      image: ogImage,
-      title: page.data.title,
-    }),
-    alternates: {
-      canonical,
-      languages,
+  return createMetadata({
+    article: {
+      authors: [siteConfig.author],
+      modifiedTime: page.data.lastModified
+        ? new Date(page.data.lastModified).toISOString()
+        : undefined,
+      publishedTime: new Date(page.data.published).toISOString(),
     },
-  };
+    description: page.data.description,
+    image: {
+      alt: title,
+      url: getLocalizedPath(locale, `/blog/og/${slugPath}`),
+    },
+    locale,
+    path: `/blog/${slugPath}`,
+    title,
+  });
 }
 
 export default async function Page(

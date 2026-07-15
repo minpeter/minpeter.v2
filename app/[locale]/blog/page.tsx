@@ -6,7 +6,11 @@ import { Suspense } from "react";
 
 import { LanguageSelector } from "@/components/language-selector";
 import { blog, getPostsMetadata } from "@/shared/source";
-import NewMetadata from "@/shared/utils/metadata";
+import {
+  createMetadata,
+  getLocalizedPath,
+  resolveLocale,
+} from "@/shared/utils/metadata";
 
 import { BlogList, BlogListFallback } from "./list";
 import { RssLink } from "./rss-link";
@@ -14,17 +18,21 @@ import { RssLink } from "./rss-link";
 export async function generateMetadata(
   props: PageProps<"/[locale]/blog">
 ): Promise<Metadata> {
-  const { locale } = await props.params;
-  const baseMetadata = NewMetadata({
+  const { locale: routeLocale } = await props.params;
+  const locale = resolveLocale(routeLocale);
+  const baseMetadata = createMetadata({
     description: "내가 적은 블로그, 너를 위해 써봤지",
+    locale,
+    path: "/blog",
     title: "minpeter | blog",
   });
 
   return {
     ...baseMetadata,
     alternates: {
+      ...baseMetadata.alternates,
       types: {
-        "application/rss+xml": `/${locale}/blog/rss.xml`,
+        "application/rss+xml": getLocalizedPath(locale, "/blog/rss.xml"),
       },
     },
   };

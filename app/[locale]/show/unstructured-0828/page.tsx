@@ -1,18 +1,27 @@
-import type { Route } from "next";
+import type { Metadata, Route } from "next";
 import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 import Link from "next/link";
 
 import { ShowcaseDetailHeader } from "@/components/showcase-detail-header";
-import NewMetadata from "@/shared/utils/metadata";
+import { createMetadata, resolveLocale } from "@/shared/utils/metadata";
 
 import SaaSComponentImage from "./saas-component.png";
 import SaaSPageImage from "./saas-page.png";
 
-export const metadata = NewMetadata({
-  description: "A perspective study in layered product interfaces.",
-  title: "minpeter | unstructured 0828",
-});
+export async function generateMetadata(
+  props: PageProps<"/[locale]/show/unstructured-0828">
+): Promise<Metadata> {
+  const { locale: routeLocale } = await props.params;
+  const locale = resolveLocale(routeLocale);
+
+  return createMetadata({
+    description: "A perspective study in layered product interfaces.",
+    locale,
+    path: "/show/unstructured-0828",
+    title: "minpeter | unstructured 0828",
+  });
+}
 
 export default async function Page(
   props: PageProps<"/[locale]/show/unstructured-0828">

@@ -1,13 +1,25 @@
-"use client";
-
-import type { Route } from "next";
-import { useLocale, useTranslations } from "next-intl";
+import type { Metadata, Route } from "next";
+import { getLocale, getTranslations } from "next-intl/server";
 
 import Header from "@/components/header";
+import { createMetadata, getLocalizedPath } from "@/shared/utils/metadata";
 
-export default function NotFound() {
-  const t = useTranslations();
-  const locale = useLocale();
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale();
+
+  return createMetadata({
+    description: "Page not found :/",
+    image: {
+      alt: "minpeter | 404",
+      url: getLocalizedPath(locale, "/og/not-found"),
+    },
+    locale,
+    title: "minpeter | 404",
+  });
+}
+
+export default async function NotFound() {
+  const [locale, t] = await Promise.all([getLocale(), getTranslations()]);
   return (
     <section>
       <Header

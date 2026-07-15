@@ -69,17 +69,20 @@ export const env = createEnv({
  * @returns The appropriate base URL (production, preview, or local)
  */
 export function getBaseUrl(): string {
-  // Explicit production URL takes priority
   if (env.PUBLIC_BASE_URL) {
     return env.PUBLIC_BASE_URL;
   }
 
-  // Vercel deployment URL
-  if (env.VERCEL_URL) {
+  const vercelEnv = env.VERCEL_ENV ?? env.NEXT_PUBLIC_VERCEL_ENV;
+
+  if (vercelEnv === "production") {
+    return "https://minpeter.uk";
+  }
+
+  if (vercelEnv === "preview" && env.VERCEL_URL) {
     return `https://${env.VERCEL_URL}`;
   }
 
-  // Local development fallback
   return `http://localhost:${env.PORT}`;
 }
 
@@ -88,19 +91,5 @@ export function getBaseUrl(): string {
  * Uses production URL for production, Vercel URL for preview, local for dev
  */
 export function getCurrentWebsiteUrl(): string {
-  const PRODUCTION_URL = "https://minpeter.uk";
-  const LOCAL_URL = `http://localhost:${env.PORT}`;
-
-  // Server-side check
-  const vercelEnv = env.VERCEL_ENV ?? env.NEXT_PUBLIC_VERCEL_ENV;
-
-  if (vercelEnv === "production") {
-    return PRODUCTION_URL;
-  }
-
-  if (vercelEnv === "preview" && env.VERCEL_URL) {
-    return `https://${env.VERCEL_URL}`;
-  }
-
-  return LOCAL_URL;
+  return getBaseUrl();
 }

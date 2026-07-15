@@ -1,18 +1,30 @@
-import type { Route } from "next";
+import type { Metadata, Route } from "next";
+import { getLocale, getTranslations } from "next-intl/server";
 
 import Header from "@/components/header";
+import { createMetadata, getLocalizedPath } from "@/shared/utils/metadata";
 
-export default function NotFound({
-  params = { locale: "ko" },
-}: {
-  params?: { locale: "ko" | "en" };
-}) {
-  const { locale } = params;
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale();
+
+  return createMetadata({
+    description: "Page not found :/",
+    image: {
+      alt: "minpeter | 404",
+      url: getLocalizedPath(locale, "/og/not-found"),
+    },
+    locale,
+    title: "minpeter | 404",
+  });
+}
+
+export default async function NotFound() {
+  const [locale, t] = await Promise.all([getLocale(), getTranslations()]);
   return (
     <section>
       <Header
-        description="page not found :/"
-        link={{ href: `/${locale}/blog` as Route, text: "글 목록으로" }}
+        description={t("404")}
+        link={{ href: `/${locale}/blog` as Route, text: t("backToBlog") }}
         title="404"
       />
     </section>

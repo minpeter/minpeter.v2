@@ -24,6 +24,20 @@ describe("Proxy", () => {
     expect(shouldExclude("/.well-known/vercel/flags")).toBeTruthy();
   });
 
+  it("should exclude metadata image routes", () => {
+    expect(shouldExclude("/ko/show/opengraph-image")).toBeTruthy();
+    expect(shouldExclude("/en/resume/twitter-image")).toBeTruthy();
+    expect(shouldExclude("/ja/blog/opengraph-image")).toBeTruthy();
+  });
+
+  it("should proxy metadata image routes without a supported locale", () => {
+    expect(shouldExclude("/opengraph-image")).toBeFalsy();
+    expect(shouldExclude("/twitter-image")).toBeFalsy();
+    expect(shouldExclude("/show/opengraph-image")).toBeFalsy();
+    expect(shouldExclude("/xx/show/opengraph-image")).toBeFalsy();
+    expect(shouldExclude("/not_a_locale/show/opengraph-image")).toBeFalsy();
+  });
+
   it("should not exclude", () => {
     expect(shouldExclude("/test")).toBeFalsy();
     expect(shouldExclude("/test.md")).toBeFalsy();

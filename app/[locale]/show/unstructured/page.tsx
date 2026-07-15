@@ -1,16 +1,25 @@
-import type { Route } from "next";
+import type { Metadata, Route } from "next";
 import { getTranslations } from "next-intl/server";
 
 import { ShowcaseDetailHeader } from "@/components/showcase-detail-header";
-import NewMetadata from "@/shared/utils/metadata";
+import { createMetadata, resolveLocale } from "@/shared/utils/metadata";
 import { cn } from "@/shared/utils/tailwind";
 
 import styles from "./styles.module.css";
 
-export const metadata = NewMetadata({
-  description: "Experiments in layered motion and depth.",
-  title: "minpeter | unstructured",
-});
+export async function generateMetadata(
+  props: PageProps<"/[locale]/show/unstructured">
+): Promise<Metadata> {
+  const { locale: routeLocale } = await props.params;
+  const locale = resolveLocale(routeLocale);
+
+  return createMetadata({
+    description: "Experiments in layered motion and depth.",
+    locale,
+    path: "/show/unstructured",
+    title: "minpeter | unstructured",
+  });
+}
 
 export default async function Page(
   props: PageProps<"/[locale]/show/unstructured">

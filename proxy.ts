@@ -6,6 +6,7 @@ import { routing } from "./shared/i18n/routing";
 
 const exclusions = ["/_next/", "/.well-known/", "/.", "/api/"];
 const publicAssetPrefixes = ["/assets/", "/fonts/"];
+const metadataImageSuffixes = ["/opengraph-image", "/twitter-image"];
 const publicAssetPaths = new Set([
   "/Lickitung.gltf",
   "/favicon.ico",
@@ -16,9 +17,17 @@ const publicAssetPaths = new Set([
   "/studio_small_03_1k.hdr",
 ]);
 
+const isMetadataImagePath = (path: string) =>
+  metadataImageSuffixes.some(
+    (suffix) =>
+      path.endsWith(suffix) &&
+      routing.locales.some((locale) => path.startsWith(`/${locale}/`))
+  );
+
 export const shouldExclude = (path: string) =>
   exclusions.some((p) => path.startsWith(p)) ||
   publicAssetPrefixes.some((p) => path.startsWith(p)) ||
+  isMetadataImagePath(path) ||
   publicAssetPaths.has(path);
 
 export function proxy(request: NextRequest) {

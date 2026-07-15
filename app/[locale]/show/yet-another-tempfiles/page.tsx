@@ -1,15 +1,24 @@
-import type { Route } from "next";
+import type { Metadata, Route } from "next";
 import { getTranslations } from "next-intl/server";
 
 import { ShowcaseDetailHeader } from "@/components/showcase-detail-header";
-import NewMetadata from "@/shared/utils/metadata";
+import { createMetadata, resolveLocale } from "@/shared/utils/metadata";
 
 import TmpfUI from "./tmpf";
 
-export const metadata = NewMetadata({
-  description: "A simpler frontend for temporary files.",
-  title: "minpeter | yet another tempfiles",
-});
+export async function generateMetadata(
+  props: PageProps<"/[locale]/show/yet-another-tempfiles">
+): Promise<Metadata> {
+  const { locale: routeLocale } = await props.params;
+  const locale = resolveLocale(routeLocale);
+
+  return createMetadata({
+    description: "A simpler frontend for temporary files.",
+    locale,
+    path: "/show/yet-another-tempfiles",
+    title: "minpeter | yet another tempfiles",
+  });
+}
 
 export default async function Page(
   props: PageProps<"/[locale]/show/yet-another-tempfiles">

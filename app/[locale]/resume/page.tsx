@@ -1,14 +1,23 @@
-import type { Route } from "next";
+import type { Metadata, Route } from "next";
 import Image from "next/image";
 import Link from "next/link";
 
 import { LanguageSelector } from "@/components/language-selector";
-import NewMetadata from "@/shared/utils/metadata";
+import { createMetadata, resolveLocale } from "@/shared/utils/metadata";
 
-export const metadata = NewMetadata({
-  description: "Work history and background — coming soon.",
-  title: "minpeter | resume",
-});
+export async function generateMetadata(
+  props: PageProps<"/[locale]/resume">
+): Promise<Metadata> {
+  const { locale: routeLocale } = await props.params;
+  const locale = resolveLocale(routeLocale);
+
+  return createMetadata({
+    description: "Work history and background — coming soon.",
+    locale,
+    path: "/resume",
+    title: "minpeter | resume",
+  });
+}
 
 export default async function Page(props: PageProps<"/[locale]/resume">) {
   const { locale } = await props.params;
