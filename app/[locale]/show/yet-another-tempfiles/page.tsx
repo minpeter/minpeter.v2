@@ -1,28 +1,37 @@
 import type { Route } from "next";
+import { getTranslations } from "next-intl/server";
 
-import Header from "@/components/header";
-import { cn } from "@/shared/utils/tailwind";
+import { ShowcaseDetailHeader } from "@/components/showcase-detail-header";
+import NewMetadata from "@/shared/utils/metadata";
 
 import TmpfUI from "./tmpf";
 
-import styles from "@/shared/styles/stagger-fade-in.module.css";
+export const metadata = NewMetadata({
+  description: "A simpler frontend for temporary files.",
+  title: "minpeter | yet another tempfiles",
+});
 
 export default async function Page(
   props: PageProps<"/[locale]/show/yet-another-tempfiles">
 ) {
-  const { locale } = await props.params;
+  const [{ locale }, t] = await Promise.all([props.params, getTranslations()]);
+
   return (
-    <section className="flex flex-col gap-3">
-      <Header
-        description="tmpf.me보다 간단한 대체 프론트엔드"
-        link={{ href: `/${locale}/show` as Route, text: "showcase로 돌아가기" }}
-        title="/show/yet-another-tempfiles"
+    <section className="showcase-page">
+      <ShowcaseDetailHeader
+        backLabel={t("back")}
+        description="A small, direct interface for uploading temporary files."
+        href={`/${locale}/show` as Route}
+        kicker="Utility study"
+        title="Yet another tempfiles"
       />
-      <div
-        className={cn(styles.stagger_container, styles.slow, "flex flex-col")}
-      >
+
+      <div className="rounded-lg border border-foreground/10 bg-secondary/25 p-5 sm:p-6">
         <TmpfUI />
       </div>
+      <p className="mt-3 text-[0.6875rem] text-muted-foreground leading-relaxed">
+        Files are uploaded to tmpf.me and may be publicly accessible by URL.
+      </p>
     </section>
   );
 }

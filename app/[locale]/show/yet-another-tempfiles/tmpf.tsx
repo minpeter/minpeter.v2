@@ -1,6 +1,11 @@
 "use client";
 
-import { DownloadIcon, EyeOpenIcon } from "@radix-ui/react-icons";
+import {
+  DownloadIcon,
+  ExclamationTriangleIcon,
+  EyeOpenIcon,
+  ReloadIcon,
+} from "@radix-ui/react-icons";
 import axios from "axios";
 import { useState } from "react";
 
@@ -96,7 +101,7 @@ export default function TmpfUI() {
     const response = await uploadFile(files);
     setUploaded(response);
     if (!response) {
-      setError("Upload failed. Please try again.");
+      setError("Check your connection and try again in a moment.");
     }
     setLoading(false);
   };
@@ -138,8 +143,28 @@ export default function TmpfUI() {
         </div>
       </div>
 
-      {error ? <p className="text-red-400 text-sm">{error}</p> : null}
-      {loading ? <p>Uploading...</p> : null}
+      {error ? (
+        <div
+          className="flex w-full max-w-md items-center gap-1.5 text-[0.6875rem] text-muted-foreground leading-relaxed"
+          role="alert"
+        >
+          <ExclamationTriangleIcon
+            aria-hidden="true"
+            className="size-3 shrink-0 text-destructive/75"
+          />
+          <span>Upload failed — {error}</span>
+        </div>
+      ) : null}
+      {loading ? (
+        <div
+          aria-live="polite"
+          className="flex w-full items-center gap-2 text-[0.75rem] text-muted-foreground"
+          role="status"
+        >
+          <ReloadIcon aria-hidden="true" className="size-3.5 animate-spin" />
+          Uploading files…
+        </div>
+      ) : null}
       {hasUploadedFiles ? (
         <>
           <div className="flex max-w-full flex-wrap items-center gap-x-4 gap-y-2">

@@ -1,93 +1,195 @@
 import type { Route } from "next";
 import { getTranslations } from "next-intl/server";
 
-import Header from "@/components/header";
+import { ShowcaseDetailHeader } from "@/components/showcase-detail-header";
+import NewMetadata from "@/shared/utils/metadata";
+import { cn } from "@/shared/utils/tailwind";
+
+import styles from "./styles.module.css";
+
+export const metadata = NewMetadata({
+  description: "Experiments in layered motion and depth.",
+  title: "minpeter | unstructured",
+});
 
 export default async function Page(
   props: PageProps<"/[locale]/show/unstructured">
 ) {
   const [{ locale }, t] = await Promise.all([props.params, getTranslations()]);
   return (
-    <section className="flex flex-col gap-8">
-      <Header
-        description="unstructured"
-        link={{ href: `/${locale}/show` as Route, text: t("back") }}
-        title="/show/unstructured"
+    <section className="showcase-page">
+      <ShowcaseDetailHeader
+        backLabel={t("back")}
+        description="Loose experiments with layered interfaces, motion, and depth."
+        href={`/${locale}/show` as Route}
+        kicker="Motion study"
+        title="Unstructured"
       />
 
-      <div className="h-48 w-full">
-        <div
-          className="unstructured-demo unstructured-demo--stack relative h-full w-full"
-          role="presentation"
-        >
-          <div className="unstructured-layer unstructured-layer--stack-back absolute inset-0 -rotate-1 transform rounded-sm bg-neutral-600 transition-all duration-300" />
-          <div className="unstructured-layer unstructured-layer--stack-front absolute inset-0 rotate-1 transform rounded-sm bg-neutral-500 p-8 transition-all duration-300">
-            <h2 className="font-extrabold text-2xl text-neutral-200">
-              Hover me
-            </h2>
-          </div>
-        </div>
-      </div>
-
-      {/* Enhanced 3D layered animated card with twisting effect */}
-      <div className="h-48 w-full [perspective:1500px]">
-        <div
-          className="unstructured-demo unstructured-demo--depth relative h-full w-full"
-          role="presentation"
-        >
-          <div className="unstructured-layer unstructured-layer--depth-one absolute inset-0 flex transform items-center justify-center rounded-sm bg-neutral-600 transition-all duration-500 ease-out">
-            <span className="font-extrabold text-2xl text-white drop-shadow-md">
-              Layer 1
-            </span>
-          </div>
-          <div className="unstructured-layer unstructured-layer--depth-two absolute inset-0 flex transform items-center justify-center rounded-sm bg-neutral-500 transition-all duration-500 ease-out">
-            <span className="font-extrabold text-2xl text-white drop-shadow-md">
-              Layer 2
-            </span>
-          </div>
-          <div className="unstructured-layer unstructured-layer--depth-three absolute inset-0 flex transform items-center justify-center rounded-sm bg-neutral-400 transition-all duration-500 ease-out">
-            <span className="font-extrabold text-2xl text-white drop-shadow-md">
-              Layer 3
-            </span>
-          </div>
-        </div>
-      </div>
-
-      {/* Side-view transition with layer separation effect */}
-      <div className="h-48 w-full [perspective:1500px]">
-        <div
-          className="unstructured-demo unstructured-demo--side relative h-full w-full"
-          role="presentation"
-        >
-          <div className="unstructured-layer unstructured-layer--side-front absolute inset-0 origin-left transform rounded-sm bg-neutral-700 shadow-lg transition-all duration-700 ease-out">
-            <div className="flex h-full p-6">
-              <span className="font-extrabold text-2xl text-white drop-shadow-md">
-                Front
-              </span>
+      <div className="space-y-10">
+        <figure>
+          <figcaption className="mb-3 flex items-center justify-between text-[0.6875rem] text-muted-foreground uppercase tracking-[0.08em]">
+            <span>Counter rotation</span>
+            <span className="font-mono">01</span>
+          </figcaption>
+          <div className="h-48 w-full">
+            <div
+              aria-label="Two layered cards rotating in opposite directions on hover"
+              className={cn(
+                styles.demo,
+                styles.stack,
+                "relative h-full w-full rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              )}
+              role="img"
+              tabIndex={0}
+            >
+              <div
+                className={cn(
+                  styles.stackBack,
+                  "absolute inset-0 -rotate-1 transform rounded-md bg-neutral-600 transition-all duration-300"
+                )}
+              />
+              <div
+                className={cn(
+                  styles.stackFront,
+                  "absolute inset-0 rotate-1 transform rounded-md bg-neutral-500 p-8 transition-all duration-300"
+                )}
+              >
+                <h2 className="font-medium text-2xl text-neutral-100 tracking-[-0.04em]">
+                  Hover me
+                </h2>
+              </div>
             </div>
           </div>
+        </figure>
 
-          <div className="unstructured-layer unstructured-layer--side-middle absolute inset-0 origin-left transform rounded-md bg-neutral-600 shadow-lg transition-all duration-700 ease-out">
-            <div className="flex h-full p-6">
-              <span className="unstructured-copy unstructured-copy--side-middle font-extrabold text-white text-xl opacity-0 drop-shadow-md transition-opacity delay-100 duration-300">
-                Middle
-              </span>
+        <figure>
+          <figcaption className="mb-3 flex items-center justify-between text-[0.6875rem] text-muted-foreground uppercase tracking-[0.08em]">
+            <span>Depth separation</span>
+            <span className="font-mono">02</span>
+          </figcaption>
+          <div className="h-48 w-full [perspective:1500px]">
+            <div
+              aria-label="Three cards separating in three-dimensional space on hover"
+              className={cn(
+                styles.demo,
+                styles.depth,
+                "relative h-full w-full rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              )}
+              role="img"
+              tabIndex={0}
+            >
+              <div
+                className={cn(
+                  styles.depthOne,
+                  "absolute inset-0 flex transform items-center justify-center rounded-md bg-neutral-600 transition-all duration-500 ease-out"
+                )}
+              >
+                <span className="font-medium text-2xl text-white tracking-[-0.04em] drop-shadow-md">
+                  Layer 1
+                </span>
+              </div>
+              <div
+                className={cn(
+                  styles.depthTwo,
+                  "absolute inset-0 flex transform items-center justify-center rounded-md bg-neutral-500 transition-all duration-500 ease-out"
+                )}
+              >
+                <span className="font-medium text-2xl text-white tracking-[-0.04em] drop-shadow-md">
+                  Layer 2
+                </span>
+              </div>
+              <div
+                className={cn(
+                  styles.depthThree,
+                  "absolute inset-0 flex transform items-center justify-center rounded-md bg-neutral-400 transition-all duration-500 ease-out"
+                )}
+              >
+                <span className="font-medium text-2xl text-white tracking-[-0.04em] drop-shadow-md">
+                  Layer 3
+                </span>
+              </div>
             </div>
           </div>
+        </figure>
 
-          <div className="unstructured-layer unstructured-layer--side-back absolute inset-x-4 inset-y-6 flex origin-left transform flex-row gap-6 rounded-sm p-3 transition-all duration-700 ease-out">
-            <div className="flex h-full w-1/2 rounded-lg bg-neutral-500 p-6">
-              <span className="unstructured-copy unstructured-copy--side-back-one font-extrabold text-lg text-white opacity-0 drop-shadow-md transition-opacity delay-200 duration-300">
-                Back 1
-              </span>
-            </div>
-            <div className="flex h-full w-1/2 rounded-lg bg-neutral-400 p-6">
-              <span className="unstructured-copy unstructured-copy--side-back-two font-extrabold text-lg text-white opacity-0 drop-shadow-md transition-opacity delay-300 duration-300">
-                Back 2
-              </span>
+        <figure>
+          <figcaption className="mb-3 flex items-center justify-between text-[0.6875rem] text-muted-foreground uppercase tracking-[0.08em]">
+            <span>Side view</span>
+            <span className="font-mono">03</span>
+          </figcaption>
+          <div className="h-48 w-full [perspective:1500px]">
+            <div
+              aria-label="A card opening into three side-view layers on hover"
+              className={cn(
+                styles.demo,
+                styles.side,
+                "relative h-full w-full rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              )}
+              role="img"
+              tabIndex={0}
+            >
+              <div
+                className={cn(
+                  styles.sideFront,
+                  "absolute inset-0 z-30 origin-left transform rounded-md bg-neutral-700 shadow-lg transition-all duration-700 ease-out"
+                )}
+              >
+                <div className="flex h-full p-6">
+                  <span className="font-medium text-2xl text-white tracking-[-0.04em] drop-shadow-md">
+                    Front
+                  </span>
+                </div>
+              </div>
+
+              <div
+                className={cn(
+                  styles.sideMiddle,
+                  "absolute inset-0 z-20 origin-left transform rounded-md bg-neutral-600 shadow-lg transition-all duration-700 ease-out"
+                )}
+              >
+                <div className="flex h-full p-6">
+                  <span
+                    className={cn(
+                      styles.copy,
+                      "font-medium text-white text-xl opacity-0 tracking-[-0.04em] drop-shadow-md transition-opacity delay-100 duration-300"
+                    )}
+                  >
+                    Middle
+                  </span>
+                </div>
+              </div>
+
+              <div
+                className={cn(
+                  styles.sideBack,
+                  "absolute inset-x-4 inset-y-6 z-10 flex origin-left transform flex-row gap-6 rounded-md p-3 transition-all duration-700 ease-out"
+                )}
+              >
+                <div className="flex h-full w-1/2 rounded-md bg-neutral-500 p-6">
+                  <span
+                    className={cn(
+                      styles.copy,
+                      "font-medium text-lg text-white opacity-0 tracking-[-0.04em] drop-shadow-md transition-opacity delay-200 duration-300"
+                    )}
+                  >
+                    Back 1
+                  </span>
+                </div>
+                <div className="flex h-full w-1/2 rounded-md bg-neutral-400 p-6">
+                  <span
+                    className={cn(
+                      styles.copy,
+                      "font-medium text-lg text-white opacity-0 tracking-[-0.04em] drop-shadow-md transition-opacity delay-300 duration-300"
+                    )}
+                  >
+                    Back 2
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
+        </figure>
       </div>
     </section>
   );
