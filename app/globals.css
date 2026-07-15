@@ -842,47 +842,6 @@
   .blog-post-page > section:last-child a:hover {
     color: hsl(var(--foreground));
   }
-
-  /* The unstructured demos only respond to real pointer hover. This prevents
-     touch browsers from applying a sticky 3D transform after a tap. */
-  @media (hover: hover) and (pointer: fine) {
-    .unstructured-demo--stack:hover .unstructured-layer--stack-back {
-      transform: rotate(1deg);
-    }
-
-    .unstructured-demo--stack:hover .unstructured-layer--stack-front {
-      transform: rotate(-1deg);
-    }
-
-    .unstructured-demo--depth:hover .unstructured-layer--depth-one {
-      transform: translate3d(-15px, -15px, 40px) rotateX(10deg) rotateY(-5deg);
-    }
-
-    .unstructured-demo--depth:hover .unstructured-layer--depth-two {
-      transform: translate3d(0, 0, 20px) rotateX(5deg) rotateY(-3deg);
-    }
-
-    .unstructured-demo--depth:hover .unstructured-layer--depth-three {
-      transform: translate3d(15px, 15px, -10px) rotateX(-5deg) rotateY(-8deg);
-    }
-
-    .unstructured-demo--side:hover .unstructured-layer--side-front {
-      transform: translate3d(-20px, -10px, 0) rotateY(30deg);
-    }
-
-    .unstructured-demo--side:hover .unstructured-layer--side-middle {
-      inset: 0.5rem;
-      transform: translate3d(0, 10px, 0) rotateY(30deg) translateZ(100px);
-    }
-
-    .unstructured-demo--side:hover .unstructured-layer--side-back {
-      transform: translate3d(20px, 30px, 0) rotateY(30deg) translateZ(200px);
-    }
-
-    .unstructured-demo--side:hover .unstructured-copy {
-      opacity: 1;
-    }
-  }
 }
 
 /* ============================================

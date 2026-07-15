@@ -1,0 +1,87 @@
+.demo {
+  transform-style: preserve-3d;
+}
+
+@media (any-hover: hover) and (any-pointer: fine) {
+  .stack:hover .stackBack {
+    transform: rotate(1deg);
+  }
+
+  .stack:hover .stackFront {
+    transform: rotate(-1deg);
+  }
+
+  .depth:hover .depthOne {
+    transform: translate3d(-15px, -15px, 40px) rotateX(10deg) rotateY(-5deg);
+  }
+
+  .depth:hover .depthTwo {
+    transform: translate3d(0, 0, 20px) rotateX(5deg) rotateY(-3deg);
+  }
+
+  .depth:hover .depthThree {
+    transform: translate3d(15px, 15px, -10px) rotateX(-5deg) rotateY(-8deg);
+  }
+
+  .side:hover .sideFront {
+    transform: translate3d(-20px, -10px, 0) rotateY(30deg);
+  }
+
+  .side:hover .sideMiddle {
+    inset: 0.5rem;
+    transform: translate3d(0, 10px, 100px) rotateY(30deg);
+  }
+
+  .side:hover .sideBack {
+    transform: translate3d(20px, 30px, 200px) rotateY(30deg);
+  }
+
+  .side:hover .copy {
+    opacity: 1;
+  }
+}
+
+.stack:focus-visible .stackBack {
+  transform: rotate(1deg);
+}
+
+.stack:focus-visible .stackFront {
+  transform: rotate(-1deg);
+}
+
+.depth:focus-visible .depthOne {
+  transform: translate3d(-15px, -15px, 40px) rotateX(10deg) rotateY(-5deg);
+}
+
+.depth:focus-visible .depthTwo {
+  transform: translate3d(0, 0, 20px) rotateX(5deg) rotateY(-3deg);
+}
+
+.depth:focus-visible .depthThree {
+  transform: translate3d(15px, 15px, -10px) rotateX(-5deg) rotateY(-8deg);
+}
+
+.side:focus-visible .sideFront {
+  transform: translate3d(-20px, -10px, 0) rotateY(30deg);
+}
+
+.side:focus-visible .sideMiddle {
+  inset: 0.5rem;
+  transform: translate3d(0, 10px, 100px) rotateY(30deg);
+}
+
+.side:focus-visible .sideBack {
+  transform: translate3d(20px, 30px, 200px) rotateY(30deg);
+}
+
+.side:focus-visible .copy {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .demo *,
+  .demo *::before,
+  .demo *::after {
+    transition-duration: 0.01ms !important;
+  }
+}

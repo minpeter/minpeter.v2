@@ -3,7 +3,7 @@ import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 import Link from "next/link";
 
-import Header from "@/components/header";
+import { ShowcaseDetailHeader } from "@/components/showcase-detail-header";
 import { createMetadata, resolveLocale } from "@/shared/utils/metadata";
 
 import SaaSComponentImage from "./saas-component.png";
@@ -16,7 +16,7 @@ export async function generateMetadata(
   const locale = resolveLocale(routeLocale);
 
   return createMetadata({
-    description: "An archived study in layered interface composition.",
+    description: "A perspective study in layered product interfaces.",
     locale,
     path: "/show/unstructured-0828",
     title: "minpeter | unstructured 0828",
@@ -28,14 +28,17 @@ export default async function Page(
 ) {
   const [{ locale }, t] = await Promise.all([props.params, getTranslations()]);
   return (
-    <section className="flex flex-col gap-8">
-      <Header
-        description="unstructured 250828"
-        link={{ href: `/${locale}/show` as Route, text: t("back") }}
-        title="/show/unstructured-0828"
+    <section className="showcase-page max-w-4xl">
+      <ShowcaseDetailHeader
+        backLabel={t("back")}
+        className="mx-auto w-full max-w-lg"
+        description="A perspective study built from layered product interfaces."
+        href={`/${locale}/show` as Route}
+        kicker="Perspective study"
+        title="Unstructured 0828"
       />
 
-      <div className="relative z-10 mt-4 flex min-h-[340px] w-full max-w-full items-center justify-center overflow-hidden sm:min-h-[430px] md:mt-0 md:min-h-[520px] lg:min-h-[560px] xl:min-h-[700px] 2xl:min-h-[820px]">
+      <div className="relative z-10 flex min-h-[340px] w-full max-w-full items-center justify-center overflow-hidden rounded-lg border border-foreground/10 bg-secondary/20 sm:min-h-[430px] md:min-h-[520px] lg:min-h-[560px] xl:min-h-[700px] 2xl:min-h-[820px]">
         <div className="origin-center scale-[0.55] sm:scale-[0.72] md:scale-[0.82] lg:scale-[0.7] xl:scale-100 2xl:scale-[1.25]">
           <div className="[transform:perspective(4101px)_rotateX(40deg)_rotateY(5deg)_rotateZ(55deg)]">
             <div className="relative inline-block [transform:scaleX(-1)_scaleY(-1)_rotate(90deg)]">
@@ -60,6 +63,10 @@ export default async function Page(
           </div>
         </div>
       </div>
+
+      <p className="mx-auto mt-3 w-full max-w-lg text-[0.6875rem] text-muted-foreground leading-relaxed">
+        Select the floating panel to open the referenced model page.
+      </p>
     </section>
   );
 }
