@@ -5,20 +5,19 @@ import Link from "next/link";
 
 const SECTIONS = [
   {
-    description:
-      "Technical notes, tutorials, and lessons from building software.",
+    descriptionKey: "sections.developmentNotes.description",
     href: "/blog",
-    title: "Development notes",
+    titleKey: "sections.developmentNotes.title",
   },
   {
-    description: "Small prototypes, visual toys, and interface studies.",
+    descriptionKey: "sections.interactiveExperiments.description",
     href: "/show",
-    title: "Interactive experiments",
+    titleKey: "sections.interactiveExperiments.title",
   },
   {
-    description: "Work history and background — coming soon.",
+    descriptionKey: "sections.resume.description",
     href: "/resume",
-    title: "Resume (in progress)",
+    titleKey: "sections.resume.title",
   },
 ] as const;
 
@@ -34,13 +33,13 @@ const SOCIAL_LINKS = [
 
 export default function Page() {
   const locale = useLocale();
-  const t = useTranslations();
+  const t = useTranslations("home");
 
   return (
     <section className="home-page mx-auto flex w-full max-w-lg flex-1 flex-col pt-[6.5rem] pb-12">
       <header className="mb-16">
         <Link
-          aria-label="minpeter home"
+          aria-label={t("homeLabel")}
           className="home-logo-link mb-6 inline-flex hover:opacity-60"
           href={`/${locale}` as Route}
         >
@@ -56,23 +55,22 @@ export default function Page() {
         </Link>
         <h1 className="text-base leading-tight tracking-[-0.035em]">
           <span className="font-semibold text-foreground">MINPETER</span>
-          <span className="text-muted-foreground"> — Software engineer</span>
+          <span className="text-muted-foreground"> — {t("role")}</span>
         </h1>
         <p className="mt-4 max-w-md text-[15px] leading-[1.35] text-foreground/85 tracking-[-0.02em]">
-          {t("siteDescription")} — building interfaces and websites for a
-          living.
+          {t("introduction")}
         </p>
       </header>
 
-      <nav aria-label="Explore" className="home-links">
-        {SECTIONS.map(({ description, href, title }) => (
+      <nav aria-label={t("exploreLabel")} className="home-links">
+        {SECTIONS.map(({ descriptionKey, href, titleKey }) => (
           <Link
             className="home-link group"
             href={`/${locale}${href}` as Route}
             key={href}
           >
-            <span className="home-link-title">{title}</span>
-            <span className="home-link-description">{description}</span>
+            <span className="home-link-title">{t(titleKey)}</span>
+            <span className="home-link-description">{t(descriptionKey)}</span>
           </Link>
         ))}
       </nav>
@@ -82,9 +80,9 @@ export default function Page() {
           className="mb-5 text-[13px] text-muted-foreground tracking-[-0.02em]"
           id="connect-title"
         >
-          Connect
+          {t("socialTitle")}
         </h2>
-        <nav aria-label="Social links" className="flex flex-col gap-3">
+        <nav aria-label={t("socialLabel")} className="flex flex-col gap-3">
           {SOCIAL_LINKS.map(({ href, label, slug }) => (
             <a
               className="home-social-link group"

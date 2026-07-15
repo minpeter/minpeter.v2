@@ -11,9 +11,10 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const { locale: routeLocale } = await props.params;
   const locale = resolveLocale(routeLocale);
+  const t = await getTranslations({ locale });
 
   return createMetadata({
-    description: "Hover over the letters and watch them react.",
+    description: t("showcase.items.dynamicText.summary"),
     locale,
     path: "/show/dynamic-hacked-text",
     title: "minpeter | dynamic hacked text",
@@ -29,10 +30,13 @@ export default async function Page(
     <section className="showcase-page">
       <ShowcaseDetailHeader
         backLabel={t("back")}
-        description="Move across the letters and watch the text reconstruct itself."
+        description={t("showcase.items.dynamicText.description")}
         href={`/${locale}/show` as Route}
-        kicker="Interaction study"
-        title="Dynamic hacked text"
+        kicker={t("showcase.items.dynamicText.kicker")}
+        navigationLabel={t("showcase.detailNavigationLabel", {
+          title: t("showcase.items.dynamicText.title"),
+        })}
+        title={t("showcase.items.dynamicText.title")}
       />
 
       <div className="flex min-h-56 items-center justify-center rounded-lg border border-foreground/10 bg-secondary/35 px-5">

@@ -1,5 +1,4 @@
 import type { TOCItemType } from "fumadocs-core/toc";
-import { Callout } from "fumadocs-ui/components/callout";
 import { ImageZoom } from "fumadocs-ui/components/image-zoom";
 import { Tab, Tabs } from "fumadocs-ui/components/tabs";
 import defaultMdxComponents from "fumadocs-ui/mdx";
@@ -11,6 +10,7 @@ import { notFound } from "next/navigation";
 import type { ComponentProps, ReactNode } from "react";
 import { isValidElement } from "react";
 
+import { BlogCallout, BlogRelatedLink } from "@/components/blog-callout";
 import ExternalRedirect from "@/components/external-redirect";
 import Header from "@/components/header";
 import { MachineTranslationNotice } from "@/components/machine-translation-notice";
@@ -47,10 +47,11 @@ export async function generateMetadata(
 ) {
   const { locale: rawLocale, slug } = await props.params;
   const locale = resolveLocale(rawLocale);
+  const t = await getTranslations({ locale });
   const page = blog.getPage(slug, locale);
   if (!page) {
     return createMetadata({
-      description: "Page not found :/",
+      description: t("notFound.description"),
       image: {
         alt: "minpeter | 404",
         url: getLocalizedPath(locale, "/og/not-found"),
@@ -169,8 +170,9 @@ export default async function Page(
             className="mdx"
             components={{
               ...defaultMdxComponents,
-              Callout,
+              Callout: BlogCallout,
               MediaGrid,
+              RelatedLink: BlogRelatedLink,
               Tab,
               Tabs,
               a: (anchorProps) => {

@@ -14,9 +14,10 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const { locale: routeLocale } = await props.params;
   const locale = resolveLocale(routeLocale);
+  const t = await getTranslations({ locale });
 
   return createMetadata({
-    description: "A perspective study in layered product interfaces.",
+    description: t("showcase.items.unstructured0828.summary"),
     locale,
     path: "/show/unstructured-0828",
     title: "minpeter | unstructured 0828",
@@ -32,10 +33,13 @@ export default async function Page(
       <ShowcaseDetailHeader
         backLabel={t("back")}
         className="mx-auto w-full max-w-lg"
-        description="A perspective study built from layered product interfaces."
+        description={t("showcase.items.unstructured0828.description")}
         href={`/${locale}/show` as Route}
-        kicker="Perspective study"
-        title="Unstructured 0828"
+        kicker={t("showcase.items.unstructured0828.kicker")}
+        navigationLabel={t("showcase.detailNavigationLabel", {
+          title: t("showcase.items.unstructured0828.title"),
+        })}
+        title={t("showcase.items.unstructured0828.title")}
       />
 
       <div className="relative z-10 flex min-h-[340px] w-full max-w-full items-center justify-center overflow-hidden rounded-lg border border-foreground/10 bg-secondary/20 sm:min-h-[430px] md:min-h-[520px] lg:min-h-[560px] xl:min-h-[700px] 2xl:min-h-[820px]">
@@ -43,7 +47,7 @@ export default async function Page(
           <div className="[transform:perspective(4101px)_rotateX(40deg)_rotateY(5deg)_rotateZ(55deg)]">
             <div className="relative inline-block [transform:scaleX(-1)_scaleY(-1)_rotate(90deg)]">
               <Image
-                alt="SaaS"
+                alt={t("showcase.items.unstructured0828.imageAlt")}
                 className="rounded-lg border border-border"
                 src={SaaSPageImage}
               />
@@ -54,7 +58,7 @@ export default async function Page(
                 target="_blank"
               >
                 <Image
-                  alt="SaaS overlay"
+                  alt={t("showcase.items.unstructured0828.overlayAlt")}
                   className="absolute top-[25%] left-[-5%] w-[78%] cursor-pointer rounded-lg border-2 border-neutral-200 transition duration-300 ease-out group-hover:brightness-105"
                   src={SaaSComponentImage}
                 />
@@ -65,7 +69,7 @@ export default async function Page(
       </div>
 
       <p className="mx-auto mt-3 w-full max-w-lg text-[0.6875rem] text-muted-foreground leading-relaxed">
-        Select the floating panel to open the referenced model page.
+        {t("showcase.items.unstructured0828.instruction")}
       </p>
     </section>
   );

@@ -12,6 +12,7 @@ interface ShowcaseDetailHeaderProps {
   description: string;
   href: Route;
   kicker: string;
+  navigationLabel: string;
   title: string;
 }
 
@@ -21,13 +22,14 @@ export function ShowcaseDetailHeader({
   description,
   href,
   kicker,
+  navigationLabel,
   title,
 }: ShowcaseDetailHeaderProps) {
   return (
     <header className={cn("showcase-header", className)}>
-      <nav aria-label={`${title} navigation`} className="fieldnotes-nav">
+      <nav aria-label={navigationLabel} className="fieldnotes-nav">
         <Link
-          aria-label={`${backLabel} — Showcase`}
+          aria-label={backLabel}
           className="fieldnotes-logo-link"
           href={href}
         >

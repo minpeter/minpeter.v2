@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 import type { ReactNode } from "react";
 
 import { createMetadata, resolveLocale } from "@/shared/utils/metadata";
@@ -11,9 +12,10 @@ interface Props {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale: routeLocale } = await params;
   const locale = resolveLocale(routeLocale);
+  const t = await getTranslations({ locale });
 
   return createMetadata({
-    description: "A live countdown to the next year.",
+    description: t("showcase.items.newYear.summary"),
     locale,
     path: "/show/new-year-clock",
     title: "minpeter | new year clock",

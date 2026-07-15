@@ -4,6 +4,16 @@ import { cn } from "@/shared/utils/tailwind";
 
 import { ModeToggle } from "./theme-toggle";
 
+const FOOTER_LABELS = {
+  en: { notes: "notes", source: "source", toggleTheme: "Toggle theme" },
+  ja: {
+    notes: "記事",
+    source: "ソース",
+    toggleTheme: "テーマを切り替え",
+  },
+  ko: { notes: "글", source: "소스", toggleTheme: "테마 전환" },
+} as const;
+
 export default function Footer({
   className,
   locale,
@@ -11,6 +21,9 @@ export default function Footer({
   className?: string;
   locale: string;
 }) {
+  const labels =
+    FOOTER_LABELS[locale as keyof typeof FOOTER_LABELS] ?? FOOTER_LABELS.ko;
+
   return (
     <footer
       className={cn(
@@ -24,7 +37,7 @@ export default function Footer({
           className="underline decoration-foreground/30 underline-offset-4 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           href={locale === "ko" ? "/blog" : `/${locale}/blog`}
         >
-          notes
+          {labels.notes}
         </Link>
         {" / "}
         <a
@@ -33,10 +46,10 @@ export default function Footer({
           rel="noopener noreferrer"
           target="_blank"
         >
-          source
+          {labels.source}
         </a>
       </p>
-      <ModeToggle />
+      <ModeToggle label={labels.toggleTheme} />
     </footer>
   );
 }

@@ -3,6 +3,7 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "@radix-ui/react-icons";
 import useEmblaCarousel from "embla-carousel-react";
 import type { UseEmblaCarouselType } from "embla-carousel-react";
+import { useTranslations } from "next-intl";
 import type { ComponentProps, KeyboardEvent } from "react";
 import {
   createContext,
@@ -187,6 +188,7 @@ function CarouselPrevious({
   size = "icon",
   ...props
 }: ComponentProps<typeof Button>) {
+  const t = useTranslations("common");
   const { orientation, scrollPrev, canScrollPrev } = useCarousel();
 
   return (
@@ -206,7 +208,7 @@ function CarouselPrevious({
       {...props}
     >
       <ArrowLeftIcon />
-      <span className="sr-only">Previous slide</span>
+      <span className="sr-only">{t("previousSlide")}</span>
     </Button>
   );
 }
@@ -217,6 +219,7 @@ function CarouselNext({
   size = "icon",
   ...props
 }: ComponentProps<typeof Button>) {
+  const t = useTranslations("common");
   const { orientation, scrollNext, canScrollNext } = useCarousel();
 
   return (
@@ -236,7 +239,7 @@ function CarouselNext({
       {...props}
     >
       <ArrowRightIcon />
-      <span className="sr-only">Next slide</span>
+      <span className="sr-only">{t("nextSlide")}</span>
     </Button>
   );
 }

@@ -20,8 +20,9 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const { locale: routeLocale } = await props.params;
   const locale = resolveLocale(routeLocale);
+  const t = await getTranslations({ locale });
   const baseMetadata = createMetadata({
-    description: "내가 적은 블로그, 너를 위해 써봤지",
+    description: t("blogPageDescription"),
     locale,
     path: "/blog",
     title: "minpeter | blog",
@@ -48,7 +49,7 @@ export default async function Page(props: PageProps<"/[locale]/blog">) {
   return (
     <section className="fieldnotes-page">
       <header className="fieldnotes-header">
-        <nav aria-label="Blog navigation" className="fieldnotes-nav">
+        <nav aria-label={t("common.blogNavigation")} className="fieldnotes-nav">
           <Link
             aria-label={t("backToHome")}
             className="fieldnotes-logo-link"

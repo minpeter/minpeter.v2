@@ -12,9 +12,10 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const { locale: routeLocale } = await props.params;
   const locale = resolveLocale(routeLocale);
+  const t = await getTranslations({ locale });
 
   return createMetadata({
-    description: "Artwork studies for language model cards.",
+    description: t("showcase.items.modelCard.summary"),
     locale,
     path: "/show/model-card-artwork",
     title: "minpeter | model card artwork",
@@ -29,10 +30,13 @@ export default async function Page(
     <section className="showcase-page">
       <ShowcaseDetailHeader
         backLabel={t("back")}
-        description="Visual studies made for language model launch cards."
+        description={t("showcase.items.modelCard.description")}
         href={`/${locale}/show` as Route}
-        kicker="Artwork study"
-        title="Model card artwork"
+        kicker={t("showcase.items.modelCard.kicker")}
+        navigationLabel={t("showcase.detailNavigationLabel", {
+          title: t("showcase.items.modelCard.title"),
+        })}
+        title={t("showcase.items.modelCard.title")}
       />
 
       <div className="grid grid-cols-3 items-start gap-3">
@@ -50,10 +54,12 @@ export default async function Page(
       </div>
 
       <aside className="mt-12 border-foreground/15 border-t pt-5">
-        <p className="showcase-kicker">Image credits</p>
+        <p className="showcase-kicker">
+          {t("showcase.items.modelCard.credits")}
+        </p>
         <div className="space-y-1 text-[0.6875rem] text-muted-foreground leading-relaxed">
-          <p>Original image © 2024 NousResearch Corp. All rights reserved.</p>
-          <p>Original image © 2025 イシガミ アキラ. All rights reserved.</p>
+          <p>{t("showcase.items.modelCard.creditNous")}</p>
+          <p>{t("showcase.items.modelCard.creditIshigami")}</p>
         </div>
       </aside>
     </section>

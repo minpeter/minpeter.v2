@@ -7,6 +7,7 @@ import {
   ReloadIcon,
 } from "@radix-ui/react-icons";
 import axios from "axios";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -83,6 +84,7 @@ async function uploadFile(file: File[]): Promise<UploadResponse | null> {
 }
 
 export default function TmpfUI() {
+  const t = useTranslations("showcase.items.tempfiles");
   const [files, setFiles] = useState<File[] | null>(null);
   const [uploaded, setUploaded] = useState<UploadResponse | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
@@ -101,7 +103,7 @@ export default function TmpfUI() {
     const response = await uploadFile(files);
     setUploaded(response);
     if (!response) {
-      setError("Check your connection and try again in a moment.");
+      setError(t("connectionError"));
     }
     setLoading(false);
   };
@@ -124,7 +126,7 @@ export default function TmpfUI() {
   return (
     <div className="flex flex-col items-center space-y-4">
       <div className="grid w-full max-w-md items-center gap-1.5">
-        <Label htmlFor="uploadfiles">Upload Files</Label>
+        <Label htmlFor="uploadfiles">{t("uploadLabel")}</Label>
         <div className="flex w-full max-w-md flex-wrap items-center gap-2">
           <Input
             className="min-w-0 flex-1"
@@ -138,7 +140,7 @@ export default function TmpfUI() {
             onClick={handleUpload}
             type="button"
           >
-            Upload
+            {t("uploadButton")}
           </Button>
         </div>
       </div>
@@ -152,7 +154,7 @@ export default function TmpfUI() {
             aria-hidden="true"
             className="size-3 shrink-0 text-destructive/75"
           />
-          <span>Upload failed — {error}</span>
+          <span>{t("uploadFailed", { error })}</span>
         </div>
       ) : null}
       {loading ? (
@@ -162,21 +164,21 @@ export default function TmpfUI() {
           role="status"
         >
           <ReloadIcon aria-hidden="true" className="size-3.5 animate-spin" />
-          Uploading files…
+          {t("uploading")}
         </div>
       ) : null}
       {hasUploadedFiles ? (
         <>
           <div className="flex max-w-full flex-wrap items-center gap-x-4 gap-y-2">
             <p className="min-w-0 max-w-full break-words">
-              Folder{" "}
+              {t("folderLabel")}{" "}
               <code className={`${codeVariants()} break-all`}>
                 {uploaded?.folderId}
               </code>{" "}
-              uploaded
+              {t("uploadedLabel")}
             </p>
             <Button
-              aria-label="Download all files"
+              aria-label={t("downloadAll")}
               onClick={handleDownloadAll}
               type="button"
             >

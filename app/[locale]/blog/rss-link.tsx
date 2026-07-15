@@ -1,4 +1,5 @@
 import { Rss } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 
 import { cn } from "@/shared/utils/tailwind";
 
@@ -6,7 +7,9 @@ interface RssLinkProps {
   locale: string;
 }
 
-export function RssLink({ locale }: RssLinkProps) {
+export async function RssLink({ locale }: RssLinkProps) {
+  const t = await getTranslations();
+
   return (
     <a
       className={cn(
@@ -19,7 +22,7 @@ export function RssLink({ locale }: RssLinkProps) {
       href={`/${locale}/blog/rss.xml`}
       rel="noopener noreferrer"
       target="_blank"
-      title="RSS Feed"
+      title={t("common.rssFeed")}
     >
       <Rss className="h-3.5 w-3.5" />
       <span>RSS</span>

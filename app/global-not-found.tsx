@@ -1,6 +1,7 @@
-import type { Metadata } from "next";
-import { getLocale } from "next-intl/server";
+import type { Metadata, Route } from "next";
+import { getLocale, getTranslations } from "next-intl/server";
 
+import { NotFoundPage } from "@/components/not-found-page";
 import { getBaseUrl } from "@/shared/env";
 import { createMetadata, getLocalizedPath } from "@/shared/utils/metadata";
 
@@ -8,10 +9,10 @@ import "./globals.css";
 import { RootDocument } from "./root-document";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const locale = await getLocale();
+  const [locale, t] = await Promise.all([getLocale(), getTranslations()]);
 
   return createMetadata({
-    description: "Page not found :/",
+    description: t("notFound.description"),
     image: {
       alt: "minpeter | 404",
       url: new URL(
@@ -25,14 +26,18 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function GlobalNotFound() {
-  const locale = await getLocale();
+  const [locale, t] = await Promise.all([getLocale(), getTranslations()]);
 
   return (
     <RootDocument lang={locale}>
-      <section>
-        404: I don&apos;t expect people to come here (if they bypass i18n by
-        going through a proxy)
-      </section>
+      <NotFoundPage
+        backHref={getLocalizedPath(locale, "/") as Route}
+        backLabel={t("backToHome")}
+        description={t("notFound.description")}
+        navigationLabel={t("notFound.navigationLabel")}
+        showLanguageSelector={false}
+        title={t("notFound.title")}
+      />
     </RootDocument>
   );
 }

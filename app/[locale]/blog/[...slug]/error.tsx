@@ -1,5 +1,6 @@
 "use client";
 
+import { useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
 import { useEffect } from "react";
 
@@ -12,6 +13,8 @@ export default function BlogPostErrorBoundary({
   error,
   reset,
 }: ErrorPageProps) {
+  const locale = useLocale();
+  const t = useTranslations("errors.blog");
   useEffect(() => {
     console.error(error);
   }, [error]);
@@ -22,14 +25,13 @@ export default function BlogPostErrorBoundary({
         <div className="space-y-4">
           <div className="space-y-2">
             <p className="font-medium text-muted-foreground text-sm">
-              Blog error
+              {t("kicker")}
             </p>
             <h1 className="text-2xl text-foreground tracking-tight">
-              글을 불러오지 못했습니다
+              {t("title")}
             </h1>
             <p className="text-muted-foreground text-sm sm:text-base">
-              요청한 글을 표시하는 중 문제가 발생했습니다. 다시 시도하거나 글
-              목록으로 돌아가세요.
+              {t("description")}
             </p>
           </div>
 
@@ -39,13 +41,13 @@ export default function BlogPostErrorBoundary({
               onClick={reset}
               type="button"
             >
-              다시 시도
+              {t("retry")}
             </button>
             <Link
               className="inline-flex items-center justify-center rounded-lg border border-border/60 bg-background px-4 py-2 font-medium text-foreground transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              href="/blog"
+              href={`/${locale}/blog`}
             >
-              글 목록으로 돌아가기
+              {t("back")}
             </Link>
           </div>
         </div>

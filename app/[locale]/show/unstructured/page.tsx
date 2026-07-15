@@ -12,9 +12,10 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const { locale: routeLocale } = await props.params;
   const locale = resolveLocale(routeLocale);
+  const t = await getTranslations({ locale });
 
   return createMetadata({
-    description: "Experiments in layered motion and depth.",
+    description: t("showcase.items.unstructured.summary"),
     locale,
     path: "/show/unstructured",
     title: "minpeter | unstructured",
@@ -29,21 +30,24 @@ export default async function Page(
     <section className="showcase-page">
       <ShowcaseDetailHeader
         backLabel={t("back")}
-        description="Loose experiments with layered interfaces, motion, and depth."
+        description={t("showcase.items.unstructured.description")}
         href={`/${locale}/show` as Route}
-        kicker="Motion study"
-        title="Unstructured"
+        kicker={t("showcase.items.unstructured.kicker")}
+        navigationLabel={t("showcase.detailNavigationLabel", {
+          title: t("showcase.items.unstructured.title"),
+        })}
+        title={t("showcase.items.unstructured.title")}
       />
 
       <div className="space-y-10">
         <figure>
           <figcaption className="mb-3 flex items-center justify-between text-[0.6875rem] text-muted-foreground uppercase tracking-[0.08em]">
-            <span>Counter rotation</span>
+            <span>{t("showcase.items.unstructured.counterRotation")}</span>
             <span className="font-mono">01</span>
           </figcaption>
           <div className="h-48 w-full">
             <div
-              aria-label="Two layered cards rotating in opposite directions on hover"
+              aria-label={t("showcase.items.unstructured.counterRotationLabel")}
               className={cn(
                 styles.demo,
                 styles.stack,
@@ -65,7 +69,7 @@ export default async function Page(
                 )}
               >
                 <h2 className="font-medium text-2xl text-neutral-100 tracking-[-0.04em]">
-                  Hover me
+                  {t("showcase.items.unstructured.hoverMe")}
                 </h2>
               </div>
             </div>
@@ -74,12 +78,12 @@ export default async function Page(
 
         <figure>
           <figcaption className="mb-3 flex items-center justify-between text-[0.6875rem] text-muted-foreground uppercase tracking-[0.08em]">
-            <span>Depth separation</span>
+            <span>{t("showcase.items.unstructured.depthSeparation")}</span>
             <span className="font-mono">02</span>
           </figcaption>
           <div className="h-48 w-full [perspective:1500px]">
             <div
-              aria-label="Three cards separating in three-dimensional space on hover"
+              aria-label={t("showcase.items.unstructured.depthSeparationLabel")}
               className={cn(
                 styles.demo,
                 styles.depth,
@@ -95,7 +99,7 @@ export default async function Page(
                 )}
               >
                 <span className="font-medium text-2xl text-white tracking-[-0.04em] drop-shadow-md">
-                  Layer 1
+                  {t("showcase.items.unstructured.layer1")}
                 </span>
               </div>
               <div
@@ -105,7 +109,7 @@ export default async function Page(
                 )}
               >
                 <span className="font-medium text-2xl text-white tracking-[-0.04em] drop-shadow-md">
-                  Layer 2
+                  {t("showcase.items.unstructured.layer2")}
                 </span>
               </div>
               <div
@@ -115,7 +119,7 @@ export default async function Page(
                 )}
               >
                 <span className="font-medium text-2xl text-white tracking-[-0.04em] drop-shadow-md">
-                  Layer 3
+                  {t("showcase.items.unstructured.layer3")}
                 </span>
               </div>
             </div>
@@ -124,12 +128,12 @@ export default async function Page(
 
         <figure>
           <figcaption className="mb-3 flex items-center justify-between text-[0.6875rem] text-muted-foreground uppercase tracking-[0.08em]">
-            <span>Side view</span>
+            <span>{t("showcase.items.unstructured.sideView")}</span>
             <span className="font-mono">03</span>
           </figcaption>
           <div className="h-48 w-full [perspective:1500px]">
             <div
-              aria-label="A card opening into three side-view layers on hover"
+              aria-label={t("showcase.items.unstructured.sideViewLabel")}
               className={cn(
                 styles.demo,
                 styles.side,
@@ -146,7 +150,7 @@ export default async function Page(
               >
                 <div className="flex h-full p-6">
                   <span className="font-medium text-2xl text-white tracking-[-0.04em] drop-shadow-md">
-                    Front
+                    {t("showcase.items.unstructured.front")}
                   </span>
                 </div>
               </div>
@@ -164,7 +168,7 @@ export default async function Page(
                       "font-medium text-white text-xl opacity-0 tracking-[-0.04em] drop-shadow-md transition-opacity delay-100 duration-300"
                     )}
                   >
-                    Middle
+                    {t("showcase.items.unstructured.middle")}
                   </span>
                 </div>
               </div>
@@ -182,7 +186,7 @@ export default async function Page(
                       "font-medium text-lg text-white opacity-0 tracking-[-0.04em] drop-shadow-md transition-opacity delay-200 duration-300"
                     )}
                   >
-                    Back 1
+                    {t("showcase.items.unstructured.back1")}
                   </span>
                 </div>
                 <div className="flex h-full w-1/2 rounded-md bg-neutral-400 p-6">
@@ -192,7 +196,7 @@ export default async function Page(
                       "font-medium text-lg text-white opacity-0 tracking-[-0.04em] drop-shadow-md transition-opacity delay-300 duration-300"
                     )}
                   >
-                    Back 2
+                    {t("showcase.items.unstructured.back2")}
                   </span>
                 </div>
               </div>

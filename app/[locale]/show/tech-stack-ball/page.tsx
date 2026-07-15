@@ -11,9 +11,10 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const { locale: routeLocale } = await props.params;
   const locale = resolveLocale(routeLocale);
+  const t = await getTranslations({ locale });
 
   return createMetadata({
-    description: "A spinning inventory of the tools behind this site.",
+    description: t("showcase.items.techStack.summary"),
     locale,
     path: "/show/tech-stack-ball",
     title: "minpeter | tech stack ball",
@@ -29,10 +30,13 @@ export default async function Page(
     <section className="showcase-page">
       <ShowcaseDetailHeader
         backLabel={t("back")}
-        description="A draggable, floating inventory of tools used to build this site."
+        description={t("showcase.items.techStack.description")}
         href={`/${locale}/show` as Route}
-        kicker="Physics study"
-        title="Tech stack ball"
+        kicker={t("showcase.items.techStack.kicker")}
+        navigationLabel={t("showcase.detailNavigationLabel", {
+          title: t("showcase.items.techStack.title"),
+        })}
+        title={t("showcase.items.techStack.title")}
       />
 
       <PlaygroundWrapper

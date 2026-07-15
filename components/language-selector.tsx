@@ -8,7 +8,7 @@ import {
   Trigger,
 } from "@radix-ui/react-dropdown-menu";
 import { GlobeIcon } from "@radix-ui/react-icons";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useCallback } from "react";
 
 import { LOCALE_LABELS } from "@/shared/constants/locales";
@@ -23,6 +23,7 @@ function preventCloseAutoFocus(event: Event) {
 
 export function LanguageSelector() {
   const locale = useLocale();
+  const t = useTranslations("common");
   const pathname = usePathname();
 
   const {
@@ -47,7 +48,7 @@ export function LanguageSelector() {
     <Root modal={false} onOpenChange={handleOpenChange} open={isOpen}>
       <Trigger asChild>
         <button
-          aria-label="Select language"
+          aria-label={t("selectLanguage")}
           className={cn(
             "flex items-center gap-1 rounded-md px-2 py-1 text-sm",
             "text-gray-500 hover:bg-secondary hover:text-primary",

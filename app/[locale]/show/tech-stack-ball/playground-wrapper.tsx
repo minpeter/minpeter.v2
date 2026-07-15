@@ -1,6 +1,7 @@
 "use client";
 
 import { ReloadIcon } from "@radix-ui/react-icons";
+import { useTranslations } from "next-intl";
 import dynamic from "next/dynamic";
 import { useCallback, useEffect, useRef, useState } from "react";
 
@@ -26,6 +27,7 @@ const Playground = dynamic<PlaygroundProps>(
 );
 
 export function PlaygroundWrapper({ className, h, w }: PlaygroundProps) {
+  const t = useTranslations("showcase.items.techStack");
   const frameRef = useRef<HTMLDivElement>(null);
   const [dimensions, setDimensions] = useState<PlaygroundDimensions | null>(
     null
@@ -94,14 +96,14 @@ export function PlaygroundWrapper({ className, h, w }: PlaygroundProps) {
         </div>
       </div>
       <div className="mt-3 flex items-center justify-between gap-4 text-[0.6875rem] text-muted-foreground leading-relaxed">
-        <p>Drag an icon and let the physics take over.</p>
+        <p>{t("instruction")}</p>
         <button
           className="inline-flex shrink-0 items-center gap-1 rounded px-1.5 py-1 transition-colors hover:bg-secondary hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           onClick={handleReplay}
           type="button"
         >
           <ReloadIcon aria-hidden="true" className="size-3" />
-          Replay
+          {t("replay")}
         </button>
       </div>
     </>
