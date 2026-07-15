@@ -4,12 +4,13 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { VercelToolbar } from "@vercel/toolbar/next";
 import { NextProvider } from "fumadocs-core/framework/next";
 import { Geist, Geist_Mono, Shippori_Mincho } from "next/font/google";
-import Script from "next/script";
 import { NuqsAdapter } from "nuqs/adapters/next";
 import { Suspense } from "react";
 import type { ReactNode } from "react";
 
 import Footer from "@/components/footer";
+import { ReactGrab } from "@/components/react-grab";
+import { ThemeFavicon } from "@/components/theme-favicon";
 import { ThemeProvider } from "@/components/theme-provider";
 import { env } from "@/shared/env";
 import { AritaBuriLocalFont } from "@/shared/font.AritaBuri";
@@ -32,11 +33,6 @@ const shipporiMincho = Shippori_Mincho({
   weight: ["400", "500", "600"],
 });
 
-const REACT_GRAB_SCRIPT_SRC =
-  "https://unpkg.com/react-grab@0.1.47/dist/index.global.js";
-const REACT_GRAB_SCRIPT_INTEGRITY =
-  "sha256-N9ZzcnqywEotWZk5PhMpU5N3zfVzXaABUWaqjSqVWJw=";
-
 interface RootDocumentProps {
   readonly children: ReactNode;
   readonly lang: string;
@@ -50,14 +46,18 @@ export function RootDocument({ children, lang }: RootDocumentProps) {
   return (
     <html lang={lang} suppressHydrationWarning>
       <head>
-        {shouldInjectDevTools ? (
-          <Script
-            crossOrigin="anonymous"
-            integrity={REACT_GRAB_SCRIPT_INTEGRITY}
-            src={REACT_GRAB_SCRIPT_SRC}
-            strategy="beforeInteractive"
-          />
-        ) : null}
+        <link
+          href="/assets/favicon-light.svg"
+          media="(prefers-color-scheme: light)"
+          rel="icon"
+          type="image/svg+xml"
+        />
+        <link
+          href="/assets/favicon-dark.svg"
+          media="(prefers-color-scheme: dark)"
+          rel="icon"
+          type="image/svg+xml"
+        />
       </head>
       <body
         className={cn(
@@ -70,6 +70,8 @@ export function RootDocument({ children, lang }: RootDocumentProps) {
       >
         <NextProvider>
           <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
+            <ThemeFavicon />
+            {shouldInjectDevTools ? <ReactGrab /> : null}
             <Suspense>
               <NuqsAdapter>
                 <main

@@ -37,7 +37,7 @@ export default function Page() {
   const t = useTranslations();
 
   return (
-    <section className="home-page mx-auto flex w-full max-w-lg flex-1 flex-col pt-24 pb-12 sm:pt-28">
+    <section className="home-page mx-auto flex w-full max-w-lg flex-1 flex-col pt-[6.5rem] pb-12">
       <header className="mb-16">
         <Link
           aria-label="minpeter home"

@@ -150,15 +150,21 @@ export function BlogList({
           </div>
         )}
       </div>
-      <BlogListFallback lang={lang} posts={filteredPosts} />
+      <BlogListFallback
+        isLoading={isSearching}
+        lang={lang}
+        posts={filteredPosts}
+      />
     </>
   );
 }
 
 export function BlogListFallback({
+  isLoading = false,
   lang = "en",
   posts,
 }: {
+  isLoading?: boolean;
   lang?: string;
   posts: postMetadataType[];
 }) {
@@ -183,6 +189,7 @@ export function BlogListFallback({
 
   return (
     <div
+      aria-busy={isLoading || undefined}
       className={cn(styles.stagger_container, styles.slow, "fieldnotes-list")}
     >
       {filteredPosts.length === 0 ? (

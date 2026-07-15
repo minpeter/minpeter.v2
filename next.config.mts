@@ -16,7 +16,6 @@ const nextConfig: NextConfig = {
       "@react-three/fiber",
     ],
     prefetchInlining: true,
-    sri: { algorithm: "sha256" },
     turbopackFileSystemCacheForDev: true,
     viewTransition: true,
   },

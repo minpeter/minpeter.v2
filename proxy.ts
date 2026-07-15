@@ -5,7 +5,7 @@ import type { NextRequest } from "next/server";
 import { routing } from "./shared/i18n/routing";
 
 const exclusions = ["/_next/", "/.well-known/", "/.", "/api/"];
-const publicAssetPrefixes = ["/assets/"];
+const publicAssetPrefixes = ["/assets/", "/fonts/"];
 const publicAssetPaths = new Set([
   "/Lickitung.gltf",
   "/favicon.ico",
