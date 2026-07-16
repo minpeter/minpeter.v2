@@ -176,7 +176,7 @@ export const OgImage = ({
             marginBottom: 9,
           }}
         >
-          MINPETER.UK // {detail}
+          MINPETER.COM // {detail}
         </div>
         <div
           style={{

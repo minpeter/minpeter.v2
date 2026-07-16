@@ -4,7 +4,7 @@ import { describe, expect, it, vi } from "vitest";
 
 import { proxy, shouldExclude } from "./proxy";
 
-const TEST_TARGET_DOMAIN = "https://minpeter.uk";
+const TEST_TARGET_DOMAIN = "https://minpeter.com";
 const NEXT_INTL_MIDDLEWARE_REWRITE = `${TEST_TARGET_DOMAIN}/HIT/NEXT-INTL`;
 
 vi.mock(import("next-intl/middleware"), () => ({

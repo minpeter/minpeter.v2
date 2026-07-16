@@ -1,10 +1,6 @@
-# minpeter.uk
+# minpeter.com
 
 A personal website, blog, and side projects built with Next.js.
-
-## Why .uk?
-
-Because this is the cheapest domain I can buy. No other reason.
 
 ## Inspired by ~
 
