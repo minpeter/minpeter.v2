@@ -76,7 +76,7 @@ export function getBaseUrl(): string {
   const vercelEnv = env.VERCEL_ENV ?? env.NEXT_PUBLIC_VERCEL_ENV;
 
   if (vercelEnv === "production") {
-    return "https://minpeter.uk";
+    return "https://minpeter.com";
   }
 
   if (vercelEnv === "preview" && env.VERCEL_URL) {

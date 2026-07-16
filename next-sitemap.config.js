@@ -1,6 +1,6 @@
 /** @type {import('next-sitemap').IConfig} */
 
-const SITE_URL = process.env.SITE_URL || "https://minpeter.uk";
+const SITE_URL = process.env.SITE_URL || "https://minpeter.com";
 
 // IMPORTANT: Keep in sync with shared/i18n/routing.ts
 // These values are duplicated here because next-sitemap.config.js is CommonJS
