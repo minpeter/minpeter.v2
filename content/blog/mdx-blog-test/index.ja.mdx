@@ -55,14 +55,14 @@ export function SimpleButton() {
 
 ---
 
-ip.minpeter.ukサーバーを利用した読者IP照会コンポーネント
+ip.minpeter.comサーバーを利用した読者IP照会コンポーネント
 
 ```jsx
 export function Ip() {
   const [ip, setIp] = useState("");
 
   useEffect(() => {
-    fetch("https://ip.minpeter.uk/ip").then((res) =>
+    fetch("https://ip.minpeter.com/ip").then((res) =>
       res.text().then((ip) => setIp(ip))
     );
   }, []);

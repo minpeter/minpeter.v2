@@ -181,7 +181,7 @@ To find `[YOUR SERVER IP]`, you can use the following commands in the server ter
 ```bash
 curl ifconfig.me
 # or
-curl ip.minpeter.uk -L
+curl ip.minpeter.com -L
 ```
 
 Also, to allow traffic through Traefik, you need to open ports 80 and 443 on your router or firewall. ~~(Do this on your own)~~
@@ -211,7 +211,7 @@ Connect to the server using SSH or your preferred method.
 
 Create a `traefik` folder and generate a `docker-compose.yaml` file.
 
-Replace `minpeter.uk` with your domain name in the configuration below.
+Replace `minpeter.com` with your domain name in the configuration below.
 
 ```yaml
 version: "3.8"
@@ -222,7 +222,7 @@ services:
     restart: unless-stopped
     labels:
       - traefik.enable=true
-      - traefik.http.routers.traefik.rule=Host(`traefik.minpeter.uk`) && PathPrefix(`/api`, `/dashboard`)
+      - traefik.http.routers.traefik.rule=Host(`traefik.minpeter.com`) && PathPrefix(`/api`, `/dashboard`)
       - traefik.http.routers.traefik.entrypoints=websecure
       - traefik.http.routers.traefik.tls.certresolver=myresolver
       - traefik.http.routers.traefik.service=api@internal
@@ -242,7 +242,7 @@ services:
     container_name: iplogger-service
     labels:
       - traefik.enable=true
-      - traefik.http.routers.iplogger.rule=Host(`ip.minpeter.uk`)
+      - traefik.http.routers.iplogger.rule=Host(`ip.minpeter.com`)
       - traefik.http.routers.iplogger.entrypoints=websecure
       - traefik.http.routers.iplogger.tls.certresolver=myresolver
     networks: [traefik]
@@ -259,7 +259,7 @@ This configuration introduces several new elements. Notably, HTTPS setup and cer
 
 ```yaml
 # Labels section in the traefik service within docker-compose.yaml
-- traefik.http.routers.traefik.rule=Host(`traefik.minpeter.uk`) && PathPrefix(`/api`, `/dashboard`)
+- traefik.http.routers.traefik.rule=Host(`traefik.minpeter.com`) && PathPrefix(`/api`, `/dashboard`)
 - traefik.http.routers.traefik.service=api@internal
 ```
 
@@ -418,7 +418,7 @@ services:
       - traefik.http.services.uptime-kuma.loadbalancer.server.port=3001
       - traefik.http.routers.uptime-kuma.entrypoints=websecure
       - traefik.http.routers.uptime-kuma.tls.certresolver=myresolver
-      - traefik.http.routers.uptime-kuma.rule=Host(`uptime.minpeter.uk`)
+      - traefik.http.routers.uptime-kuma.rule=Host(`uptime.minpeter.com`)
     networks:
       - traefik
 
@@ -451,7 +451,7 @@ Create a service definition file within the `external_services` folder:
 [http.routers]
   [http.routers.iplogger]
     entryPoints = ["websecure"]
-    rule = "Host(`ip.minpeter.uk`)"
+    rule = "Host(`ip.minpeter.com`)"
     service = "iplogger-ext-srv"
     [http.routers.iplogger.tls]
       certResolver = "myresolver"

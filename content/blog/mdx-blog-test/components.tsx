@@ -35,7 +35,7 @@ export function Ip() {
   const [ip, setIp] = useState("");
 
   useEffect(() => {
-    fetch("https://ip.minpeter.uk/ip")
+    fetch("https://ip.minpeter.com/ip")
       .then((res) => {
         if (!res.ok) {
           throw new Error(res.statusText);

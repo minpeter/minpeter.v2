@@ -55,14 +55,14 @@ export function SimpleButton() {
 
 ---
 
-Reader IP lookup component using the ip.minpeter.uk server
+Reader IP lookup component using the ip.minpeter.com server
 
 ```jsx
 export function Ip() {
   const [ip, setIp] = useState("");
 
   useEffect(() => {
-    fetch("https://ip.minpeter.uk/ip").then((res) =>
+    fetch("https://ip.minpeter.com/ip").then((res) =>
       res.text().then((ip) => setIp(ip))
     );
   }, []);
