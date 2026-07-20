@@ -1,10 +1,10 @@
 import { notFound } from "next/navigation";
 
+import { createOgImageResponse } from "@/shared/og-image";
 import {
-  createOgImageResponse,
   getOgTitleSize,
   getOgTitleVisualWidth,
-} from "@/shared/og-image";
+} from "@/shared/og-title";
 import { siteConfig } from "@/shared/site-config";
 import { blog } from "@/shared/source";
 

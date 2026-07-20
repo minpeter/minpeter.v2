@@ -2,6 +2,8 @@ import { readFile } from "node:fs/promises";
 
 import { ImageResponse } from "next/og";
 
+import { getOgTitleSize, getOgTitleVisualWidth, getTitleTokens } from "./og-title";
+
 export const ogImageSize = {
   height: 630,
   width: 1200,
@@ -23,64 +25,7 @@ const catPaths = {
   face: "M117.4 41.5801C115.68 36.9931 109.659 34.4129 104.069 31.8326C98.0484 28.9657 89.591 27.5323 81.8503 27.3889C76.6899 23.3753 69.5226 18.7882 60.6352 16.4947C58.915 10.1875 56.6215 6.31713 52.6078 2.01676C50.7443 .153267 49.4542 -.276769 46.5873 .153268C41.4269 1.01334 39.8501 2.4468 36.6965 4.45364C28.3824 9.0407 15.1946 20.6517 6.45055 36.8497C2.72357 44.3037 0 52.0444 0 60.3584C0 81.1435 17.6315 102.645 52.3211 103.075C70.6694 103.075 81.5636 95.7648 89.0176 84.0104C97.905 77.7032 109.373 66.6656 116.11 53.4778C118.26 48.8908 118.403 43.8737 117.4 41.5801Z",
 };
 
-const cjkCharacterPattern =
-  /[\u3000-\u30FF\u3400-\u9FFF\uAC00-\uD7AF\uFF00-\uFFEF]/u;
-const narrowCharacterPattern = /[I1.,:;!'|]/u;
-const wideLatinCharacterPattern = /[MW@#%&]/u;
-
-const getCharacterWidth = (character: string) => {
-  if (character === " ") {
-    return 0.35;
-  }
-  if (cjkCharacterPattern.test(character)) {
-    return 1;
-  }
-  if (narrowCharacterPattern.test(character)) {
-    return 0.35;
-  }
-  if (wideLatinCharacterPattern.test(character)) {
-    return 0.85;
-  }
-  return 0.62;
-};
-
-export const getOgTitleVisualWidth = (title: string) =>
-  [...title].reduce(
-    (total, character) => total + getCharacterWidth(character),
-    0
-  );
-
-export const getOgTitleSize = (visualWidth: number) => {
-  const fittedSize = Math.floor(960 / Math.max(1, visualWidth));
-  return Math.min(54, Math.max(28, fittedSize));
-};
-
-const getTitleTokens = (title: string) => {
-  const tokens: { isCjk: boolean; text: string }[] = [];
-
-  for (const character of title) {
-    const isCjk = cjkCharacterPattern.test(character);
-    const currentToken = tokens.at(-1);
-
-    if (isCjk) {
-      tokens.push({ isCjk, text: character });
-    } else if (character === " " && currentToken) {
-      currentToken.text += character;
-    } else if (
-      currentToken &&
-      !currentToken.isCjk &&
-      !currentToken.text.endsWith(" ")
-    ) {
-      currentToken.text += character;
-    } else {
-      tokens.push({ isCjk, text: character });
-    }
-  }
-
-  return tokens;
-};
-
-export const getOgFontData = (locale: string) =>
+const getOgFontData = (locale: string) =>
   readFile(locale === "ja" ? fusionPixelFontUrls.ja : fusionPixelFontUrls.ko);
 
 const CatMark = () => (
@@ -95,7 +40,7 @@ const CatMark = () => (
   </svg>
 );
 
-export const OgImage = ({
+const OgImage = ({
   detail,
   title,
   titleSize,
