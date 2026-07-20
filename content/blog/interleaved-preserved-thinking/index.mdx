@@ -1,0 +1,166 @@
+---
+title: "Interleaved Thinking과 Preserved Thinking"
+description: "GLM-4.7이 도입한 두 가지 thinking 전략과, 모델의 추론을 보존하려는 업계 전반의 흐름을 정리했습니다"
+published: 2026-07-21
+tags: ["llm", "glm", "agent", "reasoning"]
+ai_generated_by: "Kimi K3"
+---
+
+2025년 12월 22일 공개된 [GLM-4.7](https://z.ai/blog/glm-4.7)의 릴리스 노트에는 흥미로운 개념 두 가지가 등장합니다. **Interleaved Thinking**과 **Preserved Thinking**입니다. 둘 다 코딩 에이전트처럼 도구 호출이 길게 이어지는 시나리오를 겨냥한 기능인데, 사실 이 방향을 밟고 있는 것은 Z.ai만이 아닙니다. Anthropic, OpenAI, Google 역시 각자의 방식으로 "모델의 생각을 다음 턴에 돌려주는" 메커니즘을 만들어 왔습니다.
+
+이 글에서는 GLM-4.7의 두 기능이 무엇인지 정리하고, 같은 문제를 풀고 있는 다른 제공자들의 접근과 실제 에이전트 하네스에서 관측된 사례까지 함께 살펴 봅니다.
+
+## Interleaved Thinking: 도구 호출 사이에서 생각하기
+
+일반적인 thinking 모델은 한 턴의 시작에서 한 번 생각하고 답을 냅니다. 하지만 에이전트 워크플로우에서는 도구를 호출하고, 결과를 받고, 다시 도구를 호출하는 과정이 한 턴 안에 여러 번 반복됩니다.
+
+Interleaved Thinking은 이 사이사이에서 모델이 생각할 수 있게 하는 기능입니다. [Z.ai 문서](https://docs.z.ai/guides/capabilities/thinking-mode)의 정의를 빌리면 다음과 같습니다.
+
+> GLM이 도구 호출 사이에서, 그리고 도구 결과를 받은 뒤에 생각할 수 있도록 합니다. 각 도구 출력을 해석한 뒤 다음 행동을 결정하고, 추론 단계를 거쳐 여러 도구 호출을 연결할 수 있습니다.
+
+이 기능은 GLM-4.5(2025년 7월)부터 지원되었고, GLM-4.7에서는 "모든 응답과 도구 호출 전에 생각하는" 형태로 강화되었습니다. 참고로 GLM-4.6까지는 `thinking.type: enabled`여도 모델이 생각할지 말지를 스스로 결정하는 hybrid 방식이었지만, GLM-4.7에서는 thinking이 켜져 있으면 항상 생각하는 forced 방식으로 바뀌었습니다.
+
+이 개념을 처음 이름 붙인 것은 Anthropic입니다. 2025년 5월 `interleaved-thinking-2025-05-14` 베타 헤더로 도입되었고, 현재는 Claude 4.6 이상에서 GA입니다. [Anthropic 문서](https://docs.anthropic.com/en/docs/build-with-claude/extended-thinking)는 차이를 이렇게 설명합니다.
+
+> Interleaved thinking이 없으면 Claude는 대화 턴의 시작에서 한 번만 생각할 수 있습니다. Interleaved thinking을 사용하면 각 도구 호출 전후로 추론할 수 있어, 더 나은 의사결정과 더 정확한 결과로 이어집니다.
+
+## Preserved Thinking: 지난 턴의 사고를 버리지 않기
+
+Interleaved Thinking이 "한 턴 안"의 문제라면, Preserved Thinking은 "턴과 턴 사이"의 문제입니다. GLM-4.7에서 새로 도입된 이 기능은 **이전 assistant 턴의 추론 내용(`reasoning_content`)을 컨텍스트에 유지**하는 것입니다. [Z.ai 문서](https://docs.z.ai/guides/capabilities/thinking-mode)는 기대 효과를 세 가지로 정리합니다.
+
+- 추론의 연속성과 대화의 무결성 유지
+- 모델 성능 향상
+- 캐시 히트율 상승 — 실제 작업에서 토큰 절약
+
+동작 방식은 API 파라미터로 명확하게 드러납니다. `thinking.clear_thinking`의 기본값은 `true`인데, 이때는 이전 턴의 `reasoning_content`를 요청에서 제거하고 사용자/assistant의 가시 텍스트와 도구 호출, 도구 결과만 유지합니다. `false`로 설정하면 이전 턴의 추론이 그대로 모델에 전달됩니다.
+
+주의할 점은 기본값이 엔드포인트마다 다르다는 것입니다.
+
+| 엔드포인트 | Preserved Thinking 기본값 |
+|---|---|
+| 표준 API (`api.z.ai/api/paas/v4`) | 비활성 (`clear_thinking: true`) |
+| Coding Plan (`api.z.ai/api/coding/paas/v4`, `api.z.ai/api/anthropic`) | **활성** |
+
+표준 API에서 켜려면 `clear_thinking: false`를 설정하고, **이전 턴의 `reasoning_content`를 원래 순서 그대로, 수정 없이** messages에 포함해야 합니다. 블록을 재정렬하거나 편집하면 성능이 저하되고 캐시 히트율에도 영향을 줍니다. 다만 Anthropic과 달리 하드 에러가 발생하지는 않고, 조용히 성능만 나빠지는 방식이라 더 눈치채기 어렵습니다.
+
+GLM-4.7의 벤치마크 각주에는 이 기능의 무게감이 드러납니다. SWE-bench Verified 73.8%(+5.8), Terminal Bench 2.0 41%(+16.5)라는 수치를 낸 실행 설정에서, **멀티턴 에이전트 태스크(τ²-Bench, Terminal Bench 2)에는 Preserved Thinking 모드를 켰다**고 명시되어 있습니다. 즉 Z.ai 스스로도 에이전트 성능 측정에서 이 기능을 전제로 삼고 있습니다.
+
+덧붙여 GLM-4.7에는 세 번째 기능인 **Turn-level Thinking**도 있습니다. 같은 세션 안에서 요청마다 thinking을 켜고 끌 수 있는 기능으로, "사실 하나 물어보는" 가벼운 턴에서는 꺼서 지연과 비용을 줄이고, 복잡한 계획이나 디버깅 턴에서는 켜는 식의 제어가 가능합니다.
+
+## 업계는 이미 같은 문제를 풀고 있었다
+
+GLM-4.7의 Preserved Thinking은 사실 업계 전반의 흐름 위에 있습니다. 주요 제공자들은 각자 추론을 보존하는 메커니즘을 갖추고 있고, 어기면 에러가 나거나 성능이 떨어진다는 점도 공유합니다.
+
+### Anthropic — thinking 블록과 서명, 그리고 400 에러
+
+Anthropic은 도구 사용과 함께 extended thinking을 쓸 때 thinking 블록(과 `redacted_thinking` 블록)을 **수정 없이 그대로 다음 요청에 포함**할 것을 요구합니다.
+
+> 도구와 함께 extended thinking을 사용할 때는, 이후 턴에서 thinking 블록을 수정 없이 API에 다시 전달해야 합니다. thinking 블록을 수정하거나 제거하면 API 에러나 예기치 않은 모델 동작이 발생할 수 있습니다.
+
+"API 에러"는 실제로 발생합니다. 최신 assistant 메시지의 thinking 블록을 건드리면 다음과 같은 400 `invalid_request_error`가 돌아옵니다.
+
+> `thinking` and `redacted_thinking` blocks in the latest assistant message cannot be modified. These blocks must remain exactly as received to continue the conversation.
+
+이것이 가능한 이유는 thinking 블록에 진위를 검증하는 `signature` 필드가 있고, 암호화된 사고는 `redacted_thinking` 블록의 `data` 필드에 담겨 오기 때문입니다. 서버가 이를 검증하므로 클라이언트는 바이트 단위로 정확히 돌려볼내야 합니다.
+
+비용도 있습니다. thinking 토큰은 출력 토큰으로 과금되고, 돌려볼내는 만큼 컨텍스트 윈도우도 소비합니다. 그래서 Anthropic은 오래된 thinking 블록을 서버 측에서 정리하는 `clear_thinking_20251015` 컨텍스트 편집 기능(최근 N개 thinking 턴 유지)도 제공합니다. "보존하되, 오래된 것은 버리는" 정책을 제공자가 직접 관리하는 셈입니다.
+
+### OpenAI — reasoning items와 암호화된 추론
+
+OpenAI Responses API는 모델의 사고를 `reasoning` 출력 아이템으로 반환하고, SDK 타입 정의에서 용도를 명시합니다.
+
+> 수동으로 컨텍스트를 관리하는 경우, 대화의 후속 턴에서는 이 아이템들을 `input`에 포함해야 합니다.
+
+일반적인 멀티턴 대화에서는 없어도 되지만, **함수 호출이 포함된 턴에서는 반드시 포함**해야 한다고 [공식 쿡북](https://github.com/openai/openai-cookbook/blob/main/examples/responses_api/reasoning_items.ipynb)은 말합니다. 그 근거로 제시되는 수치가 흥미롭습니다.
+
+- 같은 프롬프트와 설정에서 reasoning items를 포함하면 SWE-bench에서 **약 3% 향상**
+- Completions API에서 Responses API로 전환해 reasoning items를 유지하자 캐시 활용률이 **40%에서 80%로** 상승 (o4-mini의 캐시된 입력 토큰은 75% 저렴)
+
+상태를 서버에 저장할 수 없는 환경(ZDR 등)을 위해 `include: ["reasoning.encrypted_content"]`로 암호화된 추론 아이템을 받아 클라이언트 측에서 보관했다가 돌려볼내는 방법도 제공합니다. "모델의 추론 상태를 클라이언트가 보관한다"는 구조는 Anthropic의 `redacted_thinking`과 같은 발상입니다.
+
+### Google — thought signatures
+
+Gemini는 추론의 암호화된 표현인 **thought signature**를 응답 파트에 첨부합니다. Gemini 3에서 함수 호출을 사용할 때는 첫 번째 `functionCall` 파트의 서명을 돌려볼내는 것이 **필수**이며, 빠뜨리면 400 에러가 발생합니다.
+
+> Function call `FC1` in the `1.` content block is missing a `thought_signature`.
+
+함수 호출이 아닌 파트의 서명은 권장 사항이어서 생략필 수 있지만 "성능이 저하될 수 있다"고 안내합니다. 재미있는 점은 검증을 우회하는 더미 서명 값(`"context_engineering_is_the_way_to_go"`)까지 문서에 공개되어 있다는 것인데, 그만큼 하네스 개발자들이 이 검증과 자주 부딪혔다는 방증으로 읽힙니다.
+
+### MiniMax, Kimi, DeepSeek — 각자의 답
+
+중국 모델들도 같은 수렴을 보입니다.
+
+**MiniMax-M2**(2025년 10월)는 스스로를 "interleaved thinking model"이라 명명한 첫 모델입니다. 모델 카드에는 히스토리에서 `<think>` 부분을 제거하면 성능이 나빠진다는 경고가 있고, 실제 채팅 템플릿은 `reasoning_content`를 **마지막 user 메시지 이후의 assistant 턴에만** 렌더링합니다. 도구 체인 안의 추론은 유지하되, 과거 대화의 추론은 버리는 절충안입니다.
+
+**Moonshot Kimi**는 `thinking.keep` 파라미터로 제어합니다. 기본값 `null`은 보존하지 않음, `"all"`은 모든 이전 턴의 `reasoning_content`를 유지해 Preserved Thinking을 활성화합니다(K2.6부터 도입). GLM-4.7의 `clear_thinking: false`와 정확히 대응하는 설계입니다. Moonshot는 한발 더 나아가, thinking이 켜진 상태에서 tool call이 포함된 assistant 메시지에 `reasoning_content`가 없으면 **400 에러**(`thinking is enabled but reasoning_content is missing in assistant tool call message`)를 반환합니다. 보존이 권장이 아니라 강제인 셈입니다.
+
+**DeepSeek**는 대조적인 사례입니다. R1 시절 공식 문서는 "멀티턴 대화에서 이전 `reasoning_content`는 모델에 전달되지 않는다"고 명시했고 오히려 포함하지 말 것을 권했습니다. 그러나 V3.2에서 interleaved thinking을 도입하더니, V4에서는 도구 호출이 있는 경우 user 메시지 경계를 넘어서까지 추론을 보존하는 방향으로 선회했습니다. 같은 회사의 모델인데 버전에 따라 "돌려볼낼지면 안 되는 필드"가 "반드시 돌려볼내야 하는 필드"로 바뀐 셈이고, 이 전환기의 혼란은 뒤에서 다룰 하네스 버그들로 그대로 이어졌습니다.
+
+## 왜 보존해야 하는가: 캐시와 단기 기억
+
+제공자마다 형태는 다르지만 이유는 두 가지로 수렴합니다.
+
+첫째, **추론의 연속성**입니다. 긴 도구 호출 체인에서 모델이 직전에 왜 그런 결정을 했는지 잊어버리면, 이미 검토한 방향을 다시 탐색하거나 일관성 없는 선택을 하게 됩니다. 한 에이전트 개발자의 표현을 빌리면, interleaved reasoning trace는 "긴 도구 호출 체인에서 의도를 유지하는 단기 기억"입니다. 처음부터 다시 추론하는 대신 기존 추론을 재사용하므로 정보 손실과 모순이 줄어듭니다.
+
+둘째, **캐시 효율**입니다. 프롬프트 캐싱은 프리픽스가 정확히 일치할 때만 동작합니다. N번째 턴에서 생성된 thinking 블록을 N+1번째 턴에서 빼버리면 입력 시퀀스가 달라지고, 캐시된 프리픽스 전체가 무효화됩니다. thinking 토큰은 출력 가격으로 생성 비용을 이미 지불했는데, 다음 턴에 버리면 그 비용을 다시 내는 셈입니다.
+
+실측 사례들이 이를 뒷받침합니다.
+
+- Claude Code 이슈 [#76253](https://github.com/anthropics/claude-code/issues/76253)에서는 thinking 블록이 매 턴 누락되면서 세션 캐시 쓰기 토큰의 약 69%가 전체 프리픽스 재작성이었고, 29만 토큰 컨텍스트에서 한 줄짜리 후속 질문에 약 $9가 청구된 사례가 보고되었습니다.
+- OpenAI는 쿡북에서 reasoning items 유지로 캐시 활용률이 40%→80%로 올랐다고 보고합니다.
+- Z.ai도 Preserved Thinking이 "캐시 히트율을 높여 실제 작업의 토큰을 절약한다"고 밝히고 있으며, 캐시된 토큰은 통상 표준 가격의 50%로 과금됩니다.
+
+## 실전에서 생기는 문제들
+
+문제는 이 "돌려볼내기"가 생각보다 잘 안 된다는 데 있습니다. 오픈소스 에이전트 하네스와 게이트웨이의 이슈 트래커에는 관련 버그가 쌓여 있습니다.
+
+- **필드명 불일치**: OpenAI 호환 API에서 추론이 `reasoning_content`가 아니라 `reasoning` 필드로 스트리밍되면 조용히 드랍되는 문제([opencode #35283](https://github.com/anomalyco/opencode/issues/35283)). vLLM도 입력 측에서 `reasoning_content`를 읽지 않아 [재지원 PR](https://github.com/vllm-project/vllm/issues/38488)이 열린 상태입니다.
+- **무음 중단**: tool_calls가 포함된 assistant 메시지에서 `reasoning_content`가 빠지면, DeepSeek가 작업 도중 조용히 멈추는 문제([opencode #35689](https://github.com/anomalyco/opencode/issues/35689)).
+- **잘못된 round-trip**: Anthropic의 `thinking_blocks`를 OpenAI 호환 백엔드에 그대로 전달했더니 이미 렌더링된 추론이 프롬프트에 중복 주입되어, 15턴 중 9턴에서 반복 루프가 발생한 실험([litellm #31279](https://github.com/BerriAI/litellm/issues/31279)). `reasoning_content`만 쓰면 0건이었습니다.
+- **캐시 무효화**: 모드 전환 시 reasoning part를 텍스트로 변환하면서 매번 대량의 KV 캐시가 무효화되는 문제([opencode #32603](https://github.com/anomalyco/opencode/issues/32603)). "Reasoning parts should never be converted to text"라는 결론이 인용할 만합니다.
+
+서빙 측에서도 골칫거리입니다. vLLM 이슈 [#39321](https://github.com/vllm-project/vllm/issues/39321)은 thinking 토큰이 프리픽스 캐시를 오염시켜, 대화 50개 동시 실행 시 65-80GB의 도달 불가능한 KV 캐시가 쌓이는 문제를 보고합니다. 보존하라는 요구와 캐시 효율이라는 요구가 서빙 계층에서 충돌하는 지점입니다.
+
+<Callout type="warn" title="하네스를 고르거나 만들 때 확인할 것">
+
+에이전트 하네스가 (1) assistant 메시지의 `reasoning_content`(또는 thinking 블록)를 그대로 보존하는지, (2) 컨텍스트 압축(compaction)이나 모드 전환 시 이 블록들을 변형하지 않는지, (3) 프로바이더별 필드명 차이(`reasoning` vs `reasoning_content`)를 올바르게 매핑하는지 확인해야 합니다. 어긋나면 에러가 아니라 조용한 품질 저하나 비용 폭증으로 나타납니다.
+
+</Callout>
+
+## 사용해 보기
+
+GLM-4.7에서 Preserved Thinking을 켜는 방법은 간단합니다. 핵심은 `clear_thinking: false`와, 받은 `reasoning_content`를 다음 요청의 assistant 메시지에 그대로 포함하는 것입니다.
+
+```python
+from openai import OpenAI
+
+client = OpenAI(api_key="YOUR_API_KEY", base_url="https://api.z.ai/api/paas/v4/")
+
+response = client.chat.completions.create(
+    model="glm-4.7",
+    messages=messages,
+    tools=tools,
+    extra_body={"thinking": {"type": "enabled", "clear_thinking": False}},
+)
+
+# 응답의 reasoning_content를 그대로 다음 턴의 assistant 메시지에 포함
+messages.append({
+    "role": "assistant",
+    "content": content,
+    "reasoning_content": reasoning,  # 수정/재정렬 없이 원본 그대로
+    "tool_calls": tool_calls,
+})
+messages.append({"role": "tool", "tool_call_id": tool_calls[0]["id"], "content": result})
+```
+
+Interleaved Thinking과 Preserved Thinking 모두 이 패턴 하나로 동작하며, 수동으로 구분할 필요는 없습니다. Coding Plan 엔드포인트(Claude Code 등에 연결하는 `api/coding/paas/v4`, `api/anthropic`)에서는 기본으로 켜져 있으니, Claude Code 같은 도구를 Z.ai Coding Plan으로 쓰고 있다면 이미 이 기능의 혜택을 받고 있는 셈입니다.
+
+## 마무리
+
+Interleaved Thinking과 Preserved Thinking은 각각 "한 턴 안"과 "턴 사이"에서 모델의 생각을 유지하는 기술입니다. 정리하면 다음과 같습니다.
+
+- 추론을 도구 호출 사이에 끼워 넣고(Interleaved), 이전 턴의 추론을 다음 턴에 그대로 돌려주는(Preserved) 것이 에이전트 시대의 표준 설계가 되어 가고 있습니다.
+- Anthropic(400 에러와 서명), OpenAI(reasoning items와 캐시 40→80%), Google(thought signature), Z.ai(`clear_thinking`), Moonshot(`thinking.keep`) 모두 같은 결론에 수렴했습니다.
+- 다만 모델마다 "돌려볼낼지야 하는 것"과 "돌려볼낼지면 안 되는 것"이 다르고(DeepSeek가 대표적), 하네스가 이를 잘못 다루면 에러 없이 조용히 성능과 비용이 망가집니다.
+
+에이전트가 긴 작업을 안정적으로 수행하는 능력은 이제 모델 자첼뿐 아니라, 그 사고를 얼마나 온전히 보존해 주는 하네스에 달려 있습니다.

@@ -1,0 +1,169 @@
+---
+title: "Interleaved Thinking & Preserved Thinking"
+description: "GLM-4.7's two thinking strategies, and how the whole industry is converging on preserving model reasoning"
+published: 2026-07-21
+tags: ["llm", "glm", "agent", "reasoning"]
+lang:
+  - en
+machine_translated: true
+ai_generated_by: "Kimi K3"
+---
+
+[GLM-4.7](https://z.ai/blog/glm-4.7), released on December 22, 2025, introduced two notable concepts: **Interleaved Thinking** and **Preserved Thinking**. Both target scenarios with long chains of tool calls, like coding agents — and Z.ai is not alone in this direction. Anthropic, OpenAI, and Google have each built their own mechanisms for "handing the model's thoughts back on the next turn."
+
+This post explains what GLM-4.7's two features are, how other providers approach the same problem, and what has been observed in real agent harnesses.
+
+## Interleaved Thinking: thinking between tool calls
+
+A typical thinking model thinks once at the start of a turn and then answers. But in agent workflows, a single turn contains repeated cycles of calling a tool, receiving the result, and calling another tool.
+
+Interleaved Thinking lets the model think in between. From the [Z.ai docs](https://docs.z.ai/guides/capabilities/thinking-mode):
+
+> GLM can think between tool calls and after receiving tool results. This enables interpreting each tool output before deciding what to do next, and chaining multiple tool calls with reasoning steps.
+
+The feature has been supported since GLM-4.5 (July 2025), and GLM-4.7 strengthens it to "think before every response and tool call." Note that up to GLM-4.6, `thinking.type: enabled` used a hybrid mode where the model decided whether to think; GLM-4.7 switched to forced thinking whenever thinking is enabled.
+
+Anthropic coined the term, introducing it in May 2025 via the `interleaved-thinking-2025-05-14` beta header; it is now GA on Claude 4.6 and later. The [Anthropic docs](https://docs.anthropic.com/en/docs/build-with-claude/extended-thinking) describe the difference:
+
+> Without interleaved thinking, Claude can only think once at the beginning of a conversation turn. With interleaved thinking, Claude can reason before and after each tool call, leading to better decision-making and more accurate results.
+
+## Preserved Thinking: not discarding previous turns' reasoning
+
+If Interleaved Thinking solves the "within one turn" problem, Preserved Thinking solves the "between turns" problem. New in GLM-4.7, this feature **keeps the reasoning content (`reasoning_content`) of previous assistant turns in the context**. The [Z.ai docs](https://docs.z.ai/guides/capabilities/thinking-mode) list three expected benefits:
+
+- Preserving reasoning continuity and conversation integrity
+- Improving model performance
+- Increasing cache hit rates — saving tokens in real tasks
+
+The API parameter makes the mechanics explicit. `thinking.clear_thinking` defaults to `true`, which strips prior turns' `reasoning_content` and keeps only visible text, tool calls, and tool results. Setting it to `false` passes previous reasoning back to the model.
+
+One caveat: the default differs per endpoint.
+
+| Endpoint | Preserved Thinking default |
+|---|---|
+| Standard API (`api.z.ai/api/paas/v4`) | Off (`clear_thinking: true`) |
+| Coding Plan (`api.z.ai/api/coding/paas/v4`, `api.z.ai/api/anthropic`) | **On** |
+
+To enable it on the standard API, set `clear_thinking: false` and include the previous turns' `reasoning_content` in messages **unmodified, in the original order**. Reordering or editing the blocks degrades performance and hurts cache hit rates. Unlike Anthropic, there is no hard error — performance just silently gets worse, which makes it harder to notice.
+
+GLM-4.7's benchmark footnote reveals how much weight this feature carries: the runs behind SWE-bench Verified 73.8% (+5.8) and Terminal Bench 2.0 41% (+16.5) **enabled Preserved Thinking for the multi-turn agentic tasks (τ²-Bench, Terminal Bench 2)**. Z.ai itself treats the feature as a premise of agent performance.
+
+GLM-4.7 also ships a third feature, **Turn-level Thinking**: toggling thinking on or off per request within the same session — off for lightweight turns to cut latency and cost, on for complex planning or debugging.
+
+## The industry was already solving the same problem
+
+Preserved Thinking sits on top of an industry-wide trend. Every major provider has a mechanism for preserving reasoning, and they all share the consequence of violating it: errors or degraded performance.
+
+### Anthropic — thinking blocks, signatures, and a 400 error
+
+When using extended thinking with tools, Anthropic requires passing thinking blocks (and `redacted_thinking` blocks) **back to the API unmodified** in subsequent turns.
+
+> When using tools with extended thinking, you must pass thinking blocks back to the API unmodified in subsequent turns. Modifying or removing thinking blocks can cause API errors or unexpected model behavior.
+
+The "API error" is real. Modifying the thinking blocks of the latest assistant message returns a 400 `invalid_request_error`:
+
+> `thinking` and `redacted_thinking` blocks in the latest assistant message cannot be modified. These blocks must remain exactly as received to continue the conversation.
+
+This is enforceable because thinking blocks carry a `signature` field for authenticity, and encrypted reasoning arrives as `redacted_thinking` blocks with a `data` payload. The server validates them, so clients must round-trip them byte-for-byte.
+
+There are costs: thinking tokens are billed as output tokens, and echoing them back consumes context window space. Anthropic therefore also offers `clear_thinking_20251015`, a server-side context edit that clears old thinking blocks while keeping the most recent N thinking turns. The provider itself manages the "preserve, but drop the stale ones" policy.
+
+### OpenAI — reasoning items and encrypted reasoning
+
+The OpenAI Responses API returns the model's reasoning as `reasoning` output items, and the SDK type definition states their purpose:
+
+> Be sure to include these items in your `input` to the Responses API for subsequent turns of a conversation if you are manually managing context.
+
+Plain multi-turn chat can skip them, but the [official cookbook](https://github.com/openai/openai-cookbook/blob/main/examples/responses_api/reasoning_items.ipynb) says they are **required when a turn includes a function call** — and backs it with numbers:
+
+- Including reasoning items improved SWE-bench by **about 3%** for the same prompt and setup
+- Moving from the Completions API to the Responses API (keeping reasoning items) raised cache utilization from **40% to 80%** (cached input tokens for o4-mini are 75% cheaper)
+
+For environments that cannot store state server-side (e.g., ZDR), `include: ["reasoning.encrypted_content"]` returns encrypted reasoning items the client can hold and replay. "The client persists the model's reasoning state" — the same idea as Anthropic's `redacted_thinking`.
+
+### Google — thought signatures
+
+Gemini attaches **thought signatures** — encrypted representations of the model's reasoning — to response parts. With Gemini 3 function calling, returning the signature on the first `functionCall` part is **mandatory**; omitting it produces a 400 error:
+
+> Function call `FC1` in the `1.` content block is missing a `thought_signature`.
+
+Signatures on non-function-call parts are recommended but not enforced — omitting them just "may degrade performance." Amusingly, the docs even publish dummy signature values (`"context_engineering_is_the_way_to_go"`) that bypass validation — evidence of how often harness developers have run into this check.
+
+### MiniMax, Kimi, DeepSeek — their own answers
+
+Chinese models show the same convergence.
+
+**MiniMax-M2** (October 2025) was the first model to explicitly call itself an "interleaved thinking model." Its model card warns that removing `<think>` sections from history hurts performance, and its chat template renders `reasoning_content` **only for assistant turns after the last user message** — reasoning inside tool chains is kept, while reasoning from older conversation is dropped. A pragmatic compromise.
+
+**Moonshot Kimi** is controlled by the `thinking.keep` parameter: the default `null` preserves nothing, while `"all"` keeps every historical turn's `reasoning_content`, enabling Preserved Thinking (introduced with K2.6) — a design that maps exactly onto GLM-4.7's `clear_thinking: false`. Moonshot goes one step further: if thinking is enabled and an assistant message containing tool calls lacks `reasoning_content`, the API returns a **400 error** (`thinking is enabled but reasoning_content is missing in assistant tool call message`). Preservation is enforced, not recommended.
+
+**DeepSeek** is the contrasting case. In the R1 era, the official docs stated that prior `reasoning_content` is not passed back in multi-turn conversations and recommended excluding it. Then V3.2 introduced interleaved thinking, and V4 pivoted to preserving reasoning across user message boundaries when tool calls are present. Within one vendor, the field flipped from "must not send back" to "must send back" depending on the version — and the confusion of that transition shows up directly in the harness bugs below.
+
+## Why preserve: cache and short-term memory
+
+The mechanisms differ, but the reasons converge on two points.
+
+First, **reasoning continuity**. If a model forgets why it made a decision midway through a long tool-call chain, it re-explores directions it already ruled out or makes inconsistent choices. In one agent developer's words, interleaved reasoning traces act as "short-term memory for persistence of intent in long tool call chains." Reusing existing reasoning instead of re-deriving from scratch reduces information loss and contradictions.
+
+Second, **cache efficiency**. Prompt caching only works when the prefix matches exactly. If you drop the thinking blocks generated on turn N when sending turn N+1, the input sequence changes and the entire cached prefix is invalidated. Thinking tokens are billed as output when generated — discarding them on the next turn means paying that cost again.
+
+Real-world measurements back this up:
+
+- In Claude Code issue [#76253](https://github.com/anthropics/claude-code/issues/76253), dropped thinking blocks caused about 69% of session cache-write tokens to be full-prefix rewrites; at ~290k context, a one-line follow-up cost about $9.
+- OpenAI's cookbook reports cache utilization rising from 40% to 80% when reasoning items are preserved.
+- Z.ai states Preserved Thinking "increases cache hit rates — saving tokens in real tasks," and cached tokens are billed at roughly 50% of the standard price.
+
+## Where things break in practice
+
+The problem is that this "pass it back" step fails surprisingly often. The issue trackers of open-source agent harnesses and gateways are full of related bugs.
+
+- **Field name mismatches**: reasoning streamed under `reasoning` instead of `reasoning_content` gets silently dropped ([opencode #35283](https://github.com/anomalyco/opencode/issues/35283)). vLLM also failed to read `reasoning_content` on the input side, with a [re-support PR](https://github.com/vllm-project/vllm/issues/38488) opened.
+- **Silent stalls**: when `reasoning_content` goes missing from assistant messages containing tool calls, DeepSeek silently stops mid-task ([opencode #35689](https://github.com/anomalyco/opencode/issues/35689)).
+- **Bad round-trips**: forwarding Anthropic `thinking_blocks` to an OpenAI-compatible backend re-injected already-rendered reasoning into the prompt, causing repetition loops in 9 of 15 turns in one experiment ([litellm #31279](https://github.com/BerriAI/litellm/issues/31279)). Using only `reasoning_content`: zero loops.
+- **Cache invalidation**: converting reasoning parts to text during mode switches triggers mass KV cache invalidation ([opencode #32603](https://github.com/anomalyco/opencode/issues/32603)). Worth quoting: "Reasoning parts should never be converted to text."
+
+The serving layer struggles too. vLLM issue [#39321](https://github.com/vllm-project/vllm/issues/39321) reports thinking tokens polluting the prefix cache, accumulating 65–80 GB of unreachable KV cache across 50 concurrent conversations. The demand to preserve and the demand for cache efficiency collide at the serving layer.
+
+<Callout type="warn" title="What to check in a harness">
+
+Verify that your agent harness (1) preserves `reasoning_content` (or thinking blocks) on assistant messages verbatim, (2) does not transform them during compaction or mode switches, and (3) correctly maps provider-specific field names (`reasoning` vs `reasoning_content`). Failures surface not as errors but as silent quality degradation or cost explosions.
+
+</Callout>
+
+## Try it
+
+Enabling Preserved Thinking on GLM-4.7 is straightforward: set `clear_thinking: false`, and include the received `reasoning_content` verbatim in the next request's assistant message.
+
+```python
+from openai import OpenAI
+
+client = OpenAI(api_key="YOUR_API_KEY", base_url="https://api.z.ai/api/paas/v4/")
+
+response = client.chat.completions.create(
+    model="glm-4.7",
+    messages=messages,
+    tools=tools,
+    extra_body={"thinking": {"type": "enabled", "clear_thinking": False}},
+)
+
+# Echo the response's reasoning_content back in the next assistant message
+messages.append({
+    "role": "assistant",
+    "content": content,
+    "reasoning_content": reasoning,  # verbatim, no edits or reordering
+    "tool_calls": tool_calls,
+})
+messages.append({"role": "tool", "tool_call_id": tool_calls[0]["id"], "content": result})
+```
+
+Both Interleaved and Preserved Thinking work through this single pattern, with no manual differentiation needed. On the Coding Plan endpoints (`api/coding/paas/v4`, `api/anthropic` — the ones you plug into Claude Code), it is on by default; if you use Claude Code with the Z.ai Coding Plan, you are already benefiting from it.
+
+## Closing
+
+Interleaved Thinking and Preserved Thinking keep the model's thoughts alive within a turn and across turns, respectively. To summarize:
+
+- Interleaving reasoning between tool calls and replaying previous turns' reasoning verbatim (Preserved) is becoming the standard design of the agent era.
+- Anthropic (400 errors and signatures), OpenAI (reasoning items, 40→80% cache), Google (thought signatures), Z.ai (`clear_thinking`), and Moonshot (`thinking.keep`) have all converged on the same conclusion.
+- But each model differs in what must and must not be sent back (DeepSeek being the extreme case), and a harness that gets it wrong silently degrades quality and inflates cost — without any error.
+
+An agent's ability to finish long tasks reliably now depends not only on the model, but on how faithfully the harness preserves its thinking.
