@@ -13,8 +13,9 @@ import { ReactGrab } from "@/components/react-grab";
 import { ThemeFavicon } from "@/components/theme-favicon";
 import { ThemeProvider } from "@/components/theme-provider";
 import { env } from "@/shared/env";
-import { AritaBuriLocalFont } from "@/shared/font.AritaBuri";
 import { cn } from "@/shared/utils/tailwind";
+
+import "./arita-buri.css";
 
 const geistMono = Geist_Mono({
   subsets: ["latin"],
@@ -61,7 +62,6 @@ export function RootDocument({ children, lang }: RootDocumentProps) {
       </head>
       <body
         className={cn(
-          AritaBuriLocalFont.variable,
           shipporiMincho.variable,
           geistMono.variable,
           geist.variable,
