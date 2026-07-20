@@ -13,10 +13,17 @@ export function formatDateLong(date?: string | number | undefined | Date) {
   return `${year}. ${month}. ${day}.`;
 }
 
+const postDateFormatters = new Map<string, Intl.DateTimeFormat>();
+
 export function formatPostDate(date: Date, locale: string) {
-  return new Intl.DateTimeFormat(locale, {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-  }).format(date);
+  let formatter = postDateFormatters.get(locale);
+  if (!formatter) {
+    formatter = new Intl.DateTimeFormat(locale, {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    });
+    postDateFormatters.set(locale, formatter);
+  }
+  return formatter.format(date);
 }

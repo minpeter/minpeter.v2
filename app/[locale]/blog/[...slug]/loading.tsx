@@ -32,10 +32,10 @@ export default function Loading() {
             <section className="flex flex-col gap-3" key={key}>
               {heading ? <Skeleton className="h-5 w-40 rounded-sm" /> : null}
               <div className="flex flex-col gap-2">
-                {lines.map((width, index) => (
+                {lines.map((width) => (
                   <Skeleton
                     className={`h-3.5 ${width} rounded-sm`}
-                    key={index}
+                    key={width}
                   />
                 ))}
               </div>

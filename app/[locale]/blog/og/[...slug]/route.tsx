@@ -8,6 +8,13 @@ import {
 import { siteConfig } from "@/shared/site-config";
 import { blog } from "@/shared/source";
 
+const publishedIsoFormatter = new Intl.DateTimeFormat("sv-SE", {
+  day: "2-digit",
+  month: "2-digit",
+  timeZone: "Asia/Seoul",
+  year: "numeric",
+});
+
 export const revalidate = 86_400;
 export const runtime = "nodejs";
 
@@ -22,12 +29,7 @@ export const GET = async (
     notFound();
   }
 
-  const publishedIso = new Intl.DateTimeFormat("sv-SE", {
-    day: "2-digit",
-    month: "2-digit",
-    timeZone: "Asia/Seoul",
-    year: "numeric",
-  }).format(post.data.published);
+  const publishedIso = publishedIsoFormatter.format(post.data.published);
   const title = post.data.title ?? siteConfig.title;
   const localizedTitleWidths = ["ko", "en", "ja"].flatMap((localizedLocale) => {
     const localizedPost = blog.getPage(slug, localizedLocale);

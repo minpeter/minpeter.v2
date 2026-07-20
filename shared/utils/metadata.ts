@@ -74,9 +74,9 @@ export function createMetadata({
   const localizedPath = path
     ? getLocalizedPath(resolvedLocale, path)
     : undefined;
-  const alternateLocale = Object.entries(openGraphLocales)
-    .filter(([candidate]) => candidate !== resolvedLocale)
-    .map(([, value]) => value);
+  const alternateLocale = Object.entries(openGraphLocales).flatMap(
+    ([candidate, value]) => (candidate === resolvedLocale ? [] : [value])
+  );
   const resolvedImage = image
     ? {
         alt: image.alt,
