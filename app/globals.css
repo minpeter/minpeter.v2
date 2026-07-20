@@ -129,8 +129,6 @@
 
     --selection: #e2e2e2;
 
-    --header-overlay-color: 255, 255, 255;
-
     --card: 180 7% 96%;
     --card-foreground: 180 8% 6%;
     --popover: 0 0% 100%;
@@ -172,8 +170,6 @@
     --sh-comment: #a5a5a5;
 
     --selection: #404040;
-
-    --header-overlay-color: 0, 0, 0;
 
     --background: 240 10% 3.9%;
     --foreground: 0 0% 98%;

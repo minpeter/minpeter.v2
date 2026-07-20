@@ -65,7 +65,6 @@
     "kicker": "쇼케이스",
     "title": "작은 실험들",
     "description": "재미로 만든 인터랙티브 작업과 프로토타입, 여러 가지 실험입니다.",
-    "featureEnabled": "테스트 기능이 켜져 있습니다.",
     "detailNavigationLabel": "{title} 페이지 탐색",
     "items": {
       "tempfiles": {

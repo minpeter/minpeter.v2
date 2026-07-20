@@ -23,13 +23,10 @@ export const env = createEnv({
    */
   runtimeEnv: {
     ANALYZE: process.env.ANALYZE,
-    FLAGS_SECRET: process.env.FLAGS_SECRET,
     NEXT_PUBLIC_VERCEL_ENV: process.env.NEXT_PUBLIC_VERCEL_ENV,
     NODE_ENV: process.env.NODE_ENV,
     PORT: process.env.PORT,
     PUBLIC_BASE_URL: process.env.PUBLIC_BASE_URL,
-    STATSIG_CONSOLE_API_KEY: process.env.STATSIG_CONSOLE_API_KEY,
-    STATSIG_PROJECT_ID: process.env.STATSIG_PROJECT_ID,
     VERCEL_ENV: process.env.VERCEL_ENV,
     VERCEL_URL: process.env.VERCEL_URL,
   },
@@ -45,15 +42,11 @@ export const env = createEnv({
       .default("false")
       .transform((val) => val === "true"),
 
-    // Feature flags (Statsig)
-    FLAGS_SECRET: z.string().optional(),
     NODE_ENV: z.enum(["development", "production", "test"]),
     PORT: z.coerce.number().optional().default(3000),
 
     // Site URL configuration
     PUBLIC_BASE_URL: z.url().optional(),
-    STATSIG_CONSOLE_API_KEY: z.string().optional(),
-    STATSIG_PROJECT_ID: z.string().optional(),
     VERCEL_ENV: z.enum(["production", "preview", "development"]).optional(),
     VERCEL_URL: z.string().optional(),
   },

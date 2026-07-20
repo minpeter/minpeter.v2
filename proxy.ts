@@ -8,13 +8,11 @@ const exclusions = ["/_next/", "/.well-known/", "/.", "/api/"];
 const publicAssetPrefixes = ["/assets/", "/fonts/"];
 const metadataImageSuffixes = ["/opengraph-image", "/twitter-image"];
 const publicAssetPaths = new Set([
-  "/Lickitung.gltf",
   "/favicon.ico",
   "/naver2d846b9f797451003a82b4505217b4c0.html",
   "/og-image.png",
   "/robots.txt",
   "/sitemap.xml",
-  "/studio_small_03_1k.hdr",
 ]);
 
 const isMetadataImagePath = (path: string) =>

@@ -4,7 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { LanguageSelector } from "@/components/language-selector";
-import { createFeatureGate } from "@/shared/flags";
 import { createMetadata, resolveLocale } from "@/shared/utils/metadata";
 
 export async function generateMetadata(
@@ -50,9 +49,8 @@ const SHOWCASE_ITEMS = [
 ] as const;
 
 export default async function Page(props: PageProps<"/[locale]/show">) {
-  const [{ locale }, enabled, t] = await Promise.all([
+  const [{ locale }, t] = await Promise.all([
     props.params,
-    createFeatureGate("test_flag")(), //Disabled by default, edit in the Statsig console
     getTranslations(),
   ]);
   return (
@@ -107,11 +105,6 @@ export default async function Page(props: PageProps<"/[locale]/show">) {
           </Link>
         ))}
 
-        {enabled ? (
-          <div className="showcase-flag-status">
-            {t("showcase.featureEnabled")}
-          </div>
-        ) : null}
       </nav>
     </section>
   );

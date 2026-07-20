@@ -20,7 +20,6 @@ describe("Proxy", () => {
     expect(shouldExclude("/_next/static")).toBeTruthy();
     expect(shouldExclude("/_next/image")).toBeTruthy();
     expect(shouldExclude("/assets/images/main-image-1.jpg")).toBeTruthy();
-    expect(shouldExclude("/Lickitung.gltf")).toBeTruthy();
     expect(shouldExclude("/.well-known/vercel/flags")).toBeTruthy();
   });
 

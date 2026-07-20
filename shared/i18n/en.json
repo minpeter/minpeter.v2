@@ -65,7 +65,6 @@
     "kicker": "Showcase",
     "title": "Small experiments",
     "description": "Interactive pieces, prototypes, and things made for the fun of it.",
-    "featureEnabled": "The test feature is enabled.",
     "detailNavigationLabel": "{title} navigation",
     "items": {
       "tempfiles": {

@@ -12,8 +12,6 @@ const nextConfig: NextConfig = {
       "lucide-react",
       "@radix-ui/react-icons",
       "react-icons",
-      "@react-three/drei",
-      "@react-three/fiber",
     ],
     prefetchInlining: true,
     turbopackFileSystemCacheForDev: true,
