@@ -12,7 +12,8 @@ import {
   resolveLocale,
 } from "@/shared/utils/metadata";
 
-import { BlogList, BlogListFallback } from "./list";
+import { BlogList } from "./list";
+import { BlogListFallback } from "./list-fallback";
 import { RssLink } from "./rss-link";
 
 export async function generateMetadata(

@@ -12,3 +12,11 @@ export function formatDateLong(date?: string | number | undefined | Date) {
   const day = String(d.getDate()).padStart(2, "0");
   return `${year}. ${month}. ${day}.`;
 }
+
+export function formatPostDate(date: Date, locale: string) {
+  return new Intl.DateTimeFormat(locale, {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  }).format(date);
+}
