@@ -1,5 +1,4 @@
-export async function register() {
-  await Promise.resolve();
+export function register() {
   console.info("[instrumentation] Server initialized");
 }
 

@@ -31,6 +31,8 @@ export default function Header({
   link,
   rightContent,
 }: HeaderProps) {
+  const resolvedTitle = title || "minpeter";
+
   return (
     <header
       className={cn(
@@ -58,10 +60,10 @@ export default function Header({
         <h1 className="home-section-title flex flex-wrap items-center break-words">
           {titleTransitionName ? (
             <ViewTransition name={titleTransitionName}>
-              {title || "minpeter"}
+              {resolvedTitle}
             </ViewTransition>
           ) : (
-            title || "minpeter"
+            resolvedTitle
           )}
         </h1>
         {description ? (

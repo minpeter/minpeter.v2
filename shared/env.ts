@@ -2,19 +2,12 @@ import { createEnv } from "@t3-oss/env-nextjs";
 import { z } from "zod";
 
 export const env = createEnv({
-  /**
-   * Client-side environment variables schema
-   * Must be prefixed with NEXT_PUBLIC_
-   */
   client: {
     NEXT_PUBLIC_VERCEL_ENV: z
       .enum(["production", "preview", "development"])
       .optional(),
   },
 
-  /**
-   * Treat empty strings as undefined
-   */
   emptyStringAsUndefined: true,
 
   /**
@@ -30,10 +23,6 @@ export const env = createEnv({
     VERCEL_ENV: process.env.VERCEL_ENV,
     VERCEL_URL: process.env.VERCEL_URL,
   },
-  /**
-   * Server-side environment variables schema
-   * These are only available on the server
-   */
   server: {
     // Build-time flags
     ANALYZE: z
@@ -51,9 +40,6 @@ export const env = createEnv({
     VERCEL_URL: z.string().optional(),
   },
 
-  /**
-   * Skip validation in certain environments
-   */
   skipValidation: !!process.env.SKIP_ENV_VALIDATION,
 });
 
@@ -79,10 +65,3 @@ export function getBaseUrl(): string {
   return `http://localhost:${env.PORT}`;
 }
 
-/**
- * Get the website URL based on environment
- * Uses production URL for production, Vercel URL for preview, local for dev
- */
-export function getCurrentWebsiteUrl(): string {
-  return getBaseUrl();
-}

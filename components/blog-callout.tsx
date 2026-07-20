@@ -2,14 +2,7 @@ import type { ComponentProps, ReactNode } from "react";
 
 import { cn } from "@/shared/utils/tailwind";
 
-type BlogCalloutType =
-  | "error"
-  | "idea"
-  | "info"
-  | "success"
-  | "tip"
-  | "warn"
-  | "warning";
+type BlogCalloutType = "error" | "idea" | "info" | "success" | "tip" | "warn";
 
 interface BlogCalloutProps extends Omit<ComponentProps<"div">, "title"> {
   title?: ReactNode;
@@ -23,7 +16,6 @@ const MARKERS: Record<BlogCalloutType, string> = {
   success: "✓",
   tip: "i",
   warn: "!",
-  warning: "!",
 };
 
 export function BlogCallout({

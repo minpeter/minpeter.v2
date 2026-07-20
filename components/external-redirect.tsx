@@ -4,7 +4,6 @@ import { useEffect, useReducer } from "react";
 
 const DEFAULT_COUNTDOWN_START = 3;
 const ONE_SECOND_MS = 1000;
-const COUNTDOWN_DECREMENT = 1;
 
 interface ExternalRedirectProps {
   countdownStart?: number;
@@ -12,7 +11,7 @@ interface ExternalRedirectProps {
 }
 
 function countdownReducer(count: number) {
-  return count - COUNTDOWN_DECREMENT;
+  return count - 1;
 }
 
 export default function ExternalRedirect({

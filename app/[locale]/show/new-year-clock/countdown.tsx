@@ -23,17 +23,9 @@ const ZERO_TIME_LEFT: TimeLeft = {
   seconds: 0,
 };
 
-const JANUARY_INDEX = 0;
-const FIRST_DAY = 1;
-const NEXT_YEAR_OFFSET = 1;
-
 function getNextYearTimestamp() {
   const currentYear = new Date().getFullYear();
-  return new Date(
-    currentYear + NEXT_YEAR_OFFSET,
-    JANUARY_INDEX,
-    FIRST_DAY
-  ).getTime();
+  return new Date(currentYear + 1, 0, 1).getTime();
 }
 
 function calculateTimeLeft(targetTimestamp: number): TimeLeft {
