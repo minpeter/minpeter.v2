@@ -27,15 +27,15 @@ export const { docs, meta } = defineDocs({
           if (value === undefined) {
             return;
           }
-          try {
-            return new Date(value);
-          } catch {
+          const date = new Date(value);
+          if (Number.isNaN(date.getTime())) {
             context.addIssue({
               code: z.ZodIssueCode.custom,
               message: "Invalid date",
             });
             return z.NEVER;
           }
+          return date;
         }),
       external_url: z.url().optional(),
       lang: z
@@ -47,15 +47,15 @@ export const { docs, meta } = defineDocs({
         .string()
         .or(z.date())
         .transform((value, context) => {
-          try {
-            return new Date(value);
-          } catch {
+          const date = new Date(value);
+          if (Number.isNaN(date.getTime())) {
             context.addIssue({
               code: z.ZodIssueCode.custom,
               message: "Invalid date",
             });
             return z.NEVER;
           }
+          return date;
         }),
     }),
   },
@@ -63,12 +63,10 @@ export const { docs, meta } = defineDocs({
 
 const mdxOptions: DefaultMDXOptions = {
   development: process.env.NODE_ENV === "development",
-  rehypePlugins: (v) => [...v],
   remarkPlugins: [remarkInstall],
 };
 
 export default defineConfig({
   mdxOptions,
   plugins: [lastModified()],
-  // generateManifest: false,
 });
