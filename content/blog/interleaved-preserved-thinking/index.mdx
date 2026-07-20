@@ -6,7 +6,7 @@ tags: ["llm", "glm", "agent", "reasoning"]
 ai_generated_by: "Kimi K3"
 ---
 
-2025년 12월 22일 공개된 [GLM-4.7](https://z.ai/blog/glm-4.7)의 릴리스 노트에는 흥미로운 개념 두 가지가 등장합니다. **Interleaved Thinking**과 **Preserved Thinking**입니다. 둘 다 코딩 에이전트처럼 도구 호출이 길게 이어지는 시나리오를 겨냥한 기능인데, 사실 이 방향을 밟고 있는 것은 Z.ai만이 아닙니다. Anthropic, OpenAI, Google 역시 각자의 방식으로 "모델의 생각을 다음 턴에 돌려주는" 메커니즘을 만들어 왔습니다.
+2025년 12월 22일 공개된 [GLM-4.7](https://z.ai/blog/glm-4.7)의 릴리스 노트에는 thinking에 관한 세 가지 변화가 등장합니다. GLM-4.5부터 지원된 **Interleaved Thinking**의 강화, 그리고 새로 도입된 **Preserved Thinking**과 **Turn-level Thinking**입니다. 모두 코딩 에이전트처럼 도구 호출이 길게 이어지는 시나리오를 겨냥한 기능이고, 이 글에서는 그중 앞의 두 가지를 중심으로 다룹니다. 사실 이 방향을 밟고 있는 것은 Z.ai만이 아닙니다. Anthropic, OpenAI, Google 역시 각자의 방식으로 "모델의 생각을 다음 턴에 돌려주는" 메커니즘을 만들어 왔습니다.
 
 이 글에서는 GLM-4.7의 두 기능이 무엇인지 정리하고, 같은 문제를 풀고 있는 다른 제공자들의 접근과 실제 에이전트 하네스에서 관측된 사례까지 함께 살펴 봅니다.
 
