@@ -66,9 +66,9 @@ Interleaved Thinking lets the model think in between. From the [Z.ai docs](https
 
 The feature has been supported since GLM-4.5 (July 2025), and GLM-4.7 strengthens it to "think before every response and tool call." Note that up to GLM-4.6, `thinking.type: enabled` used a hybrid mode where the model decided whether to think; GLM-4.7 switched to forced thinking whenever thinking is enabled.
 
-Anthropic coined the term, introducing it in May 2025 via the `interleaved-thinking-2025-05-14` beta header; it is now GA on Claude 4.6 and later. The [Anthropic docs](https://docs.anthropic.com/en/docs/build-with-claude/extended-thinking) describe the difference:
+Anthropic coined the term, introducing it in May 2025 via the `interleaved-thinking-2025-05-14` beta header; since Claude 4.6 it works automatically with no header (the header is only needed for Opus 4.5 and earlier Claude 4 models). The [Anthropic docs](https://docs.anthropic.com/en/docs/build-with-claude/extended-thinking) describe the difference:
 
-> Without interleaved thinking, Claude can only think once at the beginning of a conversation turn. With interleaved thinking, Claude can reason before and after each tool call, leading to better decision-making and more accurate results.
+> Without interleaved thinking, Claude thinks once at the start of the assistant turn. With interleaved thinking, Claude can reason about the results of a tool call before deciding what to do next.
 
 ## Preserved Thinking: not discarding previous turns' reasoning
 
@@ -154,7 +154,7 @@ When using extended thinking with tools, Anthropic requires passing thinking blo
 
 The "API error" is real. Modifying the thinking blocks of the latest assistant message returns a 400 `invalid_request_error`:
 
-> `thinking` and `redacted_thinking` blocks in the latest assistant message cannot be modified. These blocks must remain exactly as received to continue the conversation.
+> `thinking` or `redacted_thinking` blocks in the latest assistant message cannot be modified.
 
 This is enforceable because thinking blocks carry a `signature` field for authenticity, and encrypted reasoning arrives as `redacted_thinking` blocks with a `data` payload. The server validates them, so clients must round-trip them byte-for-byte.
 
@@ -185,11 +185,11 @@ Signatures on non-function-call parts are recommended but not enforced — omitt
 
 Chinese models show the same convergence.
 
-**MiniMax-M2** (October 2025) was the first model to explicitly call itself an "interleaved thinking model." Its model card warns that removing `<think>` sections from history hurts performance, and its chat template renders `reasoning_content` **only for assistant turns after the last user message** — reasoning inside tool chains is kept, while reasoning from older conversation is dropped. A pragmatic compromise.
+**MiniMax-M2** (October 2025) explicitly calls itself an "interleaved thinking model." Its model card warns that removing `<think>` sections from history hurts performance, and its chat template renders `reasoning_content` **only for assistant turns after the last user message** — reasoning inside tool chains is kept, while reasoning from older conversation is dropped. A pragmatic compromise.
 
 **Moonshot Kimi** is controlled by the `thinking.keep` parameter: the default `null` preserves nothing, while `"all"` keeps every historical turn's `reasoning_content`, enabling Preserved Thinking (introduced with K2.6) — a design that maps exactly onto GLM-4.7's `clear_thinking: false`. Moonshot goes one step further: if thinking is enabled and an assistant message containing tool calls lacks `reasoning_content`, the API returns a **400 error** (`thinking is enabled but reasoning_content is missing in assistant tool call message`). Preservation is enforced, not recommended.
 
-**DeepSeek** is the contrasting case. In the R1 era, the official docs stated that prior `reasoning_content` is not passed back in multi-turn conversations and recommended excluding it. Then V3.2 introduced interleaved thinking, and V4 pivoted to preserving reasoning across user message boundaries when tool calls are present. Within one vendor, the field flipped from "must not send back" to "must send back" depending on the version — and the confusion of that transition shows up directly in the harness bugs below.
+**DeepSeek** is the contrasting case. In the R1 era, the official docs stated that prior `reasoning_content` is not passed back in multi-turn conversations and recommended excluding it. The latest thinking-mode docs demand the opposite: if a tool call occurred, the intermediate assistant's `reasoning_content` **must be passed back in all subsequent user turns**. Within one vendor, the field flipped from "must not send back" to "must send back" depending on the version — and the confusion of that transition shows up directly in the harness bugs below.
 
 ## Why preserve: cache and short-term memory
 
@@ -255,6 +255,8 @@ Both Interleaved and Preserved Thinking work through this single pattern, with n
 Interleaved Thinking and Preserved Thinking keep the model's thoughts alive within a turn and across turns, respectively. To summarize:
 
 - Interleaving reasoning between tool calls and replaying previous turns' reasoning verbatim (Preserved) is becoming the standard design of the agent era.
+
+The trend did not stop at GLM-4.7. The follow-up GLM-5 series (5/5.1/5.2) inherited the same thinking modes with thinking enabled by default, and Anthropic switched to preserving prior turns' thinking blocks by default on its latest models (Opus 4.5+, Sonnet 4.6+). Reasoning preservation is becoming a baseline API contract, not a passing feature.
 - Anthropic (400 errors and signatures), OpenAI (reasoning items, 40→80% cache), Google (thought signatures), Z.ai (`clear_thinking`), and Moonshot (`thinking.keep`) have all converged on the same conclusion.
 - But each model differs in what must and must not be sent back (DeepSeek being the extreme case), and a harness that gets it wrong silently degrades quality and inflates cost — without any error.
 
