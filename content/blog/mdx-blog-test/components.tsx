@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 
@@ -12,10 +12,10 @@ export function SimpleButton() {
   const [toggle, setToggle] = useState(false);
   const [count, setCount] = useState(0);
 
-  const handleClick = useCallback(() => {
+  const handleClick = () => {
     setToggle((prevToggle) => !prevToggle);
     setCount((prevCount) => prevCount + 1);
-  }, []);
+  };
 
   let buttonLabel = "Push me!!";
   if (count >= PUSHED_THRESHOLD) {
@@ -35,7 +35,9 @@ export function Ip() {
   const [ip, setIp] = useState("");
 
   useEffect(() => {
-    fetch("https://ip.minpeter.com/ip")
+    const controller = new AbortController();
+
+    fetch("https://ip.minpeter.com/ip", { signal: controller.signal })
       .then((res) => {
         if (!res.ok) {
           throw new Error(res.statusText);
@@ -44,8 +46,13 @@ export function Ip() {
       })
       .then((fetchedIp) => setIp(fetchedIp))
       .catch(() => {
+        if (controller.signal.aborted) {
+          return;
+        }
         setIp("Failed to fetch IP. Please try again later.");
       });
+
+    return () => controller.abort();
   }, []);
 
   return <span>Your IP: {ip || "Loading..."}</span>;
@@ -53,12 +60,12 @@ export function Ip() {
 
 export function Counter() {
   const [count, setCount] = useState(0);
-  const handleCountUp = useCallback(() => {
+  const handleCountUp = () => {
     setCount((currentCount) => currentCount + 1);
-  }, []);
-  const handleReset = useCallback(() => {
+  };
+  const handleReset = () => {
     setCount(0);
-  }, []);
+  };
 
   return (
     <div className="space-y-2">

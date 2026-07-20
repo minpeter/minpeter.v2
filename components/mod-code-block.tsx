@@ -1,28 +1,21 @@
 "use client";
 
-import copy from "clipboard-copy";
 import { useTranslations } from "next-intl";
 import type { ChangeEvent, KeyboardEvent, MouseEvent } from "react";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useState } from "react";
+
+import { copyToClipboard, useCopyStatus } from "./code-block-copy";
 
 const TEMPLATE_TOKEN_REGEX = /{{([^}]+)}}/g;
 const LEADING_NEWLINE = "\n";
 const TAB_PLACEHOLDER = "%TAB";
 const TAB_REPLACEMENT = "    ";
-const COPY_STATUS_RESET_DELAY_MS = 1000;
 const EDITABLE_INPUT_PADDING_CH = 2;
 const MIN_EDITABLE_CONTENT_LENGTH = 1;
-export const COPY_ERROR_LABEL = "Copy failed";
-
-type CopyStatus = "idle" | "copied" | "error";
 
 type TemplateSegment =
   | { id: string; type: "static"; content: string }
   | { id: string; type: "dynamic"; content: string };
-
-export async function copyToClipboard(content: string) {
-  await copy(content);
-}
 
 function parseTemplate(template: string): TemplateSegment[] {
   const normalizedTemplate = template.startsWith(LEADING_NEWLINE)
@@ -65,31 +58,6 @@ function parseTemplate(template: string): TemplateSegment[] {
   return segments;
 }
 
-export function useCopyStatus() {
-  const [status, setStatus] = useState<CopyStatus>("idle");
-
-  useEffect(() => {
-    if (status === "idle") {
-      return;
-    }
-    const timeoutId = window.setTimeout(() => {
-      setStatus("idle");
-    }, COPY_STATUS_RESET_DELAY_MS);
-
-    return () => window.clearTimeout(timeoutId);
-  }, [status]);
-
-  const markCopied = useCallback(() => {
-    setStatus("copied");
-  }, []);
-
-  const markError = useCallback(() => {
-    setStatus("error");
-  }, []);
-
-  return { markCopied, markError, status };
-}
-
 function buildTemplateOutput(
   segments: TemplateSegment[],
   values: Record<string, string>
@@ -118,14 +86,11 @@ function getInputWidth(value: string) {
   return `${effectiveLength + EDITABLE_INPUT_PADDING_CH}ch`;
 }
 
-export function getCopyLabel(status: CopyStatus) {
-  if (status === "copied") {
-    return "Copied";
+function handleSegmentKeyDown(event: KeyboardEvent<HTMLInputElement>) {
+  if (event.key === "Enter") {
+    event.preventDefault();
+    event.currentTarget.blur();
   }
-  if (status === "error") {
-    return "Retry copy";
-  }
-  return "Copy";
 }
 
 export function ModCodeBlock({
@@ -136,7 +101,7 @@ export function ModCodeBlock({
   data: Record<string, string>;
 }) {
   const t = useTranslations("modCodeBlock");
-  const segments = useMemo(() => parseTemplate(template), [template]);
+  const segments = parseTemplate(template);
   const [editedValues, setEditedValues] = useState<Record<string, string>>({});
   const [activeSegmentIndex, setActiveSegmentIndex] = useState<number | null>(
     null
@@ -147,7 +112,7 @@ export function ModCodeBlock({
       ? null
       : activeSegmentIndex;
 
-  const handleCopy = useCallback(async () => {
+  const handleCopy = async () => {
     const values = { ...data, ...editedValues };
     const compiled = buildTemplateOutput(segments, values);
 
@@ -160,46 +125,30 @@ export function ModCodeBlock({
       }
       markError();
     }
-  }, [data, editedValues, markCopied, markError, segments]);
+  };
 
-  const handleSegmentBlur = useCallback(() => {
+  const handleSegmentBlur = () => {
     setActiveSegmentIndex(null);
-  }, []);
+  };
 
-  const handleSegmentChange = useCallback(
-    (event: ChangeEvent<HTMLInputElement>) => {
-      const { segmentKey } = event.currentTarget.dataset;
-      if (!segmentKey) {
-        return;
-      }
-      const { value } = event.currentTarget;
-      setEditedValues((previousValues) => ({
-        ...previousValues,
-        [segmentKey]: value,
-      }));
-    },
-    []
-  );
+  const handleSegmentChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const { segmentKey } = event.currentTarget.dataset;
+    if (!segmentKey) {
+      return;
+    }
+    const { value } = event.currentTarget;
+    setEditedValues((previousValues) => ({
+      ...previousValues,
+      [segmentKey]: value,
+    }));
+  };
 
-  const handleSegmentKeyDown = useCallback(
-    (event: KeyboardEvent<HTMLInputElement>) => {
-      if (event.key === "Enter") {
-        event.preventDefault();
-        event.currentTarget.blur();
-      }
-    },
-    []
-  );
-
-  const handleSegmentActivate = useCallback(
-    (event: MouseEvent<HTMLButtonElement>) => {
-      const segmentIndex = Number(event.currentTarget.dataset.segmentIndex);
-      if (Number.isSafeInteger(segmentIndex)) {
-        setActiveSegmentIndex(segmentIndex);
-      }
-    },
-    []
-  );
+  const handleSegmentActivate = (event: MouseEvent<HTMLButtonElement>) => {
+    const segmentIndex = Number(event.currentTarget.dataset.segmentIndex);
+    if (Number.isSafeInteger(segmentIndex)) {
+      setActiveSegmentIndex(segmentIndex);
+    }
+  };
 
   let copyLabel = t("copy");
   if (status === "copied") {

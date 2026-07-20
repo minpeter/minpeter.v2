@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { MouseEvent } from "react";
 
 import {
@@ -37,19 +37,21 @@ export function ImageCarousel({
   const wheelDelta = useRef(0);
   const wheelGestureLocked = useRef(false);
   const wheelResetTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const handleIndicatorClick = useCallback(
-    (event: MouseEvent<HTMLButtonElement>) => {
-      const slideIndex = Math.trunc(
-        Number(event.currentTarget.dataset.slideIndex ?? "")
-      );
-      if (!Number.isNaN(slideIndex)) {
-        api?.scrollTo(slideIndex);
-      }
-    },
-    [api]
-  );
-  const handleWheel = useCallback(
-    (event: WheelEvent) => {
+  const handleIndicatorClick = (event: MouseEvent<HTMLButtonElement>) => {
+    const slideIndex = Math.trunc(
+      Number(event.currentTarget.dataset.slideIndex ?? "")
+    );
+    if (!Number.isNaN(slideIndex)) {
+      api?.scrollTo(slideIndex);
+    }
+  };
+  useEffect(() => {
+    const carouselRoot = carouselRootRef.current;
+    if (!carouselRoot) {
+      return;
+    }
+
+    const handleWheel = (event: WheelEvent) => {
       const isHorizontalGesture =
         Math.abs(event.deltaX) > Math.abs(event.deltaY);
       let horizontalDelta = 0;
@@ -89,15 +91,7 @@ export function ImageCarousel({
         api.scrollPrev();
       }
       wheelDelta.current = 0;
-    },
-    [api]
-  );
-
-  useEffect(() => {
-    const carouselRoot = carouselRootRef.current;
-    if (!carouselRoot) {
-      return;
-    }
+    };
 
     carouselRoot.addEventListener("wheel", handleWheel, { passive: false });
 
@@ -109,7 +103,7 @@ export function ImageCarousel({
       wheelDelta.current = 0;
       wheelGestureLocked.current = false;
     };
-  }, [handleWheel]);
+  }, [api]);
 
   useEffect(() => {
     if (!api) {

@@ -9,7 +9,6 @@ import {
 } from "@radix-ui/react-dropdown-menu";
 import { GlobeIcon } from "@radix-ui/react-icons";
 import { useLocale, useTranslations } from "next-intl";
-import { useCallback } from "react";
 
 import { LOCALE_LABELS } from "@/shared/constants/locales";
 import { useHoverDropdown } from "@/shared/hooks/use-hover-dropdown";
@@ -40,9 +39,9 @@ export function LanguageSelector() {
 
   const currentLabel =
     LOCALE_LABELS[locale as keyof typeof LOCALE_LABELS] || LOCALE_LABELS.ko;
-  const handleItemClick = useCallback(() => {
+  const handleItemClick = () => {
     setIsOpen(false);
-  }, [setIsOpen]);
+  };
 
   return (
     <Root modal={false} onOpenChange={handleOpenChange} open={isOpen}>

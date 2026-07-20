@@ -4,7 +4,7 @@ import { useDocsSearch } from "fumadocs-core/search/client";
 import { Loader2, Search, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { debounce, parseAsString, useQueryState } from "nuqs";
-import { useCallback, useDeferredValue, useEffect, useTransition } from "react";
+import { useDeferredValue, useEffect, useTransition } from "react";
 import type { ChangeEvent } from "react";
 
 import type { postMetadataType } from "@/shared/source";
@@ -46,15 +46,12 @@ export function BlogList({
   const isSearching =
     query !== deferredQuery || isPending || searchQuery.isLoading;
 
-  const handleQueryChange = useCallback(
-    (event: ChangeEvent<HTMLInputElement>) => {
-      setQuery(event.target.value || null);
-    },
-    [setQuery]
-  );
-  const handleQueryClear = useCallback(() => {
+  const handleQueryChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setQuery(event.target.value || null);
+  };
+  const handleQueryClear = () => {
     setQuery(null);
-  }, [setQuery]);
+  };
 
   const byLang = posts.filter((post) => post.lang.includes(lang));
   let filteredPosts = byLang;
