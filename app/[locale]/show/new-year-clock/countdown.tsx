@@ -56,9 +56,7 @@ export function Countdown() {
   "use no memo";
   const t = useTranslations("showcase.items.newYear");
   const [targetTimestamp] = useState(getNextYearTimestamp);
-  const [remainingTime, setRemainingTime] = useState<TimeLeft>(() =>
-    calculateTimeLeft(targetTimestamp)
-  );
+  const [remainingTime, setRemainingTime] = useState<TimeLeft>(ZERO_TIME_LEFT);
 
   useEffect(() => {
     const updateRemainingTime = () => {

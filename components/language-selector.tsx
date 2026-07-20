@@ -47,7 +47,7 @@ export function LanguageSelector() {
     <Root modal={false} onOpenChange={handleOpenChange} open={isOpen}>
       <Trigger asChild>
         <button
-          aria-label={t("selectLanguage")}
+          aria-label={`${currentLabel.short} - ${t("selectLanguage")}`}
           className={cn(
             "flex items-center gap-1 rounded-md px-2 py-1 text-sm",
             "text-gray-500 hover:bg-secondary hover:text-primary",

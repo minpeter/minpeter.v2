@@ -5,6 +5,8 @@ import { routing } from "@/shared/i18n/routing";
 import { ogImageSize } from "@/shared/og-image";
 import { siteConfig } from "@/shared/site-config";
 
+const canonicalOrigin = new URL("https://minpeter.com");
+
 const openGraphLocales = {
   en: "en_US",
   ja: "ja_JP",
@@ -74,6 +76,9 @@ export function createMetadata({
   const localizedPath = path
     ? getLocalizedPath(resolvedLocale, path)
     : undefined;
+  const canonicalUrl = localizedPath
+    ? new URL(localizedPath, canonicalOrigin).toString()
+    : undefined;
   const alternateLocale = Object.entries(openGraphLocales).flatMap(
     ([candidate, value]) => (candidate === resolvedLocale ? [] : [value])
   );
@@ -99,7 +104,7 @@ export function createMetadata({
   return {
     alternates: path
       ? {
-          canonical: localizedPath,
+          canonical: canonicalUrl,
           languages: getLanguageAlternates(path),
         }
       : undefined,

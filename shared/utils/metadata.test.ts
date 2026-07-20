@@ -12,7 +12,7 @@ describe("shared metadata", () => {
     });
 
     expect(metadata.alternates).toMatchObject({
-      canonical: "/en/show",
+      canonical: "https://minpeter.com/en/show",
       languages: {
         en: "/en/show",
         ja: "/ja/show",
@@ -27,6 +27,19 @@ describe("shared metadata", () => {
       url: "/en/show",
     });
   });
+
+  it.each([
+    ["ko", "/resume", "https://minpeter.com/resume"],
+    ["en", "/resume", "https://minpeter.com/en/resume"],
+    ["ja", "/", "https://minpeter.com/ja"],
+  ] as const)(
+    "creates an absolute canonical URL for the %s locale",
+    (locale, path, expectedCanonical) => {
+      const metadata = createMetadata({ locale, path });
+
+      expect(metadata.alternates?.canonical).toBe(expectedCanonical);
+    }
+  );
 
   it("adds complete metadata for an explicitly supplied image", () => {
     const metadata = createMetadata({
