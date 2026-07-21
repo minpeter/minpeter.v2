@@ -7,8 +7,8 @@ import createNextIntlPlugin from "next-intl/plugin";
 const nextConfig: NextConfig = {
   cacheComponents: false,
   experimental: {
-    inlineCss: true,
     globalNotFound: true,
+    inlineCss: true,
     optimizePackageImports: [
       "lucide-react",
       "@radix-ui/react-icons",
