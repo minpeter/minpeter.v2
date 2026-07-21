@@ -1,10 +1,16 @@
 #!/usr/bin/env python3
+# /// script
+# requires-python = ">=3.12"
+# dependencies = ["brotli==1.1.0", "fonttools==4.63.0"]
+# ///
 """Slice the site's CJK fonts into Google-Fonts-style unicode-range woff2 sets.
 
 AritaBuri KR uses the Noto Sans KR slice ranges; Shippori Mincho uses the
-Noto Sans JP ranges. Descriptors are compacted to their min-max span so the
-deferred stylesheet stays small; browsers fetch per-glyph and fall back for
-the rare gap codepoint.
+Noto Sans JP ranges. Each @font-face descriptor emits the same sparse code
+point list used for subsetting, so the browser only fetches a slice when one
+of its actual glyphs is needed.
+
+Run with: uv run scripts/slice-fonts.py
 """
 
 from pathlib import Path
@@ -290,16 +296,17 @@ FONTS = (
 )
 
 
-def merge_range(unicode_range: str) -> str:
-    parts: list[int] = []
+def normalize_range(unicode_range: str) -> str:
+    tokens: list[tuple[int, str]] = []
     for part in unicode_range.split(","):
         token = part.strip().lower().removeprefix("u+")
         if "-" in token:
             start, end = token.split("-", 1)
-            parts.extend((int(start, 16), int(end, 16)))
+            tokens.append((int(start, 16), f"u+{int(start, 16):04x}-{int(end, 16):04x}"))
         else:
-            parts.append(int(token, 16))
-    return f"u+{min(parts):04x}-{max(parts):04x}"
+            tokens.append((int(token, 16), f"u+{int(token, 16):04x}"))
+    tokens.sort(key=lambda item: item[0])
+    return ", ".join(token for _, token in tokens)
 
 
 def slice_font(config: dict) -> list[str]:
@@ -326,7 +333,7 @@ def slice_font(config: dict) -> list[str]:
   font-weight: 400;
   font-display: swap;
   src: url(\"{config['url_prefix']}/{config['file_prefix']}.{index}.woff2\") format(\"woff2\");
-  unicode-range: {merge_range(unicode_range)};
+  unicode-range: {normalize_range(unicode_range)};
 }}"""
         )
 
@@ -336,6 +343,12 @@ def slice_font(config: dict) -> list[str]:
 
 
 def main() -> None:
+    try:
+        import brotli  # noqa: F401
+    except ImportError:
+        message = "brotli is required for woff2 output; run via `uv run scripts/slice-fonts.py`"
+        raise SystemExit(message) from None
+
     blocks: list[str] = []
     variables: list[str] = []
     for config in FONTS:
