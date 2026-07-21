@@ -25,9 +25,6 @@
   --color-card: hsl(var(--card));
   --color-card-foreground: hsl(var(--card-foreground));
 
-  --color-popover: hsl(var(--popover));
-  --color-popover-foreground: hsl(var(--popover-foreground));
-
   --color-primary: hsl(var(--primary));
   --color-primary-foreground: hsl(var(--primary-foreground));
 
@@ -41,17 +38,10 @@
   --color-accent-foreground: hsl(var(--accent-foreground));
 
   --color-destructive: hsl(var(--destructive));
-  --color-destructive-foreground: hsl(var(--destructive-foreground));
 
   --color-border: hsl(var(--border));
   --color-input: hsl(var(--input));
   --color-ring: hsl(var(--ring));
-
-  --color-chart-1: hsl(var(--chart-1));
-  --color-chart-2: hsl(var(--chart-2));
-  --color-chart-3: hsl(var(--chart-3));
-  --color-chart-4: hsl(var(--chart-4));
-  --color-chart-5: hsl(var(--chart-5));
 }
 
 /*
@@ -73,17 +63,14 @@
 }
 
 @layer base {
-  /* width */
   ::-webkit-scrollbar {
     @apply h-1 w-1.5;
   }
 
-  /* Track */
   ::-webkit-scrollbar-track {
     @apply bg-transparent;
   }
 
-  /* Handle */
   ::-webkit-scrollbar-thumb {
     background: var(--scroll-bar-color);
     @apply rounded;
@@ -105,7 +92,6 @@
   :root {
     --background: 180 7% 96%;
     --foreground: 180 8% 6%;
-    --text-second: #585858;
 
     --scroll-bar-color: #b9b9b9;
 
@@ -119,12 +105,8 @@
     --sh-sign: #686868;
     --sh-comment: #686868;
 
-    --selection: #e2e2e2;
-
     --card: 180 7% 96%;
     --card-foreground: 180 8% 6%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 3.9%;
     --primary: 240 5.9% 10%;
     --primary-foreground: 0 0% 98%;
     --secondary: 240 4.8% 95.9%;
@@ -134,21 +116,13 @@
     --accent: 240 4.8% 95.9%;
     --accent-foreground: 240 5.9% 10%;
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
     --border: 240 5.9% 90%;
     --input: 240 5.9% 90%;
     --ring: 240 10% 3.9%;
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
     --radius: 0.5rem;
   }
 
   .dark {
-    --text-second: #b0b0b0;
-
     --scroll-bar-color: #2b2b2b;
 
     --sh-class: #96c3ff;
@@ -161,14 +135,10 @@
     --sh-sign: #a5a5a5;
     --sh-comment: #a5a5a5;
 
-    --selection: #404040;
-
     --background: 240 10% 3.9%;
     --foreground: 0 0% 98%;
     --card: 240 10% 3.9%;
     --card-foreground: 0 0% 98%;
-    --popover: 240 10% 3.9%;
-    --popover-foreground: 0 0% 98%;
     --primary: 0 0% 98%;
     --primary-foreground: 240 5.9% 10%;
     --secondary: 240 3.7% 15.9%;
@@ -178,15 +148,9 @@
     --accent: 240 3.7% 15.9%;
     --accent-foreground: 0 0% 98%;
     --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
     --border: 240 3.7% 15.9%;
     --input: 240 3.7% 15.9%;
     --ring: 240 4.9% 83.9%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
   }
 }
 
@@ -499,14 +463,6 @@
   .showcase-item-link:hover .showcase-item-arrow,
   .showcase-item-link:focus-visible .showcase-item-arrow {
     transform: translate(0.125rem, -0.125rem);
-  }
-
-  .showcase-flag-status {
-    padding: 0.5rem 0.75rem;
-    margin: 0 -0.75rem;
-    color: hsl(var(--muted-foreground));
-    font-family: var(--font-geist-mono), monospace;
-    font-size: 0.6875rem;
   }
 
   .resume-message {
@@ -1008,11 +964,6 @@
   }
 }
 
-/* ============================================
-   View Transitions API — Foundation
-   ============================================ */
-
-/* Default: smooth crossfade for all page transitions */
 ::view-transition-old(root),
 ::view-transition-new(root) {
   animation-duration: 300ms;
@@ -1025,7 +976,6 @@
   animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Directional slide animations (for transitionTypes) */
 @keyframes slide-out-left {
   to {
     transform: translateX(-30%);
@@ -1051,7 +1001,6 @@
   }
 }
 
-/* slide-forward: navigating to next post */
 html:active-view-transition-type(slide-forward) {
   &::view-transition-old(root) {
     animation: 300ms ease-in both slide-out-left;
@@ -1061,7 +1010,6 @@ html:active-view-transition-type(slide-forward) {
   }
 }
 
-/* slide-back: navigating to previous post */
 html:active-view-transition-type(slide-back) {
   &::view-transition-old(root) {
     animation: 300ms ease-in both slide-out-right;
@@ -1071,10 +1019,7 @@ html:active-view-transition-type(slide-back) {
   }
 }
 
-/* ============================================
-   Accessibility: Respect reduced motion preference
-   CRITICAL: This must be present for a11y compliance
-   ============================================ */
+/* Required to respect reduced-motion accessibility preferences. */
 @media (prefers-reduced-motion: reduce) {
   ::view-transition-old(*),
   ::view-transition-new(*) {
