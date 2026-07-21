@@ -27,12 +27,11 @@ export const env = createEnv({
     // Build-time flags
     ANALYZE: z
       .string()
-      .optional()
       .default("false")
       .transform((val) => val === "true"),
 
     NODE_ENV: z.enum(["development", "production", "test"]),
-    PORT: z.coerce.number().optional().default(3000),
+    PORT: z.coerce.number().default(3000),
 
     // Site URL configuration
     PUBLIC_BASE_URL: z.url().optional(),
