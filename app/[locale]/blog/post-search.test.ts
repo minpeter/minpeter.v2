@@ -5,14 +5,13 @@ import type { postMetadataType } from "@/shared/source";
 
 import { extractMatchedUrls, filterByTitle } from "./post-search";
 
-function makePost(overrides: Partial<postMetadataType>): postMetadataType {
+function makePost(title: string): postMetadataType {
   return {
     draft: false,
     lang: ["en"],
     published: new Date("2024-03-05T00:00:00Z"),
-    title: "A Post",
+    title,
     url: "/blog/a-post",
-    ...overrides,
   };
 }
 
@@ -48,10 +47,7 @@ describe(extractMatchedUrls, () => {
 });
 
 describe(filterByTitle, () => {
-  const posts = [
-    makePost({ title: "Traefik Proxy 설정", url: "/blog/traefik" }),
-    makePost({ title: "New Year Clock", url: "/blog/clock" }),
-  ];
+  const posts = [makePost("Traefik Proxy 설정"), makePost("New Year Clock")];
 
   it("matches titles case-insensitively", () => {
     expect(filterByTitle(posts, "traefik")).toStrictEqual([posts[0]]);

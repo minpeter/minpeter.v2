@@ -21,7 +21,9 @@ export function filterByTitle(
   posts: postMetadataType[],
   query: string
 ): postMetadataType[] {
+  const normalizedQuery = query.toLowerCase();
+
   return posts.filter((post) =>
-    post.title.toLowerCase().includes(query.toLowerCase())
+    post.title.toLowerCase().includes(normalizedQuery)
   );
 }
