@@ -4,14 +4,11 @@ const narrowCharacterPattern = /[I1.,:;!'|]/u;
 const wideLatinCharacterPattern = /[MW@#%&]/u;
 
 const getCharacterWidth = (character: string) => {
-  if (character === " ") {
+  if (character === " " || narrowCharacterPattern.test(character)) {
     return 0.35;
   }
   if (cjkCharacterPattern.test(character)) {
     return 1;
-  }
-  if (narrowCharacterPattern.test(character)) {
-    return 0.35;
   }
   if (wideLatinCharacterPattern.test(character)) {
     return 0.85;
