@@ -10,6 +10,21 @@ import { z } from "zod";
 
 import { routing } from "./shared/i18n/routing";
 
+export function parseFrontmatterDate(
+  value: Date | string,
+  context: z.RefinementCtx
+): Date {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) {
+    context.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "Invalid date",
+    });
+    return z.NEVER;
+  }
+  return date;
+}
+
 export const { docs, meta } = defineDocs({
   dir: "content/blog",
   docs: {
@@ -27,15 +42,7 @@ export const { docs, meta } = defineDocs({
           if (value === undefined) {
             return;
           }
-          const date = new Date(value);
-          if (Number.isNaN(date.getTime())) {
-            context.addIssue({
-              code: z.ZodIssueCode.custom,
-              message: "Invalid date",
-            });
-            return z.NEVER;
-          }
-          return date;
+          return parseFrontmatterDate(value, context);
         }),
       external_url: z.url().optional(),
       lang: z
@@ -46,17 +53,7 @@ export const { docs, meta } = defineDocs({
       published: z
         .string()
         .or(z.date())
-        .transform((value, context) => {
-          const date = new Date(value);
-          if (Number.isNaN(date.getTime())) {
-            context.addIssue({
-              code: z.ZodIssueCode.custom,
-              message: "Invalid date",
-            });
-            return z.NEVER;
-          }
-          return date;
-        }),
+        .transform(parseFrontmatterDate),
     }),
   },
 });
