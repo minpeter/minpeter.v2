@@ -52,10 +52,16 @@ export function RootDocument({ children, lang }: RootDocumentProps) {
           rel="icon"
           type="image/svg+xml"
         />
+        <link
+          as="style"
+          href="/fonts/deferred-fonts.css"
+          id="deferred-fonts"
+          rel="preload"
+        />
         <script
           dangerouslySetInnerHTML={{
             __html:
-              "window.addEventListener('load',function(){var l=document.createElement('link');l.rel='stylesheet';l.href='/fonts/deferred-fonts.css';document.head.appendChild(l)})",
+              "document.getElementById('deferred-fonts').addEventListener('load',function(){this.rel='stylesheet'})",
           }}
         />
       </head>
