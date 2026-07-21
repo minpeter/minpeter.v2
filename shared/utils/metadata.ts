@@ -73,6 +73,7 @@ export function createMetadata({
   title?: string;
 }): Metadata {
   const resolvedLocale = resolveLocale(locale);
+  const resolvedDescription = description || siteConfig.description[resolvedLocale];
   const localizedPath = path
     ? getLocalizedPath(resolvedLocale, path)
     : undefined;
@@ -93,7 +94,7 @@ export function createMetadata({
     : undefined;
   const sharedOpenGraph = {
     alternateLocale,
-    description,
+    description: resolvedDescription,
     ...(resolvedImage ? { images: resolvedImage } : {}),
     locale: openGraphLocales[resolvedLocale],
     siteName: siteConfig.title,
@@ -108,7 +109,7 @@ export function createMetadata({
           languages: getLanguageAlternates(path),
         }
       : undefined,
-    description,
+    description: resolvedDescription,
     formatDetection: {
       telephone: false,
     },
@@ -130,7 +131,7 @@ export function createMetadata({
     twitter: {
       card: "summary_large_image",
       creator: "@minpeter",
-      description,
+      description: resolvedDescription,
       ...(resolvedImage ? { images: resolvedImage } : {}),
       title,
     },

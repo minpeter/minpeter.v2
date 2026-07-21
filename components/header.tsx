@@ -61,7 +61,7 @@ export default function Header({
             minpeter
           </Link>
         )}
-        <div className="flex items-center gap-2 text-muted-foreground">
+        <div className="flex items-center gap-2 text-foreground/80">
           {rightContent}
           {rightContent ? <span>·</span> : null}
           <LanguageSelector />
@@ -78,7 +78,7 @@ export default function Header({
           )}
         </h1>
         {description ? (
-          <p className="mt-5 max-w-lg text-[15px] leading-relaxed text-muted-foreground sm:text-base">
+          <p className="mt-5 max-w-lg text-[15px] leading-relaxed text-foreground/80 sm:text-base">
             {description}
           </p>
         ) : null}

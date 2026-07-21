@@ -50,7 +50,7 @@ export function MachineTranslationNotice({
             : t("translatedBy")}
         </span>
       </div>
-      <p className="text-muted-foreground text-xs">{t("aiDisclaimer")}</p>
+      <p className="text-foreground/80 text-xs">{t("aiDisclaimer")}</p>
     </div>
   );
 }

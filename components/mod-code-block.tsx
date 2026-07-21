@@ -211,7 +211,7 @@ export function ModCodeBlock({
 
               return (
                 <button
-                  className="cursor-pointer rounded-md bg-secondary px-1 py-0.5 text-blue-500 hover:bg-blue-500 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  className="cursor-pointer rounded-md bg-secondary px-1 py-0.5 text-blue-700 hover:bg-blue-700 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:text-blue-400 dark:hover:bg-blue-500"
                   data-segment-index={index}
                   key={segment.id}
                   onClick={handleSegmentActivate}

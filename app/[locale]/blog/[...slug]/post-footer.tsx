@@ -32,7 +32,7 @@ export function PostFooter({
 
   return (
     <section className="mt-32">
-      <div className="mb-8 flex flex-row flex-wrap items-center gap-2 text-muted-foreground text-sm">
+      <div className="mb-8 flex flex-row flex-wrap items-center gap-2 text-foreground/88 text-sm">
         {post.data.drafted ? (
           <>
             <div className="flex gap-2">

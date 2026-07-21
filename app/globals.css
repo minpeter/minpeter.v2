@@ -303,10 +303,21 @@
 
   .fieldnotes-year-heading {
     margin-bottom: 1rem;
-    color: hsl(var(--muted-foreground));
+    color: hsl(var(--foreground) / 88%);
     font-size: 0.8125rem;
     font-weight: 400;
     line-height: 1.26;
+  }
+
+  .fieldnotes-list :is(.fieldnotes-year, .fieldnotes-year-posts, .fieldnotes-year-posts > *, .fieldnotes-item-title) {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .fieldnotes-list :is(.fieldnotes-year-heading, .fieldnotes-item-date, .fieldnotes-item-title) {
+    color: hsl(var(--foreground) / 88%) !important;
+    opacity: 1 !important;
   }
 
   .fieldnotes-year-posts {
@@ -363,7 +374,7 @@
   .fieldnotes-item-date {
     flex: 0 0 auto;
     padding-top: 0.25rem;
-    color: hsl(var(--muted-foreground));
+    color: hsl(var(--foreground) / 88%);
     font-size: 0.8125rem;
     font-variant-numeric: tabular-nums;
     line-height: 1.26;
@@ -1074,8 +1085,36 @@ html:active-view-transition-type(slide-back) {
   }
 }
 
-/* AritaBuri and Shippori faces load deferred via /fonts/deferred-fonts.css (see root-document); the variable names the family ahead of registration. */
+/* AritaBuri, Pretendard, and Shippori faces load deferred via /fonts/deferred-fonts.css (see root-document); the variables name each family ahead of registration. */
 :root {
   --font-arita-buri: "AritaBuri KR";
+  --font-pretendard: "Pretendard";
   --font-shippori-mincho: "Shippori Mincho";
+}
+
+/* Package-manager code blocks need accessible contrast on tab controls and captions. */
+[data-radix-tabs-trigger][data-state="inactive"],
+[role="tab"][data-state="inactive"],
+figure figcaption.flex-1.truncate {
+  color: hsl(var(--foreground) / 84%) !important;
+}
+
+/* GitHub-light Shiki token colors need modern Primer contrast on the code-block surface. */
+.shiki span[style*="--shiki-light:#005CC5"] {
+  --shiki-light: #0550ae !important;
+}
+.shiki span[style*="--shiki-light:#032F62"] {
+  --shiki-light: #0a3069 !important;
+}
+.shiki span[style*="--shiki-light:#22863A"] {
+  --shiki-light: #116329 !important;
+}
+.shiki span[style*="--shiki-light:#6A737D"] {
+  --shiki-light: #57606a !important;
+}
+.shiki span[style*="--shiki-light:#D73A49"] {
+  --shiki-light: #b31d28 !important;
+}
+.shiki span[style*="--shiki-light:#E36209"] {
+  --shiki-light: #953800 !important;
 }

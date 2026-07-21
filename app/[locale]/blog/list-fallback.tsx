@@ -58,7 +58,7 @@ export function BlogListFallback({
     {}
   );
 
-  const itemStyles = "transition-opacity duration-200";
+  const itemStyles = "";
 
   return (
     <div
