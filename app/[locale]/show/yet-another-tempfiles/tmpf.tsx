@@ -55,7 +55,26 @@ interface UploadResponse {
   folderId: string;
 }
 
-async function uploadFile(file: File[]): Promise<UploadResponse | null> {
+function isUploadResponse(value: unknown): value is UploadResponse {
+  if (typeof value !== "object" || value === null) {
+    return false;
+  }
+  const candidate = value as Partial<UploadResponse>;
+  return (
+    typeof candidate.folderId === "string" &&
+    Array.isArray(candidate.files) &&
+    candidate.files.every(
+      (file) =>
+        typeof file === "object" &&
+        file !== null &&
+        typeof (file as { fileName?: unknown }).fileName === "string"
+    )
+  );
+}
+
+export async function uploadFile(
+  file: File[]
+): Promise<UploadResponse | null> {
   const formData = new FormData();
   for (const f of file) {
     formData.append("file", f);
@@ -71,7 +90,7 @@ async function uploadFile(file: File[]): Promise<UploadResponse | null> {
         },
       }
     );
-    return response.data;
+    return isUploadResponse(response.data) ? response.data : null;
   } catch {
     return null;
   }
