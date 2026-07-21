@@ -10,16 +10,15 @@ interface ExternalRedirectProps {
   url: string;
 }
 
-function countdownReducer(count: number) {
-  return count - 1;
-}
-
 export default function ExternalRedirect({
   url,
   countdownStart = DEFAULT_COUNTDOWN_START,
 }: ExternalRedirectProps) {
   const t = useTranslations("externalRedirect");
-  const [count, decrementCount] = useReducer(countdownReducer, countdownStart);
+  const [count, decrementCount] = useReducer(
+    (currentCount) => currentCount - 1,
+    countdownStart
+  );
 
   useEffect(() => {
     if (count <= 0) {
