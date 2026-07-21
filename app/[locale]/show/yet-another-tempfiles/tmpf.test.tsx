@@ -1,19 +1,20 @@
+import type { AxiosStatic } from "axios";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+
+import { uploadFile } from "./tmpf";
 
 const { mockPost } = vi.hoisted(() => ({
   mockPost: vi.fn(),
 }));
 
-vi.mock("axios", () => ({
+vi.mock(import("axios"), () => ({
   default: {
     create: () => ({
-      post: mockPost,
       get: vi.fn(),
+      post: mockPost,
     }),
-  },
+  } as unknown as AxiosStatic,
 }));
-
-import { uploadFile } from "./tmpf";
 
 function makeFile(name: string) {
   return new File(["dummy"], name, { type: "text/plain" });
@@ -26,17 +27,19 @@ describe("uploadFile response validation", () => {
 
   it("returns the payload when the response has a valid shape", async () => {
     const payload = {
-      folderId: "abc123",
       files: [{ fileName: "a.txt" }, { fileName: "b.txt" }],
+      folderId: "abc123",
     };
     mockPost.mockResolvedValue({ data: payload });
 
-    await expect(uploadFile([makeFile("a.txt")])).resolves.toEqual(payload);
+    await expect(uploadFile([makeFile("a.txt")])).resolves.toStrictEqual(
+      payload
+    );
   });
 
   it("returns null when files is not an array", async () => {
     mockPost.mockResolvedValue({
-      data: { folderId: "abc123", files: "not-an-array" },
+      data: { files: "not-an-array", folderId: "abc123" },
     });
 
     await expect(uploadFile([makeFile("a.txt")])).resolves.toBeNull();
@@ -48,7 +51,7 @@ describe("uploadFile response validation", () => {
     await expect(uploadFile([makeFile("a.txt")])).resolves.toBeNull();
 
     mockPost.mockResolvedValue({
-      data: { folderId: 42, files: [{ fileName: "a.txt" }] },
+      data: { files: [{ fileName: "a.txt" }], folderId: 42 },
     });
 
     await expect(uploadFile([makeFile("a.txt")])).resolves.toBeNull();
@@ -56,7 +59,7 @@ describe("uploadFile response validation", () => {
 
   it("returns null when a file entry lacks a string fileName", async () => {
     mockPost.mockResolvedValue({
-      data: { folderId: "abc123", files: [{ name: "a.txt" }] },
+      data: { files: [{ name: "a.txt" }], folderId: "abc123" },
     });
 
     await expect(uploadFile([makeFile("a.txt")])).resolves.toBeNull();

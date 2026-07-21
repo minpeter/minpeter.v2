@@ -15,7 +15,9 @@ export function ErrorPanel({ error, namespace, reset }: ErrorPanelProps) {
   const locale = useLocale();
   const t = useTranslations(`errors.${namespace}`);
   const backHref =
-    namespace === "blog" ? (`/${locale}/blog` as Route) : (`/${locale}` as Route);
+    namespace === "blog"
+      ? (`/${locale}/blog` as Route)
+      : (`/${locale}` as Route);
 
   useEffect(() => {
     console.error(error);

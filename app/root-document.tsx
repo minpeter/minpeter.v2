@@ -14,7 +14,6 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { env } from "@/shared/env";
 import { cn } from "@/shared/utils/tailwind";
 
-
 const geistMono = Geist_Mono({
   subsets: ["latin"],
   variable: "--font-geist-mono",

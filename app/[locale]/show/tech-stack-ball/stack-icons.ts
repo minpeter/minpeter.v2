@@ -65,4 +65,3 @@ export function getIconTextureScale(icon: string, iconSize: number) {
     y: iconSize / ICON_TEXTURE_BASE_DIMENSION,
   };
 }
-

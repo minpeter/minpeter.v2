@@ -49,10 +49,7 @@ const SHOWCASE_ITEMS = [
 ] as const;
 
 export default async function Page(props: PageProps<"/[locale]/show">) {
-  const [{ locale }, t] = await Promise.all([
-    props.params,
-    getTranslations(),
-  ]);
+  const [{ locale }, t] = await Promise.all([props.params, getTranslations()]);
   return (
     <section className="showcase-page">
       <header className="showcase-header">
@@ -104,7 +101,6 @@ export default async function Page(props: PageProps<"/[locale]/show">) {
             </span>
           </Link>
         ))}
-
       </nav>
     </section>
   );

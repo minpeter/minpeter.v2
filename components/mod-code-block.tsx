@@ -224,7 +224,9 @@ export function ModCodeBlock({
           </code>
         </pre>
       </div>
-      <p className="mb-4 pl-1 text-muted-foreground text-xs">*{t("instruction")}</p>
+      <p className="mb-4 pl-1 text-muted-foreground text-xs">
+        *{t("instruction")}
+      </p>
       {status === "error" && (
         <output className="pl-1 text-destructive text-xs">
           {t("copyFailed")}

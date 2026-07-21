@@ -100,8 +100,6 @@ describe(BlogListFallback, () => {
   it("marks the list busy while loading", () => {
     const { container } = renderFallback([makePost({})], { isLoading: true });
 
-    expect(container.firstElementChild?.getAttribute("aria-busy")).toBe(
-      "true"
-    );
+    expect(container.firstElementChild?.getAttribute("aria-busy")).toBe("true");
   });
 });

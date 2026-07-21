@@ -53,10 +53,7 @@ describe(getAdjacentPosts, () => {
       makePost("newest", "2025-01-01"),
     ];
 
-    const { nextPost, previousPost } = getAdjacentPosts(
-      withExternal,
-      "newest"
-    );
+    const { nextPost, previousPost } = getAdjacentPosts(withExternal, "newest");
 
     expect(previousPost).toBeNull();
     expect(nextPost?.slugs).toStrictEqual(["oldest"]);

@@ -1,5 +1,5 @@
-import { renderToString } from "react-dom/server";
 import { NextIntlClientProvider } from "next-intl";
+import { renderToString } from "react-dom/server";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { Countdown } from "./countdown";
@@ -8,13 +8,13 @@ const MESSAGES = {
   showcase: {
     items: {
       newYear: {
+        caption: "{year}년 1월 1일까지 남은 시간입니다.",
         days: "일",
+        happy: "새해 복 많이 받으세요!",
         hours: "시간",
         minutes: "분",
         seconds: "초",
-        happy: "새해 복 많이 받으세요!",
-        timerLabel: "{days}일 {hours}시간 {minutes}분 {seconds}초 남음",
-        caption: "{year}년까지",
+        timerLabel: "새해까지 {days}일 {hours}시간 {minutes}분 {seconds}초 남음",
       },
     },
   },

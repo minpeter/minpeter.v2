@@ -72,9 +72,7 @@ function isUploadResponse(value: unknown): value is UploadResponse {
   );
 }
 
-export async function uploadFile(
-  file: File[]
-): Promise<UploadResponse | null> {
+export async function uploadFile(file: File[]): Promise<UploadResponse | null> {
   const formData = new FormData();
   for (const f of file) {
     formData.append("file", f);

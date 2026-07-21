@@ -31,11 +31,7 @@ export default function AnimatedText({ data }: { data: string }) {
             if (index < iteration) {
               return data[index];
             }
-            return letters[
-              Math.floor(
-                Math.random() * letters.length
-              )
-            ];
+            return letters[Math.floor(Math.random() * letters.length)];
           })
           .join("")
       );

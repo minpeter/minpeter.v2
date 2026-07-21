@@ -8,7 +8,6 @@ import Header from "@/components/header";
 import { MachineTranslationNotice } from "@/components/machine-translation-notice";
 import { siteConfig } from "@/shared/site-config";
 import { blog } from "@/shared/source";
-import styles from "@/shared/styles/stagger-fade-in.module.css";
 import { formatDateLong } from "@/shared/utils/date";
 import {
   createMetadata,
@@ -20,6 +19,8 @@ import { cn } from "@/shared/utils/tailwind";
 import { blogMdxComponents } from "./mdx-components";
 import { PostFooter } from "./post-footer";
 import { PostToc } from "./post-toc";
+
+import styles from "@/shared/styles/stagger-fade-in.module.css";
 
 export const dynamicParams = false;
 

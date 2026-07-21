@@ -2,7 +2,11 @@ import { readFile } from "node:fs/promises";
 
 import { ImageResponse } from "next/og";
 
-import { getOgTitleSize, getOgTitleVisualWidth, getTitleTokens } from "./og-title";
+import {
+  getOgTitleSize,
+  getOgTitleVisualWidth,
+  getTitleTokens,
+} from "./og-title";
 
 export const ogImageSize = {
   height: 630,

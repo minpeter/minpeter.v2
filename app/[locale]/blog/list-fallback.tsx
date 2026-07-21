@@ -6,9 +6,10 @@ import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { ViewTransition } from "@/components/view-transition";
 import type { postMetadataType } from "@/shared/source";
-import styles from "@/shared/styles/stagger-fade-in.module.css";
 import { formatPostDate, formatYear } from "@/shared/utils/date";
 import { cn } from "@/shared/utils/tailwind";
+
+import styles from "@/shared/styles/stagger-fade-in.module.css";
 
 export function BlogSearchShell({
   searchPlaceholder,
