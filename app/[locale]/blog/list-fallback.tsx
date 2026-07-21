@@ -124,6 +124,7 @@ export function BlogListFallback({
                           "fieldnotes-item-link focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                         )}
                         href={post.url as Route}
+                        prefetch={false}
                       >
                         <ViewTransition
                           name={`blog-title-${post.url.replaceAll("/", "-")}`}
