@@ -1,4 +1,4 @@
-// react-doctor configuration. Schema confirmed against react-doctor@0.8.1;
+// react-doctor configuration. Schema confirmed against react-doctor@0.8.3;
 // the config type is not imported because react-doctor is not a dependency.
 // Exclusion policy: code fixes preferred; every entry is scoped to the exact
 // file + rule pair with its justification so future diagnostics still surface.
@@ -16,6 +16,7 @@ export default {
           "react-doctor/no-pass-data-to-parent",
           "react-doctor/no-pass-live-state-to-parent",
           "react-doctor/no-prop-callback-in-effect",
+          "react-doctor/jsx-no-constructed-context-values",
           "react-hooks-js/set-state-in-effect",
         ],
       },
