@@ -11,7 +11,7 @@
     "postbuild": "next-sitemap",
     "build:analyze": "ANALYZE=true next build",
     "test": "vitest run",
-    "check:oxlint": "oxlint",
+    "check:oxlint": "ultracite check",
     "precheck:types": "next typegen",
     "check:types": "tsc --noEmit",
     "check": "run-p check:**",
