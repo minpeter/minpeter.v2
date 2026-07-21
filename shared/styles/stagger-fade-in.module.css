@@ -10,6 +10,15 @@
     }
   }
 
+  @keyframes slideInUp {
+    from {
+      transform: translateY(8px);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+
   .stagger_container > * {
     --level: 0;
     --overflow-level: 0;
@@ -29,6 +38,10 @@
 
   .fast > * {
     --base-delay: 30ms;
+  }
+
+  .post > * {
+    animation-name: slideInUp;
   }
 }
 

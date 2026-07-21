@@ -94,7 +94,9 @@ export default async function Page(
   const blogMdxComponents = createBlogMdxComponents();
 
   return (
-    <section className={cn(styles.stagger_container, "blog-post-page")}>
+    <section
+      className={cn(styles.stagger_container, styles.post, "blog-post-page")}
+    >
       <Header
         description={formatDateLong(post.data.published)}
         link={{ href: `/${locale}/blog` as Route, text: t("backToBlog") }}
