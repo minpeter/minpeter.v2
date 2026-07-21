@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { z } from "zod";
 
-import { parseFrontmatterDate } from "./source.config";
+import { parseFrontmatterDate } from "./shared/frontmatter-date";
 
 const publishedSchema = z.string().or(z.date()).transform(parseFrontmatterDate);
 

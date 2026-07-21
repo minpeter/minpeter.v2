@@ -8,22 +8,8 @@ import type { DefaultMDXOptions } from "fumadocs-mdx/config";
 import lastModified from "fumadocs-mdx/plugins/last-modified";
 import { z } from "zod";
 
+import { parseFrontmatterDate } from "./shared/frontmatter-date";
 import { routing } from "./shared/i18n/routing";
-
-export function parseFrontmatterDate(
-  value: Date | string,
-  context: z.RefinementCtx
-): Date {
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) {
-    context.addIssue({
-      code: z.ZodIssueCode.custom,
-      message: "Invalid date",
-    });
-    return z.NEVER;
-  }
-  return date;
-}
 
 export const { docs, meta } = defineDocs({
   dir: "content/blog",
