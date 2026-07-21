@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import type { MouseEvent } from "react";
 
 import {
   Carousel,
@@ -37,14 +36,6 @@ export function ImageCarousel({
   const wheelDelta = useRef(0);
   const wheelGestureLocked = useRef(false);
   const wheelResetTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const handleIndicatorClick = (event: MouseEvent<HTMLButtonElement>) => {
-    const slideIndex = Math.trunc(
-      Number(event.currentTarget.dataset.slideIndex ?? "")
-    );
-    if (!Number.isNaN(slideIndex)) {
-      api?.scrollTo(slideIndex);
-    }
-  };
   useEffect(() => {
     const carouselRoot = carouselRootRef.current;
     if (!carouselRoot) {
@@ -90,7 +81,6 @@ export function ImageCarousel({
       } else {
         api.scrollPrev();
       }
-      wheelDelta.current = 0;
     };
 
     carouselRoot.addEventListener("wheel", handleWheel, { passive: false });
@@ -141,10 +131,8 @@ export function ImageCarousel({
               <div className="overflow-hidden rounded-lg">
                 <Image
                   alt={`${alt} ${index + 1}`}
-                  className="block h-full w-auto object-contain"
+                  className="block object-contain"
                   height={height}
-                  loading="lazy"
-                  sizes="(max-width: 768px) 100vw, 768px"
                   src={src}
                   style={{ height: `${height}px`, width: "auto" }}
                   unoptimized
@@ -167,9 +155,8 @@ export function ImageCarousel({
                 ? "w-3 bg-foreground"
                 : "bg-muted-foreground/30 hover:bg-muted-foreground/50"
             )}
-            data-slide-index={index}
             key={src}
-            onClick={handleIndicatorClick}
+            onClick={() => api?.scrollTo(index)}
             type="button"
           />
         ))}
