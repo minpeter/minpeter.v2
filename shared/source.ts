@@ -64,5 +64,5 @@ function getPostMetadata(post: NonNullable<blogType>): postMetadataType {
 export function getPostsMetadata(posts: blogListType): postMetadataType[] {
   return posts
     .toSorted((a, b) => b.data.published.getTime() - a.data.published.getTime())
-    .map((post) => getPostMetadata(post));
+    .map(getPostMetadata);
 }
