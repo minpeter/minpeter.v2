@@ -1,4 +1,4 @@
-// react-doctor configuration. Schema confirmed against react-doctor@0.8.3;
+// Schema confirmed against react-doctor@0.8.3;
 // the config type is not imported because react-doctor is not a dependency.
 // Exclusion policy: code fixes preferred; every entry is scoped to the exact
 // file + rule pair with its justification so future diagnostics still surface.

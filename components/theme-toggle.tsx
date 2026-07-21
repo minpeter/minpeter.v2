@@ -7,15 +7,11 @@ import { FiMoon } from "react-icons/fi";
 export function ModeToggle({ label }: { label: string }) {
   const { setTheme, theme } = useTheme();
 
-  const toggleTheme = () => {
-    setTheme(theme === "dark" ? "light" : "dark");
-  };
-
   return (
     <button
       aria-label={label}
       className="relative flex h-6 w-6 items-center justify-center rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-      onClick={toggleTheme}
+      onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
       type="button"
     >
       <SunIcon className="absolute h-3 w-3 rotate-0 scale-100 opacity-100 transition-[rotate,scale,opacity] dark:-rotate-90 dark:scale-[0.01] dark:opacity-0" />

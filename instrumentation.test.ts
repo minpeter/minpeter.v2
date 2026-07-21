@@ -3,14 +3,6 @@ import { describe, expect, it, vi } from "vitest";
 import { onRequestError, register } from "./instrumentation";
 
 describe("instrumentation", () => {
-  it("exports register function", () => {
-    expect(register).toBeTypeOf("function");
-  });
-
-  it("register runs without throwing", () => {
-    expect(() => register()).not.toThrow();
-  });
-
   it("register logs initialization message", () => {
     const consoleSpy = vi.spyOn(console, "info").mockReturnValue();
     register();
@@ -18,10 +10,6 @@ describe("instrumentation", () => {
       "[instrumentation] Server initialized"
     );
     consoleSpy.mockRestore();
-  });
-
-  it("exports onRequestError function", () => {
-    expect(onRequestError).toBeTypeOf("function");
   });
 
   it("onRequestError logs error info with context", async () => {
