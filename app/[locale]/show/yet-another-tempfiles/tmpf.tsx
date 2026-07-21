@@ -61,6 +61,9 @@ export default function TmpfUI() {
         )
       );
     } catch (downloadError) {
+      if (!(downloadError instanceof Error)) {
+        throw downloadError;
+      }
       console.error(downloadError);
     }
   };

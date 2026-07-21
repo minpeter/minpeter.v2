@@ -30,7 +30,7 @@ export async function downloadFile(folderId: string, fileName: string) {
   a.click();
 
   window.URL.revokeObjectURL(url);
-  document.body.removeChild(a);
+  a.remove();
 }
 
 export interface UploadResponse {
@@ -64,14 +64,9 @@ export async function uploadFile(file: File[]): Promise<UploadResponse | null> {
   }
 
   try {
-    const response = await axiosInstance.post<UploadResponse>(
+    const response = await axiosInstance.post<unknown>(
       API_SUFFIX.UPLOAD,
-      formData,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      }
+      formData
     );
     return isUploadResponse(response.data) ? response.data : null;
   } catch {

@@ -10,7 +10,6 @@ const { mockPost } = vi.hoisted(() => ({
 vi.mock(import("axios"), () => ({
   default: {
     create: () => ({
-      get: vi.fn(),
       post: mockPost,
     }),
   } as unknown as AxiosStatic,
