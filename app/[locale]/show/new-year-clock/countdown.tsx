@@ -56,7 +56,7 @@ export function Countdown() {
   "use no memo";
   const t = useTranslations("showcase.items.newYear");
   const [targetTimestamp] = useState(getNextYearTimestamp);
-  const [remainingTime, setRemainingTime] = useState<TimeLeft>(ZERO_TIME_LEFT);
+  const [remainingTime, setRemainingTime] = useState<TimeLeft | null>(null);
 
   useEffect(() => {
     const updateRemainingTime = () => {
@@ -74,13 +74,35 @@ export function Countdown() {
     };
   }, [targetTimestamp]);
 
-  const hasTimeLeft = Object.values(remainingTime).some((value) => value > 0);
-  const units = [
-    { label: t("days"), value: remainingTime.days },
-    { label: t("hours"), value: remainingTime.hours },
-    { label: t("minutes"), value: remainingTime.minutes },
-    { label: t("seconds"), value: remainingTime.seconds },
+  const labels = [
+    { key: "days", label: t("days") },
+    { key: "hours", label: t("hours") },
+    { key: "minutes", label: t("minutes") },
+    { key: "seconds", label: t("seconds") },
   ] as const;
+
+  if (remainingTime === null) {
+    return (
+      <div className="grid grid-cols-2 gap-x-5 gap-y-8 sm:grid-cols-4">
+        {labels.map(({ key, label }) => (
+          <div className="border-foreground/15 border-t pt-4" key={key}>
+            <span className="block font-mono text-2xl tabular-nums tracking-[-0.05em] sm:text-[1.75rem]">
+              --
+            </span>
+            <span className="mt-1 block text-[0.6875rem] text-muted-foreground uppercase tracking-[0.08em]">
+              {label}
+            </span>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  const hasTimeLeft = Object.values(remainingTime).some((value) => value > 0);
+  const units = labels.map(({ key, label }) => ({
+    label,
+    value: remainingTime[key],
+  }));
 
   if (!hasTimeLeft) {
     return (
