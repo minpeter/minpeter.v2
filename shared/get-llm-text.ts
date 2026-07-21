@@ -10,7 +10,7 @@ export async function getLLMText(
 
   if (full) {
     const rawContent = await page.data.getText("processed");
-    processedContent = (rawContent || "").trim();
+    processedContent = rawContent.trim();
   } else {
     const content = page.data.structuredData?.contents || "";
     processedContent =
