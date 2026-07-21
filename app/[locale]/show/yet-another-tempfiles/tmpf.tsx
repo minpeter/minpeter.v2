@@ -94,12 +94,15 @@ export default function TmpfUI() {
     }
     setError(null);
     setLoading(true);
-    const response = await uploadFile(files);
-    setUploaded(response);
-    if (!response) {
-      setError(t("connectionError"));
+    try {
+      const response = await uploadFile(files);
+      setUploaded(response);
+      if (!response) {
+        setError(t("connectionError"));
+      }
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const handleDownloadAll = async () => {

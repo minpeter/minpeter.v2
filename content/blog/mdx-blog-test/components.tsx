@@ -37,20 +37,24 @@ export function Ip() {
   useEffect(() => {
     const controller = new AbortController();
 
-    fetch("https://ip.minpeter.com/ip", { signal: controller.signal })
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error(res.statusText);
+    const load = async () => {
+      try {
+        const response = await fetch("https://ip.minpeter.com/ip", {
+          signal: controller.signal,
+        });
+        if (!response.ok) {
+          throw new Error(response.statusText);
         }
-        return res.text();
-      })
-      .then((fetchedIp) => setIp(fetchedIp))
-      .catch(() => {
+        setIp(await response.text());
+      } catch {
         if (controller.signal.aborted) {
           return;
         }
         setIp("Failed to fetch IP. Please try again later.");
-      });
+      }
+    };
+
+    load();
 
     return () => controller.abort();
   }, []);

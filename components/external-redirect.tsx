@@ -36,7 +36,7 @@ export default function ExternalRedirect({
   }, [count, url]);
 
   return (
-    <div className="flex min-h-screen items-center justify-center p-4">
+    <div className="flex min-h-dvh items-center justify-center p-4">
       <div className="space-y-4 text-center">
         <p className="text-lg">{t("message", { count: String(count) })}</p>
         <a className="text-primary underline" href={url}>
