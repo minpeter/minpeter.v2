@@ -16,7 +16,7 @@ import {
 } from "@/shared/utils/metadata";
 import { cn } from "@/shared/utils/tailwind";
 
-import { blogMdxComponents } from "./mdx-components";
+import { createBlogMdxComponents } from "./mdx-components";
 import { PostFooter } from "./post-footer";
 import { PostToc } from "./post-toc";
 
@@ -91,6 +91,7 @@ export default async function Page(
 
   const t = await getTranslations();
   const MDX = post.data.body;
+  const blogMdxComponents = createBlogMdxComponents();
 
   return (
     <section className={cn(styles.stagger_container, "blog-post-page")}>

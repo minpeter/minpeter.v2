@@ -8,40 +8,52 @@ import type { ComponentProps } from "react";
 import { BlogCallout, BlogRelatedLink } from "@/components/blog-callout";
 import { MediaGrid } from "@/components/media-grid";
 
-export const blogMdxComponents = {
-  ...defaultMdxComponents,
-  Callout: BlogCallout,
-  MediaGrid,
-  RelatedLink: BlogRelatedLink,
-  Tab,
-  Tabs,
-  a: (anchorProps: ComponentProps<"a">) => {
-    const { href, children, ...rest } = anchorProps;
-    const isInternalLink = href?.startsWith("/") && !href.startsWith("//");
-    if (isInternalLink) {
+export function createBlogMdxComponents() {
+  let firstImageEager = true;
+
+  return {
+    ...defaultMdxComponents,
+    Callout: BlogCallout,
+    MediaGrid,
+    RelatedLink: BlogRelatedLink,
+    Tab,
+    Tabs,
+    a: (anchorProps: ComponentProps<"a">) => {
+      const { href, children, ...rest } = anchorProps;
+      const isInternalLink = href?.startsWith("/") && !href.startsWith("//");
+      if (isInternalLink) {
+        return (
+          <Link
+            className="rounded-md px-2 py-1 text-primary hover:bg-secondary"
+            href={href as Route}
+            {...(rest as Record<string, unknown>)}
+          >
+            {children}
+          </Link>
+        );
+      }
       return (
-        <Link
+        <a
           className="rounded-md px-2 py-1 text-primary hover:bg-secondary"
-          href={href as Route}
-          {...(rest as Record<string, unknown>)}
+          href={href}
+          rel="noopener noreferrer"
+          target="_blank"
+          {...rest}
         >
           {children}
-        </Link>
+        </a>
       );
-    }
-    return (
-      <a
-        className="rounded-md px-2 py-1 text-primary hover:bg-secondary"
-        href={href}
-        rel="noopener noreferrer"
-        target="_blank"
-        {...rest}
-      >
-        {children}
-      </a>
-    );
-  },
-  img: (imageProps: ComponentProps<"img">) => (
-    <ImageZoom {...(imageProps as ComponentProps<typeof ImageZoom>)} />
-  ),
-};
+    },
+    img: (imageProps: ComponentProps<"img">) => {
+      const eager = firstImageEager;
+      firstImageEager = false;
+      return (
+        <ImageZoom
+          {...(imageProps as ComponentProps<typeof ImageZoom>)}
+          fetchPriority={eager ? "high" : "auto"}
+          loading={eager ? "eager" : "lazy"}
+        />
+      );
+    },
+  };
+}
