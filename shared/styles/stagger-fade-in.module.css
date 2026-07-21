@@ -1,5 +1,3 @@
-/* Stagger Fade-in Animation - Sequential appearance of child elements */
-
 @media (prefers-reduced-motion: no-preference) {
   @keyframes fadeInUp {
     from {
@@ -12,7 +10,6 @@
     }
   }
 
-  /* Main container - Apply staggered animation to child elements */
   .stagger_container > * {
     --level: 0;
     --overflow-level: 0;
@@ -26,7 +23,6 @@
     );
   }
 
-  /* Speed variants */
   .slow > * {
     --base-delay: 120ms;
   }
@@ -36,9 +32,6 @@
   }
 }
 
-/* Efficient level assignment using batch selectors - Covers unlimited elements */
-
-/* Batch 1: 1-10 */
 .stagger_container > *:nth-child(1) {
   --level: 1;
 }
