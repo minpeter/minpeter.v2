@@ -21,6 +21,10 @@ describe("frontmatter date validation", () => {
     expect(publishedSchema.safeParse("not-a-date").success).toBe(false);
   });
 
+  it("rejects an impossible calendar date", () => {
+    expect(publishedSchema.safeParse("2024-02-30").success).toBe(false);
+  });
+
   it("accepts a valid ISO date string and returns a Date", () => {
     const parsed = publishedSchema.parse("2024-03-05");
     expect(parsed).toBeInstanceOf(Date);
