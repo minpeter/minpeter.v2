@@ -1,10 +1,10 @@
-export function formatYear(date?: string | number | undefined | Date) {
+export function formatYear(date?: string | number | Date) {
   const d = new Date(date || new Date());
   return d.getFullYear();
 }
 
 // 2022-1-1 -> 22. 01. 01.
-export function formatDateLong(date?: string | number | undefined | Date) {
+export function formatDateLong(date?: string | number | Date) {
   const d = new Date(date || new Date());
 
   const year = String(d.getFullYear()).slice(-2);
