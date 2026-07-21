@@ -7,6 +7,7 @@ import createNextIntlPlugin from "next-intl/plugin";
 const nextConfig: NextConfig = {
   cacheComponents: false,
   experimental: {
+    inlineCss: true,
     globalNotFound: true,
     optimizePackageImports: [
       "lucide-react",
