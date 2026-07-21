@@ -8,7 +8,6 @@ const nextConfig: NextConfig = {
   cacheComponents: false,
   experimental: {
     globalNotFound: true,
-    inlineCss: true,
     optimizePackageImports: [
       "lucide-react",
       "@radix-ui/react-icons",
