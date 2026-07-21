@@ -1,7 +1,7 @@
 import type { AxiosStatic } from "axios";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { uploadFile } from "./tmpf";
+import { uploadFile } from "./tmpf-api";
 
 const { mockPost } = vi.hoisted(() => ({
   mockPost: vi.fn(),

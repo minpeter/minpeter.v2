@@ -6,7 +6,6 @@ import {
   EyeOpenIcon,
   ReloadIcon,
 } from "@radix-ui/react-icons";
-import axios from "axios";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 
@@ -15,84 +14,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { codeVariants } from "@/components/ui/typography";
 
-const TMPF_API_BASE = "https://api.tmpf.me";
-
-const API_SUFFIX = {
-  DOWNLOAD(folderId: string, fileName: string) {
-    return `/dl/${folderId}/${fileName}`;
-  },
-  UPLOAD: "/upload",
-  VIEW(folderId: string, fileName: string) {
-    return `/view/${folderId}/${fileName}`;
-  },
-};
-
-const axiosInstance = axios.create({
-  baseURL: TMPF_API_BASE,
-});
-
-async function downloadFile(folderId: string, fileName: string) {
-  const response = await axiosInstance.get(
-    API_SUFFIX.DOWNLOAD(folderId, fileName),
-    { responseType: "blob" }
-  );
-  const url = window.URL.createObjectURL(new Blob([response.data]));
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = fileName;
-
-  document.body.append(a);
-  a.click();
-
-  window.URL.revokeObjectURL(url);
-  document.body.removeChild(a);
-}
-
-interface UploadResponse {
-  files: {
-    fileName: string;
-  }[];
-  folderId: string;
-}
-
-function isUploadResponse(value: unknown): value is UploadResponse {
-  if (typeof value !== "object" || value === null) {
-    return false;
-  }
-  const candidate = value as Partial<UploadResponse>;
-  return (
-    typeof candidate.folderId === "string" &&
-    Array.isArray(candidate.files) &&
-    candidate.files.every(
-      (file) =>
-        typeof file === "object" &&
-        file !== null &&
-        typeof (file as { fileName?: unknown }).fileName === "string"
-    )
-  );
-}
-
-export async function uploadFile(file: File[]): Promise<UploadResponse | null> {
-  const formData = new FormData();
-  for (const f of file) {
-    formData.append("file", f);
-  }
-
-  try {
-    const response = await axiosInstance.post<UploadResponse>(
-      API_SUFFIX.UPLOAD,
-      formData,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      }
-    );
-    return isUploadResponse(response.data) ? response.data : null;
-  } catch {
-    return null;
-  }
-}
+import {
+  API_SUFFIX,
+  downloadFile,
+  TMPF_API_BASE,
+  uploadFile,
+} from "./tmpf-api";
+import type { UploadResponse } from "./tmpf-api";
 
 export default function TmpfUI() {
   const t = useTranslations("showcase.items.tempfiles");
