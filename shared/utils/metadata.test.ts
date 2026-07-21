@@ -61,6 +61,14 @@ describe("shared metadata", () => {
     expect(metadata.twitter).not.toHaveProperty("images");
   });
 
+  it("preserves an intentionally empty description", () => {
+    const metadata = createMetadata({ description: "", title: "Title" });
+
+    expect(metadata.description).toBe("");
+    expect(metadata.openGraph?.description).toBe("");
+    expect(metadata.twitter?.description).toBe("");
+  });
+
   it("creates article metadata for blog posts", () => {
     const metadata = createMetadata({
       article: {

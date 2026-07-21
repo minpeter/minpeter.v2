@@ -73,7 +73,8 @@ export function createMetadata({
   title?: string;
 }): Metadata {
   const resolvedLocale = resolveLocale(locale);
-  const resolvedDescription = description || siteConfig.description[resolvedLocale];
+  const resolvedDescription =
+    description ?? siteConfig.description[resolvedLocale];
   const localizedPath = path
     ? getLocalizedPath(resolvedLocale, path)
     : undefined;
