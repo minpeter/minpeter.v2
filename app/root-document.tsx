@@ -62,6 +62,10 @@ export function RootDocument({ children, lang }: RootDocumentProps) {
               "document.getElementById('deferred-fonts').addEventListener('load',function(){this.rel='stylesheet'})",
           }}
         />
+        <noscript>
+          {/* oxlint-disable-next-line next/no-css-tags -- no-JS clients cannot flip the preload into a stylesheet */}
+          <link href="/fonts/deferred-fonts.css" rel="stylesheet" />
+        </noscript>
       </head>
       <body
         className={cn(

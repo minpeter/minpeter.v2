@@ -1082,7 +1082,7 @@ html:active-view-transition-type(slide-back) {
   }
 }
 
-/* AritaBuri faces load deferred via /arita-buri.css (see root-document); the variable names the family ahead of registration. */
+/* AritaBuri and Shippori faces load deferred via /fonts/deferred-fonts.css (see root-document); the variable names the family ahead of registration. */
 :root {
   --font-arita-buri: "AritaBuri KR";
   --font-shippori-mincho: "Shippori Mincho";
