@@ -24,33 +24,30 @@ function parseTemplate(template: string): TemplateSegment[] {
 
   const segments: TemplateSegment[] = [];
   let lastIndex = 0;
-  let segmentIndex = 0;
 
   for (const match of normalizedTemplate.matchAll(TEMPLATE_TOKEN_REGEX)) {
-    const matchIndex = match.index ?? 0;
+    const matchIndex = match.index;
 
     if (matchIndex > lastIndex) {
       segments.push({
         content: normalizedTemplate.slice(lastIndex, matchIndex),
-        id: `static-${segmentIndex}`,
+        id: `static-${segments.length}`,
         type: "static",
       });
-      segmentIndex += 1;
     }
 
     segments.push({
       content: match[1],
-      id: `dynamic-${segmentIndex}`,
+      id: `dynamic-${segments.length}`,
       type: "dynamic",
     });
-    segmentIndex += 1;
     lastIndex = matchIndex + match[0].length;
   }
 
   if (lastIndex < normalizedTemplate.length) {
     segments.push({
       content: normalizedTemplate.slice(lastIndex),
-      id: `static-${segmentIndex}`,
+      id: `static-${segments.length}`,
       type: "static",
     });
   }
