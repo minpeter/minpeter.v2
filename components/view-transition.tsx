@@ -1,5 +1,4 @@
 import type { FC, ReactNode } from "react";
-import React from "react";
 
 /**
  * Properly typed ViewTransition wrapper for React 19 View Transitions API.
@@ -47,20 +46,15 @@ export interface ViewTransitionProps {
   // They are currently unused in this codebase.
 }
 
-interface ReactWithViewTransition {
-  ViewTransition?: FC<ViewTransitionProps>;
-}
-
-const { ViewTransition: RawViewTransition } =
-  React as unknown as ReactWithViewTransition;
-
 /**
  * Safe wrapper around React's experimental ViewTransition.
  *
- * Falls back to a plain fragment if the experimental API is not available
- * (different React channel, SSR without the flag, etc.). This prevents
- * runtime crashes as suggested in review feedback.
+ * The native API currently throws `InvalidStateError: Transition was aborted`
+ * inside Lighthouse's trace environment, which turns otherwise-correct pages
+ * into Best Practices failures. Keep the wrapper shape so callers do not need
+ * to care, but render a fragment until the upstream API is stable enough for
+ * automated audits.
  */
-export const ViewTransition: FC<ViewTransitionProps> = RawViewTransition
-  ? (props) => <RawViewTransition {...props} />
-  : ({ children }) => <>{children}</>;
+export const ViewTransition: FC<ViewTransitionProps> = ({ children }) => (
+  <>{children}</>
+);

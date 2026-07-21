@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 
@@ -32,34 +32,32 @@ export function SimpleButton() {
 }
 
 export function Ip() {
-  const [ip, setIp] = useState("");
+  const [ip, setIp] = useState("Click the button to load your IP.");
+  const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    const controller = new AbortController();
-
-    const load = async () => {
-      try {
-        const response = await fetch("https://ip.minpeter.com/ip", {
-          signal: controller.signal,
-        });
-        if (!response.ok) {
-          throw new Error(response.statusText);
-        }
-        setIp(await response.text());
-      } catch {
-        if (controller.signal.aborted) {
-          return;
-        }
-        setIp("Failed to fetch IP. Please try again later.");
+  const loadIp = async () => {
+    setIsLoading(true);
+    try {
+      const response = await fetch("https://ip.minpeter.com/ip");
+      if (!response.ok) {
+        throw new Error(response.statusText);
       }
-    };
+      setIp(await response.text());
+    } catch {
+      setIp("Failed to fetch IP. Please try again later.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-    load();
-
-    return () => controller.abort();
-  }, []);
-
-  return <span>Your IP: {ip || "Loading..."}</span>;
+  return (
+    <span className="inline-flex items-center gap-2">
+      Your IP: {isLoading ? "Loading..." : ip}
+      <Button disabled={isLoading} onClick={loadIp} size="sm" variant="secondary">
+        Load IP
+      </Button>
+    </span>
+  );
 }
 
 export function Counter() {

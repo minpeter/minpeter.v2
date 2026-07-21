@@ -15,7 +15,7 @@ const nextConfig: NextConfig = {
     ],
     prefetchInlining: true,
     turbopackFileSystemCacheForDev: true,
-    viewTransition: true,
+    viewTransition: false,
   },
   images: {
     formats: ["image/avif", "image/webp"],
