@@ -17,8 +17,7 @@
     "check": "run-p check:**",
     "fmt:oxlint": "ultracite fix",
     "fmt": "run-p fmt:**",
-    "knip": "knip",
-    "fix": "ultracite fix"
+    "knip": "knip"
   },
   "dependencies": {
     "@next/third-parties": "16.2.10",
