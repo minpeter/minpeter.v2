@@ -22,46 +22,271 @@ Interleaved Thinking lets the model think in between. From the [Z.ai docs](https
 > GLM can think between tool calls and after receiving tool results. This enables interpreting each tool output before deciding what to do next, and chaining multiple tool calls with reasoning steps.
 
 <div className="my-8">
-<svg viewBox="0 0 760 290" width="100%" role="img" aria-label="Diagram showing context stacking up within a single turn" xmlns="http://www.w3.org/2000/svg">
-  <text x="140" y="16" fontSize="11" textAnchor="middle" fill="currentColor" opacity="0.55">Turn start</text>
-  <text x="380" y="16" fontSize="11" textAnchor="middle" fill="currentColor" opacity="0.55">① Think → tool call</text>
-  <text x="620" y="16" fontSize="11" textAnchor="middle" fill="currentColor" opacity="0.55">② Read result → think → respond</text>
-  <rect x="60" y="190" width="160" height="28" rx="5" fill="none" stroke="currentColor"/>
-  <text x="140" y="208" fontSize="11" textAnchor="middle" fill="currentColor">system</text>
-  <rect x="60" y="222" width="160" height="28" rx="5" fill="none" stroke="currentColor"/>
-  <text x="140" y="240" fontSize="11" textAnchor="middle" fill="currentColor">user</text>
-  <g opacity="0.45">
-    <rect x="300" y="126" width="160" height="28" rx="5" fill="none" stroke="currentColor"/>
-    <text x="380" y="144" fontSize="11" textAnchor="middle" fill="currentColor">system</text>
-    <rect x="300" y="158" width="160" height="28" rx="5" fill="none" stroke="currentColor"/>
-    <text x="380" y="176" fontSize="11" textAnchor="middle" fill="currentColor">user</text>
-  </g>
-  <rect x="300" y="190" width="160" height="28" rx="5" fill="currentColor" fillOpacity="0.08" stroke="currentColor"/>
-  <text x="380" y="208" fontSize="11" textAnchor="middle" fill="currentColor">think</text>
-  <rect x="300" y="222" width="160" height="28" rx="5" fill="none" stroke="currentColor"/>
-  <text x="380" y="240" fontSize="11" textAnchor="middle" fill="currentColor">tool_call</text>
-  <g opacity="0.45">
-    <rect x="540" y="30" width="160" height="28" rx="5" fill="none" stroke="currentColor"/>
-    <text x="620" y="48" fontSize="11" textAnchor="middle" fill="currentColor">system</text>
-    <rect x="540" y="62" width="160" height="28" rx="5" fill="none" stroke="currentColor"/>
-    <text x="620" y="80" fontSize="11" textAnchor="middle" fill="currentColor">user</text>
-    <rect x="540" y="94" width="160" height="28" rx="5" fill="currentColor" fillOpacity="0.08" stroke="currentColor"/>
-    <text x="620" y="112" fontSize="11" textAnchor="middle" fill="currentColor">think</text>
-    <rect x="540" y="126" width="160" height="28" rx="5" fill="none" stroke="currentColor"/>
-    <text x="620" y="144" fontSize="11" textAnchor="middle" fill="currentColor">tool_call</text>
-  </g>
-  <rect x="540" y="158" width="160" height="28" rx="5" fill="none" stroke="currentColor"/>
-  <text x="620" y="176" fontSize="11" textAnchor="middle" fill="currentColor">tool result</text>
-  <rect x="540" y="190" width="160" height="28" rx="5" fill="currentColor" fillOpacity="0.08" stroke="currentColor"/>
-  <text x="620" y="208" fontSize="11" textAnchor="middle" fill="currentColor">think</text>
-  <rect x="540" y="222" width="160" height="28" rx="5" fill="none" stroke="currentColor"/>
-  <text x="620" y="240" fontSize="11" textAnchor="middle" fill="currentColor">response</text>
-  <line x1="228" y1="236" x2="290" y2="236" stroke="currentColor" strokeWidth="1.2"/>
-  <polygon points="286,232.5 293,236 286,239.5" fill="currentColor"/>
-  <line x1="468" y1="236" x2="530" y2="236" stroke="currentColor" strokeWidth="1.2"/>
-  <polygon points="526,232.5 533,236 526,239.5" fill="currentColor"/>
-  <text x="380" y="278" fontSize="12" textAnchor="middle" fill="currentColor" opacity="0.7">A think block stacks into the context between tool calls</text>
-</svg>
+  <svg
+    viewBox="0 0 760 290"
+    width="100%"
+    role="img"
+    aria-label="Diagram showing context stacking up within a single turn"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <text
+      x="140"
+      y="16"
+      fontSize="11"
+      textAnchor="middle"
+      fill="currentColor"
+      opacity="0.55"
+    >
+      Turn start
+    </text>
+    <text
+      x="380"
+      y="16"
+      fontSize="11"
+      textAnchor="middle"
+      fill="currentColor"
+      opacity="0.55"
+    >
+      ① Think → tool call
+    </text>
+    <text
+      x="620"
+      y="16"
+      fontSize="11"
+      textAnchor="middle"
+      fill="currentColor"
+      opacity="0.55"
+    >
+      ② Read result → think → respond
+    </text>
+    <rect
+      x="60"
+      y="190"
+      width="160"
+      height="28"
+      rx="5"
+      fill="none"
+      stroke="currentColor"
+    />
+    <text x="140" y="208" fontSize="11" textAnchor="middle" fill="currentColor">
+      system
+    </text>
+    <rect
+      x="60"
+      y="222"
+      width="160"
+      height="28"
+      rx="5"
+      fill="none"
+      stroke="currentColor"
+    />
+    <text x="140" y="240" fontSize="11" textAnchor="middle" fill="currentColor">
+      user
+    </text>
+    <g opacity="0.45">
+      <rect
+        x="300"
+        y="126"
+        width="160"
+        height="28"
+        rx="5"
+        fill="none"
+        stroke="currentColor"
+      />
+      <text
+        x="380"
+        y="144"
+        fontSize="11"
+        textAnchor="middle"
+        fill="currentColor"
+      >
+        system
+      </text>
+      <rect
+        x="300"
+        y="158"
+        width="160"
+        height="28"
+        rx="5"
+        fill="none"
+        stroke="currentColor"
+      />
+      <text
+        x="380"
+        y="176"
+        fontSize="11"
+        textAnchor="middle"
+        fill="currentColor"
+      >
+        user
+      </text>
+    </g>
+    <rect
+      x="300"
+      y="190"
+      width="160"
+      height="28"
+      rx="5"
+      fill="currentColor"
+      fillOpacity="0.08"
+      stroke="currentColor"
+    />
+    <text x="380" y="208" fontSize="11" textAnchor="middle" fill="currentColor">
+      think
+    </text>
+    <rect
+      x="300"
+      y="222"
+      width="160"
+      height="28"
+      rx="5"
+      fill="none"
+      stroke="currentColor"
+    />
+    <text x="380" y="240" fontSize="11" textAnchor="middle" fill="currentColor">
+      tool_call
+    </text>
+    <g opacity="0.45">
+      <rect
+        x="540"
+        y="30"
+        width="160"
+        height="28"
+        rx="5"
+        fill="none"
+        stroke="currentColor"
+      />
+      <text
+        x="620"
+        y="48"
+        fontSize="11"
+        textAnchor="middle"
+        fill="currentColor"
+      >
+        system
+      </text>
+      <rect
+        x="540"
+        y="62"
+        width="160"
+        height="28"
+        rx="5"
+        fill="none"
+        stroke="currentColor"
+      />
+      <text
+        x="620"
+        y="80"
+        fontSize="11"
+        textAnchor="middle"
+        fill="currentColor"
+      >
+        user
+      </text>
+      <rect
+        x="540"
+        y="94"
+        width="160"
+        height="28"
+        rx="5"
+        fill="currentColor"
+        fillOpacity="0.08"
+        stroke="currentColor"
+      />
+      <text
+        x="620"
+        y="112"
+        fontSize="11"
+        textAnchor="middle"
+        fill="currentColor"
+      >
+        think
+      </text>
+      <rect
+        x="540"
+        y="126"
+        width="160"
+        height="28"
+        rx="5"
+        fill="none"
+        stroke="currentColor"
+      />
+      <text
+        x="620"
+        y="144"
+        fontSize="11"
+        textAnchor="middle"
+        fill="currentColor"
+      >
+        tool_call
+      </text>
+    </g>
+    <rect
+      x="540"
+      y="158"
+      width="160"
+      height="28"
+      rx="5"
+      fill="none"
+      stroke="currentColor"
+    />
+    <text x="620" y="176" fontSize="11" textAnchor="middle" fill="currentColor">
+      tool result
+    </text>
+    <rect
+      x="540"
+      y="190"
+      width="160"
+      height="28"
+      rx="5"
+      fill="currentColor"
+      fillOpacity="0.08"
+      stroke="currentColor"
+    />
+    <text x="620" y="208" fontSize="11" textAnchor="middle" fill="currentColor">
+      think
+    </text>
+    <rect
+      x="540"
+      y="222"
+      width="160"
+      height="28"
+      rx="5"
+      fill="none"
+      stroke="currentColor"
+    />
+    <text x="620" y="240" fontSize="11" textAnchor="middle" fill="currentColor">
+      response
+    </text>
+    <line
+      x1="228"
+      y1="236"
+      x2="290"
+      y2="236"
+      stroke="currentColor"
+      strokeWidth="1.2"
+    />
+    <polygon points="286,232.5 293,236 286,239.5" fill="currentColor" />
+    <line
+      x1="468"
+      y1="236"
+      x2="530"
+      y2="236"
+      stroke="currentColor"
+      strokeWidth="1.2"
+    />
+    <polygon points="526,232.5 533,236 526,239.5" fill="currentColor" />
+    <text
+      x="380"
+      y="278"
+      fontSize="12"
+      textAnchor="middle"
+      fill="currentColor"
+      opacity="0.7"
+    >
+      A think block stacks into the context between tool calls
+    </text>
+  </svg>
 </div>
 
 The feature has been supported since GLM-4.5 (July 2025), and GLM-4.7 strengthens it to "think before every response and tool call." Note that up to GLM-4.6, `thinking.type: enabled` used a hybrid mode where the model decided whether to think; GLM-4.7 switched to forced thinking whenever thinking is enabled.
@@ -81,58 +306,318 @@ If Interleaved Thinking solves the "within one turn" problem, Preserved Thinking
 The API parameter makes the mechanics explicit. `thinking.clear_thinking` defaults to `true`, which strips prior turns' `reasoning_content` and keeps only visible text, tool calls, and tool results. Setting it to `false` passes previous reasoning back to the model.
 
 <div className="my-8">
-<svg viewBox="0 0 760 310" width="100%" role="img" aria-label="Diagram comparing stacked context and cache reuse by clear_thinking setting" xmlns="http://www.w3.org/2000/svg">
-  <text x="200" y="18" fontSize="11" textAnchor="middle" fill="currentColor" opacity="0.55">clear_thinking: true (default)</text>
-  <text x="560" y="18" fontSize="11" textAnchor="middle" fill="currentColor" opacity="0.55">clear_thinking: false</text>
-  <rect x="84" y="32" width="232" height="68" fill="currentColor" opacity="0.06"/>
-  <rect x="444" y="32" width="232" height="196" fill="currentColor" opacity="0.06"/>
-  <rect x="90" y="36" width="220" height="28" rx="5" fill="none" stroke="currentColor"/>
-  <text x="200" y="54" fontSize="11" textAnchor="middle" fill="currentColor">system</text>
-  <rect x="90" y="68" width="220" height="28" rx="5" fill="none" stroke="currentColor"/>
-  <text x="200" y="86" fontSize="11" textAnchor="middle" fill="currentColor">user</text>
-  <rect x="90" y="100" width="220" height="28" rx="5" fill="none" stroke="currentColor" strokeDasharray="4 3" opacity="0.35"/>
-  <text x="200" y="118" fontSize="10.5" textAnchor="middle" fill="currentColor" opacity="0.35">reasoning_content</text>
-  <rect x="90" y="132" width="220" height="28" rx="5" fill="none" stroke="currentColor"/>
-  <text x="200" y="150" fontSize="11" textAnchor="middle" fill="currentColor">content</text>
-  <rect x="90" y="164" width="220" height="28" rx="5" fill="none" stroke="currentColor"/>
-  <text x="200" y="182" fontSize="11" textAnchor="middle" fill="currentColor">tool_calls</text>
-  <rect x="90" y="196" width="220" height="28" rx="5" fill="none" stroke="currentColor"/>
-  <text x="200" y="214" fontSize="11" textAnchor="middle" fill="currentColor">tool result</text>
-  <rect x="90" y="228" width="220" height="28" rx="5" fill="none" stroke="currentColor"/>
-  <text x="200" y="246" fontSize="10.5" textAnchor="middle" fill="currentColor">user (turn N+1)</text>
-  <line x1="322" y1="36" x2="322" y2="96" stroke="currentColor" strokeWidth="1.2"/>
-  <line x1="318" y1="36" x2="322" y2="36" stroke="currentColor" strokeWidth="1.2"/>
-  <line x1="318" y1="96" x2="322" y2="96" stroke="currentColor" strokeWidth="1.2"/>
-  <text x="328" y="70" fontSize="10" fill="currentColor">reused</text>
-  <text x="326" y="122" fontSize="12" fill="currentColor">✕</text>
-  <text x="340" y="122" fontSize="10" fill="currentColor" opacity="0.7">prefix changes</text>
-  <rect x="450" y="36" width="220" height="28" rx="5" fill="none" stroke="currentColor"/>
-  <text x="560" y="54" fontSize="11" textAnchor="middle" fill="currentColor">system</text>
-  <rect x="450" y="68" width="220" height="28" rx="5" fill="none" stroke="currentColor"/>
-  <text x="560" y="86" fontSize="11" textAnchor="middle" fill="currentColor">user</text>
-  <rect x="450" y="100" width="220" height="28" rx="5" fill="currentColor" fillOpacity="0.08" stroke="currentColor"/>
-  <text x="560" y="118" fontSize="10.5" textAnchor="middle" fill="currentColor">reasoning_content</text>
-  <rect x="450" y="132" width="220" height="28" rx="5" fill="none" stroke="currentColor"/>
-  <text x="560" y="150" fontSize="11" textAnchor="middle" fill="currentColor">content</text>
-  <rect x="450" y="164" width="220" height="28" rx="5" fill="none" stroke="currentColor"/>
-  <text x="560" y="182" fontSize="11" textAnchor="middle" fill="currentColor">tool_calls</text>
-  <rect x="450" y="196" width="220" height="28" rx="5" fill="none" stroke="currentColor"/>
-  <text x="560" y="214" fontSize="11" textAnchor="middle" fill="currentColor">tool result</text>
-  <rect x="450" y="228" width="220" height="28" rx="5" fill="none" stroke="currentColor"/>
-  <text x="560" y="246" fontSize="10.5" textAnchor="middle" fill="currentColor">user (turn N+1)</text>
-  <line x1="682" y1="36" x2="682" y2="228" stroke="currentColor" strokeWidth="1.2"/>
-  <line x1="678" y1="36" x2="682" y2="36" stroke="currentColor" strokeWidth="1.2"/>
-  <line x1="678" y1="228" x2="682" y2="228" stroke="currentColor" strokeWidth="1.2"/>
-  <text x="690" y="134" fontSize="10" fill="currentColor">reused</text>
-  <text x="200" y="290" fontSize="12" textAnchor="middle" fill="currentColor">→ cache miss (mostly recomputed)</text>
-  <text x="560" y="290" fontSize="12" textAnchor="middle" fill="currentColor">→ cache hit (prefix reused)</text>
-</svg>
+  <svg
+    viewBox="0 0 760 310"
+    width="100%"
+    role="img"
+    aria-label="Diagram comparing stacked context and cache reuse by clear_thinking setting"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <text
+      x="200"
+      y="18"
+      fontSize="11"
+      textAnchor="middle"
+      fill="currentColor"
+      opacity="0.55"
+    >
+      clear_thinking: true (default)
+    </text>
+    <text
+      x="560"
+      y="18"
+      fontSize="11"
+      textAnchor="middle"
+      fill="currentColor"
+      opacity="0.55"
+    >
+      clear_thinking: false
+    </text>
+    <rect
+      x="84"
+      y="32"
+      width="232"
+      height="68"
+      fill="currentColor"
+      opacity="0.06"
+    />
+    <rect
+      x="444"
+      y="32"
+      width="232"
+      height="196"
+      fill="currentColor"
+      opacity="0.06"
+    />
+    <rect
+      x="90"
+      y="36"
+      width="220"
+      height="28"
+      rx="5"
+      fill="none"
+      stroke="currentColor"
+    />
+    <text x="200" y="54" fontSize="11" textAnchor="middle" fill="currentColor">
+      system
+    </text>
+    <rect
+      x="90"
+      y="68"
+      width="220"
+      height="28"
+      rx="5"
+      fill="none"
+      stroke="currentColor"
+    />
+    <text x="200" y="86" fontSize="11" textAnchor="middle" fill="currentColor">
+      user
+    </text>
+    <rect
+      x="90"
+      y="100"
+      width="220"
+      height="28"
+      rx="5"
+      fill="none"
+      stroke="currentColor"
+      strokeDasharray="4 3"
+      opacity="0.35"
+    />
+    <text
+      x="200"
+      y="118"
+      fontSize="10.5"
+      textAnchor="middle"
+      fill="currentColor"
+      opacity="0.35"
+    >
+      reasoning_content
+    </text>
+    <rect
+      x="90"
+      y="132"
+      width="220"
+      height="28"
+      rx="5"
+      fill="none"
+      stroke="currentColor"
+    />
+    <text x="200" y="150" fontSize="11" textAnchor="middle" fill="currentColor">
+      content
+    </text>
+    <rect
+      x="90"
+      y="164"
+      width="220"
+      height="28"
+      rx="5"
+      fill="none"
+      stroke="currentColor"
+    />
+    <text x="200" y="182" fontSize="11" textAnchor="middle" fill="currentColor">
+      tool_calls
+    </text>
+    <rect
+      x="90"
+      y="196"
+      width="220"
+      height="28"
+      rx="5"
+      fill="none"
+      stroke="currentColor"
+    />
+    <text x="200" y="214" fontSize="11" textAnchor="middle" fill="currentColor">
+      tool result
+    </text>
+    <rect
+      x="90"
+      y="228"
+      width="220"
+      height="28"
+      rx="5"
+      fill="none"
+      stroke="currentColor"
+    />
+    <text
+      x="200"
+      y="246"
+      fontSize="10.5"
+      textAnchor="middle"
+      fill="currentColor"
+    >
+      user (turn N+1)
+    </text>
+    <line
+      x1="322"
+      y1="36"
+      x2="322"
+      y2="96"
+      stroke="currentColor"
+      strokeWidth="1.2"
+    />
+    <line
+      x1="318"
+      y1="36"
+      x2="322"
+      y2="36"
+      stroke="currentColor"
+      strokeWidth="1.2"
+    />
+    <line
+      x1="318"
+      y1="96"
+      x2="322"
+      y2="96"
+      stroke="currentColor"
+      strokeWidth="1.2"
+    />
+    <text x="328" y="70" fontSize="10" fill="currentColor">
+      reused
+    </text>
+    <text x="326" y="122" fontSize="12" fill="currentColor">
+      ✕
+    </text>
+    <text x="340" y="122" fontSize="10" fill="currentColor" opacity="0.7">
+      prefix changes
+    </text>
+    <rect
+      x="450"
+      y="36"
+      width="220"
+      height="28"
+      rx="5"
+      fill="none"
+      stroke="currentColor"
+    />
+    <text x="560" y="54" fontSize="11" textAnchor="middle" fill="currentColor">
+      system
+    </text>
+    <rect
+      x="450"
+      y="68"
+      width="220"
+      height="28"
+      rx="5"
+      fill="none"
+      stroke="currentColor"
+    />
+    <text x="560" y="86" fontSize="11" textAnchor="middle" fill="currentColor">
+      user
+    </text>
+    <rect
+      x="450"
+      y="100"
+      width="220"
+      height="28"
+      rx="5"
+      fill="currentColor"
+      fillOpacity="0.08"
+      stroke="currentColor"
+    />
+    <text
+      x="560"
+      y="118"
+      fontSize="10.5"
+      textAnchor="middle"
+      fill="currentColor"
+    >
+      reasoning_content
+    </text>
+    <rect
+      x="450"
+      y="132"
+      width="220"
+      height="28"
+      rx="5"
+      fill="none"
+      stroke="currentColor"
+    />
+    <text x="560" y="150" fontSize="11" textAnchor="middle" fill="currentColor">
+      content
+    </text>
+    <rect
+      x="450"
+      y="164"
+      width="220"
+      height="28"
+      rx="5"
+      fill="none"
+      stroke="currentColor"
+    />
+    <text x="560" y="182" fontSize="11" textAnchor="middle" fill="currentColor">
+      tool_calls
+    </text>
+    <rect
+      x="450"
+      y="196"
+      width="220"
+      height="28"
+      rx="5"
+      fill="none"
+      stroke="currentColor"
+    />
+    <text x="560" y="214" fontSize="11" textAnchor="middle" fill="currentColor">
+      tool result
+    </text>
+    <rect
+      x="450"
+      y="228"
+      width="220"
+      height="28"
+      rx="5"
+      fill="none"
+      stroke="currentColor"
+    />
+    <text
+      x="560"
+      y="246"
+      fontSize="10.5"
+      textAnchor="middle"
+      fill="currentColor"
+    >
+      user (turn N+1)
+    </text>
+    <line
+      x1="682"
+      y1="36"
+      x2="682"
+      y2="228"
+      stroke="currentColor"
+      strokeWidth="1.2"
+    />
+    <line
+      x1="678"
+      y1="36"
+      x2="682"
+      y2="36"
+      stroke="currentColor"
+      strokeWidth="1.2"
+    />
+    <line
+      x1="678"
+      y1="228"
+      x2="682"
+      y2="228"
+      stroke="currentColor"
+      strokeWidth="1.2"
+    />
+    <text x="690" y="134" fontSize="10" fill="currentColor">
+      reused
+    </text>
+    <text x="200" y="290" fontSize="12" textAnchor="middle" fill="currentColor">
+      → cache miss (mostly recomputed)
+    </text>
+    <text x="560" y="290" fontSize="12" textAnchor="middle" fill="currentColor">
+      → cache hit (prefix reused)
+    </text>
+  </svg>
 </div>
 
 One caveat: the default differs per endpoint.
 
 | Endpoint | Preserved Thinking default |
-|---|---|
+| --- | --- |
 | Standard API (`api.z.ai/api/paas/v4`) | Off (`clear_thinking: true`) |
 | Coding Plan (`api.z.ai/api/coding/paas/v4`, `api.z.ai/api/anthropic`) | **On** |
 
@@ -257,6 +742,7 @@ Interleaved Thinking and Preserved Thinking keep the model's thoughts alive with
 - Interleaving reasoning between tool calls and replaying previous turns' reasoning verbatim (Preserved) is becoming the standard design of the agent era.
 
 The trend did not stop at GLM-4.7. The follow-up GLM-5 series (5/5.1/5.2) inherited the same thinking modes with thinking enabled by default, and Anthropic switched to preserving prior turns' thinking blocks by default on its latest models (Opus 4.5+, Sonnet 4.6+). Reasoning preservation is becoming a baseline API contract, not a passing feature.
+
 - Anthropic (400 errors and signatures), OpenAI (reasoning items, 40→80% cache), Google (thought signatures), Z.ai (`clear_thinking`), and Moonshot (`thinking.keep`) have all converged on the same conclusion.
 - But each model differs in what must and must not be sent back (DeepSeek being the extreme case), and a harness that gets it wrong silently degrades quality and inflates cost — without any error.
 

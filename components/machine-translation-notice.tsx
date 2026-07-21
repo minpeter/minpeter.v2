@@ -60,13 +60,7 @@ function GeneratedModelIcon({ generatedBy }: { generatedBy: string }) {
   if (/claude|anthropic/i.test(generatedBy)) {
     return <ClaudeIcon className={className} size={16} />;
   }
-  return (
-    <AiOutlineOpenAI
-      aria-hidden="true"
-      className={className}
-      size={16}
-    />
-  );
+  return <AiOutlineOpenAI aria-hidden="true" className={className} size={16} />;
 }
 
 interface MachineTranslationNoticeProps {
