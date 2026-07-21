@@ -3,17 +3,15 @@ import { describe, expect, it } from "vitest";
 import {
   getIconSize,
   getIconTextureScale,
-  MAX_RENDERED_ICONS,
   shuffleArray,
   STACK_ICONS,
 } from "./stack-icons";
 
 describe(shuffleArray, () => {
   it("keeps the same elements and length", () => {
-    const shuffled = shuffleArray(STACK_ICONS);
-
-    expect(shuffled).toHaveLength(STACK_ICONS.length);
-    expect([...shuffled].toSorted()).toStrictEqual([...STACK_ICONS].toSorted());
+    expect(shuffleArray(STACK_ICONS).toSorted()).toStrictEqual(
+      STACK_ICONS.toSorted()
+    );
   });
 
   it("does not mutate the input array", () => {
@@ -57,10 +55,6 @@ describe(getIconTextureScale, () => {
 });
 
 describe("stack icon configuration", () => {
-  it("renders at most MAX_RENDERED_ICONS of the available icons", () => {
-    expect(MAX_RENDERED_ICONS).toBeLessThanOrEqual(STACK_ICONS.length);
-  });
-
   it("has no duplicate icon files", () => {
     expect(new Set(STACK_ICONS).size).toBe(STACK_ICONS.length);
   });
