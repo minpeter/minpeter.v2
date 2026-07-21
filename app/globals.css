@@ -657,7 +657,7 @@
   html[lang="ko"] .blog-post-page > header > div:last-child > p,
   html[lang="ko"] .blog-post-page [data-blog-body],
   html[lang="ko"] .blog-post-page > section:last-child a {
-    font-family: "Pretendard", var(--font-geist), Arial, sans-serif;
+    font-family: var(--font-pretendard), var(--font-geist), Arial, sans-serif;
   }
 
   html[lang="ko"] .blog-post-page .home-section-title,
@@ -665,7 +665,7 @@
   html[lang="ko"] .blog-post-page [data-blog-body] h3,
   html[lang="ko"] .blog-post-page [data-blog-body] h4,
   html[lang="ko"] .blog-post-page [data-blog-body] blockquote {
-    font-family: "Pretendard", var(--font-geist), Arial, sans-serif;
+    font-family: var(--font-pretendard), var(--font-geist), Arial, sans-serif;
     letter-spacing: -0.04em;
   }
 
