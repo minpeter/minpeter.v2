@@ -20,7 +20,7 @@ export function Backlink({
   return (
     <Link
       aria-label={resolvedAriaLabel}
-      className="animation:enter w-fit rounded-md px-0.5 text-gray-600 text-sm underline hover:bg-secondary/100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+      className="animation:enter w-fit rounded-md px-0.5 text-muted-foreground text-sm underline hover:bg-secondary/100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       href={href}
       onClick={onNavigate}
     >
