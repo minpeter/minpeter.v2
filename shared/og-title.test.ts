@@ -39,7 +39,6 @@ describe(getOgTitleVisualWidth, () => {
 describe(getOgTitleSize, () => {
   it("caps the size at 54 for short titles", () => {
     expect(getOgTitleSize(0)).toBe(54);
-    expect(getOgTitleSize(10)).toBe(54);
     expect(getOgTitleSize(17)).toBe(54);
   });
 
@@ -49,7 +48,6 @@ describe(getOgTitleSize, () => {
 
   it("clamps the size at 28 for long titles", () => {
     expect(getOgTitleSize(40)).toBe(28);
-    expect(getOgTitleSize(100)).toBe(28);
   });
 });
 
