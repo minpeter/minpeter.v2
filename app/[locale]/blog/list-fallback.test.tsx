@@ -29,15 +29,11 @@ function makePost(overrides: Partial<postMetadataType>): postMetadataType {
 
 const renderFallback = (
   posts: postMetadataType[],
-  options: { isLoading?: boolean; lang?: string } = {}
+  options: { isLoading?: boolean } = {}
 ) =>
   render(
     <NextIntlClientProvider locale="en" messages={MESSAGES}>
-      <BlogListFallback
-        isLoading={options.isLoading}
-        lang={options.lang ?? "en"}
-        posts={posts}
-      />
+      <BlogListFallback isLoading={options.isLoading} posts={posts} />
     </NextIntlClientProvider>
   );
 
@@ -74,10 +70,10 @@ describe(BlogListFallback, () => {
   });
 
   it("renders a draft badge instead of the date for draft posts", () => {
-    renderFallback([makePost({ draft: true })]);
+    const { container } = renderFallback([makePost({ draft: true })]);
 
-    expect(screen.getByText("초안")).toBeTruthy();
-    expect(screen.queryByText("Mar 5, 2024")).toBeNull();
+    expect(screen.queryByText("초안")).not.toBeNull();
+    expect(container.querySelector("time")).toBeNull();
   });
 
   it("renders external posts as new-tab anchors", () => {
@@ -94,7 +90,7 @@ describe(BlogListFallback, () => {
   it("shows the empty state when no posts match", () => {
     renderFallback([]);
 
-    expect(screen.getByText("검색 결과가 없습니다 :/")).toBeTruthy();
+    expect(screen.queryByText("검색 결과가 없습니다 :/")).not.toBeNull();
   });
 
   it("marks the list busy while loading", () => {

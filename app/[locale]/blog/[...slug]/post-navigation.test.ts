@@ -7,21 +7,19 @@ function makePost(
   published: string,
   external_url?: string
 ): {
-  data: { external_url?: string; published: Date; title: string };
+  data: { external_url?: string; published: Date };
   slugs: string[];
-  url: string;
 } {
   return {
-    data: { external_url, published: new Date(published), title: slug },
+    data: { external_url, published: new Date(published) },
     slugs: [slug],
-    url: `/blog/${slug}`,
   };
 }
 
 const posts = [
-  makePost("oldest", "2023-01-01"),
-  makePost("middle", "2024-01-01"),
   makePost("newest", "2025-01-01"),
+  makePost("middle", "2024-01-01"),
+  makePost("oldest", "2023-01-01"),
 ];
 
 describe(getAdjacentPosts, () => {
@@ -73,5 +71,28 @@ describe(getAdjacentPosts, () => {
 
     expect(previousPost?.slugs).toStrictEqual(["newest"]);
     expect(nextPost?.slugs).toStrictEqual(["oldest"]);
+  });
+
+  it("does not mutate the input array while sorting", () => {
+    const shuffled = [posts[2], posts[0], posts[1]];
+    const originalOrder = [...shuffled];
+
+    getAdjacentPosts(shuffled, "middle");
+
+    expect(shuffled).toStrictEqual(originalOrder);
+  });
+
+  it("matches a post by its complete slug path", () => {
+    const nestedPost = {
+      ...makePost("nested", "2022-01-01"),
+      slugs: ["guides", "nested"],
+    };
+
+    expect(
+      getAdjacentPosts([...posts, nestedPost], "guides/nested")
+    ).toStrictEqual({
+      nextPost: null,
+      previousPost: posts[2],
+    });
   });
 });
