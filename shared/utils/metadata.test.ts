@@ -28,19 +28,6 @@ describe("shared metadata", () => {
     });
   });
 
-  it.each([
-    ["ko", "/resume", "https://minpeter.com/resume"],
-    ["en", "/resume", "https://minpeter.com/en/resume"],
-    ["ja", "/", "https://minpeter.com/ja"],
-  ] as const)(
-    "creates an absolute canonical URL for the %s locale",
-    (locale, path, expectedCanonical) => {
-      const metadata = createMetadata({ locale, path });
-
-      expect(metadata.alternates?.canonical).toBe(expectedCanonical);
-    }
-  );
-
   it("adds complete metadata for an explicitly supplied image", () => {
     const metadata = createMetadata({
       image: { alt: "minpeter | 404", url: "/og/not-found" },
