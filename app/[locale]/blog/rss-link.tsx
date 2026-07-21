@@ -15,7 +15,7 @@ export async function RssLink({ locale }: RssLinkProps) {
       className={cn(
         "fieldnotes-rss",
         "flex items-center gap-1 rounded-md px-2 py-1 text-sm",
-        "text-gray-500 hover:bg-secondary hover:text-primary",
+        "text-gray-600 hover:bg-secondary hover:text-primary",
         "transition-colors duration-150",
         "focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       )}

@@ -1,0 +1,2236 @@
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.0.woff2") format("woff2");
+  unicode-range: u+f9ca-ffe6;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.1.woff2") format("woff2");
+  unicode-range: u+f92f-f9c9;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.2.woff2") format("woff2");
+  unicode-range: u+d723-f92e;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.3.woff2") format("woff2");
+  unicode-range: u+d679-d722;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.4.woff2") format("woff2");
+  unicode-range: u+d5bc-d678;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.5.woff2") format("woff2");
+  unicode-range: u+d507-d5bb;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.6.woff2") format("woff2");
+  unicode-range: u+d464-d506;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.7.woff2") format("woff2");
+  unicode-range: u+d3bf-d463;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.8.woff2") format("woff2");
+  unicode-range: u+d2ff-d3be;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.9.woff2") format("woff2");
+  unicode-range: u+d257-d2fe;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.10.woff2") format("woff2");
+  unicode-range: u+d1b4-d256;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.11.woff2") format("woff2");
+  unicode-range: u+d105-d1b3;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.12.woff2") format("woff2");
+  unicode-range: u+d04b-d104;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.13.woff2") format("woff2");
+  unicode-range: u+cfa2-d04a;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.14.woff2") format("woff2");
+  unicode-range: u+cef0-cfa1;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.15.woff2") format("woff2");
+  unicode-range: u+ce3c-ceef;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.16.woff2") format("woff2");
+  unicode-range: u+cd92-ce3b;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.17.woff2") format("woff2");
+  unicode-range: u+ccef-cd91;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.18.woff2") format("woff2");
+  unicode-range: u+cc3f-ccee;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.19.woff2") format("woff2");
+  unicode-range: u+cb91-cc3c;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.20.woff2") format("woff2");
+  unicode-range: u+caf4-cb90;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.21.woff2") format("woff2");
+  unicode-range: u+ca4a-caf3;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.22.woff2") format("woff2");
+  unicode-range: u+c996-ca49;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.23.woff2") format("woff2");
+  unicode-range: u+c8e9-c995;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.24.woff2") format("woff2");
+  unicode-range: u+c841-c8e8;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.25.woff2") format("woff2");
+  unicode-range: u+c779-c840;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.26.woff2") format("woff2");
+  unicode-range: u+c6bb-c777;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.27.woff2") format("woff2");
+  unicode-range: u+c5f5-c6ba;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.28.woff2") format("woff2");
+  unicode-range: u+c517-c5f3;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.29.woff2") format("woff2");
+  unicode-range: u+c475-c516;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.30.woff2") format("woff2");
+  unicode-range: u+c3d0-c474;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.31.woff2") format("woff2");
+  unicode-range: u+c32b-c3cf;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.32.woff2") format("woff2");
+  unicode-range: u+c26a-c32a;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.33.woff2") format("woff2");
+  unicode-range: u+c1bc-c269;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.34.woff2") format("woff2");
+  unicode-range: u+c101-c1bb;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.35.woff2") format("woff2");
+  unicode-range: u+c049-c0ff;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.36.woff2") format("woff2");
+  unicode-range: u+bfa7-c048;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.37.woff2") format("woff2");
+  unicode-range: u+bf07-bfa6;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.38.woff2") format("woff2");
+  unicode-range: u+be56-bf06;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.39.woff2") format("woff2");
+  unicode-range: u+bdb0-be53;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.40.woff2") format("woff2");
+  unicode-range: u+bd03-bdaf;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.41.woff2") format("woff2");
+  unicode-range: u+bc4e-bd02;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.42.woff2") format("woff2");
+  unicode-range: u+bb90-bc4d;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.43.woff2") format("woff2");
+  unicode-range: u+bae6-bb8f;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.44.woff2") format("woff2");
+  unicode-range: u+ba30-bae5;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.45.woff2") format("woff2");
+  unicode-range: u+b96e-ba2f;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.46.woff2") format("woff2");
+  unicode-range: u+b8bf-b96c;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.47.woff2") format("woff2");
+  unicode-range: u+b80d-b8be;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.48.woff2") format("woff2");
+  unicode-range: u+b74d-b80b;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.49.woff2") format("woff2");
+  unicode-range: u+b6a7-b74c;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.50.woff2") format("woff2");
+  unicode-range: u+b605-b6a6;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.51.woff2") format("woff2");
+  unicode-range: u+b55f-b604;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.52.woff2") format("woff2");
+  unicode-range: u+b4a5-b55e;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.53.woff2") format("woff2");
+  unicode-range: u+b3f8-b4a3;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.54.woff2") format("woff2");
+  unicode-range: u+b342-b3f7;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.55.woff2") format("woff2");
+  unicode-range: u+b27c-b341;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.56.woff2") format("woff2");
+  unicode-range: u+b1d6-b27b;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.57.woff2") format("woff2");
+  unicode-range: u+b120-b1d5;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.58.woff2") format("woff2");
+  unicode-range: u+b05f-b11f;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.59.woff2") format("woff2");
+  unicode-range: u+afac-b05e;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.60.woff2") format("woff2");
+  unicode-range: u+af03-afab;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.61.woff2") format("woff2");
+  unicode-range: u+ae56-af02;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.62.woff2") format("woff2");
+  unicode-range: u+ad9c-ae55;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.63.woff2") format("woff2");
+  unicode-range: u+ace2-ad9b;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.64.woff2") format("woff2");
+  unicode-range: u+ac25-acdf;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.65.woff2") format("woff2");
+  unicode-range: u+99df-ac23;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.66.woff2") format("woff2");
+  unicode-range: u+96a7-99dd;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.67.woff2") format("woff2");
+  unicode-range: u+920d-96a3;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.68.woff2") format("woff2");
+  unicode-range: u+8fa8-91f5;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.69.woff2") format("woff2");
+  unicode-range: u+8c6a-8fa6;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.70.woff2") format("woff2");
+  unicode-range: u+8941-8c61;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.71.woff2") format("woff2");
+  unicode-range: u+858f-893b;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.72.woff2") format("woff2");
+  unicode-range: u+82a6-8587;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.73.woff2") format("woff2");
+  unicode-range: u+8033-82a5;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.74.woff2") format("woff2");
+  unicode-range: u+7d2f-802d;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.75.woff2") format("woff2");
+  unicode-range: u+7a49-7d2e;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.76.woff2") format("woff2");
+  unicode-range: u+7704-7a46;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.77.woff2") format("woff2");
+  unicode-range: u+7482-7701;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.78.woff2") format("woff2");
+  unicode-range: u+7230-747e;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.79.woff2") format("woff2");
+  unicode-range: u+6f8d-722d;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.80.woff2") format("woff2");
+  unicode-range: u+6d5a-6f88;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.81.woff2") format("woff2");
+  unicode-range: u+6ada-6d59;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.82.woff2") format("woff2");
+  unicode-range: u+67f0-6ad3;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.83.woff2") format("woff2");
+  unicode-range: u+6607-67ef;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.84.woff2") format("woff2");
+  unicode-range: u+6392-6606;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.85.woff2") format("woff2");
+  unicode-range: u+614c-638c;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.86.woff2") format("woff2");
+  unicode-range: u+5f11-614b;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.87.woff2") format("woff2");
+  unicode-range: u+5c40-5f0a;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.88.woff2") format("woff2");
+  unicode-range: u+59be-5c3f;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.89.woff2") format("woff2");
+  unicode-range: u+5703-59bb;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.90.woff2") format("woff2");
+  unicode-range: u+539a-56fa;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.91.woff2") format("woff2");
+  unicode-range: u+516e-5398;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.92.woff2") format("woff2");
+  unicode-range: u+4f43-516d;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.93.woff2") format("woff2");
+  unicode-range: u+338c-4f3d;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.94.woff2") format("woff2");
+  unicode-range: u+3136-338b;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.95.woff2") format("woff2");
+  unicode-range: u+2f7d-3135;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.96.woff2") format("woff2");
+  unicode-range: u+2541-2f7c;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.97.woff2") format("woff2");
+  unicode-range: u+2479-2540;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.98.woff2") format("woff2");
+  unicode-range: u+215b-2478;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.99.woff2") format("woff2");
+  unicode-range: u+0081-2154;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.100.woff2") format("woff2");
+  unicode-range: u+00e8-ff1c;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.101.woff2") format("woff2");
+  unicode-range: u+03b1-ff1e;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.102.woff2") format("woff2");
+  unicode-range: u+0131-ff5e;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.103.woff2") format("woff2");
+  unicode-range: u+00b4-ff0c;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.104.woff2") format("woff2");
+  unicode-range: u+2161-ff1a;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.105.woff2") format("woff2");
+  unicode-range: u+2103-ff5c;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.106.woff2") format("woff2");
+  unicode-range: u+2039-d6d4;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.107.woff2") format("woff2");
+  unicode-range: u+00b0-f981;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.108.woff2") format("woff2");
+  unicode-range: u+00e0-d799;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.109.woff2") format("woff2");
+  unicode-range: u+0024-d770;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.110.woff2") format("woff2");
+  unicode-range: u+00d7-d758;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.111.woff2") format("woff2");
+  unicode-range: u+00e7-d790;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.112.woff2") format("woff2");
+  unicode-range: u+2665-d750;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.113.woff2") format("woff2");
+  unicode-range: u+005e-d765;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.114.woff2") format("woff2");
+  unicode-range: u+003c-d798;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.115.woff2") format("woff2");
+  unicode-range: u+0023-d76c;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.116.woff2") format("woff2");
+  unicode-range: u+0026-d65c;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.117.woff2") format("woff2");
+  unicode-range: u+000d-d788;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.118.woff2") format("woff2");
+  unicode-range: u+0039-d68c;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.119.woff2") format("woff2");
+  unicode-range: u+0020-d558;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.120.woff2") format("woff2");
+  unicode-range: u+0301-2116;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.121.woff2") format("woff2");
+  unicode-range: u+0102-20ab;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.122.woff2") format("woff2");
+  unicode-range: u+0100-a7ff;
+}
+
+@font-face {
+  font-family: "AritaBuri KR";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arita-buri/arita-buri.123.woff2") format("woff2");
+  unicode-range: u+0000-fffd;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.0.woff2") format("woff2");
+  unicode-range: u+25ee8-2f9f4;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.1.woff2") format("woff2");
+  unicode-range: u+1f235-25ed8;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.2.woff2") format("woff2");
+  unicode-range: u+ffd7-1f234;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.3.woff2") format("woff2");
+  unicode-range: u+fa10-ffd6;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.4.woff2") format("woff2");
+  unicode-range: u+f92d-fa0f;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.5.woff2") format("woff2");
+  unicode-range: u+9e8b-f92c;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.6.woff2") format("woff2");
+  unicode-range: u+9c3e-9e88;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.7.woff2") format("woff2");
+  unicode-range: u+9ae5-9c3d;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.8.woff2") format("woff2");
+  unicode-range: u+98eb-9ae4;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.9.woff2") format("woff2");
+  unicode-range: u+971d-98ea;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.10.woff2") format("woff2");
+  unicode-range: u+944a-971b;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.11.woff2") format("woff2");
+  unicode-range: u+92bc-9448;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.12.woff2") format("woff2");
+  unicode-range: u+9143-92bb;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.13.woff2") format("woff2");
+  unicode-range: u+8f52-913d;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.14.woff2") format("woff2");
+  unicode-range: u+8dc0-8f51;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.15.woff2") format("woff2");
+  unicode-range: u+8b2d-8dbe;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.16.woff2") format("woff2");
+  unicode-range: u+8973-8b2c;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.17.woff2") format("woff2");
+  unicode-range: u+87e2-8970;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.18.woff2") format("woff2");
+  unicode-range: u+8655-87e0;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.19.woff2") format("woff2");
+  unicode-range: u+84b4-8654;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.20.woff2") format("woff2");
+  unicode-range: u+82e8-84b1;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.21.woff2") format("woff2");
+  unicode-range: u+814a-82e7;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.22.woff2") format("woff2");
+  unicode-range: u+7f77-8147;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.23.woff2") format("woff2");
+  unicode-range: u+7d57-7f71;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.24.woff2") format("woff2");
+  unicode-range: u+7bc8-7d56;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.25.woff2") format("woff2");
+  unicode-range: u+7a17-7bc6;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.26.woff2") format("woff2");
+  unicode-range: u+7851-7a15;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.27.woff2") format("woff2");
+  unicode-range: u+768c-784f;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.28.woff2") format("woff2");
+  unicode-range: u+7511-768b;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.29.woff2") format("woff2");
+  unicode-range: u+736c-750e;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.30.woff2") format("woff2");
+  unicode-range: u+7166-736b;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.31.woff2") format("woff2");
+  unicode-range: u+6f58-7165;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.32.woff2") format("woff2");
+  unicode-range: u+6d7c-6f57;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.33.woff2") format("woff2");
+  unicode-range: u+6b85-6d79;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.34.woff2") format("woff2");
+  unicode-range: u+69dd-6b84;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.35.woff2") format("woff2");
+  unicode-range: u+6855-69d9;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.36.woff2") format("woff2");
+  unicode-range: u+667e-6854;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.37.woff2") format("woff2");
+  unicode-range: u+64d2-667c;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.38.woff2") format("woff2");
+  unicode-range: u+62cf-64d1;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.39.woff2") format("woff2");
+  unicode-range: u+6117-62ce;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.40.woff2") format("woff2");
+  unicode-range: u+5f6c-6116;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.41.woff2") format("woff2");
+  unicode-range: u+5d9b-5f6a;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.42.woff2") format("woff2");
+  unicode-range: u+5bbc-5d99;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.43.woff2") format("woff2");
+  unicode-range: u+598b-5bba;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.44.woff2") format("woff2");
+  unicode-range: u+57b3-5981;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.45.woff2") format("woff2");
+  unicode-range: u+5616-57b0;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.46.woff2") format("woff2");
+  unicode-range: u+543f-5612;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.47.woff2") format("woff2");
+  unicode-range: u+528d-543d;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.48.woff2") format("woff2");
+  unicode-range: u+50dd-528c;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.49.woff2") format("woff2");
+  unicode-range: u+4f57-50dc;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.50.woff2") format("woff2");
+  unicode-range: u+4093-4f56;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.51.woff2") format("woff2");
+  unicode-range: u+3395-4058;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.52.woff2") format("woff2");
+  unicode-range: u+32b5-3394;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.53.woff2") format("woff2");
+  unicode-range: u+31c8-32b4;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.54.woff2") format("woff2");
+  unicode-range: u+3028-31c7;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.55.woff2") format("woff2");
+  unicode-range: u+2f14-3027;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.56.woff2") format("woff2");
+  unicode-range: u+25e4-2f13;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.57.woff2") format("woff2");
+  unicode-range: u+24d1-25e3;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.58.woff2") format("woff2");
+  unicode-range: u+2105-24d0;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.59.woff2") format("woff2");
+  unicode-range: u+00a1-2100;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.60.woff2") format("woff2");
+  unicode-range: u+2227-ff95;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.61.woff2") format("woff2");
+  unicode-range: u+00a8-9ece;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.62.woff2") format("woff2");
+  unicode-range: u+02d9-9913;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.63.woff2") format("woff2");
+  unicode-range: u+02ca-ff96;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.64.woff2") format("woff2");
+  unicode-range: u+2467-9eb9;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.65.woff2") format("woff2");
+  unicode-range: u+00b1-9e93;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.66.woff2") format("woff2");
+  unicode-range: u+2020-ff5a;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.67.woff2") format("woff2");
+  unicode-range: u+2466-fa11;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.68.woff2") format("woff2");
+  unicode-range: u+251c-9ac4;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.69.woff2") format("woff2");
+  unicode-range: u+2003-ff6b;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.70.woff2") format("woff2");
+  unicode-range: u+266b-ff94;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.71.woff2") format("woff2");
+  unicode-range: u+00af-ff88;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.72.woff2") format("woff2");
+  unicode-range: u+4e91-ff93;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.73.woff2") format("woff2");
+  unicode-range: u+221e-ff6a;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.74.woff2") format("woff2");
+  unicode-range: u+2002-ff90;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.75.woff2") format("woff2");
+  unicode-range: u+2464-ff85;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.76.woff2") format("woff2");
+  unicode-range: u+2266-ff9c;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.77.woff2") format("woff2");
+  unicode-range: u+2207-ff91;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.78.woff2") format("woff2");
+  unicode-range: u+4e32-ffe3;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.79.woff2") format("woff2");
+  unicode-range: u+25b3-ff8b;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.80.woff2") format("woff2");
+  unicode-range: u+2463-ff8f;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.81.woff2") format("woff2");
+  unicode-range: u+2010-ff9a;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.82.woff2") format("woff2");
+  unicode-range: u+2103-ff81;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.83.woff2") format("woff2");
+  unicode-range: u+2500-ff83;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.84.woff2") format("woff2");
+  unicode-range: u+3014-ff9b;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.85.woff2") format("woff2");
+  unicode-range: u+25c7-ff97;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.86.woff2") format("woff2");
+  unicode-range: u+0024-ff99;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.87.woff2") format("woff2");
+  unicode-range: u+00b0-ff8a;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.88.woff2") format("woff2");
+  unicode-range: u+25bd-ff80;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.89.woff2") format("woff2");
+  unicode-range: u+00a5-ff63;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.90.woff2") format("woff2");
+  unicode-range: u+4e18-ff8c;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.91.woff2") format("woff2");
+  unicode-range: u+0060-ff38;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.92.woff2") format("woff2");
+  unicode-range: u+2460-ff9d;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.93.woff2") format("woff2");
+  unicode-range: u+21d2-ff4d;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.94.woff2") format("woff2");
+  unicode-range: u+2015-ff70;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.95.woff2") format("woff2");
+  unicode-range: u+2193-ffe5;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.96.woff2") format("woff2");
+  unicode-range: u+4e03-ff9f;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.97.woff2") format("woff2");
+  unicode-range: u+007e-ff2c;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.98.woff2") format("woff2");
+  unicode-range: u+25cb-ff57;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.99.woff2") format("woff2");
+  unicode-range: u+2191-ff2d;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.100.woff2") format("woff2");
+  unicode-range: u+4e08-ff30;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.101.woff2") format("woff2");
+  unicode-range: u+25bc-ff34;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.102.woff2") format("woff2");
+  unicode-range: u+003d-ff33;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.103.woff2") format("woff2");
+  unicode-range: u+500d-ff65;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.104.woff2") format("woff2");
+  unicode-range: u+4e01-ff21;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.105.woff2") format("woff2");
+  unicode-range: u+0025-ff18;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.106.woff2") format("woff2");
+  unicode-range: u+30f6-ff16;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.107.woff2") format("woff2");
+  unicode-range: u+0023-ff1e;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.108.woff2") format("woff2");
+  unicode-range: u+2605-9ed2;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.109.woff2") format("woff2");
+  unicode-range: u+266a-ff15;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.110.woff2") format("woff2");
+  unicode-range: u+0040-985e;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.111.woff2") format("woff2");
+  unicode-range: u+002b-ff5c;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.112.woff2") format("woff2");
+  unicode-range: u+4e16-ff06;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.113.woff2") format("woff2");
+  unicode-range: u+0026-ff12;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.114.woff2") format("woff2");
+  unicode-range: u+003e-98df;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.115.woff2") format("woff2");
+  unicode-range: u+007c-ff5e;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.116.woff2") format("woff2");
+  unicode-range: u+00a9-ff1f;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.117.woff2") format("woff2");
+  unicode-range: u+004e-ff09;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.118.woff2") format("woff2");
+  unicode-range: u+0021-70b9;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.119.woff2") format("woff2");
+  unicode-range: u+0020-ff0e;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.120.woff2") format("woff2");
+  unicode-range: u+0301-2116;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.121.woff2") format("woff2");
+  unicode-range: u+0102-20ab;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.122.woff2") format("woff2");
+  unicode-range: u+0100-a7ff;
+}
+
+@font-face {
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/shippori/shippori.123.woff2") format("woff2");
+  unicode-range: u+0000-fffd;
+}
+
+:root {
+  --font-arita-buri: "AritaBuri KR";
+  --font-shippori-mincho: "Shippori Mincho";
+}

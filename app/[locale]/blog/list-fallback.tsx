@@ -1,4 +1,4 @@
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, Search } from "lucide-react";
 import type { Route } from "next";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
@@ -9,6 +9,29 @@ import type { postMetadataType } from "@/shared/source";
 import styles from "@/shared/styles/stagger-fade-in.module.css";
 import { formatPostDate, formatYear } from "@/shared/utils/date";
 import { cn } from "@/shared/utils/tailwind";
+
+export function BlogSearchShell({
+  searchPlaceholder,
+}: {
+  searchPlaceholder: string;
+}) {
+  return (
+    <div className="fieldnotes-search">
+      <label className="sr-only" htmlFor="blog-search">
+        {searchPlaceholder}
+      </label>
+      <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+      <input
+        autoComplete="off"
+        className="w-full bg-transparent px-10 py-4 text-sm placeholder:text-muted-foreground focus:outline-none"
+        id="blog-search"
+        placeholder={searchPlaceholder}
+        readOnly={true}
+        type="text"
+      />
+    </div>
+  );
+}
 
 export function BlogListFallback({
   isLoading = false,

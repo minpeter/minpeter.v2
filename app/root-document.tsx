@@ -3,7 +3,7 @@ import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { VercelToolbar } from "@vercel/toolbar/next";
 import { NextProvider } from "fumadocs-core/framework/next";
-import { Geist, Geist_Mono, Shippori_Mincho } from "next/font/google";
+import { Geist, Geist_Mono } from "next/font/google";
 import { NuqsAdapter } from "nuqs/adapters/next";
 import { Suspense } from "react";
 import type { ReactNode } from "react";
@@ -15,7 +15,6 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { env } from "@/shared/env";
 import { cn } from "@/shared/utils/tailwind";
 
-import "./arita-buri.css";
 
 const geistMono = Geist_Mono({
   subsets: ["latin"],
@@ -25,12 +24,6 @@ const geistMono = Geist_Mono({
 const geist = Geist({
   subsets: ["latin"],
   variable: "--font-geist",
-  weight: ["400", "500", "600"],
-});
-
-const shipporiMincho = Shippori_Mincho({
-  subsets: ["latin"],
-  variable: "--font-shippori-mincho",
   weight: ["400", "500", "600"],
 });
 
@@ -59,10 +52,15 @@ export function RootDocument({ children, lang }: RootDocumentProps) {
           rel="icon"
           type="image/svg+xml"
         />
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "window.addEventListener('load',function(){var l=document.createElement('link');l.rel='stylesheet';l.href='/fonts/deferred-fonts.css';document.head.appendChild(l)})",
+          }}
+        />
       </head>
       <body
         className={cn(
-          shipporiMincho.variable,
           geistMono.variable,
           geist.variable,
           "flex min-h-screen flex-col antialiased"

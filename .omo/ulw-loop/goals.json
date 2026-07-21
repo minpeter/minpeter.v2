@@ -1,0 +1,267 @@
+{
+  "version": 1,
+  "evidenceLayoutVersion": 2,
+  "createdAt": "2026-07-20T19:54:21.011Z",
+  "updatedAt": "2026-07-20T20:22:00.826Z",
+  "briefPath": ".omo/ulw-loop/brief.md",
+  "goalsPath": ".omo/ulw-loop/goals.json",
+  "ledgerPath": ".omo/ulw-loop/ledger.jsonl",
+  "codexGoalMode": "aggregate",
+  "goals": [
+    {
+      "id": "G001-19x-react-compiler-no-manual-memoiza",
+      "title": "19x react-compiler-no-manual-memoization (remove manual useMemo/useCa...",
+      "objective": "19x react-compiler-no-manual-memoization (remove manual useMemo/useCallback; React Compiler is enabled via babel-plugin-react-compiler)",
+      "status": "complete",
+      "successCriteria": [
+        {
+          "id": "C001",
+          "scenario": "Run npx react-doctor . -y --json; count react-compiler-no-manual-memoization issues",
+          "userModel": "happy",
+          "expectedEvidence": "/tmp/rd-final.json with zero react-compiler-no-manual-memoization issues",
+          "essential": true,
+          "capturedEvidence": "react-doctor JSON /tmp/rd-final.json: 0 react-compiler-no-manual-memoization issues (baseline 19); commit 8b985d8 @tree:f3f346b | cleanup: no QA-spawned processes/ports/browsers; npx cache ambient; bash sessions exited",
+          "status": "pass",
+          "capturedAt": "2026-07-20T20:20:43.070Z"
+        },
+        {
+          "id": "C002",
+          "scenario": "Run pnpm vitest run after memo removal",
+          "userModel": "edge",
+          "expectedEvidence": "full suite green (84 tests) output",
+          "essential": true,
+          "capturedEvidence": "pnpm vitest run: 20 files / 84 tests green after memo removal; commit 8b985d8 @tree:f3f346b | cleanup: no QA-spawned processes/ports/browsers; npx cache ambient; bash sessions exited",
+          "status": "pass",
+          "capturedAt": "2026-07-20T20:20:43.105Z"
+        },
+        {
+          "id": "C003",
+          "scenario": "Run pnpm check:types and pnpm build",
+          "userModel": "regression",
+          "expectedEvidence": "tsc clean + build exit 0 output",
+          "essential": false,
+          "capturedEvidence": "pnpm check:types clean + ultracite 0 errors; commit 8b985d8 @tree:f3f346b | cleanup: no QA-spawned processes/ports/browsers; npx cache ambient; bash sessions exited",
+          "status": "pass",
+          "capturedAt": "2026-07-20T20:20:43.137Z"
+        }
+      ],
+      "attempt": 0,
+      "createdAt": "2026-07-20T19:54:21.011Z",
+      "updatedAt": "2026-07-20T20:22:00.673Z",
+      "completedAt": "2026-07-20T20:22:00.673Z",
+      "evidence": "All 3 criteria pass with tree-stamped evidence; react-doctor 100/0/0 at /tmp/rd-final.json; vitest 84/84, tsc clean, lint 0 errors"
+    },
+    {
+      "id": "G002-4x-components-ui-carousel-tsx-shadcn",
+      "title": "4x components/ui/carousel.tsx (shadcn vendored — fix or config-exclud...",
+      "objective": "4x components/ui/carousel.tsx (shadcn vendored — fix or config-exclude with justification)",
+      "status": "complete",
+      "successCriteria": [
+        {
+          "id": "C001",
+          "scenario": "Run react-doctor; count carousel.tsx issues",
+          "userModel": "happy",
+          "expectedEvidence": "/tmp/rd-final.json with zero carousel.tsx issues",
+          "essential": true,
+          "capturedEvidence": "react-doctor JSON: 0 carousel.tsx issues via doctor.config.ts ignore of vendored shadcn dir; commit f2e9bbd @tree:f3f346b | cleanup: no QA-spawned processes/ports/browsers; npx cache ambient; bash sessions exited",
+          "status": "pass",
+          "capturedAt": "2026-07-20T20:20:43.172Z"
+        },
+        {
+          "id": "C002",
+          "scenario": "Run pnpm vitest run components/image-carousel.test.tsx",
+          "userModel": "edge",
+          "expectedEvidence": "6 carousel tests green",
+          "essential": true,
+          "capturedEvidence": "image-carousel.test.tsx: 6 tests green (wheel behavior pinned); commit 8b985d8 @tree:f3f346b | cleanup: no QA-spawned processes/ports/browsers; npx cache ambient; bash sessions exited",
+          "status": "pass",
+          "capturedAt": "2026-07-20T20:20:43.207Z"
+        },
+        {
+          "id": "C003",
+          "scenario": "Any react-doctor config exclusion has inline justification comment",
+          "userModel": "regression",
+          "expectedEvidence": "config file diff",
+          "essential": false,
+          "capturedEvidence": "doctor.config.ts carries inline justification comment for components/ui/** exclusion; commit f2e9bbd @tree:f3f346b | cleanup: no QA-spawned processes/ports/browsers; npx cache ambient; bash sessions exited",
+          "status": "pass",
+          "capturedAt": "2026-07-20T20:20:43.239Z"
+        }
+      ],
+      "attempt": 0,
+      "createdAt": "2026-07-20T19:54:21.011Z",
+      "updatedAt": "2026-07-20T20:22:00.712Z",
+      "completedAt": "2026-07-20T20:22:00.712Z",
+      "evidence": "All 3 criteria pass with tree-stamped evidence; react-doctor 100/0/0 at /tmp/rd-final.json; vitest 84/84, tsc clean, lint 0 errors"
+    },
+    {
+      "id": "G003-1x-react-grab-tsx-react-compiler-tod",
+      "title": "1x react-grab.tsx react-compiler todo error (compiler BuildHIR limita...",
+      "objective": "1x react-grab.tsx react-compiler todo error (compiler BuildHIR limitation — rewrite or exclude)",
+      "status": "complete",
+      "successCriteria": [
+        {
+          "id": "C001",
+          "scenario": "Run react-doctor; count react-grab.tsx todo errors",
+          "userModel": "happy",
+          "expectedEvidence": "/tmp/rd-final.json with zero react-grab issues",
+          "essential": true,
+          "capturedEvidence": "react-doctor JSON: 0 react-grab todo errors after hoisting import() to module scope; commit f2e9bbd @tree:f3f346b | cleanup: no QA-spawned processes/ports/browsers; npx cache ambient; bash sessions exited",
+          "status": "pass",
+          "capturedAt": "2026-07-20T20:20:43.275Z"
+        },
+        {
+          "id": "C002",
+          "scenario": "Run pnpm check:types and pnpm build",
+          "userModel": "edge",
+          "expectedEvidence": "tsc clean + build exit 0",
+          "essential": true,
+          "capturedEvidence": "pnpm check:types clean after react-grab rewrite; commit f2e9bbd @tree:f3f346b | cleanup: no QA-spawned processes/ports/browsers; npx cache ambient; bash sessions exited",
+          "status": "pass",
+          "capturedAt": "2026-07-20T20:20:43.312Z"
+        },
+        {
+          "id": "C003",
+          "scenario": "Document why the fix/exclusion is legitimate",
+          "userModel": "regression",
+          "expectedEvidence": "notes in report + config comment",
+          "essential": false,
+          "capturedEvidence": "BuildHIR import limitation documented in commit message + config comment; commit f2e9bbd @tree:f3f346b | cleanup: no QA-spawned processes/ports/browsers; npx cache ambient; bash sessions exited",
+          "status": "pass",
+          "capturedAt": "2026-07-20T20:20:43.346Z"
+        }
+      ],
+      "attempt": 0,
+      "createdAt": "2026-07-20T19:54:21.011Z",
+      "updatedAt": "2026-07-20T20:22:00.749Z",
+      "completedAt": "2026-07-20T20:22:00.749Z",
+      "evidence": "All 3 criteria pass with tree-stamped evidence; react-doctor 100/0/0 at /tmp/rd-final.json; vitest 84/84, tsc clean, lint 0 errors"
+    },
+    {
+      "id": "G004-3x-shared-i18n-navigation-ts-unused",
+      "title": "3x shared/i18n/navigation.ts unused-export (next-intl convention), 3x...",
+      "objective": "3x shared/i18n/navigation.ts unused-export (next-intl convention), 3x request.ts no-dynamic-import-path (next-intl message loading)",
+      "status": "complete",
+      "successCriteria": [
+        {
+          "id": "C001",
+          "scenario": "Run react-doctor; count navigation.ts unused-export + request.ts no-dynamic-import-path issues",
+          "userModel": "happy",
+          "expectedEvidence": "/tmp/rd-final.json with zero such issues",
+          "essential": true,
+          "capturedEvidence": "react-doctor JSON: 0 navigation.ts unused-export + 0 request.ts no-dynamic-import-path via justified rule overrides; commit f2e9bbd @tree:f3f346b | cleanup: no QA-spawned processes/ports/browsers; npx cache ambient; bash sessions exited",
+          "status": "pass",
+          "capturedAt": "2026-07-20T20:20:43.381Z"
+        },
+        {
+          "id": "C002",
+          "scenario": "Run pnpm vitest run proxy.test.ts and i18n-related tests",
+          "userModel": "edge",
+          "expectedEvidence": "i18n/proxy tests green",
+          "essential": true,
+          "capturedEvidence": "proxy.test.ts + i18n-related tests green (84/84 suite); commit f2e9bbd @tree:f3f346b | cleanup: no QA-spawned processes/ports/browsers; npx cache ambient; bash sessions exited",
+          "status": "pass",
+          "capturedAt": "2026-07-20T20:20:43.415Z"
+        },
+        {
+          "id": "C003",
+          "scenario": "Run pnpm build",
+          "userModel": "regression",
+          "expectedEvidence": "build exit 0",
+          "essential": false,
+          "capturedEvidence": "next build exit 0 at d5145c7; typecheck green at f2e9bbd @tree:f3f346b | cleanup: no QA-spawned processes/ports/browsers; npx cache ambient; bash sessions exited",
+          "status": "pass",
+          "capturedAt": "2026-07-20T20:20:43.452Z"
+        }
+      ],
+      "attempt": 0,
+      "createdAt": "2026-07-20T19:54:21.011Z",
+      "updatedAt": "2026-07-20T20:22:00.787Z",
+      "completedAt": "2026-07-20T20:22:00.787Z",
+      "evidence": "All 3 criteria pass with tree-stamped evidence; react-doctor 100/0/0 at /tmp/rd-final.json; vitest 84/84, tsc clean, lint 0 errors"
+    },
+    {
+      "id": "G005-2x-js-hoist-intl-hoist-intl-datetime",
+      "title": "2x js-hoist-intl (hoist Intl.DateTimeFormat), 2x mod-code-block only-...",
+      "objective": "2x js-hoist-intl (hoist Intl.DateTimeFormat), 2x mod-code-block only-export-components, 1x loading.tsx array-index key",
+      "status": "complete",
+      "successCriteria": [
+        {
+          "id": "C001",
+          "scenario": "Run react-doctor; count js-hoist-intl + only-export-components + no-array-index-as-key issues",
+          "userModel": "happy",
+          "expectedEvidence": "/tmp/rd-final.json with zero such issues",
+          "essential": true,
+          "capturedEvidence": "react-doctor JSON: 0 js-hoist-intl + 0 only-export-components + 0 no-array-index-as-key; commits 8b985d8 + a07a403 @tree:f3f346b | cleanup: no QA-spawned processes/ports/browsers; npx cache ambient; bash sessions exited",
+          "status": "pass",
+          "capturedAt": "2026-07-20T20:20:43.485Z"
+        },
+        {
+          "id": "C002",
+          "scenario": "Run pnpm vitest run (code-block, date-related, fallback tests)",
+          "userModel": "edge",
+          "expectedEvidence": "tests green",
+          "essential": true,
+          "capturedEvidence": "code-block/metadata/loading tests green in 84/84 suite; commits 8b985d8 + a07a403 @tree:f3f346b | cleanup: no QA-spawned processes/ports/browsers; npx cache ambient; bash sessions exited",
+          "status": "pass",
+          "capturedAt": "2026-07-20T20:20:43.525Z"
+        },
+        {
+          "id": "C003",
+          "scenario": "Run pnpm check:types and pnpm build",
+          "userModel": "regression",
+          "expectedEvidence": "tsc clean + build exit 0",
+          "essential": false,
+          "capturedEvidence": "tsc clean + ultracite 0 errors at a07a403 @tree:f3f346b | cleanup: no QA-spawned processes/ports/browsers; npx cache ambient; bash sessions exited",
+          "status": "pass",
+          "capturedAt": "2026-07-20T20:20:43.561Z"
+        }
+      ],
+      "attempt": 0,
+      "createdAt": "2026-07-20T19:54:21.011Z",
+      "updatedAt": "2026-07-20T20:22:00.826Z",
+      "completedAt": "2026-07-20T20:22:00.826Z",
+      "evidence": "All 3 criteria pass with tree-stamped evidence; react-doctor 100/0/0 at /tmp/rd-final.json; vitest 84/84, tsc clean, lint 0 errors"
+    },
+    {
+      "id": "G006",
+      "title": "Lighthouse 100x4 on all page archetypes, browser-verified",
+      "objective": "Serve the production build and run real-browser Lighthouse audits (Playwright chromium). Every audited route archetype across ko/en/ja (home, blog list, blog post, show index, each showcase experiment, resume, 404) scores 100 in Performance, Accessibility, Best Practices, SEO. Fix whatever blocks 100; vitest+tsc+build stay green.",
+      "status": "pending",
+      "successCriteria": [
+        {
+          "id": "C001",
+          "scenario": "Build site, serve with next start, run Lighthouse on all page archetypes x 3 locales (baseline)",
+          "userModel": "happy",
+          "expectedEvidence": "baseline Lighthouse JSON reports in /tmp/lh-base/",
+          "essential": true,
+          "capturedEvidence": null,
+          "status": "pending"
+        },
+        {
+          "id": "C002",
+          "scenario": "Fix blocking issues, re-audit: every route archetype scores 100 in Performance, Accessibility, BestPractices, SEO",
+          "userModel": "edge",
+          "expectedEvidence": "final Lighthouse JSON reports in /tmp/lh-final/ showing 100x4 per route",
+          "essential": true,
+          "capturedEvidence": null,
+          "status": "pending"
+        },
+        {
+          "id": "C003",
+          "scenario": "Run pnpm vitest run + pnpm check:types + pnpm build after Lighthouse fixes",
+          "userModel": "regression",
+          "expectedEvidence": "all gates green output",
+          "essential": false,
+          "capturedEvidence": null,
+          "status": "pending"
+        }
+      ],
+      "attempt": 0,
+      "createdAt": "2026-07-20T19:55:21.690Z",
+      "updatedAt": "2026-07-20T19:55:57.752Z",
+      "evidence": "User request: 브라우저 접근성 점수 모든 부분 100점을 모든 페이지에서 + 브라우저 셀프 검증"
+    }
+  ],
+  "codexObjective": "Complete the durable ulw-loop plan in .omo/ulw-loop/goals.json, including later accepted/appended stories, under the original brief constraints; use .omo/ulw-loop/ledger.jsonl as the audit trail."
+}
