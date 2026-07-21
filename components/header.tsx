@@ -1,5 +1,6 @@
 "use client";
 
+import { useLocale } from "next-intl";
 import type { Route } from "next";
 import Link from "next/link";
 import type { ReactNode } from "react";
@@ -31,6 +32,7 @@ export default function Header({
   link,
   rightContent,
 }: HeaderProps) {
+  const locale = useLocale();
   const resolvedTitle = title || "minpeter";
 
   return (
@@ -48,7 +50,7 @@ export default function Header({
             text={link.text}
           />
         ) : (
-          <Link href="/">minpeter</Link>
+          <Link href={`/${locale}`}>minpeter</Link>
         )}
         <div className="flex items-center gap-2 text-muted-foreground">
           {rightContent}
