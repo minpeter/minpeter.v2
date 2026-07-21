@@ -1,5 +1,4 @@
 import type { Route } from "next";
-import { getTranslations } from "next-intl/server";
 
 import { ViewTransition } from "@/components/view-transition";
 import { blog } from "@/shared/source";
@@ -9,15 +8,23 @@ import { formatDateLong } from "@/shared/utils/date";
 import { NavLink } from "./nav-link";
 import { getAdjacentPosts } from "./post-navigation";
 
-export async function PostFooter({
+interface PostFooterLabels {
+  draft: string;
+  draftedDate: string;
+  lastModifiedDate: string;
+  publishedDate: string;
+}
+
+export function PostFooter({
   locale,
   post,
+  labels,
 }: {
   locale: string;
   post: NonNullable<blogType>;
+  labels: PostFooterLabels;
 }) {
   const posts = blog.getPages(locale);
-  const t = await getTranslations();
   const { nextPost, previousPost } = getAdjacentPosts(
     posts,
     post.slugs.join("/")
@@ -29,7 +36,7 @@ export async function PostFooter({
           {post.data.drafted ? (
             <>
               <div className="flex gap-2">
-                <span>{t("draftedDate")}:</span>
+                <span>{labels.draftedDate}:</span>
                 <time dateTime={new Date(post.data.drafted).toISOString()}>
                   {formatDateLong(post.data.drafted)}
                 </time>
@@ -39,7 +46,7 @@ export async function PostFooter({
           ) : null}
 
           <div className="flex gap-2">
-            <span>{t("publishedDate")}:</span>
+            <span>{labels.publishedDate}:</span>
             <ViewTransition name={`blog-date-${post.url.replaceAll("/", "-")}`}>
               <time dateTime={new Date(post.data.published).toISOString()}>
                 {formatDateLong(post.data.published)}
@@ -51,7 +58,7 @@ export async function PostFooter({
 
           {post.data.lastModified ? (
             <div className="flex gap-2">
-              <span>{t("lastModifiedDate")}:</span>
+              <span>{labels.lastModifiedDate}:</span>
               <time dateTime={new Date(post.data.lastModified).toISOString()}>
                 {formatDateLong(post.data.lastModified)}
               </time>
@@ -60,7 +67,7 @@ export async function PostFooter({
 
           {post.data.draft ? <span aria-hidden="true">•</span> : null}
 
-          {post.data.draft ? <span>{t("draft")}</span> : null}
+          {post.data.draft ? <span>{labels.draft}</span> : null}
         </div>
 
         <hr className="my-8" />

@@ -42,6 +42,9 @@ export const blogMdxComponents = {
     );
   },
   img: (imageProps: ComponentProps<"img">) => (
-    <ImageZoom {...(imageProps as ComponentProps<typeof ImageZoom>)} />
+    <ImageZoom
+      {...(imageProps as ComponentProps<typeof ImageZoom>)}
+      loading="eager"
+    />
   ),
 };

@@ -5,7 +5,6 @@ import { VercelToolbar } from "@vercel/toolbar/next";
 import { NextProvider } from "fumadocs-core/framework/next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { NuqsAdapter } from "nuqs/adapters/next";
-import { Suspense } from "react";
 import type { ReactNode } from "react";
 
 import Footer from "@/components/footer";
@@ -76,8 +75,7 @@ export function RootDocument({ children, lang }: RootDocumentProps) {
           <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
             <ThemeFavicon />
             {shouldInjectDevTools ? <ReactGrab /> : null}
-            <Suspense>
-              <NuqsAdapter>
+            <NuqsAdapter>
                 <main
                   className={cn(
                     "font-sans",
@@ -89,8 +87,7 @@ export function RootDocument({ children, lang }: RootDocumentProps) {
                 </main>
 
                 <Footer locale={lang} />
-              </NuqsAdapter>
-            </Suspense>
+            </NuqsAdapter>
           </ThemeProvider>
         </NextProvider>
         {isProduction && isVercel ? (

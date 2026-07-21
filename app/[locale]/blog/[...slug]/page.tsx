@@ -122,7 +122,16 @@ export default async function Page(
         </div>
       </DocsBody>
 
-      <PostFooter locale={locale} post={post} />
+      <PostFooter
+        labels={{
+          draft: t("draft"),
+          draftedDate: t("draftedDate"),
+          lastModifiedDate: t("lastModifiedDate"),
+          publishedDate: t("publishedDate"),
+        }}
+        locale={locale}
+        post={post}
+      />
     </section>
   );
 }
