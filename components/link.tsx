@@ -3,7 +3,7 @@ import type { Route } from "next";
 import Link from "next/link";
 
 export function Backlink({
-  text = "plz input text props",
+  text,
   href,
   ariaLabel,
   onNavigate,
@@ -13,9 +13,8 @@ export function Backlink({
   ariaLabel?: string;
   onNavigate?: (e: React.MouseEvent) => void;
 }) {
-  const trimmedText = text.trim();
   const resolvedAriaLabel =
-    trimmedText.length === 0 ? (ariaLabel ?? "Back") : undefined;
+    text.trim().length === 0 ? (ariaLabel ?? "Back") : undefined;
 
   return (
     <Link
