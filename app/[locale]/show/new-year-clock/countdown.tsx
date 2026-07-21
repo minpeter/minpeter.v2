@@ -99,10 +99,6 @@ export function Countdown() {
   }
 
   const hasTimeLeft = Object.values(remainingTime).some((value) => value > 0);
-  const units = labels.map(({ key, label }) => ({
-    label,
-    value: remainingTime[key],
-  }));
 
   if (!hasTimeLeft) {
     return (
@@ -123,10 +119,10 @@ export function Countdown() {
       className="grid grid-cols-2 gap-x-5 gap-y-8 sm:grid-cols-4"
       role="timer"
     >
-      {units.map(({ label, value }) => (
+      {labels.map(({ key, label }) => (
         <div className="border-foreground/15 border-t pt-4" key={label}>
           <span className="block font-mono text-2xl tabular-nums tracking-[-0.05em] sm:text-[1.75rem]">
-            {String(value).padStart(2, "0")}
+            {String(remainingTime[key]).padStart(2, "0")}
           </span>
           <span className="mt-1 block text-[0.6875rem] text-muted-foreground uppercase tracking-[0.08em]">
             {label}

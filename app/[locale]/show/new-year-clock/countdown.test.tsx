@@ -8,14 +8,11 @@ const MESSAGES = {
   showcase: {
     items: {
       newYear: {
-        caption: "{year}년 1월 1일까지 남은 시간입니다.",
         days: "일",
         happy: "새해 복 많이 받으세요!",
         hours: "시간",
         minutes: "분",
         seconds: "초",
-        timerLabel:
-          "새해까지 {days}일 {hours}시간 {minutes}분 {seconds}초 남음",
       },
     },
   },
