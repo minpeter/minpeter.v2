@@ -3,10 +3,7 @@ import { z } from "zod";
 
 import { parseFrontmatterDate } from "./source.config";
 
-const publishedSchema = z
-  .string()
-  .or(z.date())
-  .transform(parseFrontmatterDate);
+const publishedSchema = z.string().or(z.date()).transform(parseFrontmatterDate);
 
 const draftedSchema = z
   .string()
@@ -19,7 +16,7 @@ const draftedSchema = z
     return parseFrontmatterDate(value, context);
   });
 
-describe("parseFrontmatterDate", () => {
+describe("frontmatter date validation", () => {
   it("rejects an unparseable date string", () => {
     expect(publishedSchema.safeParse("not-a-date").success).toBe(false);
   });
@@ -29,12 +26,9 @@ describe("parseFrontmatterDate", () => {
   });
 
   it("accepts a valid ISO date string and returns a Date", () => {
-    const result = publishedSchema.safeParse("2024-03-05");
-    expect(result.success).toBe(true);
-    if (result.success) {
-      expect(result.data).toBeInstanceOf(Date);
-      expect(Number.isNaN(result.data.getTime())).toBe(false);
-    }
+    const parsed = publishedSchema.parse("2024-03-05");
+    expect(parsed).toBeInstanceOf(Date);
+    expect(Number.isNaN(parsed.getTime())).toBe(false);
   });
 
   it("accepts a Date instance", () => {

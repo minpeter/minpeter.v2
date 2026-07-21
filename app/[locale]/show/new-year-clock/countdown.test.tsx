@@ -14,7 +14,8 @@ const MESSAGES = {
         hours: "시간",
         minutes: "분",
         seconds: "초",
-        timerLabel: "새해까지 {days}일 {hours}시간 {minutes}분 {seconds}초 남음",
+        timerLabel:
+          "새해까지 {days}일 {hours}시간 {minutes}분 {seconds}초 남음",
       },
     },
   },

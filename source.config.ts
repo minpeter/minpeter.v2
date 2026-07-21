@@ -50,10 +50,7 @@ export const { docs, meta } = defineDocs({
         .optional()
         .default([routing.defaultLocale]),
       machine_translated: z.boolean().optional().default(false),
-      published: z
-        .string()
-        .or(z.date())
-        .transform(parseFrontmatterDate),
+      published: z.string().or(z.date()).transform(parseFrontmatterDate),
     }),
   },
 });
