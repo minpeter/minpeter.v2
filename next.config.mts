@@ -38,7 +38,6 @@ const nextConfig: NextConfig = {
   reactCompiler: true,
 
   rewrites: () => [
-    // AI/LLM endpoints for blog content
     {
       destination: "/:locale/blog/llms.md/:path*",
       source: "/:locale/blog/:path*.md",
@@ -57,7 +56,6 @@ const withBundleAnalyzer = bundleAnalyzer({
 });
 const withNextIntl = createNextIntlPlugin({
   experimental: {
-    // Provide the path to the messages that you're using in `AppConfig`
     createMessagesDeclaration: "./shared/i18n/ko.json",
   },
   requestConfig: "./shared/i18n/request.ts",
