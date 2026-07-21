@@ -79,17 +79,17 @@ export function RootDocument({ children, lang }: RootDocumentProps) {
             <ThemeFavicon />
             {shouldInjectDevTools ? <ReactGrab /> : null}
             <NuqsAdapter>
-                <main
-                  className={cn(
-                    "font-sans",
-                    "relative mx-auto flex w-full max-w-4xl flex-1 flex-col px-5 sm:px-8 lg:px-12"
-                  )}
-                >
-                  {children}
-                  {shouldInjectDevTools ? <VercelToolbar /> : null}
-                </main>
+              <main
+                className={cn(
+                  "font-sans",
+                  "relative mx-auto flex w-full max-w-4xl flex-1 flex-col px-5 sm:px-8 lg:px-12"
+                )}
+              >
+                {children}
+                {shouldInjectDevTools ? <VercelToolbar /> : null}
+              </main>
 
-                <Footer locale={lang} />
+              <Footer locale={lang} />
             </NuqsAdapter>
           </ThemeProvider>
         </NextProvider>
