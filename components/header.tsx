@@ -1,5 +1,6 @@
 "use client";
 
+import { routing } from "@/shared/i18n/routing";
 import { useLocale } from "next-intl";
 import type { Route } from "next";
 import Link from "next/link";
@@ -50,7 +51,15 @@ export default function Header({
             text={link.text}
           />
         ) : (
-          <Link href={`/${locale}`}>minpeter</Link>
+          <Link
+            href={
+              locale === routing.defaultLocale
+                ? ("/" as Route)
+                : (`/${locale}` as Route)
+            }
+          >
+            minpeter
+          </Link>
         )}
         <div className="flex items-center gap-2 text-muted-foreground">
           {rightContent}
