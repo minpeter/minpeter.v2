@@ -1115,6 +1115,1122 @@
 }
 
 @font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.0.woff2") format("woff2");
+  unicode-range: u+f9ca-ffe6;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.1.woff2") format("woff2");
+  unicode-range: u+f92f-f9c9;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.2.woff2") format("woff2");
+  unicode-range: u+d723-f92e;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.3.woff2") format("woff2");
+  unicode-range: u+d679-d722;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.4.woff2") format("woff2");
+  unicode-range: u+d5bc-d678;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.5.woff2") format("woff2");
+  unicode-range: u+d507-d5bb;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.6.woff2") format("woff2");
+  unicode-range: u+d464-d506;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.7.woff2") format("woff2");
+  unicode-range: u+d3bf-d463;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.8.woff2") format("woff2");
+  unicode-range: u+d2ff-d3be;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.9.woff2") format("woff2");
+  unicode-range: u+d257-d2fe;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.10.woff2") format("woff2");
+  unicode-range: u+d1b4-d256;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.11.woff2") format("woff2");
+  unicode-range: u+d105-d1b3;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.12.woff2") format("woff2");
+  unicode-range: u+d04b-d104;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.13.woff2") format("woff2");
+  unicode-range: u+cfa2-d04a;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.14.woff2") format("woff2");
+  unicode-range: u+cef0-cfa1;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.15.woff2") format("woff2");
+  unicode-range: u+ce3c-ceef;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.16.woff2") format("woff2");
+  unicode-range: u+cd92-ce3b;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.17.woff2") format("woff2");
+  unicode-range: u+ccef-cd91;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.18.woff2") format("woff2");
+  unicode-range: u+cc3f-ccee;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.19.woff2") format("woff2");
+  unicode-range: u+cb91-cc3c;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.20.woff2") format("woff2");
+  unicode-range: u+caf4-cb90;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.21.woff2") format("woff2");
+  unicode-range: u+ca4a-caf3;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.22.woff2") format("woff2");
+  unicode-range: u+c996-ca49;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.23.woff2") format("woff2");
+  unicode-range: u+c8e9-c995;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.24.woff2") format("woff2");
+  unicode-range: u+c841-c8e8;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.25.woff2") format("woff2");
+  unicode-range: u+c779-c840;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.26.woff2") format("woff2");
+  unicode-range: u+c6bb-c777;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.27.woff2") format("woff2");
+  unicode-range: u+c5f5-c6ba;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.28.woff2") format("woff2");
+  unicode-range: u+c517-c5f3;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.29.woff2") format("woff2");
+  unicode-range: u+c475-c516;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.30.woff2") format("woff2");
+  unicode-range: u+c3d0-c474;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.31.woff2") format("woff2");
+  unicode-range: u+c32b-c3cf;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.32.woff2") format("woff2");
+  unicode-range: u+c26a-c32a;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.33.woff2") format("woff2");
+  unicode-range: u+c1bc-c269;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.34.woff2") format("woff2");
+  unicode-range: u+c101-c1bb;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.35.woff2") format("woff2");
+  unicode-range: u+c049-c0ff;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.36.woff2") format("woff2");
+  unicode-range: u+bfa7-c048;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.37.woff2") format("woff2");
+  unicode-range: u+bf07-bfa6;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.38.woff2") format("woff2");
+  unicode-range: u+be56-bf06;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.39.woff2") format("woff2");
+  unicode-range: u+bdb0-be53;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.40.woff2") format("woff2");
+  unicode-range: u+bd03-bdaf;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.41.woff2") format("woff2");
+  unicode-range: u+bc4e-bd02;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.42.woff2") format("woff2");
+  unicode-range: u+bb90-bc4d;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.43.woff2") format("woff2");
+  unicode-range: u+bae6-bb8f;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.44.woff2") format("woff2");
+  unicode-range: u+ba30-bae5;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.45.woff2") format("woff2");
+  unicode-range: u+b96e-ba2f;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.46.woff2") format("woff2");
+  unicode-range: u+b8bf-b96c;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.47.woff2") format("woff2");
+  unicode-range: u+b80d-b8be;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.48.woff2") format("woff2");
+  unicode-range: u+b74d-b80b;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.49.woff2") format("woff2");
+  unicode-range: u+b6a7-b74c;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.50.woff2") format("woff2");
+  unicode-range: u+b605-b6a6;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.51.woff2") format("woff2");
+  unicode-range: u+b55f-b604;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.52.woff2") format("woff2");
+  unicode-range: u+b4a5-b55e;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.53.woff2") format("woff2");
+  unicode-range: u+b3f8-b4a3;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.54.woff2") format("woff2");
+  unicode-range: u+b342-b3f7;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.55.woff2") format("woff2");
+  unicode-range: u+b27c-b341;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.56.woff2") format("woff2");
+  unicode-range: u+b1d6-b27b;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.57.woff2") format("woff2");
+  unicode-range: u+b120-b1d5;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.58.woff2") format("woff2");
+  unicode-range: u+b05f-b11f;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.59.woff2") format("woff2");
+  unicode-range: u+afac-b05e;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.60.woff2") format("woff2");
+  unicode-range: u+af03-afab;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.61.woff2") format("woff2");
+  unicode-range: u+ae56-af02;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.62.woff2") format("woff2");
+  unicode-range: u+ad9c-ae55;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.63.woff2") format("woff2");
+  unicode-range: u+ace2-ad9b;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.64.woff2") format("woff2");
+  unicode-range: u+ac25-acdf;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.65.woff2") format("woff2");
+  unicode-range: u+99df-ac23;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.66.woff2") format("woff2");
+  unicode-range: u+96a7-99dd;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.67.woff2") format("woff2");
+  unicode-range: u+920d-96a3;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.68.woff2") format("woff2");
+  unicode-range: u+8fa8-91f5;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.69.woff2") format("woff2");
+  unicode-range: u+8c6a-8fa6;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.70.woff2") format("woff2");
+  unicode-range: u+8941-8c61;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.71.woff2") format("woff2");
+  unicode-range: u+858f-893b;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.72.woff2") format("woff2");
+  unicode-range: u+82a6-8587;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.73.woff2") format("woff2");
+  unicode-range: u+8033-82a5;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.74.woff2") format("woff2");
+  unicode-range: u+7d2f-802d;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.75.woff2") format("woff2");
+  unicode-range: u+7a49-7d2e;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.76.woff2") format("woff2");
+  unicode-range: u+7704-7a46;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.77.woff2") format("woff2");
+  unicode-range: u+7482-7701;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.78.woff2") format("woff2");
+  unicode-range: u+7230-747e;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.79.woff2") format("woff2");
+  unicode-range: u+6f8d-722d;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.80.woff2") format("woff2");
+  unicode-range: u+6d5a-6f88;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.81.woff2") format("woff2");
+  unicode-range: u+6ada-6d59;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.82.woff2") format("woff2");
+  unicode-range: u+67f0-6ad3;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.83.woff2") format("woff2");
+  unicode-range: u+6607-67ef;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.84.woff2") format("woff2");
+  unicode-range: u+6392-6606;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.85.woff2") format("woff2");
+  unicode-range: u+614c-638c;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.86.woff2") format("woff2");
+  unicode-range: u+5f11-614b;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.87.woff2") format("woff2");
+  unicode-range: u+5c40-5f0a;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.88.woff2") format("woff2");
+  unicode-range: u+59be-5c3f;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.89.woff2") format("woff2");
+  unicode-range: u+5703-59bb;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.90.woff2") format("woff2");
+  unicode-range: u+539a-56fa;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.91.woff2") format("woff2");
+  unicode-range: u+516e-5398;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.92.woff2") format("woff2");
+  unicode-range: u+4f43-516d;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.93.woff2") format("woff2");
+  unicode-range: u+338c-4f3d;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.94.woff2") format("woff2");
+  unicode-range: u+3136-338b;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.95.woff2") format("woff2");
+  unicode-range: u+2f7d-3135;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.96.woff2") format("woff2");
+  unicode-range: u+2541-2f7c;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.97.woff2") format("woff2");
+  unicode-range: u+2479-2540;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.98.woff2") format("woff2");
+  unicode-range: u+215b-2478;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.99.woff2") format("woff2");
+  unicode-range: u+0081-2154;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.100.woff2") format("woff2");
+  unicode-range: u+00e8-ff1c;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.101.woff2") format("woff2");
+  unicode-range: u+03b1-ff1e;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.102.woff2") format("woff2");
+  unicode-range: u+0131-ff5e;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.103.woff2") format("woff2");
+  unicode-range: u+00b4-ff0c;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.104.woff2") format("woff2");
+  unicode-range: u+2161-ff1a;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.105.woff2") format("woff2");
+  unicode-range: u+2103-ff5c;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.106.woff2") format("woff2");
+  unicode-range: u+2039-d6d4;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.107.woff2") format("woff2");
+  unicode-range: u+00b0-f981;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.108.woff2") format("woff2");
+  unicode-range: u+00e0-d799;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.109.woff2") format("woff2");
+  unicode-range: u+0024-d770;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.110.woff2") format("woff2");
+  unicode-range: u+00d7-d758;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.111.woff2") format("woff2");
+  unicode-range: u+00e7-d790;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.112.woff2") format("woff2");
+  unicode-range: u+2665-d750;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.113.woff2") format("woff2");
+  unicode-range: u+005e-d765;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.114.woff2") format("woff2");
+  unicode-range: u+003c-d798;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.115.woff2") format("woff2");
+  unicode-range: u+0023-d76c;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.116.woff2") format("woff2");
+  unicode-range: u+0026-d65c;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.117.woff2") format("woff2");
+  unicode-range: u+000d-d788;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.118.woff2") format("woff2");
+  unicode-range: u+0039-d68c;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.119.woff2") format("woff2");
+  unicode-range: u+0020-d558;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.120.woff2") format("woff2");
+  unicode-range: u+0301-2116;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.121.woff2") format("woff2");
+  unicode-range: u+0102-20ab;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.122.woff2") format("woff2");
+  unicode-range: u+0100-a7ff;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/pretendard/pretendard.123.woff2") format("woff2");
+  unicode-range: u+0000-fffd;
+}
+
+@font-face {
   font-family: "Shippori Mincho";
   font-style: normal;
   font-weight: 400;
@@ -2232,5 +3348,6 @@
 
 :root {
   --font-arita-buri: "AritaBuri KR";
+  --font-pretendard: "Pretendard";
   --font-shippori-mincho: "Shippori Mincho";
 }

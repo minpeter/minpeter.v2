@@ -285,6 +285,16 @@ FONTS = (
         "ranges": KR_RANGES,
     },
     {
+        "family": "Pretendard",
+        "variable": "--font-pretendard",
+        "source": ROOT / "public/fonts/PretendardVariable.woff2",
+        "out_dir": ROOT / "public/fonts/pretendard",
+        "url_prefix": "/fonts/pretendard",
+        "file_prefix": "pretendard",
+        "ranges": KR_RANGES,
+        "weight": "100 900",
+    },
+    {
         "family": "Shippori Mincho",
         "variable": "--font-shippori-mincho",
         "source": ROOT / "shared/font.Shippori/ShipporiMincho-Regular.ttf",
@@ -326,11 +336,12 @@ def slice_font(config: dict) -> list[str]:
                 f"--output-file={output}",
             ]
         )
+        weight = config.get("weight", "400")
         blocks.append(
             f"""@font-face {{
   font-family: \"{config['family']}\";
   font-style: normal;
-  font-weight: 400;
+  font-weight: {weight};
   font-display: swap;
   src: url(\"{config['url_prefix']}/{config['file_prefix']}.{index}.woff2\") format(\"woff2\");
   unicode-range: {normalize_range(unicode_range)};
