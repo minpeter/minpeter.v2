@@ -27,7 +27,6 @@ export function LanguageSelector() {
 
   const {
     isOpen,
-    setIsOpen,
     triggerRef,
     contentRef,
     handleMouseEnter,
@@ -37,23 +36,14 @@ export function LanguageSelector() {
     handleOpenChange,
   } = useHoverDropdown();
 
-  const currentLabel =
-    LOCALE_LABELS[locale as keyof typeof LOCALE_LABELS] || LOCALE_LABELS.ko;
-  const handleItemClick = () => {
-    setIsOpen(false);
-  };
+  const currentLabel = LOCALE_LABELS[locale as keyof typeof LOCALE_LABELS];
 
   return (
     <Root modal={false} onOpenChange={handleOpenChange} open={isOpen}>
       <Trigger asChild>
         <button
           aria-label={`${currentLabel.short} - ${t("selectLanguage")}`}
-          className={cn(
-            "flex items-center gap-1 rounded-md px-2 py-1 text-sm",
-            "text-muted-foreground hover:bg-secondary hover:text-primary",
-            "transition-colors duration-150",
-            "focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-          )}
+          className="flex items-center gap-1 rounded-md px-2 py-1 text-sm text-muted-foreground hover:bg-secondary hover:text-primary transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           onPointerEnter={handleMouseEnter}
           onPointerLeave={handleMouseLeave}
           ref={triggerRef}
@@ -67,11 +57,7 @@ export function LanguageSelector() {
       <Portal>
         <Content
           align="end"
-          className={cn(
-            "z-50 min-w-[120px] rounded-md border border-border bg-background p-1 shadow-md",
-            "fade-in-0 zoom-in-95 data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 animate-in data-[state=closed]:animate-out",
-            "data-[side=bottom]:slide-in-from-top-2 data-[side=top]:slide-in-from-bottom-2"
-          )}
+          className="z-50 min-w-[120px] rounded-md border border-border bg-background p-1 shadow-md fade-in-0 zoom-in-95 data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 animate-in data-[state=closed]:animate-out data-[side=bottom]:slide-in-from-top-2 data-[side=top]:slide-in-from-bottom-2"
           onCloseAutoFocus={preventCloseAutoFocus}
           onPointerEnter={handleContentMouseEnter}
           onPointerLeave={handleContentMouseLeave}
@@ -80,7 +66,6 @@ export function LanguageSelector() {
         >
           {routing.locales.map((l) => {
             const isActive = locale === l;
-            const label = LOCALE_LABELS[l] || { native: l, short: l };
 
             return (
               <Item asChild key={l}>
@@ -97,9 +82,8 @@ export function LanguageSelector() {
                   )}
                   href={pathname}
                   locale={l}
-                  onClick={handleItemClick}
                 >
-                  {label.native}
+                  {LOCALE_LABELS[l].native}
                 </Link>
               </Item>
             );
