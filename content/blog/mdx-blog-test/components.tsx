@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 
@@ -12,10 +12,10 @@ export function SimpleButton() {
   const [toggle, setToggle] = useState(false);
   const [count, setCount] = useState(0);
 
-  const handleClick = useCallback(() => {
+  const handleClick = () => {
     setToggle((prevToggle) => !prevToggle);
     setCount((prevCount) => prevCount + 1);
-  }, []);
+  };
 
   let buttonLabel = "Push me!!";
   if (count >= PUSHED_THRESHOLD) {
@@ -32,33 +32,42 @@ export function SimpleButton() {
 }
 
 export function Ip() {
-  const [ip, setIp] = useState("");
+  const [ip, setIp] = useState("Click the button to load your IP.");
+  const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    fetch("https://ip.minpeter.com/ip")
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error(res.statusText);
-        }
-        return res.text();
-      })
-      .then((fetchedIp) => setIp(fetchedIp))
-      .catch(() => {
-        setIp("Failed to fetch IP. Please try again later.");
-      });
-  }, []);
+  const loadIp = async () => {
+    setIsLoading(true);
+    try {
+      const response = await fetch("https://ip.minpeter.com/ip");
+      if (!response.ok) {
+        throw new Error(response.statusText);
+      }
+      setIp(await response.text());
+    } catch {
+      setIp("Failed to fetch IP. Please try again later.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-  return <span>Your IP: {ip || "Loading..."}</span>;
+  return (
+    <span className="inline-flex items-center gap-2">
+      Your IP: {isLoading ? "Loading..." : ip}
+      <Button disabled={isLoading} onClick={loadIp} size="sm" variant="secondary">
+        Load IP
+      </Button>
+    </span>
+  );
 }
 
 export function Counter() {
   const [count, setCount] = useState(0);
-  const handleCountUp = useCallback(() => {
+  const handleCountUp = () => {
     setCount((currentCount) => currentCount + 1);
-  }, []);
-  const handleReset = useCallback(() => {
+  };
+  const handleReset = () => {
     setCount(0);
-  }, []);
+  };
 
   return (
     <div className="space-y-2">

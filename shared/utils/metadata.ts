@@ -5,6 +5,8 @@ import { routing } from "@/shared/i18n/routing";
 import { ogImageSize } from "@/shared/og-image";
 import { siteConfig } from "@/shared/site-config";
 
+const canonicalOrigin = new URL("https://minpeter.com");
+
 const openGraphLocales = {
   en: "en_US",
   ja: "ja_JP",
@@ -71,12 +73,17 @@ export function createMetadata({
   title?: string;
 }): Metadata {
   const resolvedLocale = resolveLocale(locale);
+  const resolvedDescription =
+    description ?? siteConfig.description[resolvedLocale];
   const localizedPath = path
     ? getLocalizedPath(resolvedLocale, path)
     : undefined;
-  const alternateLocale = Object.entries(openGraphLocales)
-    .filter(([candidate]) => candidate !== resolvedLocale)
-    .map(([, value]) => value);
+  const canonicalUrl = localizedPath
+    ? new URL(localizedPath, canonicalOrigin).toString()
+    : undefined;
+  const alternateLocale = Object.entries(openGraphLocales).flatMap(
+    ([candidate, value]) => (candidate === resolvedLocale ? [] : [value])
+  );
   const resolvedImage = image
     ? {
         alt: image.alt,
@@ -88,7 +95,7 @@ export function createMetadata({
     : undefined;
   const sharedOpenGraph = {
     alternateLocale,
-    description,
+    description: resolvedDescription,
     ...(resolvedImage ? { images: resolvedImage } : {}),
     locale: openGraphLocales[resolvedLocale],
     siteName: siteConfig.title,
@@ -99,11 +106,11 @@ export function createMetadata({
   return {
     alternates: path
       ? {
-          canonical: localizedPath,
+          canonical: canonicalUrl,
           languages: getLanguageAlternates(path),
         }
       : undefined,
-    description,
+    description: resolvedDescription,
     formatDetection: {
       telephone: false,
     },
@@ -125,7 +132,7 @@ export function createMetadata({
     twitter: {
       card: "summary_large_image",
       creator: "@minpeter",
-      description,
+      description: resolvedDescription,
       ...(resolvedImage ? { images: resolvedImage } : {}),
       title,
     },

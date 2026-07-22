@@ -3,7 +3,7 @@
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { useTranslations } from "next-intl";
 import dynamic from "next/dynamic";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -75,9 +75,9 @@ export function PlaygroundWrapper({ className, h, w }: PlaygroundProps) {
     };
   }, [h, w]);
 
-  const handleReplay = useCallback(() => {
+  const handleReplay = () => {
     setRunId((currentRunId) => currentRunId + 1);
-  }, []);
+  };
 
   return (
     <>

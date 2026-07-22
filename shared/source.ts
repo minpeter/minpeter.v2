@@ -7,6 +7,8 @@ import type {
 } from "fumadocs-mdx/runtime/server";
 import { docs, meta } from "fumadocs-mdx:collections/server";
 
+import { routing } from "./i18n/routing";
+
 type BlogFrontmatter = PageData & {
   ai_generated_by?: string;
   draft: boolean;
@@ -47,24 +49,12 @@ export interface postMetadataType {
   url: string;
 }
 
-function getPostMetadata(post: blogType): postMetadataType {
-  if (!post) {
-    return {
-      draft: false,
-      drafted: undefined,
-      external_url: undefined,
-      lang: ["ko"],
-      published: new Date(),
-      title: "",
-      url: "",
-    };
-  }
-
+function getPostMetadata(post: NonNullable<blogType>): postMetadataType {
   return {
     draft: post.data.draft,
     drafted: post.data.drafted,
     external_url: post.data.external_url,
-    lang: post.data.lang.length ? post.data.lang : ["ko"],
+    lang: post.data.lang.length ? post.data.lang : [routing.defaultLocale],
     published: post.data.published,
     title: post.data.title ?? "",
     url: post.url,
@@ -74,5 +64,5 @@ function getPostMetadata(post: blogType): postMetadataType {
 export function getPostsMetadata(posts: blogListType): postMetadataType[] {
   return posts
     .toSorted((a, b) => b.data.published.getTime() - a.data.published.getTime())
-    .map((post) => getPostMetadata(post));
+    .map(getPostMetadata);
 }

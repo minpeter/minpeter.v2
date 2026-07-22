@@ -8,6 +8,7 @@ import type { DefaultMDXOptions } from "fumadocs-mdx/config";
 import lastModified from "fumadocs-mdx/plugins/last-modified";
 import { z } from "zod";
 
+import { parseFrontmatterDate } from "./shared/frontmatter-date";
 import { routing } from "./shared/i18n/routing";
 
 export const { docs, meta } = defineDocs({
@@ -27,15 +28,7 @@ export const { docs, meta } = defineDocs({
           if (value === undefined) {
             return;
           }
-          try {
-            return new Date(value);
-          } catch {
-            context.addIssue({
-              code: z.ZodIssueCode.custom,
-              message: "Invalid date",
-            });
-            return z.NEVER;
-          }
+          return parseFrontmatterDate(value, context);
         }),
       external_url: z.url().optional(),
       lang: z
@@ -43,32 +36,17 @@ export const { docs, meta } = defineDocs({
         .optional()
         .default([routing.defaultLocale]),
       machine_translated: z.boolean().optional().default(false),
-      published: z
-        .string()
-        .or(z.date())
-        .transform((value, context) => {
-          try {
-            return new Date(value);
-          } catch {
-            context.addIssue({
-              code: z.ZodIssueCode.custom,
-              message: "Invalid date",
-            });
-            return z.NEVER;
-          }
-        }),
+      published: z.string().or(z.date()).transform(parseFrontmatterDate),
     }),
   },
 });
 
 const mdxOptions: DefaultMDXOptions = {
   development: process.env.NODE_ENV === "development",
-  rehypePlugins: (v) => [...v],
   remarkPlugins: [remarkInstall],
 };
 
 export default defineConfig({
   mdxOptions,
   plugins: [lastModified()],
-  // generateManifest: false,
 });

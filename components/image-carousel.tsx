@@ -1,8 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useEffect, useRef, useState } from "react";
-import type { MouseEvent } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import {
   Carousel,
@@ -37,19 +36,13 @@ export function ImageCarousel({
   const wheelDelta = useRef(0);
   const wheelGestureLocked = useRef(false);
   const wheelResetTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const handleIndicatorClick = useCallback(
-    (event: MouseEvent<HTMLButtonElement>) => {
-      const slideIndex = Math.trunc(
-        Number(event.currentTarget.dataset.slideIndex ?? "")
-      );
-      if (!Number.isNaN(slideIndex)) {
-        api?.scrollTo(slideIndex);
-      }
-    },
-    [api]
-  );
-  const handleWheel = useCallback(
-    (event: WheelEvent) => {
+  useEffect(() => {
+    const carouselRoot = carouselRootRef.current;
+    if (!carouselRoot) {
+      return;
+    }
+
+    const handleWheel = (event: WheelEvent) => {
       const isHorizontalGesture =
         Math.abs(event.deltaX) > Math.abs(event.deltaY);
       let horizontalDelta = 0;
@@ -88,16 +81,7 @@ export function ImageCarousel({
       } else {
         api.scrollPrev();
       }
-      wheelDelta.current = 0;
-    },
-    [api]
-  );
-
-  useEffect(() => {
-    const carouselRoot = carouselRootRef.current;
-    if (!carouselRoot) {
-      return;
-    }
+    };
 
     carouselRoot.addEventListener("wheel", handleWheel, { passive: false });
 
@@ -109,7 +93,7 @@ export function ImageCarousel({
       wheelDelta.current = 0;
       wheelGestureLocked.current = false;
     };
-  }, [handleWheel]);
+  }, [api]);
 
   useEffect(() => {
     if (!api) {
@@ -147,10 +131,8 @@ export function ImageCarousel({
               <div className="overflow-hidden rounded-lg">
                 <Image
                   alt={`${alt} ${index + 1}`}
-                  className="block h-full w-auto object-contain"
+                  className="block object-contain"
                   height={height}
-                  loading="lazy"
-                  sizes="(max-width: 768px) 100vw, 768px"
                   src={src}
                   style={{ height: `${height}px`, width: "auto" }}
                   unoptimized
@@ -173,9 +155,8 @@ export function ImageCarousel({
                 ? "w-3 bg-foreground"
                 : "bg-muted-foreground/30 hover:bg-muted-foreground/50"
             )}
-            data-slide-index={index}
             key={src}
-            onClick={handleIndicatorClick}
+            onClick={() => api?.scrollTo(index)}
             type="button"
           />
         ))}

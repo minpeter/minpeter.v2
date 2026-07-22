@@ -40,12 +40,13 @@ export default async function Page(
       />
 
       <div className="grid grid-cols-3 items-start gap-3">
-        {modelCardArtworks.map((artwork) => (
+        {modelCardArtworks.map((artwork, index) => (
           <div className="overflow-hidden bg-secondary" key={artwork.alt}>
             <Image
               alt={artwork.alt}
               className="h-auto w-full"
               placeholder="blur"
+              priority={index === 0}
               sizes="(min-width: 512px) 162px, calc((100vw - 64px) / 3)"
               src={artwork.src}
             />

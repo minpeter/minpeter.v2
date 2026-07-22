@@ -1,5 +1,7 @@
 "use client";
 
+import { routing } from "@/shared/i18n/routing";
+import { useLocale } from "next-intl";
 import type { Route } from "next";
 import Link from "next/link";
 import type { ReactNode } from "react";
@@ -31,6 +33,9 @@ export default function Header({
   link,
   rightContent,
 }: HeaderProps) {
+  const locale = useLocale();
+  const resolvedTitle = title || "minpeter";
+
   return (
     <header
       className={cn(
@@ -46,26 +51,34 @@ export default function Header({
             text={link.text}
           />
         ) : (
-          <Link href="/">minpeter</Link>
+          <Link
+            href={
+              locale === routing.defaultLocale
+                ? ("/" as Route)
+                : (`/${locale}` as Route)
+            }
+          >
+            minpeter
+          </Link>
         )}
-        <div className="flex items-center gap-2 text-muted-foreground">
+        <div className="flex items-center gap-2 text-foreground/80">
           {rightContent}
           {rightContent ? <span>·</span> : null}
           <LanguageSelector />
         </div>
       </div>
       <div className="mt-12 sm:mt-16">
-        <h1 className="home-section-title flex flex-wrap items-center break-words">
+        <h1 className="home-section-title break-words">
           {titleTransitionName ? (
             <ViewTransition name={titleTransitionName}>
-              {title || "minpeter"}
+              {resolvedTitle}
             </ViewTransition>
           ) : (
-            title || "minpeter"
+            resolvedTitle
           )}
         </h1>
         {description ? (
-          <p className="mt-5 max-w-lg text-[15px] leading-relaxed text-muted-foreground sm:text-base">
+          <p className="mt-5 max-w-lg text-[15px] leading-relaxed text-foreground/80 sm:text-base">
             {description}
           </p>
         ) : null}

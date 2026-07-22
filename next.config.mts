@@ -12,12 +12,10 @@ const nextConfig: NextConfig = {
       "lucide-react",
       "@radix-ui/react-icons",
       "react-icons",
-      "@react-three/drei",
-      "@react-three/fiber",
     ],
     prefetchInlining: true,
     turbopackFileSystemCacheForDev: true,
-    viewTransition: true,
+    viewTransition: false,
   },
   images: {
     formats: ["image/avif", "image/webp"],
@@ -40,7 +38,6 @@ const nextConfig: NextConfig = {
   reactCompiler: true,
 
   rewrites: () => [
-    // AI/LLM endpoints for blog content
     {
       destination: "/:locale/blog/llms.md/:path*",
       source: "/:locale/blog/:path*.md",
@@ -59,7 +56,6 @@ const withBundleAnalyzer = bundleAnalyzer({
 });
 const withNextIntl = createNextIntlPlugin({
   experimental: {
-    // Provide the path to the messages that you're using in `AppConfig`
     createMessagesDeclaration: "./shared/i18n/ko.json",
   },
   requestConfig: "./shared/i18n/request.ts",

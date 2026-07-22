@@ -12,7 +12,7 @@ describe("shared metadata", () => {
     });
 
     expect(metadata.alternates).toMatchObject({
-      canonical: "/en/show",
+      canonical: "https://minpeter.com/en/show",
       languages: {
         en: "/en/show",
         ja: "/ja/show",
@@ -59,6 +59,14 @@ describe("shared metadata", () => {
 
     expect(metadata.openGraph).not.toHaveProperty("images");
     expect(metadata.twitter).not.toHaveProperty("images");
+  });
+
+  it("preserves an intentionally empty description", () => {
+    const metadata = createMetadata({ description: "", title: "Title" });
+
+    expect(metadata.description).toBe("");
+    expect(metadata.openGraph?.description).toBe("");
+    expect(metadata.twitter?.description).toBe("");
   });
 
   it("creates article metadata for blog posts", () => {

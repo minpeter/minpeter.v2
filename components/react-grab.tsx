@@ -2,10 +2,12 @@
 
 import { useEffect } from "react";
 
-/** Starts React Grab only in development without rendering a script element. */
+// React Compiler cannot lower `import()` inside a component.
+const loadReactGrab = () => import("react-grab");
+
 export function ReactGrab() {
   useEffect(() => {
-    void import("react-grab");
+    void loadReactGrab();
   }, []);
 
   return null;

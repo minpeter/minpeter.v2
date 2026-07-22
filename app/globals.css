@@ -5,21 +5,13 @@
 
 @plugin "tailwindcss-animate";
 
-@font-face {
-  font-family: "Pretendard";
-  font-style: normal;
-  font-weight: 100 900;
-  font-display: swap;
-  src: url("/fonts/PretendardVariable.woff2") format("woff2");
-}
-
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-arita-buri), var(--font-shippori-mincho);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-arita-buri), var(--font-shippori-mincho), serif;
+  --font-mono: var(--font-geist-mono), monospace;
 }
 
 @theme {
@@ -32,9 +24,6 @@
 
   --color-card: hsl(var(--card));
   --color-card-foreground: hsl(var(--card-foreground));
-
-  --color-popover: hsl(var(--popover));
-  --color-popover-foreground: hsl(var(--popover-foreground));
 
   --color-primary: hsl(var(--primary));
   --color-primary-foreground: hsl(var(--primary-foreground));
@@ -49,17 +38,10 @@
   --color-accent-foreground: hsl(var(--accent-foreground));
 
   --color-destructive: hsl(var(--destructive));
-  --color-destructive-foreground: hsl(var(--destructive-foreground));
 
   --color-border: hsl(var(--border));
   --color-input: hsl(var(--input));
   --color-ring: hsl(var(--ring));
-
-  --color-chart-1: hsl(var(--chart-1));
-  --color-chart-2: hsl(var(--chart-2));
-  --color-chart-3: hsl(var(--chart-3));
-  --color-chart-4: hsl(var(--chart-4));
-  --color-chart-5: hsl(var(--chart-5));
 }
 
 /*
@@ -81,17 +63,14 @@
 }
 
 @layer base {
-  /* width */
   ::-webkit-scrollbar {
     @apply h-1 w-1.5;
   }
 
-  /* Track */
   ::-webkit-scrollbar-track {
     @apply bg-transparent;
   }
 
-  /* Handle */
   ::-webkit-scrollbar-thumb {
     background: var(--scroll-bar-color);
     @apply rounded;
@@ -108,12 +87,18 @@
 
   html {
     scroll-behavior: smooth;
+    scrollbar-gutter: stable;
+  }
+
+  @supports not (scrollbar-gutter: stable) {
+    html {
+      overflow-y: scroll;
+    }
   }
 
   :root {
     --background: 180 7% 96%;
     --foreground: 180 8% 6%;
-    --text-second: #585858;
 
     --scroll-bar-color: #b9b9b9;
 
@@ -127,38 +112,24 @@
     --sh-sign: #686868;
     --sh-comment: #686868;
 
-    --selection: #e2e2e2;
-
-    --header-overlay-color: 255, 255, 255;
-
     --card: 180 7% 96%;
     --card-foreground: 180 8% 6%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 3.9%;
     --primary: 240 5.9% 10%;
     --primary-foreground: 0 0% 98%;
     --secondary: 240 4.8% 95.9%;
     --secondary-foreground: 240 5.9% 10%;
     --muted: 240 4.8% 95.9%;
-    --muted-foreground: 240 3.8% 46.1%;
+    --muted-foreground: 240 3.8% 44%;
     --accent: 240 4.8% 95.9%;
     --accent-foreground: 240 5.9% 10%;
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
     --border: 240 5.9% 90%;
     --input: 240 5.9% 90%;
     --ring: 240 10% 3.9%;
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
     --radius: 0.5rem;
   }
 
   .dark {
-    --text-second: #b0b0b0;
-
     --scroll-bar-color: #2b2b2b;
 
     --sh-class: #96c3ff;
@@ -171,16 +142,10 @@
     --sh-sign: #a5a5a5;
     --sh-comment: #a5a5a5;
 
-    --selection: #404040;
-
-    --header-overlay-color: 0, 0, 0;
-
     --background: 240 10% 3.9%;
     --foreground: 0 0% 98%;
     --card: 240 10% 3.9%;
     --card-foreground: 0 0% 98%;
-    --popover: 240 10% 3.9%;
-    --popover-foreground: 0 0% 98%;
     --primary: 0 0% 98%;
     --primary-foreground: 240 5.9% 10%;
     --secondary: 240 3.7% 15.9%;
@@ -190,15 +155,9 @@
     --accent: 240 3.7% 15.9%;
     --accent-foreground: 0 0% 98%;
     --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
     --border: 240 3.7% 15.9%;
     --input: 240 3.7% 15.9%;
     --ring: 240 4.9% 83.9%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
   }
 }
 
@@ -315,10 +274,21 @@
 
   .fieldnotes-year-heading {
     margin-bottom: 1rem;
-    color: hsl(var(--muted-foreground));
+    color: hsl(var(--foreground) / 88%);
     font-size: 0.8125rem;
     font-weight: 400;
     line-height: 1.26;
+  }
+
+  .fieldnotes-list :is(.fieldnotes-year, .fieldnotes-year-posts, .fieldnotes-year-posts > *, .fieldnotes-item-title) {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .fieldnotes-list :is(.fieldnotes-year-heading, .fieldnotes-item-date, .fieldnotes-item-title) {
+    color: hsl(var(--foreground) / 88%) !important;
+    opacity: 1 !important;
   }
 
   .fieldnotes-year-posts {
@@ -375,7 +345,7 @@
   .fieldnotes-item-date {
     flex: 0 0 auto;
     padding-top: 0.25rem;
-    color: hsl(var(--muted-foreground));
+    color: hsl(var(--foreground) / 88%);
     font-size: 0.8125rem;
     font-variant-numeric: tabular-nums;
     line-height: 1.26;
@@ -502,14 +472,6 @@
     transform: translate(0.125rem, -0.125rem);
   }
 
-  .showcase-flag-status {
-    padding: 0.5rem 0.75rem;
-    margin: 0 -0.75rem;
-    color: hsl(var(--muted-foreground));
-    font-family: var(--font-geist-mono), monospace;
-    font-size: 0.6875rem;
-  }
-
   .resume-message {
     padding-top: 1.5rem;
     border-top: 1px solid hsl(var(--foreground) / 0.14);
@@ -562,10 +524,6 @@
     width: 2rem;
     height: 2rem;
     transition: filter 300ms ease;
-  }
-
-  .dark .home-logo-link {
-    opacity: 0.72;
   }
 
   .dark .home-logo {
@@ -650,6 +608,7 @@
   .home-section-title {
     font-family: var(--font-shippori-mincho), Georgia, serif;
     font-size: clamp(2.6rem, 7vw, 4.6rem);
+    font-synthesis-weight: none;
     font-weight: 500;
     letter-spacing: -0.075em;
     line-height: 0.95;
@@ -669,7 +628,7 @@
   html[lang="ko"] .blog-post-page > header > div:last-child > p,
   html[lang="ko"] .blog-post-page [data-blog-body],
   html[lang="ko"] .blog-post-page > section:last-child a {
-    font-family: "Pretendard", var(--font-geist), Arial, sans-serif;
+    font-family: var(--font-pretendard), var(--font-geist), Arial, sans-serif;
   }
 
   html[lang="ko"] .blog-post-page .home-section-title,
@@ -677,7 +636,7 @@
   html[lang="ko"] .blog-post-page [data-blog-body] h3,
   html[lang="ko"] .blog-post-page [data-blog-body] h4,
   html[lang="ko"] .blog-post-page [data-blog-body] blockquote {
-    font-family: "Pretendard", var(--font-geist), Arial, sans-serif;
+    font-family: var(--font-pretendard), var(--font-geist), Arial, sans-serif;
     letter-spacing: -0.04em;
   }
 
@@ -762,6 +721,7 @@
   .blog-post-page [data-blog-body] h3,
   .blog-post-page [data-blog-body] h4 {
     font-family: var(--font-shippori-mincho), Georgia, serif;
+    font-synthesis-weight: none;
     font-weight: 500;
     letter-spacing: -0.02em;
     color: hsl(var(--foreground) / 0.9);
@@ -1009,11 +969,6 @@
   }
 }
 
-/* ============================================
-   View Transitions API — Foundation
-   ============================================ */
-
-/* Default: smooth crossfade for all page transitions */
 ::view-transition-old(root),
 ::view-transition-new(root) {
   animation-duration: 300ms;
@@ -1026,7 +981,6 @@
   animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Directional slide animations (for transitionTypes) */
 @keyframes slide-out-left {
   to {
     transform: translateX(-30%);
@@ -1052,7 +1006,6 @@
   }
 }
 
-/* slide-forward: navigating to next post */
 html:active-view-transition-type(slide-forward) {
   &::view-transition-old(root) {
     animation: 300ms ease-in both slide-out-left;
@@ -1062,7 +1015,6 @@ html:active-view-transition-type(slide-forward) {
   }
 }
 
-/* slide-back: navigating to previous post */
 html:active-view-transition-type(slide-back) {
   &::view-transition-old(root) {
     animation: 300ms ease-in both slide-out-right;
@@ -1072,10 +1024,7 @@ html:active-view-transition-type(slide-back) {
   }
 }
 
-/* ============================================
-   Accessibility: Respect reduced motion preference
-   CRITICAL: This must be present for a11y compliance
-   ============================================ */
+/* Required to respect reduced-motion accessibility preferences. */
 @media (prefers-reduced-motion: reduce) {
   ::view-transition-old(*),
   ::view-transition-new(*) {
@@ -1084,4 +1033,38 @@ html:active-view-transition-type(slide-back) {
   ::view-transition-group(*) {
     animation: none !important;
   }
+}
+
+/* AritaBuri, Pretendard, and Shippori faces load deferred via /fonts/deferred-fonts.css (see root-document); the variables name each family ahead of registration. */
+:root {
+  --font-arita-buri: "AritaBuri KR";
+  --font-pretendard: "Pretendard";
+  --font-shippori-mincho: "Shippori Mincho";
+}
+
+/* Package-manager code blocks need accessible contrast on tab controls and captions. */
+[data-radix-tabs-trigger][data-state="inactive"],
+[role="tab"][data-state="inactive"],
+figure figcaption.flex-1.truncate {
+  color: hsl(var(--foreground) / 84%) !important;
+}
+
+/* GitHub-light Shiki token colors need modern Primer contrast on the code-block surface. */
+.shiki span[style*="--shiki-light:#005CC5"] {
+  --shiki-light: #0550ae !important;
+}
+.shiki span[style*="--shiki-light:#032F62"] {
+  --shiki-light: #0a3069 !important;
+}
+.shiki span[style*="--shiki-light:#22863A"] {
+  --shiki-light: #116329 !important;
+}
+.shiki span[style*="--shiki-light:#6A737D"] {
+  --shiki-light: #57606a !important;
+}
+.shiki span[style*="--shiki-light:#D73A49"] {
+  --shiki-light: #b31d28 !important;
+}
+.shiki span[style*="--shiki-light:#E36209"] {
+  --shiki-light: #953800 !important;
 }

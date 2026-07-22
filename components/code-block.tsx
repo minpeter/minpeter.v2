@@ -1,7 +1,7 @@
 "use client";
 
 import type { CSSProperties } from "react";
-import { Fragment, useCallback } from "react";
+import { Fragment } from "react";
 import { generate, tokenize } from "sugar-high";
 
 import {
@@ -9,7 +9,7 @@ import {
   copyToClipboard,
   getCopyLabel,
   useCopyStatus,
-} from "./mod-code-block";
+} from "./code-block-copy";
 
 export { ModCodeBlock } from "./mod-code-block";
 const MULTILINE_SEPARATOR = "\n";
@@ -71,7 +71,7 @@ function HighlightedCode({ code }: { code: string }) {
 export function CodeBlock({ code }: { code: string; language?: string }) {
   const { status, markCopied, markError } = useCopyStatus();
   const isMultiline = code.includes(MULTILINE_SEPARATOR);
-  const handleCopy = useCallback(async () => {
+  const handleCopy = async () => {
     try {
       await copyToClipboard(code);
       markCopied();
@@ -81,7 +81,7 @@ export function CodeBlock({ code }: { code: string; language?: string }) {
       }
       markError();
     }
-  }, [code, markCopied, markError]);
+  };
 
   const copyLabel = getCopyLabel(status);
 

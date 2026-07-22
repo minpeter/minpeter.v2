@@ -6,7 +6,6 @@ import {
   EyeOpenIcon,
   ReloadIcon,
 } from "@radix-ui/react-icons";
-import axios from "axios";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 
@@ -15,73 +14,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { codeVariants } from "@/components/ui/typography";
 
-const TMPF_API_BASE = "https://api.tmpf.me";
-// const TMPF_API_BASE = "http://localhost:5001";
-
-const API_SUFFIX = {
-  DOWNLOAD(folderId: string, fileName: string) {
-    return `/dl/${folderId}/${fileName}`;
-  },
-  UPLOAD: "/upload",
-  VIEW(folderId: string, fileName: string) {
-    return `/view/${folderId}/${fileName}`;
-  },
-};
-
-function BACKEND(suffix: string) {
-  return `${TMPF_API_BASE}${suffix}`;
-}
-
-const axiosInstance = axios.create({
-  baseURL: TMPF_API_BASE,
-});
-
-async function downloadFile(folderId: string, fileName: string) {
-  await axiosInstance
-    .get(API_SUFFIX.DOWNLOAD(folderId, fileName), { responseType: "blob" })
-    .then((response) => {
-      const url = window.URL.createObjectURL(new Blob([response.data]));
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = fileName;
-
-      document.body.append(a);
-      a.click();
-
-      window.URL.revokeObjectURL(url);
-      document.body.removeChild(a);
-    })
-    .catch((error) => error);
-}
-
-interface UploadResponse {
-  files: {
-    fileName: string;
-  }[];
-  folderId: string;
-}
-
-async function uploadFile(file: File[]): Promise<UploadResponse | null> {
-  const formData = new FormData();
-  for (const f of file) {
-    formData.append("file", f);
-  }
-
-  try {
-    const response = await axiosInstance.post<UploadResponse>(
-      API_SUFFIX.UPLOAD,
-      formData,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      }
-    );
-    return response.data;
-  } catch {
-    return null;
-  }
-}
+import {
+  API_SUFFIX,
+  downloadFile,
+  TMPF_API_BASE,
+  uploadFile,
+} from "./tmpf-api";
+import type { UploadResponse } from "./tmpf-api";
 
 export default function TmpfUI() {
   const t = useTranslations("showcase.items.tempfiles");
@@ -100,28 +39,34 @@ export default function TmpfUI() {
     }
     setError(null);
     setLoading(true);
-    const response = await uploadFile(files);
-    setUploaded(response);
-    if (!response) {
-      setError(t("connectionError"));
+    try {
+      const response = await uploadFile(files);
+      setUploaded(response);
+      if (!response) {
+        setError(t("connectionError"));
+      }
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const handleDownloadAll = async () => {
-    if (!(uploaded?.folderId && Array.isArray(uploaded.files))) {
+    if (!uploaded) {
       return;
     }
-    const { files: uploadedFiles, folderId } = uploaded;
-    await Promise.all(
-      uploadedFiles.map((item) => downloadFile(folderId, item.fileName))
-    );
+    try {
+      await Promise.all(
+        uploaded.files.map((item) =>
+          downloadFile(uploaded.folderId, item.fileName)
+        )
+      );
+    } catch (downloadError) {
+      if (!(downloadError instanceof Error)) {
+        throw downloadError;
+      }
+      console.error(downloadError);
+    }
   };
-
-  const hasUploadedFiles =
-    uploaded?.folderId &&
-    Array.isArray(uploaded?.files) &&
-    uploaded.files.length > 0;
 
   return (
     <div className="flex flex-col items-center space-y-4">
@@ -167,13 +112,13 @@ export default function TmpfUI() {
           {t("uploading")}
         </div>
       ) : null}
-      {hasUploadedFiles ? (
+      {uploaded && uploaded.files.length > 0 ? (
         <>
           <div className="flex max-w-full flex-wrap items-center gap-x-4 gap-y-2">
             <p className="min-w-0 max-w-full break-words">
               {t("folderLabel")}{" "}
               <code className={`${codeVariants()} break-all`}>
-                {uploaded?.folderId}
+                {uploaded.folderId}
               </code>{" "}
               {t("uploadedLabel")}
             </p>
@@ -187,13 +132,11 @@ export default function TmpfUI() {
           </div>
 
           <ul className="w-full min-w-0 max-w-full">
-            {uploaded?.files.map((f) => (
+            {uploaded.files.map((f) => (
               <li key={f.fileName}>
                 <a
                   className="flex min-w-0 items-center gap-2 rounded hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                  href={BACKEND(
-                    API_SUFFIX.VIEW(uploaded?.folderId ?? "", f.fileName)
-                  )}
+                  href={`${TMPF_API_BASE}${API_SUFFIX.VIEW(uploaded.folderId, f.fileName)}`}
                   rel="noreferrer noopener"
                   target="_blank"
                 >

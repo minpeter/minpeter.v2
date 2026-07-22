@@ -65,7 +65,6 @@
     "kicker": "ショーケース",
     "title": "小さな実験",
     "description": "楽しみながら作ったインタラクティブな作品、プロトタイプ、そしてさまざまな実験です。",
-    "featureEnabled": "テスト機能が有効です。",
     "detailNavigationLabel": "{title}ページのナビゲーション",
     "items": {
       "tempfiles": {
