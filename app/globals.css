@@ -526,10 +526,6 @@
     transition: filter 300ms ease;
   }
 
-  .dark .home-logo-link {
-    opacity: 0.72;
-  }
-
   .dark .home-logo {
     filter: invert(1);
   }
