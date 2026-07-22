@@ -90,6 +90,12 @@
     scrollbar-gutter: stable;
   }
 
+  @supports not (scrollbar-gutter: stable) {
+    html {
+      overflow-y: scroll;
+    }
+  }
+
   :root {
     --background: 180 7% 96%;
     --foreground: 180 8% 6%;
