@@ -1,12 +1,11 @@
 "use client";
 
-import { useEffect } from "react";
+import Script from "next/script";
 
-/** Starts React Grab only in development without rendering a script element. */
-export function ReactGrab() {
-  useEffect(() => {
-    void import("react-grab");
-  }, []);
-
-  return null;
-}
+export const ReactGrab = () => (
+  <Script
+    crossOrigin="anonymous"
+    src="https://unpkg.com/react-grab@0.1.48/dist/index.global.js"
+    strategy="afterInteractive"
+  />
+);

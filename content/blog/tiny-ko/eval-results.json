@@ -1,0 +1,164 @@
+{
+ "method": {
+  "perplexity": "fixed UTF-8 byte prefix, independent 512-token windows",
+  "benchmark": "stratified samples, mean token log-probability"
+ },
+ "pplTable": [
+  {
+   "model": "187M base (250725)",
+   "params": "186.5M",
+   "koPpl": 15.89,
+   "koBpb": 0.8552,
+   "enPpl": 27.44,
+   "enBpb": 1.104,
+   "ynat": 53.6,
+   "ynatF1": 52.5,
+   "nli": 33.3,
+   "nliF1": 16.7,
+   "tokPerS": 11.64
+  },
+  {
+   "model": "187M SFT (250725)",
+   "params": "186.5M",
+   "koPpl": 20.65,
+   "koBpb": 0.9362,
+   "enPpl": 33.09,
+   "enBpb": 1.1664,
+   "ynat": 45.0,
+   "ynatF1": 43.3,
+   "nli": 33.3,
+   "nliF1": 16.7,
+   "tokPerS": 11.08
+  },
+  {
+   "model": "124M Muon",
+   "params": "123.5M",
+   "koPpl": 21.79,
+   "koBpb": 1.0317,
+   "enPpl": 32.2,
+   "enBpb": 1.1212,
+   "ynat": 44.6,
+   "ynatF1": 42.3,
+   "nli": 37.2,
+   "nliF1": 29.5,
+   "tokPerS": 14.64
+  },
+  {
+   "model": "124M v5 base (tiny-ko-base)",
+   "params": "124.6M",
+   "koPpl": 21.9,
+   "koBpb": 0.9003,
+   "enPpl": 20.38,
+   "enBpb": 1.8884,
+   "ynat": 51.1,
+   "ynatF1": 49.8,
+   "nli": 37.2,
+   "nliF1": 26.0,
+   "tokPerS": 21.05
+  },
+  {
+   "model": "124M AdamW",
+   "params": "123.5M",
+   "koPpl": 25.21,
+   "koBpb": 1.0805,
+   "enPpl": 37.46,
+   "enBpb": 1.1701,
+   "ynat": 32.5,
+   "ynatF1": 30.1,
+   "nli": 33.9,
+   "nliF1": 24.6,
+   "tokPerS": 11.49
+  },
+  {
+   "model": "20M base",
+   "params": "20.0M",
+   "koPpl": 72.49,
+   "koBpb": 1.2882,
+   "enPpl": 47.7,
+   "enBpb": 2.651,
+   "ynat": 38.2,
+   "ynatF1": 36.0,
+   "nli": 32.2,
+   "nliF1": 26.2,
+   "tokPerS": 103.09
+  },
+  {
+   "model": "124M v5 SFT (tiny-ko-sft)",
+   "params": "124.6M",
+   "koPpl": 79.54,
+   "koBpb": 1.2766,
+   "enPpl": 59.19,
+   "enBpb": 2.5562,
+   "ynat": 25.4,
+   "ynatF1": 16.6,
+   "nli": 35.0,
+   "nliF1": 27.5,
+   "tokPerS": 15.41
+  },
+  {
+   "model": "20M SFT",
+   "params": "20.0M",
+   "koPpl": 279.24,
+   "koBpb": 1.6937,
+   "enPpl": 53.9,
+   "enBpb": 2.7348,
+   "ynat": 30.0,
+   "ynatF1": 29.0,
+   "nli": 33.9,
+   "nliF1": 30.3,
+   "tokPerS": 59.67
+  }
+ ],
+ "sftPenalty": [
+  {
+   "family": "20M",
+   "base": 72.49,
+   "sft": 279.24,
+   "ratio": 3.85
+  },
+  {
+   "family": "124M v5",
+   "base": 21.9,
+   "sft": 79.54,
+   "ratio": 3.63
+  },
+  {
+   "family": "187M",
+   "base": 15.89,
+   "sft": 20.65,
+   "ratio": 1.3
+  }
+ ],
+ "verdict": [
+  {
+   "claim": "Muon run의 우위가 후속 평가에도 남았다",
+   "evidence": "KO PPL 21.79 vs 25.21, EN BPB 1.1212 vs 1.1701; n=1",
+   "verdict": "일치함"
+  },
+  {
+   "claim": "v5의 한국어 중심 학습은 영어 효율을 낮췄다",
+   "evidence": "EN BPB 1.8884 vs 187M 혼합 계열 1.104",
+   "verdict": "일치함"
+  },
+  {
+   "claim": "SFT가 일반 언어 능력을 손상했다",
+   "evidence": "raw-news likelihood 저하는 확인, 포맷 이동과 망각은 미분리",
+   "verdict": "미확정"
+  },
+  {
+   "claim": "작은 모델의 0-shot NLI는 제한적이다",
+   "evidence": "균형 표본의 accuracy·macro-F1이 무작위 기준 주변",
+   "verdict": "일치함"
+  },
+  {
+   "claim": "SFT recipe가 보존 차이의 원인이다",
+   "evidence": "세 쌍의 변화 방향은 다르지만 recipe ablation 없음",
+   "verdict": "미확정"
+  },
+  {
+   "claim": "토크나이저가 다르면 raw PPL 비교는 위험하다",
+   "evidence": "v5 EN PPL 20.38, BPB 1.8884; 187M EN PPL 27.44, BPB 1.104",
+   "verdict": "확인됨"
+  }
+ ]
+}
