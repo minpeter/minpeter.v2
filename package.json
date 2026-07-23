@@ -62,7 +62,7 @@
     "@types/node": "^26.1.1",
     "@types/react": "19.2.17",
     "@types/react-dom": "19.2.3",
-    "@typescript/native-preview": "7.0.0-dev.20260707.2",
+    "@typescript/native": "npm:typescript@^7.0.2",
     "@vitest/ui": "^4.1.10",
     "jsdom": "^29.1.1",
     "knip": "^6.27.0",
@@ -75,7 +75,7 @@
     "tailwind-merge": "^3.6.0",
     "tailwindcss": "^4.3.3",
     "tailwindcss-animate": "^1.0.7",
-    "typescript": "^7.0.2",
+    "typescript": "npm:@typescript/typescript6@^6.0.2",
     "ultracite": "7.9.4",
     "vitest": "^4.1.10"
   },
