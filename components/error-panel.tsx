@@ -7,7 +7,7 @@ import { useEffect } from "react";
 
 interface ErrorPanelProps {
   error: Error & { digest?: string };
-  namespace: "blog" | "general";
+  namespace: "blog" | "blogList" | "general";
   reset: () => void;
 }
 
@@ -18,7 +18,6 @@ export function ErrorPanel({ error, namespace, reset }: ErrorPanelProps) {
     namespace === "blog"
       ? (`/${locale}/blog` as Route)
       : (`/${locale}` as Route);
-
   useEffect(() => {
     console.error(error);
   }, [error]);

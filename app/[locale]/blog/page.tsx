@@ -26,7 +26,7 @@ export async function generateMetadata(
     description: t("blogPageDescription"),
     locale,
     path: "/blog",
-    title: "minpeter | blog",
+    title: `minpeter | ${t("blogPageTitle")}`,
   });
 
   return {

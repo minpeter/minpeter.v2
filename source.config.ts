@@ -30,7 +30,7 @@ export const { docs, meta } = defineDocs({
           }
           return parseFrontmatterDate(value, context);
         }),
-      external_url: z.url().optional(),
+      external_url: z.url({ protocol: /^https?$/u }).optional(),
       lang: z
         .array(z.enum(routing.locales))
         .optional()
