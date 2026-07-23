@@ -73,6 +73,7 @@ export function RootDocument({ children, lang }: RootDocumentProps) {
           geist.variable,
           "flex min-h-screen flex-col antialiased"
         )}
+        suppressHydrationWarning
       >
         <NextProvider>
           <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
