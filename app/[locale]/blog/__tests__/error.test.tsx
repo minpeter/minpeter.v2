@@ -7,13 +7,13 @@ import BlogListErrorBoundary from "../error";
 
 const messages = {
   errors: {
-    blog: {
-      back: "글 목록으로 돌아가기",
+    blogList: {
+      back: "홈으로 돌아가기",
       description:
-        "요청한 글을 표시하는 중 문제가 발생했습니다. 다시 시도하거나 글 목록으로 돌아가세요.",
+        "글 목록을 표시하는 중 문제가 발생했습니다. 다시 시도하거나 홈으로 돌아가세요.",
       kicker: "블로그 오류",
       retry: "다시 시도",
-      title: "글을 불러오지 못했습니다",
+      title: "글 목록을 불러오지 못했습니다",
     },
   },
 } as const;
@@ -23,7 +23,7 @@ describe("app/[locale]/blog/error.tsx", () => {
     vi.restoreAllMocks();
   });
 
-  it("renders blog recovery UI, logs the error, and links back to the blog list", () => {
+  it("renders blog-list recovery UI, logs the error, and links back home", () => {
     const reset = vi.fn();
     const error = new Error("failed to load posts");
     const consoleError = vi.spyOn(console, "error").mockReturnValue();
@@ -35,7 +35,7 @@ describe("app/[locale]/blog/error.tsx", () => {
     );
 
     expect(
-      screen.getByRole("heading", { name: "글을 불러오지 못했습니다" })
+      screen.getByRole("heading", { name: "글 목록을 불러오지 못했습니다" })
     ).toBeDefined();
     expect(consoleError).toHaveBeenCalledWith(error);
 
@@ -43,7 +43,7 @@ describe("app/[locale]/blog/error.tsx", () => {
 
     expect(reset).toHaveBeenCalledOnce();
 
-    const blogLink = screen.getByRole("link", { name: "글 목록으로 돌아가기" });
-    expect(blogLink.getAttribute("href")).toBe("/ko/blog");
+    const homeLink = screen.getByRole("link", { name: "홈으로 돌아가기" });
+    expect(homeLink.getAttribute("href")).toBe("/ko");
   });
 });

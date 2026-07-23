@@ -43,6 +43,13 @@
       "description": "Something went wrong while displaying the requested post. Try again or return to the post list.",
       "retry": "Try again",
       "back": "Back to posts"
+    },
+    "blogList": {
+      "kicker": "Blog error",
+      "title": "We couldn't load the post list",
+      "description": "Something went wrong while loading the post list. Try again or return home.",
+      "retry": "Try again",
+      "back": "Back home"
     }
   },
   "externalRedirect": {

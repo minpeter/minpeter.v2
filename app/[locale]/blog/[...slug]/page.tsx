@@ -90,7 +90,11 @@ export default async function Page(
   if (post.data.external_url) {
     return (
       <section
-        className={cn(styles.stagger_container, styles.post, "blog-post-page")}
+        className={cn(
+          styles.stagger_container,
+          styles.post,
+          "blog-post-page flex min-h-dvh flex-col"
+        )}
       >
         <Header
           link={{ href: `/${locale}/blog` as Route, text: t("backToBlog") }}

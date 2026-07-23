@@ -11,5 +11,5 @@ export default function BlogListErrorBoundary({
   error,
   reset,
 }: ErrorPageProps) {
-  return <ErrorPanel error={error} namespace="blog" reset={reset} />;
+  return <ErrorPanel error={error} namespace="blogList" reset={reset} />;
 }

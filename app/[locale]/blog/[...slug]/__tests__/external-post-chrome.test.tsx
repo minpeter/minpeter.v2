@@ -78,4 +78,39 @@ describe("app/[locale]/blog/[...slug]/page.tsx external-linked post", () => {
     const backLink = screen.getByRole("link", { name: "글 목록으로" });
     expect(backLink.getAttribute("href")).toBe("/ko/blog");
   });
+
+  it("keeps the redirect panel inside one viewport under the header", async () => {
+    const ui = await Page({
+      params: Promise.resolve({ locale: "ko", slug: ["external-post"] }),
+      searchParams: Promise.resolve({}),
+    });
+
+    const { container } = render(
+      <NextIntlClientProvider
+        locale="ko"
+        messages={{
+          externalRedirect: {
+            link: "자동으로 이동하지 않으면 여기를 누르세요.",
+            message: "{count}초 후 외부 링크로 이동합니다…",
+          },
+        }}
+      >
+        {ui}
+      </NextIntlClientProvider>
+    );
+
+    const section = container.querySelector("section");
+    expect(section?.className).toContain("min-h-dvh");
+    expect(section?.className).toContain("flex-col");
+    expect(container.querySelectorAll(".min-h-dvh")).toHaveLength(1);
+
+    const countdown = screen.getByText(/초 후 외부 링크로 이동합니다/);
+    const viewportOwners = container.querySelectorAll(".min-h-dvh");
+    expect(viewportOwners).toHaveLength(1);
+    expect(viewportOwners[0]?.tagName).toBe("SECTION");
+
+    const flexPanel = container.querySelector(".flex-1");
+    expect(flexPanel).not.toBeNull();
+    expect(flexPanel?.contains(countdown)).toBe(true);
+  });
 });
