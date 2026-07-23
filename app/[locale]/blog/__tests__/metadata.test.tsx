@@ -62,12 +62,15 @@ describe("app/[locale]/blog/page.tsx generateMetadata", () => {
     ["ko", dictionaries.ko.blogPageTitle],
     ["en", dictionaries.en.blogPageTitle],
     ["ja", dictionaries.ja.blogPageTitle],
-  ])("localizes the document title for locale %s", async (locale, expected) => {
-    const metadata = await generateMetadata({
-      params: Promise.resolve({ locale }),
-      searchParams: Promise.resolve({}),
-    });
+  ])(
+    "keeps the site-wide brand prefix and localizes the title for locale %s",
+    async (locale, localizedTitle) => {
+      const metadata = await generateMetadata({
+        params: Promise.resolve({ locale }),
+        searchParams: Promise.resolve({}),
+      });
 
-    expect(metadata.title).toBe(expected);
-  });
+      expect(metadata.title).toBe(`minpeter | ${localizedTitle}`);
+    }
+  );
 });
