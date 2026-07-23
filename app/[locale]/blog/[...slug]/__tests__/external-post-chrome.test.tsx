@@ -100,17 +100,17 @@ describe("app/[locale]/blog/[...slug]/page.tsx external-linked post", () => {
     );
 
     const section = container.querySelector("section");
-    expect(section?.className).toContain("min-h-dvh");
+    expect(section?.className).toContain("flex-1");
     expect(section?.className).toContain("flex-col");
-    expect(container.querySelectorAll(".min-h-dvh")).toHaveLength(1);
+    expect(section?.className).not.toContain("min-h-dvh");
+    // The page fragment must not force its own viewport height: the layout
+    // body (min-h-screen) owns the viewport, and the section flex-1 fills
+    // the space between header and footer without adding scroll.
+    expect(container.querySelectorAll(".min-h-dvh")).toHaveLength(0);
 
     const countdown = screen.getByText(/초 후 외부 링크로 이동합니다/);
-    const viewportOwners = container.querySelectorAll(".min-h-dvh");
-    expect(viewportOwners).toHaveLength(1);
-    expect(viewportOwners[0]?.tagName).toBe("SECTION");
-
-    const flexPanel = container.querySelector(".flex-1");
-    expect(flexPanel).not.toBeNull();
-    expect(flexPanel?.contains(countdown)).toBe(true);
+    const panel = countdown.closest("div.flex-1");
+    expect(panel).not.toBeNull();
+    expect(panel?.className).not.toContain("min-h-dvh");
   });
 });

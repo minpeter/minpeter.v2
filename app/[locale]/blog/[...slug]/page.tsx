@@ -93,7 +93,7 @@ export default async function Page(
         className={cn(
           styles.stagger_container,
           styles.post,
-          "blog-post-page flex min-h-dvh flex-col"
+          "blog-post-page flex flex-1 flex-col"
         )}
       >
         <Header
