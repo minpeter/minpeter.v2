@@ -85,11 +85,22 @@ export default async function Page(
     notFound();
   }
 
+  const t = await getTranslations();
+
   if (post.data.external_url) {
-    return <ExternalRedirect url={post.data.external_url} />;
+    return (
+      <section
+        className={cn(styles.stagger_container, styles.post, "blog-post-page")}
+      >
+        <Header
+          link={{ href: `/${locale}/blog` as Route, text: t("backToBlog") }}
+          title={post.data.title}
+        />
+        <ExternalRedirect url={post.data.external_url} />
+      </section>
+    );
   }
 
-  const t = await getTranslations();
   const MDX = post.data.body;
   const blogMdxComponents = createBlogMdxComponents();
 

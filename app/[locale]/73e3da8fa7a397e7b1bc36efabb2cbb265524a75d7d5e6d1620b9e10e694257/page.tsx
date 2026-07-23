@@ -27,7 +27,7 @@ export default async function Page(
   const { locale } = await props.params;
   const t = await getTranslations();
   return (
-    <section className="flex flex-col gap-1">
+    <section className="flex flex-col gap-6">
       <div className={cn(styles.stagger_container, styles.fast)}>
         <Backlink href={`/${locale}` as Route} text={t("back")} />
       </div>
