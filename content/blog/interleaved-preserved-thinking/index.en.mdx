@@ -712,9 +712,16 @@ Verify that your agent harness (1) preserves `reasoning_content` (or thinking bl
 Enabling Preserved Thinking on GLM-4.7 is straightforward: set `clear_thinking: false`, and include the received `reasoning_content` verbatim in the next request's assistant message.
 
 ```python
+from concurrent.futures import ThreadPoolExecutor
 from openai import OpenAI
 
 client = OpenAI(api_key="YOUR_API_KEY", base_url="https://api.z.ai/api/paas/v4/")
+messages = [{"role": "user", "content": "What's the weather in Seoul and Tokyo?"}]
+tools = [...]  # Define the tools exposed to the model.
+
+def run_tool(tool_call):
+    # Dispatch by tool_call.function.name and parse its JSON arguments here.
+    return {"tool_call_id": tool_call.id, "content": "tool result"}
 
 response = client.chat.completions.create(
     model="glm-4.7",
@@ -723,6 +730,11 @@ response = client.chat.completions.create(
     extra_body={"thinking": {"type": "enabled", "clear_thinking": False}},
 )
 
+assistant = response.choices[0].message
+content = assistant.content or ""
+reasoning = getattr(assistant, "reasoning_content", None)
+tool_calls = assistant.tool_calls or []
+
 # Echo the response's reasoning_content back in the next assistant message
 messages.append({
     "role": "assistant",
@@ -730,7 +742,16 @@ messages.append({
     "reasoning_content": reasoning,  # verbatim, no edits or reordering
     "tool_calls": tool_calls,
 })
-messages.append({"role": "tool", "tool_call_id": tool_calls[0]["id"], "content": result})
+
+# Handle every tool call, including calls the model made in parallel.
+with ThreadPoolExecutor(max_workers=len(tool_calls) or 1) as executor:
+    tool_results = list(executor.map(run_tool, tool_calls))
+for tool_result in tool_results:
+    messages.append({
+        "role": "tool",
+        "tool_call_id": tool_result["tool_call_id"],
+        "content": tool_result["content"],
+    })
 ```
 
 Both Interleaved and Preserved Thinking work through this single pattern, with no manual differentiation needed. On the Coding Plan endpoints (`api/coding/paas/v4`, `api/anthropic` — the ones you plug into Claude Code), it is on by default; if you use Claude Code with the Z.ai Coding Plan, you are already benefiting from it.
