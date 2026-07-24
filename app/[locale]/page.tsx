@@ -40,7 +40,7 @@ export default function Page() {
       <header className="mb-16">
         <Link
           aria-label={t("homeLabel")}
-          className="home-logo-link mb-6 inline-flex hover:opacity-60"
+          className="home-logo-link mb-6 inline-flex -m-2.5 p-2.5 hover:opacity-60"
           href={`/${locale}` as Route}
         >
           <Image
@@ -53,11 +53,11 @@ export default function Page() {
             width={32}
           />
         </Link>
-        <h1 className="text-base leading-tight tracking-[-0.035em]">
+        <h1 className="text-base leading-tight tracking-tight">
           <span className="font-semibold text-foreground">MINPETER</span>
           <span className="text-muted-foreground"> — {t("role")}</span>
         </h1>
-        <p className="mt-4 max-w-md text-[15px] leading-[1.35] text-foreground/85 tracking-[-0.02em]">
+        <p className="mt-4 max-w-md text-sm leading-snug text-foreground/85">
           {t("introduction")}
         </p>
       </header>

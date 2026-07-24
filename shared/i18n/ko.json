@@ -43,6 +43,13 @@
       "description": "요청한 글을 표시하는 중 문제가 발생했습니다. 다시 시도하거나 글 목록으로 돌아가세요.",
       "retry": "다시 시도",
       "back": "글 목록으로 돌아가기"
+    },
+    "blogList": {
+      "kicker": "블로그 오류",
+      "title": "글 목록을 불러오지 못했습니다",
+      "description": "글 목록을 표시하는 중 문제가 발생했습니다. 다시 시도하거나 홈으로 돌아가세요.",
+      "retry": "다시 시도",
+      "back": "홈으로 돌아가기"
     }
   },
   "externalRedirect": {
@@ -65,7 +72,6 @@
     "kicker": "쇼케이스",
     "title": "작은 실험들",
     "description": "재미로 만든 인터랙티브 작업과 프로토타입, 여러 가지 실험입니다.",
-    "featureEnabled": "테스트 기능이 켜져 있습니다.",
     "detailNavigationLabel": "{title} 페이지 탐색",
     "items": {
       "tempfiles": {

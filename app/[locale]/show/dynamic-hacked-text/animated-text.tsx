@@ -6,7 +6,6 @@ const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ{}</>믾쾹쵭퀴섫뤱윤チェ・�
 const ITERATION_STEPS_PER_CHARACTER = 3;
 const ITERATION_INCREMENT = 1 / ITERATION_STEPS_PER_CHARACTER;
 const TIMEOUT_BASE_MS = 300;
-const RANDOM_LETTER_MULTIPLIER = 1;
 
 // original source: https://github.com/wiscaksono/wiscaksono-site/blob/master/src/components/molecules/animated-name.tsx
 // license: on github.com/wiscaksono/wiscaksono-site
@@ -32,11 +31,7 @@ export default function AnimatedText({ data }: { data: string }) {
             if (index < iteration) {
               return data[index];
             }
-            return letters[
-              Math.floor(
-                Math.random() * RANDOM_LETTER_MULTIPLIER * letters.length
-              )
-            ];
+            return letters[Math.floor(Math.random() * letters.length)];
           })
           .join("")
       );

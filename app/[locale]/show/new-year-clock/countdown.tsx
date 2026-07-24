@@ -23,17 +23,9 @@ const ZERO_TIME_LEFT: TimeLeft = {
   seconds: 0,
 };
 
-const JANUARY_INDEX = 0;
-const FIRST_DAY = 1;
-const NEXT_YEAR_OFFSET = 1;
-
 function getNextYearTimestamp() {
   const currentYear = new Date().getFullYear();
-  return new Date(
-    currentYear + NEXT_YEAR_OFFSET,
-    JANUARY_INDEX,
-    FIRST_DAY
-  ).getTime();
+  return new Date(currentYear + 1, 0, 1).getTime();
 }
 
 function calculateTimeLeft(targetTimestamp: number): TimeLeft {
@@ -64,9 +56,7 @@ export function Countdown() {
   "use no memo";
   const t = useTranslations("showcase.items.newYear");
   const [targetTimestamp] = useState(getNextYearTimestamp);
-  const [remainingTime, setRemainingTime] = useState<TimeLeft>(() =>
-    calculateTimeLeft(targetTimestamp)
-  );
+  const [remainingTime, setRemainingTime] = useState<TimeLeft | null>(null);
 
   useEffect(() => {
     const updateRemainingTime = () => {
@@ -84,13 +74,31 @@ export function Countdown() {
     };
   }, [targetTimestamp]);
 
-  const hasTimeLeft = Object.values(remainingTime).some((value) => value > 0);
-  const units = [
-    { label: t("days"), value: remainingTime.days },
-    { label: t("hours"), value: remainingTime.hours },
-    { label: t("minutes"), value: remainingTime.minutes },
-    { label: t("seconds"), value: remainingTime.seconds },
+  const labels = [
+    { key: "days", label: t("days") },
+    { key: "hours", label: t("hours") },
+    { key: "minutes", label: t("minutes") },
+    { key: "seconds", label: t("seconds") },
   ] as const;
+
+  if (remainingTime === null) {
+    return (
+      <div className="grid grid-cols-2 gap-x-5 gap-y-8 sm:grid-cols-4">
+        {labels.map(({ key, label }) => (
+          <div className="border-foreground/15 border-t pt-4" key={key}>
+            <span className="block font-mono text-2xl tabular-nums tracking-[-0.05em] sm:text-[1.75rem]">
+              --
+            </span>
+            <span className="mt-1 block text-[0.6875rem] text-muted-foreground uppercase tracking-[0.08em]">
+              {label}
+            </span>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  const hasTimeLeft = Object.values(remainingTime).some((value) => value > 0);
 
   if (!hasTimeLeft) {
     return (
@@ -111,10 +119,10 @@ export function Countdown() {
       className="grid grid-cols-2 gap-x-5 gap-y-8 sm:grid-cols-4"
       role="timer"
     >
-      {units.map(({ label, value }) => (
+      {labels.map(({ key, label }) => (
         <div className="border-foreground/15 border-t pt-4" key={label}>
           <span className="block font-mono text-2xl tabular-nums tracking-[-0.05em] sm:text-[1.75rem]">
-            {String(value).padStart(2, "0")}
+            {String(remainingTime[key]).padStart(2, "0")}
           </span>
           <span className="mt-1 block text-[0.6875rem] text-muted-foreground uppercase tracking-[0.08em]">
             {label}

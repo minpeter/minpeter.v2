@@ -12,7 +12,8 @@ import {
   resolveLocale,
 } from "@/shared/utils/metadata";
 
-import { BlogList, BlogListFallback } from "./list";
+import { BlogList } from "./list";
+import { BlogListFallback, BlogSearchShell } from "./list-fallback";
 import { RssLink } from "./rss-link";
 
 export async function generateMetadata(
@@ -25,7 +26,7 @@ export async function generateMetadata(
     description: t("blogPageDescription"),
     locale,
     path: "/blog",
-    title: "minpeter | blog",
+    title: `minpeter | ${t("blogPageTitle")}`,
   });
 
   return {
@@ -72,7 +73,14 @@ export default async function Page(props: PageProps<"/[locale]/blog">) {
           </div>
         </nav>
       </header>
-      <Suspense fallback={<BlogListFallback lang={locale} posts={posts} />}>
+      <Suspense
+        fallback={
+          <>
+            <BlogSearchShell searchPlaceholder={t("searchPlaceholder")} />
+            <BlogListFallback lang={locale} posts={posts} />
+          </>
+        }
+      >
         <BlogList lang={locale} posts={posts} />
       </Suspense>
     </section>

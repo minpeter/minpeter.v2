@@ -1,11 +1,14 @@
 "use client";
 
-import Script from "next/script";
+import { useEffect } from "react";
 
-export const ReactGrab = () => (
-  <Script
-    crossOrigin="anonymous"
-    src="https://unpkg.com/react-grab@0.1.48/dist/index.global.js"
-    strategy="afterInteractive"
-  />
-);
+// React Compiler cannot lower `import()` inside a component.
+const loadReactGrab = () => import("react-grab");
+
+export function ReactGrab() {
+  useEffect(() => {
+    void loadReactGrab();
+  }, []);
+
+  return null;
+}

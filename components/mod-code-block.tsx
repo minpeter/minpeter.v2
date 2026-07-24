@@ -1,28 +1,21 @@
 "use client";
 
-import copy from "clipboard-copy";
 import { useTranslations } from "next-intl";
 import type { ChangeEvent, KeyboardEvent, MouseEvent } from "react";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useState } from "react";
+
+import { copyToClipboard, useCopyStatus } from "./code-block-copy";
 
 const TEMPLATE_TOKEN_REGEX = /{{([^}]+)}}/g;
 const LEADING_NEWLINE = "\n";
 const TAB_PLACEHOLDER = "%TAB";
 const TAB_REPLACEMENT = "    ";
-const COPY_STATUS_RESET_DELAY_MS = 1000;
 const EDITABLE_INPUT_PADDING_CH = 2;
 const MIN_EDITABLE_CONTENT_LENGTH = 1;
-export const COPY_ERROR_LABEL = "Copy failed";
-
-type CopyStatus = "idle" | "copied" | "error";
 
 type TemplateSegment =
   | { id: string; type: "static"; content: string }
   | { id: string; type: "dynamic"; content: string };
-
-export async function copyToClipboard(content: string) {
-  await copy(content);
-}
 
 function parseTemplate(template: string): TemplateSegment[] {
   const normalizedTemplate = template.startsWith(LEADING_NEWLINE)
@@ -31,63 +24,35 @@ function parseTemplate(template: string): TemplateSegment[] {
 
   const segments: TemplateSegment[] = [];
   let lastIndex = 0;
-  let segmentIndex = 0;
 
   for (const match of normalizedTemplate.matchAll(TEMPLATE_TOKEN_REGEX)) {
-    const matchIndex = match.index ?? 0;
+    const matchIndex = match.index;
 
     if (matchIndex > lastIndex) {
       segments.push({
         content: normalizedTemplate.slice(lastIndex, matchIndex),
-        id: `static-${segmentIndex}`,
+        id: `static-${segments.length}`,
         type: "static",
       });
-      segmentIndex += 1;
     }
 
     segments.push({
       content: match[1],
-      id: `dynamic-${segmentIndex}`,
+      id: `dynamic-${segments.length}`,
       type: "dynamic",
     });
-    segmentIndex += 1;
     lastIndex = matchIndex + match[0].length;
   }
 
   if (lastIndex < normalizedTemplate.length) {
     segments.push({
       content: normalizedTemplate.slice(lastIndex),
-      id: `static-${segmentIndex}`,
+      id: `static-${segments.length}`,
       type: "static",
     });
   }
 
   return segments;
-}
-
-export function useCopyStatus() {
-  const [status, setStatus] = useState<CopyStatus>("idle");
-
-  useEffect(() => {
-    if (status === "idle") {
-      return;
-    }
-    const timeoutId = window.setTimeout(() => {
-      setStatus("idle");
-    }, COPY_STATUS_RESET_DELAY_MS);
-
-    return () => window.clearTimeout(timeoutId);
-  }, [status]);
-
-  const markCopied = useCallback(() => {
-    setStatus("copied");
-  }, []);
-
-  const markError = useCallback(() => {
-    setStatus("error");
-  }, []);
-
-  return { markCopied, markError, status };
 }
 
 function buildTemplateOutput(
@@ -118,14 +83,14 @@ function getInputWidth(value: string) {
   return `${effectiveLength + EDITABLE_INPUT_PADDING_CH}ch`;
 }
 
-export function getCopyLabel(status: CopyStatus) {
-  if (status === "copied") {
-    return "Copied";
+function handleSegmentKeyDown(event: KeyboardEvent<HTMLInputElement>) {
+  if (event.nativeEvent.isComposing) {
+    return;
   }
-  if (status === "error") {
-    return "Retry copy";
+  if (event.key === "Enter") {
+    event.preventDefault();
+    event.currentTarget.blur();
   }
-  return "Copy";
 }
 
 export function ModCodeBlock({
@@ -136,7 +101,7 @@ export function ModCodeBlock({
   data: Record<string, string>;
 }) {
   const t = useTranslations("modCodeBlock");
-  const segments = useMemo(() => parseTemplate(template), [template]);
+  const segments = parseTemplate(template);
   const [editedValues, setEditedValues] = useState<Record<string, string>>({});
   const [activeSegmentIndex, setActiveSegmentIndex] = useState<number | null>(
     null
@@ -147,7 +112,7 @@ export function ModCodeBlock({
       ? null
       : activeSegmentIndex;
 
-  const handleCopy = useCallback(async () => {
+  const handleCopy = async () => {
     const values = { ...data, ...editedValues };
     const compiled = buildTemplateOutput(segments, values);
 
@@ -160,46 +125,30 @@ export function ModCodeBlock({
       }
       markError();
     }
-  }, [data, editedValues, markCopied, markError, segments]);
+  };
 
-  const handleSegmentBlur = useCallback(() => {
+  const handleSegmentBlur = () => {
     setActiveSegmentIndex(null);
-  }, []);
+  };
 
-  const handleSegmentChange = useCallback(
-    (event: ChangeEvent<HTMLInputElement>) => {
-      const { segmentKey } = event.currentTarget.dataset;
-      if (!segmentKey) {
-        return;
-      }
-      const { value } = event.currentTarget;
-      setEditedValues((previousValues) => ({
-        ...previousValues,
-        [segmentKey]: value,
-      }));
-    },
-    []
-  );
+  const handleSegmentChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const { segmentKey } = event.currentTarget.dataset;
+    if (!segmentKey) {
+      return;
+    }
+    const { value } = event.currentTarget;
+    setEditedValues((previousValues) => ({
+      ...previousValues,
+      [segmentKey]: value,
+    }));
+  };
 
-  const handleSegmentKeyDown = useCallback(
-    (event: KeyboardEvent<HTMLInputElement>) => {
-      if (event.key === "Enter") {
-        event.preventDefault();
-        event.currentTarget.blur();
-      }
-    },
-    []
-  );
-
-  const handleSegmentActivate = useCallback(
-    (event: MouseEvent<HTMLButtonElement>) => {
-      const segmentIndex = Number(event.currentTarget.dataset.segmentIndex);
-      if (Number.isSafeInteger(segmentIndex)) {
-        setActiveSegmentIndex(segmentIndex);
-      }
-    },
-    []
-  );
+  const handleSegmentActivate = (event: MouseEvent<HTMLButtonElement>) => {
+    const segmentIndex = Number(event.currentTarget.dataset.segmentIndex);
+    if (Number.isSafeInteger(segmentIndex)) {
+      setActiveSegmentIndex(segmentIndex);
+    }
+  };
 
   let copyLabel = t("copy");
   if (status === "copied") {
@@ -259,7 +208,7 @@ export function ModCodeBlock({
 
               return (
                 <button
-                  className="cursor-pointer rounded-md bg-secondary px-1 py-0.5 text-blue-500 hover:bg-blue-500 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  className="cursor-pointer rounded-md bg-secondary px-1 py-0.5 text-blue-700 hover:bg-blue-700 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:text-blue-400 dark:hover:bg-blue-700 dark:hover:text-white"
                   data-segment-index={index}
                   key={segment.id}
                   onClick={handleSegmentActivate}
@@ -272,7 +221,9 @@ export function ModCodeBlock({
           </code>
         </pre>
       </div>
-      <p className="mb-4 pl-1 text-gray-500 text-xs">*{t("instruction")}</p>
+      <p className="mb-4 pl-1 text-muted-foreground text-xs">
+        *{t("instruction")}
+      </p>
       {status === "error" && (
         <output className="pl-1 text-destructive text-xs">
           {t("copyFailed")}

@@ -43,6 +43,13 @@
       "description": "Something went wrong while displaying the requested post. Try again or return to the post list.",
       "retry": "Try again",
       "back": "Back to posts"
+    },
+    "blogList": {
+      "kicker": "Blog error",
+      "title": "We couldn't load the post list",
+      "description": "Something went wrong while loading the post list. Try again or return home.",
+      "retry": "Try again",
+      "back": "Back home"
     }
   },
   "externalRedirect": {
@@ -65,7 +72,6 @@
     "kicker": "Showcase",
     "title": "Small experiments",
     "description": "Interactive pieces, prototypes, and things made for the fun of it.",
-    "featureEnabled": "The test feature is enabled.",
     "detailNavigationLabel": "{title} navigation",
     "items": {
       "tempfiles": {

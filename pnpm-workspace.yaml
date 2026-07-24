@@ -13,19 +13,6 @@ overrides:
   # Range override so future postcss patches still flow; drop once Next's
   # own pin reaches >=8.5.10.
   "next>postcss": "^8.5.16"
-  # statsig-node-lite declares ua-parser-js ^1.0.33, which would resolve to
-  # 1.0.41 — but trustPolicy hard-fails on it (ERR_PNPM_TRUST_DOWNGRADE):
-  # trust checks compare by publish date, and 1.0.40/1.0.41 shipped without
-  # provenance after the attested 2.0.0 stable (2024-11). 1.0.39 predates it
-  # and passes. Bump when a 1.x with provenance appears (or statsig moves to
-  # the attested 2.x line).
-  "statsig-node-lite>ua-parser-js": "1.0.39"
-  # statsig-node-lite declares uuid ^8.3.2, which is deprecated upstream AND
-  # vulnerable to GHSA-w5hq-g745-h8pq (patched in 11.1.1); uuid's deprecation
-  # notice recommends v11 for CJS consumers. Scoped so no other dependency is
-  # affected. Drop once statsig-node-lite updates its range.
-  "statsig-node-lite>uuid": "^11.1.1"
-
 peerDependencyRules:
   allowedVersions:
     # tsconfck (via vite-tsconfig-paths) declares typescript ^5 but works with
