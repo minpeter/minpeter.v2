@@ -8,6 +8,7 @@ import Header from "@/components/header";
 import { MachineTranslationNotice } from "@/components/machine-translation-notice";
 import { siteConfig } from "@/shared/site-config";
 import { blog } from "@/shared/source";
+import { routing } from "@/shared/i18n/routing";
 import { formatDateLong } from "@/shared/utils/date";
 import {
   createMetadata,
@@ -31,7 +32,9 @@ export function generateStaticParams({
 }) {
   const { locale } = params;
   const pages = blog.getPages(locale);
-  return pages.map((page) => ({ slug: page.slugs }));
+  return pages
+    .filter((page) => (page.data.lang ?? [locale]).includes(locale))
+    .map((page) => ({ slug: page.slugs }));
 }
 
 export async function generateMetadata(
@@ -55,6 +58,9 @@ export async function generateMetadata(
 
   const slugPath = slug.join("/");
   const title = page.data.title ?? siteConfig.title;
+  const locales = routing.locales.filter((candidate) =>
+    (page.data.lang ?? [locale]).includes(candidate)
+  );
 
   return createMetadata({
     article: {
@@ -70,6 +76,7 @@ export async function generateMetadata(
       url: getLocalizedPath(locale, `/blog/og/${slugPath}`),
     },
     locale,
+    locales,
     path: `/blog/${slugPath}`,
     title,
   });
@@ -86,6 +93,9 @@ export default async function Page(
   }
 
   const t = await getTranslations();
+  const locales = routing.locales.filter((candidate) =>
+    (post.data.lang ?? [locale]).includes(candidate)
+  );
 
   if (post.data.external_url) {
     return (
@@ -99,6 +109,7 @@ export default async function Page(
         <Header
           link={{ href: `/${locale}/blog` as Route, text: t("backToBlog") }}
           title={post.data.title}
+          locales={locales}
         />
         <ExternalRedirect url={post.data.external_url} />
       </section>
@@ -116,6 +127,7 @@ export default async function Page(
         description={formatDateLong(post.data.published)}
         link={{ href: `/${locale}/blog` as Route, text: t("backToBlog") }}
         title={post.data.title}
+        locales={locales}
         titleTransitionName={`blog-title-${post.url.replaceAll("/", "-")}`}
       />
 

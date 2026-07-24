@@ -6,6 +6,9 @@ const SITE_URL = process.env.SITE_URL || "https://minpeter.com";
 // These values are duplicated here because next-sitemap.config.js is CommonJS
 const locales = ["en", "ko", "ja"];
 const defaultLocale = "ko";
+const localeOverrides = {
+  "/blog/tiny-ko": ["ko"],
+};
 
 // Regex for matching internal Next.js hash paths
 const hashPathPattern = /^(\/(ko|en|ja))?\/[a-f0-9]{32,}/;
@@ -61,7 +64,8 @@ function getLocalizedPath(basePath, locale) {
  * @returns {Array}
  */
 function getAlternateRefs(basePath) {
-  const refs = locales.map((locale) => ({
+  const supportedLocales = localeOverrides[basePath] || locales;
+  const refs = supportedLocales.map((locale) => ({
     href: `${SITE_URL}${getLocalizedPath(basePath, locale)}`,
     hrefIsAbsolute: true,
     hreflang: locale,
@@ -118,6 +122,14 @@ const config = {
     }
 
     const basePath = getBasePath(path);
+
+    // Do not publish alternate locale URLs for posts without a translation.
+    if (
+      localeOverrides[basePath] &&
+      path !== getLocalizedPath(basePath, defaultLocale)
+    ) {
+      return null;
+    }
 
     return {
       alternateRefs: getAlternateRefs(basePath),

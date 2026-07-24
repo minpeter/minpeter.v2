@@ -21,6 +21,7 @@ interface HeaderProps {
     text: string;
     onNavigate?: (e: React.MouseEvent) => void;
   };
+  locales?: readonly (typeof routing.locales)[number][];
   rightContent?: ReactNode;
   title?: string;
   titleTransitionName?: string;
@@ -32,6 +33,7 @@ export default function Header({
   description,
   link,
   rightContent,
+  locales,
 }: HeaderProps) {
   const locale = useLocale();
   const resolvedTitle = title || "minpeter";
@@ -64,7 +66,7 @@ export default function Header({
         <div className="flex items-center gap-2 text-foreground/80">
           {rightContent}
           {rightContent ? <span>·</span> : null}
-          <LanguageSelector />
+          <LanguageSelector locales={locales} />
         </div>
       </div>
       <div className="mt-12 sm:mt-16">
