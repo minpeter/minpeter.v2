@@ -5,6 +5,7 @@ import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
 
 const nextConfig: NextConfig = {
+  allowedDevOrigins: ["localhost", "127.0.0.1", "workstation", "192.168.0.120"],
   cacheComponents: false,
   experimental: {
     globalNotFound: true,

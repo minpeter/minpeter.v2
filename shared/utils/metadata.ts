@@ -38,10 +38,13 @@ export const getLocalizedPath = (locale: string, path: string) => {
   return `/${resolvedLocale}${resolvedPath}`;
 };
 
-const getLanguageAlternates = (path: string) => ({
-  en: getLocalizedPath("en", path),
-  ja: getLocalizedPath("ja", path),
-  ko: getLocalizedPath("ko", path),
+const getLanguageAlternates = (
+  path: string,
+  locales: readonly LocaleCode[] = routing.locales
+) => ({
+  ...Object.fromEntries(
+    locales.map((locale) => [locale, getLocalizedPath(locale, path)])
+  ),
   "x-default": getLocalizedPath(routing.defaultLocale, path),
 });
 
@@ -62,6 +65,7 @@ export function createMetadata({
   description,
   image,
   locale,
+  locales,
   path,
   title,
 }: {
@@ -69,6 +73,7 @@ export function createMetadata({
   description?: string;
   image?: MetadataImage;
   locale?: LocaleCode;
+  locales?: readonly LocaleCode[];
   path?: string;
   title?: string;
 }): Metadata {
@@ -103,11 +108,13 @@ export function createMetadata({
     url: localizedPath,
   };
 
+  const supportedLocales = locales ?? routing.locales;
+
   return {
     alternates: path
       ? {
           canonical: canonicalUrl,
-          languages: getLanguageAlternates(path),
+          languages: getLanguageAlternates(path, supportedLocales),
         }
       : undefined,
     description: resolvedDescription,

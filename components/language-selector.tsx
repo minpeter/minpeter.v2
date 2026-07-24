@@ -20,7 +20,11 @@ function preventCloseAutoFocus(event: Event) {
   event.preventDefault();
 }
 
-export function LanguageSelector() {
+export function LanguageSelector({
+  locales = routing.locales,
+}: {
+  locales?: readonly (typeof routing.locales)[number][];
+}) {
   const locale = useLocale();
   const t = useTranslations("common");
   const pathname = usePathname();
@@ -64,7 +68,7 @@ export function LanguageSelector() {
           ref={contentRef}
           sideOffset={5}
         >
-          {routing.locales.map((l) => {
+          {locales.map((l) => {
             const isActive = locale === l;
 
             return (
