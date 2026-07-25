@@ -1,4 +1,4 @@
-import type { Metadata, Route } from "next";
+import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 
 import { ShowcaseDetailHeader } from "@/components/showcase-detail-header";
@@ -22,16 +22,16 @@ export async function generateMetadata(
 }
 
 export default async function Page(
-  props: PageProps<"/[locale]/show/yet-another-tempfiles">
+  _props: PageProps<"/[locale]/show/yet-another-tempfiles">
 ) {
-  const [{ locale }, t] = await Promise.all([props.params, getTranslations()]);
+  const t = await getTranslations();
 
   return (
     <section className="showcase-page">
       <ShowcaseDetailHeader
         backLabel={t("back")}
         description={t("showcase.items.tempfiles.description")}
-        href={`/${locale}/show` as Route}
+        href="/show"
         kicker={t("showcase.items.tempfiles.kicker")}
         navigationLabel={t("showcase.detailNavigationLabel", {
           title: t("showcase.items.tempfiles.title"),

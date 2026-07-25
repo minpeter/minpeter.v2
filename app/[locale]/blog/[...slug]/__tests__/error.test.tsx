@@ -44,6 +44,6 @@ describe("app/[locale]/blog/[...slug]/error.tsx", () => {
     expect(reset).toHaveBeenCalledOnce();
 
     const blogLink = screen.getByRole("link", { name: "글 목록으로 돌아가기" });
-    expect(blogLink.getAttribute("href")).toBe("/ko/blog");
+    expect(blogLink.getAttribute("href")).toBe("/blog");
   });
 });

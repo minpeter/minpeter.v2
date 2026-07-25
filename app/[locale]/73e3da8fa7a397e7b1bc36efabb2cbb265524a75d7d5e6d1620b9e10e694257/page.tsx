@@ -1,5 +1,5 @@
-import type { Metadata, Route } from "next";
-import { getTranslations } from "next-intl/server";
+import type { Metadata } from "next";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { Backlink } from "@/components/link";
 import { createMetadata, resolveLocale } from "@/shared/utils/metadata";
@@ -25,11 +25,14 @@ export default async function Page(
   props: PageProps<"/[locale]/73e3da8fa7a397e7b1bc36efabb2cbb265524a75d7d5e6d1620b9e10e694257">
 ) {
   const { locale } = await props.params;
+  // Opts the page into static rendering: a page that never reads `params`
+  // drops out of the per-locale prerender manifest.
+  setRequestLocale(resolveLocale(locale));
   const t = await getTranslations();
   return (
     <section className="flex flex-col gap-6">
       <div className={cn(styles.stagger_container, styles.fast)}>
-        <Backlink href={`/${locale}` as Route} text={t("back")} />
+        <Backlink href="/" text={t("back")} />
       </div>
       <div
         className={cn(styles.stagger_container, styles.slow, "flex flex-col")}

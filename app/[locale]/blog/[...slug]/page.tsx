@@ -1,5 +1,4 @@
 import { DocsBody } from "fumadocs-ui/page";
-import type { Route } from "next";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 
@@ -97,7 +96,7 @@ export default async function Page(
         )}
       >
         <Header
-          link={{ href: `/${locale}/blog` as Route, text: t("backToBlog") }}
+          link={{ href: "/blog", text: t("backToBlog") }}
           title={post.data.title}
         />
         <ExternalRedirect url={post.data.external_url} />
@@ -114,7 +113,7 @@ export default async function Page(
     >
       <Header
         description={formatDateLong(post.data.published)}
-        link={{ href: `/${locale}/blog` as Route, text: t("backToBlog") }}
+        link={{ href: "/blog", text: t("backToBlog") }}
         title={post.data.title}
         titleTransitionName={`blog-title-${post.url.replaceAll("/", "-")}`}
       />

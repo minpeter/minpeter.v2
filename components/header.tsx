@@ -1,12 +1,9 @@
 "use client";
 
-import { routing } from "@/shared/i18n/routing";
-import { useLocale } from "next-intl";
-import type { Route } from "next";
-import Link from "next/link";
 import type { ReactNode } from "react";
 
 import { ViewTransition } from "@/components/view-transition";
+import { Link } from "@/shared/i18n/navigation";
 import { cn } from "@/shared/utils/tailwind";
 
 import { LanguageSelector } from "./language-selector";
@@ -17,7 +14,8 @@ import styles from "@/shared/styles/stagger-fade-in.module.css";
 interface HeaderProps {
   description?: string;
   link?: {
-    href: Route;
+    /** Locale-agnostic pathname; the locale prefix is applied by next-intl. */
+    href: string;
     text: string;
     onNavigate?: (e: React.MouseEvent) => void;
   };
@@ -33,7 +31,6 @@ export default function Header({
   link,
   rightContent,
 }: HeaderProps) {
-  const locale = useLocale();
   const resolvedTitle = title || "minpeter";
 
   return (
@@ -51,15 +48,7 @@ export default function Header({
             text={link.text}
           />
         ) : (
-          <Link
-            href={
-              locale === routing.defaultLocale
-                ? ("/" as Route)
-                : (`/${locale}` as Route)
-            }
-          >
-            minpeter
-          </Link>
+          <Link href="/">minpeter</Link>
         )}
         <div className="flex items-center gap-2 text-foreground/80">
           {rightContent}

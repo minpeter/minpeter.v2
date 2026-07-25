@@ -1,9 +1,9 @@
-import type { Metadata, Route } from "next";
+import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import Image from "next/image";
-import Link from "next/link";
 
 import { LanguageSelector } from "@/components/language-selector";
+import { Link } from "@/shared/i18n/navigation";
 import { createMetadata, resolveLocale } from "@/shared/utils/metadata";
 
 export async function generateMetadata(
@@ -48,8 +48,8 @@ const SHOWCASE_ITEMS = [
   },
 ] as const;
 
-export default async function Page(props: PageProps<"/[locale]/show">) {
-  const [{ locale }, t] = await Promise.all([props.params, getTranslations()]);
+export default async function Page(_props: PageProps<"/[locale]/show">) {
+  const t = await getTranslations();
   return (
     <section className="showcase-page">
       <header className="showcase-header">
@@ -60,7 +60,7 @@ export default async function Page(props: PageProps<"/[locale]/show">) {
           <Link
             aria-label={t("backToHome")}
             className="fieldnotes-logo-link"
-            href={`/${locale}` as Route}
+            href="/"
           >
             <Image
               alt=""
@@ -85,7 +85,7 @@ export default async function Page(props: PageProps<"/[locale]/show">) {
         {SHOWCASE_ITEMS.map(({ key, path }) => (
           <Link
             className="showcase-item-link"
-            href={`/${locale}${path}` as Route}
+            href={path}
             key={path}
           >
             <span className="showcase-item-top">

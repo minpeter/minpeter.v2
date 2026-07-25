@@ -1,9 +1,9 @@
 "use client";
 
-import type { Route } from "next";
-import { useLocale, useTranslations } from "next-intl";
-import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { useEffect } from "react";
+
+import { Link } from "@/shared/i18n/navigation";
 
 interface ErrorPanelProps {
   error: Error & { digest?: string };
@@ -12,12 +12,8 @@ interface ErrorPanelProps {
 }
 
 export function ErrorPanel({ error, namespace, reset }: ErrorPanelProps) {
-  const locale = useLocale();
   const t = useTranslations(`errors.${namespace}`);
-  const backHref =
-    namespace === "blog"
-      ? (`/${locale}/blog` as Route)
-      : (`/${locale}` as Route);
+  const backHref = namespace === "blog" ? "/blog" : "/";
   useEffect(() => {
     console.error(error);
   }, [error]);

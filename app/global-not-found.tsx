@@ -1,4 +1,4 @@
-import type { Metadata, Route } from "next";
+import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 
 import { NotFoundPage } from "@/components/not-found-page";
@@ -31,7 +31,7 @@ export default async function GlobalNotFound() {
   return (
     <RootDocument lang={locale}>
       <NotFoundPage
-        backHref={getLocalizedPath(locale, "/") as Route}
+        backHref={getLocalizedPath(locale, "/")}
         backLabel={t("backToHome")}
         description={t("notFound.description")}
         navigationLabel={t("notFound.navigationLabel")}

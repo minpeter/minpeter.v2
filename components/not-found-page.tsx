@@ -1,10 +1,13 @@
-import type { Route } from "next";
 import Image from "next/image";
 
 import { LanguageSelector } from "@/components/language-selector";
 
 interface NotFoundPageProps {
-  backHref: Route;
+  /**
+   * Fully localized href: these are plain anchors on purpose (see below), so
+   * the prefix must already be resolved via `getLocalizedPath`.
+   */
+  backHref: string;
   backLabel: string;
   description: string;
   navigationLabel: string;

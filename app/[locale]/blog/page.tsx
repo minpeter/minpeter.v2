@@ -1,10 +1,10 @@
-import type { Metadata, Route } from "next";
+import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import Image from "next/image";
-import Link from "next/link";
 import { Suspense } from "react";
 
 import { LanguageSelector } from "@/components/language-selector";
+import { Link } from "@/shared/i18n/navigation";
 import { blog, getPostsMetadata } from "@/shared/source";
 import {
   createMetadata,
@@ -54,7 +54,7 @@ export default async function Page(props: PageProps<"/[locale]/blog">) {
           <Link
             aria-label={t("backToHome")}
             className="fieldnotes-logo-link"
-            href={`/${locale}` as Route}
+            href="/"
           >
             <Image
               alt=""

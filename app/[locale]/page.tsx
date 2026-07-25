@@ -1,7 +1,7 @@
-import type { Route } from "next";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import Image from "next/image";
-import Link from "next/link";
+
+import { Link } from "@/shared/i18n/navigation";
 
 const SECTIONS = [
   {
@@ -32,7 +32,6 @@ const SOCIAL_LINKS = [
 ] as const;
 
 export default function Page() {
-  const locale = useLocale();
   const t = useTranslations("home");
 
   return (
@@ -41,7 +40,7 @@ export default function Page() {
         <Link
           aria-label={t("homeLabel")}
           className="home-logo-link mb-6 inline-flex -m-2.5 p-2.5 hover:opacity-60"
-          href={`/${locale}` as Route}
+          href="/"
         >
           <Image
             alt=""
@@ -64,11 +63,7 @@ export default function Page() {
 
       <nav aria-label={t("exploreLabel")} className="home-links">
         {SECTIONS.map(({ descriptionKey, href, titleKey }) => (
-          <Link
-            className="home-link group"
-            href={`/${locale}${href}` as Route}
-            key={href}
-          >
+          <Link className="home-link group" href={href} key={href}>
             <span className="home-link-title">{t(titleKey)}</span>
             <span className="home-link-description">{t(descriptionKey)}</span>
           </Link>
