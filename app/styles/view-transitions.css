@@ -1,0 +1,67 @@
+/* Cross-document view transitions, including the reduced-motion opt-out. */
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 300ms;
+  animation-timing-function: ease-in-out;
+}
+
+/* Shared Element Transition defaults (for blog title morphing) */
+::view-transition-group(*) {
+  animation-duration: 350ms;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes slide-out-left {
+  to {
+    transform: translateX(-30%);
+    opacity: 0;
+  }
+}
+@keyframes slide-in-right {
+  from {
+    transform: translateX(30%);
+    opacity: 0;
+  }
+}
+@keyframes slide-out-right {
+  to {
+    transform: translateX(30%);
+    opacity: 0;
+  }
+}
+@keyframes slide-in-left {
+  from {
+    transform: translateX(-30%);
+    opacity: 0;
+  }
+}
+
+html:active-view-transition-type(slide-forward) {
+  &::view-transition-old(root) {
+    animation: 300ms ease-in both slide-out-left;
+  }
+  &::view-transition-new(root) {
+    animation: 300ms ease-out both slide-in-right;
+  }
+}
+
+html:active-view-transition-type(slide-back) {
+  &::view-transition-old(root) {
+    animation: 300ms ease-in both slide-out-right;
+  }
+  &::view-transition-new(root) {
+    animation: 300ms ease-out both slide-in-left;
+  }
+}
+
+/* Required to respect reduced-motion accessibility preferences. */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+  ::view-transition-group(*) {
+    animation: none !important;
+  }
+}
