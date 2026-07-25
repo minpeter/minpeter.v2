@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getTranslations } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import Image from "next/image";
 
 import { LanguageSelector } from "@/components/language-selector";
@@ -21,7 +21,11 @@ export async function generateMetadata(
   });
 }
 
-export default async function Page(_props: PageProps<"/[locale]/resume">) {
+export default async function Page(props: PageProps<"/[locale]/resume">) {
+  const { locale } = await props.params;
+  // Opts the page into static rendering: a page that never reads `params`
+  // drops out of the per-locale prerender manifest (and thus the sitemap).
+  setRequestLocale(resolveLocale(locale));
   const t = await getTranslations();
 
   return (
