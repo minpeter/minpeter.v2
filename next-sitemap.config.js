@@ -1,14 +1,17 @@
 /** @type {import('next-sitemap').IConfig} */
 
+import { defaultLocale, locales } from "./shared/i18n/locales.js";
+
 const SITE_URL = process.env.SITE_URL || "https://minpeter.com";
 
-// IMPORTANT: Keep in sync with shared/i18n/routing.ts
-// These values are duplicated here because next-sitemap.config.js is CommonJS
-const locales = ["en", "ko", "ja"];
-const defaultLocale = "ko";
+const defaultLocalePrefix = `/${defaultLocale}`;
 
-// Regex for matching internal Next.js hash paths
-const hashPathPattern = /^(\/(ko|en|ja))?\/[a-f0-9]{32,}/;
+// Internal Next.js hash paths (e.g. the unlisted poem route), optionally
+// locale-prefixed, must stay out of the sitemap.
+const hashPathPattern = new RegExp(
+  `^(/(${locales.join("|")}))?/[a-f0-9]{32,}`,
+  "u"
+);
 
 /**
  * Get priority based on path
@@ -16,7 +19,7 @@ const hashPathPattern = /^(\/(ko|en|ja))?\/[a-f0-9]{32,}/;
  * @returns {number}
  */
 function getPriority(path) {
-  if (path === "/" || path === "/en" || path === "/ja") {
+  if (homepagePaths.has(path)) {
     return 1;
   }
   if (path.includes("/blog")) {
@@ -54,6 +57,12 @@ function getLocalizedPath(basePath, locale) {
   }
   return basePath === "/" ? `/${locale}` : `/${locale}${basePath}`;
 }
+
+// `localePrefix: "as-needed"` means the default locale is served unprefixed, so
+// the homepage exists once per locale: "/", "/en", "/ja".
+const homepagePaths = new Set(
+  locales.map((locale) => getLocalizedPath("/", locale))
+);
 
 /**
  * Generate alternateRefs for hreflang tags
@@ -102,19 +111,19 @@ const config = {
   siteUrl: SITE_URL,
 
   // Transform function to handle localePrefix: "as-needed"
-  // Korean (default) has no prefix, English and Japanese have prefixes
+  // The default locale has no prefix, every other locale keeps one
   transform: (sitemapConfig, path) => {
     // Skip internal Next.js paths (hash-like paths, _next, etc.)
     if (hashPathPattern.test(path)) {
       return null;
     }
 
-    // Transform /ko/* paths to paths without prefix (Korean is default locale)
+    // Strip the default-locale prefix: "/ko/blog/post" -> "/blog/post"
     let loc = path;
-    if (path.startsWith("/ko/")) {
-      loc = path.slice(3); // "/ko/blog/post" -> "/blog/post"
-    } else if (path === "/ko") {
+    if (path === defaultLocalePrefix) {
       loc = "/";
+    } else if (path.startsWith(`${defaultLocalePrefix}/`)) {
+      loc = path.slice(defaultLocalePrefix.length);
     }
 
     const basePath = getBasePath(path);
