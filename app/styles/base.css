@@ -1,0 +1,136 @@
+/* Element-level resets, scrollbar/selection chrome and the light/dark token
+   palettes. Everything here is `@layer base`, so any utility class wins. */
+
+/*
+  The default border color has changed to `currentColor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentColor);
+  }
+}
+
+@layer base {
+  ::-webkit-scrollbar {
+    @apply h-1 w-1.5;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--scroll-bar-color);
+    @apply rounded;
+  }
+
+  ::selection {
+    background-color: hsl(240 5% 78%);
+    color: hsl(var(--foreground));
+  }
+
+  .dark ::selection {
+    @apply bg-secondary text-secondary-foreground;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    scrollbar-gutter: stable;
+  }
+
+  @supports not (scrollbar-gutter: stable) {
+    html {
+      overflow-y: scroll;
+    }
+  }
+
+  :root {
+    --background: 180 7% 96%;
+    --foreground: 180 8% 6%;
+
+    --scroll-bar-color: #b9b9b9;
+
+    --sh-class: #4d8bdc;
+    --sh-jsxliterals: #00047a;
+    --sh-identifier: #292525;
+    --sh-property: #0073ff;
+    --sh-entity: #6334da;
+    --sh-string: #00afa1;
+    --sh-keyword: #ff1100;
+    --sh-sign: #686868;
+    --sh-comment: #686868;
+
+    --card: 180 7% 96%;
+    --card-foreground: 180 8% 6%;
+    --primary: 240 5.9% 10%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 44%;
+    --accent: 240 4.8% 95.9%;
+    --accent-foreground: 240 5.9% 10%;
+    --destructive: 0 84.2% 60.2%;
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 240 10% 3.9%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --scroll-bar-color: #2b2b2b;
+
+    --sh-class: #96c3ff;
+    --sh-jsxliterals: #797dff;
+    --sh-identifier: #f6f6f6;
+    --sh-property: #3c94ff;
+    --sh-entity: #34e4df;
+    --sh-string: #00f9e4;
+    --sh-keyword: #f87d74;
+    --sh-sign: #a5a5a5;
+    --sh-comment: #a5a5a5;
+
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 240 5.9% 10%;
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+    --accent: 240 3.7% 15.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 240 4.9% 83.9%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@layer base {
+  img {
+    -webkit-user-drag: none;
+    user-select: none;
+  }
+}
