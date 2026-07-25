@@ -1,9 +1,9 @@
-import type { Metadata, Route } from "next";
+import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import Image from "next/image";
-import Link from "next/link";
 
 import { LanguageSelector } from "@/components/language-selector";
+import { Link } from "@/shared/i18n/navigation";
 import { createMetadata, resolveLocale } from "@/shared/utils/metadata";
 
 export async function generateMetadata(
@@ -21,8 +21,7 @@ export async function generateMetadata(
   });
 }
 
-export default async function Page(props: PageProps<"/[locale]/resume">) {
-  const { locale } = await props.params;
+export default async function Page(_props: PageProps<"/[locale]/resume">) {
   const t = await getTranslations();
 
   return (
@@ -35,7 +34,7 @@ export default async function Page(props: PageProps<"/[locale]/resume">) {
           <Link
             aria-label={t("backToHome")}
             className="fieldnotes-logo-link"
-            href={`/${locale}` as Route}
+            href="/"
           >
             <Image
               alt=""
@@ -63,7 +62,7 @@ export default async function Page(props: PageProps<"/[locale]/resume">) {
         <p className="resume-message-description">
           {t("resume.statusDescription")}
         </p>
-        <Link className="resume-home-link" href={`/${locale}` as Route}>
+        <Link className="resume-home-link" href="/">
           {t("resume.homeLabel")} <span aria-hidden="true">↗</span>
         </Link>
       </section>

@@ -1,7 +1,6 @@
-import type { Route } from "next";
 import Image from "next/image";
-import Link from "next/link";
 
+import { Link } from "@/shared/i18n/navigation";
 import { cn } from "@/shared/utils/tailwind";
 
 import { LanguageSelector } from "./language-selector";
@@ -10,7 +9,8 @@ interface ShowcaseDetailHeaderProps {
   backLabel: string;
   className?: string;
   description: string;
-  href: Route;
+  /** Locale-agnostic pathname; the locale prefix is applied by next-intl. */
+  href: string;
   kicker: string;
   navigationLabel: string;
   title: string;

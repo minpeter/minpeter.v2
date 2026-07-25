@@ -76,7 +76,7 @@ describe("app/[locale]/blog/[...slug]/page.tsx external-linked post", () => {
     );
 
     const backLink = screen.getByRole("link", { name: "글 목록으로" });
-    expect(backLink.getAttribute("href")).toBe("/ko/blog");
+    expect(backLink.getAttribute("href")).toBe("/blog");
   });
 
   it("keeps the redirect panel inside one viewport under the header", async () => {

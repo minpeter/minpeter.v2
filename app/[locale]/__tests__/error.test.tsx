@@ -52,7 +52,9 @@ describe("app/[locale]/error.tsx", () => {
     expect(reset).toHaveBeenCalledOnce();
 
     const homeLink = screen.getByRole("link", { name: "홈으로 돌아가기" });
-    expect(homeLink.getAttribute("href")).toBe("/ko");
+    // `localePrefix: "as-needed"` — the default locale is served unprefixed,
+    // so linking to `/ko` would only trigger a redirect to `/`.
+    expect(homeLink.getAttribute("href")).toBe("/");
   });
 
   it("does not render a digest section when no digest is available", () => {

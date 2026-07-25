@@ -1,5 +1,6 @@
 // @vitest-environment jsdom
 import { render } from "@testing-library/react";
+import { NextIntlClientProvider } from "next-intl";
 import type * as intlServer from "next-intl/server";
 import { describe, expect, it, vi } from "vitest";
 
@@ -20,7 +21,12 @@ describe("app/[locale]/73e3da.../page.tsx poem", () => {
       searchParams: Promise.resolve({}),
     });
 
-    const { container } = render(ui);
+    // The backlink resolves its locale prefix through next-intl navigation.
+    const { container } = render(
+      <NextIntlClientProvider locale="ko" messages={{}}>
+        {ui}
+      </NextIntlClientProvider>
+    );
     const section = container.querySelector("section");
 
     expect(section?.className).toContain("gap-6");

@@ -1,6 +1,6 @@
 import { ArrowTopLeftIcon } from "@radix-ui/react-icons";
-import type { Route } from "next";
-import Link from "next/link";
+
+import { Link } from "@/shared/i18n/navigation";
 
 export function Backlink({
   text,
@@ -9,7 +9,8 @@ export function Backlink({
   onNavigate,
 }: {
   text: string;
-  href: Route;
+  /** Locale-agnostic pathname; the locale prefix is applied by next-intl. */
+  href: string;
   ariaLabel?: string;
   onNavigate?: (e: React.MouseEvent) => void;
 }) {
