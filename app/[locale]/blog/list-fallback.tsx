@@ -11,6 +11,11 @@ import { cn } from "@/shared/utils/tailwind";
 
 import styles from "@/shared/styles/stagger-fade-in.module.css";
 
+// Shared by the external-link and internal-link branches of a list item.
+const ITEM_LINK_CLASSNAME =
+  "fieldnotes-item-link focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring";
+const ITEM_TITLE_CLASSNAME = "fieldnotes-item-title line-clamp-2";
+
 export function BlogSearchShell({
   searchPlaceholder,
 }: {
@@ -58,8 +63,6 @@ export function BlogListFallback({
     {}
   );
 
-  const itemStyles = "";
-
   return (
     <div
       aria-busy={isLoading || undefined}
@@ -85,20 +88,12 @@ export function BlogListFallback({
                   <li className="fieldnotes-item" key={post.url}>
                     {post.external_url ? (
                       <a
-                        className={cn(
-                          itemStyles,
-                          "fieldnotes-item-link focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                        )}
+                        className={ITEM_LINK_CLASSNAME}
                         href={post.external_url}
                         rel="noopener noreferrer"
                         target="_blank"
                       >
-                        <span
-                          className={cn(
-                            "fieldnotes-item-title line-clamp-2",
-                            itemStyles
-                          )}
-                        >
+                        <span className={ITEM_TITLE_CLASSNAME}>
                           {post.title}
                           <ExternalLink
                             className="ml-1 inline-block pb-1 opacity-60"
@@ -120,22 +115,14 @@ export function BlogListFallback({
                       </a>
                     ) : (
                       <Link
-                        className={cn(
-                          itemStyles,
-                          "fieldnotes-item-link focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                        )}
+                        className={ITEM_LINK_CLASSNAME}
                         href={post.url as Route}
                         prefetch={false}
                       >
                         <ViewTransition
                           name={`blog-title-${post.url.replaceAll("/", "-")}`}
                         >
-                          <span
-                            className={cn(
-                              "fieldnotes-item-title line-clamp-2",
-                              itemStyles
-                            )}
-                          >
+                          <span className={ITEM_TITLE_CLASSNAME}>
                             {post.title}
                           </span>
                         </ViewTransition>
