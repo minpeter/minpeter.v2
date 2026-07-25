@@ -1,28 +1,24 @@
+import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 
+import { routing } from "@/shared/i18n/routing";
+import { resolveLocale } from "@/shared/utils/metadata";
 import { cn } from "@/shared/utils/tailwind";
 
 import { ModeToggle } from "./theme-toggle";
 
-const FOOTER_LABELS = {
-  en: { notes: "notes", source: "source", toggleTheme: "Toggle theme" },
-  ja: {
-    notes: "記事",
-    source: "ソース",
-    toggleTheme: "テーマを切り替え",
-  },
-  ko: { notes: "글", source: "소스", toggleTheme: "테마 전환" },
-} as const;
+const linkClassName =
+  "underline decoration-foreground/30 underline-offset-4 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring";
 
-export default function Footer({
+export default async function Footer({
   className,
   locale,
 }: {
   className?: string;
   locale: string;
 }) {
-  const labels =
-    FOOTER_LABELS[locale as keyof typeof FOOTER_LABELS] ?? FOOTER_LABELS.ko;
+  const resolvedLocale = resolveLocale(locale);
+  const t = await getTranslations({ locale: resolvedLocale });
 
   return (
     <footer
@@ -34,22 +30,26 @@ export default function Footer({
       <p className="font-mono text-[11px] text-muted-foreground uppercase tracking-[0.08em]">
         © {new Date().getFullYear()} Woonggi Min ·
         <Link
-          className="underline decoration-foreground/30 underline-offset-4 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-          href={locale === "ko" ? "/blog" : `/${locale}/blog`}
+          className={linkClassName}
+          href={
+            resolvedLocale === routing.defaultLocale
+              ? "/blog"
+              : `/${resolvedLocale}/blog`
+          }
         >
-          {labels.notes}
+          {t("common.notes")}
         </Link>
         {" / "}
         <a
-          className="underline decoration-foreground/30 underline-offset-4 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className={linkClassName}
           href="https://github.com/minpeter/minpeter.v2"
           rel="noopener noreferrer"
           target="_blank"
         >
-          {labels.source}
+          {t("common.source")}
         </a>
       </p>
-      <ModeToggle label={labels.toggleTheme} />
+      <ModeToggle label={t("common.toggleTheme")} />
     </footer>
   );
 }
