@@ -1,0 +1,189 @@
+---
+title: tools를 시스템 지침으로 바꿔 복원한 첫 성공 오픈소스
+description: vercel/ai #3521에서 시작한 @ai-sdk-tool/parser의 실제 동작 구조
+published: 2026-02-17
+drafted: 2026-02-17
+tags:
+  - open-source
+  - vercel-ai-sdk
+  - tool-calling
+  - middleware
+draft: true
+---
+
+## 시작점
+
+이 글은 [vercel/ai 이슈 #3521](https://github.com/vercel/ai/issues/3521)에서 시작한
+[`@ai-sdk-tool/parser`](https://github.com/minpeter/ai-sdk-tool-call-middleware) 구현을 정리한 글이다.
+
+문제는 단순했다.
+
+- 모델은 함수 호출을 할 수 있는데
+- OpenAI-compatible 엔드포인트에서는 `tools` 파라미터가 항상 안정적으로 동작하지 않고
+- 결국 tool calling 루프가 중간에 끊긴다
+
+그래서 이 프로젝트는 native `tools` 경로가 불안정한 환경에서,
+같은 루프를 텍스트 경로로 우회해서 유지하는 방식으로 설계됐다.
+
+## 함수 호출을 최소 단위로 보면
+
+함수 호출은 아래 네 단계를 유지하면 된다.
+
+1. 앱이 도구 정의(`name`, `description`, `input schema`)를 모델에 전달한다.
+2. 모델이 도구 호출 구조를 반환한다.
+3. 앱이 실제 함수를 실행한다.
+4. 실행 결과를 다시 모델에 전달해 최종 답을 만든다.
+
+핵심은 "모델이 어떤 API 포맷으로 출력하느냐"가 아니라,
+이 네 단계가 끊기지 않고 유지되는지다.
+
+## 이 프로젝트가 하는 일 (정확한 3단계)
+
+이 미들웨어는 모델 행동을 강제하지 않는다.
+정확히는, 도구 정보를 system prompt 지침으로 제공하고,
+모델 출력 텍스트를 parser로 다시 구조화한다.
+
+### 1) tools를 system 지침 텍스트로 렌더링
+
+- 미들웨어 진입: `src/tool-call-middleware.ts`
+- 파라미터 변환: `src/transform-handler.ts`
+- 프리셋 선택: `src/preconfigured-middleware.ts`
+
+프리셋(Hermes/XML/YAML/Qwen3Coder)에 따라 도구 목록과 출력 형식이
+system prompt에 들어간다.
+
+### 2) 모델이 지침을 참고해 도구 호출 텍스트 생성
+
+모델은 아래 같은 형식 중 하나로 출력한다.
+
+- JSON-in-XML: `<tool_call>{...}</tool_call>`
+- XML: `<tool_name><param>...</param></tool_name>`
+- YAML: `<tool_name>\nkey: value\n</tool_name>`
+- Qwen3Coder: `<tool_call><function=...><parameter=...>`
+
+### 3) parser가 텍스트를 `tool-call` 이벤트로 복원
+
+- non-stream: `src/generate-handler.ts`에서 `parseGeneratedText(...)`
+- stream: `src/stream-handler.ts`에서 `createStreamParser(...)`
+
+복원된 결과는 런타임에서 일반 tool 호출과 동일하게 처리된다.
+
+## 실제 렌더 예제
+
+아래 예제는 도구 하나를 입력했을 때,
+system 지침이 실제로 어떻게 만들어지는지 보여준다.
+
+### 입력 tools (예시)
+
+```json
+[
+  {
+    "type": "function",
+    "name": "get_weather",
+    "description": "Get weather by city",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "city": { "type": "string", "description": "City name" },
+        "unit": {
+          "type": "string",
+          "enum": ["celsius", "fahrenheit"],
+          "default": "celsius"
+        }
+      },
+      "required": ["city"],
+      "additionalProperties": false
+    }
+  }
+]
+```
+
+### XML preset에서 렌더된 system 지침
+
+```text
+# Tools
+You may call one or more functions to assist with the user query.
+
+You have access to the following functions:
+<tools>
+name: get_weather
+description: Get weather by city
+parameters:
+  - city (string, required) - City name
+  - unit (string, optional) - enum: ["celsius", "fahrenheit"]; default: "celsius"
+schema: {"type":"object","properties":{"city":{"type":"string","description":"City name"},"unit":{"type":"string","enum":["celsius","fahrenheit"],"default":"celsius"}},"required":["city"],"additionalProperties":false}
+</tools>
+
+<rules>
+- Use exactly one XML element whose tag name is the function name.
+- Put each parameter as a child element.
+- Values must follow the schema exactly (numbers, arrays, objects, enums -> copy as-is).
+- Do not add or remove functions or parameters.
+- Each required parameter must appear once.
+- Output nothing before or after the function call.
+- It is also possible to call multiple types of functions in one turn or to call a single function multiple times.
+</rules>
+```
+
+### Hermes preset에서 렌더된 system 지침
+
+```text
+You are a function calling AI model.
+You are provided with function signatures within <tools></tools> XML tags.
+You may call one or more functions to assist with the user query.
+Don't make assumptions about what values to plug into functions.
+Here are the available tools: <tools>[{"type":"function","name":"get_weather","description":"Get weather by city","inputSchema":{...}}]</tools>
+Use the following pydantic model json schema for each tool call you will make: {"title": "FunctionCall", "type": "object", "properties": {"arguments": {"title": "Arguments", "type": "object"}, "name": {"title": "Name", "type": "string"}}, "required": ["arguments", "name"]}
+For each function call return a json object with function name and arguments within <tool_call></tool_call> XML tags as follows:
+<tool_call>
+{"name": "<function-name>", "arguments": <args-dict>}
+</tool_call>
+```
+
+## 스트리밍에서 실제로 복원되는 이벤트
+
+스트리밍에서는 아래 순서로 이벤트를 만든다.
+
+1. `tool-input-start`
+2. `tool-input-delta`
+3. `tool-input-end`
+4. `tool-call`
+
+즉 청크 경계가 깨져도 최종적으로 `tool-call` 단위로 재구성한다.
+
+## "강제"가 아니라 "지침 제공"인 이유
+
+이 프로젝트는 템플릿으로 형식을 안내하고,
+출력 텍스트를 후단 parser로 복원한다.
+
+그래서 모델이 지침을 따르지 않으면 파싱 실패가 발생할 수 있고,
+반대로 지침을 잘 따르면 native tool call과 유사한 루프가 유지된다.
+
+정리하면,
+
+- 템플릿은 지침을 제공하고
+- parser는 결과를 복원한다
+
+이 두 가지를 결합해서 불안정한 `tools` 경로를 우회한다.
+
+## 마무리
+
+`#3521`에서 시작한 질문은 지금도 같다.
+
+"native tools가 불안정한 환경에서, tool calling 루프를 어떻게 유지할 것인가?"
+
+내 답은 현재까지 명확하다.
+
+- 도구 정보를 system 지침으로 변환하고
+- 모델이 만든 호출 텍스트를 parser로 복원하면
+- 같은 개발 루프를 유지할 수 있다
+
+이게 `@ai-sdk-tool/parser`가 해결하는 문제다.
+
+## 관련 링크
+
+- [vercel/ai Issue #3521](https://github.com/vercel/ai/issues/3521)
+- [ai-sdk-tool-call-middleware](https://github.com/minpeter/ai-sdk-tool-call-middleware)
+- [npm: @ai-sdk-tool/parser](https://www.npmjs.com/package/@ai-sdk-tool/parser)
+- [OpenAI Function Calling](https://platform.openai.com/docs/guides/function-calling)
+- [vLLM Tool Calling](https://docs.vllm.ai/en/stable/features/tool_calling.html)
