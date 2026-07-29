@@ -1,0 +1,426 @@
+---
+title: "한글 검색 하나 만들려다 터미널 입력의 끝까지 간 이야기"
+description: "Atuin 한글 검색 PR에서 시작해 IME, Kitty 키보드 프로토콜, PTY 경계까지 파고든 기록"
+published: 2026-07-28
+draft: true
+tags: ["terminal", "ime", "open-source", "rust"]
+ai_generated_by: "GPT 5.6 Sol"
+---
+
+import {
+  CsiUAnatomyDiagram,
+  DirectKeyPathDiagram,
+  ImeCompositionPathDiagram,
+  InputBoundaryMatrix,
+} from "./diagrams/index";
+
+<div
+  className="min-w-0 [&_pre]:!min-w-0 [&_pre]:!w-full [&_pre]:!whitespace-pre-wrap [&_pre]:!break-words"
+  data-responsive-code-boundary
+>
+
+처음에는 정말 작은 문제라고 생각했다.
+
+터미널에서 Atuin으로 명령어를 찾다가 한글 입력 상태인 것을 뒤늦게 알아차리는 일이 종종 있었다. `git`을 찾으려 했는데 검색창에는 `햣`이 들어가고, 결과가 없는 것을 본 뒤에야 한/영 키를 누르는 식이다.
+
+“두벌식으로 입력된 한글을 영문 키 위치로 한 번 더 검색하면 되는 것 아닌가?”
+
+구현 자체는 그렇게 복잡해 보이지 않았다. 한글 음절을 자모로 분해하고 두벌식 키 배열에 대응하는 영문자로 바꾸면 된다. 원래 검색어에서 결과가 없을 때 변환한 검색어를 한 번 더 시도하면 사용자는 입력 상태를 되돌리지 않아도 된다.
+
+그런데 이 작은 아이디어를 Atuin에 넣으려다 보니 질문이 계속 커졌다.
+
+- 검색 프로그램이 사용자의 입력 방식을 추측해도 되는가?
+- 한글만 지원하면 제품 범위가 지나치게 좁아지는가?
+- 키보드 레이아웃과 IME는 같은 문제인가?
+- 터미널 애플리케이션은 사용자가 실제로 누른 키를 알 수 있는가?
+- 브라우저에서는 되는 것 같은데, 왜 TUI에서는 어려운가?
+
+결국 나는 검색 로직보다 훨씬 아래에 있는 IME, 터미널 에뮬레이터, PTY, Kitty 키보드 프로토콜, Crossterm, 심지어 Wayland의 keyboard grab까지 내려가게 됐다.
+
+이 글은 한글 검색 기능 하나를 만들려다가 터미널 입력의 경계를 확인하게 된 과정에 대한 기록이다.
+
+## 시작은 단순한 두벌식 변환이었다
+
+Atuin은 셸 히스토리를 SQLite에 저장하고, TUI에서 빠르게 검색할 수 있게 해주는 도구다. 나는 한글 상태에서 잘못 입력한 검색어를 영문 명령어와 연결하는 기능을 구현해 [PR #3781](https://github.com/atuinsh/atuin/pull/3781)을 올렸다.
+
+초기 구현의 생각은 단순했다.
+
+```text
+사용자가 입력한 검색어
+        ↓
+원래 검색어로 검색
+        ↓ 결과 없음
+두벌식 키 위치를 기준으로 영문 검색어 생성
+        ↓
+대체 검색어로 다시 검색
+```
+
+관련 테스트를 추가했고, regex 검색과 highlighting이 깨지지 않도록 리뷰 피드백을 반영한 [후속 수정](https://github.com/minpeter/atuin/commit/dadcfaab1740340936babe3148dfda3ed2a46269)도 fork branch에 남겼다. 하지만 [PR #3781](https://github.com/atuinsh/atuin/pull/3781)은 merge되지 않은 채 닫혔다. 코드만 보면 거의 끝난 것처럼 보였지만, 제품 방향에 대한 판단은 달랐다.
+
+하지만 메인테이너가 본 핵심은 구현의 완성도가 아니라 **이 기능이 Atuin의 책임인가**였다.
+
+[Issue #3780](https://github.com/atuinsh/atuin/issues/3780)은 처음에 닫혔다. 검색 도구가 키보드 레이아웃을 교정하기 시작하면 기능 범위가 계속 넓어질 수 있고, 새로운 입력 방식마다 유지보수 부담이 생긴다는 이유였다. 메인테이너의 말도 충분히 합리적이었다.
+
+내 구현은 “입력된 문자가 한글이면 두벌식으로 해석한다”는 가정을 갖고 있었다. 하지만 사용자가 세벌식을 쓰거나, 한글 문장 자체를 찾고 있거나, 붙여넣은 문자열을 검색하고 있다면 이 가정은 틀릴 수 있다.
+
+내게는 편리한 기능이었지만, 제품 입장에서는 추측이었다.
+
+## VS Code의 한국어 대체 검색
+
+여기서 흥미로운 선례를 하나 찾았다.
+
+VS Code는 [PR #196204](https://github.com/microsoft/vscode/pull/196204)에서 입력된 한글 문자를 QWERTY 대체 문자열로 변환해 함께 비교하는 **character 기반 query-side matching**을 추가했다. 물리 키를 캡처하는 구현은 아니다. 한글 입력 상태에서 `debug`의 키를 누르면 만들어지는 `ㅇ듀ㅕㅎ`으로도 `debug`를 찾을 수 있다. [VS Code 1.85 릴리스 노트](https://code.visualstudio.com/updates/v1_85#_alternate-character-filtering-for-korean)는 이 예와 함께, 현재 단어 중간에서 시작하는 filtering에는 적용되지 않는다는 제한도 명시한다.
+
+이 기능의 출발점은 [Go to File에서의 한국어 filtering 요청](https://github.com/microsoft/vscode/issues/196203)이었다. 하지만 PR이 만든 것은 모든 VS Code filtering surface나 입력 API를 일반화한 계약이 아니라, 그 사용 사례에 맞춘 character matching이다. 그래서 이 선례는 “사용자가 잘못된 배열 상태에서 만든 문자열도 검색할 수 있게 하자”에는 강한 답이지만, “어떤 입력기에서도 실제 key sequence를 얻자”의 답은 아니다.
+
+Atuin 메인테이너도 이 선례를 흥미롭게 봤고, 이슈를 다시 열어 더 넓은 방향을 제안했다.
+
+> character-based input이 아니라 key-stroke-based input을 지원하면 어떨까?
+
+범위도 한글에 머물지 않았다.
+
+- 키릴 문자(Cyrillic)
+- 두벌식(Dubeolsik)
+- 중국어 병음(Pinyin) 입력
+- 일본어 입력기(Japanese input methods)
+
+반대로 QWERTZ처럼 사용자가 지역화된 배열 그대로 동작하기를 기대하는 경우에는 적용하지 않아야 한다는 조건도 붙었다.
+
+나도 처음에는 이 방향이 훨씬 멋지다고 생각했다. 입력된 문자를 억지로 역변환하지 말고 실제로 누른 키를 기준으로 검색하면 두벌식과 세벌식을 구분할 필요조차 없어 보였다. 한국어뿐 아니라 여러 입력 방식에 일반화할 수도 있다.
+
+Atuin 메인테이너가 이슈를 다시 열며 연결한 [X의 공개 대화](https://x.com/minpeter/status/2082179288586227712)에서도 같은 방향을 논의했다. “검색 도구가 입력 방식을 추측하지 않고, 터미널이 전달한 키 정보를 사용한다”는 원칙은 제품 설계로도 훨씬 깨끗해 보였다.
+
+문제는 터미널이 그 정보를 애플리케이션까지 전달해 주느냐였다.
+
+## 브라우저와 터미널은 입력을 받는 방식이 다르다
+
+브라우저에서 한글을 입력하면 웹 애플리케이션은 composition의 시작, 갱신, 종료와 최종 입력을 구분할 수 있다. [`KeyboardEvent.isComposing`](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/isComposing)처럼 “지금 composition 중인가”를 알려 주는 DOM API도 있다. 그래서 처음에는 터미널도 운영체제의 입력 API에 직접 연결하면 되는 것 아닌가 싶었다.
+
+하지만 이것도 provenance의 답은 아니다. `isComposing`은 composition session 안에서 발생한 event라는 boolean일 뿐, 최종 `햣`이 어떤 `g·i·t`와 후보 선택·수정 과정을 거쳐 만들어졌는지 연결해 주지 않는다. 브라우저가 자신의 DOM 입력 경계에서 composition을 관찰할 수 있다는 사실과, terminal PTY가 애플리케이션에 원래 constituent key들을 전달한다는 사실은 다른 계약이다.
+
+하지만 TUI 애플리케이션은 보통 운영체제의 입력 시스템과 직접 대화하지 않는다.
+
+```text
+키보드
+  ↓
+운영체제 / IME
+  ↓
+터미널 에뮬레이터
+  ↓
+escape sequence 또는 일반 텍스트
+  ↓
+PTY
+  ↓
+입력 라이브러리(Crossterm 등)
+  ↓
+Atuin
+```
+
+Atuin이 보는 것은 이 파이프라인의 마지막에 도착한 데이터다. 중간 단계에서 키 정보가 사라졌다면 Atuin은 그것을 복원할 수 없다.
+
+브라우저도 모든 물리 키의 이력을 웹페이지에 보장해 주는 것은 아니다. 다만 브라우저 엔진과 렌더러가 운영체제의 입력 API를 직접 통합하고, 웹에 composition이라는 공통 생명주기를 제공한다. 반면 전통적인 터미널 인터페이스는 최종적으로 PTY에 바이트 스트림을 넘긴다.
+
+이 차이가 생각보다 컸다.
+
+## 일반 키 이벤트와 IME 조합은 같은 입력이 아니다
+
+조사하면서 가장 중요하게 배운 것은 **문자 종류보다 입력 경로가 중요하다**는 점이었다.
+
+일반적인 direct layout에서는 하나의 키 이벤트가 하나의 논리 문자로 이어질 수 있다. 예를 들어 보통의 키릴 문자 배열에서 문자를 직접 입력한다면 터미널은 key event를 받고, 지원되는 경우 Kitty 키보드 프로토콜을 통해 논리 문자와 PC-101 기준의 base-layout codepoint를 함께 보낼 수 있다.
+
+이 값은 raw hardware scancode는 아니지만, 어떤 기준 키 위치에서 나온 문자인지 표현하는 데 사용할 수 있다.
+
+IME 조합 입력은 다르다.
+
+```text
+여러 키 이벤트
+  ↓
+수정 가능한 preedit / composition
+  ↓
+후보 선택 또는 문자 변환
+  ↓
+최종 committed text
+```
+
+한글은 자음과 모음을 조합해 음절을 만들고, 중국어 병음과 일본어 입력은 후보 선택과 변환까지 포함할 수 있다. 사용자가 중간에 글자를 지우거나 바꾸는 일도 있다.
+
+최종 문자열은 이 과정을 거친 결과일 뿐, 그 문자열을 만든 모든 키 이벤트의 영수증이 아니다.
+
+## Kitty 키보드 프로토콜이 해결해 주지 않을까
+
+글을 작성할 당시 Atuin은 [검색 TUI 입력 경로](https://github.com/atuinsh/atuin/blob/a5fd5e5ee6cba5e819289cec991389adb34eaaef/crates/atuin/src/command/client/search/interactive.rs#L1529-L1533)에서 Rust의 Crossterm을 통해 Kitty 키보드 프로토콜을 사용한다. [workspace 의존성](https://github.com/atuinsh/atuin/blob/a5fd5e5ee6cba5e819289cec991389adb34eaaef/Cargo.toml#L36)은 Crossterm 0.29.0이며, Windows 이외의 빌드에서 다음 세 flag를 활성화한다.
+
+- `DISAMBIGUATE_ESCAPE_CODES`
+- `REPORT_ALL_KEYS_AS_ESCAPE_CODES`
+- `REPORT_ALTERNATE_KEYS`
+
+Crossterm 0.29는 `REPORT_ASSOCIATED_TEXT`를 지원하지 않으므로 Atuin은 이 flag를 요청하지 않는다. 또한 enhanced keyboard mode와 CJK composition의 상호작용에는 [조합 중 Enter가 명령을 실행하는 Issue #3558](https://github.com/atuinsh/atuin/issues/3558)과 이를 설정으로 우회하려는 [PR #3559](https://github.com/atuinsh/atuin/pull/3559)가 별도로 열려 있다. 이것은 key provenance 문제와 같지는 않지만, 더 풍부한 키보드 보고를 켜는 일이 모든 IME에서 비용 없는 해법은 아니라는 점을 보여준다.
+
+### CSI-u라는 이름부터
+
+Kitty 키보드 프로토콜에서 키 이벤트를 표현하는 중심 형식은 흔히 **CSI-u**라고 부른다. CSI는 Control Sequence Introducer의 약자다. Kitty가 사용하는 7-bit 표현에서는 `ESC [`이고, 실제 바이트는 `0x1B 0x5B`다. 마지막 `u`는 `0x75`인 final byte로, 이 제어 시퀀스가 끝났음을 나타낸다. `u` 자체가 Unicode나 modifier의 약자인 것은 아니다.
+
+이 조사에서 확인해야 할 것은 두 가지였다.
+
+1. CSI-u가 현재 배열의 문자와 PC-101 기준의 키 위치를 함께 보낼 수 있는가?
+2. 터미널이 보낸 그 값을 Crossterm과 Atuin이 끝까지 보존하는가?
+
+첫 번째 질문의 답은 “그렇다”다. 두 번째 질문에서 문제가 생긴다.
+
+<details>
+<summary>CSI-u의 전체 필드와 숫자 인코딩 보기</summary>
+
+Kitty가 정의한 현재 문법은 다음과 같다.
+
+```text
+ESC [ K[:S[:B]] [; M[:E]] [; T[:T...]] u
+```
+
+- `K`: 현재 레이아웃의 unshifted Unicode code point
+- `S`: Shift를 적용한 현재 레이아웃의 code point
+- `B`: 같은 물리 위치를 표준 PC-101 배열로 표현한 base-layout code point
+- `M`: modifier bitmask에 1을 더한 값
+- `E`: `1=press`, `2=repeat`, `3=release`
+- `T`: 해당 key event가 생성한 text의 Unicode code point
+
+세미콜론은 큰 필드를, 콜론은 하위 필드를 나눈다. 첫 번째 `K`만 필수이고 나머지는 프로그램이 요청한 enhancement와 터미널이 가진 정보에 따라 생략될 수 있다.
+
+<CsiUAnatomyDiagram />
+
+modifier 값은 단순한 번호가 아니라 **`1 + bitmask`**다. Shift는 1, Alt는 2, Ctrl은 4이므로 Shift만 누르면 `2`, Ctrl만 누르면 `5`, Ctrl+Shift는 `6`이 된다. press는 기본값이라 생략할 수 있고, repeat와 release를 요청하면 `M:2`, `M:3`처럼 두 번째 하위 필드에 들어간다.
+
+Kitty 문서의 공식 예시 `ESC[97;2;65u`는 `REPORT_ALL_KEYS_AS_ESCAPE_CODES`와 `REPORT_ASSOCIATED_TEXT`를 함께 요청했을 때의 형식이다. Atuin은 후자를 요청하지 않으므로 이 예시는 Atuin의 현재 wire form이 아니다. 이를 풀어 보면 primary key는 `97`, 즉 unshifted `a`다. modifier `2`는 Shift이고, 마지막 text `65`가 실제로 생성된 대문자 `A`다. Shift+A를 그냥 `65` 하나로 표현하지 않고 “어떤 키였는가”와 “어떤 글자를 만들었는가”를 분리한다.
+
+이 문법은 원래의 [fixterms 제안](https://www.leonerd.org.uk/hacks/fixterms/)과 같은 `CSI ... u` 형태에서 출발했지만 동일한 프로토콜은 아니다. Kitty 문서도 [fixterms와의 차이와 수정점](https://sw.kovidgoyal.net/kitty/keyboard-protocol/#fixterms-bugs)을 별도로 정리한다. Kitty 확장은 shifted/base-layout key, Super·Meta 같은 modifier, repeat/release, associated text, feature negotiation을 추가하고 Shift 처리의 모호함도 수정했다. 따라서 여기서 말하는 CSI-u는 정확히는 **Kitty가 확장한 CSI-u 키 이벤트 형식**이다.
+
+</details>
+
+### CSI-u가 Atuin까지 도착하는 경로
+
+CSI-u가 직접 레이아웃 입력에 유용한 이유는 첫 번째 필드 안의 `B`, 즉 base-layout key에 있다. 예를 들어 키릴 문자 배열에서 `Ctrl+с`를 누르면 현재 레이아웃의 unshifted key는 U+0441 `с`, 10진수로 `1089`다. 같은 물리 위치를 PC-101 배열로 표현한 값은 U+0063 `c`, 즉 `99`가 될 수 있다.
+
+규격에 맞게 조합하면 다음과 같은 시퀀스로 표현할 수 있다.
+
+```text
+ESC[1089::99;5u
+```
+
+`1089::99`에서 비어 있는 가운데 값은 Shift key가 없다는 뜻이고, `99`가 base-layout key다. `5`는 `1 + Ctrl(4)`이며 event type이 없으므로 press다.
+
+<DirectKeyPathDiagram />
+
+여기서 `B=99`는 hardware scancode가 아니다. USB HID usage ID나 Linux evdev code처럼 운영체제·하드웨어가 사용하는 raw identifier가 아니라, 해당 키 위치를 **표준 PC-101 배열의 문자 `c`로 정규화한 Unicode code point**다. 물리 위치를 설명하는 semantic value에 가깝다.
+
+그리고 현재 Crossterm 0.29의 공개 `KeyEvent`에는 primary, shifted, base-layout, associated text를 각각 담을 필드가 없다. [Issue #968](https://github.com/crossterm-rs/crossterm/issues/968)에 정리된 현재 parser는 shifted key가 있으면 기존 `code`를 덮어쓰고 Shift modifier를 제거하며, base-layout key와 associated text는 무시한다. [PR #1074](https://github.com/crossterm-rs/crossterm/pull/1074)는 이 가운데 base-layout 정보를 노출하려는 시도다.
+
+따라서 터미널이 `99`를 보냈더라도 Crossterm의 `KeyEvent`만 받은 Atuin은 그것을 볼 수 없다. CSI-u를 지원하는 것과 CSI-u의 모든 필드를 end-to-end로 보존하는 것은 다른 문제다.
+
+### CSI-u로도 복원할 수 없는 IME 입력
+
+더 근본적인 한계는 CSI-u가 **터미널이 받은 key event를 직렬화하는 형식**이라는 데 있다. 운영체제나 IME에서 먼저 소비된 키를 감지하는 API는 아니다.
+
+Kitty 문서에는 `REPORT_ALL_KEYS_AS_ESCAPE_CODES`와 `REPORT_ASSOCIATED_TEXT`를 함께 요청한 경우, OS가 Alt 정보를 소비하고 `å`라는 text input만 터미널에 전달한 공식 예가 있다.
+
+```text
+ESC[0;;229u
+```
+
+여기서 `K=0`은 “키가 0번이었다”는 뜻이 아니라 **터미널이 이 text를 연결할 수 있는 알려진 key 정보를 받지 못했다**는 표시다. `229`는 U+00E5 `å`다. CSI-u 안에 text가 들어갔지만 원래 Alt+A라는 입력 이력은 이미 사라졌다.
+
+한글 IME도 같은 경계를 더 극단적으로 보여준다. `git`을 치려던 `g`, `i`, `t`는 각각 `ㅎ`, `ㅑ`, `ㅅ`으로 조합되고, 입력기는 최종 `햣`을 commit한다. 터미널이 constituent key event를 받지 못했다면 CSI-u가 담을 `K`, `S`, `B`, `M`, `E` 자체가 없다.
+
+<ImeCompositionPathDiagram />
+
+Atuin이 켠 `REPORT_ALL_KEYS_AS_ESCAPE_CODES`는 **터미널이 받은 text-generating key event**도 raw UTF-8 대신 CSI-u로 보내게 한다. `REPORT_ALTERNATE_KEYS`는 그렇게 escape code로 보낼 이벤트에 shifted/base-layout 값을 추가한다. Kitty 문서도 이 두 번째 flag가 이미 escape code로 표현될 key event의 형식만 확장할 뿐이라고 명시한다.
+
+즉 CSI-u는 “들어온 키를 잃지 않는” 쪽의 해법이지, “들어오지 않은 키를 찾아내는” 해법이 아니다. Kitty 메인테이너도 [Issue #8620의 답변](https://github.com/kovidgoyal/kitty/issues/8620#issuecomment-2869364450)에서 IME가 소비한 key event는 프로토콜에 보고되지 않으며, 나중에 commit된 결과는 입력 출처를 추적할 정보(key provenance)가 없는 text라고 설명했다.
+
+여기서 내가 원하던 “기존 프로토콜 위에서 날로 먹는 해결책”은 거의 사라졌다.
+
+## 운영체제마다 경계도 달랐다
+
+더 어려운 점은 터미널과 IME의 관계가 플랫폼과 통합 방식에 따라 달라진다는 것이다.
+
+### Windows Terminal과 TSF
+
+Windows Terminal의 현재 코드에서는 key handler가 virtual key와 scan code를 받는다. 하지만 TSF composition이 활성화된 동안에는 [완료된 composition을 먼저 flush한 뒤, key event를 PTY로 직접 전달하지 않고 반환한다.](https://github.com/microsoft/terminal/blob/a463ae64797c19d181dd8fc9f74c5596ad017782/src/cascadia/TerminalControl/TermControl.cpp#L1783-L1817)
+
+터미널 호스트는 key 정보를 처리하지만, composition이 활성화된 동안에는 그 key event를 PTY로 직접 전달하지 않는다. finalized text는 별도의 TSF output 경로로 전송되고, navigation이나 confirmation key는 composition이 끝난 뒤 IME가 다시 주입하면 보통 전달된다.
+
+### X11 IBus
+
+입력 통합의 세부 동작은 backend마다 다르다. 확인한 Kitty의 X11 IBus 경로는 [`CommitText`와 `ForwardKeyEvent`를 별도로 처리](https://github.com/kovidgoyal/kitty/blob/4b55d5985e84e0e973d1534e61d0468e6a79fbf5/glfw/ibus_glfw.c#L185-L247)한다. 원래 event를 임시 보관해 [`ProcessKeyEvent`의 handled 결과](https://github.com/kovidgoyal/kitty/blob/4b55d5985e84e0e973d1534e61d0468e6a79fbf5/glfw/ibus_glfw.c#L493-L529)를 기다릴 수는 있지만, commit callback과 constituent key 목록이 하나의 안정적인 provenance로 묶이는 것은 아니다.
+
+즉 “터미널이 어느 시점에 이벤트를 본다”와 “나중에 commit된 문자열이 정확히 어떤 이벤트들로 만들어졌는지 PTY 애플리케이션이 안다”는 다른 이야기다.
+
+### macOS AppKit
+
+Kitty의 macOS 경로도 [`NSEvent`의 native keyCode와 modifier를 먼저 보존](https://github.com/kovidgoyal/kitty/blob/4b55d5985e84e0e973d1534e61d0468e6a79fbf5/glfw/cocoa_window.m#L1262-L1325)한 뒤 `interpretKeyEvents`를 호출한다. 하지만 committed text를 전달하는 [`insertText` callback](https://github.com/kovidgoyal/kitty/blob/4b55d5985e84e0e973d1534e61d0468e6a79fbf5/glfw/cocoa_window.m#L2025-L2054)은 별도 경로이며, 한 key event에서 여러 번 호출될 수도 있다. native event를 관찰할 수 있다는 사실만으로 여러 key와 하나의 commit을 PTY 애플리케이션이 안정적으로 연결할 수 있는 것은 아니다.
+
+### Wayland와 keyboard grab
+
+Wayland의 input-method-unstable-v2 경로에서는 입력기가 하드웨어 키보드를 grab할 수 있다. [프로토콜 설명](https://wayland.app/protocols/input-method-unstable-v2#zwp_input_method_v2:request:grab_keyboard)에 따르면 compositor는 seat의 keyboard event를 grab holder로 보내도록 되어 있지만(`should`), 특정 이벤트를 보내지 않을 수 있다. 이미 전달한 이벤트는 더 처리해서는 안 된다.
+
+입력기가 이 경로를 사용하면 조합에 소비된 키는 터미널 클라이언트보다 앞에서 입력기로 향할 수 있다. 이 경우 터미널 에뮬레이터만 수정해서 모든 키를 복원하는 것조차 불가능하다. compositor와 input method의 협력이 필요하다.
+
+결국 “터미널 에뮬레이터가 OS와 직접 연결돼 있으니 거기만 고치면 된다”는 생각도 모든 환경에서는 성립하지 않았다.
+
+플랫폼과 입력 방식에 따라 어느 계층에서 정보가 사라지는지 한 장으로 정리하면 다음과 같다.
+
+<InputBoundaryMatrix />
+
+<details>
+<summary>조사 로그에서 빠뜨리기 아까운 열두 장면</summary>
+
+이 글의 결론은 한 번에 나온 것이 아니었다. 처음의 “두벌식 문자열을 한 번 더 검색하자”는 생각은, 입력 경계를 하나씩 확인할 때마다 다른 종류의 문제로 바뀌었다. 아래 장면들은 최종 설계보다도 이 조사가 왜 예상보다 깊어졌는지를 보여 준다.
+
+1. **PR은 코드가 부족해서만 닫힌 것이 아니었다.** [PR #3781](https://github.com/atuinsh/atuin/pull/3781)에는 테스트가 있었고, regex와 highlighting을 다듬은 후속 수정도 fork에 남았다. 하지만 merge되지 않은 채 닫힌 이유를 따라가 보니, 질문은 “이 변환이 맞게 동작하는가”보다 “검색 도구가 입력 방식을 추측하는 책임을 가져도 되는가”에 가까웠다. 구현을 더 완성하는 것만으로는 답할 수 없는 제품 범위의 질문이었다.
+
+2. **VS Code의 선례도 physical-key 해법은 아니었다.** `ㅇ듀ㅕㅎ`으로 `debug`를 찾는 [VS Code의 한국어 대체 filtering](https://code.visualstudio.com/updates/v1_85#_alternate-character-filtering-for-korean)은 매우 마법처럼 보인다. 그러나 [PR #196204](https://github.com/microsoft/vscode/pull/196204)의 방식은 입력 문자를 query-side alternate로 함께 비교하는 것이다. 실제로 누른 키를 복원하지 않고, 단어 중간에서 시작하는 filtering에는 적용되지도 않는다. 좋은 문자열 변환과 key provenance는 다른 문제라는 첫 번째 경고였다.
+
+3. **`B=99`는 raw scancode가 아니다.** Kitty CSI-u의 base-layout `B`는 “물리 키 위치”를 가리키는 데 쓸 수 있지만 USB HID usage ID나 Linux evdev code는 아니다. 키릴 `с`를 만든 키가 표준 PC-101에서 `c`에 해당한다는 것을 Unicode code point `99`로 정규화한 semantic value다. 그래서 `ESC[1089::99;5u`의 `99`는 하드웨어 식별자가 아니라 “기준 배열에서의 `c`”라는 뜻이다.
+
+4. **터미널이 `B`를 보내도 애플리케이션이 보는 것은 별개다.** PTY는 `ESC[1089::99;5u` 바이트를 보존할 수 있다. 그럼에도 현재 Crossterm 0.29의 공개 `KeyEvent`에는 base-layout과 associated text를 담는 필드가 없다. [Issue #968](https://github.com/crossterm-rs/crossterm/issues/968)과 [PR #1074](https://github.com/crossterm-rs/crossterm/pull/1074)가 보여 주듯, protocol support와 end-to-end data preservation은 전혀 같은 말이 아니다.
+
+5. **확장 프로토콜 안에서도 이미 사라진 키는 돌아오지 않는다.** Kitty의 공식 예시 `ESC[0;;229u`에서 `K=0`은 key가 0번이라는 뜻이 아니다. terminal이 text `å`를 어떤 key event와 연결할 수 없다는 표시다. `229`는 U+00E5만 남겼고, OS가 먼저 소비한 Alt+A의 이력은 없다. CSI-u가 text를 표현할 수 있다는 사실만으로 text가 만들어진 과정을 복원할 수는 없다.
+
+6. **Windows Terminal은 key와 PTY 전달을 일부러 분리한다.** TSF composition 중 Windows Terminal은 virtual key와 scan code를 처리할 수 있어도, [완료된 composition을 flush한 뒤 key event를 PTY로 직접 넘기지 않고 반환한다](https://github.com/microsoft/terminal/blob/a463ae64797c19d181dd8fc9f74c5596ad017782/src/cascadia/TerminalControl/TermControl.cpp#L1783-L1817). key를 본 terminal host와 나중에 text를 받는 TUI 애플리케이션이 같은 정보를 공유한다는 보장은 없었다.
+
+7. **X11 IBus에서 event를 보았다는 것만으로 commit의 영수증이 생기지는 않는다.** Kitty는 [`ForwardKeyEvent`와 `CommitText`를 별도 경로로 처리](https://github.com/kovidgoyal/kitty/blob/4b55d5985e84e0e973d1534e61d0468e6a79fbf5/glfw/ibus_glfw.c#L185-L247)하고, [`ProcessKeyEvent`의 handled 결과](https://github.com/kovidgoyal/kitty/blob/4b55d5985e84e0e973d1534e61d0468e6a79fbf5/glfw/ibus_glfw.c#L493-L529)를 기다릴 수 있다. 그래도 나중의 한 commit이 어느 constituent key들의 결과인지 안정적으로 묶는 identifier는 없다. 관찰과 provenance는 다르다.
+
+8. **macOS도 같은 직관을 깨뜨린다.** AppKit 경로는 `NSEvent`의 native keyCode와 modifier를 먼저 보존한 뒤 `interpretKeyEvents`를 호출한다. 하지만 committed text는 별도 `insertText` callback으로 오며 한 key event에서 여러 번 호출될 수도 있다. native event를 볼 수 있다는 사실이 여러 key와 하나의 commit을 PTY 애플리케이션까지 연결해 주는 계약은 아니다.
+
+9. **Wayland에서는 terminal을 고쳐도 이미 늦을 수 있다.** input-method-v2에서 입력기는 terminal보다 먼저 keyboard grab을 받을 수 있다. compositor와 input method가 협력하지 않는다면, 조합에 소비된 key는 terminal emulator가 볼 기회조차 없다. “terminal protocol을 확장하면 된다”는 생각이 compositor 경계에서 무너졌다.
+
+10. **두벌식은 유용하지만 provenance 복원은 아니다.** 지원 범위를 명시하면 현대 한글 문자열에서 canonical alternate query를 만들 수 있다. 그러나 붙여넣기, 세벌식, 조합 중 수정, Caps Lock, 한자 변환, 옛한글까지 원래 입력을 증명할 수는 없다. 두벌식 fallback은 사용자가 opt-in한 검색 변환이지, 실제 key history의 복원이 아니다.
+
+11. **중국어 병음과 일본어 입력은 역변환의 한계를 더 선명하게 만든다.** 같은 최종 문자가 여러 병음, 후보 선택, 변환 과정을 거쳐 만들어질 수 있다. committed text만 보고 원래 key sequence를 하나로 정할 수 없으므로, 한글의 단순한 layout table 사고를 일반화하면 오히려 거짓 확신이 된다.
+
+12. **더 많은 keyboard flag도 공짜 해법은 아니다.** `REPORT_ASSOCIATED_TEXT`는 현재 Crossterm 0.29에서 지원되지 않아 Atuin이 요청하지 않는다. 그리고 `REPORT_ALL_KEYS_AS_ESCAPE_CODES` 같은 enhanced mode 자체도 CJK composition 중 Enter가 명령 실행으로 이어질 수 있는 [Issue #3558](https://github.com/atuinsh/atuin/issues/3558)과 [PR #3559](https://github.com/atuinsh/atuin/pull/3559)의 맥락을 가진다. 더 풍부한 보고를 켠다는 결정은 단순한 feature flag가 아니라 IME 호환성의 trade-off다.
+
+</details>
+
+## 언어별로 보면 더 분명해진다
+
+이제 처음에 제안된 입력 방식들을 다시 보면 차이가 보인다.
+
+### 키릴 문자
+
+ordinary direct-layout key event로 전달되는 경우에는 Kitty 프로토콜의 base-layout 정보가 도움이 될 수 있다. Atuin이 이 정보를 활용하려면 Crossterm과 Atuin의 입력 경로가 그 필드를 끝까지 노출해야 한다.
+
+다만 키릴 문자도 IME나 별도의 text-input 경로를 거치면 같은 보장이 사라질 수 있다. “키릴 문자는 된다”가 아니라 “일반 key event로 도착한 direct-layout 입력은 다룰 수 있다”가 더 정확하다.
+
+### 두벌식
+
+현대 한글 음절과 지원하는 자모 범위를 명확히 정하면 Unicode 분해와 두벌식 테이블로 하나의 **canonical alternate query**를 만들 수 있다.
+
+하지만 이것은 실제 키 이벤트 복원이 아니다. 붙여넣은 텍스트, 조합 중 수정, Caps Lock과 modifier 상태, 세벌식이나 다른 한국어 입력기, 한자 변환, 옛한글까지 원래 입력을 증명할 수는 없다.
+
+두벌식이라고 사용자가 명시했을 때 적용할 수 있는 제한된 검색 변환일 뿐이다.
+
+### 중국어 병음과 일본어 입력
+
+이쪽은 더 어렵다. 같은 최종 문자가 서로 다른 입력과 후보 선택 과정을 통해 만들어질 수 있다. committed text만 보고 원래 키 입력을 하나로 역산할 수 없다.
+
+따라서 두벌식처럼 문자에서 canonical key-layout query를 만드는 방법을 그대로 일반화할 수 없다. 진짜 key-based matching을 원한다면 composition을 구성한 키의 provenance가 입력기부터 애플리케이션까지 보존돼야 한다.
+
+## 범용 해법에는 새로운 provenance가 필요하다
+
+정석적인 범용 해법은 최종 문자열과 함께 “이 commit을 만든 입력 사건”을 전달하는 것이다.
+
+예를 들면 다음과 같은 정보가 하나의 단위로 이어져야 한다.
+
+```text
+committed text
++ constituent key/base-layout events
++ composition 또는 commit 식별자
+```
+
+그리고 이 정보는 한 계층에서만 존재해서는 부족하다.
+
+1. 운영체제의 입력기 또는 터미널 호스트가 정보를 만든다.
+2. 터미널 프로토콜이 opt-in 형태로 표현한다.
+3. tmux 같은 중간 계층이 보존한다.
+4. PTY 입력 라이브러리가 구조화된 이벤트로 노출한다.
+5. Atuin 같은 애플리케이션이 명시적으로 사용한다.
+
+native Wayland처럼 입력기가 터미널보다 먼저 키를 가져가는 경로라면 compositor와 input method 프로토콜까지 이 계약에 참여해야 한다.
+
+처음에는 Kitty 프로토콜만 조금 확장하면 될 것이라고 생각했다. 실제로는 터미널 생태계 전체를 통과하는 end-to-end provenance 문제였다.
+
+당장 Atuin 검색 하나를 개선하기에는 꽤 큰 공사다.
+
+## 지금 Atuin에서 할 수 있는 것
+
+오랜 조사 끝에 다시 작은 해결책으로 돌아왔다.
+
+Atuin이 지금 현실적으로 할 수 있는 것은 범용 physical-key capture가 아니라, 사용자가 직접 선택하는 **layout-aware alternate query**라고 생각한다.
+
+아직 Atuin에 채택되거나 구현된 설정은 아니다. 다음 TOML은 이름과 동작 계약을 포함한 미래 API 제안의 예시다.
+
+```toml
+[search]
+layout_fallback = "dubeolsik"
+```
+
+이 제안이 채택된다면 운영체제의 IME를 감지하거나 선택하지 않는다. 사용자가 “이 검색 변환에는 두벌식 테이블을 사용해도 된다”고 명시하는 것이다. 기본값은 꺼진 상태여야 하고, QWERTZ를 포함한 다른 배열에는 아무 영향도 주지 않아야 한다.
+
+동작도 보수적으로 제한할 수 있다.
+
+- 먼저 원래 검색어를 사용하고, 결과가 하나라도 있으면 그대로 둔다.
+- 정상적으로 완료된 fuzzy 검색이 결과 0개일 때만 대체 검색어를 시도한다.
+- regex와 확장 query operator에는 적용하지 않는다.
+- 변환한 문자열을 새로운 query syntax로 다시 해석하지 않는다.
+- prefix와 full-text 검색은 그대로 유지한다.
+- 화면에 보이는 검색어와 저장·동기화되는 히스토리를 바꾸지 않는다.
+- 결과가 원래 검색어와 대체 검색어 중 어느 쪽에서 왔는지 함께 보존하고, matching·ranking·highlighting에 같은 검색어를 사용한다.
+
+이 방식은 “한국어 입력 문제를 해결한다”고 말할 수 없다. 현대 한글과 두벌식의 명시된 범위에서, 원래 검색 결과가 없을 때 잘못된 입력 상태의 검색어를 한 번 더 해석해 보는 기능이다.
+
+대신 무엇을 해결하고 무엇을 해결하지 않는지가 분명하다.
+
+## 오픈소스에서 구현보다 framing이 중요할 때
+
+이번 과정에서 가장 크게 느낀 것은 좋은 코드가 곧 좋은 제품 변경은 아니라는 점이었다.
+
+처음 PR은 테스트도 있었고 검색 엔진별 동작도 맞췄다. 하지만 “왜 Atuin이 이 책임을 가져야 하는가”라는 질문에 충분히 답하지 못했다. 나는 한국어 사용자로서 당연히 편리하다고 느꼈지만, 메인테이너는 이후 추가될 입력 방식과 유지보수 범위를 먼저 봤다.
+
+반대로 물리 키 기반의 범용 해결책은 제품 방향으로는 훨씬 아름다웠지만, 지금 터미널 입력 계층이 제공하지 않는 정보를 전제로 했다.
+
+결국 현실적인 제안은 둘 사이에 있다.
+
+- 자동 감지나 추측은 하지 않는다.
+- 사용자가 배열을 명시적으로 선택한다.
+- Atuin이 보장할 수 있는 검색 동작만 구현한다.
+- 범용 IME provenance 문제를 해결한 것처럼 말하지 않는다.
+
+지금은 이 조사 결과와 좁은 opt-in 설계를 [Issue #3780의 댓글](https://github.com/atuinsh/atuin/issues/3780#issuecomment-5110902701)로 남기고 답변을 기다리는 중이다.
+
+처음 목표였던 “한글 상태에서 `git`을 검색하고 싶다”에 비하면 꽤 먼 곳까지 왔다.
+
+그래도 이 과정을 거치고 나니 왜 간단한 문자 변환이 제품 범위의 문제가 되고, 왜 브라우저에서 자연스러운 입력 경험이 TUI에서는 어려우며, 데이터가 어느 계층에서 사라지는지를 조금은 알 것 같다.
+
+낮은 계층으로 내려가면 언제나 더 많은 진실을 얻을 수 있을 것 같지만, 때로는 그 낮은 계층에도 이미 정보가 도착하지 않는다.
+
+이번 문제에서 가장 중요한 사실은 바로 그것이었다.
+
+## 관련 링크
+
+- [Atuin Issue #3780](https://github.com/atuinsh/atuin/issues/3780)
+- [Atuin PR #3781 — closed, unmerged](https://github.com/atuinsh/atuin/pull/3781)
+- [Atuin search TUI keyboard flags](https://github.com/atuinsh/atuin/blob/a5fd5e5ee6cba5e819289cec991389adb34eaaef/crates/atuin/src/command/client/search/interactive.rs#L1529-L1533)
+- [Atuin Issue #3558 — CJK IME Enter compatibility](https://github.com/atuinsh/atuin/issues/3558)
+- [Atuin PR #3559 — enhanced keyboard option](https://github.com/atuinsh/atuin/pull/3559)
+- [X에서 이어진 공개 대화](https://x.com/minpeter/status/2082179288586227712)
+- [VS Code PR #196204](https://github.com/microsoft/vscode/pull/196204)
+- [VS Code 1.85: Alternate character filtering for Korean](https://code.visualstudio.com/updates/v1_85#_alternate-character-filtering-for-korean)
+- [Kitty keyboard protocol](https://sw.kovidgoyal.net/kitty/keyboard-protocol/)
+- [Kitty X11 IBus integration source](https://github.com/kovidgoyal/kitty/blob/4b55d5985e84e0e973d1534e61d0468e6a79fbf5/glfw/ibus_glfw.c#L185-L247)
+- [Kitty macOS input integration source](https://github.com/kovidgoyal/kitty/blob/4b55d5985e84e0e973d1534e61d0468e6a79fbf5/glfw/cocoa_window.m#L1262-L1325)
+- [Kitty Issue #8620의 IME 경계 설명](https://github.com/kovidgoyal/kitty/issues/8620#issuecomment-2869364450)
+- [Crossterm Issue #968](https://github.com/crossterm-rs/crossterm/issues/968)
+- [Crossterm PR #1074](https://github.com/crossterm-rs/crossterm/pull/1074)
+- [Windows Terminal의 TSF composition 처리](https://github.com/microsoft/terminal/blob/a463ae64797c19d181dd8fc9f74c5596ad017782/src/cascadia/TerminalControl/TermControl.cpp#L1783-L1817)
+- [Wayland input-method-v2 keyboard grab](https://wayland.app/protocols/input-method-unstable-v2#zwp_input_method_v2:request:grab_keyboard)
+
+</div>
