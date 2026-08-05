@@ -13,9 +13,7 @@ const nextConfig: NextConfig = {
       "@radix-ui/react-icons",
       "react-icons",
     ],
-    prefetchInlining: true,
-    turbopackFileSystemCacheForDev: true,
-    viewTransition: false,
+    useTypeScriptCli: true,
   },
   images: {
     formats: ["image/avif", "image/webp"],

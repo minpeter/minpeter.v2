@@ -39,13 +39,7 @@ describe("Search API Route", () => {
     await import("./route");
 
     expect(createFromSource).toHaveBeenCalled();
-    expect(createFromSource).toHaveBeenCalledWith(blog, {
-      localeMap: {
-        en: "english",
-        ja: "english",
-        ko: "english",
-      },
-    });
+    expect(createFromSource).toHaveBeenCalledWith(blog);
   });
 
   it("GET handler should be callable", async () => {

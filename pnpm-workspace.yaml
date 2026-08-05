@@ -15,9 +15,13 @@ overrides:
   "next>postcss": "^8.5.16"
 peerDependencyRules:
   allowedVersions:
-    # tsconfck (via vite-tsconfig-paths) declares typescript ^5 but works with
-    # the TypeScript 6 this repo uses; silence the unmet-peer warning.
-    "tsconfck>typescript": "^6.0.0"
+    # These parser/config packages have not widened their peer ranges for
+    # TypeScript 7 yet, but their consumers in this project support its CLI.
+    "@typescript-eslint/project-service>typescript": "^7.0.0"
+    "@typescript-eslint/tsconfig-utils>typescript": "^7.0.0"
+    "@typescript-eslint/typescript-estree>typescript": "^7.0.0"
+    "@typescript-eslint/utils>typescript": "^7.0.0"
+    "tsconfck>typescript": "^7.0.0"
 
 allowBuilds:
   "@parcel/watcher": true
