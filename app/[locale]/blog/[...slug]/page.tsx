@@ -68,7 +68,8 @@ export async function generateMetadata(
   });
 }
 
-async function PostBody({
+/** Exported for unit tests; page wraps this in Suspense for the soft-nav shell. */
+export async function PostBody({
   params,
 }: {
   params: Promise<{ locale: string; slug: string[] }>;

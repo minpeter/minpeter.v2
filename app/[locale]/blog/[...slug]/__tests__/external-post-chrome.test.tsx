@@ -8,7 +8,7 @@ import { describe, expect, it, vi } from "vitest";
 import type * as sourceModule from "@/shared/source";
 
 import type * as mdxComponentsModule from "../mdx-components";
-import Page from "../page";
+import { PostBody } from "../page";
 
 const COUNTDOWN_RE = /초 후 외부 링크로 이동합니다/;
 vi.mock(
@@ -74,9 +74,8 @@ vi.mock(import("../post-toc"), () => ({ PostToc: () => <div /> }));
 
 describe("app/[locale]/blog/[...slug]/page.tsx external-linked post", () => {
   it("keeps the header chrome with a back-to-blog link around the redirect", async () => {
-    const ui = Page({
+    const ui = await PostBody({
       params: Promise.resolve({ locale: "ko", slug: ["external-post"] }),
-      searchParams: Promise.resolve({}),
     });
 
     render(
@@ -93,14 +92,13 @@ describe("app/[locale]/blog/[...slug]/page.tsx external-linked post", () => {
       </NextIntlClientProvider>
     );
 
-    const backLink = await screen.findByRole("link", { name: "글 목록으로" });
+    const backLink = screen.getByRole("link", { name: "글 목록으로" });
     expect(backLink.getAttribute("href")).toBe("/blog");
   });
 
   it("keeps the redirect panel inside one viewport under the header", async () => {
-    const ui = Page({
+    const ui = await PostBody({
       params: Promise.resolve({ locale: "ko", slug: ["external-post"] }),
-      searchParams: Promise.resolve({}),
     });
 
     const { container } = render(
@@ -117,7 +115,6 @@ describe("app/[locale]/blog/[...slug]/page.tsx external-linked post", () => {
       </NextIntlClientProvider>
     );
 
-    const countdown = await screen.findByText(COUNTDOWN_RE);
     const section = container.querySelector("section.blog-post-page");
     expect(section?.className).toContain("flex-1");
     expect(section?.className).toContain("flex-col");
@@ -127,9 +124,11 @@ describe("app/[locale]/blog/[...slug]/page.tsx external-linked post", () => {
     // the space between header and footer without adding scroll.
     expect(container.querySelectorAll(".min-h-dvh")).toHaveLength(0);
 
+    const countdown = screen.getByText(COUNTDOWN_RE);
     const panel = countdown.closest("div.flex-1");
     expect(panel).not.toBeNull();
     expect(panel?.className).not.toContain("min-h-dvh");
   });
 });
+
 
