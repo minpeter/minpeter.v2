@@ -1,4 +1,5 @@
 import deepmerge from "deepmerge";
+import { locale as getRootLocale } from "next/root-params";
 import type { Formats } from "next-intl";
 import { hasLocale } from "next-intl";
 import { getRequestConfig } from "next-intl/server";
@@ -26,12 +27,25 @@ export const formats = {
   },
 } satisfies Formats;
 
-export default getRequestConfig(async ({ requestLocale }) => {
-  // Typically corresponds to the `[locale]` segment
-  const requested = await requestLocale;
-  const locale = hasLocale(routing.locales, requested)
-    ? requested
-    : routing.defaultLocale;
+async function resolveLocale(explicit?: string) {
+  if (hasLocale(routing.locales, explicit)) {
+    return explicit;
+  }
+
+  // Prefer native root params (Next 16.3+) so static rendering and Cache
+  // Components work without setRequestLocale. Falls back for global-not-found
+  // and other trees outside `[locale]`.
+  // See: https://next-intl.dev/blog/nextjs-root-params
+  const paramValue = await getRootLocale();
+  if (hasLocale(routing.locales, paramValue)) {
+    return paramValue;
+  }
+
+  return routing.defaultLocale;
+}
+
+export default getRequestConfig(async ({ locale: explicitLocale }) => {
+  const locale = await resolveLocale(explicitLocale);
 
   // If current locale is not the default, merge with fallback messages
   // This ensures missing translations fall back to the default locale (ko)
