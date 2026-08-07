@@ -15,6 +15,7 @@ vi.mock(
   import("next-intl/server"),
   () =>
     ({
+      getLocale: vi.fn(() => Promise.resolve("ko")),
       getTranslations: vi.fn(() => (key: string) => {
         const messages: Record<string, string> = {
           backToBlog: "글 목록으로",
@@ -73,7 +74,7 @@ vi.mock(import("../post-toc"), () => ({ PostToc: () => <div /> }));
 
 describe("app/[locale]/blog/[...slug]/page.tsx external-linked post", () => {
   it("keeps the header chrome with a back-to-blog link around the redirect", async () => {
-    const ui = await Page({
+    const ui = Page({
       params: Promise.resolve({ locale: "ko", slug: ["external-post"] }),
       searchParams: Promise.resolve({}),
     });
@@ -92,12 +93,12 @@ describe("app/[locale]/blog/[...slug]/page.tsx external-linked post", () => {
       </NextIntlClientProvider>
     );
 
-    const backLink = screen.getByRole("link", { name: "글 목록으로" });
+    const backLink = await screen.findByRole("link", { name: "글 목록으로" });
     expect(backLink.getAttribute("href")).toBe("/blog");
   });
 
   it("keeps the redirect panel inside one viewport under the header", async () => {
-    const ui = await Page({
+    const ui = Page({
       params: Promise.resolve({ locale: "ko", slug: ["external-post"] }),
       searchParams: Promise.resolve({}),
     });
@@ -116,7 +117,8 @@ describe("app/[locale]/blog/[...slug]/page.tsx external-linked post", () => {
       </NextIntlClientProvider>
     );
 
-    const section = container.querySelector("section");
+    const countdown = await screen.findByText(COUNTDOWN_RE);
+    const section = container.querySelector("section.blog-post-page");
     expect(section?.className).toContain("flex-1");
     expect(section?.className).toContain("flex-col");
     expect(section?.className).not.toContain("min-h-dvh");
@@ -125,9 +127,9 @@ describe("app/[locale]/blog/[...slug]/page.tsx external-linked post", () => {
     // the space between header and footer without adding scroll.
     expect(container.querySelectorAll(".min-h-dvh")).toHaveLength(0);
 
-    const countdown = screen.getByText(COUNTDOWN_RE);
     const panel = countdown.closest("div.flex-1");
     expect(panel).not.toBeNull();
     expect(panel?.className).not.toContain("min-h-dvh");
   });
 });
+
