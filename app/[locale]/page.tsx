@@ -3,6 +3,10 @@ import Image from "next/image";
 
 import { Link } from "@/shared/i18n/navigation";
 
+// Cache Components opt-out — remove after this route is adopted.
+// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
+export const instant = false;
+
 const SECTIONS = [
   {
     descriptionKey: "sections.developmentNotes.description",
@@ -35,7 +39,10 @@ export default function Page() {
   const t = useTranslations("home");
 
   return (
-    <section className="home-page mx-auto flex w-full max-w-lg flex-1 flex-col pt-[6.5rem] pb-12">
+    <section
+      className="home-page mx-auto flex w-full max-w-lg flex-1 flex-col pt-[6.5rem] pb-12"
+      data-testid="home-page"
+    >
       <header className="mb-16">
         <Link
           aria-label={t("homeLabel")}

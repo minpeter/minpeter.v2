@@ -7,6 +7,8 @@ import { cn } from "@/shared/utils/tailwind";
 
 import { ModeToggle } from "./theme-toggle";
 
+const SITE_COPYRIGHT_YEAR = 2026;
+
 const linkClassName =
   "underline decoration-foreground/30 underline-offset-4 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring";
 
@@ -28,7 +30,7 @@ export default async function Footer({
       )}
     >
       <p className="font-mono text-[11px] text-muted-foreground uppercase tracking-[0.08em]">
-        © {new Date().getFullYear()} Woonggi Min ·
+        © {SITE_COPYRIGHT_YEAR} Woonggi Min ·
         <Link
           className={linkClassName}
           href={

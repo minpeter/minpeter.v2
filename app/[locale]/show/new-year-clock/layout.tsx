@@ -4,6 +4,10 @@ import type { ReactNode } from "react";
 
 import { createMetadata, resolveLocale } from "@/shared/utils/metadata";
 
+// Cache Components opt-out — remove after this route is adopted.
+// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
+export const instant = false;
+
 interface Props {
   children: ReactNode;
   params: Promise<{ locale: string }>;

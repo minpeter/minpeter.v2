@@ -21,6 +21,10 @@ import "../globals.css";
 import { RootDocument } from "../root-document";
 import { metadata as rootMetadata } from "../root-metadata";
 
+// Cache Components opt-out — remove after this route is adopted.
+// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
+export const instant = false;
+
 export { viewport } from "../root-metadata";
 interface Props {
   children: ReactNode;

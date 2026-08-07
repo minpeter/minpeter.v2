@@ -7,6 +7,10 @@ import { cn } from "@/shared/utils/tailwind";
 
 import styles from "./styles.module.css";
 
+// Cache Components opt-out — remove after this route is adopted.
+// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
+export const instant = false;
+
 export async function generateMetadata(
   props: PageProps<"/[locale]/show/unstructured">
 ): Promise<Metadata> {

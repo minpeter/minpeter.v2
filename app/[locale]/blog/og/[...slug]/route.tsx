@@ -1,3 +1,4 @@
+import { cacheLife } from "next/cache";
 import { notFound } from "next/navigation";
 
 import { createOgImageResponse } from "@/shared/og-image";
@@ -12,14 +13,10 @@ const publishedIsoFormatter = new Intl.DateTimeFormat("sv-SE", {
   year: "numeric",
 });
 
-export const revalidate = 86_400;
-export const runtime = "nodejs";
+async function getPostOgImage(locale: string, slug: string[]) {
+  "use cache";
+  cacheLife("days");
 
-export const GET = async (
-  _request: Request,
-  { params }: { params: Promise<{ locale: string; slug: string[] }> }
-) => {
-  const { locale, slug } = await params;
   const post = blog.getPage(slug, locale);
 
   if (!post) {
@@ -41,10 +38,19 @@ export const GET = async (
   });
   const titleSize = getOgTitleSize(Math.max(...localizedTitleWidths));
 
-  return createOgImageResponse({
+  return await createOgImageResponse({
     detail: publishedIso,
     locale,
     title,
     titleSize,
   });
+}
+
+export const GET = async (
+  _request: Request,
+  { params }: { params: Promise<{ locale: string; slug: string[] }> }
+) => {
+  const { locale, slug } = await params;
+
+  return getPostOgImage(locale, slug);
 };

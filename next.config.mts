@@ -5,7 +5,7 @@ import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
 
 const nextConfig: NextConfig = {
-  cacheComponents: false,
+  cacheComponents: true,
   experimental: {
     globalNotFound: true,
     optimizePackageImports: [
@@ -32,9 +32,9 @@ const nextConfig: NextConfig = {
       fullUrl: true,
     },
   },
+  partialPrefetching: true,
   poweredByHeader: false,
   reactCompiler: true,
-
   rewrites: () => [
     {
       destination: "/:locale/blog/llms.md/:path*",

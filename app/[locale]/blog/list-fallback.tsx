@@ -30,6 +30,7 @@ export function BlogSearchShell({
       <input
         autoComplete="off"
         className="w-full bg-transparent px-10 py-4 text-sm placeholder:text-muted-foreground focus:outline-none"
+        data-testid="blog-search"
         id="blog-search"
         placeholder={searchPlaceholder}
         readOnly={true}
@@ -117,7 +118,6 @@ export function BlogListFallback({
                       <Link
                         className={ITEM_LINK_CLASSNAME}
                         href={post.url as Route}
-                        prefetch={false}
                       >
                         <ViewTransition
                           name={`blog-title-${post.url.replaceAll("/", "-")}`}

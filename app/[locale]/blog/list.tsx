@@ -83,6 +83,7 @@ export function BlogList({
         <input
           autoComplete="off"
           className="w-full bg-transparent px-10 py-4 text-sm placeholder:text-muted-foreground focus:outline-none"
+          data-testid="blog-search"
           id="blog-search"
           onChange={handleQueryChange}
           placeholder={t("searchPlaceholder")}

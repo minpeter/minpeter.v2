@@ -21,7 +21,9 @@ import { PostToc } from "./post-toc";
 
 import styles from "@/shared/styles/stagger-fade-in.module.css";
 
-export const dynamicParams = false;
+// Cache Components opt-out — remove after this route is adopted.
+// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
+export const instant = false;
 
 export function generateStaticParams({
   params,

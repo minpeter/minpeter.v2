@@ -44,6 +44,7 @@ export function LanguageSelector() {
         <button
           aria-label={`${currentLabel.short} - ${t("selectLanguage")}`}
           className="flex items-center gap-1 rounded-md px-2 py-1 text-sm text-muted-foreground hover:bg-secondary hover:text-primary transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          data-testid="language-selector"
           onPointerEnter={handleMouseEnter}
           onPointerLeave={handleMouseLeave}
           ref={triggerRef}
