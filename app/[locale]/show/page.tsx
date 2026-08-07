@@ -79,7 +79,12 @@ export default async function Page(_props: PageProps<"/[locale]/show">) {
 
       <nav aria-label={t("showcase.projectsLabel")} className="showcase-list">
         {SHOWCASE_ITEMS.map(({ key, path }) => (
-          <Link className="showcase-item-link" href={path} key={path}>
+          <Link
+            className="showcase-item-link"
+            data-testid={`showcase-link-${key}`}
+            href={path}
+            key={path}
+          >
             <span className="showcase-item-top">
               <span className="showcase-item-title">
                 {t(`showcase.items.${key}.title`)}

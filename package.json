@@ -16,7 +16,9 @@
     "postinstall": "fumadocs-mdx",
     "knip": "knip",
     "start": "next start -p 8200",
-    "test": "vitest run"
+    "test": "vitest run",
+    "test:e2e": "playwright test",
+    "test:e2e:instant": "EXPOSE_TESTING_API=1 pnpm build && playwright test"
   },
   "dependencies": {
     "@next/third-parties": "16.3.0",
@@ -54,6 +56,8 @@
     "@biomejs/biome": "2.5.6",
     "@edge-runtime/vm": "^5.0.0",
     "@next/bundle-analyzer": "16.3.0",
+    "@next/playwright": "16.3.0",
+    "@playwright/test": "^1.62.1",
     "@tailwindcss/postcss": "^4.3.3",
     "@testing-library/react": "^16.3.2",
     "@types/matter-js": "^0.20.2",

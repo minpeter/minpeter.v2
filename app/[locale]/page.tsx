@@ -66,7 +66,12 @@ export default function Page() {
 
       <nav aria-label={t("exploreLabel")} className="home-links">
         {SECTIONS.map(({ descriptionKey, href, titleKey }) => (
-          <Link className="home-link group" href={href} key={href}>
+          <Link
+            className="home-link group"
+            data-testid={`home-link-${href.slice(1)}`}
+            href={href}
+            key={href}
+          >
             <span className="home-link-title">{t(titleKey)}</span>
             <span className="home-link-description">{t(descriptionKey)}</span>
           </Link>

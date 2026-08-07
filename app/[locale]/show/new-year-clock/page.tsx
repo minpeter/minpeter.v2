@@ -1,14 +1,12 @@
 import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
+import { Suspense } from "react";
 
 import { ShowcaseDetailHeader } from "@/components/showcase-detail-header";
+import { Skeleton } from "@/components/ui/skeleton";
 import { createMetadata } from "@/shared/utils/metadata";
 
 import { Countdown } from "./countdown";
-
-// Deliberate Block: client-only interaction (canvas / Date.now / Math.random / network).
-// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
-export const instant = false;
 
 export async function generateMetadata(): Promise<Metadata> {
   const [locale, t] = await Promise.all([getLocale(), getTranslations()]);
@@ -21,13 +19,11 @@ export async function generateMetadata(): Promise<Metadata> {
   });
 }
 
-export default async function Page(
-  _props: PageProps<"/[locale]/show/new-year-clock">
-) {
+export default async function Page() {
   const t = await getTranslations();
 
   return (
-    <section className="showcase-page">
+    <section className="showcase-page" data-testid="showcase-detail-shell">
       <ShowcaseDetailHeader
         backLabel={t("back")}
         description={t("showcase.items.newYear.description")}
@@ -39,7 +35,9 @@ export default async function Page(
         title={t("showcase.items.newYear.title")}
       />
 
-      <Countdown />
+      <Suspense fallback={<Skeleton className="h-40 w-full rounded-lg" />}>
+        <Countdown />
+      </Suspense>
     </section>
   );
 }

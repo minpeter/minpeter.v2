@@ -22,9 +22,15 @@
 
 ## Cache Components
 - `cacheComponents: true` and `partialPrefetching: true` in `next.config.mts` (stable top-level).
-- Prefer removing `instant = false` once a route builds clean. Interactive showcases may keep a deliberate Block (client-only canvas / timers / network).
+- Prefer no `instant = false`; interactive islands are client components under Suspense.
 - Blog list: server shell renders post list; client `BlogList` only owns search (`?q=`).
 - OG routes use `"use cache"` + `cacheLife("days")` instead of `revalidate`/`dynamic`.
+
+## Instant soft-nav e2e (`@next/playwright`)
+- Rig: `instant-nav.rig.md`
+- Measure only production builds with `EXPOSE_TESTING_API=1` (sets `experimental.exposeTestingApiInProductionBuild`).
+- Run: `pnpm test:e2e:instant` (build + playwright) or `pnpm build` with the env var then `pnpm test:e2e`.
+- Specs: `e2e/soft-nav.instant.spec.ts` (home→blog, blog→post, showcase detail).
 
 ## Next experimental flags (`next.config.mts`)
 Keep under `experimental` until they gain a stable top-level rename (Next 16.3 types still list these as experimental-only):

@@ -40,7 +40,7 @@ export default async function Page() {
   );
 
   return (
-    <section className="fieldnotes-page">
+    <section className="fieldnotes-page" data-testid="blog-list-shell">
       <header className="fieldnotes-header">
         <nav aria-label={t("common.blogNavigation")} className="fieldnotes-nav">
           <Link

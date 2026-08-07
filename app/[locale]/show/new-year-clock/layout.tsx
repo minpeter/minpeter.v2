@@ -4,10 +4,6 @@ import type { ReactNode } from "react";
 
 import { createMetadata } from "@/shared/utils/metadata";
 
-// Deliberate Block: client-only interaction (canvas / Date.now / Math.random / network).
-// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
-export const instant = false;
-
 interface Props {
   children: ReactNode;
 }

@@ -7,6 +7,9 @@ import createNextIntlPlugin from "next-intl/plugin";
 const nextConfig: NextConfig = {
   cacheComponents: true,
   experimental: {
+    // Only for local/CI measured production builds used by @next/playwright instant().
+    // Never enable in real production deploys.
+    exposeTestingApiInProductionBuild: process.env.EXPOSE_TESTING_API === "1",
     globalNotFound: true,
     optimizePackageImports: [
       "lucide-react",
