@@ -7,6 +7,10 @@ import { cn } from "@/shared/utils/tailwind";
 
 import styles from "./styles.module.css";
 
+// Cache Components opt-out — remove after this route is adopted.
+// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
+export const instant = false;
+
 export async function generateMetadata(
   props: PageProps<"/[locale]/show/unstructured">
 ): Promise<Metadata> {
@@ -54,7 +58,6 @@ export default async function Page(
                 "relative h-full w-full rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               )}
               role="img"
-              tabIndex={0}
             >
               <div
                 className={cn(
@@ -90,7 +93,6 @@ export default async function Page(
                 "relative h-full w-full rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               )}
               role="img"
-              tabIndex={0}
             >
               <div
                 className={cn(
@@ -140,7 +142,6 @@ export default async function Page(
                 "relative h-full w-full rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               )}
               role="img"
-              tabIndex={0}
             >
               <div
                 className={cn(
@@ -165,7 +166,7 @@ export default async function Page(
                   <span
                     className={cn(
                       styles.copy,
-                      "font-medium text-white text-xl opacity-0 tracking-[-0.04em] drop-shadow-md transition-opacity delay-100 duration-300"
+                      "font-medium text-white text-xl tracking-[-0.04em] opacity-0 drop-shadow-md transition-opacity delay-100 duration-300"
                     )}
                   >
                     {t("showcase.items.unstructured.middle")}
@@ -183,7 +184,7 @@ export default async function Page(
                   <span
                     className={cn(
                       styles.copy,
-                      "font-medium text-lg text-white opacity-0 tracking-[-0.04em] drop-shadow-md transition-opacity delay-200 duration-300"
+                      "font-medium text-lg text-white tracking-[-0.04em] opacity-0 drop-shadow-md transition-opacity delay-200 duration-300"
                     )}
                   >
                     {t("showcase.items.unstructured.back1")}
@@ -193,7 +194,7 @@ export default async function Page(
                   <span
                     className={cn(
                       styles.copy,
-                      "font-medium text-lg text-white opacity-0 tracking-[-0.04em] drop-shadow-md transition-opacity delay-300 duration-300"
+                      "font-medium text-lg text-white tracking-[-0.04em] opacity-0 drop-shadow-md transition-opacity delay-300 duration-300"
                     )}
                   >
                     {t("showcase.items.unstructured.back2")}

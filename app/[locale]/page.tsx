@@ -1,7 +1,11 @@
-import { useTranslations } from "next-intl";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 import { Link } from "@/shared/i18n/navigation";
+
+// Cache Components opt-out — remove after this route is adopted.
+// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
+export const instant = false;
 
 const SECTIONS = [
   {
@@ -35,11 +39,14 @@ export default function Page() {
   const t = useTranslations("home");
 
   return (
-    <section className="home-page mx-auto flex w-full max-w-lg flex-1 flex-col pt-[6.5rem] pb-12">
+    <section
+      className="home-page mx-auto flex w-full max-w-lg flex-1 flex-col pt-[6.5rem] pb-12"
+      data-testid="home-page"
+    >
       <header className="mb-16">
         <Link
           aria-label={t("homeLabel")}
-          className="home-logo-link mb-6 inline-flex -m-2.5 p-2.5 hover:opacity-60"
+          className="home-logo-link -m-2.5 mb-6 inline-flex p-2.5 hover:opacity-60"
           href="/"
         >
           <Image
@@ -56,7 +63,7 @@ export default function Page() {
           <span className="font-semibold text-foreground">MINPETER</span>
           <span className="text-muted-foreground"> — {t("role")}</span>
         </h1>
-        <p className="mt-4 max-w-md text-sm leading-snug text-foreground/85">
+        <p className="mt-4 max-w-md text-foreground/85 text-sm leading-snug">
           {t("introduction")}
         </p>
       </header>
@@ -70,7 +77,7 @@ export default function Page() {
         ))}
       </nav>
 
-      <section className="mt-16" aria-labelledby="connect-title">
+      <section aria-labelledby="connect-title" className="mt-16">
         <h2
           className="mb-5 text-[13px] text-muted-foreground tracking-[-0.02em]"
           id="connect-title"

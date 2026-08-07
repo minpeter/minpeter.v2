@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { getTranslations } from "next-intl/server";
 import Image from "next/image";
+import { getTranslations } from "next-intl/server";
 import { Suspense } from "react";
 
 import { LanguageSelector } from "@/components/language-selector";
@@ -15,6 +15,10 @@ import {
 import { BlogList } from "./list";
 import { BlogListFallback, BlogSearchShell } from "./list-fallback";
 import { RssLink } from "./rss-link";
+
+// Cache Components opt-out — remove after this route is adopted.
+// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
+export const instant = false;
 
 export async function generateMetadata(
   props: PageProps<"/[locale]/blog">
@@ -69,7 +73,9 @@ export default async function Page(props: PageProps<"/[locale]/blog">) {
           <div className="fieldnotes-nav-tools">
             <RssLink locale={locale} />
             <span aria-hidden="true">·</span>
-            <LanguageSelector />
+            <Suspense fallback={null}>
+              <LanguageSelector />
+            </Suspense>
           </div>
         </nav>
       </header>

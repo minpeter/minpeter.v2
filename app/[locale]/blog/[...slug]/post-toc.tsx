@@ -12,7 +12,7 @@ export function PostToc({ toc }: { toc: TOCItemType[] }) {
           <nav className={styles.stagger_container}>
             {toc.map((item: TOCItemType) => (
               <a
-                className="my-1 block animation:enter w-fit rounded-md hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring box-decoration-clone px-2 py-1"
+                className="animation:enter my-1 block w-fit rounded-md box-decoration-clone px-2 py-1 hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                 href={item.url}
                 key={item.url}
                 style={{ marginLeft: `${item.depth - 1}rem` }}

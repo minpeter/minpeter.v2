@@ -6,6 +6,10 @@ import { createMetadata, resolveLocale } from "@/shared/utils/metadata";
 
 import { Countdown } from "./countdown";
 
+// Cache Components opt-out — remove after this route is adopted.
+// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
+export const instant = false;
+
 export async function generateMetadata(
   props: PageProps<"/[locale]/show/new-year-clock">
 ): Promise<Metadata> {

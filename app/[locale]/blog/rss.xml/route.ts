@@ -48,7 +48,8 @@ function generateRssFeed(locale: Locale): string {
     ko: "ko-KR",
   };
   const langCode = langCodeMap[locale];
-  const lastBuildDate = new Date().toUTCString();
+  const lastBuildDate =
+    sortedPosts[0]?.data.published.toUTCString() ?? new Date(0).toUTCString();
 
   return `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">

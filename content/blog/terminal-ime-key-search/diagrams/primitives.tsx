@@ -33,10 +33,10 @@ export const DiagramFigure = ({
     data-diagram={name}
   >
     <div className="mb-3 text-center">
-      <div className="text-sm font-semibold leading-snug">{title}</div>
+      <div className="font-semibold text-sm leading-snug">{title}</div>
     </div>
     {children}
-    <figcaption className="mt-3 text-center text-sm leading-relaxed text-foreground">
+    <figcaption className="mt-3 text-center text-foreground text-sm leading-relaxed">
       {description}
     </figcaption>
   </figure>
@@ -49,9 +49,9 @@ export const DiagramFlow = ({
   children: ReactNode;
   label: string;
 }) => (
-  <div aria-label={label} className="grid gap-2" data-flow role="list">
+  <ul aria-label={label} className="m-0 grid list-none gap-2 p-0" data-flow>
     {children}
-  </div>
+  </ul>
 );
 
 export const FlowStage = ({
@@ -61,32 +61,31 @@ export const FlowStage = ({
   title,
   tone = "default",
 }: FlowStageProps) => (
-  <div
+  <li
     className={`rounded-lg border px-3 py-3 text-center ${toneClasses[tone]}`}
     data-stage={stage}
     data-tone={tone}
-    role="listitem"
   >
-    <div className="text-sm font-semibold leading-snug">{title}</div>
+    <div className="font-semibold text-sm leading-snug">{title}</div>
     {detail ? (
-      <div className="mt-1 text-sm leading-snug text-foreground">{detail}</div>
+      <div className="mt-1 text-foreground text-sm leading-snug">{detail}</div>
     ) : null}
     {children}
-  </div>
+  </li>
 );
 
 export const FlowArrow = ({ label }: { label: string }) => (
-  <div
+  <li
     aria-label={label}
-    className="flex h-5 items-center justify-center text-base font-semibold leading-none text-foreground"
+    className="flex h-5 list-none items-center justify-center font-semibold text-base text-foreground leading-none"
     role="img"
   >
     ↓
-  </div>
+  </li>
 );
 
 export const LossNote = ({ children }: { children: ReactNode }) => (
-  <div className="mt-3 border-t border-dashed border-foreground pt-2 text-sm font-medium leading-snug text-foreground">
+  <div className="mt-3 border-foreground border-t border-dashed pt-2 font-medium text-foreground text-sm leading-snug">
     <span aria-hidden="true" className="mr-1">
       ×
     </span>
@@ -107,7 +106,7 @@ export const FieldCard = ({
     className="rounded-lg border border-border bg-background px-3 py-3 text-center"
     data-field={field}
   >
-    <div className="font-mono text-base font-semibold">{value}</div>
-    <div className="mt-1 text-sm leading-snug text-foreground">{children}</div>
+    <div className="font-mono font-semibold text-base">{value}</div>
+    <div className="mt-1 text-foreground text-sm leading-snug">{children}</div>
   </div>
 );

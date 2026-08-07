@@ -18,8 +18,8 @@ describe("instrumentation", () => {
     const mockRequest = new Request("http://localhost/blog");
     const mockContext = {
       routePath: "/blog",
-      routeType: "render",
       routerKind: "App",
+      routeType: "render",
     };
 
     await onRequestError(mockErr, mockRequest, mockContext);

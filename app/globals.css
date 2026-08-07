@@ -3,10 +3,6 @@
 @import "fumadocs-ui/css/neutral.css";
 @import "fumadocs-ui/css/preset.css";
 
-@plugin "tailwindcss-animate";
-
-@custom-variant dark (&:is(.dark *));
-
 /* Site styles, split by surface. Import order is source order: the base layer
    is emitted before the page-level rules that build on it. */
 @import "./styles/theme.css";
@@ -17,3 +13,7 @@
 @import "./styles/blog-post.css";
 @import "./styles/view-transitions.css";
 @import "./styles/overrides.css";
+
+@plugin "tailwindcss-animate";
+
+@custom-variant dark (&:is(.dark *));

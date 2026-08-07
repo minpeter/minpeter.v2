@@ -2,43 +2,18 @@
    `@layer components` so post-specific rules outrank the base layer. */
 
 @layer components {
-  html[lang="ko"] .blog-post-page,
-  html[lang="ko"] .blog-post-page > header > div:first-child,
-  html[lang="ko"] .blog-post-page > header > div:last-child > p,
-  html[lang="ko"] .blog-post-page [data-blog-body],
-  html[lang="ko"] .blog-post-page > section:last-child a {
-    font-family: var(--font-pretendard), var(--font-geist), Arial, sans-serif;
-  }
-
-  html[lang="ko"] .blog-post-page .home-section-title,
-  html[lang="ko"] .blog-post-page [data-blog-body] h2,
-  html[lang="ko"] .blog-post-page [data-blog-body] h3,
-  html[lang="ko"] .blog-post-page [data-blog-body] h4,
-  html[lang="ko"] .blog-post-page [data-blog-body] blockquote {
-    font-family: var(--font-pretendard), var(--font-geist), Arial, sans-serif;
-    letter-spacing: -0.04em;
-  }
-
   .blog-post-page > header {
     max-width: 32rem;
+    padding-bottom: 0;
     margin: 6.5rem auto 0;
     border-bottom: 0;
-    padding-bottom: 0;
   }
 
   .blog-post-page > header > div:first-child {
     font-family: var(--font-geist), Arial, sans-serif;
     font-size: 0.8125rem;
-    letter-spacing: 0;
     text-transform: none;
-  }
-
-  .blog-post-page > header > div:first-child a {
-    color: hsl(var(--muted-foreground));
-  }
-
-  .blog-post-page > header > div:first-child a:hover {
-    color: hsl(var(--foreground));
+    letter-spacing: 0;
   }
 
   .blog-post-page > header > div:first-child button {
@@ -54,19 +29,11 @@
     font-family: var(--font-shippori-mincho), Georgia, serif;
     font-size: clamp(2rem, 7vw, 2.75rem);
     font-weight: 400;
-    letter-spacing: -0.025em;
     line-height: 1.1;
     color: hsl(var(--foreground) / 0.9);
-    overflow-wrap: anywhere;
+    letter-spacing: -0.025em;
     word-break: keep-all;
-  }
-
-  .blog-post-page > header > div:last-child > p {
-    margin-top: 0.75rem;
-    font-family: var(--font-geist), Arial, sans-serif;
-    font-size: 0.8125rem;
-    line-height: 1.26;
-    color: hsl(var(--muted-foreground));
+    overflow-wrap: anywhere;
   }
 
   .blog-post-page > aside {
@@ -74,9 +41,9 @@
   }
 
   .blog-post-page > .prose {
+    flex: none;
     width: 100%;
     max-width: 32rem;
-    flex: none;
     margin: 2rem auto 0;
   }
 
@@ -96,14 +63,22 @@
     margin-top: 0;
   }
 
+  .blog-post-page > header > div:last-child > p {
+    margin-top: 0.75rem;
+    font-family: var(--font-geist), Arial, sans-serif;
+    font-size: 0.8125rem;
+    line-height: 1.26;
+    color: hsl(var(--muted-foreground));
+  }
+
   .blog-post-page [data-blog-body] h2,
   .blog-post-page [data-blog-body] h3,
   .blog-post-page [data-blog-body] h4 {
     font-family: var(--font-shippori-mincho), Georgia, serif;
-    font-synthesis-weight: none;
     font-weight: 500;
-    letter-spacing: -0.02em;
+    font-synthesis-weight: none;
     color: hsl(var(--foreground) / 0.9);
+    letter-spacing: -0.02em;
   }
 
   .blog-post-page [data-blog-body] h2 {
@@ -122,9 +97,9 @@
   .blog-post-page [data-blog-body] a {
     color: hsl(var(--foreground) / 0.9);
     text-decoration-line: underline;
+    text-decoration-thickness: 0.05rem;
     text-decoration-style: dashed;
     text-decoration-color: hsl(var(--muted-foreground));
-    text-decoration-thickness: 0.05rem;
     text-underline-offset: 0.15rem;
   }
 
@@ -133,46 +108,64 @@
     text-decoration-color: transparent;
   }
 
+  .blog-post-page > section:last-child a {
+    font-family: var(--font-geist), Arial, sans-serif;
+    font-size: 0.8125rem;
+    color: hsl(var(--muted-foreground));
+  }
+
+  .blog-post-page > section:last-child a:hover {
+    color: hsl(var(--foreground));
+  }
+
+  .blog-post-page > header > div:first-child a {
+    color: hsl(var(--muted-foreground));
+  }
+
+  .blog-post-page > header > div:first-child a:hover {
+    color: hsl(var(--foreground));
+  }
+
   .blog-post-page [data-blog-body] blockquote {
+    padding: 0.75rem 0.25rem;
     margin: 1.5rem 0;
+    font-family: var(--font-shippori-mincho), Georgia, serif;
+    font-size: 1.0625rem;
+    font-style: italic;
+    color: hsl(var(--muted-foreground));
     border-top: 1px solid hsl(var(--border));
     border-right: 0;
     border-bottom: 1px solid hsl(var(--border));
     border-left: 0;
-    padding: 0.75rem 0.25rem;
-    color: hsl(var(--muted-foreground));
-    font-family: var(--font-shippori-mincho), Georgia, serif;
-    font-size: 1.0625rem;
-    font-style: italic;
   }
 
   .blog-post-page [data-blog-body] .blog-callout {
     display: grid;
     grid-template-columns: 1.125rem minmax(0, 1fr);
     gap: 0.625rem;
-    margin: 1.75rem 0;
     padding: 0.875rem 1rem;
+    margin: 1.75rem 0;
+    color: hsl(var(--foreground) / 0.76);
+    background: hsl(var(--foreground) / 0.025);
     border: 1px solid hsl(var(--foreground) / 0.09);
     border-radius: 0.5rem;
-    background: hsl(var(--foreground) / 0.025);
     box-shadow: none;
-    color: hsl(var(--foreground) / 0.76);
   }
 
   .blog-post-page [data-blog-body] .blog-callout-marker {
     display: inline-flex;
-    width: 1rem;
-    height: 1rem;
     align-items: center;
     justify-content: center;
+    width: 1rem;
+    height: 1rem;
     margin-top: 0.125rem;
-    border: 1px solid hsl(var(--foreground) / 0.16);
-    border-radius: 9999px;
-    color: hsl(var(--muted-foreground));
     font-family: var(--font-geist-mono), monospace;
     font-size: 0.625rem;
     font-weight: 500;
     line-height: 1;
+    color: hsl(var(--muted-foreground));
+    border: 1px solid hsl(var(--foreground) / 0.16);
+    border-radius: 9999px;
   }
 
   .blog-post-page [data-blog-body] .blog-callout-content {
@@ -181,17 +174,17 @@
 
   .blog-post-page [data-blog-body] .blog-callout-title {
     margin: 0;
-    color: hsl(var(--foreground) / 0.82);
     font-size: 0.8125rem;
     font-weight: 500;
-    letter-spacing: -0.012em;
     line-height: 1.55;
+    color: hsl(var(--foreground) / 0.82);
+    letter-spacing: -0.012em;
   }
 
   .blog-post-page [data-blog-body] .blog-callout-description {
-    color: hsl(var(--foreground) / 0.68);
     font-size: 0.8375rem;
     line-height: 1.55;
+    color: hsl(var(--foreground) / 0.68);
   }
 
   .blog-post-page
@@ -212,24 +205,24 @@
   .blog-post-page
     [data-blog-body]
     .blog-callout:is([data-callout-type="info"], [data-callout-type="tip"]) {
-    border-color: hsl(204 30% 43% / 0.16);
     background: hsl(204 38% 52% / 0.055);
+    border-color: hsl(204 30% 43% / 0.16);
   }
 
   .blog-post-page
     [data-blog-body]
     .blog-callout:is([data-callout-type="info"], [data-callout-type="tip"])
     .blog-callout-marker {
-    border-color: hsl(204 30% 43% / 0.28);
     color: hsl(204 34% 34%);
+    border-color: hsl(204 30% 43% / 0.28);
   }
 
   .dark
     .blog-post-page
     [data-blog-body]
     .blog-callout:is([data-callout-type="info"], [data-callout-type="tip"]) {
-    border-color: hsl(204 38% 68% / 0.18);
     background: hsl(204 38% 68% / 0.07);
+    border-color: hsl(204 38% 68% / 0.18);
   }
 
   .dark
@@ -237,8 +230,8 @@
     [data-blog-body]
     .blog-callout:is([data-callout-type="info"], [data-callout-type="tip"])
     .blog-callout-marker {
-    border-color: hsl(204 38% 68% / 0.28);
     color: hsl(204 44% 72%);
+    border-color: hsl(204 38% 68% / 0.28);
   }
 
   .blog-post-page
@@ -247,16 +240,16 @@
       [data-callout-type="warn"],
       [data-callout-type="warning"]
     ) {
-    border-color: hsl(39 44% 44% / 0.18);
     background: hsl(42 52% 52% / 0.06);
+    border-color: hsl(39 44% 44% / 0.18);
   }
 
   .blog-post-page
     [data-blog-body]
     .blog-callout:is([data-callout-type="warn"], [data-callout-type="warning"])
     .blog-callout-marker {
-    border-color: hsl(39 44% 44% / 0.28);
     color: hsl(39 36% 34%);
+    border-color: hsl(39 44% 44% / 0.28);
   }
 
   .dark
@@ -266,8 +259,8 @@
       [data-callout-type="warn"],
       [data-callout-type="warning"]
     ) {
-    border-color: hsl(42 48% 62% / 0.18);
     background: hsl(42 48% 62% / 0.07);
+    border-color: hsl(42 48% 62% / 0.18);
   }
 
   .dark
@@ -275,26 +268,26 @@
     [data-blog-body]
     .blog-callout:is([data-callout-type="warn"], [data-callout-type="warning"])
     .blog-callout-marker {
-    border-color: hsl(42 48% 62% / 0.28);
     color: hsl(42 48% 68%);
+    border-color: hsl(42 48% 62% / 0.28);
   }
 
   .blog-post-page [data-blog-body] .blog-related-link {
     display: flex;
-    align-items: baseline;
     gap: 0.5rem;
-    margin: 1.5rem 0;
+    align-items: baseline;
     padding: 0.5rem 0.125rem;
-    color: hsl(var(--muted-foreground));
+    margin: 1.5rem 0;
     font-size: 0.8125rem;
     line-height: 1.5;
+    color: hsl(var(--muted-foreground));
   }
 
   .blog-post-page [data-blog-body] .blog-related-link-marker {
     flex: 0 0 auto;
-    color: hsl(var(--muted-foreground));
     font-family: var(--font-geist-mono), monospace;
     font-size: 0.6875rem;
+    color: hsl(var(--muted-foreground));
   }
 
   .blog-post-page [data-blog-body] .blog-related-link-content {
@@ -311,8 +304,8 @@
 
   .blog-post-page [data-blog-body] ul,
   .blog-post-page [data-blog-body] ol {
-    margin: 1rem 0;
     padding-inline-start: 1.25rem;
+    margin: 1rem 0;
   }
 
   .blog-post-page [data-blog-body] li {
@@ -337,13 +330,20 @@
     opacity: 0.6;
   }
 
-  .blog-post-page > section:last-child a {
-    color: hsl(var(--muted-foreground));
-    font-family: var(--font-geist), Arial, sans-serif;
-    font-size: 0.8125rem;
+  html[lang="ko"] .blog-post-page,
+  html[lang="ko"] .blog-post-page > header > div:first-child,
+  html[lang="ko"] .blog-post-page > header > div:last-child > p,
+  html[lang="ko"] .blog-post-page [data-blog-body],
+  html[lang="ko"] .blog-post-page > section:last-child a {
+    font-family: var(--font-pretendard), var(--font-geist), Arial, sans-serif;
   }
 
-  .blog-post-page > section:last-child a:hover {
-    color: hsl(var(--foreground));
+  html[lang="ko"] .blog-post-page .home-section-title,
+  html[lang="ko"] .blog-post-page [data-blog-body] h2,
+  html[lang="ko"] .blog-post-page [data-blog-body] h3,
+  html[lang="ko"] .blog-post-page [data-blog-body] h4,
+  html[lang="ko"] .blog-post-page [data-blog-body] blockquote {
+    font-family: var(--font-pretendard), var(--font-geist), Arial, sans-serif;
+    letter-spacing: -0.04em;
   }
 }

@@ -3,12 +3,12 @@ import { readFileSync } from "node:fs";
 import { renderToString } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 
-import {
-  CsiUAnatomyDiagram,
-  DirectKeyPathDiagram,
-  ImeCompositionPathDiagram,
-  InputBoundaryMatrix,
-} from "./index";
+import { CsiUAnatomyDiagram } from "./csi-u-anatomy";
+import { DirectKeyPathDiagram } from "./direct-key-path";
+import { ImeCompositionPathDiagram } from "./ime-composition-path";
+import { InputBoundaryMatrix } from "./input-boundary-matrix";
+
+const OPACITY_ATTR_RE = /\sopacity=/u;
 
 const articleSource = readFileSync(
   new URL("../index.mdx", import.meta.url),
@@ -91,6 +91,6 @@ describe("terminal input diagrams", () => {
 
     expect(html.match(/<figure/gu)).toHaveLength(4);
     expect(html.match(/<figcaption/gu)).toHaveLength(4);
-    expect(html).not.toMatch(/\sopacity=/u);
+    expect(html).not.toMatch(OPACITY_ATTR_RE);
   });
 });

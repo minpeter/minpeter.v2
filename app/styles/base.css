@@ -34,8 +34,8 @@
   }
 
   ::selection {
-    background-color: hsl(240 5% 78%);
     color: hsl(var(--foreground));
+    background-color: hsl(240 5% 78%);
   }
 
   .dark ::selection {

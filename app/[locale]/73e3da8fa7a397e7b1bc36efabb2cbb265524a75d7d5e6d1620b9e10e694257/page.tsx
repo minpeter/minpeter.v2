@@ -2,10 +2,13 @@ import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { Backlink } from "@/components/link";
+import styles from "@/shared/styles/stagger-fade-in.module.css";
 import { createMetadata, resolveLocale } from "@/shared/utils/metadata";
 import { cn } from "@/shared/utils/tailwind";
 
-import styles from "@/shared/styles/stagger-fade-in.module.css";
+// Cache Components opt-out — remove after this route is adopted.
+// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
+export const instant = false;
 
 export async function generateMetadata(
   props: PageProps<"/[locale]/73e3da8fa7a397e7b1bc36efabb2cbb265524a75d7d5e6d1620b9e10e694257">

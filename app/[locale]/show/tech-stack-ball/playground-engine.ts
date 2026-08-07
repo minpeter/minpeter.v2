@@ -14,8 +14,8 @@ import {
   getIconSize,
   getIconTextureScale,
   MAX_RENDERED_ICONS,
-  shuffleArray,
   STACK_ICONS,
+  shuffleArray,
 } from "./stack-icons";
 
 const GRAVITY_X = 0;

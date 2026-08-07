@@ -7,7 +7,9 @@ const loadReactGrab = () => import("react-grab");
 
 export function ReactGrab() {
   useEffect(() => {
-    void loadReactGrab();
+    loadReactGrab().catch(() => {
+      // react-grab is a dev-only optional dependency
+    });
   }, []);
 
   return null;

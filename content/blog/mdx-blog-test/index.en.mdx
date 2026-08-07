@@ -6,7 +6,7 @@ lang: ["en"]
 machine_translated: true
 ---
 
-import { ModCodeBlock } from "@/components/code-block";
+import { ModCodeBlock } from "@/components/mod-code-block";
 
 <Callout>
   This is a post for experimenting with MDX components that can be used on this
@@ -140,7 +140,8 @@ This is the first practical MDX component added. To make it available by default
 ```
 "use client";
 
-import { CodeBlock, ModCodeBlock } from "@/components/code-block";
+import { CodeBlock } from "@/components/code-block";
+import { ModCodeBlock } from "@/components/mod-code-block";
 import "@/styles/mdx.css";
 
 import { getMDXComponent } from "mdx-bundler/client";

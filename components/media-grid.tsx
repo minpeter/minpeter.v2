@@ -25,7 +25,7 @@ export const MediaGrid = ({
     className={cn(
       "my-8 grid items-start gap-4",
       columnClasses[columns],
-      "[&>p]:m-0 [&>p]:min-w-0 [&>p_[data-rmiz-content]]:block [&>p_[data-rmiz-content]]:w-full [&>p_[data-rmiz]]:block [&>p_[data-rmiz]]:w-full [&>p_img]:!m-0 [&>p_img]:block [&>p_img]:h-auto [&>p_img]:w-full",
+      "[&>p_img]:!m-0 [&>p]:m-0 [&>p]:min-w-0 [&>p_[data-rmiz-content]]:block [&>p_[data-rmiz-content]]:w-full [&>p_[data-rmiz]]:block [&>p_[data-rmiz]]:w-full [&>p_img]:block [&>p_img]:h-auto [&>p_img]:w-full",
       className
     )}
   >

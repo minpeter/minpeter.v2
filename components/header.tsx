@@ -1,15 +1,14 @@
 "use client";
 
 import type { ReactNode } from "react";
+import { Suspense } from "react";
 
 import { ViewTransition } from "@/components/view-transition";
 import { Link } from "@/shared/i18n/navigation";
+import styles from "@/shared/styles/stagger-fade-in.module.css";
 import { cn } from "@/shared/utils/tailwind";
-
 import { LanguageSelector } from "./language-selector";
 import { Backlink } from "./link";
-
-import styles from "@/shared/styles/stagger-fade-in.module.css";
 
 interface HeaderProps {
   description?: string;
@@ -39,6 +38,7 @@ export default function Header({
         "relative z-10 mx-auto mb-16 w-full max-w-2xl border-foreground/20 border-b pb-10 sm:mb-20",
         styles.stagger_container
       )}
+      data-testid="site-header"
     >
       <div className="flex items-center justify-between font-mono text-[11px] uppercase tracking-[-0.05em]">
         {link ? (
@@ -53,7 +53,9 @@ export default function Header({
         <div className="flex items-center gap-2 text-foreground/80">
           {rightContent}
           {rightContent ? <span>·</span> : null}
-          <LanguageSelector />
+          <Suspense fallback={null}>
+            <LanguageSelector />
+          </Suspense>
         </div>
       </div>
       <div className="mt-12 sm:mt-16">
@@ -67,7 +69,7 @@ export default function Header({
           )}
         </h1>
         {description ? (
-          <p className="mt-5 max-w-lg text-[15px] leading-relaxed text-foreground/80 sm:text-base">
+          <p className="mt-5 max-w-lg text-[15px] text-foreground/80 leading-relaxed sm:text-base">
             {description}
           </p>
         ) : null}

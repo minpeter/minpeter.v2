@@ -28,14 +28,15 @@ export const getOgTitleSize = (visualWidth: number) => {
 };
 
 export const getTitleTokens = (title: string) => {
-  const tokens: { isCjk: boolean; text: string }[] = [];
+  const tokens: { isCjk: boolean; offset: number; text: string }[] = [];
+  let offset = 0;
 
   for (const character of title) {
     const isCjk = cjkCharacterPattern.test(character);
     const currentToken = tokens.at(-1);
 
     if (isCjk) {
-      tokens.push({ isCjk, text: character });
+      tokens.push({ isCjk, offset, text: character });
     } else if (character === " " && currentToken) {
       currentToken.text += character;
     } else if (
@@ -45,8 +46,9 @@ export const getTitleTokens = (title: string) => {
     ) {
       currentToken.text += character;
     } else {
-      tokens.push({ isCjk, text: character });
+      tokens.push({ isCjk, offset, text: character });
     }
+    offset += character.length;
   }
 
   return tokens;

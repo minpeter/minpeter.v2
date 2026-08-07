@@ -1,8 +1,9 @@
 import { describe, expect, it } from "vitest";
 import { z } from "zod";
 
-import { parseFrontmatterDate } from "./shared/frontmatter-date";
+import { parseFrontmatterDate } from "./frontmatter-date";
 
+// Mirrors the published/drafted field transforms in source.config.ts.
 const publishedSchema = z.string().or(z.date()).transform(parseFrontmatterDate);
 
 const draftedSchema = z
@@ -16,7 +17,7 @@ const draftedSchema = z
     return parseFrontmatterDate(value, context);
   });
 
-describe("frontmatter date validation", () => {
+describe("parseFrontmatterDate", () => {
   it("rejects an unparseable date string", () => {
     expect(publishedSchema.safeParse("not-a-date").success).toBe(false);
   });

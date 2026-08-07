@@ -6,10 +6,14 @@ import { describe, expect, it, vi } from "vitest";
 
 import Page from "../page";
 
-vi.mock(import("next-intl/server"), () => ({
-  getTranslations: vi.fn(() => (key: string) => key),
-  setRequestLocale: vi.fn<() => void>(),
-}) as unknown as Partial<typeof intlServer>);
+vi.mock(
+  import("next-intl/server"),
+  () =>
+    ({
+      getTranslations: vi.fn(() => (key: string) => key),
+      setRequestLocale: vi.fn<() => void>(),
+    }) as unknown as Partial<typeof intlServer>
+);
 
 vi.mock(import("@/shared/styles/stagger-fade-in.module.css"), () => ({
   default: new Proxy({}, { get: (_, key) => key }),

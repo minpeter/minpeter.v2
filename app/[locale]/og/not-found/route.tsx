@@ -1,8 +1,16 @@
+import { cacheLife } from "next/cache";
+
 import { createOgImageResponse } from "@/shared/og-image";
 
-export const dynamic = "force-static";
-export const revalidate = 86_400;
-export const runtime = "nodejs";
+async function getNotFoundOgImage(locale: string) {
+  "use cache";
+  cacheLife("days");
+
+  return await createOgImageResponse({
+    locale,
+    title: "minpeter | 404",
+  });
+}
 
 export const GET = async (
   _request: Request,
@@ -10,8 +18,5 @@ export const GET = async (
 ) => {
   const { locale } = await params;
 
-  return createOgImageResponse({
-    locale,
-    title: "minpeter | 404",
-  });
+  return getNotFoundOgImage(locale);
 };

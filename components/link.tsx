@@ -7,12 +7,15 @@ export function Backlink({
   href,
   ariaLabel,
   onNavigate,
+  prefetch,
 }: {
   text: string;
   /** Locale-agnostic pathname; the locale prefix is applied by next-intl. */
   href: string;
   ariaLabel?: string;
   onNavigate?: (e: React.MouseEvent) => void;
+  /** Forwarded to next-intl Link (Next.js Partial Prefetching). */
+  prefetch?: boolean | null;
 }) {
   const resolvedAriaLabel =
     text.trim().length === 0 ? (ariaLabel ?? "Back") : undefined;
@@ -23,6 +26,7 @@ export function Backlink({
       className="animation:enter w-fit rounded-md px-0.5 text-muted-foreground text-sm underline hover:bg-secondary/100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       href={href}
       onClick={onNavigate}
+      prefetch={prefetch}
     >
       <ArrowTopLeftIcon className="mr-0.5 mb-1 inline h-3 w-3" />
       {text}

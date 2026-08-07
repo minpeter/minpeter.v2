@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
-import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 
 import { getLLMText } from "@/shared/get-llm-text";
 import { blog } from "@/shared/source";

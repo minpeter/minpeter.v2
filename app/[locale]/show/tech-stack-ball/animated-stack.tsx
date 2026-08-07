@@ -20,12 +20,11 @@ export function Playground({
   className?: string;
 }) {
   const t = useTranslations("showcase.items.techStack");
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
-
-    if (!canvas) {
+    if (canvas === null) {
       return;
     }
 
@@ -36,7 +35,7 @@ export function Playground({
     <canvas
       aria-label={t("simulationLabel")}
       className={cn(
-        "h-auto w-full max-w-full touch-none cursor-grab rounded-lg border bg-card text-card-foreground shadow-xs active:cursor-grabbing",
+        "h-auto w-full max-w-full cursor-grab touch-none rounded-lg border bg-card text-card-foreground shadow-xs active:cursor-grabbing",
         className
       )}
       height={h}

@@ -1,5 +1,6 @@
 "use client";
 
+import type { PointerEvent as ReactPointerEvent } from "react";
 import {
   useEffect,
   useEffectEvent,
@@ -7,7 +8,6 @@ import {
   useState,
   useSyncExternalStore,
 } from "react";
-import type { PointerEvent as ReactPointerEvent } from "react";
 
 import { isPointInTriangle } from "@/shared/utils/geometry";
 
@@ -90,34 +90,35 @@ export function useHoverDropdown(
     getServerTouchDeviceSnapshot
   );
 
-  const triggerRef = useRef<HTMLButtonElement>(null);
-  const contentRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLButtonElement | null>(null);
+  const contentRef = useRef<HTMLDivElement | null>(null);
   const mousePositionRef = useRef({ x: 0, y: 0 });
-  const openTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const isMouseInSafeZoneRef = useRef(false);
+  // Mutable box avoids noUnnecessaryConditions false-positives on RefObject.current
+  const timeouts = useRef({
+    close: undefined as ReturnType<typeof setTimeout> | undefined,
+    open: undefined as ReturnType<typeof setTimeout> | undefined,
+  }).current;
+  const safeZone = useRef({ active: false }).current;
 
   // Clear timeouts on unmount
   useEffect(
     () => () => {
-      if (openTimeoutRef.current) {
-        clearTimeout(openTimeoutRef.current);
-      }
-      if (closeTimeoutRef.current) {
-        clearTimeout(closeTimeoutRef.current);
-      }
+      clearTimeout(timeouts.open);
+      clearTimeout(timeouts.close);
     },
-    []
+    [timeouts]
   );
 
   // Check if mouse is in safe triangle zone
   const isInSafeTriangle = useEffectEvent(() => {
-    if (!(triggerRef.current && contentRef.current)) {
+    const trigger = triggerRef.current;
+    const content = contentRef.current;
+    if (trigger === null || content === null) {
       return false;
     }
 
-    const triggerRect = triggerRef.current.getBoundingClientRect();
-    const contentRect = contentRef.current.getBoundingClientRect();
+    const triggerRect = trigger.getBoundingClientRect();
+    const contentRect = content.getBoundingClientRect();
     const { x: mx, y: my } = mousePositionRef.current;
 
     // Trigger center point (apex of triangle)
@@ -142,23 +143,23 @@ export function useHoverDropdown(
     const handleMouseMove = (e: MouseEvent) => {
       mousePositionRef.current = { x: e.clientX, y: e.clientY };
 
-      if (closeTimeoutRef.current) {
+      if (timeouts.close !== undefined) {
         const inTrigger = triggerRef.current?.contains(e.target as Node);
         const inContent = contentRef.current?.contains(e.target as Node);
         const inSafeZone = isInSafeTriangle();
 
-        isMouseInSafeZoneRef.current = inSafeZone;
+        safeZone.active = inSafeZone;
 
         if (inTrigger || inContent || inSafeZone) {
-          clearTimeout(closeTimeoutRef.current);
-          closeTimeoutRef.current = null;
+          clearTimeout(timeouts.close);
+          timeouts.close = undefined;
         }
       }
     };
 
     document.addEventListener("mousemove", handleMouseMove);
     return () => document.removeEventListener("mousemove", handleMouseMove);
-  }, [isOpen]);
+  }, [isOpen, timeouts, safeZone]);
 
   const handleMouseEnter = (event: ReactPointerEvent<HTMLButtonElement>) => {
     if (event.pointerType === "touch") {
@@ -166,16 +167,14 @@ export function useHoverDropdown(
     }
 
     // Cancel any pending close
-    if (closeTimeoutRef.current) {
-      clearTimeout(closeTimeoutRef.current);
-      closeTimeoutRef.current = null;
-    }
+    clearTimeout(timeouts.close);
+    timeouts.close = undefined;
 
     // Small delay to prevent flicker on quick mouse movements
-    if (!(isOpen || openTimeoutRef.current)) {
-      openTimeoutRef.current = setTimeout(() => {
+    if (!(isOpen || timeouts.open !== undefined)) {
+      timeouts.open = setTimeout(() => {
         setIsOpen(true);
-        openTimeoutRef.current = null;
+        timeouts.open = undefined;
       }, openDelay);
     }
   };
@@ -186,18 +185,16 @@ export function useHoverDropdown(
     }
 
     // Cancel any pending open
-    if (openTimeoutRef.current) {
-      clearTimeout(openTimeoutRef.current);
-      openTimeoutRef.current = null;
-    }
+    clearTimeout(timeouts.open);
+    timeouts.open = undefined;
 
     // Start close timeout - gives time for safe triangle check
-    closeTimeoutRef.current = setTimeout(() => {
+    timeouts.close = setTimeout(() => {
       // Final check before closing
-      if (!isMouseInSafeZoneRef.current) {
+      if (safeZone.active === false) {
         setIsOpen(false);
       }
-      closeTimeoutRef.current = null;
+      timeouts.close = undefined;
     }, closeDelay);
   };
 
@@ -208,10 +205,8 @@ export function useHoverDropdown(
       return;
     }
 
-    if (closeTimeoutRef.current) {
-      clearTimeout(closeTimeoutRef.current);
-      closeTimeoutRef.current = null;
-    }
+    clearTimeout(timeouts.close);
+    timeouts.close = undefined;
   };
 
   const handleContentMouseLeave = (
@@ -221,9 +216,9 @@ export function useHoverDropdown(
       return;
     }
 
-    closeTimeoutRef.current = setTimeout(() => {
+    timeouts.close = setTimeout(() => {
       setIsOpen(false);
-      closeTimeoutRef.current = null;
+      timeouts.close = undefined;
     }, closeDelay);
   };
 

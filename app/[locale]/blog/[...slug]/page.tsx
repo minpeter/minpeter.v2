@@ -1,12 +1,13 @@
 import { DocsBody } from "fumadocs-ui/page";
-import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 
 import ExternalRedirect from "@/components/external-redirect";
 import Header from "@/components/header";
 import { MachineTranslationNotice } from "@/components/machine-translation-notice";
 import { siteConfig } from "@/shared/site-config";
 import { blog } from "@/shared/source";
+import styles from "@/shared/styles/stagger-fade-in.module.css";
 import { formatDateLong } from "@/shared/utils/date";
 import {
   createMetadata,
@@ -14,14 +15,13 @@ import {
   resolveLocale,
 } from "@/shared/utils/metadata";
 import { cn } from "@/shared/utils/tailwind";
-
 import { createBlogMdxComponents } from "./mdx-components";
 import { PostFooter } from "./post-footer";
 import { PostToc } from "./post-toc";
 
-import styles from "@/shared/styles/stagger-fade-in.module.css";
-
-export const dynamicParams = false;
+// Cache Components opt-out — remove after this route is adopted.
+// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
+export const instant = false;
 
 export function generateStaticParams({
   params,
@@ -118,12 +118,12 @@ export default async function Page(
         titleTransitionName={`blog-title-${post.url.replaceAll("/", "-")}`}
       />
 
-      {(post.data.machine_translated || post.data.ai_generated_by) && (
+      {post.data.machine_translated || post.data.ai_generated_by ? (
         <MachineTranslationNotice
           className="mb-6"
           generatedBy={post.data.ai_generated_by}
         />
-      )}
+      ) : null}
 
       <PostToc toc={post.data.toc} />
       <DocsBody>
