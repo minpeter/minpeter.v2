@@ -10,8 +10,8 @@ vi.mock(
   import("next-intl/server"),
   () =>
     ({
+      getLocale: vi.fn(() => Promise.resolve("ko")),
       getTranslations: vi.fn(() => (key: string) => key),
-      setRequestLocale: vi.fn<() => void>(),
     }) as unknown as Partial<typeof intlServer>
 );
 
@@ -21,10 +21,7 @@ vi.mock(import("@/shared/styles/stagger-fade-in.module.css"), () => ({
 
 describe("app/[locale]/73e3da.../page.tsx poem", () => {
   it("separates the backlink from the poem content with clear spacing", async () => {
-    const ui = await Page({
-      params: Promise.resolve({ locale: "ko" }),
-      searchParams: Promise.resolve({}),
-    });
+    const ui = await Page();
 
     // The backlink resolves its locale prefix through next-intl navigation.
     const { container } = render(

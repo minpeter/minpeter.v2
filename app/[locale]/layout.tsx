@@ -1,21 +1,13 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
-import {
-  getMessages,
-  getTranslations,
-  setRequestLocale,
-} from "next-intl/server";
+import { getLocale, getMessages, getTranslations } from "next-intl/server";
 import type { ReactNode } from "react";
 
 import { ViewTransition } from "@/components/view-transition";
 import { routing } from "@/shared/i18n/routing";
 import { getSiteDescription } from "@/shared/site-config";
-import {
-  createMetadata,
-  getLocalizedPath,
-  resolveLocale,
-} from "@/shared/utils/metadata";
+import { createMetadata, getLocalizedPath } from "@/shared/utils/metadata";
 
 import "../globals.css";
 import { RootDocument } from "../root-document";
@@ -39,10 +31,9 @@ export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { locale: routeLocale } = await params;
-  const locale = resolveLocale(routeLocale);
-  const t = await getTranslations({ locale });
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale();
+  const t = await getTranslations();
   const baseMetadata = createMetadata({
     description: getSiteDescription(locale),
     locale,
@@ -69,14 +60,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function LocaleLayout({ children, params }: Props) {
-  const { locale } = await params;
+  const { locale: routeLocale } = await params;
 
-  if (!hasLocale(routing.locales, locale)) {
+  if (!hasLocale(routing.locales, routeLocale)) {
     notFound();
   }
 
-  setRequestLocale(locale);
-  const messages = await getMessages();
+  const [locale, messages] = await Promise.all([getLocale(), getMessages()]);
 
   return (
     <RootDocument lang={locale}>

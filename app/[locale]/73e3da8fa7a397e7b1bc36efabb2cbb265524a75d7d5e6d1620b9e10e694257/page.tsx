@@ -1,20 +1,17 @@
 import type { Metadata } from "next";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 
 import { Backlink } from "@/components/link";
 import styles from "@/shared/styles/stagger-fade-in.module.css";
-import { createMetadata, resolveLocale } from "@/shared/utils/metadata";
+import { createMetadata } from "@/shared/utils/metadata";
 import { cn } from "@/shared/utils/tailwind";
 
 // Cache Components opt-out — remove after this route is adopted.
 // See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
 export const instant = false;
 
-export async function generateMetadata(
-  props: PageProps<"/[locale]/73e3da8fa7a397e7b1bc36efabb2cbb265524a75d7d5e6d1620b9e10e694257">
-): Promise<Metadata> {
-  const { locale: routeLocale } = await props.params;
-  const locale = resolveLocale(routeLocale);
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale();
 
   return createMetadata({
     description: "동짓달 기나긴 밤을 한 허리를 베어내어",
@@ -24,13 +21,7 @@ export async function generateMetadata(
   });
 }
 
-export default async function Page(
-  props: PageProps<"/[locale]/73e3da8fa7a397e7b1bc36efabb2cbb265524a75d7d5e6d1620b9e10e694257">
-) {
-  const { locale } = await props.params;
-  // Opts the page into static rendering: a page that never reads `params`
-  // drops out of the per-locale prerender manifest.
-  setRequestLocale(resolveLocale(locale));
+export default async function Page() {
   const t = await getTranslations();
   return (
     <section className="flex flex-col gap-6">
