@@ -1,11 +1,18 @@
 "use client";
 
 import { useDocsSearch } from "fumadocs-core/search/client";
+import { fetchClient } from "fumadocs-core/search/client/fetch";
 import { Loader2, Search, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { debounce, parseAsString, useQueryState } from "nuqs";
 import type { ChangeEvent } from "react";
-import { useCallback, useDeferredValue, useEffect, useTransition } from "react";
+import {
+  useCallback,
+  useDeferredValue,
+  useEffect,
+  useMemo,
+  useTransition,
+} from "react";
 
 import type { postMetadataType } from "@/shared/source";
 
@@ -33,10 +40,17 @@ export function BlogList({
 
   const deferredQuery = useDeferredValue(query);
 
+  const searchClient = useMemo(
+    () =>
+      fetchClient({
+        api: "/api/search",
+        locale: lang,
+      }),
+    [lang]
+  );
+
   const { setSearch, query: searchQuery } = useDocsSearch({
-    api: "/api/search",
-    locale: lang,
-    type: "fetch",
+    client: searchClient,
   });
 
   useEffect(() => {

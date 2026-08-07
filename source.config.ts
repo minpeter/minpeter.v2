@@ -1,10 +1,7 @@
-import { remarkInstall } from "fumadocs-docgen";
+import { remarkNpm } from "fumadocs-core/mdx-plugins";
+import { pageSchema } from "fumadocs-core/source/schema";
 import type { DefaultMDXOptions } from "fumadocs-mdx/config";
-import {
-  defineConfig,
-  defineDocs,
-  frontmatterSchema,
-} from "fumadocs-mdx/config";
+import { defineConfig, defineDocs } from "fumadocs-mdx/config";
 import lastModified from "fumadocs-mdx/plugins/last-modified";
 import { z } from "zod";
 
@@ -17,7 +14,7 @@ export const { docs, meta } = defineDocs({
     postprocess: {
       includeProcessedMarkdown: true,
     },
-    schema: frontmatterSchema.extend({
+    schema: pageSchema.extend({
       ai_generated_by: z.string().optional(),
       draft: z.boolean().optional().default(false),
       drafted: z
@@ -43,7 +40,7 @@ export const { docs, meta } = defineDocs({
 
 const mdxOptions: DefaultMDXOptions = {
   development: process.env.NODE_ENV === "development",
-  remarkPlugins: [remarkInstall],
+  remarkPlugins: [remarkNpm],
 };
 
 export default defineConfig({

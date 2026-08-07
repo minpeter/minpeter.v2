@@ -7,7 +7,7 @@ lang:
 machine_translated: true
 ---
 
-import { ModCodeBlock } from "@/components/code-block";
+import { ModCodeBlock } from "@/components/mod-code-block";
 
 <Callout>
   このブログで活用できるMDXコンポーネントを実験するための投稿です。
@@ -140,7 +140,8 @@ ModCodeBlockの特徴としては、あるコマンドを読者がコピーす�
 ```
 "use client";
 
-import { CodeBlock, ModCodeBlock } from "@/components/code-block";
+import { CodeBlock } from "@/components/code-block";
+import { ModCodeBlock } from "@/components/mod-code-block";
 import "@/styles/mdx.css";
 
 import { getMDXComponent } from "mdx-bundler/client";

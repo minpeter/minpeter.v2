@@ -15,7 +15,7 @@ export function parseFrontmatterDate(
 
   if (Number.isNaN(date.getTime()) || invalidCalendarDate) {
     context.addIssue({
-      code: z.ZodIssueCode.custom,
+      code: "custom",
       message: "Invalid date",
     });
     return z.NEVER;

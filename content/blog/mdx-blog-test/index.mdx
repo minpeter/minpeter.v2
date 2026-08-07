@@ -4,7 +4,7 @@ published: 2023-11-21
 description: 블로그 mdx 지원 기념 컴포넌트 실험실
 ---
 
-import { ModCodeBlock } from "@/components/code-block";
+import { ModCodeBlock } from "@/components/mod-code-block";
 
 <Callout>
   이 블로그에서 활용할 수 있는 MDX 컴포넌트들을 실험해보기 위한 게시글입니다.
@@ -138,7 +138,8 @@ ModCodeBlock의 특징으로는 어떤 커맨드을 독자가 복사하기 전�
 ```
 "use client";
 
-import { CodeBlock, ModCodeBlock } from "@/components/code-block";
+import { CodeBlock } from "@/components/code-block";
+import { ModCodeBlock } from "@/components/mod-code-block";
 import "@/styles/mdx.css";
 
 import { getMDXComponent } from "mdx-bundler/client";
