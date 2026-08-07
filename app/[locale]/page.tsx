@@ -3,10 +3,6 @@ import { useTranslations } from "next-intl";
 
 import { Link } from "@/shared/i18n/navigation";
 
-// Cache Components opt-out — remove after this route is adopted.
-// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
-export const instant = false;
-
 const SECTIONS = [
   {
     descriptionKey: "sections.developmentNotes.description",

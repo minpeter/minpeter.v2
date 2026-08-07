@@ -16,10 +16,6 @@ import {
   viewport as rootViewport,
 } from "../root-metadata";
 
-// Cache Components opt-out — remove after this route is adopted.
-// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
-export const instant = false;
-
 export const viewport = rootViewport;
 
 interface Props {

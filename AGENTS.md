@@ -21,6 +21,28 @@
 - Typecheck: `pnpm check` · Tests: `pnpm test` · Build: `pnpm build` · Audit: `pnpm audit --prod`
 
 ## Cache Components
-- `cacheComponents: true` and `partialPrefetching: true` in `next.config.mts`.
-- Most pages/layouts still export `instant = false` with "Cache Components opt-out" markers — do not remove without verifying the route shell in dev/build.
+- `cacheComponents: true` and `partialPrefetching: true` in `next.config.mts` (stable top-level).
+- Prefer removing `instant = false` once a route builds clean. Interactive showcases may keep a deliberate Block (client-only canvas / timers / network).
+- Blog list: server shell renders post list; client `BlogList` only owns search (`?q=`).
 - OG routes use `"use cache"` + `cacheLife("days")` instead of `revalidate`/`dynamic`.
+
+## Next experimental flags (`next.config.mts`)
+Keep under `experimental` until they gain a stable top-level rename (Next 16.3 types still list these as experimental-only):
+- `experimental.globalNotFound`
+- `experimental.useTypeScriptCli`
+- `experimental.optimizePackageImports` (`lucide-react`, `@radix-ui/react-icons`, `react-icons`)
+
+## i18n: Server Components vs Route Handlers
+- **Server Components / `generateMetadata` under `[locale]`**: prefer request locale from next-intl (root-params), not params override:
+  ```ts
+  const [locale, t] = await Promise.all([getLocale(), getTranslations()]);
+  ```
+- **Keep explicit `{ locale }`** for opengraph-image / twitter-image routes and true Route Handlers (rss, og handlers) where root-params may be unreliable.
+- **Route Handlers / Server Actions**: `next/root-params` does **not** work. Pass locale explicitly:
+  ```ts
+  // Route Handlers / Server Actions: next/root-params does NOT work.
+  // Pass locale explicitly:
+  const t = await getTranslations({ locale });
+  // getRequestConfig receives { locale } override when provided
+  // (shared/i18n/request.ts resolveLocale(explicit)).
+  ```

@@ -1,6 +1,6 @@
 import { DocsBody } from "fumadocs-ui/page";
 import { notFound } from "next/navigation";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 
 import ExternalRedirect from "@/components/external-redirect";
 import Header from "@/components/header";
@@ -9,19 +9,11 @@ import { siteConfig } from "@/shared/site-config";
 import { blog } from "@/shared/source";
 import styles from "@/shared/styles/stagger-fade-in.module.css";
 import { formatDateLong } from "@/shared/utils/date";
-import {
-  createMetadata,
-  getLocalizedPath,
-  resolveLocale,
-} from "@/shared/utils/metadata";
+import { createMetadata, getLocalizedPath } from "@/shared/utils/metadata";
 import { cn } from "@/shared/utils/tailwind";
 import { createBlogMdxComponents } from "./mdx-components";
 import { PostFooter } from "./post-footer";
 import { PostToc } from "./post-toc";
-
-// Cache Components opt-out — remove after this route is adopted.
-// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
-export const instant = false;
 
 export function generateStaticParams({
   params,
@@ -36,9 +28,8 @@ export function generateStaticParams({
 export async function generateMetadata(
   props: PageProps<"/[locale]/blog/[...slug]">
 ) {
-  const { locale: rawLocale, slug } = await props.params;
-  const locale = resolveLocale(rawLocale);
-  const t = await getTranslations({ locale });
+  const { slug } = await props.params;
+  const [locale, t] = await Promise.all([getLocale(), getTranslations()]);
   const page = blog.getPage(slug, locale);
   if (!page) {
     return createMetadata({

@@ -1,24 +1,16 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 
 import { ShowcaseDetailHeader } from "@/components/showcase-detail-header";
-import { createMetadata, resolveLocale } from "@/shared/utils/metadata";
+import { createMetadata } from "@/shared/utils/metadata";
 
 import SaaSComponentImage from "./saas-component.png";
 import SaaSPageImage from "./saas-page.png";
 
-// Cache Components opt-out — remove after this route is adopted.
-// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
-export const instant = false;
-
-export async function generateMetadata(
-  props: PageProps<"/[locale]/show/unstructured-0828">
-): Promise<Metadata> {
-  const { locale: routeLocale } = await props.params;
-  const locale = resolveLocale(routeLocale);
-  const t = await getTranslations({ locale });
+export async function generateMetadata(): Promise<Metadata> {
+  const [locale, t] = await Promise.all([getLocale(), getTranslations()]);
 
   return createMetadata({
     description: t("showcase.items.unstructured0828.summary"),

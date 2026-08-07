@@ -4,10 +4,6 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { NotFoundPage } from "@/components/not-found-page";
 import { createMetadata, getLocalizedPath } from "@/shared/utils/metadata";
 
-// Cache Components opt-out — remove after this route is adopted.
-// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
-export const instant = false;
-
 export async function generateMetadata(): Promise<Metadata> {
   const [locale, t] = await Promise.all([getLocale(), getTranslations()]);
 

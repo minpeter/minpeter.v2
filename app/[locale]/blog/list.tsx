@@ -5,7 +5,7 @@ import { fetchClient } from "fumadocs-core/search/client/fetch";
 import { Loader2, Search, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { debounce, parseAsString, useQueryState } from "nuqs";
-import type { ChangeEvent } from "react";
+import type { ChangeEvent, ReactNode } from "react";
 import {
   useCallback,
   useDeferredValue,
@@ -19,10 +19,17 @@ import type { postMetadataType } from "@/shared/source";
 import { BlogListFallback } from "./list-fallback";
 import { extractMatchedUrls, filterByTitle } from "./post-search";
 
+/**
+ * Client search island: owns the search input and URL `?q=` state.
+ * When the query is empty, renders the server-provided static list (`children`).
+ * When searching, replaces it with a filtered client list.
+ */
 export function BlogList({
+  children,
   lang,
   posts,
 }: {
+  children: ReactNode;
   lang: string;
   posts: postMetadataType[];
 }) {
@@ -70,25 +77,28 @@ export function BlogList({
     setQuery(null);
   }, [setQuery]);
 
-  const byLang = posts.filter((post) => post.lang.includes(lang));
-  let filteredPosts = byLang;
+  const filteredPosts = useMemo(() => {
+    if (!deferredQuery) {
+      return null;
+    }
 
-  if (deferredQuery) {
+    const byLang = posts.filter((post) => post.lang.includes(lang));
+
     if (
       searchQuery.isLoading ||
       searchQuery.data === "empty" ||
       !searchQuery.data
     ) {
-      filteredPosts = filterByTitle(byLang, deferredQuery);
-    } else {
-      const matchedUrls = extractMatchedUrls(searchQuery.data);
-      const bySearchResult = byLang.filter((post) => matchedUrls.has(post.url));
-      filteredPosts =
-        bySearchResult.length === 0
-          ? filterByTitle(byLang, deferredQuery)
-          : bySearchResult;
+      return filterByTitle(byLang, deferredQuery);
     }
-  }
+
+    const matchedUrls = extractMatchedUrls(searchQuery.data);
+    const bySearchResult = byLang.filter((post) => matchedUrls.has(post.url));
+
+    return bySearchResult.length === 0
+      ? filterByTitle(byLang, deferredQuery)
+      : bySearchResult;
+  }, [deferredQuery, lang, posts, searchQuery.data, searchQuery.isLoading]);
 
   return (
     <>
@@ -124,11 +134,15 @@ export function BlogList({
           </div>
         ) : null}
       </div>
-      <BlogListFallback
-        isLoading={isSearching}
-        lang={lang}
-        posts={filteredPosts}
-      />
+      {filteredPosts ? (
+        <BlogListFallback
+          isLoading={isSearching}
+          lang={lang}
+          posts={filteredPosts}
+        />
+      ) : (
+        children
+      )}
     </>
   );
 }

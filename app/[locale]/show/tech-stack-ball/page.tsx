@@ -1,21 +1,17 @@
 import type { Metadata } from "next";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 
 import { ShowcaseDetailHeader } from "@/components/showcase-detail-header";
-import { createMetadata, resolveLocale } from "@/shared/utils/metadata";
+import { createMetadata } from "@/shared/utils/metadata";
 
 import { PlaygroundWrapper } from "./playground-wrapper";
 
-// Cache Components opt-out — remove after this route is adopted.
+// Deliberate Block: client-only interaction (canvas / Date.now / Math.random / network).
 // See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
 export const instant = false;
 
-export async function generateMetadata(
-  props: PageProps<"/[locale]/show/tech-stack-ball">
-): Promise<Metadata> {
-  const { locale: routeLocale } = await props.params;
-  const locale = resolveLocale(routeLocale);
-  const t = await getTranslations({ locale });
+export async function generateMetadata(): Promise<Metadata> {
+  const [locale, t] = await Promise.all([getLocale(), getTranslations()]);
 
   return createMetadata({
     description: t("showcase.items.techStack.summary"),
