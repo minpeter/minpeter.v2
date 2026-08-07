@@ -1,9 +1,9 @@
 "use client";
 
 import { ReloadIcon } from "@radix-ui/react-icons";
-import { useTranslations } from "next-intl";
 import dynamic from "next/dynamic";
-import { useEffect, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -28,7 +28,7 @@ const Playground = dynamic<PlaygroundProps>(
 
 export function PlaygroundWrapper({ className, h, w }: PlaygroundProps) {
   const t = useTranslations("showcase.items.techStack");
-  const frameRef = useRef<HTMLDivElement>(null);
+  const frameRef = useRef<HTMLDivElement | null>(null);
   const [dimensions, setDimensions] = useState<PlaygroundDimensions | null>(
     null
   );
@@ -36,8 +36,7 @@ export function PlaygroundWrapper({ className, h, w }: PlaygroundProps) {
 
   useEffect(() => {
     const frame = frameRef.current;
-
-    if (!frame) {
+    if (frame === null) {
       return;
     }
 
@@ -75,9 +74,9 @@ export function PlaygroundWrapper({ className, h, w }: PlaygroundProps) {
     };
   }, [h, w]);
 
-  const handleReplay = () => {
+  const handleReplay = useCallback(() => {
     setRunId((currentRunId) => currentRunId + 1);
-  };
+  }, []);
 
   return (
     <>

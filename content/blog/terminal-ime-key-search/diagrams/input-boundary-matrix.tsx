@@ -59,20 +59,20 @@ export const InputBoundaryMatrix = () => (
           key={row.path}
         >
           <div className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between">
-            <div className="text-sm font-semibold">{row.title}</div>
-            <div className="text-sm text-foreground">{row.examples}</div>
+            <div className="font-semibold text-sm">{row.title}</div>
+            <div className="text-foreground text-sm">{row.examples}</div>
           </div>
           <dl className="mt-3 grid gap-2 sm:grid-cols-3">
             <div>
-              <dt className="text-xs font-semibold">누가 key를 보는가</dt>
+              <dt className="font-semibold text-xs">누가 key를 보는가</dt>
               <dd className="mt-1 text-sm leading-snug">{row.observer}</dd>
             </div>
             <div>
-              <dt className="text-xs font-semibold">PTY / Atuin에 도착</dt>
+              <dt className="font-semibold text-xs">PTY / Atuin에 도착</dt>
               <dd className="mt-1 text-sm leading-snug">{row.output}</dd>
             </div>
             <div>
-              <dt className="text-xs font-semibold">provenance 복원</dt>
+              <dt className="font-semibold text-xs">provenance 복원</dt>
               <dd className="mt-1 text-sm leading-snug">{row.recovery}</dd>
             </div>
           </dl>
@@ -80,9 +80,9 @@ export const InputBoundaryMatrix = () => (
       ))}
     </div>
 
-    <div className="my-3 flex items-center gap-2" aria-hidden="true">
+    <div aria-hidden="true" className="my-3 flex items-center gap-2">
       <div className="h-px flex-1 bg-foreground" />
-      <div className="text-xs font-semibold">Atuin에서 가능한 해석</div>
+      <div className="font-semibold text-xs">Atuin에서 가능한 해석</div>
       <div className="h-px flex-1 bg-foreground" />
     </div>
 
@@ -93,7 +93,7 @@ export const InputBoundaryMatrix = () => (
           data-input={row.input}
           key={row.input}
         >
-          <div className="text-sm font-semibold">{row.title}</div>
+          <div className="font-semibold text-sm">{row.title}</div>
           <div className="mt-2 text-sm leading-snug">{row.outcome}</div>
         </div>
       ))}

@@ -1,5 +1,5 @@
-import type { ZodType } from "zod";
 import { describe, expect, it } from "vitest";
+import type { ZodType } from "zod";
 
 import { docs } from "../../source.config";
 

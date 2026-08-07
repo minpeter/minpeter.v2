@@ -42,8 +42,8 @@ jobs:
         run: |
           pnpm check:types
 
-  oxlint:
-    name: Oxlint
+  lint:
+    name: Ultracite (Biome)
     timeout-minutes: 15
     runs-on: ubuntu-latest
 
@@ -65,9 +65,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Run Oxlint check
+      - name: Run Ultracite check
         run: |
-          pnpm check:oxlint
+          pnpm check:lint
 
   build:
     name: Production build

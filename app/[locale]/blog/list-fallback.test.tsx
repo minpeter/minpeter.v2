@@ -7,6 +7,7 @@ import type { postMetadataType } from "@/shared/source";
 
 import { BlogListFallback } from "./list-fallback";
 
+const EXT_LINK_NAME_RE = /Ext/;
 vi.mock(import("@/shared/styles/stagger-fade-in.module.css"), () => ({
   default: new Proxy({}, { get: (_target, key) => String(key) }),
 }));
@@ -81,7 +82,7 @@ describe(BlogListFallback, () => {
       makePost({ external_url: "https://example.com/post", title: "Ext" }),
     ]);
 
-    const anchor = screen.getByRole("link", { name: /Ext/ });
+    const anchor = screen.getByRole("link", { name: EXT_LINK_NAME_RE });
     expect(anchor.getAttribute("href")).toBe("https://example.com/post");
     expect(anchor.getAttribute("target")).toBe("_blank");
     expect(anchor.getAttribute("rel")).toBe("noopener noreferrer");

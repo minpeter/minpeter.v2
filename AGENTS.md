@@ -17,6 +17,7 @@
 - Blog post: soft-nav from list; avoid external_url posts for in-app checks
 - Header / locale: `[data-testid=site-header]`, `[data-testid=language-selector]`
 - Showcase: prefer title/description, not canvas pixels
+- Lint/format: `pnpm check:lint` / `pnpm fmt` (Ultracite → Biome; no oxlint/oxfmt)
 - Typecheck: `pnpm check` · Tests: `pnpm test` · Build: `pnpm build` · Audit: `pnpm audit --prod`
 
 ## Cache Components

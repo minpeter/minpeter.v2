@@ -3,14 +3,15 @@ import { describe, expect, it } from "vitest";
 import {
   getIconSize,
   getIconTextureScale,
-  shuffleArray,
   STACK_ICONS,
+  shuffleArray,
 } from "./stack-icons";
 
 describe(shuffleArray, () => {
   it("keeps the same elements and length", () => {
-    expect(shuffleArray(STACK_ICONS).toSorted()).toStrictEqual(
-      STACK_ICONS.toSorted()
+    const byPath = (a: string, b: string) => a.localeCompare(b);
+    expect(shuffleArray(STACK_ICONS).toSorted(byPath)).toStrictEqual(
+      STACK_ICONS.toSorted(byPath)
     );
   });
 

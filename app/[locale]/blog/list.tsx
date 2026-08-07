@@ -4,8 +4,8 @@ import { useDocsSearch } from "fumadocs-core/search/client";
 import { Loader2, Search, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { debounce, parseAsString, useQueryState } from "nuqs";
-import { useDeferredValue, useEffect, useTransition } from "react";
 import type { ChangeEvent } from "react";
+import { useCallback, useDeferredValue, useEffect, useTransition } from "react";
 
 import type { postMetadataType } from "@/shared/source";
 
@@ -46,12 +46,15 @@ export function BlogList({
   const isSearching =
     query !== deferredQuery || isPending || searchQuery.isLoading;
 
-  const handleQueryChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setQuery(event.target.value || null);
-  };
-  const handleQueryClear = () => {
+  const handleQueryChange = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      setQuery(event.target.value || null);
+    },
+    [setQuery]
+  );
+  const handleQueryClear = useCallback(() => {
     setQuery(null);
-  };
+  }, [setQuery]);
 
   const byLang = posts.filter((post) => post.lang.includes(lang));
   let filteredPosts = byLang;
@@ -90,7 +93,7 @@ export function BlogList({
           type="text"
           value={query}
         />
-        {query && (
+        {query ? (
           <div className="absolute top-1/2 right-3 flex h-4 w-4 -translate-y-1/2 items-center justify-center">
             {isSearching ? (
               <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
@@ -105,7 +108,7 @@ export function BlogList({
               </button>
             )}
           </div>
-        )}
+        ) : null}
       </div>
       <BlogListFallback
         isLoading={isSearching}

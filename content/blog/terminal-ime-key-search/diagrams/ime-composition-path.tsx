@@ -18,7 +18,7 @@ export const ImeCompositionPathDiagram = () => (
         stage="constituent-keys"
         title="구성 key events"
       >
-        <div className="mt-2 text-sm leading-snug text-foreground">
+        <div className="mt-2 text-foreground text-sm leading-snug">
           사용자가 실제로 누른 키
         </div>
       </FlowStage>
@@ -44,7 +44,7 @@ export const ImeCompositionPathDiagram = () => (
         title="터미널"
         tone="emphasis"
       >
-        <div className="mt-2 text-sm leading-snug text-foreground">
+        <div className="mt-2 text-foreground text-sm leading-snug">
           key event가 아니라 committed text를 받음
         </div>
       </FlowStage>
@@ -52,7 +52,7 @@ export const ImeCompositionPathDiagram = () => (
       <FlowArrow label="터미널이 committed text를 PTY에 기록" />
 
       <FlowStage detail={'UTF-8 "햣"'} stage="pty" title="PTY bytes">
-        <div className="mt-2 text-sm leading-snug text-foreground">
+        <div className="mt-2 text-foreground text-sm leading-snug">
           최종 text byte stream만 운반
         </div>
       </FlowStage>

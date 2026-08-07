@@ -43,7 +43,7 @@ export function LanguageSelector() {
       <Trigger asChild>
         <button
           aria-label={`${currentLabel.short} - ${t("selectLanguage")}`}
-          className="flex items-center gap-1 rounded-md px-2 py-1 text-sm text-muted-foreground hover:bg-secondary hover:text-primary transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="flex items-center gap-1 rounded-md px-2 py-1 text-muted-foreground text-sm transition-colors duration-150 hover:bg-secondary hover:text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           data-testid="language-selector"
           onPointerEnter={handleMouseEnter}
           onPointerLeave={handleMouseLeave}
@@ -58,7 +58,7 @@ export function LanguageSelector() {
       <Portal>
         <Content
           align="end"
-          className="z-50 min-w-[120px] rounded-md border border-border bg-background p-1 shadow-md fade-in-0 zoom-in-95 data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 animate-in data-[state=closed]:animate-out data-[side=bottom]:slide-in-from-top-2 data-[side=top]:slide-in-from-bottom-2"
+          className="fade-in-0 zoom-in-95 data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[side=bottom]:slide-in-from-top-2 data-[side=top]:slide-in-from-bottom-2 z-50 min-w-[120px] animate-in rounded-md border border-border bg-background p-1 shadow-md data-[state=closed]:animate-out"
           onCloseAutoFocus={preventCloseAutoFocus}
           onPointerEnter={handleContentMouseEnter}
           onPointerLeave={handleContentMouseLeave}

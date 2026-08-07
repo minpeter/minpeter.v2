@@ -4,20 +4,19 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "postinstall": "fumadocs-mdx",
-    "dev": "portless minpeter next dev",
-    "start": "next start -p 8200",
     "build": "next build",
     "postbuild": "next-sitemap",
     "build:analyze": "ANALYZE=true next build",
-    "test": "vitest run",
-    "check:oxlint": "oxlint",
+    "check": "run-p check:**",
+    "check:lint": "ultracite check",
     "precheck:types": "next typegen",
     "check:types": "tsc --noEmit",
-    "check": "run-p check:**",
-    "fmt:oxlint": "ultracite fix",
-    "fmt": "run-p fmt:**",
-    "knip": "knip"
+    "dev": "portless minpeter next dev",
+    "fmt": "ultracite fix",
+    "postinstall": "fumadocs-mdx",
+    "knip": "knip",
+    "start": "next start -p 8200",
+    "test": "vitest run"
   },
   "dependencies": {
     "@next/third-parties": "16.3.0",
@@ -53,6 +52,7 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
+    "@biomejs/biome": "2.5.6",
     "@edge-runtime/vm": "^5.0.0",
     "@next/bundle-analyzer": "16.3.0",
     "@tailwindcss/postcss": "^4.3.3",
@@ -68,8 +68,6 @@
     "next-sitemap": "^4.2.3",
     "next-themes": "^0.4.6",
     "npm-run-all2": "^9.0.3",
-    "oxfmt": "^0.62.0",
-    "oxlint": "^1.77.0",
     "react-grab": "0.1.50",
     "tailwind-merge": "^3.6.0",
     "tailwindcss": "^4.3.3",

@@ -35,7 +35,7 @@ export function NavLink({
       {...rest}
     >
       {children}
-      {pending && <span className="ml-1 opacity-60">...</span>}
+      {pending ? <span className="ml-1 opacity-60">...</span> : null}
     </Link>
   );
 }

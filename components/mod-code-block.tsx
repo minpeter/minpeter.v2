@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import type { ChangeEvent, KeyboardEvent, MouseEvent } from "react";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
 import { copyToClipboard, useCopyStatus } from "./code-block-copy";
 
@@ -112,7 +112,7 @@ export function ModCodeBlock({
       ? null
       : activeSegmentIndex;
 
-  const handleCopy = async () => {
+  const handleCopy = useCallback(async () => {
     const values = { ...data, ...editedValues };
     const compiled = buildTemplateOutput(segments, values);
 
@@ -125,30 +125,36 @@ export function ModCodeBlock({
       }
       markError();
     }
-  };
+  }, [data, editedValues, markCopied, markError, segments]);
 
-  const handleSegmentBlur = () => {
+  const handleSegmentBlur = useCallback(() => {
     setActiveSegmentIndex(null);
-  };
+  }, []);
 
-  const handleSegmentChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const { segmentKey } = event.currentTarget.dataset;
-    if (!segmentKey) {
-      return;
-    }
-    const { value } = event.currentTarget;
-    setEditedValues((previousValues) => ({
-      ...previousValues,
-      [segmentKey]: value,
-    }));
-  };
+  const handleSegmentChange = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      const { segmentKey } = event.currentTarget.dataset;
+      if (!segmentKey) {
+        return;
+      }
+      const { value } = event.currentTarget;
+      setEditedValues((previousValues) => ({
+        ...previousValues,
+        [segmentKey]: value,
+      }));
+    },
+    []
+  );
 
-  const handleSegmentActivate = (event: MouseEvent<HTMLButtonElement>) => {
-    const segmentIndex = Number(event.currentTarget.dataset.segmentIndex);
-    if (Number.isSafeInteger(segmentIndex)) {
-      setActiveSegmentIndex(segmentIndex);
-    }
-  };
+  const handleSegmentActivate = useCallback(
+    (event: MouseEvent<HTMLButtonElement>) => {
+      const segmentIndex = Number(event.currentTarget.dataset.segmentIndex);
+      if (Number.isSafeInteger(segmentIndex)) {
+        setActiveSegmentIndex(segmentIndex);
+      }
+    },
+    []
+  );
 
   let copyLabel = t("copy");
   if (status === "copied") {

@@ -1,5 +1,5 @@
-import { getTranslations } from "next-intl/server";
 import Link from "next/link";
+import { getTranslations } from "next-intl/server";
 
 import { routing } from "@/shared/i18n/routing";
 import { resolveLocale } from "@/shared/utils/metadata";

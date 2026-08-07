@@ -54,30 +54,30 @@ describe(getOgTitleSize, () => {
 describe(getTitleTokens, () => {
   it("keeps each CJK character in its own token", () => {
     expect(getTitleTokens("한글")).toStrictEqual([
-      { isCjk: true, text: "한" },
-      { isCjk: true, text: "글" },
+      { isCjk: true, offset: 0, text: "한" },
+      { isCjk: true, offset: 1, text: "글" },
     ]);
   });
 
   it("attaches a trailing space to the preceding latin token", () => {
     expect(getTitleTokens("Hello World")).toStrictEqual([
-      { isCjk: false, text: "Hello " },
-      { isCjk: false, text: "World" },
+      { isCjk: false, offset: 0, text: "Hello " },
+      { isCjk: false, offset: 6, text: "World" },
     ]);
   });
 
   it("starts a new latin token after CJK characters", () => {
     expect(getTitleTokens("한글ABC")).toStrictEqual([
-      { isCjk: true, text: "한" },
-      { isCjk: true, text: "글" },
-      { isCjk: false, text: "ABC" },
+      { isCjk: true, offset: 0, text: "한" },
+      { isCjk: true, offset: 1, text: "글" },
+      { isCjk: false, offset: 2, text: "ABC" },
     ]);
   });
 
   it("attaches a space before CJK to the latin token", () => {
     expect(getTitleTokens("AB 한")).toStrictEqual([
-      { isCjk: false, text: "AB " },
-      { isCjk: true, text: "한" },
+      { isCjk: false, offset: 0, text: "AB " },
+      { isCjk: true, offset: 3, text: "한" },
     ]);
   });
 

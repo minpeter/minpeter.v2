@@ -18,7 +18,7 @@ const emblaApi = vi.hoisted(() => ({
 
 // @ts-expect-error -- the mock only implements the Embla surface used here.
 vi.mock(import("embla-carousel-react"), () => ({
-  default: () => [() => {}, emblaApi],
+  default: () => [() => undefined, emblaApi],
 }));
 
 const EXTERNAL_IMAGE_URL = "https://images.example.com/gallery/photo.jpg";

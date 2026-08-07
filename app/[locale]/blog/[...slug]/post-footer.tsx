@@ -1,8 +1,8 @@
 import type { Route } from "next";
 
 import { ViewTransition } from "@/components/view-transition";
-import { blog } from "@/shared/source";
 import type { blogType } from "@/shared/source";
+import { blog } from "@/shared/source";
 import { formatDateLong } from "@/shared/utils/date";
 
 import { NavLink } from "./nav-link";

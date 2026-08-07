@@ -1,11 +1,11 @@
+import { docs, meta } from "fumadocs-mdx:collections/server";
 import type { MetaData, PageData } from "fumadocs-core/source";
 import { loader } from "fumadocs-core/source";
-import { toFumadocsSource } from "fumadocs-mdx/runtime/server";
 import type {
   DocCollectionEntry,
   MetaCollectionEntry,
 } from "fumadocs-mdx/runtime/server";
-import { docs, meta } from "fumadocs-mdx:collections/server";
+import { toFumadocsSource } from "fumadocs-mdx/runtime/server";
 
 import { routing } from "./i18n/routing";
 

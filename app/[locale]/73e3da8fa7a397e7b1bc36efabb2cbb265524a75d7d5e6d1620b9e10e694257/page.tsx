@@ -2,10 +2,9 @@ import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { Backlink } from "@/components/link";
+import styles from "@/shared/styles/stagger-fade-in.module.css";
 import { createMetadata, resolveLocale } from "@/shared/utils/metadata";
 import { cn } from "@/shared/utils/tailwind";
-
-import styles from "@/shared/styles/stagger-fade-in.module.css";
 
 // Cache Components opt-out — remove after this route is adopted.
 // See: https://nextjs.org/docs/app/guides/migrating-to-cache-components

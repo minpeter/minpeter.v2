@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { getTranslations } from "next-intl/server";
 import Image from "next/image";
+import { getTranslations } from "next-intl/server";
 
 import { LanguageSelector } from "@/components/language-selector";
 import { Link } from "@/shared/i18n/navigation";
@@ -87,11 +87,7 @@ export default async function Page(_props: PageProps<"/[locale]/show">) {
 
       <nav aria-label={t("showcase.projectsLabel")} className="showcase-list">
         {SHOWCASE_ITEMS.map(({ key, path }) => (
-          <Link
-            className="showcase-item-link"
-            href={path}
-            key={path}
-          >
+          <Link className="showcase-item-link" href={path} key={path}>
             <span className="showcase-item-top">
               <span className="showcase-item-title">
                 {t(`showcase.items.${key}.title`)}

@@ -1,10 +1,10 @@
 import { remarkInstall } from "fumadocs-docgen";
+import type { DefaultMDXOptions } from "fumadocs-mdx/config";
 import {
   defineConfig,
   defineDocs,
   frontmatterSchema,
 } from "fumadocs-mdx/config";
-import type { DefaultMDXOptions } from "fumadocs-mdx/config";
 import lastModified from "fumadocs-mdx/plugins/last-modified";
 import { z } from "zod";
 

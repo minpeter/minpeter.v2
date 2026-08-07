@@ -13,11 +13,6 @@ export function createBlogMdxComponents() {
 
   return {
     ...defaultMdxComponents,
-    Callout: BlogCallout,
-    MediaGrid,
-    RelatedLink: BlogRelatedLink,
-    Tab,
-    Tabs,
     a: (anchorProps: ComponentProps<"a">) => {
       const { href, children, ...rest } = anchorProps;
       const isInternalLink = href?.startsWith("/") && !href.startsWith("//");
@@ -44,6 +39,7 @@ export function createBlogMdxComponents() {
         </a>
       );
     },
+    Callout: BlogCallout,
     img: (imageProps: ComponentProps<"img">) => {
       const eager = firstImageEager;
       firstImageEager = false;
@@ -55,5 +51,9 @@ export function createBlogMdxComponents() {
         />
       );
     },
+    MediaGrid,
+    RelatedLink: BlogRelatedLink,
+    Tab,
+    Tabs,
   };
 }

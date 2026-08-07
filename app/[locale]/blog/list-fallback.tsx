@@ -1,15 +1,14 @@
 import { ExternalLink, Search } from "lucide-react";
 import type { Route } from "next";
-import { useTranslations } from "next-intl";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 import { Badge } from "@/components/ui/badge";
 import { ViewTransition } from "@/components/view-transition";
 import type { postMetadataType } from "@/shared/source";
+import styles from "@/shared/styles/stagger-fade-in.module.css";
 import { formatPostDate, formatYear } from "@/shared/utils/date";
 import { cn } from "@/shared/utils/tailwind";
-
-import styles from "@/shared/styles/stagger-fade-in.module.css";
 
 // Shared by the external-link and internal-link branches of a list item.
 const ITEM_LINK_CLASSNAME =

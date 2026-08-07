@@ -56,14 +56,8 @@ export function RootDocument({ children, lang }: RootDocumentProps) {
           id="deferred-fonts"
           rel="preload"
         />
-        <script
-          dangerouslySetInnerHTML={{
-            __html:
-              "document.getElementById('deferred-fonts').addEventListener('load',function(){this.rel='stylesheet'})",
-          }}
-        />
+        <script defer src="/scripts/deferred-fonts.js" />
         <noscript>
-          {/* oxlint-disable-next-line next/no-css-tags -- no-JS clients cannot flip the preload into a stylesheet */}
           <link href="/fonts/deferred-fonts.css" rel="stylesheet" />
         </noscript>
       </head>
@@ -80,7 +74,7 @@ export function RootDocument({ children, lang }: RootDocumentProps) {
             <ThemeFavicon />
             {shouldInjectDevTools ? <ReactGrab /> : null}
             <NuqsAdapter>
-              <main className="font-sans relative mx-auto flex w-full max-w-4xl flex-1 flex-col px-5 sm:px-8 lg:px-12">
+              <main className="relative mx-auto flex w-full max-w-4xl flex-1 flex-col px-5 font-sans sm:px-8 lg:px-12">
                 {children}
                 {shouldInjectDevTools ? <VercelToolbar /> : null}
               </main>

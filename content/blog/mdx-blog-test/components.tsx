@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 
@@ -12,10 +12,10 @@ export function SimpleButton() {
   const [toggle, setToggle] = useState(false);
   const [count, setCount] = useState(0);
 
-  const handleClick = () => {
+  const handleClick = useCallback(() => {
     setToggle((prevToggle) => !prevToggle);
     setCount((prevCount) => prevCount + 1);
-  };
+  }, []);
 
   let buttonLabel = "Push me!!";
   if (count >= PUSHED_THRESHOLD) {
@@ -35,7 +35,7 @@ export function Ip() {
   const [ip, setIp] = useState("Click the button to load your IP.");
   const [isLoading, setIsLoading] = useState(false);
 
-  const loadIp = async () => {
+  const loadIp = useCallback(async () => {
     setIsLoading(true);
     try {
       const response = await fetch("https://ip.minpeter.com/ip");
@@ -48,12 +48,17 @@ export function Ip() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
 
   return (
     <span className="inline-flex items-center gap-2">
-      Your IP: {isLoading ? "Loading..." : ip}
-      <Button disabled={isLoading} onClick={loadIp} size="sm" variant="secondary">
+      Your IP: {isLoading ? "Loading..." : ip || ""}
+      <Button
+        disabled={isLoading}
+        onClick={loadIp}
+        size="sm"
+        variant="secondary"
+      >
         Load IP
       </Button>
     </span>
@@ -62,12 +67,12 @@ export function Ip() {
 
 export function Counter() {
   const [count, setCount] = useState(0);
-  const handleCountUp = () => {
+  const handleCountUp = useCallback(() => {
     setCount((currentCount) => currentCount + 1);
-  };
-  const handleReset = () => {
+  }, []);
+  const handleReset = useCallback(() => {
     setCount(0);
-  };
+  }, []);
 
   return (
     <div className="space-y-2">

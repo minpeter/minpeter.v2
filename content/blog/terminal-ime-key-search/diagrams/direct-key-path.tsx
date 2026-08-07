@@ -18,10 +18,10 @@ export const DirectKeyPathDiagram = () => (
         stage="keyboard-layout"
         title="OS / 키보드 배열"
       >
-        <div className="mt-2 text-sm leading-snug text-foreground">
+        <div className="mt-2 text-foreground text-sm leading-snug">
           PC-101 위치: c · U+0063
         </div>
-        <div className="mt-1 font-mono text-sm text-foreground">
+        <div className="mt-1 font-mono text-foreground text-sm">
           K=1089 · B=99
         </div>
       </FlowStage>
@@ -34,7 +34,7 @@ export const DirectKeyPathDiagram = () => (
         title="터미널"
         tone="emphasis"
       >
-        <div className="mt-2 text-sm leading-snug text-foreground">
+        <div className="mt-2 text-foreground text-sm leading-snug">
           K와 B를 함께 인코딩
         </div>
       </FlowStage>
@@ -42,7 +42,7 @@ export const DirectKeyPathDiagram = () => (
       <FlowArrow label="터미널이 escape sequence를 PTY에 기록" />
 
       <FlowStage detail="ESC[1089::99;5u" stage="pty" title="PTY bytes">
-        <div className="mt-2 text-sm leading-snug text-foreground">
+        <div className="mt-2 text-foreground text-sm leading-snug">
           byte stream을 그대로 운반
         </div>
       </FlowStage>
@@ -61,7 +61,7 @@ export const DirectKeyPathDiagram = () => (
       <FlowArrow label="Crossterm KeyEvent가 Atuin에 전달" />
 
       <FlowStage detail="'с' + Ctrl" stage="atuin" title="Atuin">
-        <div className="mt-2 text-sm font-medium leading-snug text-foreground">
+        <div className="mt-2 font-medium text-foreground text-sm leading-snug">
           B=99는 보이지 않음
         </div>
       </FlowStage>

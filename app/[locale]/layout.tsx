@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import {
   getMessages,
   getTranslations,
   setRequestLocale,
 } from "next-intl/server";
-import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
 
 import { ViewTransition } from "@/components/view-transition";
@@ -19,13 +19,17 @@ import {
 
 import "../globals.css";
 import { RootDocument } from "../root-document";
-import { metadata as rootMetadata } from "../root-metadata";
+import {
+  metadata as rootMetadata,
+  viewport as rootViewport,
+} from "../root-metadata";
 
 // Cache Components opt-out — remove after this route is adopted.
 // See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
 export const instant = false;
 
-export { viewport } from "../root-metadata";
+export const viewport = rootViewport;
+
 interface Props {
   children: ReactNode;
   params: Promise<{ locale: string }>;
