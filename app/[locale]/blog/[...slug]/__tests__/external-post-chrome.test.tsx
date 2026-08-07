@@ -130,5 +130,3 @@ describe("app/[locale]/blog/[...slug]/page.tsx external-linked post", () => {
     expect(panel?.className).not.toContain("min-h-dvh");
   });
 });
-
-
