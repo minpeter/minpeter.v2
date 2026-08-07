@@ -1,22 +1,15 @@
 import type { Metadata } from "next";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import type { ReactNode } from "react";
 
-import { createMetadata, resolveLocale } from "@/shared/utils/metadata";
-
-// Cache Components opt-out — remove after this route is adopted.
-// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
-export const instant = false;
+import { createMetadata } from "@/shared/utils/metadata";
 
 interface Props {
   children: ReactNode;
-  params: Promise<{ locale: string }>;
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { locale: routeLocale } = await params;
-  const locale = resolveLocale(routeLocale);
-  const t = await getTranslations({ locale });
+export async function generateMetadata(): Promise<Metadata> {
+  const [locale, t] = await Promise.all([getLocale(), getTranslations()]);
 
   return createMetadata({
     description: t("showcase.items.newYear.summary"),

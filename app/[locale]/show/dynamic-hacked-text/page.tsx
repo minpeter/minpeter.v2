@@ -1,21 +1,15 @@
 import type { Metadata } from "next";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
+import { Suspense } from "react";
 
 import { ShowcaseDetailHeader } from "@/components/showcase-detail-header";
-import { createMetadata, resolveLocale } from "@/shared/utils/metadata";
+import { Skeleton } from "@/components/ui/skeleton";
+import { createMetadata } from "@/shared/utils/metadata";
 
 import AnimatedText from "./animated-text";
 
-// Cache Components opt-out — remove after this route is adopted.
-// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
-export const instant = false;
-
-export async function generateMetadata(
-  props: PageProps<"/[locale]/show/dynamic-hacked-text">
-): Promise<Metadata> {
-  const { locale: routeLocale } = await props.params;
-  const locale = resolveLocale(routeLocale);
-  const t = await getTranslations({ locale });
+export async function generateMetadata(): Promise<Metadata> {
+  const [locale, t] = await Promise.all([getLocale(), getTranslations()]);
 
   return createMetadata({
     description: t("showcase.items.dynamicText.summary"),
@@ -25,13 +19,11 @@ export async function generateMetadata(
   });
 }
 
-export default async function Page(
-  _props: PageProps<"/[locale]/show/dynamic-hacked-text">
-) {
+export default async function Page() {
   const t = await getTranslations();
 
   return (
-    <section className="showcase-page">
+    <section className="showcase-page" data-testid="showcase-detail-shell">
       <ShowcaseDetailHeader
         backLabel={t("back")}
         description={t("showcase.items.dynamicText.description")}
@@ -44,7 +36,9 @@ export default async function Page(
       />
 
       <div className="flex min-h-56 items-center justify-center rounded-lg border border-foreground/10 bg-secondary/35 px-5">
-        <AnimatedText data={"Hello world"} />
+        <Suspense fallback={<Skeleton className="h-10 w-48" />}>
+          <AnimatedText data={"Hello world"} />
+        </Suspense>
       </div>
     </section>
   );

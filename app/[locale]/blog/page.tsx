@@ -1,31 +1,19 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { Suspense } from "react";
 
 import { LanguageSelector } from "@/components/language-selector";
 import { Link } from "@/shared/i18n/navigation";
 import { blog, getPostsMetadata } from "@/shared/source";
-import {
-  createMetadata,
-  getLocalizedPath,
-  resolveLocale,
-} from "@/shared/utils/metadata";
+import { createMetadata, getLocalizedPath } from "@/shared/utils/metadata";
 
 import { BlogList } from "./list";
 import { BlogListFallback, BlogSearchShell } from "./list-fallback";
 import { RssLink } from "./rss-link";
 
-// Cache Components opt-out — remove after this route is adopted.
-// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
-export const instant = false;
-
-export async function generateMetadata(
-  props: PageProps<"/[locale]/blog">
-): Promise<Metadata> {
-  const { locale: routeLocale } = await props.params;
-  const locale = resolveLocale(routeLocale);
-  const t = await getTranslations({ locale });
+export async function generateMetadata(): Promise<Metadata> {
+  const [locale, t] = await Promise.all([getLocale(), getTranslations()]);
   const baseMetadata = createMetadata({
     description: t("blogPageDescription"),
     locale,
@@ -44,15 +32,15 @@ export async function generateMetadata(
   };
 }
 
-export default async function Page(props: PageProps<"/[locale]/blog">) {
-  const { locale } = await props.params;
+export default async function Page() {
+  const [locale, t] = await Promise.all([getLocale(), getTranslations()]);
 
-  const posts = getPostsMetadata(blog.getPages(locale));
-
-  const t = await getTranslations();
+  const posts = getPostsMetadata(blog.getPages(locale)).filter((post) =>
+    post.lang.includes(locale)
+  );
 
   return (
-    <section className="fieldnotes-page">
+    <section className="fieldnotes-page" data-testid="blog-list-shell">
       <header className="fieldnotes-header">
         <nav aria-label={t("common.blogNavigation")} className="fieldnotes-nav">
           <Link
@@ -79,6 +67,10 @@ export default async function Page(props: PageProps<"/[locale]/blog">) {
           </div>
         </nav>
       </header>
+      {/*
+        Soft-nav / streaming shell: header + search placeholder + full post list.
+        After hydrate, BlogList keeps the server list (children) until ?q= is set.
+      */}
       <Suspense
         fallback={
           <>
@@ -87,7 +79,9 @@ export default async function Page(props: PageProps<"/[locale]/blog">) {
           </>
         }
       >
-        <BlogList lang={locale} posts={posts} />
+        <BlogList lang={locale} posts={posts}>
+          <BlogListFallback lang={locale} posts={posts} />
+        </BlogList>
       </Suspense>
     </section>
   );

@@ -6,6 +6,8 @@ export default defineConfig({
   },
   test: {
     environment: "node",
+    // Playwright e2e lives under e2e/ and is not for Vitest.
+    exclude: ["**/node_modules/**", "**/e2e/**", "**/dist/**", "**/.next/**"],
     globals: true,
     server: {
       deps: {

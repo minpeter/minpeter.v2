@@ -21,12 +21,15 @@ const dictionaries: Record<string, Record<string, unknown>> = {
   ko: readMessages("ko"),
 };
 
+let mockLocale = "en";
+
 vi.mock(
   import("next-intl/server"),
   () =>
     ({
-      getTranslations: vi.fn((options?: { locale?: string }) => {
-        const dict = dictionaries[options?.locale ?? "en"] ?? dictionaries.en;
+      getLocale: vi.fn(() => Promise.resolve(mockLocale)),
+      getTranslations: vi.fn(() => {
+        const dict = dictionaries[mockLocale] ?? dictionaries.en;
         return (key: string): string => {
           const value = key
             .split(".")
@@ -75,10 +78,8 @@ describe("app/[locale]/blog/page.tsx generateMetadata", () => {
   ])(
     "keeps the site-wide brand prefix and localizes the title for locale %s",
     async (locale, localizedTitle) => {
-      const metadata = await generateMetadata({
-        params: Promise.resolve({ locale }),
-        searchParams: Promise.resolve({}),
-      });
+      mockLocale = locale;
+      const metadata = await generateMetadata();
 
       expect(metadata.title).toBe(`minpeter | ${localizedTitle}`);
     }

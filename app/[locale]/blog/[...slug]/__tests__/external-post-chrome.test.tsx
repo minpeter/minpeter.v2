@@ -8,13 +8,14 @@ import { describe, expect, it, vi } from "vitest";
 import type * as sourceModule from "@/shared/source";
 
 import type * as mdxComponentsModule from "../mdx-components";
-import Page from "../page";
+import { PostBody } from "../page";
 
 const COUNTDOWN_RE = /초 후 외부 링크로 이동합니다/;
 vi.mock(
   import("next-intl/server"),
   () =>
     ({
+      getLocale: vi.fn(() => Promise.resolve("ko")),
       getTranslations: vi.fn(() => (key: string) => {
         const messages: Record<string, string> = {
           backToBlog: "글 목록으로",
@@ -73,9 +74,8 @@ vi.mock(import("../post-toc"), () => ({ PostToc: () => <div /> }));
 
 describe("app/[locale]/blog/[...slug]/page.tsx external-linked post", () => {
   it("keeps the header chrome with a back-to-blog link around the redirect", async () => {
-    const ui = await Page({
+    const ui = await PostBody({
       params: Promise.resolve({ locale: "ko", slug: ["external-post"] }),
-      searchParams: Promise.resolve({}),
     });
 
     render(
@@ -97,9 +97,8 @@ describe("app/[locale]/blog/[...slug]/page.tsx external-linked post", () => {
   });
 
   it("keeps the redirect panel inside one viewport under the header", async () => {
-    const ui = await Page({
+    const ui = await PostBody({
       params: Promise.resolve({ locale: "ko", slug: ["external-post"] }),
-      searchParams: Promise.resolve({}),
     });
 
     const { container } = render(
@@ -116,7 +115,7 @@ describe("app/[locale]/blog/[...slug]/page.tsx external-linked post", () => {
       </NextIntlClientProvider>
     );
 
-    const section = container.querySelector("section");
+    const section = container.querySelector("section.blog-post-page");
     expect(section?.className).toContain("flex-1");
     expect(section?.className).toContain("flex-col");
     expect(section?.className).not.toContain("min-h-dvh");

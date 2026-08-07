@@ -3,10 +3,6 @@ import { useTranslations } from "next-intl";
 
 import { Link } from "@/shared/i18n/navigation";
 
-// Cache Components opt-out — remove after this route is adopted.
-// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
-export const instant = false;
-
 const SECTIONS = [
   {
     descriptionKey: "sections.developmentNotes.description",
@@ -70,7 +66,12 @@ export default function Page() {
 
       <nav aria-label={t("exploreLabel")} className="home-links">
         {SECTIONS.map(({ descriptionKey, href, titleKey }) => (
-          <Link className="home-link group" href={href} key={href}>
+          <Link
+            className="home-link group"
+            data-testid={`home-link-${href.slice(1)}`}
+            href={href}
+            key={href}
+          >
             <span className="home-link-title">{t(titleKey)}</span>
             <span className="home-link-description">{t(descriptionKey)}</span>
           </Link>

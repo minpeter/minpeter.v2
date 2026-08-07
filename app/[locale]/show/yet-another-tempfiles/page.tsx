@@ -1,21 +1,15 @@
 import type { Metadata } from "next";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
+import { Suspense } from "react";
 
 import { ShowcaseDetailHeader } from "@/components/showcase-detail-header";
-import { createMetadata, resolveLocale } from "@/shared/utils/metadata";
+import { Skeleton } from "@/components/ui/skeleton";
+import { createMetadata } from "@/shared/utils/metadata";
 
 import TmpfUI from "./tmpf";
 
-// Cache Components opt-out — remove after this route is adopted.
-// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
-export const instant = false;
-
-export async function generateMetadata(
-  props: PageProps<"/[locale]/show/yet-another-tempfiles">
-): Promise<Metadata> {
-  const { locale: routeLocale } = await props.params;
-  const locale = resolveLocale(routeLocale);
-  const t = await getTranslations({ locale });
+export async function generateMetadata(): Promise<Metadata> {
+  const [locale, t] = await Promise.all([getLocale(), getTranslations()]);
 
   return createMetadata({
     description: t("showcase.items.tempfiles.summary"),
@@ -25,13 +19,11 @@ export async function generateMetadata(
   });
 }
 
-export default async function Page(
-  _props: PageProps<"/[locale]/show/yet-another-tempfiles">
-) {
+export default async function Page() {
   const t = await getTranslations();
 
   return (
-    <section className="showcase-page">
+    <section className="showcase-page" data-testid="showcase-detail-shell">
       <ShowcaseDetailHeader
         backLabel={t("back")}
         description={t("showcase.items.tempfiles.description")}
@@ -44,7 +36,9 @@ export default async function Page(
       />
 
       <div className="rounded-lg border border-foreground/10 bg-secondary/25 p-5 sm:p-6">
-        <TmpfUI />
+        <Suspense fallback={<Skeleton className="h-48 w-full" />}>
+          <TmpfUI />
+        </Suspense>
       </div>
       <p className="mt-3 text-[0.6875rem] text-muted-foreground leading-relaxed">
         {t("showcase.items.tempfiles.notice")}

@@ -116,6 +116,7 @@ export function BlogListFallback({
                     ) : (
                       <Link
                         className={ITEM_LINK_CLASSNAME}
+                        data-testid="blog-post-link"
                         href={post.url as Route}
                       >
                         <ViewTransition
