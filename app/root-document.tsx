@@ -8,7 +8,6 @@ import { NuqsAdapter } from "nuqs/adapters/next";
 import type { ReactNode } from "react";
 
 import Footer from "@/components/footer";
-import { ReactGrab } from "@/components/react-grab";
 import { ThemeFavicon } from "@/components/theme-favicon";
 import { ThemeProvider } from "@/components/theme-provider";
 import { env } from "@/shared/env";
@@ -38,6 +37,8 @@ export function RootDocument({ children, lang }: RootDocumentProps) {
   return (
     <html lang={lang} suppressHydrationWarning>
       <head>
+        {/* Native theme (class on <html>). Tell Dark Reader not to inject. */}
+        <meta name="darkreader-lock" />
         <link
           href="/assets/favicon-light.svg"
           media="(prefers-color-scheme: light)"
@@ -56,7 +57,6 @@ export function RootDocument({ children, lang }: RootDocumentProps) {
           id="deferred-fonts"
           rel="preload"
         />
-        <script defer src="/scripts/deferred-fonts.js" />
         <noscript>
           <link href="/fonts/deferred-fonts.css" rel="stylesheet" />
         </noscript>
@@ -70,9 +70,8 @@ export function RootDocument({ children, lang }: RootDocumentProps) {
         suppressHydrationWarning
       >
         <NextProvider>
-          <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
+          <ThemeProvider defaultTheme="light" enableSystem>
             <ThemeFavicon />
-            {shouldInjectDevTools ? <ReactGrab /> : null}
             <NuqsAdapter>
               <main className="relative mx-auto flex w-full max-w-4xl flex-1 flex-col px-5 font-sans sm:px-8 lg:px-12">
                 {children}

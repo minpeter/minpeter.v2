@@ -4,7 +4,19 @@ import { createMDX } from "fumadocs-mdx/next";
 import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
 
+/** Hostnames only (no scheme/port). Extra LAN hosts via ALLOWED_DEV_ORIGINS. */
+function resolveAllowedDevOrigins(): string[] {
+  const defaults = ["127.0.0.1", "minpeter.localhost", "*.localhost"];
+  const extra =
+    process.env.ALLOWED_DEV_ORIGINS?.split(",")
+      .map((host) => host.trim())
+      .filter(Boolean) ?? [];
+  return [...new Set([...defaults, ...extra])];
+}
+
 const nextConfig: NextConfig = {
+  // Next 16 blockCrossSiteDEV: allowlisted origins may load /_next in dev.
+  allowedDevOrigins: resolveAllowedDevOrigins(),
   cacheComponents: true,
   experimental: {
     // Only for local/CI measured production builds used by @next/playwright instant().

@@ -20,12 +20,11 @@ export default defineConfig({
     baseURL,
     trace: "on-first-retry",
   },
-  // Assumes a production build is already running (see package.json test:e2e).
-  // EXPOSE_TESTING_API=1 must have been set during `next build`.
+  // Instant() needs a production build with EXPOSE_TESTING_API=1 (see test:e2e:instant).
   webServer: process.env.PLAYWRIGHT_SKIP_WEBSERVER
     ? undefined
     : {
-        command: "pnpm start",
+        command: `pnpm exec next start -p ${port}`,
         reuseExistingServer: !process.env.CI,
         timeout: 120_000,
         url: baseURL,

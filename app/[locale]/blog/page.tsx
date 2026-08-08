@@ -5,7 +5,7 @@ import { Suspense } from "react";
 
 import { LanguageSelector } from "@/components/language-selector";
 import { Link } from "@/shared/i18n/navigation";
-import { blog, getPostsMetadata } from "@/shared/source";
+import { type AppLocale, getCachedPostsForLocale } from "@/shared/source";
 import { createMetadata, getLocalizedPath } from "@/shared/utils/metadata";
 
 import { BlogList } from "./list";
@@ -34,10 +34,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function Page() {
   const [locale, t] = await Promise.all([getLocale(), getTranslations()]);
-
-  const posts = getPostsMetadata(blog.getPages(locale)).filter((post) =>
-    post.lang.includes(locale)
-  );
+  const posts = await getCachedPostsForLocale(locale as AppLocale);
 
   return (
     <section className="fieldnotes-page" data-testid="blog-list-shell">

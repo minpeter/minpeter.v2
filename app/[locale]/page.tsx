@@ -71,6 +71,10 @@ export default function Page() {
             data-testid={`home-link-${href.slice(1)}`}
             href={href}
             key={href}
+            // Runtime prefetch only where destination has `"use cache"` data
+            // (blog list). Default Partial Prefetching already warms App Shell.
+            // See: next-partial-prefetching-adoption step 5 / runtime-prefetching.
+            prefetch={href === "/blog" ? true : undefined}
           >
             <span className="home-link-title">{t(titleKey)}</span>
             <span className="home-link-description">{t(descriptionKey)}</span>

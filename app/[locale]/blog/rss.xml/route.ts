@@ -1,3 +1,5 @@
+import { cacheLife } from "next/cache";
+
 import { getBaseUrl } from "@/shared/env";
 import { routing } from "@/shared/i18n/routing";
 import { getSiteDescription, siteConfig } from "@/shared/site-config";
@@ -14,7 +16,10 @@ function escapeXml(text: string): string {
     .replaceAll("'", "&apos;");
 }
 
-function generateRssFeed(locale: Locale): string {
+async function generateRssFeed(locale: Locale): Promise<string> {
+  "use cache";
+  cacheLife("days");
+
   const baseUrl = getBaseUrl();
   const posts = blog.getPages(locale);
 
@@ -51,7 +56,7 @@ function generateRssFeed(locale: Locale): string {
   const lastBuildDate =
     sortedPosts[0]?.data.published.toUTCString() ?? new Date(0).toUTCString();
 
-  return `<?xml version="1.0" encoding="UTF-8"?>
+  const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>${escapeXml(siteConfig.title)}</title>
@@ -63,6 +68,8 @@ function generateRssFeed(locale: Locale): string {
 ${items}
   </channel>
 </rss>`;
+  // `"use cache"` requires async; feed assembly is sync.
+  return await Promise.resolve(xml);
 }
 
 export async function GET(
@@ -75,7 +82,7 @@ export async function GET(
     return new Response("Not Found", { status: 404 });
   }
 
-  const feed = generateRssFeed(locale as Locale);
+  const feed = await generateRssFeed(locale as Locale);
 
   return new Response(feed, {
     headers: {

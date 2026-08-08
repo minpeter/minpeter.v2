@@ -12,7 +12,7 @@ import { useLocale, useTranslations } from "next-intl";
 
 import { LOCALE_LABELS } from "@/shared/constants/locales";
 import { useHoverDropdown } from "@/shared/hooks/use-hover-dropdown";
-import { Link, usePathname } from "@/shared/i18n/navigation";
+import { getPathname, usePathname } from "@/shared/i18n/navigation";
 import { routing } from "@/shared/i18n/routing";
 import { cn } from "@/shared/utils/tailwind";
 
@@ -67,10 +67,15 @@ export function LanguageSelector() {
         >
           {routing.locales.map((l) => {
             const isActive = locale === l;
+            // Full document navigation (plain <a>), not next-intl <Link> soft-nav.
+            // Locale switches under localePrefix: "as-needed" often 307 (e.g. /ko/blog
+            // → /blog) and abort in-flight RSC streams, which surfaces
+            // TypeError: Cannot write/close a CLOSED writable stream in Next 16.
+            const href = getPathname({ href: pathname, locale: l });
 
             return (
               <Item asChild key={l}>
-                <Link
+                <a
                   className={cn(
                     "block w-full cursor-pointer rounded-sm px-3 py-2 text-left text-sm",
                     "transition-colors duration-150",
@@ -81,11 +86,11 @@ export function LanguageSelector() {
                         !isActive,
                     }
                   )}
-                  href={pathname}
-                  locale={l}
+                  href={href}
+                  lang={l}
                 >
                   {LOCALE_LABELS[l].native}
-                </Link>
+                </a>
               </Item>
             );
           })}
