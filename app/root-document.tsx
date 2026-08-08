@@ -38,9 +38,10 @@ export function RootDocument({ children, lang }: RootDocumentProps) {
   return (
     <html lang={lang} suppressHydrationWarning>
       <head>
-        {/* Site has native theme (next-themes). Tell Dark Reader not to inject
-            inline styles that break React hydration. */}
+        {/* Native theme (class on <html>). Tell Dark Reader not to inject. */}
         <meta name="darkreader-lock" />
+        {/* FOUC-free theme before paint — not via a Client Component <script>. */}
+        <Script src="/scripts/theme-init.js" strategy="beforeInteractive" />
         <link
           href="/assets/favicon-light.svg"
           media="(prefers-color-scheme: light)"
@@ -74,7 +75,7 @@ export function RootDocument({ children, lang }: RootDocumentProps) {
         {/* next/script — raw <script> in RSC triggers client console errors */}
         <Script src="/scripts/deferred-fonts.js" strategy="afterInteractive" />
         <NextProvider>
-          <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
+          <ThemeProvider defaultTheme="light" enableSystem>
             <ThemeFavicon />
             <NuqsAdapter>
               <main className="relative mx-auto flex w-full max-w-4xl flex-1 flex-col px-5 font-sans sm:px-8 lg:px-12">

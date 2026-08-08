@@ -1,7 +1,8 @@
 "use client";
 
-import { useTheme } from "next-themes";
 import { useEffect } from "react";
+
+import { useTheme } from "@/components/theme-provider";
 
 const faviconPaths = {
   dark: "/assets/favicon-dark.svg",
