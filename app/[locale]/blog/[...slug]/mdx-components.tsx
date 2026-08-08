@@ -21,6 +21,7 @@ export function createBlogMdxComponents() {
           <Link
             className="rounded-md px-2 py-1 text-primary hover:bg-secondary"
             href={href as Route}
+            prefetch={true}
             {...(rest as Record<string, unknown>)}
           >
             {children}

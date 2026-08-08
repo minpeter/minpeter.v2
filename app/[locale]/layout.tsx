@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
-import { getLocale, getMessages, getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import type { ReactNode } from "react";
 
 import { ViewTransition } from "@/components/view-transition";
+import { getCachedMessages } from "@/shared/i18n/messages-cache";
 import { routing } from "@/shared/i18n/routing";
 import { getSiteDescription } from "@/shared/site-config";
 import { createMetadata, getLocalizedPath } from "@/shared/utils/metadata";
@@ -62,7 +63,10 @@ export default async function LocaleLayout({ children, params }: Props) {
     notFound();
   }
 
-  const [locale, messages] = await Promise.all([getLocale(), getMessages()]);
+  const [locale, messages] = await Promise.all([
+    getLocale(),
+    getCachedMessages(routeLocale),
+  ]);
 
   return (
     <RootDocument lang={locale}>

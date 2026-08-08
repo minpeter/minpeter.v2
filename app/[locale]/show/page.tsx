@@ -57,6 +57,7 @@ export default async function Page(_props: PageProps<"/[locale]/show">) {
             aria-label={t("backToHome")}
             className="fieldnotes-logo-link"
             href="/"
+            prefetch={true}
           >
             <Image
               alt=""
@@ -84,6 +85,7 @@ export default async function Page(_props: PageProps<"/[locale]/show">) {
             data-testid={`showcase-link-${key}`}
             href={path}
             key={path}
+            prefetch={true}
           >
             <span className="showcase-item-top">
               <span className="showcase-item-title">

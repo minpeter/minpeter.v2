@@ -71,6 +71,7 @@ export default function Page() {
             data-testid={`home-link-${href.slice(1)}`}
             href={href}
             key={href}
+            prefetch={true}
           >
             <span className="home-link-title">{t(titleKey)}</span>
             <span className="home-link-description">{t(descriptionKey)}</span>

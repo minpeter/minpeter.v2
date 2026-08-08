@@ -118,6 +118,7 @@ export function BlogListFallback({
                         className={ITEM_LINK_CLASSNAME}
                         data-testid="blog-post-link"
                         href={post.url as Route}
+                        prefetch={true}
                       >
                         <ViewTransition
                           name={`blog-title-${post.url.replaceAll("/", "-")}`}

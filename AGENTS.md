@@ -24,6 +24,8 @@
 - `cacheComponents: true` and `partialPrefetching: true` in `next.config.mts` (stable top-level).
 - Prefer no `instant = false`; interactive islands are client components under Suspense.
 - Blog list: server shell renders post list; client `BlogList` only owns search (`?q=`).
+- Content `"use cache"`: list (`shared/blog-cache.ts`), i18n messages (`shared/i18n/messages-cache.ts`), RSS/OG — **not** full MDX post trees (Flight stream corruption in dev).
+- Runtime prefetch: key links use `prefetch={true}` (home sections, blog posts, showcase).
 - OG routes use `"use cache"` + `cacheLife("days")` instead of `revalidate`/`dynamic`.
 
 ## Instant soft-nav e2e (`@next/playwright`)

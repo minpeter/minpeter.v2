@@ -38,6 +38,9 @@ export function RootDocument({ children, lang }: RootDocumentProps) {
   return (
     <html lang={lang} suppressHydrationWarning>
       <head>
+        {/* Site has native theme (next-themes). Tell Dark Reader not to inject
+            inline styles that break React hydration. */}
+        <meta name="darkreader-lock" />
         <link
           href="/assets/favicon-light.svg"
           media="(prefers-color-scheme: light)"

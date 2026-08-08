@@ -68,7 +68,14 @@ export async function generateMetadata(
   });
 }
 
-/** Exported for unit tests; page wraps this in Suspense for the soft-nav shell. */
+/**
+ * Exported for unit tests; page wraps this in Suspense for the soft-nav shell.
+ *
+ * Note: do not wrap the full MDX tree in `"use cache"`. Caching RSC that
+ * includes MDX + client islands (Header, etc.) can corrupt the Flight stream
+ * in dev ("Cannot write to a CLOSED writable stream"). List/metadata stay
+ * cached via `shared/blog-cache.ts` instead.
+ */
 export async function PostBody({
   params,
 }: {

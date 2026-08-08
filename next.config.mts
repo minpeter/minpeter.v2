@@ -5,6 +5,15 @@ import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
 
 const nextConfig: NextConfig = {
+  // Next 16 blocks cross-origin dev asset requests (blockCrossSiteDEV).
+  // LAN / 127.0.0.1 / portless hostnames need an explicit allowlist so client
+  // chunks hydrate (theme toggle, etc.). Hostnames only — no scheme/port.
+  allowedDevOrigins: [
+    "127.0.0.1",
+    "10.10.10.10",
+    "minpeter.localhost",
+    "*.localhost",
+  ],
   cacheComponents: true,
   experimental: {
     // Only for local/CI measured production builds used by @next/playwright instant().

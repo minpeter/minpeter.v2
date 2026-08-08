@@ -1,3 +1,5 @@
+import { cacheLife, cacheTag } from "next/cache";
+
 import { getBaseUrl } from "@/shared/env";
 import { routing } from "@/shared/i18n/routing";
 import { getSiteDescription, siteConfig } from "@/shared/site-config";
@@ -14,7 +16,11 @@ function escapeXml(text: string): string {
     .replaceAll("'", "&apos;");
 }
 
-function generateRssFeed(locale: Locale): string {
+async function generateRssFeed(locale: Locale): Promise<string> {
+  "use cache";
+  cacheLife("days");
+  cacheTag("blog-rss", `blog-rss-${locale}`);
+
   const baseUrl = getBaseUrl();
   const posts = blog.getPages(locale);
 
@@ -75,7 +81,7 @@ export async function GET(
     return new Response("Not Found", { status: 404 });
   }
 
-  const feed = generateRssFeed(locale as Locale);
+  const feed = await generateRssFeed(locale as Locale);
 
   return new Response(feed, {
     headers: {
