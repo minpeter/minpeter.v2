@@ -8,7 +8,6 @@ import { NuqsAdapter } from "nuqs/adapters/next";
 import type { ReactNode } from "react";
 
 import Footer from "@/components/footer";
-import { ReactGrab } from "@/components/react-grab";
 import { ThemeFavicon } from "@/components/theme-favicon";
 import { ThemeProvider } from "@/components/theme-provider";
 import { env } from "@/shared/env";
@@ -75,7 +74,6 @@ export function RootDocument({ children, lang }: RootDocumentProps) {
         <NextProvider>
           <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
             <ThemeFavicon />
-            {shouldInjectDevTools ? <ReactGrab /> : null}
             <NuqsAdapter>
               <main className="relative mx-auto flex w-full max-w-4xl flex-1 flex-col px-5 font-sans sm:px-8 lg:px-12">
                 {children}

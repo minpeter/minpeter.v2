@@ -5,6 +5,7 @@
 - Origin is typically `https://minpeter.localhost` (or whatever portless prints). Read the next dev banner for the actual URL/port.
 - Production-like local: `pnpm build && pnpm start` → port 8200 (`next start -p 8200`)
 - LAN / custom hosts: set `ALLOWED_DEV_ORIGINS` (comma-separated hostnames, no scheme/port), e.g. `ALLOWED_DEV_ORIGINS=10.10.10.10`. Defaults already include `127.0.0.1`, `minpeter.localhost`, `*.localhost`.
+- **React Grab** (hover UI → ⌘C/Ctrl+C → paste into agent): loads via `instrumentation-client.ts` in **`next dev` only**. Does **not** run on `pnpm start` / production preview (`:8200`). Console should log `[react-grab] ready …`.
 
 ## next-dev-loop / MCP
 - Requires Next 16.3+ Turbopack (this repo uses `turbopack` in `next.config.mts`).
