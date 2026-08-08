@@ -4,7 +4,6 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { VercelToolbar } from "@vercel/toolbar/next";
 import { NextProvider } from "fumadocs-core/framework/next";
 import { Geist, Geist_Mono } from "next/font/google";
-import Script from "next/script";
 import { NuqsAdapter } from "nuqs/adapters/next";
 import type { ReactNode } from "react";
 
@@ -40,8 +39,6 @@ export function RootDocument({ children, lang }: RootDocumentProps) {
       <head>
         {/* Native theme (class on <html>). Tell Dark Reader not to inject. */}
         <meta name="darkreader-lock" />
-        {/* FOUC-free theme before paint — not via a Client Component <script>. */}
-        <Script src="/scripts/theme-init.js" strategy="beforeInteractive" />
         <link
           href="/assets/favicon-light.svg"
           media="(prefers-color-scheme: light)"
@@ -72,8 +69,6 @@ export function RootDocument({ children, lang }: RootDocumentProps) {
         )}
         suppressHydrationWarning
       >
-        {/* next/script — raw <script> in RSC triggers client console errors */}
-        <Script src="/scripts/deferred-fonts.js" strategy="afterInteractive" />
         <NextProvider>
           <ThemeProvider defaultTheme="light" enableSystem>
             <ThemeFavicon />
