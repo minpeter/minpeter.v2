@@ -63,6 +63,7 @@ export default async function LocaleLayout({ children, params }: Props) {
     notFound();
   }
 
+  // routeLocale is a validated AppLocale after hasLocale; use it as the cache key.
   const [locale, messages] = await Promise.all([
     getLocale(),
     getCachedMessages(routeLocale),

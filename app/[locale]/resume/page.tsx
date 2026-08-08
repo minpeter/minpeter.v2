@@ -32,7 +32,6 @@ export default async function Page() {
             aria-label={t("backToHome")}
             className="fieldnotes-logo-link"
             href="/"
-            prefetch={true}
           >
             <Image
               alt=""
@@ -60,7 +59,7 @@ export default async function Page() {
         <p className="resume-message-description">
           {t("resume.statusDescription")}
         </p>
-        <Link className="resume-home-link" href="/" prefetch={true}>
+        <Link className="resume-home-link" href="/">
           {t("resume.homeLabel")} <span aria-hidden="true">↗</span>
         </Link>
       </section>

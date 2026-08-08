@@ -4,8 +4,8 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { Suspense } from "react";
 
 import { LanguageSelector } from "@/components/language-selector";
-import { getCachedPostsForLocale } from "@/shared/blog-cache";
 import { Link } from "@/shared/i18n/navigation";
+import { type AppLocale, getCachedPostsForLocale } from "@/shared/source";
 import { createMetadata, getLocalizedPath } from "@/shared/utils/metadata";
 
 import { BlogList } from "./list";
@@ -34,8 +34,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function Page() {
   const [locale, t] = await Promise.all([getLocale(), getTranslations()]);
-  // Cached list — fills App Shell / runtime prefetch without re-reading the source tree.
-  const posts = await getCachedPostsForLocale(locale);
+  const posts = await getCachedPostsForLocale(locale as AppLocale);
 
   return (
     <section className="fieldnotes-page" data-testid="blog-list-shell">
@@ -45,7 +44,6 @@ export default async function Page() {
             aria-label={t("backToHome")}
             className="fieldnotes-logo-link"
             href="/"
-            prefetch={true}
           >
             <Image
               alt=""

@@ -32,7 +32,6 @@ export function ShowcaseDetailHeader({
           aria-label={backLabel}
           className="fieldnotes-logo-link"
           href={href}
-          prefetch={true}
         >
           <Image
             alt=""

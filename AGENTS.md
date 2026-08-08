@@ -4,6 +4,7 @@
 - `pnpm dev` uses portless: `portless minpeter next dev`
 - Origin is typically `https://minpeter.localhost` (or whatever portless prints). Read the next dev banner for the actual URL/port.
 - Production-like local: `pnpm build && pnpm start` → port 8200 (`next start -p 8200`)
+- LAN / custom hosts: set `ALLOWED_DEV_ORIGINS` (comma-separated hostnames, no scheme/port), e.g. `ALLOWED_DEV_ORIGINS=10.10.10.10`. Defaults already include `127.0.0.1`, `minpeter.localhost`, `*.localhost`.
 
 ## next-dev-loop / MCP
 - Requires Next 16.3+ Turbopack (this repo uses `turbopack` in `next.config.mts`).
@@ -24,8 +25,8 @@
 - `cacheComponents: true` and `partialPrefetching: true` in `next.config.mts` (stable top-level).
 - Prefer no `instant = false`; interactive islands are client components under Suspense.
 - Blog list: server shell renders post list; client `BlogList` only owns search (`?q=`).
-- Content `"use cache"`: list (`shared/blog-cache.ts`), i18n messages (`shared/i18n/messages-cache.ts`), RSS/OG — **not** full MDX post trees (Flight stream corruption in dev).
-- Runtime prefetch: key links use `prefetch={true}` (home sections, blog posts, showcase).
+- Content `"use cache"`: `getCachedPostsForLocale` in `shared/source.ts`, i18n messages (`shared/i18n/messages-cache.ts`), RSS/OG with `cacheLife`. **Never** put full MDX post trees in `"use cache"` (Flight stream corruption in dev).
+- Runtime prefetch (`prefetch={true}`): only where destination has cached URL/list data worth a per-link server hit (currently home → `/blog`). Default links already warm the App Shell under Partial Prefetching — do not spray `prefetch={true}`.
 - OG routes use `"use cache"` + `cacheLife("days")` instead of `revalidate`/`dynamic`.
 
 ## Instant soft-nav e2e (`@next/playwright`)

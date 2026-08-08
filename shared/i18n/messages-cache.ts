@@ -1,24 +1,16 @@
-import { cacheLife, cacheTag } from "next/cache";
+import { cacheLife } from "next/cache";
 import { getMessages } from "next-intl/server";
 
-import { routing } from "@/shared/i18n/routing";
-
-type AppLocale = (typeof routing.locales)[number];
+/** Mirrors `shared/i18n/locales.js` — keep in sync with `routing.locales`. */
+type AppLocale = "en" | "ja" | "ko";
 
 /**
- * Static message catalogs per locale — shared shell + every page under [locale].
- * Build id invalidates on deploy; tags allow on-demand revalidation if catalogs ever ship separately.
+ * Static message catalogs per locale (layout shell).
+ * Caller must pass a validated locale (see `[locale]/layout` + `hasLocale`).
  */
-export async function getCachedMessages(locale: string) {
+export async function getCachedMessages(locale: AppLocale) {
   "use cache";
   cacheLife("max");
-  cacheTag("i18n-messages", `i18n-messages-${locale}`);
 
-  const resolved = (
-    routing.locales.includes(locale as AppLocale)
-      ? locale
-      : routing.defaultLocale
-  ) as AppLocale;
-
-  return getMessages({ locale: resolved });
+  return await getMessages({ locale });
 }

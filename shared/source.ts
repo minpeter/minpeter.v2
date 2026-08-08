@@ -6,8 +6,11 @@ import type {
   MetaCollectionEntry,
 } from "fumadocs-mdx/runtime/server";
 import { toFumadocsSource } from "fumadocs-mdx/runtime/server";
+import { cacheLife } from "next/cache";
 
 import { routing } from "./i18n/routing";
+
+export type AppLocale = (typeof routing.locales)[number];
 
 type BlogFrontmatter = PageData & {
   ai_generated_by?: string;
@@ -65,4 +68,21 @@ export function getPostsMetadata(posts: blogListType): postMetadataType[] {
   return posts
     .toSorted((a, b) => b.data.published.getTime() - a.data.published.getTime())
     .map(getPostMetadata);
+}
+
+/**
+ * Locale-scoped post index for the blog list and runtime prefetches into it.
+ * Build id invalidates on deploy. Do not put full MDX trees in `"use cache"`.
+ */
+export async function getCachedPostsForLocale(
+  locale: AppLocale
+): Promise<postMetadataType[]> {
+  "use cache";
+  cacheLife("days");
+
+  const posts = getPostsMetadata(blog.getPages(locale)).filter((post) =>
+    post.lang.includes(locale)
+  );
+  // `"use cache"` requires async; source tree reads are sync.
+  return await Promise.resolve(posts);
 }

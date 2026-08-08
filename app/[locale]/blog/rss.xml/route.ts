@@ -1,4 +1,4 @@
-import { cacheLife, cacheTag } from "next/cache";
+import { cacheLife } from "next/cache";
 
 import { getBaseUrl } from "@/shared/env";
 import { routing } from "@/shared/i18n/routing";
@@ -19,7 +19,6 @@ function escapeXml(text: string): string {
 async function generateRssFeed(locale: Locale): Promise<string> {
   "use cache";
   cacheLife("days");
-  cacheTag("blog-rss", `blog-rss-${locale}`);
 
   const baseUrl = getBaseUrl();
   const posts = blog.getPages(locale);
@@ -57,7 +56,7 @@ async function generateRssFeed(locale: Locale): Promise<string> {
   const lastBuildDate =
     sortedPosts[0]?.data.published.toUTCString() ?? new Date(0).toUTCString();
 
-  return `<?xml version="1.0" encoding="UTF-8"?>
+  const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>${escapeXml(siteConfig.title)}</title>
@@ -69,6 +68,8 @@ async function generateRssFeed(locale: Locale): Promise<string> {
 ${items}
   </channel>
 </rss>`;
+  // `"use cache"` requires async; feed assembly is sync.
+  return await Promise.resolve(xml);
 }
 
 export async function GET(

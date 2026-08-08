@@ -45,7 +45,6 @@ export default function Header({
           <Backlink
             href={link.href}
             onNavigate={link.onNavigate}
-            prefetch={true}
             text={link.text}
           />
         ) : (
