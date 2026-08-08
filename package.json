@@ -15,7 +15,6 @@
     "fmt": "ultracite fix",
     "postinstall": "fumadocs-mdx",
     "knip": "knip",
-    "start": "next start -p 8200",
     "test": "vitest run",
     "test:e2e": "playwright test",
     "test:e2e:instant": "EXPOSE_TESTING_API=1 pnpm build && playwright test"

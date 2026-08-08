@@ -1,7 +1,7 @@
 /**
  * Client instrumentation runs before the app becomes interactive.
  * React Grab must load early so hover/⌘C can resolve component stacks.
- * Only active under `next dev` (NODE_ENV === "development") — not `next start`.
+ * Only active under `next dev` (NODE_ENV === "development").
  *
  * @see https://nextjs.org/docs/app/api-reference/file-conventions/instrumentation-client
  * @see https://www.react-grab.com
