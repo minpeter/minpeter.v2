@@ -4,6 +4,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { VercelToolbar } from "@vercel/toolbar/next";
 import { NextProvider } from "fumadocs-core/framework/next";
 import { Geist, Geist_Mono } from "next/font/google";
+import Script from "next/script";
 import { NuqsAdapter } from "nuqs/adapters/next";
 import type { ReactNode } from "react";
 
@@ -58,7 +59,6 @@ export function RootDocument({ children, lang }: RootDocumentProps) {
           id="deferred-fonts"
           rel="preload"
         />
-        <script defer src="/scripts/deferred-fonts.js" />
         <noscript>
           <link href="/fonts/deferred-fonts.css" rel="stylesheet" />
         </noscript>
@@ -71,6 +71,8 @@ export function RootDocument({ children, lang }: RootDocumentProps) {
         )}
         suppressHydrationWarning
       >
+        {/* next/script — raw <script> in RSC triggers client console errors */}
+        <Script src="/scripts/deferred-fonts.js" strategy="afterInteractive" />
         <NextProvider>
           <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
             <ThemeFavicon />
