@@ -1,9 +1,9 @@
-(function () {
-  var el = document.getElementById("deferred-fonts");
+(() => {
+  const el = document.getElementById("deferred-fonts");
   if (!el) {
     return;
   }
-  var promote = function () {
+  const promote = () => {
     el.rel = "stylesheet";
   };
   // afterInteractive may run after preload already finished
