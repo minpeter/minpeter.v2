@@ -1,0 +1,16 @@
+app/[locale]/blog/list.tsx
+  h_47761b8ceb2970 21-22
+app/[locale]/blog/page.tsx
+  h_47761b8ceb2970 11,23-24,38-39
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.23",
+  "base_commit_sha": "c431895cd22bed907e4fdf7afb134068c108fc7c",
+  "prompts": {},
+  "humans": {
+    "h_47761b8ceb2970": {
+      "author": "minpeter <minpeter@friendli.ai>"
+    }
+  }
+}
