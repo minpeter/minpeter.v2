@@ -12,25 +12,14 @@ import { formatDate, formatYear } from "@/lib/utils/date";
 import { cn } from "@/lib/utils/tailwind";
 
 export function BlogList({
-  lang,
   posts,
+  lang,
 }: {
-  lang: string;
   posts: postMetadataType[];
+  lang: string;
 }) {
   const [query] = useQueryState("q", parseAsString.withDefault(""));
-  return <BlogListFallback posts={posts} query={query} lang={lang} />;
-}
 
-export function BlogListFallback({
-  posts,
-  query,
-  lang,
-}: {
-  posts: postMetadataType[];
-  query: string | null;
-  lang: string;
-}) {
   // first filter by language metadata, then by title query
   const byLang = posts.filter((post) => post.lang.includes(lang));
   const filteredPosts = byLang.filter((post) =>
