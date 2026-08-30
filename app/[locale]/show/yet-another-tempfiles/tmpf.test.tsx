@@ -175,6 +175,7 @@ describe("uploadFile response validation", () => {
     expect(call).toHaveLength(2);
     expect(call[0]).toBe(API_SUFFIX.UPLOAD);
     expect(call[1]).toMatchObject({ retry: 0, timeout: false });
+    expect(call[1]).not.toHaveProperty("headers");
     expect([...call[1].body.entries()]).toStrictEqual(
       files.map((file) => ["file", file])
     );
@@ -238,9 +239,24 @@ describe("uploadFile response validation", () => {
     expect(callOrder).toStrictEqual([...callOrder].sort((a, b) => a - b));
   });
 
-  it("propagates a rejected download request", async () => {
+  it.each([
+    {
+      arrange(error: Error) {
+        mockGet.mockImplementationOnce(() => {
+          throw error;
+        });
+      },
+      stage: "request",
+    },
+    {
+      arrange(error: Error) {
+        mockBlob.mockRejectedValueOnce(error);
+      },
+      stage: "blob body",
+    },
+  ])("propagates $stage failures", async ({ arrange }) => {
     const requestError = new Error("download unavailable");
-    mockBlob.mockRejectedValue(requestError);
+    arrange(requestError);
 
     await expect(downloadFile("folder", "a.txt")).rejects.toBe(requestError);
 
