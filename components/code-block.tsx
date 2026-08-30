@@ -2,7 +2,8 @@
 
 import type { CSSProperties } from "react";
 import { Fragment, useCallback } from "react";
-import { generate, tokenize } from "sugar-high";
+import { generate, parse } from "sugar-high/core";
+import { tokenize } from "sugar-high/lang/javascript";
 
 import {
   COPY_ERROR_LABEL,
@@ -33,7 +34,7 @@ interface HighlightLineNode {
 }
 
 function HighlightedCode({ code }: { code: string }) {
-  const lines = generate(tokenize(code)) as HighlightLineNode[];
+  const lines = generate(parse(code, { tokenize })) as HighlightLineNode[];
   const lastLine = lines.at(-1);
   let lineOffset = 0;
 
