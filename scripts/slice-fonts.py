@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # /// script
 # requires-python = ">=3.12"
-# dependencies = ["brotli==1.1.0", "fonttools==4.63.0"]
+# dependencies = ["brotli==1.2.0", "fonttools==4.63.0"]
 # ///
 """Slice the site's CJK fonts into Google-Fonts-style unicode-range woff2 sets.
 

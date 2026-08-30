@@ -6,7 +6,7 @@ import { describe, expect, it } from "vitest";
 
 import { CodeBlock } from "./code-block";
 
-describe("highlight() from sugar-high@0.9.5", () => {
+describe("highlight() from sugar-high", () => {
   it("should highlight simple variable declaration", () => {
     const code = "const x = 1;";
     const result = highlight(code);

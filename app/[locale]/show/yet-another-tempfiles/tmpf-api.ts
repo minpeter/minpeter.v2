@@ -1,4 +1,4 @@
-import axios from "axios";
+import ky from "ky";
 
 export const TMPF_API_BASE = "https://api.tmpf.me";
 
@@ -12,16 +12,18 @@ export const API_SUFFIX = {
   },
 };
 
-const axiosInstance = axios.create({
-  baseURL: TMPF_API_BASE,
+const kyInstance = ky.create({
+  baseUrl: TMPF_API_BASE,
 });
 
 export async function downloadFile(folderId: string, fileName: string) {
-  const response = await axiosInstance.get(
-    API_SUFFIX.DOWNLOAD(folderId, fileName),
-    { responseType: "blob" }
-  );
-  const url = window.URL.createObjectURL(new Blob([response.data]));
+  const responseBlob = await kyInstance
+    .get(API_SUFFIX.DOWNLOAD(folderId, fileName), {
+      retry: 0,
+      timeout: false,
+    })
+    .blob();
+  const url = window.URL.createObjectURL(new Blob([responseBlob]));
   const a = document.createElement("a");
   a.href = url;
   a.download = fileName;
@@ -64,11 +66,14 @@ export async function uploadFile(file: File[]): Promise<UploadResponse | null> {
   }
 
   try {
-    const response = await axiosInstance.post<unknown>(
-      API_SUFFIX.UPLOAD,
-      formData
-    );
-    return isUploadResponse(response.data) ? response.data : null;
+    const response = await kyInstance
+      .post(API_SUFFIX.UPLOAD, {
+        body: formData,
+        retry: 0,
+        timeout: false,
+      })
+      .json<unknown>();
+    return isUploadResponse(response) ? response : null;
   } catch {
     return null;
   }
