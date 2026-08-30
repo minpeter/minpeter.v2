@@ -10,18 +10,8 @@ export const env = createEnv({
 
   emptyStringAsUndefined: true,
 
-  /**
-   * Manual destructuring for Next.js edge/client bundling
-   * @see https://env.t3.gg/docs/nextjs#manual-destructuring
-   */
-  runtimeEnv: {
-    ANALYZE: process.env.ANALYZE,
+  experimental__runtimeEnv: {
     NEXT_PUBLIC_VERCEL_ENV: process.env.NEXT_PUBLIC_VERCEL_ENV,
-    NODE_ENV: process.env.NODE_ENV,
-    PORT: process.env.PORT,
-    PUBLIC_BASE_URL: process.env.PUBLIC_BASE_URL,
-    VERCEL_ENV: process.env.VERCEL_ENV,
-    VERCEL_URL: process.env.VERCEL_URL,
   },
   server: {
     // Build-time flags

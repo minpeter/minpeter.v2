@@ -10,7 +10,7 @@
 - Requires Next 16.3+ Turbopack (this repo uses `turbopack` in `next.config.mts`).
 - With `next dev` running, MCP is at `/_next/mcp` on the dev origin.
 - Set `NEXT_MCP_URL` to that origin if the agent tool needs it.
-- Prefer agent-browser ≥ 0.31.1 for DOM verification.
+- Prefer agent-browser ≥ 0.35.1 for DOM verification.
 
 ## Runtime verification checklist
 - Home / locale: `/`, `/en`, `/ja` (`data-testid="home-page"`)
@@ -55,3 +55,13 @@ Keep under `experimental` until they gain a stable top-level rename (Next 16.3 t
   // getRequestConfig receives { locale } override when provided
   // (shared/i18n/request.ts resolveLocale(explicit)).
   ```
+
+<!-- BEGIN:nextjs-agent-rules -->
+
+# This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->
