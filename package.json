@@ -69,6 +69,7 @@
     "knip": "^6.33.0",
     "next-sitemap": "^4.2.3",
     "npm-run-all2": "^9.0.3",
+    "portless": "0.15.6",
     "react-grab": "0.2.0",
     "tailwind-merge": "^3.6.0",
     "tailwindcss": "^4.3.3",
