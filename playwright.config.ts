@@ -24,7 +24,7 @@ export default defineConfig({
   webServer: process.env.PLAYWRIGHT_SKIP_WEBSERVER
     ? undefined
     : {
-        command: `pnpm exec next start -p ${port}`,
+        command: `./node_modules/.bin/next start -p ${port}`,
         reuseExistingServer: !process.env.CI,
         timeout: 120_000,
         url: baseURL,

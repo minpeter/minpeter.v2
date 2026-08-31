@@ -5,7 +5,8 @@ import { expect, type Page, type Request, test } from "@playwright/test";
 
 const SEARCH_SETTLE_TIMEOUT_MS = 3000;
 const MULTI_WORD_QUERY = "cache components";
-const OVER_LIMIT_QUERY = "😀".repeat(201);
+const CANONICAL_DIRECT_QUERY = "😀".repeat(200);
+const OVER_LIMIT_DIRECT_QUERY = ` ${CANONICAL_DIRECT_QUERY}`;
 const TRAEFIK_QUERY_URL_RE = /\?q=traefik$/;
 
 test.use({ channel: "chrome" });
@@ -131,22 +132,25 @@ test("normalizes direct and whitespace-only queries before searching", async ({
       searchRequests.push(collectSearchRequest(request));
     }
   });
+  const canonicalResponse = page.waitForResponse((response) => {
+    const request = response.request();
+    return (
+      isSearchRequest(request) &&
+      collectSearchRequest(request).query === CANONICAL_DIRECT_QUERY
+    );
+  });
 
-  await page.goto(`/en/blog?q=${encodeURIComponent(OVER_LIMIT_QUERY)}`);
-  await expect
-    .poll(() => searchRequests.length, { timeout: SEARCH_SETTLE_TIMEOUT_MS })
-    .toBeGreaterThan(0);
-  await expect
-    .poll(
-      () => Array.from(new URL(page.url()).searchParams.get("q") ?? "").length,
-      { timeout: SEARCH_SETTLE_TIMEOUT_MS }
-    )
-    .toBe(200);
-
+  await page.goto(`/en/blog?q=${encodeURIComponent(OVER_LIMIT_DIRECT_QUERY)}`);
+  const directResponse = await canonicalResponse;
   const input = page.locator("#blog-search:not([readonly])");
+  await expect(input).toHaveValue(CANONICAL_DIRECT_QUERY);
+  await expect(page).toHaveURL(
+    (url) => url.searchParams.get("q") === CANONICAL_DIRECT_QUERY
+  );
+
   const directQuery = new URL(page.url()).searchParams.get("q") ?? "";
   const inputQuery = await input.inputValue();
-  const requestedQuery = searchRequests.at(-1)?.query ?? "";
+  const requestedQuery = collectSearchRequest(directResponse.request()).query;
 
   searchRequests.length = 0;
   await input.fill("   ");
@@ -165,9 +169,9 @@ test("normalizes direct and whitespace-only queries before searching", async ({
     whitespaceSearchRequests: searchRequests,
   });
 
-  expect.soft(Array.from(directQuery)).toHaveLength(200);
-  expect.soft(Array.from(inputQuery)).toHaveLength(200);
-  expect.soft(Array.from(requestedQuery)).toHaveLength(200);
+  expect.soft(directQuery).toBe(CANONICAL_DIRECT_QUERY);
+  expect.soft(inputQuery).toBe(CANONICAL_DIRECT_QUERY);
+  expect.soft(requestedQuery).toBe(CANONICAL_DIRECT_QUERY);
   expect.soft(whitespaceQuery).toBeNull();
   expect.soft(searchRequests).toHaveLength(0);
 });

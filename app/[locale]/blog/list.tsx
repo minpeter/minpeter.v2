@@ -17,15 +17,11 @@ import {
   useTransition,
 } from "react";
 
+import { limitBlogQuery, normalizeBlogQuery } from "@/shared/blog-search-query";
 import type { postMetadataType } from "@/shared/source";
 
 import { BlogListFallback } from "./list-fallback";
-import {
-  extractMatchedUrls,
-  filterByTitle,
-  limitBlogQuery,
-  normalizeBlogQuery,
-} from "./post-search";
+import { extractMatchedUrls, filterByTitle } from "./post-search";
 
 type SearchOutcome =
   | {
@@ -64,7 +60,7 @@ export function BlogList({
       startTransition,
     })
   );
-  const [inputQuery, setInputQuery] = useState(() => limitBlogQuery(query));
+  const [inputQuery, setInputQuery] = useState(() => normalizeBlogQuery(query));
   const [searchOutcome, setSearchOutcome] = useState<SearchOutcome | null>(
     null
   );
@@ -119,7 +115,7 @@ export function BlogList({
       normalizedUrlQuery !== deferredQuery;
     if (isExternalQuery) {
       expectedUrlQuery.current = normalizedUrlQuery;
-      setInputQuery(limitBlogQuery(query));
+      setInputQuery(normalizedUrlQuery);
       return;
     }
     if (query !== deferredQuery) {
