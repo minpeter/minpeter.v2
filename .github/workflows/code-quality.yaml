@@ -125,8 +125,8 @@ jobs:
           cache: true
           require-lockfile: true
 
-      - name: Install Chrome and system dependencies
-        run: pnpm exec playwright install --with-deps chrome
+      - name: Install browsers and system dependencies
+        run: pnpm exec playwright install --with-deps chromium chrome
 
       - name: Run search and instant E2E
         run: >-
