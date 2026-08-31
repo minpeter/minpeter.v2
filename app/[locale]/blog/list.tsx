@@ -69,6 +69,7 @@ export function BlogList({
     null
   );
   const expectedUrlQuery = useRef(normalizeBlogQuery(query));
+  const searchRequestId = useRef(0);
 
   const normalizedQuery = useMemo(
     () => normalizeBlogQuery(inputQuery),
@@ -85,12 +86,18 @@ export function BlogList({
     return {
       ...client,
       async search(searchText: string) {
+        const requestId = searchRequestId.current + 1;
+        searchRequestId.current = requestId;
         try {
           const data = await client.search(searchText);
-          setSearchOutcome({ data, kind: "success", query: searchText });
+          if (requestId === searchRequestId.current) {
+            setSearchOutcome({ data, kind: "success", query: searchText });
+          }
           return data;
         } catch (error: unknown) {
-          setSearchOutcome({ kind: "error", query: searchText });
+          if (requestId === searchRequestId.current) {
+            setSearchOutcome({ kind: "error", query: searchText });
+          }
           throw error;
         }
       },

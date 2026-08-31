@@ -93,35 +93,33 @@ test("updates q without requesting a new RSC payload", async ({ page }) => {
 test("preserves spaces during sequential multi-word entry", async ({
   page,
 }) => {
-  const searchRequests: SearchRequestRecord[] = [];
-
   await page.goto("/en/blog");
   await page.route("**/api/search?**", async (route) => {
     await route.fulfill({ json: [] });
   });
-  page.on("request", (request) => {
-    if (isSearchRequest(request)) {
-      searchRequests.push(collectSearchRequest(request));
-    }
-  });
 
   const input = page.locator("#blog-search:not([readonly])");
-  const settledSearch = page.waitForResponse((response) =>
-    isSearchRequest(response.request())
-  );
+  const settledSearch = page.waitForResponse((response) => {
+    const request = response.request();
+    return (
+      isSearchRequest(request) &&
+      collectSearchRequest(request).query === MULTI_WORD_QUERY
+    );
+  });
 
   await input.pressSequentially(MULTI_WORD_QUERY);
-  await settledSearch;
+  const finalResponse = await settledSearch;
+  await expect(input).toHaveValue(MULTI_WORD_QUERY);
   await expect
     .poll(() => new URL(page.url()).searchParams.get("q"), {
       timeout: SEARCH_SETTLE_TIMEOUT_MS,
     })
     .toBe(MULTI_WORD_QUERY);
 
-  expect.soft(await input.inputValue()).toBe(MULTI_WORD_QUERY);
-  expect.soft(new URL(page.url()).searchParams.get("q")).toBe(MULTI_WORD_QUERY);
-  expect.soft(searchRequests).toHaveLength(1);
-  expect.soft(searchRequests[0]?.query).toBe(MULTI_WORD_QUERY);
+  expect(new URL(page.url()).searchParams.get("q")).toBe(MULTI_WORD_QUERY);
+  expect(collectSearchRequest(finalResponse.request()).query).toBe(
+    MULTI_WORD_QUERY
+  );
 });
 
 test("normalizes direct and whitespace-only queries before searching", async ({

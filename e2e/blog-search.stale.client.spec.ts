@@ -1,8 +1,6 @@
 import { expect, type Page, test } from "@playwright/test";
 
 const BODY_ONLY_QUERY = "body-only-match";
-const BODY_ONLY_RESULT_TITLE =
-  "How to Log Client IP Addresses in Backend Systems";
 const NEWER_QUERY = "query-with-no-title-match";
 
 interface DeferredResponse {
@@ -27,9 +25,7 @@ function isSearchResponse(url: string, query: string): boolean {
 }
 
 async function findBodyOnlyResultUrl(page: Page): Promise<string> {
-  const result = page
-    .locator('[data-testid="blog-post-link"]:visible')
-    .filter({ hasText: BODY_ONLY_RESULT_TITLE });
+  const result = page.locator('[data-testid="blog-post-link"]:visible').first();
   await expect(result).toBeVisible();
   const href = await result.getAttribute("href");
   expect(href).not.toBeNull();
@@ -48,6 +44,65 @@ function bodyOnlySearchResult(url: string): readonly Record<string, string>[] {
 }
 
 test.use({ channel: "chrome" });
+
+test("keeps the newer failed search authoritative after an older success arrives", async ({
+  page,
+}) => {
+  await page.goto("/en/blog");
+  const resultUrl = await findBodyOnlyResultUrl(page);
+  const olderResponseGate = createDeferredResponse();
+
+  await page.route("**/api/search?**", async (route) => {
+    const query = new URL(route.request().url()).searchParams.get("query");
+    if (query === BODY_ONLY_QUERY) {
+      await olderResponseGate.promise;
+      await route.fulfill({ json: bodyOnlySearchResult(resultUrl) });
+      return;
+    }
+    if (query === NEWER_QUERY) {
+      await route.fulfill({
+        body: "search unavailable",
+        contentType: "text/plain",
+        status: 500,
+      });
+      return;
+    }
+    await route.fulfill({ json: [] });
+  });
+
+  const input = page.locator("#blog-search:not([readonly])");
+  const olderRequest = page.waitForRequest((request) =>
+    isSearchResponse(request.url(), BODY_ONLY_QUERY)
+  );
+  const olderResponse = page.waitForResponse(
+    (response) =>
+      isSearchResponse(response.url(), BODY_ONLY_QUERY) &&
+      response.status() === 200
+  );
+  await input.fill(BODY_ONLY_QUERY);
+  await olderRequest;
+
+  const newerResponse = page.waitForResponse(
+    (response) =>
+      isSearchResponse(response.url(), NEWER_QUERY) && response.status() === 500
+  );
+  await input.fill(NEWER_QUERY);
+  await newerResponse;
+
+  const unavailableStatus = page.getByTestId("blog-search-status");
+  const list = page.locator(".fieldnotes-list");
+  const clearButton = page.locator('.fieldnotes-search button[type="button"]');
+  await expect(unavailableStatus).toHaveAttribute("data-state", "unavailable");
+  await expect(list).not.toHaveAttribute("aria-busy", "true");
+  await expect(clearButton).toBeVisible();
+
+  olderResponseGate.release();
+  await olderResponse;
+
+  await expect(unavailableStatus).toHaveAttribute("data-state", "unavailable");
+  await expect(list).not.toHaveAttribute("aria-busy", "true");
+  await expect(clearButton).toBeVisible();
+});
 
 test("hides prior full-text results while the next query debounces", async ({
   page,
