@@ -195,5 +195,6 @@
   },
   "siteDescription": "minpeterの文章、デザイン、コード",
   "noSearchResults": "検索結果がありません :/",
+  "searchUnavailableTitleFallback": "全文検索を利用できないため、タイトルが一致する記事のみ表示しています。",
   "searchPlaceholder": "検索..."
 }

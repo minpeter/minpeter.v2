@@ -195,5 +195,6 @@
   },
   "siteDescription": "Writing, design, and code by minpeter",
   "noSearchResults": "No results found :/",
+  "searchUnavailableTitleFallback": "Full-text search is unavailable. Showing title matches.",
   "searchPlaceholder": "Search posts..."
 }

@@ -17,7 +17,11 @@ import {
 import type { postMetadataType } from "@/shared/source";
 
 import { BlogListFallback } from "./list-fallback";
-import { extractMatchedUrls, filterByTitle } from "./post-search";
+import {
+  extractMatchedUrls,
+  filterByTitle,
+  normalizeBlogQuery,
+} from "./post-search";
 
 /**
  * Client search island: owns the search input and URL `?q=` state.
@@ -39,13 +43,15 @@ export function BlogList({
   const [query, setQuery] = useQueryState(
     "q",
     parseAsString.withDefault("").withOptions({
+      history: "replace",
       limitUrlUpdates: debounce(500),
-      shallow: false,
+      shallow: true,
       startTransition,
     })
   );
 
-  const deferredQuery = useDeferredValue(query);
+  const normalizedQuery = useMemo(() => normalizeBlogQuery(query), [query]);
+  const deferredQuery = useDeferredValue(normalizedQuery);
 
   const searchClient = useMemo(
     () =>
@@ -64,12 +70,23 @@ export function BlogList({
     setSearch(deferredQuery);
   }, [deferredQuery, setSearch]);
 
+  useEffect(() => {
+    if (query !== normalizedQuery) {
+      setQuery(normalizedQuery || null);
+    }
+  }, [normalizedQuery, query, setQuery]);
+
   const isSearching =
-    query !== deferredQuery || isPending || searchQuery.isLoading;
+    normalizedQuery !== deferredQuery || isPending || searchQuery.isLoading;
+  const hasSearchError =
+    Boolean(deferredQuery) &&
+    !searchQuery.isLoading &&
+    Boolean(searchQuery.error);
 
   const handleQueryChange = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
-      setQuery(event.target.value || null);
+      const nextQuery = normalizeBlogQuery(event.target.value);
+      setQuery(nextQuery || null);
     },
     [setQuery]
   );
@@ -85,6 +102,7 @@ export function BlogList({
     const byLang = posts.filter((post) => post.lang.includes(lang));
 
     if (
+      searchQuery.error ||
       searchQuery.isLoading ||
       searchQuery.data === "empty" ||
       !searchQuery.data
@@ -98,7 +116,14 @@ export function BlogList({
     return bySearchResult.length === 0
       ? filterByTitle(byLang, deferredQuery)
       : bySearchResult;
-  }, [deferredQuery, lang, posts, searchQuery.data, searchQuery.isLoading]);
+  }, [
+    deferredQuery,
+    lang,
+    posts,
+    searchQuery.data,
+    searchQuery.error,
+    searchQuery.isLoading,
+  ]);
 
   return (
     <>
@@ -134,6 +159,16 @@ export function BlogList({
           </div>
         ) : null}
       </div>
+      {hasSearchError ? (
+        <p
+          className="mt-3 px-1 text-muted-foreground text-sm [overflow-wrap:anywhere] [word-break:keep-all]"
+          data-state="unavailable"
+          data-testid="blog-search-status"
+          role="status"
+        >
+          {t("searchUnavailableTitleFallback")}
+        </p>
+      ) : null}
       {filteredPosts ? (
         <BlogListFallback
           isLoading={isSearching}
