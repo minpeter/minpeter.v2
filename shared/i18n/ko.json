@@ -195,5 +195,6 @@
   },
   "siteDescription": "minpeter의 글, 디자인, 코드",
   "noSearchResults": "검색 결과가 없습니다 :/",
+  "searchUnavailableTitleFallback": "전체 검색을 사용할 수 없어 제목이 일치하는 글만 표시합니다.",
   "searchPlaceholder": "검색어를 입력하세요..."
 }

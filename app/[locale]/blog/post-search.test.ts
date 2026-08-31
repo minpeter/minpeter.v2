@@ -3,7 +3,13 @@ import { describe, expect, it } from "vitest";
 
 import type { postMetadataType } from "@/shared/source";
 
-import { extractMatchedUrls, filterByTitle } from "./post-search";
+import {
+  extractMatchedUrls,
+  filterByTitle,
+  limitBlogQuery,
+  MAX_BLOG_QUERY_CODE_POINTS,
+  normalizeBlogQuery,
+} from "./post-search";
 
 function makePost(title: string): postMetadataType {
   return {
@@ -64,5 +70,37 @@ describe(filterByTitle, () => {
 
   it("returns nothing when no title matches", () => {
     expect(filterByTitle(posts, "zzz")).toStrictEqual([]);
+  });
+});
+
+describe(limitBlogQuery, () => {
+  it("preserves whitespace in controlled input values", () => {
+    expect(limitBlogQuery("cache ")).toBe("cache ");
+  });
+
+  it("limits raw input by Unicode code point", () => {
+    const query = ` ${"😀".repeat(MAX_BLOG_QUERY_CODE_POINTS)}`;
+
+    expect(Array.from(limitBlogQuery(query))).toHaveLength(
+      MAX_BLOG_QUERY_CODE_POINTS
+    );
+  });
+});
+
+describe(normalizeBlogQuery, () => {
+  it("trims surrounding whitespace", () => {
+    expect(normalizeBlogQuery("  cache components  ")).toBe("cache components");
+  });
+
+  it("normalizes whitespace-only input to an empty query", () => {
+    expect(normalizeBlogQuery(" \n\t ")).toBe("");
+  });
+
+  it("limits queries by Unicode code point", () => {
+    const query = "😀".repeat(MAX_BLOG_QUERY_CODE_POINTS + 1);
+    const normalized = normalizeBlogQuery(query);
+
+    expect(Array.from(normalized)).toHaveLength(MAX_BLOG_QUERY_CODE_POINTS);
+    expect(normalized).toBe("😀".repeat(MAX_BLOG_QUERY_CODE_POINTS));
   });
 });
