@@ -1,54 +1,70 @@
+import type { SortedResult } from "fumadocs-core/search";
 import { describe, expect, it, vi } from "vitest";
 
-// @ts-expect-error -- the test only needs the search route's GET handler.
-vi.mock(import("fumadocs-core/search/server"), () => ({
-  createFromSource: vi.fn(() => ({
-    GET: vi.fn(() =>
-      Promise.resolve(
-        Response.json(
-          { results: [] },
-          {
-            headers: { "Content-Type": "application/json" },
-            status: 200,
-          }
-        )
-      )
-    ),
-  })),
-}));
+vi.mock("@/shared/source", () => ({ blog: {} }));
 
-// @ts-expect-error -- the test only needs the loader's getPages method.
-vi.mock(import("@/shared/source"), () => ({
-  blog: {
-    getPages: vi.fn(() => []),
-  },
-}));
+import { GET, handleSearchRequest } from "./route";
+
+function searchResults(count: number): SortedResult[] {
+  return Array.from({ length: count }, (_, index) => ({
+    content: `Result ${index}`,
+    id: `result-${index}`,
+    type: "page",
+    url: `/blog/result-${index}`,
+  }));
+}
 
 describe("Search API Route", () => {
-  it("should export GET handler", async () => {
-    const { GET } = await import("./route");
-
-    expect(GET).toBeDefined();
+  it("exports a GET handler", () => {
     expect(GET).toBeTypeOf("function");
   });
 
-  it("should call createFromSource with correct arguments", async () => {
-    const { createFromSource } = await import("fumadocs-core/search/server");
-    const { blog } = await import("@/shared/source");
+  it("canonicalizes an over-limit query and preserves locale", async () => {
+    const canonicalQuery = "😀".repeat(200);
+    const search = vi.fn(() => Promise.resolve([]));
+    const request = new Request(
+      `http://localhost:3000/api/search?query=${encodeURIComponent(` ${canonicalQuery}`)}&locale=ja&limit=9999`
+    );
 
-    await import("./route");
+    await handleSearchRequest(request, search);
 
-    expect(createFromSource).toHaveBeenCalled();
-    expect(createFromSource).toHaveBeenCalledWith(blog);
+    expect(search).toHaveBeenCalledOnce();
+    expect(search).toHaveBeenCalledWith(canonicalQuery, {
+      limit: 60,
+      locale: "ja",
+      mode: "full",
+      tag: undefined,
+    });
   });
 
-  it("GET handler should be callable", async () => {
-    const { GET } = await import("./route");
+  it("caps caller-requested results at 60", async () => {
+    const search = vi.fn(() => Promise.resolve(searchResults(61)));
+    const request = new Request(
+      "http://localhost:3000/api/search?query=a&limit=9999"
+    );
 
-    const request = new Request("http://localhost:3000/api/search?q=test");
-    const response = await GET(request);
+    const response = await handleSearchRequest(request, search);
 
-    expect(response).toBeDefined();
-    expect(response.status).toBe(200);
+    const results: unknown = await response.json();
+    expect(results).toBeInstanceOf(Array);
+    expect(results).toHaveLength(60);
+    expect(search).toHaveBeenCalledWith("a", {
+      limit: 60,
+      locale: null,
+      mode: "full",
+      tag: undefined,
+    });
+  });
+
+  it("returns no results without searching for a whitespace-only query", async () => {
+    const search = vi.fn(() => Promise.resolve(searchResults(1)));
+    const request = new Request(
+      `http://localhost:3000/api/search?query=${encodeURIComponent("  \n\t ")}&limit=9999`
+    );
+
+    const response = await handleSearchRequest(request, search);
+
+    expect(await response.json()).toStrictEqual([]);
+    expect(search).not.toHaveBeenCalled();
   });
 });

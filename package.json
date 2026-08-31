@@ -16,8 +16,8 @@
     "postinstall": "fumadocs-mdx",
     "knip": "knip",
     "test": "vitest run",
-    "test:e2e": "playwright test",
-    "test:e2e:instant": "EXPOSE_TESTING_API=1 pnpm build && playwright test"
+    "test:e2e": "EXPOSE_TESTING_API=1 next build && playwright test",
+    "test:e2e:instant": "EXPOSE_TESTING_API=1 next build && playwright test e2e/soft-nav.instant.spec.ts"
   },
   "dependencies": {
     "@next/third-parties": "16.3.3",
