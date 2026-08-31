@@ -4,8 +4,12 @@ import type { postMetadataType } from "@/shared/source";
 
 export const MAX_BLOG_QUERY_CODE_POINTS = 200;
 
+export function limitBlogQuery(query: string): string {
+  return Array.from(query).slice(0, MAX_BLOG_QUERY_CODE_POINTS).join("");
+}
+
 export function normalizeBlogQuery(query: string): string {
-  return Array.from(query.trim()).slice(0, MAX_BLOG_QUERY_CODE_POINTS).join("");
+  return limitBlogQuery(query.trim());
 }
 
 export function extractMatchedUrls(results: SortedResult[]): Set<string> {

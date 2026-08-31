@@ -6,6 +6,7 @@ import type { postMetadataType } from "@/shared/source";
 import {
   extractMatchedUrls,
   filterByTitle,
+  limitBlogQuery,
   MAX_BLOG_QUERY_CODE_POINTS,
   normalizeBlogQuery,
 } from "./post-search";
@@ -69,6 +70,20 @@ describe(filterByTitle, () => {
 
   it("returns nothing when no title matches", () => {
     expect(filterByTitle(posts, "zzz")).toStrictEqual([]);
+  });
+});
+
+describe(limitBlogQuery, () => {
+  it("preserves whitespace in controlled input values", () => {
+    expect(limitBlogQuery("cache ")).toBe("cache ");
+  });
+
+  it("limits raw input by Unicode code point", () => {
+    const query = ` ${"😀".repeat(MAX_BLOG_QUERY_CODE_POINTS)}`;
+
+    expect(Array.from(limitBlogQuery(query))).toHaveLength(
+      MAX_BLOG_QUERY_CODE_POINTS
+    );
   });
 });
 

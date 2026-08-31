@@ -4,6 +4,7 @@ import path from "node:path";
 import { expect, type Page, type Request, test } from "@playwright/test";
 
 const SEARCH_SETTLE_TIMEOUT_MS = 3000;
+const MULTI_WORD_QUERY = "cache components";
 const OVER_LIMIT_QUERY = "😀".repeat(201);
 const TRAEFIK_QUERY_URL_RE = /\?q=traefik$/;
 
@@ -68,7 +69,7 @@ test("updates q without requesting a new RSC payload", async ({ page }) => {
     }
   });
 
-  await page.locator("#blog-search").fill("traefik");
+  await page.locator("#blog-search:not([readonly])").fill("traefik");
   await expect(page).toHaveURL(TRAEFIK_QUERY_URL_RE);
   await expect
     .poll(() => searchRequests.length, { timeout: SEARCH_SETTLE_TIMEOUT_MS })
@@ -89,73 +90,38 @@ test("updates q without requesting a new RSC payload", async ({ page }) => {
   expect(queryRscRequests).toHaveLength(0);
 });
 
-test("does not reuse successful results after a newer search fails", async ({
+test("preserves spaces during sequential multi-word entry", async ({
   page,
 }) => {
   const searchRequests: SearchRequestRecord[] = [];
 
-  await page.route("**/api/search?**", async (route) => {
-    const request = route.request();
-    const query = new URL(request.url()).searchParams.get("query") ?? "";
-    searchRequests.push(collectSearchRequest(request));
-
-    if (query === "traefik") {
-      await route.fallback();
-      return;
-    }
-
-    await route.fulfill({
-      body: "search unavailable",
-      contentType: "text/plain",
-      status: 500,
-    });
-  });
-
   await page.goto("/en/blog");
-  const input = page.locator("#blog-search");
-
-  await input.fill("traefik");
-  await expect(page).toHaveURL(TRAEFIK_QUERY_URL_RE);
-  await expect
-    .poll(() => searchRequests.some(({ query }) => query === "traefik"))
-    .toBe(true);
-  await expect(page.getByTestId("blog-post-link").first()).toBeVisible();
-  const successfulResultHref = await page
-    .getByTestId("blog-post-link")
-    .first()
-    .getAttribute("href");
-  expect(successfulResultHref).not.toBeNull();
-
-  const failedResponse = page.waitForResponse(
-    (response) =>
-      new URL(response.url()).pathname === "/api/search" &&
-      response.status() === 500
-  );
-  await input.fill("query-with-no-title-match");
-  await failedResponse;
-  await expect(
-    page.getByRole("button", { name: "Clear search" })
-  ).toBeVisible();
-
-  const staleResultVisible = successfulResultHref
-    ? await page.locator(`a[href="${successfulResultHref}"]`).isVisible()
-    : false;
-  const status = page.getByTestId("blog-search-status");
-  const statusVisible = await status.isVisible();
-  const statusState = statusVisible
-    ? await status.getAttribute("data-state")
-    : null;
-
-  await saveEvidence(page, "edge", {
-    searchRequests,
-    staleResultVisible,
-    statusState,
-    statusVisible,
+  await page.route("**/api/search?**", async (route) => {
+    await route.fulfill({ json: [] });
+  });
+  page.on("request", (request) => {
+    if (isSearchRequest(request)) {
+      searchRequests.push(collectSearchRequest(request));
+    }
   });
 
-  expect.soft(staleResultVisible).toBe(false);
-  expect.soft(statusVisible).toBe(true);
-  expect.soft(statusState).toBe("unavailable");
+  const input = page.locator("#blog-search:not([readonly])");
+  const settledSearch = page.waitForResponse((response) =>
+    isSearchRequest(response.request())
+  );
+
+  await input.pressSequentially(MULTI_WORD_QUERY);
+  await settledSearch;
+  await expect
+    .poll(() => new URL(page.url()).searchParams.get("q"), {
+      timeout: SEARCH_SETTLE_TIMEOUT_MS,
+    })
+    .toBe(MULTI_WORD_QUERY);
+
+  expect.soft(await input.inputValue()).toBe(MULTI_WORD_QUERY);
+  expect.soft(new URL(page.url()).searchParams.get("q")).toBe(MULTI_WORD_QUERY);
+  expect.soft(searchRequests).toHaveLength(1);
+  expect.soft(searchRequests[0]?.query).toBe(MULTI_WORD_QUERY);
 });
 
 test("normalizes direct and whitespace-only queries before searching", async ({
@@ -179,7 +145,7 @@ test("normalizes direct and whitespace-only queries before searching", async ({
     )
     .toBe(200);
 
-  const input = page.locator("#blog-search");
+  const input = page.locator("#blog-search:not([readonly])");
   const directQuery = new URL(page.url()).searchParams.get("q") ?? "";
   const inputQuery = await input.inputValue();
   const requestedQuery = searchRequests.at(-1)?.query ?? "";

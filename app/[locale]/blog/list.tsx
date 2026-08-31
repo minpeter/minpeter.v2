@@ -1,5 +1,6 @@
 "use client";
 
+import type { SortedResult } from "fumadocs-core/search";
 import { useDocsSearch } from "fumadocs-core/search/client";
 import { fetchClient } from "fumadocs-core/search/client/fetch";
 import { Loader2, Search, X } from "lucide-react";
@@ -11,6 +12,8 @@ import {
   useDeferredValue,
   useEffect,
   useMemo,
+  useRef,
+  useState,
   useTransition,
 } from "react";
 
@@ -20,8 +23,20 @@ import { BlogListFallback } from "./list-fallback";
 import {
   extractMatchedUrls,
   filterByTitle,
+  limitBlogQuery,
   normalizeBlogQuery,
 } from "./post-search";
+
+type SearchOutcome =
+  | {
+      readonly data: SortedResult[];
+      readonly kind: "success";
+      readonly query: string;
+    }
+  | {
+      readonly kind: "error";
+      readonly query: string;
+    };
 
 /**
  * Client search island: owns the search input and URL `?q=` state.
@@ -49,18 +64,38 @@ export function BlogList({
       startTransition,
     })
   );
+  const [inputQuery, setInputQuery] = useState(() => limitBlogQuery(query));
+  const [searchOutcome, setSearchOutcome] = useState<SearchOutcome | null>(
+    null
+  );
+  const expectedUrlQuery = useRef(normalizeBlogQuery(query));
 
-  const normalizedQuery = useMemo(() => normalizeBlogQuery(query), [query]);
+  const normalizedQuery = useMemo(
+    () => normalizeBlogQuery(inputQuery),
+    [inputQuery]
+  );
   const deferredQuery = useDeferredValue(normalizedQuery);
 
-  const searchClient = useMemo(
-    () =>
-      fetchClient({
-        api: "/api/search",
-        locale: lang,
-      }),
-    [lang]
-  );
+  const searchClient = useMemo(() => {
+    const client = fetchClient({
+      api: "/api/search",
+      locale: lang,
+    });
+
+    return {
+      ...client,
+      async search(searchText: string) {
+        try {
+          const data = await client.search(searchText);
+          setSearchOutcome({ data, kind: "success", query: searchText });
+          return data;
+        } catch (error: unknown) {
+          setSearchOutcome({ kind: "error", query: searchText });
+          throw error;
+        }
+      },
+    };
+  }, [lang]);
 
   const { setSearch, query: searchQuery } = useDocsSearch({
     client: searchClient,
@@ -71,57 +106,66 @@ export function BlogList({
   }, [deferredQuery, setSearch]);
 
   useEffect(() => {
-    if (query !== normalizedQuery) {
-      setQuery(normalizedQuery || null);
+    const normalizedUrlQuery = normalizeBlogQuery(query);
+    const isExternalQuery =
+      normalizedUrlQuery !== expectedUrlQuery.current &&
+      normalizedUrlQuery !== deferredQuery;
+    if (isExternalQuery) {
+      expectedUrlQuery.current = normalizedUrlQuery;
+      setInputQuery(limitBlogQuery(query));
+      return;
     }
-  }, [normalizedQuery, query, setQuery]);
+    if (query !== deferredQuery) {
+      expectedUrlQuery.current = deferredQuery;
+      setQuery(deferredQuery || null);
+    }
+  }, [deferredQuery, query, setQuery]);
 
+  const currentSearchOutcome =
+    normalizedQuery === deferredQuery && searchOutcome?.query === deferredQuery
+      ? searchOutcome
+      : null;
   const isSearching =
-    normalizedQuery !== deferredQuery || isPending || searchQuery.isLoading;
+    normalizedQuery !== deferredQuery ||
+    isPending ||
+    (Boolean(normalizedQuery) &&
+      (currentSearchOutcome === null || searchQuery.isLoading));
   const hasSearchError =
-    Boolean(deferredQuery) &&
-    !searchQuery.isLoading &&
-    Boolean(searchQuery.error);
+    !searchQuery.isLoading && currentSearchOutcome?.kind === "error";
 
   const handleQueryChange = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
-      const nextQuery = normalizeBlogQuery(event.target.value);
-      setQuery(nextQuery || null);
+      const nextInputQuery = limitBlogQuery(event.target.value);
+      setInputQuery(nextInputQuery);
     },
-    [setQuery]
+    []
   );
   const handleQueryClear = useCallback(() => {
-    setQuery(null);
-  }, [setQuery]);
+    setInputQuery("");
+  }, []);
 
   const filteredPosts = useMemo(() => {
-    if (!deferredQuery) {
+    if (!normalizedQuery) {
       return null;
     }
 
     const byLang = posts.filter((post) => post.lang.includes(lang));
 
-    if (
-      searchQuery.error ||
-      searchQuery.isLoading ||
-      searchQuery.data === "empty" ||
-      !searchQuery.data
-    ) {
-      return filterByTitle(byLang, deferredQuery);
+    if (currentSearchOutcome?.kind !== "success" || searchQuery.isLoading) {
+      return filterByTitle(byLang, normalizedQuery);
     }
 
-    const matchedUrls = extractMatchedUrls(searchQuery.data);
+    const matchedUrls = extractMatchedUrls(currentSearchOutcome.data);
     const bySearchResult = byLang.filter((post) => matchedUrls.has(post.url));
 
     return bySearchResult.length === 0
-      ? filterByTitle(byLang, deferredQuery)
+      ? filterByTitle(byLang, normalizedQuery)
       : bySearchResult;
   }, [
-    deferredQuery,
+    currentSearchOutcome,
     lang,
+    normalizedQuery,
     posts,
-    searchQuery.data,
-    searchQuery.error,
     searchQuery.isLoading,
   ]);
 
@@ -140,9 +184,9 @@ export function BlogList({
           onChange={handleQueryChange}
           placeholder={t("searchPlaceholder")}
           type="text"
-          value={query}
+          value={inputQuery}
         />
-        {query ? (
+        {inputQuery ? (
           <div className="absolute top-1/2 right-3 flex h-4 w-4 -translate-y-1/2 items-center justify-center">
             {isSearching ? (
               <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
