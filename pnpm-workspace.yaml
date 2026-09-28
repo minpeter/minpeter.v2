@@ -14,8 +14,12 @@ allowBuilds:
   sharp: true
 
 overrides:
-  # mdast-util-to-markdown 2.1.3 serializes strong/emphasis via handler
-  # `.attention` props; fumadocs-core's stringifier (includeProcessedMarkdown)
-  # wraps handlers and drops them -> infinite recursion at build time.
-  # Remove once fumadocs-core is compatible.
-  mdast-util-to-markdown: 2.1.2
+  # mdast-util-to-markdown 2.1.3 serializes strong/emphasis via the handler's
+  # `.attention` prop. fumadocs-core <=16.15.14's MDX stringifier
+  # (includeProcessedMarkdown) wraps handlers and drops it, so `next build`
+  # recurses forever. Scoped to fumadocs-core so other consumers keep 2.1.3.
+  # Fixed upstream in fumadocs-core 16.15.15:
+  # https://github.com/fuma-nama/fumadocs/issues/3604
+  # Remove this override when bumping fumadocs-core to >=16.15.15.
+  # Guarded by shared/processed-markdown.test.ts.
+  "fumadocs-core>mdast-util-to-markdown": 2.1.2

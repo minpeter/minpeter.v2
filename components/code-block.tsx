@@ -14,12 +14,22 @@ import {
 
 const MULTILINE_SEPARATOR = "\n";
 
-// sugar-high 2.5 types the JS preset with a 4-arg `onCommentEnd`, while
-// `ParseOptions` declares 5 args. Runtime is compatible; bridge the typings.
+type JavaScriptTokenizeOptions = NonNullable<Parameters<typeof tokenize>[1]>;
+
+// sugar-high 2.5 types the JS preset's `onCommentEnd` with 4 args, while
+// `ParseOptions` declares 5 (extra `start`). Only that field is cast; every
+// other option stays type-checked. The preset spreads options over its
+// defaults, so the key must be omitted (not `undefined`) when unset.
 const tokenizeJavaScript: NonNullable<ParseOptions["tokenize"]> = (
   input,
-  options
-) => tokenize(input, options as Parameters<typeof tokenize>[1]);
+  { onCommentEnd, ...options }
+) =>
+  tokenize(input, {
+    ...options,
+    ...(onCommentEnd && {
+      onCommentEnd: onCommentEnd as JavaScriptTokenizeOptions["onCommentEnd"],
+    }),
+  });
 
 interface HighlightTextNode {
   value: string;

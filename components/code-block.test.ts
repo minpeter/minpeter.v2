@@ -58,4 +58,18 @@ describe(CodeBlock, () => {
     expect(codeElement?.querySelector("script")).toBeNull();
     expect(codeElement?.querySelector(".sh__line")).not.toBeNull();
   });
+
+  it("classifies tokens with the JavaScript preset", () => {
+    const { container } = render(
+      createElement(CodeBlock, { code: "const answer = 42; // done" })
+    );
+    const tokenText = (className: string) =>
+      [...container.querySelectorAll(`.${className}`)].map(
+        (node) => node.textContent
+      );
+
+    expect(tokenText("sh__token--keyword")).toContain("const");
+    expect(tokenText("sh__token--identifier")).toContain("answer");
+    expect(tokenText("sh__token--comment").join("")).toContain("// done");
+  });
 });
