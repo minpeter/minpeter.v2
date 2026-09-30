@@ -2,7 +2,7 @@
 
 import type { CSSProperties } from "react";
 import { Fragment, useCallback } from "react";
-import { generate, parse } from "sugar-high/core";
+import { generate, type ParseOptions, parse } from "sugar-high/core";
 import { tokenize } from "sugar-high/lang/javascript";
 
 import {
@@ -13,6 +13,23 @@ import {
 } from "./code-block-copy";
 
 const MULTILINE_SEPARATOR = "\n";
+
+type JavaScriptTokenizeOptions = NonNullable<Parameters<typeof tokenize>[1]>;
+
+// sugar-high 2.5 types the JS preset's `onCommentEnd` with 4 args, while
+// `ParseOptions` declares 5 (extra `start`). Only that field is cast; every
+// other option stays type-checked. The preset spreads options over its
+// defaults, so the key must be omitted (not `undefined`) when unset.
+const tokenizeJavaScript: NonNullable<ParseOptions["tokenize"]> = (
+  input,
+  { onCommentEnd, ...options }
+) =>
+  tokenize(input, {
+    ...options,
+    ...(onCommentEnd && {
+      onCommentEnd: onCommentEnd as JavaScriptTokenizeOptions["onCommentEnd"],
+    }),
+  });
 
 interface HighlightTextNode {
   value: string;
@@ -34,7 +51,9 @@ interface HighlightLineNode {
 }
 
 function HighlightedCode({ code }: { code: string }) {
-  const lines = generate(parse(code, { tokenize })) as HighlightLineNode[];
+  const lines = generate(
+    parse(code, { tokenize: tokenizeJavaScript })
+  ) as HighlightLineNode[];
   const lastLine = lines.at(-1);
   let lineOffset = 0;
 

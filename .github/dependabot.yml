@@ -10,6 +10,17 @@ updates:
     # until the patch ages past minimumReleaseAge — intended; retry after 24h.
     cooldown:
       default-days: 1
+    ignore:
+      # vitest 5 pulls why-is-node-running@3.2.2, which lost provenance and is
+      # rejected by `trustPolicy: no-downgrade`; it would fail the whole grouped
+      # PR. Drop once a vitest 5 release installs cleanly.
+      - dependency-name: "vitest"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@vitest/ui"
+        update-types: ["version-update:semver-major"]
+      # Track the Node major pinned in package.json `engines.node` (24.x).
+      - dependency-name: "@types/node"
+        update-types: ["version-update:semver-major"]
     groups:
       dependencies:
         patterns:

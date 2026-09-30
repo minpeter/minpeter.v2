@@ -217,23 +217,6 @@
     border-color: hsl(204 30% 43% / 0.28);
   }
 
-  .dark
-    .blog-post-page
-    [data-blog-body]
-    .blog-callout:is([data-callout-type="info"], [data-callout-type="tip"]) {
-    background: hsl(204 38% 68% / 0.07);
-    border-color: hsl(204 38% 68% / 0.18);
-  }
-
-  .dark
-    .blog-post-page
-    [data-blog-body]
-    .blog-callout:is([data-callout-type="info"], [data-callout-type="tip"])
-    .blog-callout-marker {
-    color: hsl(204 44% 72%);
-    border-color: hsl(204 38% 68% / 0.28);
-  }
-
   .blog-post-page
     [data-blog-body]
     .blog-callout:is(
@@ -250,6 +233,23 @@
     .blog-callout-marker {
     color: hsl(39 36% 34%);
     border-color: hsl(39 44% 44% / 0.28);
+  }
+
+  .dark
+    .blog-post-page
+    [data-blog-body]
+    .blog-callout:is([data-callout-type="info"], [data-callout-type="tip"]) {
+    background: hsl(204 38% 68% / 0.07);
+    border-color: hsl(204 38% 68% / 0.18);
+  }
+
+  .dark
+    .blog-post-page
+    [data-blog-body]
+    .blog-callout:is([data-callout-type="info"], [data-callout-type="tip"])
+    .blog-callout-marker {
+    color: hsl(204 44% 72%);
+    border-color: hsl(204 38% 68% / 0.28);
   }
 
   .dark
