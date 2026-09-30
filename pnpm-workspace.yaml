@@ -17,9 +17,11 @@ overrides:
   # mdast-util-to-markdown 2.1.3 serializes strong/emphasis via the handler's
   # `.attention` prop. fumadocs-core <=16.15.14's MDX stringifier
   # (includeProcessedMarkdown) wraps handlers and drops it, so `next build`
-  # recurses forever. Scoped to fumadocs-core so other consumers keep 2.1.3.
-  # Fixed upstream in fumadocs-core 16.15.15:
+  # recurses forever. Fixed upstream in fumadocs-core 16.15.15:
   # https://github.com/fuma-nama/fumadocs/issues/3604
-  # Remove this override when bumping fumadocs-core to >=16.15.15.
+  # The selector only matches fumadocs-core <16.15.15, so it stops applying
+  # once fumadocs-core is bumped; delete it then. Note: pnpm dedupes the
+  # runtime importers (remark-stringify, mdast-util-gfm-*) onto the same
+  # 2.1.2, so in practice the whole tree resolves to 2.1.2 while this applies.
   # Guarded by shared/processed-markdown.test.ts.
-  "fumadocs-core>mdast-util-to-markdown": 2.1.2
+  "fumadocs-core@<16.15.15>mdast-util-to-markdown": 2.1.2
