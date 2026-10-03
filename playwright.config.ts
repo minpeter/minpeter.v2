@@ -11,6 +11,11 @@ export default defineConfig({
       name: "chromium",
       use: { ...devices["Desktop Chrome"] },
     },
+    {
+      name: "mobile-chromium",
+      testMatch: /site-journeys\.spec\.ts/,
+      use: { ...devices["Pixel 7"] },
+    },
   ],
   reporter: process.env.CI ? "github" : "list",
   retries: process.env.CI ? 1 : 0,

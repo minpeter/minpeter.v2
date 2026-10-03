@@ -1,7 +1,6 @@
 import { GoogleAnalytics } from "@next/third-parties/google";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import { VercelToolbar } from "@vercel/toolbar/next";
 import { NextProvider } from "fumadocs-core/framework/next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { NuqsAdapter } from "nuqs/adapters/next";
@@ -30,7 +29,6 @@ interface RootDocumentProps {
 }
 
 export function RootDocument({ children, lang }: RootDocumentProps) {
-  const shouldInjectDevTools = env.NODE_ENV === "development";
   const isProduction = env.NODE_ENV === "production";
   const isVercel = !!env.VERCEL_ENV;
 
@@ -75,7 +73,6 @@ export function RootDocument({ children, lang }: RootDocumentProps) {
             <NuqsAdapter>
               <main className="relative mx-auto flex w-full max-w-4xl flex-1 flex-col px-5 font-sans sm:px-8 lg:px-12">
                 {children}
-                {shouldInjectDevTools ? <VercelToolbar /> : null}
               </main>
 
               <Footer locale={lang} />

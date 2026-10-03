@@ -1,5 +1,4 @@
 import bundleAnalyzer from "@next/bundle-analyzer";
-import { withVercelToolbar as vercelToolbar } from "@vercel/toolbar/plugins/next";
 import { createMDX } from "fumadocs-mdx/next";
 import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
@@ -63,7 +62,6 @@ const nextConfig: NextConfig = {
 };
 
 const withMDX = createMDX();
-const withVercelToolbar = vercelToolbar();
 const withBundleAnalyzer = bundleAnalyzer({
   enabled: process.env.ANALYZE === "true",
 });
@@ -74,6 +72,4 @@ const withNextIntl = createNextIntlPlugin({
   requestConfig: "./shared/i18n/request.ts",
 });
 
-export default withBundleAnalyzer(
-  withVercelToolbar(withMDX(withNextIntl(nextConfig)))
-);
+export default withBundleAnalyzer(withMDX(withNextIntl(nextConfig)));

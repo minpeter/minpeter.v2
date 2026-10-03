@@ -87,7 +87,9 @@
         "uploading": "ファイルをアップロード中…",
         "folderLabel": "フォルダ",
         "uploadedLabel": "アップロード完了",
-        "downloadAll": "すべてのファイルをダウンロード"
+        "downloadAll": "すべてのファイルをダウンロード",
+        "downloading": "ファイルをダウンロード中…",
+        "downloadFailed": "一部のファイルをダウンロードできませんでした。接続を確認して再試行してください。取得済みのファイルが再度ダウンロードされる場合があります。"
       },
       "techStack": {
         "title": "Tech stack ball",

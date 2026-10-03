@@ -87,7 +87,9 @@
         "uploading": "Uploading files…",
         "folderLabel": "Folder",
         "uploadedLabel": "uploaded",
-        "downloadAll": "Download all files"
+        "downloadAll": "Download all files",
+        "downloading": "Downloading files…",
+        "downloadFailed": "Some files could not be downloaded. Check your connection and try again. Files already downloaded may be downloaded again."
       },
       "techStack": {
         "title": "Tech stack ball",

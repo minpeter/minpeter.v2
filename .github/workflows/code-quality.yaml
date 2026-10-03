@@ -134,6 +134,7 @@ jobs:
           e2e/blog-search.client.spec.ts
           e2e/blog-search.stale.client.spec.ts
           e2e/soft-nav.instant.spec.ts
+          e2e/site-journeys.spec.ts
 
   audit:
     name: Security audit
