@@ -9,6 +9,7 @@ import {
 } from "@radix-ui/react-dropdown-menu";
 import { GlobeIcon } from "@radix-ui/react-icons";
 import { useLocale, useTranslations } from "next-intl";
+import { type PointerEvent, useCallback, useRef } from "react";
 
 import { LOCALE_LABELS } from "@/shared/constants/locales";
 import { useHoverDropdown } from "@/shared/hooks/use-hover-dropdown";
@@ -24,6 +25,7 @@ export function LanguageSelector() {
   const locale = useLocale();
   const t = useTranslations("common");
   const pathname = usePathname();
+  const touchOpen = useRef<boolean | null>(null);
 
   const {
     isOpen,
@@ -36,6 +38,27 @@ export function LanguageSelector() {
     handleOpenChange,
   } = useHoverDropdown();
 
+  const handleTriggerPointerDown = useCallback(
+    (event: PointerEvent<HTMLButtonElement>) => {
+      if (event.pointerType === "touch") {
+        // Opening on touch-down can send the release click to a menu item.
+        // Capture the toggle before Radix can dismiss the menu on touch-up.
+        touchOpen.current = !isOpen;
+        event.preventDefault();
+      } else {
+        touchOpen.current = null;
+      }
+    },
+    [isOpen]
+  );
+
+  const handleTriggerClick = useCallback(() => {
+    if (touchOpen.current !== null) {
+      handleOpenChange(touchOpen.current);
+      touchOpen.current = null;
+    }
+  }, [handleOpenChange]);
+
   const currentLabel = LOCALE_LABELS[locale as keyof typeof LOCALE_LABELS];
 
   return (
@@ -45,6 +68,8 @@ export function LanguageSelector() {
           aria-label={`${currentLabel.short} - ${t("selectLanguage")}`}
           className="flex items-center gap-1 rounded-md px-2 py-1 text-muted-foreground text-sm transition-colors duration-150 hover:bg-secondary hover:text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           data-testid="language-selector"
+          onClick={handleTriggerClick}
+          onPointerDown={handleTriggerPointerDown}
           onPointerEnter={handleMouseEnter}
           onPointerLeave={handleMouseLeave}
           ref={triggerRef}
@@ -67,11 +92,14 @@ export function LanguageSelector() {
         >
           {routing.locales.map((l) => {
             const isActive = locale === l;
-            // Full document navigation (plain <a>), not next-intl <Link> soft-nav.
-            // Locale switches under localePrefix: "as-needed" often 307 (e.g. /ko/blog
-            // → /blog) and abort in-flight RSC streams, which surfaces
-            // TypeError: Cannot write/close a CLOSED writable stream in Next 16.
-            const href = getPathname({ href: pathname, locale: l });
+            // Keep full document navigation to avoid aborted RSC streams in Next 16.
+            // Even the default locale needs a prefix so middleware updates the
+            // locale cookie before redirecting to the unprefixed URL.
+            const href = getPathname({
+              forcePrefix: true,
+              href: pathname,
+              locale: l,
+            });
 
             return (
               <Item asChild key={l}>
