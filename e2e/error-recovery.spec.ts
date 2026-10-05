@@ -73,8 +73,14 @@ for (const scenario of [
         scenario.locale === "ja" ? "link" : "button",
         { name: scenario.locale === "ja" ? scenario.back : scenario.reload }
       );
+      await panel.getByRole("heading").click();
       await page.keyboard.press("Tab");
-      await recovery.focus();
+      await expect(
+        panel.getByRole("button", { name: scenario.reload })
+      ).toBeFocused();
+      if (scenario.locale === "ja") {
+        await page.keyboard.press("Tab");
+      }
       await expect(recovery).toBeFocused();
       await expect(recovery).toHaveCSS("outline-style", "solid");
 

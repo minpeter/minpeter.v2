@@ -86,7 +86,6 @@
         "description": "Three projects connecting models, accounts, and inference requests.",
         "connectionLabel": "Connect",
         "settingsLabel": "Configure",
-        "organizationLink": "GitHub org",
         "screens": {
           "overview": "Overview",
           "models": "Models",
@@ -106,7 +105,6 @@
           "requestsAlt": "Token Hub request search and usage statistics"
         },
         "kiroLb": {
-          "label": "Rust · TypeScript / React",
           "description": "Multi-account routing built on kiro-gateway, with OpenAI- and Anthropic-compatible APIs.",
           "connection": "Run a standalone binary or Docker container, then point a compatible client at its API.",
           "settings": "Manage account sign-in, API keys, load balancing, and concurrency from the dashboard.",
@@ -115,7 +113,6 @@
           "settingsAlt": "KiroLB concurrent request and queue timeout settings"
         },
         "inferx": {
-          "label": "Early development · Public overview",
           "description": "An inference exchange connecting spare provider quota through a shared API.",
           "connection": "Suppliers connect supported accounts; consumers call models with an API key.",
           "settings": "Manage provider connections and API keys, and track usage, credits, and supplier earnings.",

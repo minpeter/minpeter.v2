@@ -86,7 +86,6 @@
         "description": "モデルとアカウントをつなぎ、推論リクエストを分配する三つのプロジェクト。",
         "connectionLabel": "接続方法",
         "settingsLabel": "設定・運用",
-        "organizationLink": "GitHub 組織",
         "screens": {
           "overview": "ダッシュボード",
           "models": "モデル",
@@ -106,7 +105,6 @@
           "requestsAlt": "Token Hubのリクエスト検索と使用量統計"
         },
         "kiroLb": {
-          "label": "Rust · TypeScript / React",
           "description": "kiro-gatewayベースの複数アカウントルーター。OpenAI・Anthropic互換APIを提供します。",
           "connection": "単体バイナリまたはDockerで起動し、互換クライアントのAPI接続先を設定します。",
           "settings": "ログイン、APIキー、負荷分散方式と同時処理数をダッシュボードで管理します。",
@@ -115,7 +113,6 @@
           "settingsAlt": "KiroLBの同時リクエスト数とキュー待機時間設定"
         },
         "inferx": {
-          "label": "開発初期 · 公開概要",
           "description": "提供者の余った推論クォータを集め、共通APIで利用できる推論取引所。",
           "connection": "提供者は対応アカウントを接続し、利用者はAPIキーでモデルを呼び出します。",
           "settings": "プロバイダー接続とAPIキーを管理し、使用量・クレジット・提供収益を確認します。",

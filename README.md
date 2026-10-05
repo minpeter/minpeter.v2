@@ -11,8 +11,9 @@ Stop the preview before replacing it on the same port; its snapshot is removed
 when the server exits. Don't leave `next start` serving this checkout's `.next`
 while rebuilding it: old pages will request deleted JS/CSS chunks.
 
-Preview snapshots live in `.amp/in/previews/`. Keep `/.amp/in/` in the
-repository-local `.git/info/exclude` file. For hot reload, use `pnpm dev` instead.
+Preview snapshots live in the git-ignored `.amp/in/previews/` directory.
+After a hard kill or machine crash, remove orphaned snapshots manually once
+their preview processes have stopped. For hot reload, use `pnpm dev` instead.
 
 ## Inspired by ~
 

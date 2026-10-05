@@ -86,7 +86,6 @@
         "description": "모델과 계정을 연결하고, 추론 요청을 나누는 세 가지 프로젝트.",
         "connectionLabel": "연결 방식",
         "settingsLabel": "설정·운영",
-        "organizationLink": "GitHub 조직",
         "screens": {
           "overview": "대시보드",
           "models": "모델",
@@ -106,7 +105,6 @@
           "requestsAlt": "Token Hub 요청 검색과 사용량 통계"
         },
         "kiroLb": {
-          "label": "Rust · TypeScript / React",
           "description": "kiro-gateway 기반의 다중 계정 게이트웨이. OpenAI·Anthropic 호환 API를 제공합니다.",
           "connection": "단독 실행 파일이나 Docker로 구동하고, 호환 클라이언트의 API 주소를 연결합니다.",
           "settings": "계정 로그인, API 키, 요청 분배 방식과 동시 처리 수를 대시보드에서 관리합니다.",
@@ -115,7 +113,6 @@
           "settingsAlt": "KiroLB 동시 요청 수와 대기 시간 설정"
         },
         "inferx": {
-          "label": "초기 개발 · 공개 소개",
           "description": "제공자의 남는 추론 할당량을 모아 API로 연결하는 추론 거래소.",
           "connection": "공급자는 지원하는 계정을 연결하고, 사용자는 API 키로 모델을 호출합니다.",
           "settings": "제공자 연결과 API 키를 관리하고, 사용량·크레딧·공급 수익을 확인합니다.",
