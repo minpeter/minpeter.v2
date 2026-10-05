@@ -4,12 +4,12 @@ import { ErrorPanel } from "@/components/error-panel";
 
 interface ErrorPageProps {
   error: Error & { digest?: string };
-  reset: () => void;
+  retry: () => void;
 }
 
 export default function BlogPostErrorBoundary({
   error,
-  reset,
+  retry,
 }: ErrorPageProps) {
-  return <ErrorPanel error={error} namespace="blog" reset={reset} />;
+  return <ErrorPanel error={error} namespace="blog" retry={retry} />;
 }

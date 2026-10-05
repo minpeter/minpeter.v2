@@ -1,0 +1,21 @@
+<svg
+  fill="#dce5d8"
+  height="112"
+  viewBox="0 0 1040 112"
+  width="1040"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <title>InferX</title>
+  <path d="M0 0h42v108H0z" />
+  <path d="M76 12 88 0h31l83 66V0h40v96l-12 12h-31l-83-66v66H76z" />
+  <path d="M274 22 294 0h144l-22 24h-94q-8 0-8 8v12h98l-22 24h-76v40h-40z" />
+  <path
+    d="M458 22 478 0h142l-22 24h-92q-8 0-8 8v8h92v24h-92v12q0 8 8 8h104v24H458z"
+  />
+  <path
+    d="m646 24 22-24h124l14 14v34l-20 20h-20l44 40h-50l-42-36h-27v36h-41V48h110q8 0 8-8v-8q0-8-8-8z"
+  />
+  <path
+    d="M842 0h58l40 36 44-36h56l-54 46h-92zM894 64h92l54 48h-56l-44-36-40 36h-58z"
+  />
+</svg>

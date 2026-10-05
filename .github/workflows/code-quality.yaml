@@ -136,6 +136,7 @@ jobs:
           e2e/soft-nav.instant.spec.ts
           e2e/site-journeys.spec.ts
           e2e/language-selector.spec.ts
+          e2e/error-recovery.spec.ts
 
   audit:
     name: Security audit

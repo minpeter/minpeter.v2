@@ -15,6 +15,7 @@
     "fmt": "ultracite fix",
     "postinstall": "fumadocs-mdx",
     "knip": "knip",
+    "preview": "NEXT_PREVIEW=1 pnpm build && node scripts/preview.mjs",
     "test": "vitest run",
     "test:e2e": "EXPOSE_TESTING_API=1 next build && playwright test",
     "test:e2e:instant": "EXPOSE_TESTING_API=1 next build && playwright test e2e/soft-nav.instant.spec.ts"

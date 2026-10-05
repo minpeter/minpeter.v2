@@ -29,23 +29,24 @@
     "source": "ソース"
   },
   "errors": {
+    "reload": "再読み込み",
     "general": {
-      "kicker": "エラー処理",
-      "title": "エラーが発生しました",
-      "description": "しばらくしてから再度お試しいただくか、ホームに戻って別のページをご覧ください。",
+      "kicker": "ページの読み込みエラー",
+      "title": "ページを読み込めませんでした。",
+      "description": "もう一度お試しください。問題が続く場合は、ホームからやり直せます。",
       "digestLabel": "エラーID",
       "retry": "再試行",
       "back": "ホームに戻る"
     },
     "blog": {
-      "kicker": "ブログエラー",
+      "kicker": "記事の読み込みエラー",
       "title": "記事を読み込めませんでした",
       "description": "記事の表示中に問題が発生しました。再度お試しいただくか、記事一覧にお戻りください。",
       "retry": "再試行",
       "back": "記事一覧に戻る"
     },
     "blogList": {
-      "kicker": "ブログエラー",
+      "kicker": "記事一覧の読み込みエラー",
       "title": "記事一覧を読み込めませんでした",
       "description": "記事一覧の読み込み中に問題が発生しました。再度お試しいただくか、ホームにお戻りください。",
       "retry": "再試行",
@@ -69,11 +70,83 @@
   "showcase": {
     "navigationLabel": "ショーケースのナビゲーション",
     "projectsLabel": "プロジェクト",
+    "experimentsLabel": "実験",
+    "openScreenshot": "{project} — {screen}を拡大（新しいタブ）",
+    "productScreens": "{project}の製品画面",
+    "connectionSettings": "接続・設定",
     "kicker": "ショーケース",
-    "title": "小さな実験",
-    "description": "楽しみながら作ったインタラクティブな作品、プロトタイプ、そしてさまざまな実験です。",
+    "title": "プロジェクトと実験",
+    "description": "AIインフラやエージェントツールから、小さなインタラクティブ実験まで、自分で作ったものを集めました。",
     "detailNavigationLabel": "{title}ページのナビゲーション",
     "items": {
+      "loadBalancer": {
+        "title": "The Load Balancer",
+        "summary": "Tokenhub · kiro-lb · InferX — AIゲートウェイと推論リクエストのルーティング。",
+        "kicker": "AIインフラ",
+        "description": "モデルとアカウントをつなぎ、推論リクエストを分配する三つのプロジェクト。",
+        "connectionLabel": "接続方法",
+        "settingsLabel": "設定・運用",
+        "screens": {
+          "overview": "ダッシュボード",
+          "models": "モデル",
+          "requests": "リクエスト",
+          "accounts": "アカウント",
+          "settings": "同時処理設定",
+          "usage": "使用量",
+          "analytics": "分析"
+        },
+        "tokenhub": {
+          "label": "プライベート",
+          "description": "複数のモデルプロバイダーのアカウントを接続し、リクエストを分配するAIゲートウェイ。",
+          "connection": "OpenAI・Anthropic互換APIで既存のモデルクライアントと接続します。",
+          "settings": "アカウント接続とクライアントキーを管理し、モデル別のルーティング状態を確認します。",
+          "screenAlt": "Token Hubのロゴ、サイドバーとアカウントの可用性",
+          "modelsAlt": "Token Hubのモデル別プロバイダーと可用性",
+          "requestsAlt": "Token Hubのリクエスト検索と使用量統計"
+        },
+        "kiroLb": {
+          "description": "kiro-gatewayベースの複数アカウントルーター。OpenAI・Anthropic互換APIを提供します。",
+          "connection": "単体バイナリまたはDockerで起動し、互換クライアントのAPI接続先を設定します。",
+          "settings": "ログイン、APIキー、負荷分散方式と同時処理数をダッシュボードで管理します。",
+          "screenAlt": "KiroLBのロゴ、サイドバーとリクエスト量グラフ",
+          "accountsAlt": "KiroLBのアカウント状態と残りクォータ",
+          "settingsAlt": "KiroLBの同時リクエスト数とキュー待機時間設定"
+        },
+        "inferx": {
+          "description": "提供者の余った推論クォータを集め、共通APIで利用できる推論取引所。",
+          "connection": "提供者は対応アカウントを接続し、利用者はAPIキーでモデルを呼び出します。",
+          "settings": "プロバイダー接続とAPIキーを管理し、使用量・クレジット・提供収益を確認します。",
+          "screenAlt": "InferXのロゴ、サイドバーとワークスペース概要",
+          "usageAlt": "InferXのクレジット残高と使用履歴",
+          "analyticsAlt": "InferXのモデル別リクエスト、トークン使用量と獲得クレジット"
+        }
+      },
+      "wrench": {
+        "title": "Project Wrench",
+        "summary": "モデル学習からツール呼び出し、コーディングエージェントのランタイムまで。",
+        "kicker": "LLMツール呼び出し · エージェント",
+        "description": "言語モデルがツールを呼び出し、実際の作業を行うまでの過程を探る取り組みです。関数呼び出しのためのモデル学習から始まり、推論パーサー、SDKミドルウェア、コーディングエージェントのランタイムへと発展しました。",
+        "training": {
+          "label": "モデル学習 · アーカイブ",
+          "description": "関数呼び出しに強いモデルを目指した初期の事後学習実験です。LoRA学習設定、ツール呼び出しのノートブック、Hermes / Llamaチャットテンプレートを収録しています。開発は終了しています。"
+        },
+        "parser": {
+          "label": "Python · vLLMに取り込み済み",
+          "description": "vLLM上のLlamaモデルによるHermes形式のツール呼び出しを解析するパーサーです。ストリーミング中にタグが複数のトークンに分割される問題に対応し、実装はvLLMに取り込まれました。"
+        },
+        "middleware": {
+          "label": "TypeScript · Vercel AI SDK",
+          "description": "ネイティブな関数呼び出しに対応しないモデルのテキスト出力を、構造化されたツール呼び出しに変換するミドルウェアです。モデル別の解析、ストリーミング復元、スキーマに沿った引数変換を提供します。"
+        },
+        "plugsuits": {
+          "label": "TypeScript · アーカイブ",
+          "description": "Vercel AI SDKを使い、ファイル・編集・シェルツールと対話型・ヘッドレス実行を備えたコーディングエージェントです。現在は参照用に保存され、後継の開発はpss-runtimeで続いています。"
+        },
+        "runtime": {
+          "label": "TypeScript · Plugsuitsの後継ランタイム",
+          "description": "スレッド、モデルループ、フック、ストレージを担う再利用可能なエージェントランタイムです。その上にワークスペースツール、TUI、ヘッドレス実行を備えたコーディングエージェントを分離して構成しました。"
+        }
+      },
       "tempfiles": {
         "title": "Yet another tempfiles",
         "summary": "一時ファイルのための、よりシンプルなフロントエンド。",
@@ -179,8 +252,8 @@
         "description": "ソフトウェア開発で得た技術メモ、チュートリアル、学び。"
       },
       "interactiveExperiments": {
-        "title": "インタラクティブな実験",
-        "description": "小さなプロトタイプ、視覚的な遊び、インターフェースの試作。"
+        "title": "プロジェクトと実験",
+        "description": "AIインフラ、エージェントツール、小さなインタラクティブ実験。"
       },
       "resume": {
         "title": "履歴書（準備中）",

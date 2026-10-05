@@ -29,23 +29,24 @@
     "source": "source"
   },
   "errors": {
+    "reload": "Reload page",
     "general": {
-      "kicker": "Error boundary",
-      "title": "Something went wrong",
-      "description": "Try again in a moment, or return home and continue from another page.",
+      "kicker": "Page unavailable",
+      "title": "This page didn’t load.",
+      "description": "Try loading it again. If the problem continues, you can head back home.",
       "digestLabel": "Error ID",
       "retry": "Try again",
       "back": "Back home"
     },
     "blog": {
-      "kicker": "Blog error",
+      "kicker": "Post unavailable",
       "title": "We couldn't load this post",
       "description": "Something went wrong while displaying the requested post. Try again or return to the post list.",
       "retry": "Try again",
       "back": "Back to posts"
     },
     "blogList": {
-      "kicker": "Blog error",
+      "kicker": "Posts unavailable",
       "title": "We couldn't load the post list",
       "description": "Something went wrong while loading the post list. Try again or return home.",
       "retry": "Try again",
@@ -69,11 +70,83 @@
   "showcase": {
     "navigationLabel": "Showcase navigation",
     "projectsLabel": "Projects",
+    "experimentsLabel": "Experiments",
+    "openScreenshot": "View {project} — {screen} at full size (new tab)",
+    "productScreens": "{project} product screens",
+    "connectionSettings": "Connection & setup",
     "kicker": "Showcase",
-    "title": "Small experiments",
-    "description": "Interactive pieces, prototypes, and things made for the fun of it.",
+    "title": "Projects and experiments",
+    "description": "Things I've built, from AI infrastructure and agent tools to small interactive experiments.",
     "detailNavigationLabel": "{title} navigation",
     "items": {
+      "loadBalancer": {
+        "title": "The Load Balancer",
+        "summary": "Tokenhub · kiro-lb · InferX — AI gateways and inference routing.",
+        "kicker": "AI infrastructure",
+        "description": "Three projects connecting models, accounts, and inference requests.",
+        "connectionLabel": "Connect",
+        "settingsLabel": "Configure",
+        "screens": {
+          "overview": "Overview",
+          "models": "Models",
+          "requests": "Requests",
+          "accounts": "Accounts",
+          "settings": "Concurrency settings",
+          "usage": "Usage",
+          "analytics": "Analytics"
+        },
+        "tokenhub": {
+          "label": "Private",
+          "description": "An AI gateway connecting accounts across model providers and distributing requests.",
+          "connection": "Connect existing model clients through OpenAI- and Anthropic-compatible APIs.",
+          "settings": "Manage account connections and client keys, and inspect routing status for each model.",
+          "screenAlt": "Token Hub wordmark, sidebar, and account availability",
+          "modelsAlt": "Token Hub model providers and availability",
+          "requestsAlt": "Token Hub request search and usage statistics"
+        },
+        "kiroLb": {
+          "description": "Multi-account routing built on kiro-gateway, with OpenAI- and Anthropic-compatible APIs.",
+          "connection": "Run a standalone binary or Docker container, then point a compatible client at its API.",
+          "settings": "Manage account sign-in, API keys, load balancing, and concurrency from the dashboard.",
+          "screenAlt": "KiroLB wordmark, sidebar, and request volume chart",
+          "accountsAlt": "KiroLB account status and remaining quota",
+          "settingsAlt": "KiroLB concurrent request and queue timeout settings"
+        },
+        "inferx": {
+          "description": "An inference exchange connecting spare provider quota through a shared API.",
+          "connection": "Suppliers connect supported accounts; consumers call models with an API key.",
+          "settings": "Manage provider connections and API keys, and track usage, credits, and supplier earnings.",
+          "screenAlt": "InferX wordmark, sidebar, and workspace overview",
+          "usageAlt": "InferX credit balance and usage ledger",
+          "analyticsAlt": "InferX requests, token usage, and earned credits by model"
+        }
+      },
+      "wrench": {
+        "title": "Project Wrench",
+        "summary": "From model training to tool calling and coding-agent runtimes.",
+        "kicker": "LLM tool calling · Agents",
+        "description": "Exploring how language models call tools and carry out real work. What began as function-calling model training grew into inference parsers, SDK middleware, and a coding-agent runtime.",
+        "training": {
+          "label": "Model training · Archived",
+          "description": "Early post-training experiments for function-calling models: LoRA configurations, tool-calling notebooks, and Hermes / Llama chat templates. Development has ended."
+        },
+        "parser": {
+          "label": "Python · Upstreamed to vLLM",
+          "description": "A parser for Hermes-style tool calls from Llama models on vLLM. It handles tool-call tags split across streaming tokens; the implementation was contributed upstream to vLLM."
+        },
+        "middleware": {
+          "label": "TypeScript · Vercel AI SDK",
+          "description": "Middleware that turns text output into structured tool calls for models without native function calling. It provides model-specific parsing, streaming reconstruction, and schema-aware argument coercion."
+        },
+        "plugsuits": {
+          "label": "TypeScript · Archived",
+          "description": "A coding agent built on the Vercel AI SDK, with file, editing, and shell tools for interactive and headless use. Kept for reference; continued development lives in pss-runtime."
+        },
+        "runtime": {
+          "label": "TypeScript · Successor to Plugsuits",
+          "description": "A reusable agent runtime for threads, the model loop, hooks, and storage. A separate coding-agent application adds workspace tools, a TUI, and a headless runner."
+        }
+      },
       "tempfiles": {
         "title": "Yet another tempfiles",
         "summary": "A simpler frontend for temporary files.",
@@ -179,8 +252,8 @@
         "description": "Technical notes, tutorials, and lessons from building software."
       },
       "interactiveExperiments": {
-        "title": "Interactive experiments",
-        "description": "Small prototypes, visual toys, and interface studies."
+        "title": "Projects and experiments",
+        "description": "AI infrastructure, agent tools, and small interactive experiments."
       },
       "resume": {
         "title": "Resume (in progress)",

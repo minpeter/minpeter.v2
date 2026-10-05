@@ -46,6 +46,8 @@ const nextConfig: NextConfig = {
       fullUrl: true,
     },
   },
+  // Local previews run a copied build, never the mutable .next directory.
+  output: process.env.NEXT_PREVIEW === "1" ? "standalone" : undefined,
   partialPrefetching: true,
   poweredByHeader: false,
   reactCompiler: true,
@@ -59,6 +61,9 @@ const nextConfig: NextConfig = {
     root: process.cwd(),
   },
   typedRoutes: true,
+  // Use polling on busy runners where the per-user inotify limit is exhausted.
+  watchOptions:
+    process.env.NEXT_DEV_POLLING === "1" ? { pollIntervalMs: 1000 } : undefined,
 };
 
 const withMDX = createMDX();

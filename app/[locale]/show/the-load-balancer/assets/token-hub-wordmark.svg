@@ -1,0 +1,36 @@
+<svg
+  fill="black"
+  height="60"
+  viewBox="-2 -2 382 60"
+  width="382"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <title>Token Hub</title>
+  <!-- Original interlocking H with bespoke uppercase lettering and a split diagonal K. -->
+  <path
+    d="M7 17 27 5V23L19 30V59L7 51ZM45 7 57 15V51L37 61V45L45 37ZM29 25 41 33 43 37 35 43H33L21 35V31L27 25Z"
+    transform="translate(-7 -5)"
+  />
+  <path d="M0 8H32V16H20V48H12V16H0Z" transform="translate(72)" />
+  <path
+    d="M7 8H25Q32 8 32 15V41Q32 48 25 48H7Q0 48 0 41V15Q0 8 7 8ZM8 16V40H24V16Z"
+    fill-rule="evenodd"
+    transform="translate(108)"
+  />
+  <path
+    d="M0 8H8V25L24 8H35L8 37V48H0ZM20 28L36 48H26L15 35Z"
+    transform="translate(144)"
+  />
+  <path d="M0 8H30V16H8V24H28L21 31H8V40H30V48H0Z" transform="translate(184)" />
+  <path d="M0 8H8L25 34V8H33V48H25L8 22V48H0Z" transform="translate(220)" />
+  <path d="M0 8H8V24H24V8H32V48H24V32H8V48H0Z" transform="translate(269)" />
+  <path
+    d="M0 8H8V38Q8 40 10 40H22Q24 40 24 38V8H32V41Q32 48 25 48H7Q0 48 0 41Z"
+    transform="translate(307)"
+  />
+  <path
+    d="M0 8H24Q32 8 32 16V21Q32 25 28 27Q33 29 33 34V40Q33 48 25 48H0ZM8 16V24H22Q24 24 24 22V18Q24 16 22 16ZM8 31V40H23Q25 40 25 38V33Q25 31 23 31Z"
+    fill-rule="evenodd"
+    transform="translate(345)"
+  />
+</svg>

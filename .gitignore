@@ -39,3 +39,6 @@ shared/i18n/*.d.json.ts
 # Playwright
 test-results/
 playwright-report/
+
+# Isolated local preview builds (not other Amp files)
+/.amp/in/previews/
