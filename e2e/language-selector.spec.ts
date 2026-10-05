@@ -9,13 +9,13 @@ const languages = {
 // A non-default browser preference must not override an explicit selection.
 test.use({ locale: "en-US" });
 
-for (const pathname of [
-  "/blog",
-  "/blog/blog-redesign",
-  "/show",
-  "/show/yet-another-tempfiles",
-  "/resume",
-]) {
+for (const [pathname, landmark] of [
+  ["/blog", '[data-testid="blog-list-shell"]'],
+  ["/blog/blog-redesign", '[data-testid="blog-post-content"]'],
+  ["/show", '[data-testid="showcase-link-tempfiles"]'],
+  ["/show/yet-another-tempfiles", '[data-testid="showcase-detail-shell"]'],
+  ["/resume", "section.resume-page"],
+] as const) {
   for (const [from, locale] of [
     ["en", "ko"],
     ["ja", "ko"],
@@ -31,9 +31,11 @@ for (const pathname of [
     }) => {
       const pageErrors: string[] = [];
       page.on("pageerror", (error) => pageErrors.push(error.message));
+      const pageContent = page.locator(landmark).filter({ visible: true });
       // The explicit prefix establishes the source locale, including Korean.
       await page.goto(`/${from}${pathname}`);
       await expect(page.locator("html")).toHaveAttribute("lang", from);
+      await expect(pageContent).toBeVisible();
       // Simulate a saved preference even when it matches Accept-Language.
       await context.addCookies([
         {
@@ -65,6 +67,7 @@ for (const pathname of [
       await expect(page).toHaveURL(`${language.prefix}${pathname}`);
       await expect(page.locator("html")).toHaveAttribute("lang", locale);
       await expect(trigger).toHaveText(language.short);
+      await expect(pageContent).toBeVisible();
       expect(
         (await context.cookies()).find(
           (cookie) => cookie.name === "MINPETER-LOCATE"
@@ -76,6 +79,7 @@ for (const pathname of [
         await expect(page).toHaveURL(pathname);
         await expect(page.locator("html")).toHaveAttribute("lang", "ko");
         await expect(trigger).toHaveText("KO");
+        await expect(pageContent).toBeVisible();
       }
       expect(pageErrors).toEqual([]);
     });
@@ -147,5 +151,34 @@ test.describe("touch trigger", () => {
 
     await expect(page).toHaveURL("/blog");
     await expect(trigger).toHaveText("KO");
+  });
+
+  test("canceled touches do not leak their toggle into later clicks", async ({
+    page,
+  }) => {
+    await page.goto("/ko/blog");
+    const trigger = page
+      .getByTestId("language-selector")
+      .filter({ visible: true });
+    await trigger.tap();
+    await expect(page.getByRole("menu")).toBeVisible();
+    await trigger.tap();
+    await expect(page.getByRole("menu")).toHaveCount(0);
+
+    await trigger.dispatchEvent("pointerdown", { pointerType: "touch" });
+    await trigger.dispatchEvent("pointercancel", { pointerType: "touch" });
+    // A later non-pointer click must not apply the canceled touch's intent.
+    await trigger.dispatchEvent("click");
+    await expect(trigger).toHaveAttribute("aria-expanded", "false");
+    await expect(page.getByRole("menu")).toHaveCount(0);
+
+    await trigger.focus();
+    await trigger.press("Enter");
+    await expect(page.getByRole("menu")).toBeVisible();
+    await page.keyboard.press("Escape");
+    await expect(page.getByRole("menu")).toHaveCount(0);
+    await trigger.tap();
+    await expect(page.getByRole("menu")).toBeVisible();
+    await expect(page).toHaveURL("/blog");
   });
 });

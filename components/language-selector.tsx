@@ -59,6 +59,10 @@ export function LanguageSelector() {
     }
   }, [handleOpenChange]);
 
+  const clearTouchOpen = useCallback(() => {
+    touchOpen.current = null;
+  }, []);
+
   const currentLabel = LOCALE_LABELS[locale as keyof typeof LOCALE_LABELS];
 
   return (
@@ -69,6 +73,8 @@ export function LanguageSelector() {
           className="flex items-center gap-1 rounded-md px-2 py-1 text-muted-foreground text-sm transition-colors duration-150 hover:bg-secondary hover:text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           data-testid="language-selector"
           onClick={handleTriggerClick}
+          onKeyDown={clearTouchOpen}
+          onPointerCancel={clearTouchOpen}
           onPointerDown={handleTriggerPointerDown}
           onPointerEnter={handleMouseEnter}
           onPointerLeave={handleMouseLeave}
