@@ -17,30 +17,48 @@ export async function generateMetadata(): Promise<Metadata> {
   });
 }
 
-const SHOWCASE_ITEMS = [
+const SHOWCASE_GROUPS = [
   {
-    key: "tempfiles",
-    path: "/show/yet-another-tempfiles",
+    items: [
+      {
+        key: "loadBalancer",
+        path: "/show/the-load-balancer",
+      },
+      {
+        key: "wrench",
+        path: "/show/project-wrench",
+      },
+    ],
+    key: "projects",
   },
   {
-    key: "techStack",
-    path: "/show/tech-stack-ball",
-  },
-  {
-    key: "dynamicText",
-    path: "/show/dynamic-hacked-text",
-  },
-  {
-    key: "newYear",
-    path: "/show/new-year-clock",
-  },
-  {
-    key: "modelCard",
-    path: "/show/model-card-artwork",
-  },
-  {
-    key: "unstructured",
-    path: "/show/unstructured",
+    items: [
+      {
+        key: "tempfiles",
+        path: "/show/yet-another-tempfiles",
+      },
+      {
+        key: "techStack",
+        path: "/show/tech-stack-ball",
+      },
+      {
+        key: "dynamicText",
+        path: "/show/dynamic-hacked-text",
+      },
+      {
+        key: "newYear",
+        path: "/show/new-year-clock",
+      },
+      {
+        key: "modelCard",
+        path: "/show/model-card-artwork",
+      },
+      {
+        key: "unstructured",
+        path: "/show/unstructured",
+      },
+    ],
+    key: "experiments",
   },
 ] as const;
 
@@ -77,28 +95,40 @@ export default async function Page(_props: PageProps<"/[locale]/show">) {
         </div>
       </header>
 
-      <nav aria-label={t("showcase.projectsLabel")} className="showcase-list">
-        {SHOWCASE_ITEMS.map(({ key, path }) => (
-          <Link
-            className="showcase-item-link"
-            data-testid={`showcase-link-${key}`}
-            href={path}
-            key={path}
-          >
-            <span className="showcase-item-top">
-              <span className="showcase-item-title">
-                {t(`showcase.items.${key}.title`)}
-              </span>
-              <span aria-hidden="true" className="showcase-item-arrow">
-                ↗
-              </span>
-            </span>
-            <span className="showcase-item-description">
-              {t(`showcase.items.${key}.summary`)}
-            </span>
-          </Link>
+      <div className="space-y-8">
+        {SHOWCASE_GROUPS.map(({ key: group, items }) => (
+          <section key={group}>
+            <h2 className="showcase-kicker" id={`showcase-${group}`}>
+              {t(`showcase.${group}Label`)}
+            </h2>
+            <nav
+              aria-labelledby={`showcase-${group}`}
+              className="showcase-list"
+            >
+              {items.map(({ key, path }) => (
+                <Link
+                  className="showcase-item-link"
+                  data-testid={`showcase-link-${key}`}
+                  href={path}
+                  key={path}
+                >
+                  <span className="showcase-item-top">
+                    <span className="showcase-item-title">
+                      {t(`showcase.items.${key}.title`)}
+                    </span>
+                    <span aria-hidden="true" className="showcase-item-arrow">
+                      ↗
+                    </span>
+                  </span>
+                  <span className="showcase-item-description">
+                    {t(`showcase.items.${key}.summary`)}
+                  </span>
+                </Link>
+              ))}
+            </nav>
+          </section>
         ))}
-      </nav>
+      </div>
     </section>
   );
 }

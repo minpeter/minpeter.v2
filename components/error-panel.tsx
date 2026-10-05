@@ -1,65 +1,85 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { ArrowLeft, FileWarning, RotateCw } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
 import { useEffect } from "react";
 
-import { Link } from "@/shared/i18n/navigation";
+import { getPathname } from "@/shared/i18n/navigation";
 
 interface ErrorPanelProps {
   error: Error & { digest?: string };
   namespace: "blog" | "blogList" | "general";
-  reset: () => void;
+  retry: () => void;
 }
 
-export function ErrorPanel({ error, namespace, reset }: ErrorPanelProps) {
-  const t = useTranslations(`errors.${namespace}`);
-  const backHref = namespace === "blog" ? "/blog" : "/";
+function reloadPage() {
+  // Retrying React alone reuses the failed module from the old build.
+  window.location.reload();
+}
+
+export function ErrorPanel({ error, namespace, retry }: ErrorPanelProps) {
+  const t = useTranslations("errors");
+  const locale = useLocale();
+  const backHref = getPathname({
+    href: namespace === "blog" ? "/blog" : "/",
+    locale,
+  });
+  const needsReload = error.name === "ChunkLoadError";
+
   useEffect(() => {
     console.error(error);
   }, [error]);
 
   return (
-    <section className="mx-auto flex min-h-[50vh] max-w-2xl items-center px-4 py-16 sm:px-6">
-      <div className="w-full rounded-xl border border-border/60 bg-secondary/50 p-6 shadow-sm sm:p-8">
-        <div className="space-y-4">
-          <div className="space-y-2">
-            <p className="font-medium text-muted-foreground text-sm">
-              {t("kicker")}
-            </p>
-            <h1 className="text-2xl text-foreground tracking-tight">
-              {t("title")}
-            </h1>
-            <p className="text-muted-foreground text-sm sm:text-base">
-              {t("description")}
-            </p>
-          </div>
-
-          {namespace === "general" && error.digest ? (
-            <div className="rounded-lg bg-background/70 px-4 py-3">
-              <p className="text-muted-foreground text-xs">
-                {t("digestLabel")}
-              </p>
-              <p className="font-mono text-sm">{error.digest}</p>
-            </div>
-          ) : null}
-
-          <div className="flex flex-col gap-3 sm:flex-row">
-            <button
-              className="inline-flex items-center justify-center rounded-lg bg-foreground px-4 py-2 font-medium text-background transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              onClick={reset}
-              type="button"
-            >
-              {t("retry")}
-            </button>
-            <Link
-              className="inline-flex items-center justify-center rounded-lg border border-border/60 bg-background px-4 py-2 font-medium text-foreground transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              href={backHref}
-            >
-              {t("back")}
-            </Link>
-          </div>
-        </div>
+    <section
+      aria-labelledby="error-title"
+      className="mx-auto w-full max-w-lg py-20 font-[family-name:var(--font-geist),Arial,sans-serif] sm:py-26"
+      data-testid="error-panel"
+    >
+      <div
+        aria-hidden="true"
+        className="mb-8 flex size-11 items-center justify-center rounded-xl border border-border text-muted-foreground"
+      >
+        <FileWarning size={21} strokeWidth={1.4} />
       </div>
+      <p className="font-mono text-[10px] text-muted-foreground uppercase tracking-[0.16em]">
+        {t(`${namespace}.kicker`)}
+      </p>
+      <h1
+        className="mt-3 text-balance font-normal text-2xl text-foreground tracking-tight"
+        id="error-title"
+      >
+        {t(`${namespace}.title`)}
+      </h1>
+      <p className="mt-3 max-w-sm text-pretty text-muted-foreground text-sm leading-6">
+        {t(`${namespace}.description`)}
+      </p>
+
+      <div className="mt-7 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm">
+        <button
+          className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-foreground px-4 py-2 text-background transition-opacity hover:opacity-80 focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-4"
+          onClick={needsReload ? reloadPage : retry}
+          type="button"
+        >
+          <RotateCw aria-hidden="true" size={14} />
+          {needsReload ? t("reload") : t(`${namespace}.retry`)}
+        </button>
+        {/* A document navigation also works when the client router is broken. */}
+        <a
+          className="inline-flex min-h-11 items-center gap-2 rounded-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-4"
+          href={backHref}
+        >
+          <ArrowLeft aria-hidden="true" size={14} />
+          {t(`${namespace}.back`)}
+        </a>
+      </div>
+
+      {namespace === "general" && error.digest ? (
+        <p className="mt-8 flex flex-wrap gap-x-2 border-border border-t pt-4 font-mono text-[10px] text-muted-foreground">
+          <span>{t("general.digestLabel")}</span>
+          <code className="break-all">{error.digest}</code>
+        </p>
+      ) : null}
     </section>
   );
 }

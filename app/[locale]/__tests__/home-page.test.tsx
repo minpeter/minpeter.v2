@@ -18,8 +18,8 @@ const messages = {
         title: "개발 노트",
       },
       interactiveExperiments: {
-        description: "작은 프로토타입과 시각적 놀이, 인터페이스 실험.",
-        title: "인터랙티브 실험",
+        description: "AI 인프라, 에이전트 도구, 작은 인터랙티브 실험.",
+        title: "프로젝트와 실험",
       },
       resume: {
         description: "경력과 활동 이력 — 곧 공개합니다.",

@@ -29,23 +29,24 @@
     "source": "소스"
   },
   "errors": {
+    "reload": "새로고침",
     "general": {
-      "kicker": "오류 처리",
-      "title": "오류가 발생했습니다",
-      "description": "잠시 후 다시 시도하거나 홈으로 이동해 다른 페이지를 확인해 주세요.",
+      "kicker": "페이지 로딩 오류",
+      "title": "페이지를 불러오지 못했어요.",
+      "description": "한 번 더 불러와 주세요. 계속 문제가 생기면 홈에서 다시 시작할 수 있어요.",
       "digestLabel": "오류 ID",
       "retry": "다시 시도",
       "back": "홈으로 돌아가기"
     },
     "blog": {
-      "kicker": "블로그 오류",
+      "kicker": "글 로딩 오류",
       "title": "글을 불러오지 못했습니다",
       "description": "요청한 글을 표시하는 중 문제가 발생했습니다. 다시 시도하거나 글 목록으로 돌아가세요.",
       "retry": "다시 시도",
       "back": "글 목록으로 돌아가기"
     },
     "blogList": {
-      "kicker": "블로그 오류",
+      "kicker": "글 목록 로딩 오류",
       "title": "글 목록을 불러오지 못했습니다",
       "description": "글 목록을 표시하는 중 문제가 발생했습니다. 다시 시도하거나 홈으로 돌아가세요.",
       "retry": "다시 시도",
@@ -69,11 +70,86 @@
   "showcase": {
     "navigationLabel": "쇼케이스 탐색",
     "projectsLabel": "프로젝트",
+    "experimentsLabel": "실험",
+    "openScreenshot": "{project} — {screen} 크게 보기 (새 탭)",
+    "productScreens": "{project} 제품 화면",
+    "connectionSettings": "연결·설정",
     "kicker": "쇼케이스",
-    "title": "작은 실험들",
-    "description": "재미로 만든 인터랙티브 작업과 프로토타입, 여러 가지 실험입니다.",
+    "title": "프로젝트와 실험들",
+    "description": "AI 인프라와 에이전트 도구부터 작은 인터랙티브 실험까지, 직접 만든 작업을 모았습니다.",
     "detailNavigationLabel": "{title} 페이지 탐색",
     "items": {
+      "loadBalancer": {
+        "title": "더 로드밸런서",
+        "summary": "Tokenhub · kiro-lb · InferX — AI 게이트웨이와 추론 요청 라우팅.",
+        "kicker": "AI 인프라",
+        "description": "모델과 계정을 연결하고, 추론 요청을 나누는 세 가지 프로젝트.",
+        "connectionLabel": "연결 방식",
+        "settingsLabel": "설정·운영",
+        "organizationLink": "GitHub 조직",
+        "screens": {
+          "overview": "대시보드",
+          "models": "모델",
+          "requests": "요청",
+          "accounts": "계정",
+          "settings": "동시 처리 설정",
+          "usage": "사용량",
+          "analytics": "분석"
+        },
+        "tokenhub": {
+          "label": "프라이빗",
+          "description": "여러 모델 제공자의 계정을 연결하고 요청을 분배하는 AI 게이트웨이.",
+          "connection": "OpenAI·Anthropic 호환 API로 기존 모델 클라이언트와 연결합니다.",
+          "settings": "계정 연결과 클라이언트 키를 관리하고, 모델별 라우팅 상태를 확인합니다.",
+          "screenAlt": "Token Hub 로고, 사이드바와 계정 가용성",
+          "modelsAlt": "Token Hub 모델별 제공자와 가용 상태",
+          "requestsAlt": "Token Hub 요청 검색과 사용량 통계"
+        },
+        "kiroLb": {
+          "label": "Rust · TypeScript / React",
+          "description": "kiro-gateway 기반의 다중 계정 게이트웨이. OpenAI·Anthropic 호환 API를 제공합니다.",
+          "connection": "단독 실행 파일이나 Docker로 구동하고, 호환 클라이언트의 API 주소를 연결합니다.",
+          "settings": "계정 로그인, API 키, 요청 분배 방식과 동시 처리 수를 대시보드에서 관리합니다.",
+          "screenAlt": "KiroLB 로고, 사이드바와 요청량 차트",
+          "accountsAlt": "KiroLB 계정별 상태와 잔여 할당량",
+          "settingsAlt": "KiroLB 동시 요청 수와 대기 시간 설정"
+        },
+        "inferx": {
+          "label": "초기 개발 · 공개 소개",
+          "description": "제공자의 남는 추론 할당량을 모아 API로 연결하는 추론 거래소.",
+          "connection": "공급자는 지원하는 계정을 연결하고, 사용자는 API 키로 모델을 호출합니다.",
+          "settings": "제공자 연결과 API 키를 관리하고, 사용량·크레딧·공급 수익을 확인합니다.",
+          "screenAlt": "InferX 로고, 사이드바와 워크스페이스 대시보드",
+          "usageAlt": "InferX 크레딧 잔액과 사용 내역",
+          "analyticsAlt": "InferX 모델별 요청, 토큰 사용량과 적립 크레딧"
+        }
+      },
+      "wrench": {
+        "title": "Project Wrench",
+        "summary": "모델 학습부터 도구 호출, 코딩 에이전트 런타임까지.",
+        "kicker": "LLM 도구 호출 · 에이전트",
+        "description": "언어 모델이 도구를 호출하고 실제 작업을 수행하기까지의 과정을 다룹니다. 함수 호출을 위한 모델 학습에서 출발해, 추론 파서와 SDK 미들웨어를 거쳐 코딩 에이전트 런타임으로 이어졌습니다.",
+        "training": {
+          "label": "모델 학습 · 아카이브",
+          "description": "함수 호출을 잘하는 모델을 만들기 위한 초기 후속 학습 실험입니다. LoRA 학습 설정, 도구 호출 노트북, Hermes / Llama 채팅 템플릿을 담고 있으며 현재는 개발을 종료했습니다."
+        },
+        "parser": {
+          "label": "Python · vLLM 업스트림 반영",
+          "description": "vLLM에서 Llama 모델의 Hermes 형식 도구 호출을 해석하는 파서입니다. 스트리밍 중 도구 호출 태그가 여러 토큰으로 나뉘는 문제를 처리했고, 구현은 vLLM에 반영되었습니다."
+        },
+        "middleware": {
+          "label": "TypeScript · Vercel AI SDK",
+          "description": "네이티브 함수 호출을 지원하지 않는 모델의 텍스트 출력을 구조화된 도구 호출로 바꾸는 미들웨어입니다. 모델별 형식 파싱, 스트리밍 복원, 스키마에 맞춘 인자 변환을 제공합니다."
+        },
+        "plugsuits": {
+          "label": "TypeScript · 아카이브",
+          "description": "Vercel AI SDK 위에 파일·편집·셸 도구와 대화형·헤드리스 실행을 묶은 코딩 에이전트입니다. 현재는 참고용으로 보존하며, 후속 개발은 pss-runtime으로 이어집니다."
+        },
+        "runtime": {
+          "label": "TypeScript · Plugsuits의 후속 런타임",
+          "description": "스레드, 모델 루프, 훅, 저장소를 담당하는 재사용 가능한 에이전트 런타임입니다. 그 위에 워크스페이스 도구, TUI, 헤드리스 실행기를 갖춘 코딩 에이전트를 분리해 구성했습니다."
+        }
+      },
       "tempfiles": {
         "title": "Yet another tempfiles",
         "summary": "임시 파일을 위한 더 단순한 프런트엔드.",
@@ -179,8 +255,8 @@
         "description": "기술 메모와 튜토리얼, 소프트웨어를 만들며 배운 것들."
       },
       "interactiveExperiments": {
-        "title": "인터랙티브 실험",
-        "description": "작은 프로토타입과 시각적 놀이, 인터페이스 실험."
+        "title": "프로젝트와 실험",
+        "description": "AI 인프라, 에이전트 도구, 작은 인터랙티브 실험."
       },
       "resume": {
         "title": "이력서 (작성 중)",
