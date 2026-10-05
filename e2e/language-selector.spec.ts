@@ -52,16 +52,19 @@ for (const [pathname, landmark] of [
         .getByTestId("language-selector")
         .filter({ visible: true });
       await expect(trigger).toHaveCount(1);
+      await expect(trigger).toBeInViewport();
       if (isMobile) {
         await trigger.tap();
       } else {
-        await trigger.hover();
+        // Avoid Playwright's implicit smooth scroll moving the visible trigger
+        // away from the pointer after hover has returned.
+        await trigger.hover({ scroll: "none" });
       }
       const item = page.getByRole("menuitem", { name: language.label });
       if (isMobile) {
         await item.tap();
       } else {
-        await item.click();
+        await item.click({ scroll: "none" });
       }
 
       await expect(page).toHaveURL(`${language.prefix}${pathname}`);
@@ -95,13 +98,16 @@ test("language menu supports pointer opening and keyboard selection", async ({
     .getByTestId("language-selector")
     .filter({ visible: true });
 
+  await expect(trigger).toBeInViewport();
   if (isMobile) {
     await trigger.tap();
   } else {
-    await trigger.hover();
+    await trigger.hover({ scroll: "none" });
   }
   await expect(page.getByRole("menu")).toBeVisible();
-  await page.getByRole("menuitem", { name: "日本語" }).click();
+  await page
+    .getByRole("menuitem", { name: "日本語" })
+    .click({ scroll: "none" });
   await expect(page).toHaveURL("/ja/blog");
 
   await page.mouse.move(0, 0);
