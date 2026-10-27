@@ -23,7 +23,7 @@ const SECTIONS = [
 
 const SOCIAL_LINKS = [
   { href: "https://github.com/minpeter", label: "GitHub", slug: "/minpeter" },
-  { href: "https://x.com/minpeterx", label: "X", slug: "/minpeterx" },
+  { href: "https://x.com/minpeter", label: "X", slug: "/minpeter" },
   {
     href: "https://linkedin.com/in/minpeter/",
     label: "LinkedIn",
