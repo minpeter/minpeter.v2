@@ -1,39 +1,42 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { useCallback, useMemo, useSyncExternalStore } from "react";
+import { useCallback, useEffect, useMemo, useSyncExternalStore } from "react";
 
 import {
-  HOUSING_OPTIONS,
-  type HousingId,
-  KEYCAP_OPTIONS,
-  type KeycapId,
+  SELECTION_HOUSING_OPTIONS,
+  SELECTION_KEYCAP_OPTIONS,
+  type SelectionHousingId,
+  type SelectionKeycapId,
 } from "@/shared/keyboard-customization";
 
 interface CustomizationSelection {
-  customize: boolean;
-  housing: HousingId;
-  keycaps: KeycapId;
+  housing: SelectionHousingId;
+  keycaps: SelectionKeycapId;
 }
 
 const DEFAULTS: CustomizationSelection = {
-  customize: false,
-  housing: "bone-white",
-  keycaps: "retro-programmer-retail",
+  housing: "transparent",
+  keycaps: "inventor",
 };
-const QUERY_KEYS = ["customize", "housing", "keycaps"] as const;
+const QUERY_KEYS = ["housing", "keycaps"] as const;
 const CHANGE_EVENT = "keyboard-customization-query-change";
 
 function parseSelection(search: string): CustomizationSelection {
   const params = new URLSearchParams(search);
+  if (params.has("customize") && params.get("customize") !== "true") {
+    return DEFAULTS;
+  }
+  const legacyRetail = params.get("customize") === "true";
   return {
-    customize: params.get("customize") === "true",
     housing:
-      HOUSING_OPTIONS.find((option) => option.id === params.get("housing"))
-        ?.id ?? DEFAULTS.housing,
+      SELECTION_HOUSING_OPTIONS.find(
+        (option) => option.id === params.get("housing")
+      )?.id ?? (legacyRetail ? "bone-white" : DEFAULTS.housing),
     keycaps:
-      KEYCAP_OPTIONS.find((option) => option.id === params.get("keycaps"))
-        ?.id ?? DEFAULTS.keycaps,
+      SELECTION_KEYCAP_OPTIONS.find(
+        (option) => option.id === params.get("keycaps")
+      )?.id ?? (legacyRetail ? "retro-programmer-retail" : DEFAULTS.keycaps),
   };
 }
 
@@ -64,18 +67,30 @@ export function useKeyboardCustomizationQuery() {
     getServerSnapshot
   );
   const selection = useMemo(() => parseSelection(search), [search]);
+  // Upgrade old mode URLs without adding a history entry or losing unrelated parameters.
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    if (url.search !== search || !url.searchParams.has("customize")) {
+      return;
+    }
+    const current = parseSelection(url.search);
+    url.searchParams.delete("customize");
+    for (const key of QUERY_KEYS) {
+      url.searchParams.set(key, current[key]);
+    }
+    window.history.replaceState(
+      null,
+      "",
+      `${url.pathname}${url.search}${url.hash}`
+    );
+    window.dispatchEvent(new Event(CHANGE_EVENT));
+  }, [search]);
   const setSelection = useCallback((patch: Partial<CustomizationSelection>) => {
     const url = new URL(window.location.href);
+    const next = { ...parseSelection(url.search), ...patch };
+    url.searchParams.delete("customize");
     for (const key of QUERY_KEYS) {
-      const value = patch[key];
-      if (value === undefined) {
-        continue;
-      }
-      if (value === DEFAULTS[key]) {
-        url.searchParams.delete(key);
-      } else {
-        url.searchParams.set(key, String(value));
-      }
+      url.searchParams.set(key, next[key]);
     }
     if (url.href === window.location.href) {
       return;

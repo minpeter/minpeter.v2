@@ -239,19 +239,21 @@ describe("ProductCustomizer availability and selection", () => {
       expect(screen.getByTestId("personal-showcase-notice").textContent).toBe(
         t.showcaseNote
       );
+      expect(screen.queryByRole("button", { name: t.showcase })).toBeNull();
+      expect(screen.queryByRole("button", { name: t.customize })).toBeNull();
       expect(
-        screen
-          .getByRole("button", { name: t.showcase })
-          .getAttribute("aria-pressed")
-      ).toBe("true");
+        screen.getByTestId("product-customizer").getAttribute("data-orderable")
+      ).toBe("false");
+      expect(housingRadio("transparent").checked).toBe(true);
+      expect(keycapRadio("inventor").checked).toBe(true);
       expect(screen.getByTestId("personal-gallery")).toBeTruthy();
       expect(screen.queryByTestId("customization-pending")).toBeNull();
-      expect(screen.queryByRole("radio")).toBeNull();
+      expect(screen.getAllByRole("radio")).toHaveLength(14);
     }
   );
 
   it.each(["en", "ja", "ko"] as const)(
-    "renders seven housings, five complete retail sets, and honest pending text in %s",
+    "renders unified eight housings, six keycap choices, and honest pending text in %s",
     (locale) => {
       render(ui("?customize=true", locale));
       const t = messages[locale].products.customization;
@@ -266,12 +268,12 @@ describe("ProductCustomizer availability and selection", () => {
         within(screen.getByRole("group", { name: t.housing })).getAllByRole(
           "radio"
         )
-      ).toHaveLength(7);
+      ).toHaveLength(8);
       expect(
         within(screen.getByRole("group", { name: t.keycaps })).getAllByRole(
           "radio"
         )
-      ).toHaveLength(5);
+      ).toHaveLength(6);
       for (const housing of HOUSING_OPTIONS) {
         expect(
           screen.getByRole("radio", {
@@ -303,7 +305,6 @@ describe("ProductCustomizer availability and selection", () => {
       ];
       render(ui("", locale));
       const t = messages[locale].products.customization;
-      fireEvent.click(screen.getByRole("button", { name: t.customize }));
       fireEvent.click(housingRadio("ice-blue"));
       const retro = screen.getByTestId("retail-spin");
       fireEvent.click(screen.getByRole("button", { name: "Rotate retail" }));
@@ -316,9 +317,9 @@ describe("ProductCustomizer availability and selection", () => {
       expect(retro.isConnected).toBe(false);
 
       await traverse("back");
-      expect(
-        new URLSearchParams(window.location.search).get("keycaps")
-      ).toBeNull();
+      expect(new URLSearchParams(window.location.search).get("keycaps")).toBe(
+        "retro-programmer-retail"
+      );
       expect(new URLSearchParams(window.location.search).get("housing")).toBe(
         "ice-blue"
       );
@@ -350,8 +351,9 @@ describe("ProductCustomizer availability and selection", () => {
       expect(
         new URLSearchParams(window.location.search).get("housing")
       ).toBeNull();
-      expect(housingRadio("bone-white").checked).toBe(true);
-      expect(screen.getByTestId("customization-pending")).toBeTruthy();
+      expect(housingRadio("transparent").checked).toBe(true);
+      expect(keycapRadio("inventor").checked).toBe(true);
+      expect(screen.getByTestId("personal-gallery")).toBeTruthy();
       expect(screen.queryByTestId("retail-spin")).toBeNull();
       expect(restoredRetro.isConnected).toBe(false);
 
@@ -382,13 +384,11 @@ describe("ProductCustomizer availability and selection", () => {
     }
   );
 
-  it("does not add history entries for duplicate mode or option clicks", () => {
+  it("does not add history entries for duplicate option clicks", () => {
     render(ui("?customize=true"));
     const { length } = window.history;
     const url = window.location.href;
-    fireEvent.click(
-      screen.getByRole("button", { name: en.products.customization.customize })
-    );
+
     fireEvent.click(housingRadio("bone-white"));
     fireEvent.click(keycapRadio("retro-programmer-retail"));
     expect(window.history.length).toBe(length);
@@ -413,39 +413,39 @@ describe("ProductCustomizer availability and selection", () => {
     expect(params.get("campaign")).toBe("launch");
     expect(params.getAll("tag")).toEqual(["a", "b"]);
     expect(params.get("housing")).toBe("charcoal");
-    expect(params.get("keycaps")).toBeNull();
+    expect(params.get("keycaps")).toBe("retro-programmer-retail");
     expect(keycapRadio("retro-programmer-retail").checked).toBe(true);
     expect(window.location.hash).toBe("#render");
   });
 
-  it("rejects invalid URL choices and removes the personal image when entering pending mode", async () => {
+  it("rejects unknown unflagged options to personal defaults and removes the original image on retail selection", () => {
     render(ui("?housing=unknown&keycaps=personal-logo"));
-    fireEvent.click(
-      screen.getByRole("button", { name: en.products.customization.customize })
-    );
-    await waitFor(() =>
-      expect(screen.getByTestId("customization-pending")).toBeTruthy()
-    );
+    expect(housingRadio("transparent").checked).toBe(true);
+    expect(keycapRadio("inventor").checked).toBe(true);
+    expect(screen.getByTestId("personal-gallery")).toBeTruthy();
+    fireEvent.click(housingRadio("bone-white"));
+    expect(screen.getByTestId("customization-pending")).toBeTruthy();
     expect(housingRadio("bone-white").checked).toBe(true);
     expect(keycapRadio("retro-programmer-retail").checked).toBe(true);
     expect(screen.queryByTestId("personal-gallery")).toBeNull();
     expect(document.querySelectorAll("img, canvas")).toHaveLength(0);
+    expect(screen.getByTestId("customization-pairing-notice")).toBeTruthy();
   });
 
   it("preserves angle while keyed validated combinations replace stale preview instances", async () => {
     fixtures.candidates = [candidate(), candidate("charcoal")];
     render(ui());
     fireEvent.click(screen.getByRole("button", { name: "Rotate showcase" }));
-    fireEvent.click(
-      screen.getByRole("button", { name: en.products.customization.customize })
-    );
+    fireEvent.click(housingRadio("bone-white"));
     const first = await screen.findByTestId("retail-spin");
     expect(first.getAttribute("data-angle")).toBe("150");
     fireEvent.click(screen.getByRole("button", { name: "Rotate retail" }));
     fireEvent.click(screen.getByRole("button", { name: "Resolve render" }));
-    expect(screen.getByRole("status").textContent).toBe(
-      en.products.customization.ready
-    );
+    expect(
+      within(
+        document.querySelector(".store-custom-preview") as HTMLElement
+      ).getByRole("status").textContent
+    ).toBe(en.products.customization.ready);
     fireEvent.click(housingRadio("charcoal"));
     await waitFor(() =>
       expect(
@@ -458,18 +458,18 @@ describe("ProductCustomizer availability and selection", () => {
     );
     expect(first.isConnected).toBe(false);
     expect(second.getAttribute("data-angle")).toBe("210");
-    expect(screen.getByRole("status").textContent).toBe(
-      en.products.customization.loading
-    );
+    expect(
+      within(
+        document.querySelector(".store-custom-preview") as HTMLElement
+      ).getByRole("status").textContent
+    ).toBe(en.products.customization.loading);
     fireEvent.click(housingRadio("ice-blue"));
     await waitFor(() =>
       expect(screen.getByTestId("customization-pending")).toBeTruthy()
     );
     expect(screen.queryByTestId("retail-spin")).toBeNull();
     expect(second.isConnected).toBe(false);
-    fireEvent.click(
-      screen.getByRole("button", { name: en.products.customization.showcase })
-    );
+    fireEvent.click(housingRadio("transparent"));
     await waitFor(() =>
       expect(
         screen.getByTestId("personal-gallery").getAttribute("data-angle")
@@ -480,15 +480,19 @@ describe("ProductCustomizer availability and selection", () => {
   it("announces loading and errors, retries without remounting, then announces readiness", () => {
     fixtures.candidates = [candidate()];
     render(ui("?customize=true"));
-    expect(screen.getByRole("status").textContent).toBe(
-      en.products.customization.loading
-    );
+    expect(
+      within(
+        document.querySelector(".store-custom-preview") as HTMLElement
+      ).getByRole("status").textContent
+    ).toBe(en.products.customization.loading);
     const before = screen.getByTestId("retail-spin");
     fireEvent.click(screen.getByRole("button", { name: "Rotate retail" }));
     fireEvent.click(screen.getByRole("button", { name: "Fail render" }));
-    expect(screen.getByRole("status").textContent).toBe(
-      en.products.customization.loadError
-    );
+    expect(
+      within(
+        document.querySelector(".store-custom-preview") as HTMLElement
+      ).getByRole("status").textContent
+    ).toBe(en.products.customization.loadError);
     fireEvent.click(
       screen.getByRole("button", { name: en.products.customization.retry })
     );
@@ -499,17 +503,23 @@ describe("ProductCustomizer availability and selection", () => {
     expect(before.isConnected).toBe(true);
     expect(fixtures.retry).toHaveBeenCalledOnce();
     expect(after.getAttribute("data-angle")).toBe("210");
-    expect(screen.getByRole("status").textContent).toBe(
-      en.products.customization.loading
-    );
+    expect(
+      within(
+        document.querySelector(".store-custom-preview") as HTMLElement
+      ).getByRole("status").textContent
+    ).toBe(en.products.customization.loading);
     fireEvent.click(screen.getByRole("button", { name: "Start render" }));
-    expect(screen.getByRole("status").textContent).toBe(
-      en.products.customization.loading
-    );
+    expect(
+      within(
+        document.querySelector(".store-custom-preview") as HTMLElement
+      ).getByRole("status").textContent
+    ).toBe(en.products.customization.loading);
     fireEvent.click(screen.getByRole("button", { name: "Resolve render" }));
-    expect(screen.getByRole("status").textContent).toBe(
-      en.products.customization.ready
-    );
+    expect(
+      within(
+        document.querySelector(".store-custom-preview") as HTMLElement
+      ).getByRole("status").textContent
+    ).toBe(en.products.customization.ready);
     expect(
       screen.queryByRole("button", { name: en.products.customization.retry })
     ).toBeNull();
@@ -523,19 +533,108 @@ describe("ProductCustomizer availability and selection", () => {
       const preview = screen.getByTestId("retail-spin");
       fireEvent.click(screen.getByRole("button", { name: "Rotate retail" }));
       fireEvent.click(screen.getByRole("button", { name: "Partial render" }));
-      expect(screen.getByRole("status").textContent).toBe(t.partial);
-      expect(screen.getByRole("status").getAttribute("aria-live")).toBe(
-        "polite"
-      );
+      expect(
+        within(
+          document.querySelector(".store-custom-preview") as HTMLElement
+        ).getByRole("status").textContent
+      ).toBe(t.partial);
+      expect(
+        within(document.querySelector(".store-custom-preview") as HTMLElement)
+          .getByRole("status")
+          .getAttribute("aria-live")
+      ).toBe("polite");
       fireEvent.click(screen.getByRole("button", { name: t.retry }));
       expect(fixtures.retry).toHaveBeenCalledOnce();
       expect(screen.getByTestId("retail-spin")).toBe(preview);
       expect(preview.isConnected).toBe(true);
       expect(preview.getAttribute("data-angle")).toBe("210");
-      expect(screen.getByRole("status").textContent).toBe(t.loading);
+      expect(
+        within(
+          document.querySelector(".store-custom-preview") as HTMLElement
+        ).getByRole("status").textContent
+      ).toBe(t.loading);
       fireEvent.click(screen.getByRole("button", { name: "Resolve render" }));
-      expect(screen.getByRole("status").textContent).toBe(t.ready);
+      expect(
+        within(
+          document.querySelector(".store-custom-preview") as HTMLElement
+        ).getByRole("status").textContent
+      ).toBe(t.ready);
       expect(screen.queryByRole("button", { name: t.retry })).toBeNull();
     }
   );
+  it.each(["en", "ja", "ko"] as const)(
+    "canonicalizes legacy personal and retail URLs without extra history in %s",
+    (locale) => {
+      const { length } = window.history;
+      render(
+        ui(
+          "?customize=false&housing=charcoal&keycaps=nicepbt-bow-retail&campaign=launch#render",
+          locale
+        )
+      );
+      expect(housingRadio("transparent").checked).toBe(true);
+      expect(keycapRadio("inventor").checked).toBe(true);
+      expect(screen.getByTestId("personal-gallery")).toBeTruthy();
+      expect(window.history.length).toBe(length);
+      let params = new URLSearchParams(window.location.search);
+      expect(params.has("customize")).toBe(false);
+      expect(params.get("housing")).toBe("transparent");
+      expect(params.get("keycaps")).toBe("inventor");
+      expect(params.get("campaign")).toBe("launch");
+      expect(window.location.hash).toBe("#render");
+      cleanup();
+      render(ui("?customize=true&housing=unknown&keycaps=unknown", locale));
+      params = new URLSearchParams(window.location.search);
+      expect(params.has("customize")).toBe(false);
+      expect(params.get("housing")).toBe("bone-white");
+      expect(params.get("keycaps")).toBe("retro-programmer-retail");
+      expect(screen.getByTestId("customization-pending")).toBeTruthy();
+      expect(window.history.length).toBe(length);
+    }
+  );
+
+  it.each(["en", "ja", "ko"] as const)(
+    "keeps explicit cross-pair URLs unavailable and image-free in %s",
+    (locale) => {
+      for (const [housing, keycaps] of [
+        ["transparent", "nicepbt-bow-retail"],
+        ["charcoal", "inventor"],
+      ]) {
+        render(ui(`?housing=${housing}&keycaps=${keycaps}`, locale));
+        expect(housingRadio(housing).checked).toBe(true);
+        expect(keycapRadio(keycaps).checked).toBe(true);
+        expect(screen.getByTestId("customization-unavailable")).toBeTruthy();
+        expect(
+          screen
+            .getByTestId("product-customizer")
+            .getAttribute("data-configuration")
+        ).toBe("unsupported");
+        expect(document.querySelectorAll("img, canvas")).toHaveLength(0);
+        expect(screen.queryByTestId("personal-gallery")).toBeNull();
+        cleanup();
+      }
+    }
+  );
+
+  it("pairs personal selectors atomically and restores the last retail counterpart", () => {
+    render(ui("?housing=charcoal&keycaps=nicepbt-bow-retail"));
+    fireEvent.click(keycapRadio("inventor"));
+    expect(housingRadio("transparent").checked).toBe(true);
+    expect(keycapRadio("inventor").checked).toBe(true);
+    expect(screen.getByTestId("personal-gallery")).toBeTruthy();
+    expect(
+      screen
+        .getByTestId("customization-pairing-notice")
+        .getAttribute("aria-live")
+    ).toBe("polite");
+    fireEvent.click(housingRadio("ice-blue"));
+    expect(housingRadio("ice-blue").checked).toBe(true);
+    expect(keycapRadio("nicepbt-bow-retail").checked).toBe(true);
+    fireEvent.click(housingRadio("transparent"));
+    expect(keycapRadio("inventor").checked).toBe(true);
+    fireEvent.click(keycapRadio("pbtfans-wob-retail"));
+    expect(housingRadio("ice-blue").checked).toBe(true);
+    expect(keycapRadio("pbtfans-wob-retail").checked).toBe(true);
+    expect(screen.queryByTestId("personal-gallery")).toBeNull();
+  });
 });

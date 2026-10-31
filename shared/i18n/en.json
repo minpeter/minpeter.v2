@@ -272,7 +272,7 @@
       "showcase": "Personal showcase",
       "customize": "Explore retail sets",
       "showcaseNote": "Unique personal keyboard · showcase only · not available to order",
-      "configurationNote": "Visual configuration preview only. Every new option uses a complete retail keycap set, without the personal logo keys. No ordering is available here.",
+      "configurationNote": "Choose a housing and keycap set to explore the appearance. Transparent × Inventor is the original personal keyboard, not a retail set. No ordering is available here.",
       "selected": "{housing} × {keycaps}",
       "previewLabel": "Selected configuration — reconstructed render; drag or use arrow keys to rotate in 30° steps",
       "pending": "This render is not ready",
@@ -282,8 +282,8 @@
       "ready": "Reviewed render · 12 views · 30° steps",
       "loadError": "The selected render could not be loaded.",
       "retry": "Retry this render",
-      "housing": "Housing · Bambu Lab PLA",
-      "keycaps": "Complete retail keycap set",
+      "housing": "Housing",
+      "keycaps": "Keycaps",
       "fullRetailSet": "Full set · no personal logo keys",
       "approximation": "Colors, surface finish and legends are visual approximations, not a guarantee of printed color or physical keycap compatibility. A render is not an order or stock confirmation.",
       "materialSource": "Manufacturer color reference",
@@ -295,12 +295,22 @@
         "ice-blue": "Ice Blue",
         "lilac-purple": "Lilac Purple",
         "dark-green": "Dark Green",
-        "white-marble": "White Marble"
+        "white-marble": "White Marble",
+        "transparent": "Transparent"
       },
       "partial": "Some views could not load. Rotation uses the nearest available view. You can retry loading.",
       "renderReady": "Render ready for this combination",
       "renderPending": "Render pending for this combination",
-      "marbleNote": "PLA Marble 13103: off-white with fine, irregular gray flecks. The swatch shows only the manufacturer’s base color, not the printed texture."
+      "marbleNote": "PLA Marble 13103: off-white with fine, irregular gray flecks. The swatch shows only the manufacturer’s base color, not the printed texture.",
+      "transparentNote": "Approximate appearance of the original translucent PETG showcase housing, not a Bambu Lab PLA color or a new retail material.",
+      "personalHousing": "Original translucent PETG · approximate appearance",
+      "personalOnly": "Personal showcase · not available to order",
+      "inventorNote": "Original personal keycaps with logo keys · not a retail set",
+      "pairedPersonal": "Transparent and Inventor are paired to show the original personal keyboard. Not available to order.",
+      "pairedRetail": "Switched to {housing} × {keycaps} to preview a retail combination.",
+      "unsupported": "This pairing is unavailable",
+      "unsupportedDetail": "Transparent housing and Inventor keycaps are only shown together as the original personal keyboard. Select both, or choose a retail housing and keycap set. No substitute image is shown.",
+      "switchToRetail": "Selecting this switches to a retail combination"
     }
   },
   "modCodeBlock": {

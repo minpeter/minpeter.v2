@@ -7,7 +7,11 @@ import {
   combinationToSpin,
   getValidatedCombination,
   HOUSING_OPTIONS,
+  isPersonalConfiguration,
+  isUnsupportedPersonalPair,
   KEYCAP_OPTIONS,
+  SELECTION_HOUSING_OPTIONS,
+  SELECTION_KEYCAP_OPTIONS,
   validateCombination,
 } from "./keyboard-customization";
 import manifests from "./keyboard-customization-manifests.json";
@@ -45,6 +49,30 @@ function fixture() {
 }
 
 describe("keyboard customization availability gates", () => {
+  it("keeps Inventor and Transparent paired outside every retail manifest", () => {
+    expect(SELECTION_HOUSING_OPTIONS).toHaveLength(8);
+    expect(SELECTION_KEYCAP_OPTIONS).toHaveLength(6);
+    expect(isPersonalConfiguration("transparent", "inventor")).toBe(true);
+    expect(isUnsupportedPersonalPair("transparent", "inventor")).toBe(false);
+    expect(getValidatedCombination("transparent", "inventor")).toBeNull();
+    expect(
+      validateCombination({
+        ...fixture(),
+        housingId: "transparent",
+        id: "transparent--inventor",
+        keycapId: "inventor",
+      })
+    ).toBeNull();
+    for (const housing of HOUSING_OPTIONS) {
+      expect(isUnsupportedPersonalPair(housing.id, "inventor")).toBe(true);
+      expect(isPersonalConfiguration(housing.id, "inventor")).toBe(false);
+    }
+    for (const kit of KEYCAP_OPTIONS) {
+      expect(isUnsupportedPersonalPair("transparent", kit.id)).toBe(true);
+      expect(isPersonalConfiguration("transparent", kit.id)).toBe(false);
+    }
+  });
+
   it("keeps seven material approximations and five logo-free retail candidates independently gated", () => {
     expect(HOUSING_OPTIONS).toHaveLength(7);
     expect(KEYCAP_OPTIONS).toHaveLength(5);

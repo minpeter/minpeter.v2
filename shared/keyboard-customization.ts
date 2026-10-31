@@ -27,7 +27,7 @@ export const HOUSING_OPTIONS = (
       : HOUSING_SOURCE,
 }));
 
-/** Full retail sets only; personal custom logo caps are showcase-only, never options. */
+/** Full retail render sets only; the unique Inventor showcase is modeled separately. */
 export const KEYCAP_OPTIONS = [
   {
     compatibility: "unverified",
@@ -77,6 +77,37 @@ export const KEYCAP_OPTIONS = [
 
 export type HousingId = (typeof HOUSING_OPTIONS)[number]["id"];
 export type KeycapId = (typeof KEYCAP_OPTIONS)[number]["id"];
+
+/** Selector-only personal choices never enter the retail render manifest schema. */
+export const SELECTION_HOUSING_OPTIONS = [
+  {
+    hex: "transparent",
+    id: "transparent",
+    material: "PETG",
+    materialCalibration: "approximate",
+    name: "Transparent",
+    personal: true,
+  },
+  ...HOUSING_OPTIONS,
+] as const;
+export const SELECTION_KEYCAP_OPTIONS = [
+  { id: "inventor", name: "Inventor", personal: true, personalLogos: true },
+  ...KEYCAP_OPTIONS,
+] as const;
+export type SelectionHousingId =
+  (typeof SELECTION_HOUSING_OPTIONS)[number]["id"];
+export type SelectionKeycapId = (typeof SELECTION_KEYCAP_OPTIONS)[number]["id"];
+
+export function isPersonalConfiguration(housing: string, keycaps: string) {
+  return housing === "transparent" && keycaps === "inventor";
+}
+
+export function isUnsupportedPersonalPair(housing: string, keycaps: string) {
+  return (
+    (housing === "transparent" || keycaps === "inventor") &&
+    !isPersonalConfiguration(housing, keycaps)
+  );
+}
 
 const angles = Array.from({ length: 12 }, (_, index) => index * 30);
 const digest = z.string().regex(/^[a-f0-9]{64}$/);

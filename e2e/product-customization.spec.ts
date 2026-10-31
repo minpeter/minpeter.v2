@@ -65,6 +65,22 @@ const [pendingTrail] = PENDING.flatMap((initial) =>
     ).map((keycapsChanged) => ({ housingChanged, initial, keycapsChanged }))
   )
 );
+// Prefer a keycap change: this remains an always-on regression for the original Back bug.
+const readyPairs = combinations.flatMap((first) =>
+  combinations
+    .filter(
+      (second) =>
+        first.id !== second.id &&
+        (first.housingId === second.housingId ||
+          first.keycapId === second.keycapId)
+    )
+    .map((second) => [first, second] as const)
+);
+const READY_PAIR =
+  readyPairs.find(([first, second]) => first.housingId === second.housingId) ??
+  readyPairs[0];
+type Combination = (typeof combinations)[number];
+
 const LOCALES = [
   { locale: "ko", messages: ko, prefix: "" },
   { locale: "en", messages: en, prefix: "/en" },
@@ -91,10 +107,9 @@ async function expectHistorySelection(
   try {
     await expect(page).toHaveURL(
       (url) =>
-        (url.searchParams.get("housing") ?? "bone-white") ===
+        (url.searchParams.get("housing") ?? "transparent") ===
           selection.housing &&
-        (url.searchParams.get("keycaps") ?? "retro-programmer-retail") ===
-          selection.keycaps
+        (url.searchParams.get("keycaps") ?? "inventor") === selection.keycaps
     );
     for (const group of ["housing", "keycaps"] as const) {
       await expect(
@@ -179,16 +194,364 @@ async function selectOption(
 async function expectPending(page: Page, text: string) {
   const customizer = page.getByTestId("product-customizer");
   await expect(page.getByTestId("customization-pending")).toBeVisible();
-  await expect(customizer.getByRole("status")).toContainText(text);
+  await expect(
+    page.getByTestId("customization-pending").getByRole("status")
+  ).toContainText(text);
   await expect(customizer.locator("img, canvas")).toHaveCount(0);
   await expect(customizer.getByTestId("product-spin")).toHaveCount(0);
   await expect(page.getByTestId("personal-showcase-notice")).toHaveCount(0);
 }
 
+/** Compare the full-resolution painted pixels with this selection's actual manifest frame.
+ * Both paths use the same browser decode/color conversion and copy compositing. Ignore RGB
+ * under zero alpha and allow one byte of rounding, not a screenshot/perceptual tolerance.
+ */
+async function expectReadyHistoryState(
+  page: Page,
+  combination: Combination,
+  messages: typeof en,
+  testInfo: TestInfo
+) {
+  await expectHistorySelection(
+    page,
+    { housing: combination.housingId, keycaps: combination.keycapId },
+    testInfo
+  );
+  await expect(page.locator(".store-custom-preview")).toHaveCount(1);
+  await expect(page.locator(".store-custom-preview")).toHaveAttribute(
+    "data-combination",
+    combination.id
+  );
+  await expect(page.getByTestId("customization-pending")).toHaveCount(0);
+  await expect(page.getByTestId("personal-showcase-notice")).toHaveCount(0);
+  const labels = messages.products.customization;
+  const housingName =
+    labels.housingNames[
+      combination.housingId as keyof typeof labels.housingNames
+    ];
+  const kitName = await page
+    .locator("label.store-custom-option")
+    .filter({
+      has: page.locator(
+        `input[name="keycaps"][value="${combination.keycapId}"]`
+      ),
+    })
+    .locator("span")
+    .evaluate((element) => element.firstChild?.textContent?.trim() ?? "");
+  expect(kitName).not.toBe("");
+  await expect(page.locator(".store-custom-selection")).toHaveText(
+    labels.selected
+      .replace("{housing}", housingName)
+      .replace("{keycaps}", kitName)
+  );
+  const spin = page.getByTestId("product-spin");
+  await spin.scrollIntoViewIfNeeded();
+  await expect(spin).toHaveAttribute("data-loaded-count", "12", {
+    timeout: 15_000,
+  });
+  await expect(spin).toHaveAttribute("data-frame", "11");
+  await expect(spin).toHaveAttribute("data-displayed-frame", "11");
+  await expect(spin).toHaveAttribute("aria-valuetext", "330°");
+  await expect(spin).toHaveAttribute("data-resolution", "full");
+  await expect(spin.locator("img")).toHaveCount(0);
+  await expect(spin.locator("canvas")).toHaveCount(1);
+  await expect(
+    page.locator(".store-custom-preview").getByRole("status")
+  ).toHaveText(labels.ready);
+  const source = combination.frames[11]?.src;
+  if (!source) {
+    throw new Error(`Missing 330 degree manifest frame: ${combination.id}`);
+  }
+  const comparison = await spin
+    .locator("canvas")
+    .evaluate(async (element, src) => {
+      const painted = element as HTMLCanvasElement;
+      const context = painted.getContext("2d");
+      if (!context) {
+        throw new Error("Painted canvas has no 2D context");
+      }
+      const response = await fetch(src);
+      if (!response.ok) {
+        throw new Error(`Reference frame returned ${response.status}`);
+      }
+      const bitmap = await createImageBitmap(await response.blob());
+      try {
+        const reference = document.createElement("canvas");
+        reference.width = painted.width;
+        reference.height = painted.height;
+        const expectedContext = reference.getContext("2d");
+        if (!expectedContext) {
+          throw new Error("Reference canvas has no 2D context");
+        }
+        expectedContext.globalCompositeOperation = "copy";
+        expectedContext.drawImage(
+          bitmap,
+          0,
+          0,
+          reference.width,
+          reference.height
+        );
+        const actual = context.getImageData(
+          0,
+          0,
+          painted.width,
+          painted.height
+        ).data;
+        const expected = expectedContext.getImageData(
+          0,
+          0,
+          reference.width,
+          reference.height
+        ).data;
+        let differences = 0;
+        let visiblePixels = 0;
+        for (let offset = 0; offset < expected.length; offset += 4) {
+          if (expected[offset + 3] > 0) {
+            visiblePixels += 1;
+          }
+          for (let channel = 0; channel < 4; channel += 1) {
+            if (
+              channel < 3 &&
+              expected[offset + 3] === 0 &&
+              actual[offset + 3] === 0
+            ) {
+              continue;
+            }
+            if (
+              Math.abs(expected[offset + channel] - actual[offset + channel]) >
+              1
+            ) {
+              differences += 1;
+            }
+          }
+        }
+        return {
+          differences,
+          height: painted.height,
+          visiblePixels,
+          width: painted.width,
+        };
+      } finally {
+        bitmap.close();
+      }
+    }, source);
+  expect(comparison).toMatchObject({
+    differences: 0,
+    height: 1536,
+    width: 1024,
+  });
+  expect(comparison.visiblePixels).toBeGreaterThan(0);
+}
+
 for (const { locale, prefix, messages } of LOCALES) {
   test.describe(`${locale} customization`, () => {
     test.use({ locale });
+    test("legacy URLs canonicalize and explicit personal cross-pairs stay image-free", async ({
+      page,
+    }) => {
+      const labels = messages.products.customization;
+      await page.goto(
+        `${prefix}${DETAIL}?customize=false&housing=charcoal&keycaps=nicepbt-bow-retail&campaign=launch#render`
+      );
+      await expect(page).toHaveURL(
+        (url) =>
+          !url.searchParams.has("customize") &&
+          url.searchParams.get("housing") === "transparent" &&
+          url.searchParams.get("keycaps") === "inventor" &&
+          url.searchParams.get("campaign") === "launch" &&
+          url.hash === "#render"
+      );
+      await expectSelection(page, {
+        housing: "transparent",
+        keycaps: "inventor",
+      });
+      await expect(page.getByTestId("personal-showcase-notice")).toHaveText(
+        labels.showcaseNote
+      );
+      await page.reload();
+      await expectSelection(page, {
+        housing: "transparent",
+        keycaps: "inventor",
+      });
+      const [retail] = combinations;
+      if (!retail) {
+        throw new Error(
+          "Legacy retail compatibility requires a reviewed combination"
+        );
+      }
+      await page.goto(
+        `${prefix}${DETAIL}?customize=true&housing=${retail.housingId}&keycaps=${retail.keycapId}`
+      );
+      await expect(page).toHaveURL(
+        (url) =>
+          !url.searchParams.has("customize") &&
+          url.searchParams.get("housing") === retail.housingId &&
+          url.searchParams.get("keycaps") === retail.keycapId
+      );
+      await expectSelection(page, {
+        housing: retail.housingId,
+        keycaps: retail.keycapId,
+      });
+      await page.getByTestId("product-spin").scrollIntoViewIfNeeded();
+      await expectRegistryPreview(page, retail.housingId, retail.keycapId);
+      for (const selection of [
+        { housing: "transparent", keycaps: retail.keycapId },
+        { housing: retail.housingId, keycaps: "inventor" },
+      ]) {
+        await page.goto(
+          `${prefix}${DETAIL}?housing=${selection.housing}&keycaps=${selection.keycaps}`
+        );
+        await expectSelection(page, selection);
+        await expect(
+          page.getByTestId("customization-unavailable")
+        ).toBeVisible();
+        await expect(
+          page.getByTestId("customization-unavailable").getByRole("status")
+        ).toContainText(labels.unsupported);
+        await expect(page.getByTestId("product-customizer")).toHaveAttribute(
+          "data-configuration",
+          "unsupported"
+        );
+        await expect(page.getByTestId("product-customizer")).toHaveAttribute(
+          "data-orderable",
+          "false"
+        );
+        await expect(
+          page.getByTestId("product-customizer").locator("img, canvas")
+        ).toHaveCount(0);
+        await expect(page.getByTestId("personal-showcase-notice")).toHaveCount(
+          0
+        );
+        await page.reload();
+        await expectSelection(page, selection);
+        await expect(
+          page.getByTestId("customization-unavailable")
+        ).toBeVisible();
+        await expect(
+          page.getByTestId("product-customizer").locator("img, canvas")
+        ).toHaveCount(0);
+      }
+    });
+
     for (const width of [320, 393, 1440]) {
+      test(`unified personal and retail selectors preserve history and refresh: ${prefix || "ko"}, ${width}px`, async ({
+        page,
+      }, testInfo) => {
+        const [retail] = combinations;
+        if (!retail) {
+          throw new Error(
+            "Unified selection coverage requires a reviewed retail combination"
+          );
+        }
+        const labels = messages.products.customization;
+        await page.setViewportSize({
+          height: width === 1440 ? 900 : 852,
+          width,
+        });
+        await page.emulateMedia({ reducedMotion: "reduce" });
+        await page.goto(`${prefix}${DETAIL}`);
+        await expectSelection(page, {
+          housing: "transparent",
+          keycaps: "inventor",
+        });
+        await expect(page.locator(".store-custom-modes")).toHaveCount(0);
+        await expect(page.locator('input[name="housing"]')).toHaveCount(
+          HOUSINGS.length + 1
+        );
+        await expect(page.locator('input[name="keycaps"]')).toHaveCount(
+          KEYCAPS.length + 1
+        );
+        await expect(page.getByTestId("product-customizer")).toHaveAttribute(
+          "data-configuration",
+          "personal"
+        );
+        await expect(page.getByTestId("product-customizer")).toHaveAttribute(
+          "data-orderable",
+          "false"
+        );
+        await expect(page.getByTestId("personal-showcase-notice")).toHaveText(
+          labels.showcaseNote
+        );
+        await expect(page.getByTestId("product-spin")).toHaveAttribute(
+          "aria-valuemax",
+          "71"
+        );
+        await expect(page.locator(".store-custom-selection")).toHaveText(
+          labels.selected
+            .replace("{housing}", labels.housingNames.transparent)
+            .replace("{keycaps}", "Inventor")
+        );
+        await selectOption(page, "housing", retail.housingId);
+        if (retail.keycapId !== "retro-programmer-retail") {
+          await selectOption(page, "keycaps", retail.keycapId);
+        }
+        await expectHistorySelection(
+          page,
+          { housing: retail.housingId, keycaps: retail.keycapId },
+          testInfo
+        );
+        await page.getByTestId("product-spin").scrollIntoViewIfNeeded();
+        await expectRegistryPreview(page, retail.housingId, retail.keycapId);
+        await expect(page.getByTestId("product-spin")).toHaveAttribute(
+          "aria-valuemax",
+          "11"
+        );
+        await selectOption(page, "keycaps", "inventor");
+        await expectHistorySelection(
+          page,
+          { housing: "transparent", keycaps: "inventor" },
+          testInfo
+        );
+        await expect(page.getByTestId("personal-showcase-notice")).toHaveText(
+          labels.showcaseNote
+        );
+        await expect(page.locator(".store-custom-preview")).toHaveCount(0);
+        await expect(
+          page.getByTestId("customization-pairing-notice")
+        ).toHaveText(labels.pairedPersonal);
+        await page.goBack();
+        await expectHistorySelection(
+          page,
+          { housing: retail.housingId, keycaps: retail.keycapId },
+          testInfo
+        );
+        await page.getByTestId("product-spin").scrollIntoViewIfNeeded();
+        await expectRegistryPreview(page, retail.housingId, retail.keycapId);
+        await page.goForward();
+        await expectHistorySelection(
+          page,
+          { housing: "transparent", keycaps: "inventor" },
+          testInfo
+        );
+        await expect(page.getByTestId("personal-showcase-notice")).toHaveText(
+          labels.showcaseNote
+        );
+        await page.reload();
+        await expectHistorySelection(
+          page,
+          { housing: "transparent", keycaps: "inventor" },
+          testInfo
+        );
+        await expect(page.getByTestId("product-spin")).toHaveAttribute(
+          "aria-valuemax",
+          "71"
+        );
+        await expect(page.getByTestId("product-customizer")).toHaveAttribute(
+          "data-orderable",
+          "false"
+        );
+        await expect(page.locator(".store-custom-preview")).toHaveCount(0);
+        expect(
+          await page.evaluate(
+            () => document.documentElement.scrollWidth <= innerWidth
+          )
+        ).toBe(true);
+        await page.screenshot({
+          fullPage: true,
+          path: testInfo.outputPath("unified-personal-selection.png"),
+        });
+      });
+
       test(`pending retail configuration, controls and history: ${prefix || "ko"}, ${width}px`, async ({
         page,
       }, testInfo) => {
@@ -210,20 +573,18 @@ for (const { locale, prefix, messages } of LOCALES) {
           width,
         });
         await page.goto(
-          `${prefix}${DETAIL}?customize=true&housing=${initial.housing}&keycaps=${initial.keycaps}`
+          `${prefix}${DETAIL}?housing=${initial.housing}&keycaps=${initial.keycaps}`
         );
         await expect(page).toHaveURL(
           (url) => url.pathname === `${prefix}${DETAIL}`
         );
         await expectPending(page, labels.pending);
-        await expect(
-          page.getByRole("button", { exact: true, name: labels.customize })
-        ).toHaveAttribute("aria-pressed", "true");
+        await expect(page.locator(".store-custom-modes")).toHaveCount(0);
         await expect(page.locator('input[name="housing"]')).toHaveCount(
-          HOUSINGS.length
+          HOUSINGS.length + 1
         );
         await expect(page.locator('input[name="keycaps"]')).toHaveCount(
-          KEYCAPS.length
+          KEYCAPS.length + 1
         );
         await expectSelection(page, initial);
         await expect(page.getByTestId("product-customizer")).toContainText(
@@ -241,13 +602,13 @@ for (const { locale, prefix, messages } of LOCALES) {
         await selectOption(page, "housing", housingChanged.housing);
         await expect(page).toHaveURL(
           (url) =>
-            (url.searchParams.get("housing") ?? "bone-white") ===
+            (url.searchParams.get("housing") ?? "transparent") ===
             housingChanged.housing
         );
         await selectOption(page, "keycaps", keycapsChanged.keycaps);
         await expect(page).toHaveURL(
           (url) =>
-            (url.searchParams.get("keycaps") ?? "retro-programmer-retail") ===
+            (url.searchParams.get("keycaps") ?? "inventor") ===
             keycapsChanged.keycaps
         );
         // Confirm both URL fields and controlled inputs before traversing history.
@@ -261,22 +622,24 @@ for (const { locale, prefix, messages } of LOCALES) {
         await expectHistorySelection(page, housingChanged, testInfo);
         await expectPending(page, labels.pending);
 
-        await page
-          .getByRole("button", { exact: true, name: labels.showcase })
-          .click();
-        await expect(page).toHaveURL(
-          (url) => !url.searchParams.has("customize")
+        await selectOption(page, "housing", "transparent");
+        await expectHistorySelection(
+          page,
+          { housing: "transparent", keycaps: "inventor" },
+          testInfo
         );
         await expect(page.getByTestId("personal-showcase-notice")).toHaveText(
           labels.showcaseNote
         );
-        await expect(page.getByTestId("product-spin")).toHaveCount(1);
-        await page
-          .getByRole("button", { exact: true, name: labels.customize })
-          .click();
-        await expect(page).toHaveURL(
-          (url) => url.searchParams.get("customize") === "true"
+        await expect(page.getByTestId("product-spin")).toHaveAttribute(
+          "aria-valuemax",
+          "71"
         );
+        await expect(page.getByTestId("product-customizer")).toHaveAttribute(
+          "data-orderable",
+          "false"
+        );
+        await selectOption(page, "housing", housingChanged.housing);
         await expectPending(page, labels.pending);
         await expectSelection(page, housingChanged);
         // Cache Components may retain an inaccessible previous route tree.
@@ -292,6 +655,61 @@ for (const { locale, prefix, messages } of LOCALES) {
         });
       });
 
+      test(`ready retail history preserves selection, pixels and angle: ${prefix || "ko"}, ${width}px`, async ({
+        page,
+      }, testInfo) => {
+        // This must not silently disappear when the pending catalog becomes empty.
+        if (!READY_PAIR) {
+          throw new Error(
+            "Ready history coverage requires two reviewed adjacent combinations"
+          );
+        }
+        const [first, second] = READY_PAIR;
+        await page.setViewportSize({
+          height: width === 1440 ? 900 : 852,
+          width,
+        });
+        await page.emulateMedia({ reducedMotion: "reduce" });
+        await page.goto(
+          `${prefix}${DETAIL}?housing=${first.housingId}&keycaps=${first.keycapId}`
+        );
+        const spin = page.getByTestId("product-spin");
+        await spin.scrollIntoViewIfNeeded();
+        await expect(spin).toHaveAttribute("data-loaded-count", "12", {
+          timeout: 15_000,
+        });
+        await spin.press("ArrowLeft");
+        await expectReadyHistoryState(page, first, messages, testInfo);
+        const firstCanvas = await spin.locator("canvas").elementHandle();
+        if (!firstCanvas) {
+          throw new Error("First ready canvas is missing");
+        }
+        if (first.housingId === second.housingId) {
+          await selectOption(page, "keycaps", second.keycapId);
+        } else {
+          await selectOption(page, "housing", second.housingId);
+        }
+        await expectReadyHistoryState(page, second, messages, testInfo);
+        expect(await firstCanvas.evaluate((canvas) => canvas.isConnected)).toBe(
+          false
+        );
+        const secondCanvas = await spin.locator("canvas").elementHandle();
+        if (!secondCanvas) {
+          throw new Error("Second ready canvas is missing");
+        }
+        await page.goBack();
+        await expectReadyHistoryState(page, first, messages, testInfo);
+        expect(
+          await secondCanvas.evaluate((canvas) => canvas.isConnected)
+        ).toBe(false);
+        await page.goForward();
+        await expectReadyHistoryState(page, second, messages, testInfo);
+        await page.screenshot({
+          fullPage: true,
+          path: testInfo.outputPath("ready-history-forward.png"),
+        });
+      });
+
       test(`reviewed retail render layout and all angles: ${prefix || "ko"}, ${width}px`, async ({
         page,
       }, testInfo) => {
@@ -303,7 +721,7 @@ for (const { locale, prefix, messages } of LOCALES) {
         await page.setViewportSize({ height, width });
         await page.emulateMedia({ reducedMotion: "reduce" });
         await page.goto(
-          `${prefix}${DETAIL}?customize=true&housing=${combination.housingId}&keycaps=${combination.keycapId}`
+          `${prefix}${DETAIL}?housing=${combination.housingId}&keycaps=${combination.keycapId}`
         );
         await expect(page).toHaveURL(
           (url) => url.pathname === `${prefix}${DETAIL}`
@@ -322,7 +740,7 @@ for (const { locale, prefix, messages } of LOCALES) {
           timeout: 15_000,
         });
         await expect(
-          page.getByTestId("product-customizer").getByRole("status")
+          page.locator(".store-custom-preview").getByRole("status")
         ).toHaveText(labels.ready);
         await expect(spin.locator("img")).toHaveCount(0);
         await expect(spin.locator("canvas")).toHaveCount(1);
@@ -401,9 +819,7 @@ test("every unvalidated retail combination stays image-free without custom-frame
       }
       // Navigate atomically so a previous kit paired with the next housing cannot
       // briefly activate a validated combination between the two radio clicks.
-      await page.goto(
-        `/en${DETAIL}?customize=true&housing=${housing}&keycaps=${keycaps}`
-      );
+      await page.goto(`/en${DETAIL}?housing=${housing}&keycaps=${keycaps}`);
       await expect(page.locator(`input[value="${housing}"]`)).toBeChecked();
       await expect(page.locator(`input[value="${keycaps}"]`)).toBeChecked();
       await expectPending(page, en.products.customization.pending);
@@ -507,7 +923,7 @@ test("validated retail frames load only the selection, stay bounded and refine a
   });
   try {
     await page.goto(
-      `/en${DETAIL}?customize=true&housing=${combination.housingId}&keycaps=${combination.keycapId}`
+      `/en${DETAIL}?housing=${combination.housingId}&keycaps=${combination.keycapId}`
     );
     const spin = page.getByTestId("product-spin");
     await expect(spin).toHaveAttribute("aria-valuemax", "11");
@@ -526,7 +942,7 @@ test("validated retail frames load only the selection, stay bounded and refine a
     });
     await expect(spin).toHaveAttribute("data-displayed-frame", "1");
     await expect(
-      page.getByTestId("product-customizer").getByRole("status")
+      page.locator(".store-custom-preview").getByRole("status")
     ).toHaveText(en.products.customization.ready);
     await spin.press("ArrowLeft");
     await spin.press("ArrowLeft");
@@ -602,7 +1018,7 @@ test("switching validated combinations shares the global three-request limit", a
   });
   try {
     await page.goto(
-      `/en${DETAIL}?customize=true&housing=${first.housingId}&keycaps=${first.keycapId}`
+      `/en${DETAIL}?housing=${first.housingId}&keycaps=${first.keycapId}`
     );
     await expect.poll(() => network.pending).toBe(3);
     if (first.housingId === second.housingId) {
@@ -640,16 +1056,15 @@ test("switching validated combinations shares the global three-request limit", a
   }
 });
 
-test("every reviewed retail combination has a full-resolution visual reference", async ({
-  page,
-}, testInfo) => {
-  test.setTimeout(120_000);
-  // biome-ignore lint/suspicious/noSkippedTests: Visual references require reviewed manifests.
-  test.skip(combinations.length === 0, "No reviewed render is available");
-  await page.setViewportSize({ height: 900, width: 1440 });
-  await page.emulateMedia({ reducedMotion: "reduce" });
-  for (const combination of combinations) {
-    const path = `/en${DETAIL}?customize=true&housing=${combination.housingId}&keycaps=${combination.keycapId}`;
+// Independent deadlines, retries and screenshots scale to the full 35-combination catalog.
+for (const combination of combinations) {
+  test(`reviewed retail visual reference: ${combination.id}`, async ({
+    page,
+  }, testInfo) => {
+    await page.setViewportSize({ height: 900, width: 1440 });
+    await page.emulateMedia({ reducedMotion: "reduce" });
+
+    const path = `/en${DETAIL}?housing=${combination.housingId}&keycaps=${combination.keycapId}`;
     await page.goto(path);
     await expect(page).toHaveURL(
       (url) => `${url.pathname}${url.search}` === path
@@ -695,5 +1110,5 @@ test("every reviewed retail combination has a full-resolution visual reference",
       fullPage: true,
       path: testInfo.outputPath(`reviewed-${combination.id}.png`),
     });
-  }
-});
+  });
+}
