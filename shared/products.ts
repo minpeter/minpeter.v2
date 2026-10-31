@@ -40,12 +40,12 @@ export interface ProductSpin {
 }
 
 /**
- * Link-preview media served from `public/assets`: an MP4 turntable for `og:video` plus a 1200×630 PNG still
- * (`og:image`) for crawlers that skip video.
+ * 1200×630 link-preview media served from `public/assets`: a PNG still (`og:image`), the turntable MP4
+ * (`og:video`), a looping GIF of it, and a player page for X's player card.
  */
 export interface ProductPreview {
   image: string;
-  video: { height: number; url: string; width: number };
+  video: { animatedImage: string; player: string; url: string };
 }
 
 export interface Product {
@@ -74,9 +74,9 @@ export const PRODUCTS: readonly Product[] = [
     preview: {
       image: "/assets/products/rule60-hhkb-unibody/og.png",
       video: {
-        height: 1536,
-        url: "/assets/products/rule60-hhkb-unibody/preview.mp4",
-        width: 1024,
+        animatedImage: "/assets/products/rule60-hhkb-unibody/og.gif",
+        player: "/assets/products/rule60-hhkb-unibody/player.html",
+        url: "/assets/products/rule60-hhkb-unibody/og.mp4",
       },
     },
     renders: [
