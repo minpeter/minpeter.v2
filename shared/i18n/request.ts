@@ -1,9 +1,9 @@
-import deepmerge from "deepmerge";
 import { locale as getRootLocale } from "next/root-params";
 import type { Formats } from "next-intl";
 import { hasLocale } from "next-intl";
 import { getRequestConfig } from "next-intl/server";
 
+import { mergeMessages } from "./merge-messages";
 import { routing } from "./routing";
 
 export const formats = {
@@ -63,9 +63,7 @@ export default getRequestConfig(async ({ locale: explicitLocale }) => {
       import(`./${locale}.json`),
       import(`./${routing.defaultLocale}.json`),
     ]);
-  const messages = deepmerge(defaultMessages, currentMessages, {
-    arrayMerge: (_destination, source) => source,
-  });
+  const messages = mergeMessages(defaultMessages, currentMessages);
   return {
     locale,
     messages,
