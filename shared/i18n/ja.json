@@ -245,6 +245,7 @@
     "downloadFiles": "印刷ファイルを入手",
     "descriptionLabel": "説明",
     "detailsLabel": "詳細",
+    "upcoming": "発売予定",
     "renderAlts": {
       "rule60Assembled": "CADレンダー：パームレスト一体型トップケースを組み立てた状態（左半分グレー、右半分ブルー）",
       "rule60Top": "CADレンダー：トップケースを上から見た状態",

@@ -52,7 +52,10 @@ async function ProductDetail({
     notFound();
   }
 
-  const t = await getTranslations("products");
+  const [locale, t] = await Promise.all([
+    getLocale(),
+    getTranslations("products"),
+  ]);
   const slides = product.renders.length + 1;
 
   return (
@@ -85,6 +88,23 @@ async function ProductDetail({
           <p className="store-label text-muted-foreground">
             {t(`items.${product.key}.variant`)}
           </p>
+          {product.upcomingPrice ? (
+            <p
+              className="store-label mt-3 flex flex-wrap items-baseline gap-x-3"
+              data-testid="product-price"
+            >
+              <span className="text-foreground">
+                {new Intl.NumberFormat(locale, {
+                  currency: "KRW",
+                  style: "currency",
+                }).formatRange(
+                  product.upcomingPrice.min,
+                  product.upcomingPrice.max
+                )}
+              </span>
+              <span className="text-muted-foreground">{t("upcoming")}</span>
+            </p>
+          ) : null}
         </div>
 
         <div className="store-actions">
