@@ -502,6 +502,59 @@ describe("ProductSpin progressive canvas", () => {
     expect(listeners.size).toBe(0);
   });
 
+  it("turns by mouse movement over the render, not by where the pointer enters", () => {
+    vi.stubGlobal(
+      "matchMedia",
+      vi.fn(() => ({
+        addEventListener: vi.fn(),
+        matches: false,
+        removeEventListener: vi.fn(),
+      }))
+    );
+    const callbacks: FrameRequestCallback[] = [];
+    vi.stubGlobal("requestAnimationFrame", (callback: FrameRequestCallback) =>
+      callbacks.push(callback)
+    );
+    vi.stubGlobal("cancelAnimationFrame", () => {
+      callbacks.length = 0;
+    });
+    let now = 0;
+    const settle = () => {
+      act(() => {
+        while (callbacks.length > 0) {
+          now += 20;
+          callbacks.shift()?.(now);
+        }
+      });
+    };
+    // 720 px wide: 10 px of travel is one of the 72 frames.
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
+      DOMRect.fromRect({ height: 1080, width: 720, x: 0, y: 0 })
+    );
+    const slider = mountSpin();
+
+    fireEvent.pointerEnter(slider, { clientX: 600, pointerType: "mouse" });
+    fireEvent.pointerMove(slider, { clientX: 600, pointerType: "mouse" });
+    settle();
+    expect(slider.getAttribute("data-frame")).toBe("0");
+
+    fireEvent.pointerMove(slider, { clientX: 630, pointerType: "mouse" });
+    settle();
+    expect(slider.getAttribute("data-frame")).toBe("3");
+
+    fireEvent.pointerMove(slider, { clientX: 570, pointerType: "mouse" });
+    settle();
+    expect(slider.getAttribute("data-frame")).toBe("69");
+
+    fireEvent.pointerLeave(slider, { pointerType: "mouse" });
+    settle();
+    expect(slider.getAttribute("data-frame")).toBe("0");
+    fireEvent.pointerEnter(slider, { clientX: 100, pointerType: "mouse" });
+    fireEvent.pointerMove(slider, { clientX: 100, pointerType: "mouse" });
+    settle();
+    expect(slider.getAttribute("data-frame")).toBe("0");
+  });
+
   it("leaves vertical touch panning enabled and does not animate on reduced-motion hover", () => {
     const slider = mountSpin();
     expect(slider.classList.contains("touch-pan-y")).toBe(true);
