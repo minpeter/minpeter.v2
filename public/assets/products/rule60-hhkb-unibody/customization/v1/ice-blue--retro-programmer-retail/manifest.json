@@ -1,0 +1,1010 @@
+{
+  "id": "ice-blue--retro-programmer-retail",
+  "housingId": "ice-blue",
+  "keycapId": "retro-programmer-retail",
+  "status": "validated",
+  "sourceDigest": "159d26e6cedfae2481708c5a45abd174bf910c9db36247ae58ef02f6e124e3b2",
+  "kitQaStatus": "60-of-60-passed",
+  "kitQa": {
+    "status": "60-of-60-passed",
+    "reviewer": "Orchestrator render-pipeline worker",
+    "reviewedAt": "2026-10-31T07:46:23.119657+00:00",
+    "keys": [
+      {
+        "position": "Esc",
+        "passed": true,
+        "reviewScope": "v2 top/oblique contact inspection; inherited57textureprovenance; 3newreplacementobliques additionally opened",
+        "evidence": [
+          {
+            "path": "individual_keycaps_v2/key_00_Esc_top.png",
+            "sha256": "306b95d03c938fe16736304fdb44b173afff41a72a1da99980bb5d60f6a4520b"
+          },
+          {
+            "path": "individual_keycaps_v2/key_00_Esc_oblique.png",
+            "sha256": "cb539dbf3b365d3677f22c66cfcdc5309cfbeac4ee2023dab348792b28423915"
+          }
+        ]
+      },
+      {
+        "position": "1",
+        "passed": true,
+        "reviewScope": "v2 top/oblique contact inspection; inherited57textureprovenance; 3newreplacementobliques additionally opened",
+        "evidence": [
+          {
+            "path": "individual_keycaps_v2/key_01_1_top.png",
+            "sha256": "6b3c20a985e89cb23643e0b605de2b0a80cd8fc8953e004639a5dd550544ce85"
+          },
+          {
+            "path": "individual_keycaps_v2/key_01_1_oblique.png",
+            "sha256": "26625d28ad152fbd88a5cc3cbe15aa0df035a0f065d040a708c13a948651a2b6"
+          }
+        ]
+      },
+      {
+        "position": "2",
+        "passed": true,
+        "reviewScope": "v2 top/oblique contact inspection; inherited57textureprovenance; 3newreplacementobliques additionally opened",
+        "evidence": [
+          {
+            "path": "individual_keycaps_v2/key_02_2_top.png",
+            "sha256": "6d4f022050b15c389779aa78a964c69ffe2d78b4f00ad44c5100c62416d209ba"
+          },
+          {
+            "path": "individual_keycaps_v2/key_02_2_oblique.png",
+            "sha256": "46e11d80b60153b3d26321e642b1b5388f807cb8f8de541ee568d75f04b6610a"
+          }
+        ]
+      },
+      {
+        "position": "3",
+        "passed": true,
+        "reviewScope": "v2 top/oblique contact inspection; inherited57textureprovenance; 3newreplacementobliques additionally opened",
+        "evidence": [
+          {
+            "path": "individual_keycaps_v2/key_03_3_top.png",
+            "sha256": "b68f0f14d975161bf5ff01ab261e679db60e78c4c25a29d2443b079e6313d273"
+          },
+          {
+            "path": "individual_keycaps_v2/key_03_3_oblique.png",
+            "sha256": "23160955b8c8a64c697d99a3b6dbe8d9744fac7596bd477745dc49af851cc6f1"
+          }
+        ]
+      },
+      {
+        "position": "4",
+        "passed": true,
+        "reviewScope": "v2 top/oblique contact inspection; inherited57textureprovenance; 3newreplacementobliques additionally opened",
+        "evidence": [
+          {
+            "path": "individual_keycaps_v2/key_04_4_top.png",
+            "sha256": "34127a42127a98b2512bded7020bd8289f1858349c7fbc09e730b56ba2d07803"
+          },
+          {
+            "path": "individual_keycaps_v2/key_04_4_oblique.png",
+            "sha256": "3425cc3fc4d672443db4e21903ed0d49b86bb220cefbf9e93f49f72e4b2bc18b"
+          }
+        ]
+      },
+      {
+        "position": "5",
+        "passed": true,
+        "reviewScope": "v2 top/oblique contact inspection; inherited57textureprovenance; 3newreplacementobliques additionally opened",
+        "evidence": [
+          {
+            "path": "individual_keycaps_v2/key_05_5_top.png",
+            "sha256": "3173ae96f32cbea6e93a409c6a92bb06d8c91dcb613d393ea79f6b2ecf14aeed"
+          },
+          {
+            "path": "individual_keycaps_v2/key_05_5_oblique.png",
+            "sha256": "e93338f31bc3b82507ce1adef4b935242ec305e7bf5bad028897650b33189b59"
+          }
+        ]
+      },
+      {
+        "position": "6",
+        "passed": true,
+        "reviewScope": "v2 top/oblique contact inspection; inherited57textureprovenance; 3newreplacementobliques additionally opened",
+        "evidence": [
+          {
+            "path": "individual_keycaps_v2/key_06_6_top.png",
+            "sha256": "c775aaa7bfd453304c59aca6933628576eb56a9ed92ec2a629e6b3d177d2dfa4"
+          },
+          {
+            "path": "individual_keycaps_v2/key_06_6_oblique.png",
+            "sha256": "94bb763751559fe2a1e60696f9548bf5e51bfd4413497dab9633dd7a58e3bee2"
+          }
+        ]
+      },
+      {
+        "position": "7",
+        "passed": true,
+        "reviewScope": "v2 top/oblique contact inspection; inherited57textureprovenance; 3newreplacementobliques additionally opened",
+        "evidence": [
+          {
+            "path": "individual_keycaps_v2/key_07_7_top.png",
+            "sha256": "9805864029d336001ef8aff3fa5b04ba920c3bb3602e145454efa16aed1f1822"
+          },
+          {
+            "path": "individual_keycaps_v2/key_07_7_oblique.png",
+            "sha256": "6f47895565ef3b77ede2e0dd56c74e9b7c55a5c7ac0dff30d48fb29b25466249"
+          }
+        ]
+      },
+      {
+        "position": "8",
+        "passed": true,
+        "reviewScope": "v2 top/oblique contact inspection; inherited57textureprovenance; 3newreplacementobliques additionally opened",
+        "evidence": [
+          {
+            "path": "individual_keycaps_v2/key_08_8_top.png",
+            "sha256": "dcea1366c455fcf4f7ed18882908f90396bb5624951d8d2ff8bc716f98196f1f"
+          },
+          {
+            "path": "individual_keycaps_v2/key_08_8_oblique.png",
+            "sha256": "0f4e36827938f2624b49c776613a35496b6c4deeedbe6ef5f5c864c3bf92feef"
+          }
+        ]
+      },
+      {
+        "position": "9",
+        "passed": true,
+        "reviewScope": "v2 top/oblique contact inspection; inherited57textureprovenance; 3newreplacementobliques additionally opened",
+        "evidence": [
+          {
+            "path": "individual_keycaps_v2/key_09_9_top.png",
+            "sha256": "e85a2de3f9dd2f785734a7c3f770f7819e31116318049f69cabe9c96d6794a23"
+          },
+          {
+            "path": "individual_keycaps_v2/key_09_9_oblique.png",
+            "sha256": "9b4ddc184bcbe6550583775bfe5987d2aec45e20dcb8508b51772b498e8087b1"
+          }
+        ]
+      },
+      {
+        "position": "0",
+        "passed": true,
+        "reviewScope": "v2 top/oblique contact inspection; inherited57textureprovenance; 3newreplacementobliques additionally opened",
+        "evidence": [
+          {
+            "path": "individual_keycaps_v2/key_10_0_top.png",
+            "sha256": "93495983438862e574c70a613d2eb1eef0e5371ea5b9b80543ce8dbeeaa75dde"
+          },
+          {
+            "path": "individual_keycaps_v2/key_10_0_oblique.png",
+            "sha256": "420d3afc83aa5130a9a59dd9d690bc018d79bf260a630f86fab991c406f970a5"
+          }
+        ]
+      },
+      {
+        "position": "minus",
+        "passed": true,
+        "reviewScope": "v2 top/oblique contact inspection; inherited57textureprovenance; 3newreplacementobliques additionally opened",
+        "evidence": [
+          {
+            "path": "individual_keycaps_v2/key_11_minus_top.png",
+            "sha256": "e65d8dc42ef78af5189b197472d5465b4a34a80234ffeac4acdd4b302179fabf"
+          },
+          {
+            "path": "individual_keycaps_v2/key_11_minus_oblique.png",
+            "sha256": "46abbf0acf2f9b244544a12537aa99bbf01181f463bbcbba02c60c963d8015fb"
+          }
+        ]
+      },
+      {
+        "position": "plus",
+        "passed": true,
+        "reviewScope": "v2 top/oblique contact inspection; inherited57textureprovenance; 3newreplacementobliques additionally opened",
+        "evidence": [
+          {
+            "path": "individual_keycaps_v2/key_12_plus_top.png",
+            "sha256": "be0e06359fcf63ad4e79e19dfe94e4018cd512660b9f8a1649f9c4aa3ac7ef88"
+          },
+          {
+            "path": "individual_keycaps_v2/key_12_plus_oblique.png",
+            "sha256": "49af888a37699f50285f5c9b82ec342eb82f557fdf1bd8de07a445f38242d3dd"
+          }
+        ]
+      },
+      {
+        "position": "blue",
+        "passed": true,
+        "reviewScope": "v2 top/oblique contact inspection; inherited57textureprovenance; 3newreplacementobliques additionally opened",
+        "evidence": [
+          {
+            "path": "individual_keycaps_v2/key_13_blue_top.png",
+            "sha256": "0eb843eacd38c05ec8d0ff51e253eb01cf0ef426519a7ad960215e859443f6b9"
+          },
+          {
+            "path": "individual_keycaps_v2/key_13_blue_oblique.png",
+            "sha256": "176b783e8a6756eaec25c06f6015478ada8490841f6f3f24443411f345c4973e"
+          }
+        ]
+      },
+      {
+        "position": "white",
+        "passed": true,
+        "reviewScope": "v2 top/oblique contact inspection; inherited57textureprovenance; 3newreplacementobliques additionally opened",
+        "evidence": [
+          {
+            "path": "individual_keycaps_v2/key_14_white_top.png",
+            "sha256": "15f6e05ea72aa906dc1644989a6a9fa2412b4cb0adb1f6ee9896fa8ee54d6d38"
+          },
+          {
+            "path": "individual_keycaps_v2/key_14_white_oblique.png",
+            "sha256": "e95ece679526eee2f84bec01bb0e7499f375621e11c9729c904626acbbbeb249"
+          }
+        ]
+      },
+      {
+        "position": "Tab",
+        "passed": true,
+        "reviewScope": "v2 top/oblique contact inspection; inherited57textureprovenance; 3newreplacementobliques additionally opened",
+        "evidence": [
+          {
+            "path": "individual_keycaps_v2/key_15_Tab_top.png",
+            "sha256": "0513fb1f55b80417e8606ea2206623bead7078d734780f2f2149103544a90f98"
+          },
+          {
+            "path": "individual_keycaps_v2/key_15_Tab_oblique.png",
+            "sha256": "52f42360576851c60c98e32c7f6b84d6f416d970fcdf79e020dafcb8c42516dd"
+          }
+        ]
+      },
+      {
+        "position": "Q",
+        "passed": true,
+        "reviewScope": "v2 top/oblique contact inspection; inherited57textureprovenance; 3newreplacementobliques additionally opened",
+        "evidence": [
+          {
+            "path": "individual_keycaps_v2/key_16_Q_top.png",
+            "sha256": "17f820b65ed88eb8e3b33dfaa4e7501c26dd0b469a4f7702541aa69653b544f3"
+          },
+          {
+            "path": "individual_keycaps_v2/key_16_Q_oblique.png",
+            "sha256": "f347d1c7d8720b0386ce3cebd889d75416dd7b84b5ca6a090a1b54454a3b9cef"
+          }
+        ]
+      },
+      {
+        "position": "W",
+        "passed": true,
+        "reviewScope": "v2 top/oblique contact inspection; inherited57textureprovenance; 3newreplacementobliques additionally opened",
+        "evidence": [
+          {
+            "path": "individual_keycaps_v2/key_17_W_top.png",
+            "sha256": "514a59d5b18eda12825c6feaa49057f879aac9c4397a5a42ec5fb91c07396018"
+          },
+          {
+            "path": "individual_keycaps_v2/key_17_W_oblique.png",
+            "sha256": "c40ae6e8b9b67e5a57a4d4c5344ae2794c4d50efedca77d64042909e2bfb0216"
+          }
+        ]
+      },
+      {
+        "position": "E",
+        "passed": true,
+        "reviewScope": "v2 top/oblique contact inspection; inherited57textureprovenance; 3newreplacementobliques additionally opened",
+        "evidence": [
+          {
+            "path": "individual_keycaps_v2/key_18_E_top.png",
+            "sha256": "fd83716b251245cdb39240fb7c246a4b50d4531decc1a96887bbd0c089b3e757"
+          },
+          {
+            "path": "individual_keycaps_v2/key_18_E_oblique.png",
+            "sha256": "a63d2093c1827b88053dcec22f68f36fe5a3f53370ca6ae49deaa63e02e4521d"
+          }
+        ]
+      },
+      {
+        "position": "R",
+        "passed": true,
+        "reviewScope": "v2 top/oblique contact inspection; inherited57textureprovenance; 3newreplacementobliques additionally opened",
+        "evidence": [
+          {
+            "path": "individual_keycaps_v2/key_19_R_top.png",
+            "sha256": "d758059416b6ec65e2d6f0a8b5d96677b78d159d44ab0a60318365288e239ef8"
+          },
+          {
+            "path": "individual_keycaps_v2/key_19_R_oblique.png",
+            "sha256": "90c7692518b90d48c63c669072ad3d65f7e93b9119bfb96c85cf70111e155505"
+          }
+        ]
+      },
+      {
+        "position": "T",
+        "passed": true,
+        "reviewScope": "v2 top/oblique contact inspection; inherited57textureprovenance; 3newreplacementobliques additionally opened",
+        "evidence": [
+          {
+            "path": "individual_keycaps_v2/key_20_T_top.png",
+            "sha256": "e10348bdcb4582c5c8fc2ad316f7c884893e15bd0b3f631a4412347e98f5cef2"
+          },
+          {
+            "path": "individual_keycaps_v2/key_20_T_oblique.png",
+            "sha256": "138e6841a5e5986695eff37b651f15ffae9fc2b23ad1c70c5abd63f40a90e9ba"
+          }
+        ]
+      },
+      {
+        "position": "Y",
+        "passed": true,
+        "reviewScope": "v2 top/oblique contact inspection; inherited57textureprovenance; 3newreplacementobliques additionally opened",
+        "evidence": [
+          {
+            "path": "individual_keycaps_v2/key_21_Y_top.png",
+            "sha256": "e6d1586311e9267947df8d0736779dd997d52acb6842d9ffc1fd1f3d96b08daa"
+          },
+          {
+            "path": "individual_keycaps_v2/key_21_Y_oblique.png",
+            "sha256": "6d4cf95bf1245a1e0c50a6f02ad34ef7305ab8bb514ad6485974174e3c51e4dd"
+          }
+        ]
+      },
+      {
+        "position": "U",
+        "passed": true,
+        "reviewScope": "v2 top/oblique contact inspection; inherited57textureprovenance; 3newreplacementobliques additionally opened",
+        "evidence": [
+          {
+            "path": "individual_keycaps_v2/key_22_U_top.png",
+            "sha256": "1b484e64d41143074962072913b9e77fbad224769cebe4a06824cf128fa58594"
+          },
+          {
+            "path": "individual_keycaps_v2/key_22_U_oblique.png",
+            "sha256": "51e931f94ca9f01eaf960837fe11af294e1f63a9243f3a8789296609e471f75c"
+          }
+        ]
+      },
+      {
+        "position": "I",
+        "passed": true,
+        "reviewScope": "v2 top/oblique contact inspection; inherited57textureprovenance; 3newreplacementobliques additionally opened",
+        "evidence": [
+          {
+            "path": "individual_keycaps_v2/key_23_I_top.png",
+            "sha256": "d377738372df6091e58525d4887f7154b49bd22c59ad636c3a23577cb01c03c7"
+          },
+          {
+            "path": "individual_keycaps_v2/key_23_I_oblique.png",
+            "sha256": "4b5b81e591fe2d488c07b74975441e364f0bbc7b4a75646beba906c5271c64b7"
+          }
+        ]
+      },
+      {
+        "position": "O",
+        "passed": true,
+        "reviewScope": "v2 top/oblique contact inspection; inherited57textureprovenance; 3newreplacementobliques additionally opened",
+        "evidence": [
+          {
+            "path": "individual_keycaps_v2/key_24_O_top.png",
+            "sha256": "9a57056aeb6d1a98f6d5344307d3bb84e770391f0cd6411d0f0462a5fa75203c"
+          },
+          {
+            "path": "individual_keycaps_v2/key_24_O_oblique.png",
+            "sha256": "cdeecd78e84ef3c856fb71ad6642aa19d4bd951e97f912a534a81369d6b8f4c1"
+          }
+        ]
+      },
+      {
+        "position": "P",
+        "passed": true,
+        "reviewScope": "v2 top/oblique contact inspection; inherited57textureprovenance; 3newreplacementobliques additionally opened",
+        "evidence": [
+          {
+            "path": "individual_keycaps_v2/key_25_P_top.png",
+            "sha256": "cbb875681c389ebd035c5359b7555bbd7ec97562dd6a66968437fbb39e1f65b6"
+          },
+          {
+            "path": "individual_keycaps_v2/key_25_P_oblique.png",
+            "sha256": "37b57cc2e1ac228776eb9703bf03f19f14adadc4b8a671bc1be56ed019cdb7ad"
+          }
+        ]
+      },
+      {
+        "position": "lbracket",
+        "passed": true,
+        "reviewScope": "v2 top/oblique contact inspection; inherited57textureprovenance; 3newreplacementobliques additionally opened",
+        "evidence": [
+          {
+            "path": "individual_keycaps_v2/key_26_lbracket_top.png",
+            "sha256": "1f7e9e358315591e77268bcae01b3aee8a89be45e3452657df92bd5bf0420a46"
+          },
+          {
+            "path": "individual_keycaps_v2/key_26_lbracket_oblique.png",
+            "sha256": "c05ff24ea3a08ba33179478c19842ba1dd7d0efb53ea4ba875f6c60e892a7de0"
+          }
+        ]
+      },
+      {
+        "position": "rbracket",
+        "passed": true,
+        "reviewScope": "v2 top/oblique contact inspection; inherited57textureprovenance; 3newreplacementobliques additionally opened",
+        "evidence": [
+          {
+            "path": "individual_keycaps_v2/key_27_rbracket_top.png",
+            "sha256": "f07e95d1f5690f2f359a9ad27b7868a08721ea0942f3eef061ff3a1d644b7c83"
+          },
+          {
+            "path": "individual_keycaps_v2/key_27_rbracket_oblique.png",
+            "sha256": "cf36cf694fc2950e5a7f93030aa4ce3527e58cc25627d7971d4e2470b3d1bdfa"
+          }
+        ]
+      },
+      {
+        "position": "backslash",
+        "passed": true,
+        "reviewScope": "v2 top/oblique contact inspection; inherited57textureprovenance; 3newreplacementobliques additionally opened",
+        "evidence": [
+          {
+            "path": "individual_keycaps_v2/key_28_backslash_top.png",
+            "sha256": "ad890e8dfe4a1ea53b093fc50cbc59a68f104c7fe43cafc65a27deeb6d001065"
+          },
+          {
+            "path": "individual_keycaps_v2/key_28_backslash_oblique.png",
+            "sha256": "bd161bf26f0b90a4c51cb990ed2d9e0316d5ae910d67162f03a9da5a4e14a0a2"
+          }
+        ]
+      },
+      {
+        "position": "CapsLock",
+        "passed": true,
+        "reviewScope": "v2 top/oblique contact inspection; inherited57textureprovenance; 3newreplacementobliques additionally opened",
+        "evidence": [
+          {
+            "path": "individual_keycaps_v2/key_29_CapsLock_top.png",
+            "sha256": "16baf38251f8d55a096bc1a27c8c63eb70afeae7046c825cd0ef6a0bb2dc8e5b"
+          },
+          {
+            "path": "individual_keycaps_v2/key_29_CapsLock_oblique.png",
+            "sha256": "3d8ec6ea34056d9f1d2089bd90ca2dfe114661e9621289cb975b2b552bbe2d88"
+          }
+        ]
+      },
+      {
+        "position": "A",
+        "passed": true,
+        "reviewScope": "v2 top/oblique contact inspection; inherited57textureprovenance; 3newreplacementobliques additionally opened",
+        "evidence": [
+          {
+            "path": "individual_keycaps_v2/key_30_A_top.png",
+            "sha256": "aa88b29cfeca39d5845ebe960ecc07089a46385dddeeb2a1ced4b0e4e642f62e"
+          },
+          {
+            "path": "individual_keycaps_v2/key_30_A_oblique.png",
+            "sha256": "77c58e578fd2b02d810990e425e5b9d2c28c6e19d1db7c5b2a0667d43cd0cc0f"
+          }
+        ]
+      },
+      {
+        "position": "S",
+        "passed": true,
+        "reviewScope": "v2 top/oblique contact inspection; inherited57textureprovenance; 3newreplacementobliques additionally opened",
+        "evidence": [
+          {
+            "path": "individual_keycaps_v2/key_31_S_top.png",
+            "sha256": "aac81f95450a4a1a47e7919daa2b58cccf2fe9ea63d0adee47b945d139488aca"
+          },
+          {
+            "path": "individual_keycaps_v2/key_31_S_oblique.png",
+            "sha256": "f1cf90e6509c2e913a109450e9a0868b3e91059b5f3d15fe4d1f36d43924c4cd"
+          }
+        ]
+      },
+      {
+        "position": "D",
+        "passed": true,
+        "reviewScope": "v2 top/oblique contact inspection; inherited57textureprovenance; 3newreplacementobliques additionally opened",
+        "evidence": [
+          {
+            "path": "individual_keycaps_v2/key_32_D_top.png",
+            "sha256": "c1dc76984f581c7c3fcfd597535642f1542afaacaeb4444eab71a1c7b0b283c1"
+          },
+          {
+            "path": "individual_keycaps_v2/key_32_D_oblique.png",
+            "sha256": "90883f09ff7fdd670cd69eac3517e11a4ce0e79a35513772c3b3be5b4bb60bac"
+          }
+        ]
+      },
+      {
+        "position": "F",
+        "passed": true,
+        "reviewScope": "v2 top/oblique contact inspection; inherited57textureprovenance; 3newreplacementobliques additionally opened",
+        "evidence": [
+          {
+            "path": "individual_keycaps_v2/key_33_F_top.png",
+            "sha256": "aeb6b4da3559b8d6d76c46a12f7486fcc121d97c98d4c4918572a9637848b5e7"
+          },
+          {
+            "path": "individual_keycaps_v2/key_33_F_oblique.png",
+            "sha256": "253e2a2fbf809c067bae4df6fa4887f50cfc4d2730abf2bc6a66cd43a2db7228"
+          }
+        ]
+      },
+      {
+        "position": "G",
+        "passed": true,
+        "reviewScope": "v2 top/oblique contact inspection; inherited57textureprovenance; 3newreplacementobliques additionally opened",
+        "evidence": [
+          {
+            "path": "individual_keycaps_v2/key_34_G_top.png",
+            "sha256": "9713caafa332bc681d89bc2b232a8f8617d703f39d5718a370efa7faaacf3d15"
+          },
+          {
+            "path": "individual_keycaps_v2/key_34_G_oblique.png",
+            "sha256": "8eefeb2e27d10573666d56af01a7b4be34d8730a2b80bfcdb3e6f63797e45486"
+          }
+        ]
+      },
+      {
+        "position": "H",
+        "passed": true,
+        "reviewScope": "v2 top/oblique contact inspection; inherited57textureprovenance; 3newreplacementobliques additionally opened",
+        "evidence": [
+          {
+            "path": "individual_keycaps_v2/key_35_H_top.png",
+            "sha256": "45b046a056bf3b32e7c88c8958765903cbfacdc35e12d874a3e94cffa6e9e9aa"
+          },
+          {
+            "path": "individual_keycaps_v2/key_35_H_oblique.png",
+            "sha256": "b809d5c37fb7fb5287464bfc87ce71f0841a787e42e7eacb0598b22ae7da0e16"
+          }
+        ]
+      },
+      {
+        "position": "J",
+        "passed": true,
+        "reviewScope": "v2 top/oblique contact inspection; inherited57textureprovenance; 3newreplacementobliques additionally opened",
+        "evidence": [
+          {
+            "path": "individual_keycaps_v2/key_36_J_top.png",
+            "sha256": "9fa1cfdb1fb9edc245dd70657ebd36d0f8f33e3436ae9140e185edb6eee6c19f"
+          },
+          {
+            "path": "individual_keycaps_v2/key_36_J_oblique.png",
+            "sha256": "56419ef9a7fbb5af2a1e703642c722a69de013fb10091a1d2bfd6fb921c95e70"
+          }
+        ]
+      },
+      {
+        "position": "K",
+        "passed": true,
+        "reviewScope": "v2 top/oblique contact inspection; inherited57textureprovenance; 3newreplacementobliques additionally opened",
+        "evidence": [
+          {
+            "path": "individual_keycaps_v2/key_37_K_top.png",
+            "sha256": "529c03c78feff3fe73f96c0f930504e6b69b0dcf8932890ff41d1052e792c441"
+          },
+          {
+            "path": "individual_keycaps_v2/key_37_K_oblique.png",
+            "sha256": "a8f4ba47b755df0a83cc38ebe4bef1878dd8972fd2cf630869ae7de335a6559e"
+          }
+        ]
+      },
+      {
+        "position": "L",
+        "passed": true,
+        "reviewScope": "v2 top/oblique contact inspection; inherited57textureprovenance; 3newreplacementobliques additionally opened",
+        "evidence": [
+          {
+            "path": "individual_keycaps_v2/key_38_L_top.png",
+            "sha256": "f2b55b6a29d3dc0243e6daa7acedb098b132ea27a1c50065f27d9a69905f089b"
+          },
+          {
+            "path": "individual_keycaps_v2/key_38_L_oblique.png",
+            "sha256": "8b9e7d71eaf6a1c24dc67bea7bcccad1408181ea59fa5e8f41b7742a32cdc145"
+          }
+        ]
+      },
+      {
+        "position": "semicolon",
+        "passed": true,
+        "reviewScope": "v2 top/oblique contact inspection; inherited57textureprovenance; 3newreplacementobliques additionally opened",
+        "evidence": [
+          {
+            "path": "individual_keycaps_v2/key_39_semicolon_top.png",
+            "sha256": "e54ba8ae60ea505827e980c9bab5ba8fa5b0dcdf208804767f45496a620a056f"
+          },
+          {
+            "path": "individual_keycaps_v2/key_39_semicolon_oblique.png",
+            "sha256": "e52a5a14bd7c003bad64f5cebb90324d4576d087c23d55aa9666ef9f2132a687"
+          }
+        ]
+      },
+      {
+        "position": "quote",
+        "passed": true,
+        "reviewScope": "v2 top/oblique contact inspection; inherited57textureprovenance; 3newreplacementobliques additionally opened",
+        "evidence": [
+          {
+            "path": "individual_keycaps_v2/key_40_quote_top.png",
+            "sha256": "eccc42555aad4f412f563e54571bbf087e29bf6c54611bff9030cc15e348eda3"
+          },
+          {
+            "path": "individual_keycaps_v2/key_40_quote_oblique.png",
+            "sha256": "9c1e5ad8c2ee8430fa3c7d592c290d3a85d2323f9fae448eff31ce20f16e3641"
+          }
+        ]
+      },
+      {
+        "position": "Enter",
+        "passed": true,
+        "reviewScope": "v2 top/oblique contact inspection; inherited57textureprovenance; 3newreplacementobliques additionally opened",
+        "evidence": [
+          {
+            "path": "individual_keycaps_v2/key_41_Enter_top.png",
+            "sha256": "658889f89bcb021c45c6629aa95aa1329b383bbf61f91f224b072ba99dc56f4a"
+          },
+          {
+            "path": "individual_keycaps_v2/key_41_Enter_oblique.png",
+            "sha256": "d294e87bda03f458ab1b8401ba32d0a7b4f5be4b944f4a397a571e7f2ed6ea16"
+          }
+        ]
+      },
+      {
+        "position": "LeftShift",
+        "passed": true,
+        "reviewScope": "v2 top/oblique contact inspection; inherited57textureprovenance; 3newreplacementobliques additionally opened",
+        "evidence": [
+          {
+            "path": "individual_keycaps_v2/key_42_LeftShift_top.png",
+            "sha256": "8872a719aa23ea465ece2dde15a7ecbf2e4b714ba0e30d6215870c55149061f7"
+          },
+          {
+            "path": "individual_keycaps_v2/key_42_LeftShift_oblique.png",
+            "sha256": "d651e563b26026fcb694643e9469a969195b4505daeccdbaa9c1e3bdd9104b5f"
+          }
+        ]
+      },
+      {
+        "position": "Z",
+        "passed": true,
+        "reviewScope": "v2 top/oblique contact inspection; inherited57textureprovenance; 3newreplacementobliques additionally opened",
+        "evidence": [
+          {
+            "path": "individual_keycaps_v2/key_43_Z_top.png",
+            "sha256": "a60cbd2da4c892ef4348c1b36f62f1445779614d114595a1fa8f9d14698103fd"
+          },
+          {
+            "path": "individual_keycaps_v2/key_43_Z_oblique.png",
+            "sha256": "8757b29685b9e4dc96f423e77935fed1d48f40ab0c63cdbef1223b8d7ec864c3"
+          }
+        ]
+      },
+      {
+        "position": "X",
+        "passed": true,
+        "reviewScope": "v2 top/oblique contact inspection; inherited57textureprovenance; 3newreplacementobliques additionally opened",
+        "evidence": [
+          {
+            "path": "individual_keycaps_v2/key_44_X_top.png",
+            "sha256": "bfe8f3ef14323070989c45765ae4adfd307fe6457ffa9ae1a1ba1bce5fc270fb"
+          },
+          {
+            "path": "individual_keycaps_v2/key_44_X_oblique.png",
+            "sha256": "6c40908b1c4af37d29f6a98b200cd2e7576a376bc69ada550df31efc7177dc46"
+          }
+        ]
+      },
+      {
+        "position": "C",
+        "passed": true,
+        "reviewScope": "v2 top/oblique contact inspection; inherited57textureprovenance; 3newreplacementobliques additionally opened",
+        "evidence": [
+          {
+            "path": "individual_keycaps_v2/key_45_C_top.png",
+            "sha256": "f078e771862ce8a0101810de43052fdef523f99d50093c053e62b8a79e0c3a1a"
+          },
+          {
+            "path": "individual_keycaps_v2/key_45_C_oblique.png",
+            "sha256": "8a11ce9b66280c449768f5388cda70adde65350b535b668b29864784f4ca8f0b"
+          }
+        ]
+      },
+      {
+        "position": "V",
+        "passed": true,
+        "reviewScope": "v2 top/oblique contact inspection; inherited57textureprovenance; 3newreplacementobliques additionally opened",
+        "evidence": [
+          {
+            "path": "individual_keycaps_v2/key_46_V_top.png",
+            "sha256": "af695296c771aed92fdd526f47004b5b99612588d095f05780653137c01317db"
+          },
+          {
+            "path": "individual_keycaps_v2/key_46_V_oblique.png",
+            "sha256": "f348166ce86fd2567f5c3becc08061bb6cbdd5d38ba1744af280d5b5540724be"
+          }
+        ]
+      },
+      {
+        "position": "B",
+        "passed": true,
+        "reviewScope": "v2 top/oblique contact inspection; inherited57textureprovenance; 3newreplacementobliques additionally opened",
+        "evidence": [
+          {
+            "path": "individual_keycaps_v2/key_47_B_top.png",
+            "sha256": "d977ddcef5afceeb2a98a1d7afbbd70c7f663d4c92cb112175c96a2e29d0685c"
+          },
+          {
+            "path": "individual_keycaps_v2/key_47_B_oblique.png",
+            "sha256": "a919a8e995a77559121549fd0a2bee80aea4735735347b34c2227949ad42936d"
+          }
+        ]
+      },
+      {
+        "position": "N",
+        "passed": true,
+        "reviewScope": "v2 top/oblique contact inspection; inherited57textureprovenance; 3newreplacementobliques additionally opened",
+        "evidence": [
+          {
+            "path": "individual_keycaps_v2/key_48_N_top.png",
+            "sha256": "7835e1d153c1937561e4b85a4309d65da7431971b156640fdaa9d296d549a7bb"
+          },
+          {
+            "path": "individual_keycaps_v2/key_48_N_oblique.png",
+            "sha256": "1513d068a7553a03621a43aeb892c2d0bfc653d313f2135c0e57cbaea74e3016"
+          }
+        ]
+      },
+      {
+        "position": "M",
+        "passed": true,
+        "reviewScope": "v2 top/oblique contact inspection; inherited57textureprovenance; 3newreplacementobliques additionally opened",
+        "evidence": [
+          {
+            "path": "individual_keycaps_v2/key_49_M_top.png",
+            "sha256": "5509d9e5c7facfe5818e62a49c422d89cb7dd36ce60f6bde51b66b83a592c68f"
+          },
+          {
+            "path": "individual_keycaps_v2/key_49_M_oblique.png",
+            "sha256": "51aec66207b0e70355a39d20b00af44acd9300385d68c00b3d3c2670cc2ce3c4"
+          }
+        ]
+      },
+      {
+        "position": "comma",
+        "passed": true,
+        "reviewScope": "v2 top/oblique contact inspection; inherited57textureprovenance; 3newreplacementobliques additionally opened",
+        "evidence": [
+          {
+            "path": "individual_keycaps_v2/key_50_comma_top.png",
+            "sha256": "9a47146315c17cc715a84643e6f602c2e03eb97517e322b42c452c8b9fd6efca"
+          },
+          {
+            "path": "individual_keycaps_v2/key_50_comma_oblique.png",
+            "sha256": "f88fe7bd0242c8b9329f27e5b9264da1303d1f3cf21e190747d5495f9427f821"
+          }
+        ]
+      },
+      {
+        "position": "period",
+        "passed": true,
+        "reviewScope": "v2 top/oblique contact inspection; inherited57textureprovenance; 3newreplacementobliques additionally opened",
+        "evidence": [
+          {
+            "path": "individual_keycaps_v2/key_51_period_top.png",
+            "sha256": "b3d435468645a7f93554fb62e7e23399ab1dd6e06feef74d327a005292f6877a"
+          },
+          {
+            "path": "individual_keycaps_v2/key_51_period_oblique.png",
+            "sha256": "eb7c05c4aa8241b9ed18d4a24c6b79a0ae13ab3680497cceb34318d131e06aca"
+          }
+        ]
+      },
+      {
+        "position": "slash",
+        "passed": true,
+        "reviewScope": "v2 top/oblique contact inspection; inherited57textureprovenance; 3newreplacementobliques additionally opened",
+        "evidence": [
+          {
+            "path": "individual_keycaps_v2/key_52_slash_top.png",
+            "sha256": "198dccc9c7a6f10573742a6b218767e0dcf287285882c9ee1c2ba58842eb3ccc"
+          },
+          {
+            "path": "individual_keycaps_v2/key_52_slash_oblique.png",
+            "sha256": "095b97072331399667f897778a15e80da04df072b01bca7e5c78206aeb35a02e"
+          }
+        ]
+      },
+      {
+        "position": "RightShift",
+        "passed": true,
+        "reviewScope": "v2 top/oblique contact inspection; inherited57textureprovenance; 3newreplacementobliques additionally opened",
+        "evidence": [
+          {
+            "path": "individual_keycaps_v2/key_53_RightShift_top.png",
+            "sha256": "f4ac96bfc04991a4ecc6368017b2b82993a20076299af1a82a8645025238a8c5"
+          },
+          {
+            "path": "individual_keycaps_v2/key_53_RightShift_oblique.png",
+            "sha256": "c97f2400384f74319662bd84c1aed393983993718d91e19072f5727ecb0b82bd"
+          }
+        ]
+      },
+      {
+        "position": "Fn",
+        "passed": true,
+        "reviewScope": "v2 top/oblique contact inspection; inherited57textureprovenance; 3newreplacementobliques additionally opened",
+        "evidence": [
+          {
+            "path": "individual_keycaps_v2/key_54_Fn_top.png",
+            "sha256": "30ba4d5f761fa18c4a3e3ef7d82f04cc36960001f32b716ae20a0a7ac7aa582f"
+          },
+          {
+            "path": "individual_keycaps_v2/key_54_Fn_oblique.png",
+            "sha256": "6de8092810e7369a4c92b5a68f20e3c132da87c2cac52816c648f56d76bbb34d"
+          }
+        ]
+      },
+      {
+        "position": "ghost",
+        "passed": true,
+        "reviewScope": "v2 top/oblique contact inspection; inherited57textureprovenance; 3newreplacementobliques additionally opened",
+        "evidence": [
+          {
+            "path": "individual_keycaps_v2/key_55_ghost_top.png",
+            "sha256": "aee2f534b68422404b349359326b6a4d3e9fe1d5f8b073e5ebc9ea7fe54a9604"
+          },
+          {
+            "path": "individual_keycaps_v2/key_55_ghost_oblique.png",
+            "sha256": "00ca70efb4893f54ac3f43f3571e17b3fbad42c0fab3b3cc635f848a43869f00"
+          }
+        ]
+      },
+      {
+        "position": "LeftAlt",
+        "passed": true,
+        "reviewScope": "v2 top/oblique contact inspection; inherited57textureprovenance; 3newreplacementobliques additionally opened",
+        "evidence": [
+          {
+            "path": "individual_keycaps_v2/key_56_LeftAlt_top.png",
+            "sha256": "20927bbda5c8f2d86b465d9959edfc797fa58c0f5e0153b86ad63d4b97650c8c"
+          },
+          {
+            "path": "individual_keycaps_v2/key_56_LeftAlt_oblique.png",
+            "sha256": "e645bf908e1d33f583709cd4d8d28aa72d70e0ff6005e3a85b94964db790b231"
+          }
+        ]
+      },
+      {
+        "position": "space",
+        "passed": true,
+        "reviewScope": "v2 top/oblique contact inspection; inherited57textureprovenance; 3newreplacementobliques additionally opened",
+        "evidence": [
+          {
+            "path": "individual_keycaps_v2/key_57_space_top.png",
+            "sha256": "8a32b75889d331623189d867eaef0c9dabe3754772a35e58d113195899451b6f"
+          },
+          {
+            "path": "individual_keycaps_v2/key_57_space_oblique.png",
+            "sha256": "b3e769a76038cd1eb4612d8a8f5a67083a3d9d05147e5b3c66962d6072fb9522"
+          }
+        ]
+      },
+      {
+        "position": "RightAlt",
+        "passed": true,
+        "reviewScope": "v2 top/oblique contact inspection; inherited57textureprovenance; 3newreplacementobliques additionally opened",
+        "evidence": [
+          {
+            "path": "individual_keycaps_v2/key_58_RightAlt_top.png",
+            "sha256": "7be5450f1c696c96249a1421f554840dde4260b437ae7126f829c66d97e38980"
+          },
+          {
+            "path": "individual_keycaps_v2/key_58_RightAlt_oblique.png",
+            "sha256": "4ba1d48b4917b03d3d592a0d9d53e16f5ad45e8df0dc441a9ea15b2879f0273d"
+          }
+        ]
+      },
+      {
+        "position": "arrow",
+        "passed": true,
+        "reviewScope": "v2 top/oblique contact inspection; inherited57textureprovenance; 3newreplacementobliques additionally opened",
+        "evidence": [
+          {
+            "path": "individual_keycaps_v2/key_59_arrow_top.png",
+            "sha256": "fc6f7b7c2590ac0fc7f9db4a9fd62907f160b3a88a7e4df85d2c5ecf772ae607"
+          },
+          {
+            "path": "individual_keycaps_v2/key_59_arrow_oblique.png",
+            "sha256": "c4eee9612dbcc3f83d9981e8fc95c58e29e17d6978967c8ad99d617be0a35737"
+          }
+        ]
+      }
+    ]
+  },
+  "visualQa": {
+    "status": "passed",
+    "reviewer": "Orchestrator render-pipeline worker",
+    "reviewedAt": "2026-10-31T08:17:51.012870+00:00",
+    "angles": [0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330],
+    "scope": "All12actualPNGviews inspected in three contacts plus fullquality30pilot individuallyopened; pose/framing/kit/no3logos/alpha/occlusion/sides/underside reviewed. Qualifiedvisualization, not material/typeface/manufacturingcertification."
+  },
+  "renderer": "Blender 4.3.2",
+  "materialCalibration": "approximate",
+  "frames": [
+    {
+      "angleDegrees": 0,
+      "src": "/assets/products/rule60-hhkb-unibody/customization/v1/ice-blue--retro-programmer-retail/frame_000.webp",
+      "sha256": "88a09764d223ffbe109e0167e84c93af441f946c9737fc71beb3dc44c4b5d65f",
+      "width": 1024,
+      "height": 1536
+    },
+    {
+      "angleDegrees": 30,
+      "src": "/assets/products/rule60-hhkb-unibody/customization/v1/ice-blue--retro-programmer-retail/frame_030.webp",
+      "sha256": "10515da4e39a6e1a8d25fce2169a362f2d4cf648f95f294e9492594978cdf0e1",
+      "width": 1024,
+      "height": 1536
+    },
+    {
+      "angleDegrees": 60,
+      "src": "/assets/products/rule60-hhkb-unibody/customization/v1/ice-blue--retro-programmer-retail/frame_060.webp",
+      "sha256": "2f382e1d43f9c0f50202d94e1c523bffb45e39c19b177f03be9b0424f12e9041",
+      "width": 1024,
+      "height": 1536
+    },
+    {
+      "angleDegrees": 90,
+      "src": "/assets/products/rule60-hhkb-unibody/customization/v1/ice-blue--retro-programmer-retail/frame_090.webp",
+      "sha256": "792e99927f742f531abb295075a491e0006004055a63cc37e151a885cb24e080",
+      "width": 1024,
+      "height": 1536
+    },
+    {
+      "angleDegrees": 120,
+      "src": "/assets/products/rule60-hhkb-unibody/customization/v1/ice-blue--retro-programmer-retail/frame_120.webp",
+      "sha256": "52801d97eab88fa278f3825b695e91604f41199c00b4ca55a9acff41d5288f66",
+      "width": 1024,
+      "height": 1536
+    },
+    {
+      "angleDegrees": 150,
+      "src": "/assets/products/rule60-hhkb-unibody/customization/v1/ice-blue--retro-programmer-retail/frame_150.webp",
+      "sha256": "6ffda513aeb809c03f9e7bad801c22f33c83fbd5da7022f2cf91db460db4d331",
+      "width": 1024,
+      "height": 1536
+    },
+    {
+      "angleDegrees": 180,
+      "src": "/assets/products/rule60-hhkb-unibody/customization/v1/ice-blue--retro-programmer-retail/frame_180.webp",
+      "sha256": "6afecec77cdff3ef7fcfe36001f6827ae917b848eadf2a364900aa5b08118861",
+      "width": 1024,
+      "height": 1536
+    },
+    {
+      "angleDegrees": 210,
+      "src": "/assets/products/rule60-hhkb-unibody/customization/v1/ice-blue--retro-programmer-retail/frame_210.webp",
+      "sha256": "9cc04b710642766137577c6774f414437d1e7e9851846657d9624731e2748178",
+      "width": 1024,
+      "height": 1536
+    },
+    {
+      "angleDegrees": 240,
+      "src": "/assets/products/rule60-hhkb-unibody/customization/v1/ice-blue--retro-programmer-retail/frame_240.webp",
+      "sha256": "fbf114c06c54619c55c4e0dd61373fc093e8f1d90302f3c461a80a48009e8e4e",
+      "width": 1024,
+      "height": 1536
+    },
+    {
+      "angleDegrees": 270,
+      "src": "/assets/products/rule60-hhkb-unibody/customization/v1/ice-blue--retro-programmer-retail/frame_270.webp",
+      "sha256": "a3701aa2a9c6bc91b62ee461da89fb820d488521823742899719ace711514030",
+      "width": 1024,
+      "height": 1536
+    },
+    {
+      "angleDegrees": 300,
+      "src": "/assets/products/rule60-hhkb-unibody/customization/v1/ice-blue--retro-programmer-retail/frame_300.webp",
+      "sha256": "98f972896d6f7d47ae3a345a45c2a4c76705b25d22c6a909942a21c4763dfb6a",
+      "width": 1024,
+      "height": 1536
+    },
+    {
+      "angleDegrees": 330,
+      "src": "/assets/products/rule60-hhkb-unibody/customization/v1/ice-blue--retro-programmer-retail/frame_330.webp",
+      "sha256": "967947ba72fb7f83712f54ab66f6bfb976dc451351cc206ee4d3c51596bbc3e5",
+      "width": 1024,
+      "height": 1536
+    }
+  ]
+}

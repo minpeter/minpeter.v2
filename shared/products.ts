@@ -34,8 +34,10 @@ export interface ProductSpin {
   /** 0-based frame shown at rest; `poster` is the same frame, optimized for first paint. */
   defaultFrame: number;
   frameCount: number;
+  /** Optional manifest-backed sources in angular order; otherwise 01.webp … */
+  frameSources?: readonly string[];
   height: number;
-  poster: StaticImageData;
+  poster: StaticImageData | string;
   width: number;
 }
 

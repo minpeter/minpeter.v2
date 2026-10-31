@@ -34,6 +34,12 @@ interface ProductSpinProps {
   /** Accessible name; omit inside a link, where the spin is decorative hover-only motion. */
   alt?: string;
   className?: string;
+  initialAngle?: number;
+  onAngleChange?: (degrees: number) => void;
+  onLoadStateChange?: (
+    state: "loading" | "ready" | "partial" | "error"
+  ) => void;
+  resetOnLeave?: boolean;
   sizes: string;
   spin: ProductSpinData;
 }
@@ -47,9 +53,31 @@ function stepToward(from: number, to: number, count: number) {
   return Math.sign(diff);
 }
 
-export function ProductSpin({ alt, className, sizes, spin }: ProductSpinProps) {
+export function ProductSpin({
+  alt,
+  className,
+  initialAngle,
+  onAngleChange,
+  onLoadStateChange,
+  resetOnLeave = true,
+  sizes,
+  spin,
+}: ProductSpinProps) {
   const interactive = alt !== undefined;
-  const { basePath, defaultFrame, frameCount, height, poster, width } = spin;
+  const {
+    basePath,
+    defaultFrame,
+    frameCount,
+    frameSources,
+    height,
+    poster,
+    width,
+  } = spin;
+  const initialFrame =
+    initialAngle === undefined
+      ? defaultFrame
+      : Math.round(((((initialAngle % 360) + 360) % 360) / 360) * frameCount) %
+        frameCount;
   const [active, setActive] = useState(false);
   const [inView, setInView] = useState(false);
   const stageRef = useRef<HTMLDivElement>(null);
@@ -61,26 +89,40 @@ export function ProductSpin({ alt, className, sizes, spin }: ProductSpinProps) {
   const id = useId();
   const token = useMemo(() => Symbol(id), [id]);
   const loader = useMemo(
-    () => getSpinLoader({ basePath, frameCount, height, width }),
-    [basePath, frameCount, height, width]
+    () => getSpinLoader({ basePath, frameCount, frameSources, height, width }),
+    [basePath, frameCount, frameSources, height, width]
   );
   const version = useSyncExternalStore(
     loader.subscribe,
     loader.getSnapshot,
     () => 0
   );
-  const [frame, setFrame] = useState(defaultFrame);
+  const [frame, setFrame] = useState(initialFrame);
   const [displayedFrame, setDisplayedFrame] = useState<number | null>(null);
   const reducedMotion = useSyncExternalStore(
     subscribeReducedMotion,
     getReducedMotion,
     () => false
   );
-  const frameRef = useRef(defaultFrame);
-  const targetRef = useRef(defaultFrame);
+  const frameRef = useRef(initialFrame);
+  const targetRef = useRef(initialFrame);
   const rafRef = useRef(0);
   const lastStepRef = useRef(0);
   const dragRef = useRef<{ startFrame: number; startX: number } | null>(null);
+
+  useEffect(() => {
+    if (version !== loader.getSnapshot()) {
+      return;
+    }
+    let state: "loading" | "ready" | "partial" | "error" = "loading";
+    if (loader.readyCount > 0) {
+      state =
+        loader.loadingComplete && loader.hasFailures ? "partial" : "ready";
+    } else if (loader.loadingComplete) {
+      state = "error";
+    }
+    onLoadStateChange?.(state);
+  }, [loader, onLoadStateChange, version]);
 
   useEffect(() => {
     const stage = stageRef.current;
@@ -221,8 +263,11 @@ export function ProductSpin({ alt, className, sizes, spin }: ProductSpinProps) {
   }, [frameCount]);
 
   const aim = useCallback(
-    (target: number) => {
+    (target: number, report = true) => {
       targetRef.current = target;
+      if (report) {
+        onAngleChange?.((target / frameCount) * 360);
+      }
       if (reducedMotion) {
         cancelAnimationFrame(rafRef.current);
         frameRef.current = target;
@@ -231,7 +276,7 @@ export function ProductSpin({ alt, className, sizes, spin }: ProductSpinProps) {
         animate();
       }
     },
-    [animate, reducedMotion]
+    [animate, frameCount, onAngleChange, reducedMotion]
   );
 
   const handlePointerEnter = useCallback(() => setActive(true), []);
@@ -286,11 +331,11 @@ export function ProductSpin({ alt, className, sizes, spin }: ProductSpinProps) {
         return;
       }
       dragRef.current = null;
-      if (!reducedMotion) {
-        aim(defaultFrame);
+      if (!reducedMotion && resetOnLeave) {
+        aim(defaultFrame, false);
       }
     },
-    [aim, defaultFrame, reducedMotion]
+    [aim, defaultFrame, reducedMotion, resetOnLeave]
   );
 
   const handleKeyDown = useCallback(
@@ -343,15 +388,17 @@ export function ProductSpin({ alt, className, sizes, spin }: ProductSpinProps) {
       ref={stageRef}
       style={{ aspectRatio: `${width} / ${height}` }}
     >
-      <Image
-        alt=""
-        className={cn("object-contain", showFrames && "invisible")}
-        draggable={false}
-        fill
-        priority
-        sizes={sizes}
-        src={poster}
-      />
+      {frameSources ? null : (
+        <Image
+          alt=""
+          className={cn("object-contain", showFrames && "invisible")}
+          draggable={false}
+          fill
+          priority
+          sizes={sizes}
+          src={poster}
+        />
+      )}
       <canvas
         aria-hidden="true"
         className={cn(

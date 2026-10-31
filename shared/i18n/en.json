@@ -266,6 +266,41 @@
           "license": "CC BY-NC 4.0 — print and modify for personal, non-commercial use only. Selling prints or files is not permitted."
         }
       }
+    },
+    "customization": {
+      "modeLabel": "Product view",
+      "showcase": "Personal showcase",
+      "customize": "Explore retail sets",
+      "showcaseNote": "Unique personal keyboard · showcase only · not available to order",
+      "configurationNote": "Visual configuration preview only. Every new option uses a complete retail keycap set, without the personal logo keys. No ordering is available here.",
+      "selected": "{housing} × {keycaps}",
+      "previewLabel": "Selected configuration — reconstructed render; drag or use arrow keys to rotate in 30° steps",
+      "pending": "This render is not ready",
+      "pendingDetail": "No image is shown until this exact combination has 12 reviewed views. The personal keyboard is not a preview of this selection.",
+      "kitQA": "Individual key and all-angle review must pass before a render appears.",
+      "loading": "Loading the selected render…",
+      "ready": "Reviewed render · 12 views · 30° steps",
+      "loadError": "The selected render could not be loaded.",
+      "retry": "Retry this render",
+      "housing": "Housing · Bambu Lab PLA",
+      "keycaps": "Complete retail keycap set",
+      "fullRetailSet": "Full set · no personal logo keys",
+      "approximation": "Colors, surface finish and legends are visual approximations, not a guarantee of printed color or physical keycap compatibility. A render is not an order or stock confirmation.",
+      "materialSource": "Manufacturer color reference",
+      "keycapSource": "Manufacturer keycap reference",
+      "housingNames": {
+        "bone-white": "Bone White",
+        "ash-gray": "Ash Gray",
+        "charcoal": "Charcoal",
+        "ice-blue": "Ice Blue",
+        "lilac-purple": "Lilac Purple",
+        "dark-green": "Dark Green",
+        "white-marble": "White Marble"
+      },
+      "partial": "Some views could not load. Rotation uses the nearest available view. You can retry loading.",
+      "renderReady": "Render ready for this combination",
+      "renderPending": "Render pending for this combination",
+      "marbleNote": "PLA Marble 13103: off-white with fine, irregular gray flecks. The swatch shows only the manufacturer’s base color, not the printed texture."
     }
   },
   "modCodeBlock": {
