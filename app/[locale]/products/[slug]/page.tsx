@@ -96,6 +96,8 @@ async function ProductDetail({
               <span className="text-foreground">
                 {new Intl.NumberFormat(locale, {
                   currency: "KRW",
+                  // English readers may not recognise ₩, so spell out the code there.
+                  currencyDisplay: locale === "en" ? "code" : "symbol",
                   style: "currency",
                 }).formatRange(
                   product.upcomingPrice.min,
