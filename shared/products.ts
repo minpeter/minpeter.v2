@@ -60,6 +60,8 @@ export interface Product {
   slug: string;
   sourceHref: string;
   spin: ProductSpin;
+  /** Expected price range in KRW before launch; shown with a "coming soon" label. */
+  upcomingPrice?: { max: number; min: number };
 }
 
 /** Display order on `/products`; add a product here plus `products.items.<key>` messages. */
@@ -96,6 +98,7 @@ export const PRODUCTS: readonly Product[] = [
       poster: rule60SpinPoster,
       width: 1024,
     },
+    upcomingPrice: { max: 300_000, min: 200_000 },
   },
 ];
 

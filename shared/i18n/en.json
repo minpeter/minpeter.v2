@@ -245,6 +245,7 @@
     "downloadFiles": "Download print files",
     "descriptionLabel": "Description",
     "detailsLabel": "Details",
+    "upcoming": "Coming soon",
     "renderAlts": {
       "rule60Assembled": "CAD render: the assembled top case with its wrist rest (left half grey, right half blue)",
       "rule60Top": "CAD render: the top case from above",
