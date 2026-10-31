@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 import { readFileSync } from "node:fs";
 import {
+  act,
   cleanup,
   fireEvent,
   render,
@@ -9,7 +10,6 @@ import {
   within,
 } from "@testing-library/react";
 import { NextIntlClientProvider } from "next-intl";
-import { NuqsTestingAdapter, type UrlUpdateEvent } from "nuqs/adapters/testing";
 import type { ComponentProps } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import en from "@/shared/i18n/en.json";
@@ -22,6 +22,10 @@ import {
 
 import { ProductCustomizer } from "./product-customizer";
 import type { ProductGalleryProps } from "./product-gallery";
+
+vi.mock("next/navigation", () => ({
+  useSearchParams: () => new URLSearchParams(window.location.search),
+}));
 
 const fixtures = vi.hoisted(() => ({
   candidates: [] as unknown[],
@@ -131,11 +135,12 @@ const props: ProductGalleryProps = {
 const ko = JSON.parse(readFileSync("shared/i18n/ko.json", "utf8")) as typeof en;
 const messages = { en, ja, ko };
 type Locale = keyof typeof messages;
-function ui(
-  searchParams = "",
-  locale: Locale = "en",
-  onUrlUpdate?: (event: UrlUpdateEvent) => void
-) {
+function ui(searchParams = "", locale: Locale = "en") {
+  window.history.replaceState(
+    null,
+    "",
+    `/products/rule60-hhkb-unibody${searchParams}`
+  );
   return (
     <NextIntlClientProvider
       locale={locale}
@@ -146,16 +151,21 @@ function ui(
       }
       timeZone="UTC"
     >
-      <NuqsTestingAdapter
-        hasMemory
-        onUrlUpdate={onUrlUpdate}
-        searchParams={searchParams}
-      >
-        <ProductCustomizer {...props} />
-      </NuqsTestingAdapter>
+      <ProductCustomizer {...props} />
     </NextIntlClientProvider>
   );
 }
+
+/** Real asynchronous jsdom session-history traversal, not a synthetic state rerender. */
+async function traverse(direction: "back" | "forward") {
+  await act(async () => {
+    await new Promise<void>((resolve) => {
+      window.addEventListener("popstate", () => resolve(), { once: true });
+      window.history[direction]();
+    });
+  });
+}
+
 function candidate(
   housingId = "bone-white",
   keycapId = "retro-programmer-retail"
@@ -284,32 +294,128 @@ describe("ProductCustomizer availability and selection", () => {
     }
   );
 
-  it("updates URL selection with push history and restores earlier search params", async () => {
-    const update = vi.fn<(event: UrlUpdateEvent) => void>();
-    const view = render(ui("?customize=true", "en", update));
-    fireEvent.click(housingRadio("ice-blue"));
-    await waitFor(() =>
-      expect(update.mock.calls.at(-1)?.[0].searchParams.get("housing")).toBe(
-        "ice-blue"
-      )
-    );
-    expect(update.mock.calls.at(-1)?.[0].options.history).toBe("push");
-    fireEvent.click(keycapRadio("nicepbt-bow-retail"));
-    await waitFor(() =>
-      expect(update.mock.calls.at(-1)?.[0].searchParams.get("keycaps")).toBe(
+  it.each(["en", "ja", "ko"] as const)(
+    "synchronizes real Back and Forward URL, radios, labels and preview identity in %s",
+    async (locale) => {
+      fixtures.candidates = [
+        candidate("ice-blue"),
+        candidate("ice-blue", "nicepbt-bow-retail"),
+      ];
+      render(ui("", locale));
+      const t = messages[locale].products.customization;
+      fireEvent.click(screen.getByRole("button", { name: t.customize }));
+      fireEvent.click(housingRadio("ice-blue"));
+      const retro = screen.getByTestId("retail-spin");
+      fireEvent.click(screen.getByRole("button", { name: "Rotate retail" }));
+      fireEvent.click(keycapRadio("nicepbt-bow-retail"));
+      const bow = screen.getByTestId("retail-spin");
+      expect(new URLSearchParams(window.location.search).get("keycaps")).toBe(
         "nicepbt-bow-retail"
-      )
+      );
+      expect(keycapRadio("nicepbt-bow-retail").checked).toBe(true);
+      expect(retro.isConnected).toBe(false);
+
+      await traverse("back");
+      expect(
+        new URLSearchParams(window.location.search).get("keycaps")
+      ).toBeNull();
+      expect(new URLSearchParams(window.location.search).get("housing")).toBe(
+        "ice-blue"
+      );
+      expect(keycapRadio("retro-programmer-retail").checked).toBe(true);
+      expect(keycapRadio("nicepbt-bow-retail").checked).toBe(false);
+      expect(
+        keycapRadio("retro-programmer-retail")
+          .closest("label")
+          ?.getAttribute("data-selected")
+      ).toBe("true");
+      expect(
+        keycapRadio("nicepbt-bow-retail")
+          .closest("label")
+          ?.getAttribute("data-selected")
+      ).toBe("false");
+      expect(screen.getByRole("heading").textContent).toBe(
+        `${t.housingNames["ice-blue"]} × Retro Programmer (retail set)`
+      );
+      expect(
+        screen.getByTestId("retail-spin").getAttribute("data-source")
+      ).toContain("ice-blue--retro-programmer-retail");
+      expect(screen.getByTestId("retail-spin").getAttribute("data-angle")).toBe(
+        "210"
+      );
+      expect(bow.isConnected).toBe(false);
+
+      const restoredRetro = screen.getByTestId("retail-spin");
+      await traverse("back");
+      expect(
+        new URLSearchParams(window.location.search).get("housing")
+      ).toBeNull();
+      expect(housingRadio("bone-white").checked).toBe(true);
+      expect(screen.getByTestId("customization-pending")).toBeTruthy();
+      expect(screen.queryByTestId("retail-spin")).toBeNull();
+      expect(restoredRetro.isConnected).toBe(false);
+
+      await traverse("forward");
+      expect(new URLSearchParams(window.location.search).get("housing")).toBe(
+        "ice-blue"
+      );
+      expect(housingRadio("ice-blue").checked).toBe(true);
+      expect(
+        screen.getByTestId("retail-spin").getAttribute("data-source")
+      ).toContain("ice-blue--retro-programmer-retail");
+      await traverse("forward");
+      expect(new URLSearchParams(window.location.search).get("keycaps")).toBe(
+        "nicepbt-bow-retail"
+      );
+      expect(keycapRadio("nicepbt-bow-retail").checked).toBe(true);
+      expect(
+        keycapRadio("nicepbt-bow-retail")
+          .closest("label")
+          ?.getAttribute("data-selected")
+      ).toBe("true");
+      expect(screen.getByRole("heading").textContent).toBe(
+        `${t.housingNames["ice-blue"]} × NicePBT BoW (retail set)`
+      );
+      expect(
+        screen.getByTestId("retail-spin").getAttribute("data-source")
+      ).toContain("ice-blue--nicepbt-bow-retail");
+    }
+  );
+
+  it("does not add history entries for duplicate mode or option clicks", () => {
+    render(ui("?customize=true"));
+    const { length } = window.history;
+    const url = window.location.href;
+    fireEvent.click(
+      screen.getByRole("button", { name: en.products.customization.customize })
     );
-    expect(screen.getByRole("heading").textContent).toBe(
-      "Ice Blue × NicePBT BoW (retail set)"
-    );
-    view.rerender(ui("?customize=true&housing=charcoal", "en", update));
-    await waitFor(() => expect(housingRadio("charcoal").checked).toBe(true));
+    fireEvent.click(housingRadio("bone-white"));
+    fireEvent.click(keycapRadio("retro-programmer-retail"));
+    expect(window.history.length).toBe(length);
+    expect(window.location.href).toBe(url);
+    fireEvent.click(housingRadio("ice-blue"));
+    expect(window.history.length).toBe(length + 1);
+    fireEvent.click(housingRadio("ice-blue"));
+    expect(window.history.length).toBe(length + 1);
+  });
+
+  it("preserves unrelated query parameters and hash through selection and history traversal", async () => {
+    render(ui("?customize=true&campaign=launch&tag=a&tag=b#render"));
+    fireEvent.click(housingRadio("charcoal"));
+    fireEvent.click(keycapRadio("nicepbt-bow-retail"));
+    let params = new URLSearchParams(window.location.search);
+    expect(params.get("campaign")).toBe("launch");
+    expect(params.getAll("tag")).toEqual(["a", "b"]);
+    expect(window.location.hash).toBe("#render");
+    expect(window.location.pathname).toBe("/products/rule60-hhkb-unibody");
+    await traverse("back");
+    params = new URLSearchParams(window.location.search);
+    expect(params.get("campaign")).toBe("launch");
+    expect(params.getAll("tag")).toEqual(["a", "b"]);
+    expect(params.get("housing")).toBe("charcoal");
+    expect(params.get("keycaps")).toBeNull();
     expect(keycapRadio("retro-programmer-retail").checked).toBe(true);
-    view.rerender(ui("", "en", update));
-    await waitFor(() =>
-      expect(screen.getByTestId("personal-gallery")).toBeTruthy()
-    );
+    expect(window.location.hash).toBe("#render");
   });
 
   it("rejects invalid URL choices and removes the personal image when entering pending mode", async () => {

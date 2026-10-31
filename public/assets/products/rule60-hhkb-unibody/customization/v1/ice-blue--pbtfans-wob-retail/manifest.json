@@ -1,0 +1,351 @@
+{
+  "id": "ice-blue--pbtfans-wob-retail",
+  "housingId": "ice-blue",
+  "keycapId": "pbtfans-wob-retail",
+  "status": "validated",
+  "sourceDigest": "39acc5061d8f0c609135eee2f9d9ff4e3c40a33e93a4105def277284efcafc31",
+  "kitQaStatus": "60-of-60-passed",
+  "kitQa": {
+    "status": "60-of-60-passed",
+    "reviewer": "model_bow_keycaps_qa",
+    "reviewedAt": "2026-10-31T08:03:17Z",
+    "keys": [
+      {
+        "position": "Esc",
+        "passed": true
+      },
+      {
+        "position": "1",
+        "passed": true
+      },
+      {
+        "position": "2",
+        "passed": true
+      },
+      {
+        "position": "3",
+        "passed": true
+      },
+      {
+        "position": "4",
+        "passed": true
+      },
+      {
+        "position": "5",
+        "passed": true
+      },
+      {
+        "position": "6",
+        "passed": true
+      },
+      {
+        "position": "7",
+        "passed": true
+      },
+      {
+        "position": "8",
+        "passed": true
+      },
+      {
+        "position": "9",
+        "passed": true
+      },
+      {
+        "position": "0",
+        "passed": true
+      },
+      {
+        "position": "minus",
+        "passed": true
+      },
+      {
+        "position": "plus",
+        "passed": true
+      },
+      {
+        "position": "blue",
+        "passed": true
+      },
+      {
+        "position": "white",
+        "passed": true
+      },
+      {
+        "position": "Tab",
+        "passed": true
+      },
+      {
+        "position": "Q",
+        "passed": true
+      },
+      {
+        "position": "W",
+        "passed": true
+      },
+      {
+        "position": "E",
+        "passed": true
+      },
+      {
+        "position": "R",
+        "passed": true
+      },
+      {
+        "position": "T",
+        "passed": true
+      },
+      {
+        "position": "Y",
+        "passed": true
+      },
+      {
+        "position": "U",
+        "passed": true
+      },
+      {
+        "position": "I",
+        "passed": true
+      },
+      {
+        "position": "O",
+        "passed": true
+      },
+      {
+        "position": "P",
+        "passed": true
+      },
+      {
+        "position": "lbracket",
+        "passed": true
+      },
+      {
+        "position": "rbracket",
+        "passed": true
+      },
+      {
+        "position": "backslash",
+        "passed": true
+      },
+      {
+        "position": "CapsLock",
+        "passed": true
+      },
+      {
+        "position": "A",
+        "passed": true
+      },
+      {
+        "position": "S",
+        "passed": true
+      },
+      {
+        "position": "D",
+        "passed": true
+      },
+      {
+        "position": "F",
+        "passed": true
+      },
+      {
+        "position": "G",
+        "passed": true
+      },
+      {
+        "position": "H",
+        "passed": true
+      },
+      {
+        "position": "J",
+        "passed": true
+      },
+      {
+        "position": "K",
+        "passed": true
+      },
+      {
+        "position": "L",
+        "passed": true
+      },
+      {
+        "position": "semicolon",
+        "passed": true
+      },
+      {
+        "position": "quote",
+        "passed": true
+      },
+      {
+        "position": "Enter",
+        "passed": true
+      },
+      {
+        "position": "LeftShift",
+        "passed": true
+      },
+      {
+        "position": "Z",
+        "passed": true
+      },
+      {
+        "position": "X",
+        "passed": true
+      },
+      {
+        "position": "C",
+        "passed": true
+      },
+      {
+        "position": "V",
+        "passed": true
+      },
+      {
+        "position": "B",
+        "passed": true
+      },
+      {
+        "position": "N",
+        "passed": true
+      },
+      {
+        "position": "M",
+        "passed": true
+      },
+      {
+        "position": "comma",
+        "passed": true
+      },
+      {
+        "position": "period",
+        "passed": true
+      },
+      {
+        "position": "slash",
+        "passed": true
+      },
+      {
+        "position": "RightShift",
+        "passed": true
+      },
+      {
+        "position": "Fn",
+        "passed": true
+      },
+      {
+        "position": "ghost",
+        "passed": true
+      },
+      {
+        "position": "LeftAlt",
+        "passed": true
+      },
+      {
+        "position": "space",
+        "passed": true
+      },
+      {
+        "position": "RightAlt",
+        "passed": true
+      },
+      {
+        "position": "arrow",
+        "passed": true
+      }
+    ],
+    "reviewScope": "All 60 PBTfans WOB PT04-1 selected retail caps rendered individually in top and oblique orthographic views, 120 PNGs total. Every pair visually inspected against the official Base Alpha+Text Modifiers atlas via four sheets (backslash pair also opened separately); all legends readable, correct orientation, no overlap/cropping, all-black supplemental Esc/Enter/arrows confirmed. Automated exact layout and texture/object alpha bounds pass. This is individual visualization QA only, not full-board or 12-angle combination QA."
+  },
+  "visualQa": {
+    "status": "passed",
+    "reviewer": "/root/plan_customization_render_pipeline/review_completed_combinations",
+    "reviewedAt": "2026-10-31T09:14:27.748523+00:00",
+    "angles": [0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330],
+    "scope": "Visually inspected all twelve actual-angle PNGs in three four-frame contact sheets and front full-frame. Consistent ice-blue housing and black white-legend PBTFans WOB retail caps; no personal brand keys, no keyboard cropping, stable camera and geometry. Reviewed visible key profile including stepped Caps Lock, occlusion, side USB opening, rear plate/weight, feet, perforations, shadows and silhouette. Exact physical geometry, legends/fonts and filament color are approximate visualization, not fit or color certification. Frozen individual-key QA remains separate."
+  },
+  "renderer": "Blender 4.3.2",
+  "materialCalibration": "approximate",
+  "frames": [
+    {
+      "angleDegrees": 0,
+      "src": "/assets/products/rule60-hhkb-unibody/customization/v1/ice-blue--pbtfans-wob-retail/frame_000.webp",
+      "sha256": "fd8a73bd8dbd0e183b0178e258357c896e76a37ffba0ff01ae229e0971d79e08",
+      "width": 1024,
+      "height": 1536
+    },
+    {
+      "angleDegrees": 30,
+      "src": "/assets/products/rule60-hhkb-unibody/customization/v1/ice-blue--pbtfans-wob-retail/frame_030.webp",
+      "sha256": "74ce03b69a71eda8ff12d360387f5b20f7bcb8083f98313c6f4cd1ae1bc80edc",
+      "width": 1024,
+      "height": 1536
+    },
+    {
+      "angleDegrees": 60,
+      "src": "/assets/products/rule60-hhkb-unibody/customization/v1/ice-blue--pbtfans-wob-retail/frame_060.webp",
+      "sha256": "96bf2714165facd02686fbdd3a74f2714b9968063f49e56959601b0beaec57cd",
+      "width": 1024,
+      "height": 1536
+    },
+    {
+      "angleDegrees": 90,
+      "src": "/assets/products/rule60-hhkb-unibody/customization/v1/ice-blue--pbtfans-wob-retail/frame_090.webp",
+      "sha256": "53ac231891c087374da2b7e4faebf287d2ee3bb3fe4157a6ebb558dca2e0b102",
+      "width": 1024,
+      "height": 1536
+    },
+    {
+      "angleDegrees": 120,
+      "src": "/assets/products/rule60-hhkb-unibody/customization/v1/ice-blue--pbtfans-wob-retail/frame_120.webp",
+      "sha256": "f16948abc800d36c5669178f544576cfaf2eab46129ab2733740b83f4fa8fa18",
+      "width": 1024,
+      "height": 1536
+    },
+    {
+      "angleDegrees": 150,
+      "src": "/assets/products/rule60-hhkb-unibody/customization/v1/ice-blue--pbtfans-wob-retail/frame_150.webp",
+      "sha256": "fe9ffe67d5e9ba7cee4e705b0d2154197489f365eb4ab6e1572c963ac4fe3150",
+      "width": 1024,
+      "height": 1536
+    },
+    {
+      "angleDegrees": 180,
+      "src": "/assets/products/rule60-hhkb-unibody/customization/v1/ice-blue--pbtfans-wob-retail/frame_180.webp",
+      "sha256": "945453007532475934e7d7de8aa428188e49c9374f9262fba7a7ce04467d2d2c",
+      "width": 1024,
+      "height": 1536
+    },
+    {
+      "angleDegrees": 210,
+      "src": "/assets/products/rule60-hhkb-unibody/customization/v1/ice-blue--pbtfans-wob-retail/frame_210.webp",
+      "sha256": "9d509b4c2eb3948e42a4e8d99009bc298f9ef42cb3ce9e69267becc414d1d7c2",
+      "width": 1024,
+      "height": 1536
+    },
+    {
+      "angleDegrees": 240,
+      "src": "/assets/products/rule60-hhkb-unibody/customization/v1/ice-blue--pbtfans-wob-retail/frame_240.webp",
+      "sha256": "2faee4a175fa17ab196a748c528755d3afd29e8b9cc938011bb2d07b53b31d88",
+      "width": 1024,
+      "height": 1536
+    },
+    {
+      "angleDegrees": 270,
+      "src": "/assets/products/rule60-hhkb-unibody/customization/v1/ice-blue--pbtfans-wob-retail/frame_270.webp",
+      "sha256": "603a51fb85beced8ceb62fa10b95146e8f491aa90aea9683cb6107e34460ed5a",
+      "width": 1024,
+      "height": 1536
+    },
+    {
+      "angleDegrees": 300,
+      "src": "/assets/products/rule60-hhkb-unibody/customization/v1/ice-blue--pbtfans-wob-retail/frame_300.webp",
+      "sha256": "5328ef33e3c54658ef771d6ae0a91cfed0165147aa4c55f6c14471dfec9ab781",
+      "width": 1024,
+      "height": 1536
+    },
+    {
+      "angleDegrees": 330,
+      "src": "/assets/products/rule60-hhkb-unibody/customization/v1/ice-blue--pbtfans-wob-retail/frame_330.webp",
+      "sha256": "1fe982af294fb881bd990eb04b147aba5b439ee653b1b90a6fc3ec48ebd27871",
+      "width": 1024,
+      "height": 1536
+    }
+  ]
+}

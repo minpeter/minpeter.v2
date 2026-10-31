@@ -1,7 +1,6 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { parseAsBoolean, parseAsStringLiteral, useQueryStates } from "nuqs";
 import {
   type ChangeEvent,
   useCallback,
@@ -26,16 +25,7 @@ import {
 } from "@/shared/keyboard-customization";
 
 import { getSpinLoader } from "@/shared/product-spin-loader";
-
-const HOUSING_IDS = HOUSING_OPTIONS.map((option) => option.id);
-const KEYCAP_IDS = KEYCAP_OPTIONS.map((option) => option.id);
-const QUERY = {
-  customize: parseAsBoolean.withDefault(false),
-  housing: parseAsStringLiteral(HOUSING_IDS).withDefault("bone-white"),
-  keycaps: parseAsStringLiteral(KEYCAP_IDS).withDefault(
-    "retro-programmer-retail"
-  ),
-};
+import { useKeyboardCustomizationQuery } from "@/shared/use-keyboard-customization-query";
 
 function ValidatedPreview({
   combination,
@@ -105,10 +95,7 @@ function ValidatedPreview({
 /** The personal logo-key board is an immutable showcase, never a retail configuration. */
 export function ProductCustomizer(props: ProductGalleryProps) {
   const t = useTranslations("products.customization");
-  const [selection, setSelection] = useQueryStates(QUERY, {
-    history: "push",
-    shallow: true,
-  });
+  const [selection, setSelection] = useKeyboardCustomizationQuery();
   const showPersonal = useCallback(() => {
     setSelection({ customize: false });
   }, [setSelection]);

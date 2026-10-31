@@ -1,5 +1,5 @@
 // biome-ignore-all lint/performance/noAwaitInLoops: Each selection and history step verifies the preceding UI state.
-import { readFileSync } from "node:fs";
+import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 
 import {
   expect,
@@ -107,8 +107,11 @@ async function expectHistorySelection(
     }
     await expectSelection(page, selection);
   } catch (error) {
-    await testInfo.attach("history-selection-state", {
-      body: JSON.stringify(
+    const diagnosticPath = testInfo.outputPath("history-selection-state.json");
+    mkdirSync(testInfo.outputDir, { recursive: true });
+    writeFileSync(
+      diagnosticPath,
+      JSON.stringify(
         {
           expected: selection,
           state: await page.evaluate(() => ({
@@ -128,8 +131,11 @@ async function expectHistorySelection(
         },
         null,
         2
-      ),
+      )
+    );
+    await testInfo.attach("history-selection-state", {
       contentType: "application/json",
+      path: diagnosticPath,
     });
     throw error;
   }
@@ -628,5 +634,63 @@ test("switching validated combinations shares the global three-request limit", a
   } finally {
     gate.release();
     await page.unrouteAll({ behavior: "wait" });
+  }
+});
+
+test("every reviewed retail combination has a full-resolution visual reference", async ({
+  page,
+}, testInfo) => {
+  test.setTimeout(120_000);
+  // biome-ignore lint/suspicious/noSkippedTests: Visual references require reviewed manifests.
+  test.skip(combinations.length === 0, "No reviewed render is available");
+  await page.setViewportSize({ height: 900, width: 1440 });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  for (const combination of combinations) {
+    const path = `/en${DETAIL}?customize=true&housing=${combination.housingId}&keycaps=${combination.keycapId}`;
+    await page.goto(path);
+    await expect(page).toHaveURL(
+      (url) => `${url.pathname}${url.search}` === path
+    );
+    await expectSelection(page, {
+      housing: combination.housingId,
+      keycaps: combination.keycapId,
+    });
+    await expect(page.locator(".store-custom-preview")).toHaveAttribute(
+      "data-combination",
+      combination.id
+    );
+    const housingName =
+      en.products.customization.housingNames[
+        combination.housingId as keyof typeof en.products.customization.housingNames
+      ];
+    const kitName = await page
+      .locator("label.store-custom-option")
+      .filter({
+        has: page.locator(
+          `input[name="keycaps"][value="${combination.keycapId}"]`
+        ),
+      })
+      .locator("span")
+      .evaluate((element) => element.firstChild?.textContent?.trim() ?? "");
+    expect(kitName).not.toBe("");
+    await expect(page.locator(".store-custom-selection")).toHaveText(
+      en.products.customization.selected
+        .replace("{housing}", housingName)
+        .replace("{keycaps}", kitName)
+    );
+    const spin = page.getByTestId("product-spin");
+    await spin.scrollIntoViewIfNeeded();
+    await expect(spin).toHaveAttribute("data-loaded-count", "12", {
+      timeout: 15_000,
+    });
+    await expect(spin).toHaveAttribute("data-frame", "0");
+    await expect(spin).toHaveAttribute("data-displayed-frame", "0");
+    await expect(spin).toHaveAttribute("data-resolution", "full");
+    await expect(spin.locator("canvas")).toHaveCount(1);
+    await expect(spin.locator("img")).toHaveCount(0);
+    await page.screenshot({
+      fullPage: true,
+      path: testInfo.outputPath(`reviewed-${combination.id}.png`),
+    });
   }
 });
