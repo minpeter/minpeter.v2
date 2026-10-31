@@ -29,9 +29,14 @@ export async function generateMetadata(
 
   return createMetadata({
     description: t(`items.${product.key}.description`),
+    image: product.preview && {
+      alt: product.name,
+      url: product.preview.image,
+    },
     locale,
     path: `/products/${product.slug}`,
     title: `minpeter | ${product.name}`,
+    video: product.preview?.video,
   });
 }
 

@@ -39,12 +39,22 @@ export interface ProductSpin {
   width: number;
 }
 
+/**
+ * Link-preview media served from `public/assets`: an MP4 turntable for `og:video` plus a 1200×630 PNG still
+ * (`og:image`) for crawlers that skip video.
+ */
+export interface ProductPreview {
+  image: string;
+  video: { height: number; url: string; width: number };
+}
+
 export interface Product {
   details: readonly ProductDetail[];
   /** Where the print files live. */
   downloadHref: string;
   key: ProductKey;
   name: string;
+  preview?: ProductPreview;
   /** Extra gallery images after the turntable. */
   renders: readonly { alt: ProductRenderAlt; image: StaticImageData }[];
   slug: string;
@@ -61,6 +71,14 @@ export const PRODUCTS: readonly Product[] = [
       "https://github.com/minpeter/rule60-wrist-rest/tree/hhkb-topcase-wrist-rest#hhkb-top-case-with-integrated-wrist-rest-experimental",
     key: "rule60",
     name: "Rule 60 HHKB Unibody",
+    preview: {
+      image: "/assets/products/rule60-hhkb-unibody/og.png",
+      video: {
+        height: 1536,
+        url: "/assets/products/rule60-hhkb-unibody/preview.mp4",
+        width: 1024,
+      },
+    },
     renders: [
       { alt: "rule60Assembled", image: rule60Assembled },
       { alt: "rule60Top", image: rule60Top },

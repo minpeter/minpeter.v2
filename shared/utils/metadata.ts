@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import type { LocaleCode } from "@/shared/constants/locales";
+import { getBaseUrl } from "@/shared/env";
 import { routing } from "@/shared/i18n/routing";
 import { ogImageSize } from "@/shared/og-image";
 import { siteConfig } from "@/shared/site-config";
@@ -57,6 +58,12 @@ interface MetadataImage {
   url: string;
 }
 
+interface MetadataVideo {
+  height: number;
+  url: string;
+  width: number;
+}
+
 export function createMetadata({
   article,
   description,
@@ -64,6 +71,7 @@ export function createMetadata({
   locale,
   path,
   title,
+  video,
 }: {
   article?: ArticleMetadata;
   description?: string;
@@ -71,6 +79,7 @@ export function createMetadata({
   locale?: LocaleCode;
   path?: string;
   title?: string;
+  video?: MetadataVideo;
 }): Metadata {
   const resolvedLocale = resolveLocale(locale);
   const resolvedDescription =
@@ -97,6 +106,16 @@ export function createMetadata({
     alternateLocale,
     description: resolvedDescription,
     ...(resolvedImage ? { images: resolvedImage } : {}),
+    // Next resolves og:image against metadataBase but leaves og:video relative; crawlers need it absolute.
+    ...(video
+      ? {
+          videos: {
+            ...video,
+            type: "video/mp4",
+            url: new URL(video.url, getBaseUrl()).toString(),
+          },
+        }
+      : {}),
     locale: openGraphLocales[resolvedLocale],
     siteName: siteConfig.title,
     title,
