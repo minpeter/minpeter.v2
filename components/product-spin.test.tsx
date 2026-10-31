@@ -27,6 +27,42 @@ vi.mock("next/image", async () => {
   return { default: MockImage };
 });
 
+const cache = vi.hoisted(() => {
+  const listeners = new Set<() => void>();
+  const frames = new Map<number, ImageBitmap>();
+  const state = { version: 0 };
+  const loader = {
+    fetchedCount: 0,
+    getSnapshot: () => state.version,
+    getSource: vi.fn<(index: number) => Blob | undefined>(() => undefined),
+    nearestFrame: vi.fn((target: number) => {
+      let nearest: { index: number; bitmap: ImageBitmap } | null = null;
+      let distance = Number.POSITIVE_INFINITY;
+      for (const [index, bitmap] of frames) {
+        const delta = Math.abs(target - index);
+        const circular = Math.min(delta, 72 - delta);
+        if (circular < distance) {
+          nearest = { bitmap, index };
+          distance = circular;
+        }
+      }
+      return nearest;
+    }),
+    readyCount: 0,
+    release: vi.fn(),
+    requestFrame: vi.fn(),
+    setActive: vi.fn(),
+    subscribe: (listener: () => void) => {
+      listeners.add(listener);
+      return () => listeners.delete(listener);
+    },
+  };
+  return { frames, listeners, loader, state };
+});
+vi.mock("@/shared/product-spin-loader", () => ({
+  getSpinLoader: () => cache.loader,
+}));
+
 const spin = {
   basePath: "/assets/products/example/spin",
   defaultFrame: 0,
@@ -35,62 +71,52 @@ const spin = {
   poster: { height: 1536, src: "/poster.webp", width: 1024 },
   width: 1024,
 };
+const drawImage = vi.fn();
+const context = { drawImage, globalCompositeOperation: "source-over" };
 
-function mountSpin() {
+function mountSpin(active = true) {
   render(<ProductSpin alt="Reconstructed render" sizes="100vw" spin={spin} />);
-  return screen.getByRole("slider", { name: "Reconstructed render" });
-}
-
-function frame(slider: HTMLElement, index: number) {
-  const image = slider.querySelector<HTMLImageElement>(
-    `img[data-index="${index}"]`
-  );
-  if (!image) {
-    throw new Error(`Frame ${index} is not mounted`);
+  const slider = screen.getByRole("slider", { name: "Reconstructed render" });
+  if (active) {
+    fireEvent.focus(slider);
   }
-  return image;
+  return slider;
 }
-
-function pendingDecode(image: HTMLImageElement) {
-  const deferred = Promise.withResolvers<void>();
-  Object.defineProperty(image, "decode", {
-    configurable: true,
-    value: vi.fn(() => deferred.promise),
-  });
-  fireEvent.load(image);
-  return {
-    fail: async () => {
-      await act(async () => {
-        deferred.reject(new Error("Decode failed"));
-        await Promise.resolve();
-      });
-    },
-    finish: async () => {
-      await act(async () => {
-        deferred.resolve();
-        await deferred.promise;
-      });
-    },
-  };
-}
-
 function press(slider: HTMLElement, key: string, times = 1) {
   for (let step = 0; step < times; step += 1) {
     fireEvent.keyDown(slider, { key });
   }
 }
-
-function displayed(slider: HTMLElement) {
-  return [
-    slider.getAttribute("data-displayed-frame"),
-    ...Array.from(slider.querySelectorAll("img"))
-      .filter((image) => !image.classList.contains("invisible"))
-      .map((image) => image.getAttribute("data-index") ?? "poster"),
-  ];
+function arrive(index: number) {
+  const bitmap = {
+    close: vi.fn(),
+    height: 768,
+    width: 512,
+  } as unknown as ImageBitmap;
+  act(() => {
+    cache.frames.set(index, bitmap);
+    cache.loader.readyCount = cache.frames.size;
+    cache.loader.fetchedCount += 1;
+    cache.state.version += 1;
+    for (const listener of cache.listeners) {
+      listener();
+    }
+  });
+  return bitmap;
 }
 
-describe("ProductSpin decode retention", () => {
+describe("ProductSpin progressive canvas", () => {
   beforeEach(() => {
+    vi.clearAllMocks();
+    cache.frames.clear();
+    cache.state.version = 0;
+    cache.loader.readyCount = 0;
+    cache.loader.fetchedCount = 0;
+    drawImage.mockReset();
+    cache.loader.getSource.mockReset();
+    vi.spyOn(HTMLCanvasElement.prototype, "getContext").mockReturnValue(
+      context as unknown as CanvasRenderingContext2D
+    );
     vi.stubGlobal(
       "matchMedia",
       vi.fn(() => ({
@@ -100,114 +126,331 @@ describe("ProductSpin decode retention", () => {
       }))
     );
   });
-
   afterEach(() => {
     cleanup();
+    vi.useRealTimers();
+    vi.restoreAllMocks();
     vi.unstubAllGlobals();
   });
 
-  it("starts with only a poster and bounds retained frame elements to four", async () => {
+  it("retains one poster and one canvas instead of mounting frame images", () => {
     const slider = mountSpin();
-    expect(slider.querySelectorAll("img[data-index]")).toHaveLength(0);
-    expect(displayed(slider)).toEqual(["poster", "poster"]);
+    expect(slider.getAttribute("data-displayed-frame")).toBe("poster");
+    expect(slider.querySelectorAll("img")).toHaveLength(1);
+    expect(slider.querySelectorAll("canvas")).toHaveLength(1);
+    expect(
+      slider.querySelector("canvas")?.classList.contains("invisible")
+    ).toBe(true);
     fireEvent.focus(slider);
-    expect(slider.querySelectorAll("img[data-index]")).toHaveLength(3);
-    await pendingDecode(frame(slider, 0)).finish();
-    for (let index = 1; index <= 72; index += 1) {
-      press(slider, "ArrowRight");
-      expect(
-        slider.querySelectorAll("img[data-index]").length
-      ).toBeLessThanOrEqual(4);
-      expect(displayed(slider)).toEqual(["0", "0"]);
+    for (let index = 0; index < 72; index += 1) {
+      arrive(index);
     }
+    press(slider, "ArrowRight", 72);
+    expect(slider.querySelectorAll("img")).toHaveLength(1);
+    expect(slider.querySelectorAll("canvas")).toHaveLength(1);
+    expect(slider.getAttribute("data-loaded-count")).toBe("72");
+    expect(slider.getAttribute("data-ready-count")).toBe("72");
   });
 
-  it("wraps 0 to 71 to 0 without intermediate animation under reduced motion", () => {
+  it("draws the nearest ready angle and refines without changing the requested angle", () => {
     const slider = mountSpin();
+    const coarse = arrive(6);
+    press(slider, "ArrowRight", 8);
+    expect(cache.loader.nearestFrame).toHaveBeenLastCalledWith(8);
+    expect(slider.getAttribute("data-frame")).toBe("8");
+    expect(slider.getAttribute("data-displayed-frame")).toBe("6");
+    expect(drawImage).toHaveBeenLastCalledWith(coarse, 0, 0, 1024, 1536);
+    const medium = arrive(9);
+    expect(slider.getAttribute("data-displayed-frame")).toBe("9");
+    expect(drawImage).toHaveBeenLastCalledWith(medium, 0, 0, 1024, 1536);
+    const fine = arrive(8);
+    expect(slider.getAttribute("data-displayed-frame")).toBe("8");
+    expect(slider.getAttribute("data-frame")).toBe("8");
+    expect(drawImage).toHaveBeenLastCalledWith(fine, 0, 0, 1024, 1536);
+    expect(context.globalCompositeOperation).toBe("copy");
+  });
+
+  it("compares late arrivals against the latest angle instead of blindly drawing them", () => {
+    const slider = mountSpin();
+    arrive(0);
+    press(slider, "ArrowRight", 6);
+    arrive(6);
+    press(slider, "ArrowRight", 18);
+    const current = arrive(24);
+    arrive(7);
+    expect(cache.loader.nearestFrame).toHaveBeenLastCalledWith(24);
+    expect(slider.getAttribute("data-displayed-frame")).toBe("24");
+    expect(drawImage).toHaveBeenLastCalledWith(current, 0, 0, 1024, 1536);
+    expect(cache.loader.requestFrame).toHaveBeenLastCalledWith(
+      expect.any(Symbol),
+      24
+    );
+  });
+
+  it("keeps the poster when drawing fails and retains a successfully painted frame on later failure", () => {
+    const slider = mountSpin();
+    drawImage.mockImplementationOnce(() => {
+      throw new Error("Closed bitmap");
+    });
+    arrive(0);
+    expect(slider.getAttribute("data-displayed-frame")).toBe("poster");
+    expect(slider.querySelector("img")?.classList.contains("invisible")).toBe(
+      false
+    );
+    arrive(6);
+    expect(slider.getAttribute("data-displayed-frame")).toBe("0");
+    drawImage.mockImplementationOnce(() => {
+      throw new Error("Closed bitmap");
+    });
+    press(slider, "ArrowRight", 4);
+    expect(slider.getAttribute("data-displayed-frame")).toBe("0");
+    cache.frames.clear();
+    press(slider, "ArrowRight", 1);
+    expect(slider.getAttribute("data-displayed-frame")).toBe("0");
+    expect(
+      slider.querySelector("canvas")?.classList.contains("invisible")
+    ).toBe(false);
+  });
+
+  it("keeps the poster if the browser cannot provide a canvas context", () => {
+    vi.spyOn(HTMLCanvasElement.prototype, "getContext").mockReturnValue(null);
+    const slider = mountSpin();
+    arrive(0);
+    expect(drawImage).not.toHaveBeenCalled();
+    expect(slider.getAttribute("data-displayed-frame")).toBe("poster");
+  });
+
+  it("wraps keyboard controls and chooses the circular nearest ready frame", () => {
+    const slider = mountSpin();
+    arrive(0);
+    arrive(60);
     press(slider, "ArrowLeft");
     expect(slider.getAttribute("data-frame")).toBe("71");
     expect(slider.getAttribute("aria-valuetext")).toBe("355°");
-    expect(frame(slider, 71).getAttribute("src")).toBe(
-      `${spin.basePath}/72.webp`
-    );
+    expect(slider.getAttribute("data-displayed-frame")).toBe("0");
     press(slider, "ArrowRight");
     expect(slider.getAttribute("data-frame")).toBe("0");
     expect(slider.getAttribute("aria-valuetext")).toBe("0°");
   });
 
-  it("promotes an already decoded mounted neighbor when selected", async () => {
-    const slider = mountSpin();
+  it("tracks viewport activity and only releases the shared consumer on unmount", () => {
+    let intersect: IntersectionObserverCallback | undefined;
+    const observe = vi.fn();
+    const disconnect = vi.fn();
+    vi.stubGlobal(
+      "IntersectionObserver",
+      class {
+        constructor(callback: IntersectionObserverCallback) {
+          intersect = callback;
+        }
+        observe = observe;
+        disconnect = disconnect;
+      }
+    );
+    const slider = mountSpin(false);
+    expect(observe).toHaveBeenCalledWith(slider);
+    expect(cache.loader.setActive).toHaveBeenLastCalledWith(
+      expect.any(Symbol),
+      false
+    );
+    act(() => {
+      intersect?.(
+        [{ isIntersecting: true } as IntersectionObserverEntry],
+        {} as IntersectionObserver
+      );
+    });
+    expect(cache.loader.setActive).toHaveBeenLastCalledWith(
+      expect.any(Symbol),
+      true
+    );
+    act(() => {
+      intersect?.(
+        [{ isIntersecting: false } as IntersectionObserverEntry],
+        {} as IntersectionObserver
+      );
+    });
+    expect(cache.loader.setActive).toHaveBeenLastCalledWith(
+      expect.any(Symbol),
+      false
+    );
     fireEvent.focus(slider);
-    await pendingDecode(frame(slider, 0)).finish();
-    await pendingDecode(frame(slider, 1)).finish();
-    expect(displayed(slider)).toEqual(["0", "0"]);
-    press(slider, "ArrowRight");
-    expect(displayed(slider)).toEqual(["1", "1"]);
+    expect(cache.loader.setActive).toHaveBeenLastCalledWith(
+      expect.any(Symbol),
+      true
+    );
+    arrive(0);
+    expect(drawImage).toHaveBeenCalledOnce();
+    act(() => {
+      intersect?.(
+        [{ isIntersecting: false } as IntersectionObserverEntry],
+        {} as IntersectionObserver
+      );
+    });
+    arrive(6);
+    expect(drawImage).toHaveBeenCalledOnce();
+    expect(cache.loader.setActive).toHaveBeenLastCalledWith(
+      expect.any(Symbol),
+      false
+    );
+    expect(cache.loader.release).not.toHaveBeenCalled();
+    const token = cache.loader.setActive.mock.calls.at(-1)?.[0];
+    cleanup();
+    expect(cache.loader.release).toHaveBeenLastCalledWith(token);
+    expect(disconnect).toHaveBeenCalledOnce();
+    expect(cache.listeners.size).toBe(0);
+  });
+  it("does not draw offscreen cache updates until activated", () => {
+    const slider = mountSpin(false);
+    const bitmap = arrive(0);
+    arrive(6);
+    expect(drawImage).not.toHaveBeenCalled();
+    expect(cache.loader.requestFrame).not.toHaveBeenCalled();
+    expect(slider.getAttribute("data-displayed-frame")).toBe("poster");
+    fireEvent.focus(slider);
+    expect(drawImage).toHaveBeenCalledOnce();
+    expect(drawImage).toHaveBeenLastCalledWith(bitmap, 0, 0, 1024, 1536);
+    expect(slider.getAttribute("data-displayed-frame")).toBe("0");
   });
 
-  it("retains the last decoded frame until the requested image decodes", async () => {
+  it("does not repaint the same bitmap when unrelated cache versions arrive", () => {
     const slider = mountSpin();
-    fireEvent.focus(slider);
-    await pendingDecode(frame(slider, 0)).finish();
-    press(slider, "ArrowRight", 4);
-    const decode = pendingDecode(frame(slider, 4));
-    expect(displayed(slider)).toEqual(["0", "0"]);
-    await decode.finish();
-    expect(displayed(slider)).toEqual(["4", "4"]);
-    expect(slider.querySelector('img[data-index="0"]')).toBeNull();
+    arrive(0);
+    expect(drawImage).toHaveBeenCalledOnce();
+    arrive(24);
+    arrive(30);
+    expect(drawImage).toHaveBeenCalledOnce();
+    press(slider, "ArrowRight");
+    expect(drawImage).toHaveBeenCalledOnce();
+    arrive(1);
+    expect(drawImage).toHaveBeenCalledTimes(2);
+    expect(slider.getAttribute("data-displayed-frame")).toBe("1");
+    arrive(36);
+    expect(drawImage).toHaveBeenCalledTimes(2);
   });
 
-  it("ignores stale decodes even when the old target is still a mounted neighbor", async () => {
+  it("refines an idle frame at full resolution and closes the temporary bitmap", async () => {
+    vi.useFakeTimers();
+    const source = new Blob(["frame"]);
+    cache.loader.getSource.mockReturnValue(source);
+    const full = {
+      close: vi.fn(),
+      height: 1536,
+      width: 1024,
+    } as unknown as ImageBitmap;
+    const decode = vi.fn().mockResolvedValue(full);
+    vi.stubGlobal("createImageBitmap", decode);
     const slider = mountSpin();
-    fireEvent.focus(slider);
-    await pendingDecode(frame(slider, 0)).finish();
-    press(slider, "ArrowRight");
-    const stale = pendingDecode(frame(slider, 1));
-    press(slider, "ArrowRight");
-    await pendingDecode(frame(slider, 2)).finish();
-    await stale.finish();
-    expect(displayed(slider)).toEqual(["2", "2"]);
+    arrive(0);
+    expect(slider.getAttribute("data-resolution")).toBe("preview");
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(199);
+    });
+    expect(decode).not.toHaveBeenCalled();
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(1);
+    });
+    expect(decode).toHaveBeenCalledExactlyOnceWith(source);
+    expect(drawImage).toHaveBeenLastCalledWith(full, 0, 0, 1024, 1536);
+    expect(full.close).toHaveBeenCalledOnce();
+    expect(slider.getAttribute("data-resolution")).toBe("full");
+    const paints = drawImage.mock.calls.length;
+    arrive(24);
+    expect(drawImage).toHaveBeenCalledTimes(paints);
   });
 
-  it("ignores decode completion after an image was unmounted", async () => {
+  it("closes a stale idle decode without replacing the newer angle", async () => {
+    vi.useFakeTimers();
+    cache.loader.getSource.mockReturnValue(new Blob(["frame"]));
+    const pending = Promise.withResolvers<ImageBitmap>();
+    vi.stubGlobal(
+      "createImageBitmap",
+      vi.fn(() => pending.promise)
+    );
     const slider = mountSpin();
-    fireEvent.focus(slider);
-    const staleImage = frame(slider, 1);
-    const stale = pendingDecode(staleImage);
+    arrive(0);
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(200);
+    });
     press(slider, "ArrowRight", 6);
-    expect(staleImage.isConnected).toBe(false);
-    await stale.finish();
-    expect(displayed(slider)).toEqual(["poster", "poster"]);
-    await pendingDecode(frame(slider, 6)).finish();
-    expect(displayed(slider)).toEqual(["6", "6"]);
+    const latest = arrive(6);
+    const paints = drawImage.mock.calls.length;
+    const stale = {
+      close: vi.fn(),
+      height: 1536,
+      width: 1024,
+    } as unknown as ImageBitmap;
+    await act(async () => {
+      pending.resolve(stale);
+      await pending.promise;
+    });
+    expect(stale.close).toHaveBeenCalledOnce();
+    expect(drawImage).toHaveBeenCalledTimes(paints);
+    expect(drawImage).toHaveBeenLastCalledWith(latest, 0, 0, 1024, 1536);
+    expect(slider.getAttribute("data-displayed-frame")).toBe("6");
+    expect(slider.getAttribute("data-resolution")).toBe("preview");
   });
 
-  it("requires a fresh decode when returning to an unmounted historical frame", async () => {
+  it("allows only one pending full-resolution decode and then refines the latest angle", async () => {
+    vi.useFakeTimers();
+    cache.loader.getSource.mockReturnValue(new Blob(["frame"]));
+    const pending = Promise.withResolvers<ImageBitmap>();
+    const latestFull = {
+      close: vi.fn(),
+      height: 1536,
+      width: 1024,
+    } as unknown as ImageBitmap;
+    const decode = vi
+      .fn()
+      .mockReturnValueOnce(pending.promise)
+      .mockResolvedValue(latestFull);
+    vi.stubGlobal("createImageBitmap", decode);
     const slider = mountSpin();
-    fireEvent.focus(slider);
-    const original = frame(slider, 0);
-    await pendingDecode(original).finish();
-    press(slider, "ArrowRight", 4);
-    await pendingDecode(frame(slider, 4)).finish();
-    expect(original.isConnected).toBe(false);
-    press(slider, "ArrowLeft", 4);
-    expect(frame(slider, 0)).not.toBe(original);
-    expect(displayed(slider)).toEqual(["4", "4"]);
-    await pendingDecode(frame(slider, 0)).finish();
-    expect(displayed(slider)).toEqual(["0", "0"]);
+    arrive(0);
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(200);
+    });
+    press(slider, "ArrowRight", 6);
+    arrive(6);
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(400);
+    });
+    expect(decode).toHaveBeenCalledOnce();
+    const obsolete = {
+      close: vi.fn(),
+      height: 1536,
+      width: 1024,
+    } as unknown as ImageBitmap;
+    await act(async () => {
+      pending.resolve(obsolete);
+      await pending.promise;
+    });
+    expect(obsolete.close).toHaveBeenCalledOnce();
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(50);
+    });
+    expect(decode).toHaveBeenCalledTimes(2);
+    expect(drawImage).toHaveBeenLastCalledWith(latestFull, 0, 0, 1024, 1536);
+    expect(latestFull.close).toHaveBeenCalledOnce();
+    expect(slider.getAttribute("data-displayed-frame")).toBe("6");
+    expect(slider.getAttribute("data-resolution")).toBe("full");
   });
 
-  it("keeps the poster on initial decode failure and last decoded frame on later failure", async () => {
+  it("retains the preview when idle full-resolution decoding fails", async () => {
+    vi.useFakeTimers();
+    cache.loader.getSource.mockReturnValue(new Blob(["frame"]));
+    vi.stubGlobal(
+      "createImageBitmap",
+      vi.fn().mockRejectedValue(new Error("Decode failed"))
+    );
     const slider = mountSpin();
-    fireEvent.focus(slider);
-    await pendingDecode(frame(slider, 0)).fail();
-    expect(displayed(slider)).toEqual(["poster", "poster"]);
-    press(slider, "ArrowRight");
-    await pendingDecode(frame(slider, 1)).finish();
-    press(slider, "ArrowRight");
-    await pendingDecode(frame(slider, 2)).fail();
-    fireEvent.error(frame(slider, 2));
-    expect(displayed(slider)).toEqual(["1", "1"]);
+    const preview = arrive(0);
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(200);
+    });
+    expect(drawImage).toHaveBeenCalledOnce();
+    expect(drawImage).toHaveBeenLastCalledWith(preview, 0, 0, 1024, 1536);
+    expect(slider.getAttribute("data-resolution")).toBe("preview");
+    expect(slider.getAttribute("data-displayed-frame")).toBe("0");
   });
 
   it("cancels an active animation when reduced motion is enabled live", () => {

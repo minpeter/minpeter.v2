@@ -4,12 +4,14 @@ import Image from "next/image";
 import {
   useCallback,
   useEffect,
+  useId,
   useMemo,
   useRef,
   useState,
   useSyncExternalStore,
 } from "react";
 
+import { getSpinLoader } from "@/shared/product-spin-loader";
 import type { ProductSpin as ProductSpinData } from "@/shared/products";
 import { cn } from "@/shared/utils/tailwind";
 
@@ -26,59 +28,6 @@ function subscribeReducedMotion(onChange: () => void) {
 
 function getReducedMotion() {
   return window.matchMedia(REDUCED_MOTION_QUERY).matches;
-}
-
-/** Decode state belongs to this mounted image, never to a historical frame index. */
-function SpinFrame({
-  index,
-  src,
-  selected,
-  visible,
-  onReady,
-}: {
-  index: number;
-  src: string;
-  selected: boolean;
-  visible: boolean;
-  onReady: (index: number) => void;
-}) {
-  const [decoded, setDecoded] = useState(false);
-  const imageRef = useRef<HTMLImageElement>(null);
-  useEffect(() => {
-    if (selected && decoded && imageRef.current?.isConnected) {
-      onReady(index);
-    }
-  }, [decoded, index, onReady, selected]);
-
-  const handleLoad = useCallback(
-    async (event: React.SyntheticEvent<HTMLImageElement>) => {
-      const image = event.currentTarget;
-      try {
-        await image.decode();
-        if (image.isConnected && image === imageRef.current) {
-          setDecoded(true);
-        }
-      } catch {
-        // Keep the last decoded frame (or poster) on decode/network failure.
-      }
-    },
-    []
-  );
-
-  return (
-    <Image
-      alt=""
-      className={cn("object-contain", !visible && "invisible")}
-      data-index={index}
-      draggable={false}
-      fill
-      loading="eager"
-      onLoad={handleLoad}
-      ref={imageRef}
-      src={src}
-      unoptimized
-    />
-  );
 }
 
 interface ProductSpinProps {
@@ -102,6 +51,24 @@ export function ProductSpin({ alt, className, sizes, spin }: ProductSpinProps) {
   const interactive = alt !== undefined;
   const { basePath, defaultFrame, frameCount, height, poster, width } = spin;
   const [active, setActive] = useState(false);
+  const [inView, setInView] = useState(false);
+  const stageRef = useRef<HTMLDivElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const paintedBitmapRef = useRef<ImageBitmap | null>(null);
+  const fullResolutionFrameRef = useRef<number | null>(null);
+  const fullDecodePendingRef = useRef(false);
+  const [resolution, setResolution] = useState("preview");
+  const id = useId();
+  const token = useMemo(() => Symbol(id), [id]);
+  const loader = useMemo(
+    () => getSpinLoader({ basePath, frameCount, height, width }),
+    [basePath, frameCount, height, width]
+  );
+  const version = useSyncExternalStore(
+    loader.subscribe,
+    loader.getSnapshot,
+    () => 0
+  );
   const [frame, setFrame] = useState(defaultFrame);
   const [displayedFrame, setDisplayedFrame] = useState<number | null>(null);
   const reducedMotion = useSyncExternalStore(
@@ -114,6 +81,116 @@ export function ProductSpin({ alt, className, sizes, spin }: ProductSpinProps) {
   const rafRef = useRef(0);
   const lastStepRef = useRef(0);
   const dragRef = useRef<{ startFrame: number; startX: number } | null>(null);
+
+  useEffect(() => {
+    const stage = stageRef.current;
+    if (!(stage && window.IntersectionObserver)) {
+      return;
+    }
+    const observer = new IntersectionObserver(([entry]) => {
+      setInView(entry.isIntersecting);
+      if (!entry.isIntersecting) {
+        setActive(false);
+      }
+    });
+    observer.observe(stage);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    loader.setActive(token, inView || active);
+  }, [active, inView, loader, token]);
+  useEffect(() => () => loader.release(token), [loader, token]);
+
+  useEffect(() => {
+    if (!(inView || active)) {
+      return;
+    }
+    loader.requestFrame(token, frame);
+    if (version !== loader.getSnapshot()) {
+      return;
+    }
+    // Loading order is independent of pointer movement. Only draw decoded cache entries;
+    // a late load is compared with the current angle, never blindly promoted.
+    const nearest = loader.nearestFrame(frame);
+    const canvas = canvasRef.current;
+    if (
+      !(nearest && canvas) ||
+      nearest.bitmap === paintedBitmapRef.current ||
+      nearest.index === fullResolutionFrameRef.current
+    ) {
+      return;
+    }
+    const context = canvas.getContext("2d");
+    if (!context) {
+      return;
+    }
+    try {
+      context.globalCompositeOperation = "copy";
+      context.drawImage(nearest.bitmap, 0, 0, canvas.width, canvas.height);
+      paintedBitmapRef.current = nearest.bitmap;
+      fullResolutionFrameRef.current = null;
+      setResolution("preview");
+      setDisplayedFrame(nearest.index);
+    } catch {
+      // An unavailable bitmap must not erase the already painted frame or poster.
+    }
+  }, [active, frame, inView, loader, token, version]);
+
+  useEffect(() => {
+    if (
+      !(inView || active) ||
+      displayedFrame === null ||
+      fullResolutionFrameRef.current === displayedFrame
+    ) {
+      return;
+    }
+    const source = loader.getSource(displayedFrame);
+    if (!source) {
+      return;
+    }
+    let cancelled = false;
+    let timer: ReturnType<typeof setTimeout>;
+    const paintFullResolution = async () => {
+      if (cancelled) {
+        return;
+      }
+      // biome-ignore lint/suspicious/noUnnecessaryConditions: A previous effect's asynchronous decode can still own this shared ref.
+      if (fullDecodePendingRef.current) {
+        timer = setTimeout(paintFullResolution, 50);
+        return;
+      }
+      fullDecodePendingRef.current = true;
+      let bitmap: ImageBitmap | undefined;
+      try {
+        // Preserve original detail on high-DPR screens after motion stops. The compressed
+        // original is already cached; only one temporary full-resolution decode is needed.
+        bitmap = await createImageBitmap(source);
+        const canvas = canvasRef.current;
+        if (cancelled || !canvas || frameRef.current !== frame) {
+          return;
+        }
+        const context = canvas.getContext("2d");
+        if (!context) {
+          return;
+        }
+        context.globalCompositeOperation = "copy";
+        context.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+        fullResolutionFrameRef.current = displayedFrame;
+        setResolution("full");
+      } catch {
+        // A full-quality refinement failure leaves the resized decoded frame intact.
+      } finally {
+        bitmap?.close();
+        fullDecodePendingRef.current = false;
+      }
+    };
+    timer = setTimeout(paintFullResolution, 200);
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
+  }, [active, displayedFrame, frame, inView, loader]);
 
   useEffect(() => () => cancelAnimationFrame(rafRef.current), []);
   useEffect(() => {
@@ -217,11 +294,13 @@ export function ProductSpin({ alt, className, sizes, spin }: ProductSpinProps) {
   );
 
   const handlePointerEnd = useCallback(() => {
+    setActive(false);
     dragRef.current = null;
   }, []);
 
   const handlePointerLeave = useCallback(
     (event: React.PointerEvent<HTMLDivElement>) => {
+      setActive(false);
       if (event.pointerType !== "touch" && !reducedMotion) {
         aim(defaultFrame);
       }
@@ -242,39 +321,8 @@ export function ProductSpin({ alt, className, sizes, spin }: ProductSpinProps) {
     [aim, frameCount]
   );
 
-  const handleFrameReady = useCallback((index: number) => {
-    // A late decode must not replace the newer requested angle.
-    if (index === frameRef.current) {
-      setDisplayedFrame(index);
-    }
-  }, []);
-
   const handleFocus = useCallback(() => setActive(true), []);
-
-  const frameSources = useMemo(
-    () =>
-      Array.from(
-        { length: frameCount },
-        (_, index) => `${basePath}/${String(index + 1).padStart(2, "0")}.webp`
-      ),
-    [basePath, frameCount]
-  );
-
-  const frameWindow = useMemo(
-    () =>
-      active
-        ? Array.from(
-            new Set([
-              frame,
-              (frame + 1) % frameCount,
-              (frame - 1 + frameCount) % frameCount,
-              ...(displayedFrame === null ? [] : [displayedFrame]),
-            ])
-          )
-        : [],
-    [active, displayedFrame, frame, frameCount]
-  );
-  // At most four frame images: requested angle, its neighbors, and the retained decoded image.
+  const handleBlur = useCallback(() => setActive(false), []);
   const showFrames = displayedFrame !== null;
 
   return (
@@ -286,6 +334,7 @@ export function ProductSpin({ alt, className, sizes, spin }: ProductSpinProps) {
             "aria-valuemin": 0,
             "aria-valuenow": frame,
             "aria-valuetext": `${Math.round((frame / frameCount) * 360)}°`,
+            onBlur: handleBlur,
             onFocus: handleFocus,
             onKeyDown: handleKeyDown,
             onLostPointerCapture: handlePointerEnd,
@@ -299,10 +348,14 @@ export function ProductSpin({ alt, className, sizes, spin }: ProductSpinProps) {
       className={cn("relative touch-pan-y select-none", className)}
       data-displayed-frame={displayedFrame ?? "poster"}
       data-frame={frame}
+      data-loaded-count={loader.fetchedCount}
+      data-ready-count={loader.readyCount}
+      data-resolution={resolution}
       data-testid="product-spin"
       onPointerEnter={handlePointerEnter}
       onPointerLeave={handlePointerLeave}
       onPointerMove={handlePointerMove}
+      ref={stageRef}
       style={{ aspectRatio: `${width} / ${height}` }}
     >
       <Image
@@ -314,16 +367,17 @@ export function ProductSpin({ alt, className, sizes, spin }: ProductSpinProps) {
         sizes={sizes}
         src={poster}
       />
-      {frameWindow.map((index) => (
-        <SpinFrame
-          index={index}
-          key={frameSources[index]}
-          onReady={handleFrameReady}
-          selected={index === frame}
-          src={frameSources[index]}
-          visible={index === displayedFrame}
-        />
-      ))}
+      <canvas
+        aria-hidden="true"
+        className={cn(
+          "absolute inset-0 h-full w-full object-contain",
+          !showFrames && "invisible"
+        )}
+        height={height}
+        ref={canvasRef}
+        tabIndex={-1}
+        width={width}
+      />
     </div>
   );
 }
