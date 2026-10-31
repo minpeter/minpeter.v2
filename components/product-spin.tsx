@@ -234,49 +234,30 @@ export function ProductSpin({ alt, className, sizes, spin }: ProductSpinProps) {
     [animate, reducedMotion]
   );
 
-  const frameAt = useCallback(
-    (event: React.PointerEvent<HTMLDivElement>) => {
-      const { left, width: boxWidth } =
-        event.currentTarget.getBoundingClientRect();
-      const progress = Math.min(
-        Math.max((event.clientX - left) / boxWidth, 0),
-        1
-      );
-      return Math.min(Math.floor(progress * frameCount), frameCount - 1);
-    },
-    [frameCount]
-  );
+  const handlePointerEnter = useCallback(() => setActive(true), []);
 
-  const handlePointerEnter = useCallback(
-    (event: React.PointerEvent<HTMLDivElement>) => {
-      setActive(true);
-      if (event.pointerType === "mouse" && !reducedMotion) {
-        aim(frameAt(event));
-      }
-    },
-    [aim, frameAt, reducedMotion]
-  );
-
-  // Mouse and pen: the horizontal position over the render picks the angle, no click needed.
-  // Touch: drag across the render; one full width is one full turn.
+  // Mouse and pen: horizontal movement over the render turns it, no click needed; entering only
+  // anchors at the pointer, so the angle never jumps to where the pointer happens to land.
+  // Touch: drag across the render. Either way one full width of travel is one full turn.
   const handlePointerMove = useCallback(
     (event: React.PointerEvent<HTMLDivElement>) => {
       const drag = dragRef.current;
-      if (drag) {
-        const { width: boxWidth } = event.currentTarget.getBoundingClientRect();
-        const moved = Math.round(
-          ((event.clientX - drag.startX) / boxWidth) * frameCount
-        );
-        aim(
-          (((drag.startFrame + moved) % frameCount) + frameCount) % frameCount
-        );
+      if (!drag) {
+        if (event.pointerType !== "touch" && !reducedMotion) {
+          dragRef.current = {
+            startFrame: targetRef.current,
+            startX: event.clientX,
+          };
+        }
         return;
       }
-      if (event.pointerType !== "touch" && !reducedMotion) {
-        aim(frameAt(event));
-      }
+      const { width: boxWidth } = event.currentTarget.getBoundingClientRect();
+      const moved = Math.round(
+        ((event.clientX - drag.startX) / boxWidth) * frameCount
+      );
+      aim((((drag.startFrame + moved) % frameCount) + frameCount) % frameCount);
     },
-    [aim, frameAt, frameCount, reducedMotion]
+    [aim, frameCount, reducedMotion]
   );
 
   const handlePointerDown = useCallback(
@@ -301,7 +282,11 @@ export function ProductSpin({ alt, className, sizes, spin }: ProductSpinProps) {
   const handlePointerLeave = useCallback(
     (event: React.PointerEvent<HTMLDivElement>) => {
       setActive(false);
-      if (event.pointerType !== "touch" && !reducedMotion) {
+      if (event.pointerType === "touch") {
+        return;
+      }
+      dragRef.current = null;
+      if (!reducedMotion) {
         aim(defaultFrame);
       }
     },

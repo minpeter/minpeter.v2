@@ -18,7 +18,7 @@
 - Blog post: soft-nav from list; avoid external_url posts for in-app checks
 - Header / locale: `[data-testid=site-header]`, `[data-testid=language-selector]`
 - Showcase: prefer title/description, not canvas pixels
-- Products: `[data-testid=products-page]`, detail `[data-testid=product-detail]`; turntable `[data-testid=product-spin]` exposes `data-frame` (hover x-position picks the frame). Catalog: `shared/products.ts`; spin frames must live under `public/assets/` (other public paths get locale-rewritten by `proxy.ts`).
+- Products: `[data-testid=products-page]`, detail `[data-testid=product-detail]`; turntable `[data-testid=product-spin]` exposes `data-frame` (horizontal pointer movement over it turns it; entering does not). Catalog: `shared/products.ts`; spin frames must live under `public/assets/` (other public paths get locale-rewritten by `proxy.ts`).
 - Lint/format: `pnpm check:lint` / `pnpm fmt` (Ultracite → Biome; no oxlint/oxfmt)
 - Typecheck: `pnpm check` · Tests: `pnpm test` · Build: `pnpm build` · Audit: `pnpm audit --prod`
 
