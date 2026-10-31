@@ -279,9 +279,12 @@ for (const { locale, prefix, messages } of LOCALES) {
         );
         await expectPending(page, labels.pending);
         await expectSelection(page, housingChanged);
-        await expect(page.getByTestId("product-price")).toContainText(
-          messages.products.upcoming
-        );
+        // Cache Components may retain an inaccessible previous route tree.
+        // Assert the unique price in the currently accessible product article.
+        const price = page.getByRole("article").getByTestId("product-price");
+        await expect(price).toHaveCount(1);
+        await expect(price).toBeVisible();
+        await expect(price).toContainText(messages.products.upcoming);
         expect(customRequests).toEqual([]);
         await page.screenshot({
           fullPage: true,
