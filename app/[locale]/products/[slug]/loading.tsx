@@ -5,7 +5,7 @@ export default function Loading() {
     <div aria-busy="true" className="store-product">
       <div className="store-media">
         <div className="store-media-stage">
-          <Skeleton className="aspect-[4/3] w-full max-w-[56rem] rounded-none" />
+          <Skeleton className="store-media-skeleton rounded-none" />
         </div>
       </div>
       <div className="store-product-info">

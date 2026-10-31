@@ -156,17 +156,25 @@ body:has([data-store]) main {
 
   .store-media-stage {
     display: flex;
-    flex: 1;
+    flex: none;
     align-items: center;
     justify-content: center;
+    height: min(72dvh, 48rem);
     padding: 0 2.5rem;
+  }
+
+  /* Stable portrait stage across the turntable and all four CAD slides. */
+  .store-media-stage > [data-testid="product-spin"],
+  .store-media-skeleton {
+    width: min(100%, calc(min(72dvh, 48rem) * 2 / 3));
+    aspect-ratio: 2 / 3;
   }
 
   .store-media-render {
     position: relative;
     width: 100%;
     max-width: 56rem;
-    aspect-ratio: 3 / 2;
+    height: 100%;
     overflow: hidden;
     border-radius: 0.25rem;
   }

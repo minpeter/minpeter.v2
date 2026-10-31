@@ -26,8 +26,8 @@ type ProductDetail =
   | "status";
 
 /**
- * Turntable photos with the background removed: `frameCount` transparent WebP frames served from
- * `public` as `${basePath}/01.webp` … in turn order, all `width`×`height`.
+ * Reconstructed 3D turntable renders (not photographs): `frameCount` transparent WebP frames served from
+ * `public/assets` as `${basePath}/01.webp` … in turn order, all `width`×`height`.
  */
 export interface ProductSpin {
   basePath: string;
@@ -73,10 +73,10 @@ export const PRODUCTS: readonly Product[] = [
     spin: {
       basePath: "/assets/products/rule60-hhkb-unibody/spin",
       defaultFrame: 0,
-      frameCount: 22,
-      height: 900,
+      frameCount: 72,
+      height: 1536,
       poster: rule60SpinPoster,
-      width: 1200,
+      width: 1024,
     },
   },
 ];

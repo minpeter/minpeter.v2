@@ -1,13 +1,85 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from "react";
 
 import type { ProductSpin as ProductSpinData } from "@/shared/products";
 import { cn } from "@/shared/utils/tailwind";
 
 /** The shown frame steps one frame at a time toward the pointer's frame, at most this often. */
 const STEP_MS = 14;
+
+const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
+
+function subscribeReducedMotion(onChange: () => void) {
+  const media = window.matchMedia(REDUCED_MOTION_QUERY);
+  media.addEventListener("change", onChange);
+  return () => media.removeEventListener("change", onChange);
+}
+
+function getReducedMotion() {
+  return window.matchMedia(REDUCED_MOTION_QUERY).matches;
+}
+
+/** Decode state belongs to this mounted image, never to a historical frame index. */
+function SpinFrame({
+  index,
+  src,
+  selected,
+  visible,
+  onReady,
+}: {
+  index: number;
+  src: string;
+  selected: boolean;
+  visible: boolean;
+  onReady: (index: number) => void;
+}) {
+  const [decoded, setDecoded] = useState(false);
+  const imageRef = useRef<HTMLImageElement>(null);
+  useEffect(() => {
+    if (selected && decoded && imageRef.current?.isConnected) {
+      onReady(index);
+    }
+  }, [decoded, index, onReady, selected]);
+
+  const handleLoad = useCallback(
+    async (event: React.SyntheticEvent<HTMLImageElement>) => {
+      const image = event.currentTarget;
+      try {
+        await image.decode();
+        if (image.isConnected && image === imageRef.current) {
+          setDecoded(true);
+        }
+      } catch {
+        // Keep the last decoded frame (or poster) on decode/network failure.
+      }
+    },
+    []
+  );
+
+  return (
+    <Image
+      alt=""
+      className={cn("object-contain", !visible && "invisible")}
+      data-index={index}
+      draggable={false}
+      fill
+      loading="eager"
+      onLoad={handleLoad}
+      ref={imageRef}
+      src={src}
+      unoptimized
+    />
+  );
+}
 
 interface ProductSpinProps {
   /** Accessible name; omit inside a link, where the spin is decorative hover-only motion. */
@@ -31,7 +103,12 @@ export function ProductSpin({ alt, className, sizes, spin }: ProductSpinProps) {
   const { basePath, defaultFrame, frameCount, height, poster, width } = spin;
   const [active, setActive] = useState(false);
   const [frame, setFrame] = useState(defaultFrame);
-  const [loaded, setLoaded] = useState<ReadonlySet<number>>(new Set());
+  const [displayedFrame, setDisplayedFrame] = useState<number | null>(null);
+  const reducedMotion = useSyncExternalStore(
+    subscribeReducedMotion,
+    getReducedMotion,
+    () => false
+  );
   const frameRef = useRef(defaultFrame);
   const targetRef = useRef(defaultFrame);
   const rafRef = useRef(0);
@@ -39,6 +116,11 @@ export function ProductSpin({ alt, className, sizes, spin }: ProductSpinProps) {
   const dragRef = useRef<{ startFrame: number; startX: number } | null>(null);
 
   useEffect(() => () => cancelAnimationFrame(rafRef.current), []);
+  useEffect(() => {
+    if (reducedMotion) {
+      cancelAnimationFrame(rafRef.current);
+    }
+  }, [reducedMotion]);
 
   const animate = useCallback(() => {
     cancelAnimationFrame(rafRef.current);
@@ -64,9 +146,15 @@ export function ProductSpin({ alt, className, sizes, spin }: ProductSpinProps) {
   const aim = useCallback(
     (target: number) => {
       targetRef.current = target;
-      animate();
+      if (reducedMotion) {
+        cancelAnimationFrame(rafRef.current);
+        frameRef.current = target;
+        setFrame(target);
+      } else {
+        animate();
+      }
     },
-    [animate]
+    [animate, reducedMotion]
   );
 
   const frameAt = useCallback(
@@ -85,15 +173,15 @@ export function ProductSpin({ alt, className, sizes, spin }: ProductSpinProps) {
   const handlePointerEnter = useCallback(
     (event: React.PointerEvent<HTMLDivElement>) => {
       setActive(true);
-      if (event.pointerType === "mouse") {
+      if (event.pointerType === "mouse" && !reducedMotion) {
         aim(frameAt(event));
       }
     },
-    [aim, frameAt]
+    [aim, frameAt, reducedMotion]
   );
 
-  // Mouse and pen: the horizontal position over the photo picks the angle, no click needed.
-  // Touch: drag across the photo; one full width is one full turn.
+  // Mouse and pen: the horizontal position over the render picks the angle, no click needed.
+  // Touch: drag across the render; one full width is one full turn.
   const handlePointerMove = useCallback(
     (event: React.PointerEvent<HTMLDivElement>) => {
       const drag = dragRef.current;
@@ -107,11 +195,11 @@ export function ProductSpin({ alt, className, sizes, spin }: ProductSpinProps) {
         );
         return;
       }
-      if (event.pointerType !== "touch") {
+      if (event.pointerType !== "touch" && !reducedMotion) {
         aim(frameAt(event));
       }
     },
-    [aim, frameAt, frameCount]
+    [aim, frameAt, frameCount, reducedMotion]
   );
 
   const handlePointerDown = useCallback(
@@ -134,11 +222,11 @@ export function ProductSpin({ alt, className, sizes, spin }: ProductSpinProps) {
 
   const handlePointerLeave = useCallback(
     (event: React.PointerEvent<HTMLDivElement>) => {
-      if (event.pointerType !== "touch") {
+      if (event.pointerType !== "touch" && !reducedMotion) {
         aim(defaultFrame);
       }
     },
-    [aim, defaultFrame]
+    [aim, defaultFrame, reducedMotion]
   );
 
   const handleKeyDown = useCallback(
@@ -154,13 +242,12 @@ export function ProductSpin({ alt, className, sizes, spin }: ProductSpinProps) {
     [aim, frameCount]
   );
 
-  const handleFrameLoad = useCallback(
-    (event: React.SyntheticEvent<HTMLImageElement>) => {
-      const index = Number(event.currentTarget.dataset.index);
-      setLoaded((previous) => new Set(previous).add(index));
-    },
-    []
-  );
+  const handleFrameReady = useCallback((index: number) => {
+    // A late decode must not replace the newer requested angle.
+    if (index === frameRef.current) {
+      setDisplayedFrame(index);
+    }
+  }, []);
 
   const handleFocus = useCallback(() => setActive(true), []);
 
@@ -173,8 +260,22 @@ export function ProductSpin({ alt, className, sizes, spin }: ProductSpinProps) {
     [basePath, frameCount]
   );
 
-  // The poster stays until the frame being shown has decoded, so nothing ever blinks blank.
-  const showFrames = active && loaded.has(frame);
+  const frameWindow = useMemo(
+    () =>
+      active
+        ? Array.from(
+            new Set([
+              frame,
+              (frame + 1) % frameCount,
+              (frame - 1 + frameCount) % frameCount,
+              ...(displayedFrame === null ? [] : [displayedFrame]),
+            ])
+          )
+        : [],
+    [active, displayedFrame, frame, frameCount]
+  );
+  // At most four frame images: requested angle, its neighbors, and the retained decoded image.
+  const showFrames = displayedFrame !== null;
 
   return (
     <div
@@ -188,6 +289,7 @@ export function ProductSpin({ alt, className, sizes, spin }: ProductSpinProps) {
             onFocus: handleFocus,
             onKeyDown: handleKeyDown,
             onLostPointerCapture: handlePointerEnd,
+            onPointerCancel: handlePointerEnd,
             onPointerDown: handlePointerDown,
             onPointerUp: handlePointerEnd,
             role: "slider",
@@ -195,6 +297,7 @@ export function ProductSpin({ alt, className, sizes, spin }: ProductSpinProps) {
           }
         : { "aria-hidden": true })}
       className={cn("relative touch-pan-y select-none", className)}
+      data-displayed-frame={displayedFrame ?? "poster"}
       data-frame={frame}
       data-testid="product-spin"
       onPointerEnter={handlePointerEnter}
@@ -211,24 +314,16 @@ export function ProductSpin({ alt, className, sizes, spin }: ProductSpinProps) {
         sizes={sizes}
         src={poster}
       />
-      {active
-        ? frameSources.map((src, index) => (
-            <Image
-              alt=""
-              className={cn(
-                "object-contain",
-                !(showFrames && index === frame) && "invisible"
-              )}
-              data-index={index}
-              draggable={false}
-              fill
-              key={src}
-              onLoad={handleFrameLoad}
-              src={src}
-              unoptimized
-            />
-          ))
-        : null}
+      {frameWindow.map((index) => (
+        <SpinFrame
+          index={index}
+          key={frameSources[index]}
+          onReady={handleFrameReady}
+          selected={index === frame}
+          src={frameSources[index]}
+          visible={index === displayedFrame}
+        />
+      ))}
     </div>
   );
 }
