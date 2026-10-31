@@ -232,6 +232,41 @@
       }
     }
   },
+  "products": {
+    "navigationLabel": "製品のナビゲーション",
+    "title": "製品",
+    "description": "自分で設計して印刷したもの。",
+    "spinLabel": "{product}の再構成3Dレンダー（実際の写真ではありません）：ポインターを左右に動かすか、タッチでドラッグ、または矢印キーで360°回転します",
+    "mediaLabel": "{product}のレンダー画像",
+    "previousImage": "前の画像",
+    "nextImage": "次の画像",
+    "showImage": "{index}枚目の画像を表示",
+    "viewSource": "GitHubで見る",
+    "downloadFiles": "印刷ファイルを入手",
+    "descriptionLabel": "説明",
+    "detailsLabel": "詳細",
+    "renderAlts": {
+      "rule60Assembled": "CADレンダー：パームレスト一体型トップケースを組み立てた状態（左半分グレー、右半分ブルー）",
+      "rule60Top": "CADレンダー：トップケースを上から見た状態",
+      "rule60Exploded": "CADレンダー：二つの半分を分けた状態",
+      "rule60Underside": "CADレンダー：底面のポケット、ストライクプレートの座面と接合部"
+    },
+    "items": {
+      "rule60": {
+        "variant": "PETG 半透明",
+        "license": "CC BY-NC 4.0",
+        "description": "ハニカムのパームレストを一体化した、Rule 60 V3 HHKB用の交換トップケースです。純正のボトムケースとPCガスケットプレートはそのまま使い、トップケースとパームレストだけを印刷します。形状はすべてコードで生成しています。",
+        "details": {
+          "size": "組み立て時 298.1 × 198.3 mm、ケース高さ 20.01 mm",
+          "joints": "二つの半分を圧着リブ付きのスライド式ダブテール3か所で結合",
+          "reuse": "純正ボトムケース、PCガスケットプレート、シリコンガスケットキャップ12個、ボールキャッチのストライクプレート4枚を再利用",
+          "print": "X2D・0.4 mmノズル・PETG・0.20 mmレイヤー、サポートなし。左半分約76 g、右半分約65 g",
+          "status": "実験段階 — v7.4の印刷物で組み立てを確認",
+          "license": "CC BY-NC 4.0 — 個人・非商用の目的に限り印刷・改変できます。印刷物やファイルの販売は認めていません。"
+        }
+      }
+    }
+  },
   "modCodeBlock": {
     "copy": "コピー",
     "copied": "コピー済み",
@@ -250,6 +285,10 @@
       "developmentNotes": {
         "title": "開発ノート",
         "description": "ソフトウェア開発で得た技術メモ、チュートリアル、学び。"
+      },
+      "products": {
+        "title": "製品",
+        "description": "自分で設計して印刷したもの。"
       },
       "interactiveExperiments": {
         "title": "プロジェクトと実験",

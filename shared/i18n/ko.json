@@ -232,6 +232,41 @@
       }
     }
   },
+  "products": {
+    "navigationLabel": "제품 탐색",
+    "title": "제품",
+    "description": "직접 설계하고 출력한 물건들.",
+    "spinLabel": "{product} 재구성 3D 렌더 (실제 사진이 아님): 마우스를 좌우로 움직이거나, 터치로 드래그하거나, 화살표 키로 360° 돌려 볼 수 있습니다",
+    "mediaLabel": "{product} 렌더 이미지",
+    "previousImage": "이전 이미지",
+    "nextImage": "다음 이미지",
+    "showImage": "{index}번째 이미지 보기",
+    "viewSource": "GitHub에서 보기",
+    "downloadFiles": "출력 파일 받기",
+    "descriptionLabel": "설명",
+    "detailsLabel": "상세",
+    "renderAlts": {
+      "rule60Assembled": "CAD 렌더: 손목 받침이 붙은 상판을 조립한 모습 (왼쪽 반쪽 회색, 오른쪽 반쪽 파란색)",
+      "rule60Top": "CAD 렌더: 상판을 위에서 본 모습",
+      "rule60Exploded": "CAD 렌더: 두 반쪽을 분리한 모습",
+      "rule60Underside": "CAD 렌더: 하단의 포켓, 스트라이크 플레이트 자리와 결합부"
+    },
+    "items": {
+      "rule60": {
+        "variant": "PETG 반투명",
+        "license": "CC BY-NC 4.0",
+        "description": "허니컴 손목 받침을 한 몸으로 넣은 Rule 60 V3 HHKB 교체 상판입니다. 기존 하판과 PC 가스켓 플레이트를 그대로 쓰고, 상판과 손목 받침만 새로 출력합니다. 형상은 모두 코드로 생성했습니다.",
+        "details": {
+          "size": "조립 크기 298.1 × 198.3 mm, 케이스 높이 20.01 mm",
+          "joints": "두 반쪽을 압착 리브가 있는 슬라이딩 도브테일 3개로 결합",
+          "reuse": "기존 하판, PC 가스켓 플레이트, 실리콘 가스켓 캡 12개, 볼 캐치 스트라이크 플레이트 4개 재사용",
+          "print": "X2D · 0.4 mm 노즐 · PETG · 0.20 mm 레이어, 서포트 없이 왼쪽 약 76 g, 오른쪽 약 65 g",
+          "status": "실험 단계 — v7.4 출력물로 조립 확인",
+          "license": "CC BY-NC 4.0 — 개인·비상업 용도로만 출력하고 수정할 수 있습니다. 출력물이나 파일 판매는 허용하지 않습니다."
+        }
+      }
+    }
+  },
   "modCodeBlock": {
     "copy": "복사",
     "copied": "복사됨",
@@ -250,6 +285,10 @@
       "developmentNotes": {
         "title": "개발 노트",
         "description": "기술 메모와 튜토리얼, 소프트웨어를 만들며 배운 것들."
+      },
+      "products": {
+        "title": "제품",
+        "description": "직접 설계하고 출력한 물건들."
       },
       "interactiveExperiments": {
         "title": "프로젝트와 실험",

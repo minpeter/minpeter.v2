@@ -1,0 +1,281 @@
+/* Product store (`/products`): full-bleed black, objects floating on it, mono labels.
+   The dark token palette comes from base.css (`:root:has([data-store])`). */
+
+/* Tokens resolve on :root (Tailwind's --color-* reference them there), so the store's black page
+   is set on :root too. The full-bleed main override sits outside layers to beat its utilities. */
+:root:has([data-store]) {
+  --background: 0 0% 0%;
+}
+
+body:has([data-store]) main {
+  max-width: none;
+  padding-inline: 0;
+}
+
+@layer base {
+  .store {
+    --store-gutter: 1.25rem;
+
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    width: 100%;
+    min-height: 100dvh;
+    font-family: var(--font-geist), Arial, sans-serif;
+    color: hsl(var(--foreground));
+  }
+
+  @media (min-width: 64rem) {
+    .store {
+      --store-gutter: 2.5rem;
+    }
+  }
+
+  .store-label {
+    font-family: var(--font-geist-mono), monospace;
+    font-size: 0.75rem;
+    line-height: 1.4;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .store-header {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    padding: 1rem var(--store-gutter);
+  }
+
+  .store-header-home {
+    justify-self: start;
+    color: hsl(var(--muted-foreground));
+    transition: color 160ms ease;
+  }
+
+  .store-header-home:hover,
+  .store-header-home:focus-visible {
+    color: hsl(var(--foreground));
+    outline: none;
+  }
+
+  .store-header > :last-child {
+    justify-self: end;
+  }
+
+  /* vercel.store's grid: fixed columns sized for a full catalogue, so one product takes one
+     cell at the top left instead of filling the page. 2 columns on phones, 4 from 64rem. */
+  .store-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2.5rem var(--store-gutter);
+    align-content: start;
+    padding: 2.5rem var(--store-gutter) 4rem;
+  }
+
+  @media (min-width: 64rem) {
+    .store-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      padding-top: 4rem;
+    }
+  }
+
+  .store-card {
+    position: relative;
+    display: block;
+    outline: none;
+  }
+
+  /* Inset frame on keyboard focus, as on vercel.store. */
+  .store-card::after {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    content: "";
+    border: 1px solid hsl(var(--foreground));
+    opacity: 0;
+  }
+
+  .store-card:focus-visible::after {
+    opacity: 1;
+  }
+
+  /* Name over license: a grid cell is only ~160px wide on phones. */
+  .store-card-caption {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    margin-top: 0.75rem;
+    color: hsl(var(--muted-foreground));
+    opacity: 0;
+    transition: opacity 200ms ease;
+  }
+
+  .store-card:is(:hover, :focus-visible) .store-card-caption {
+    opacity: 1;
+  }
+
+  /* Touch screens have no hover to reveal the name. */
+  @media (hover: none) {
+    .store-card-caption {
+      opacity: 1;
+    }
+  }
+
+  .store-product {
+    display: grid;
+    flex: 1;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2rem;
+    padding: 0 var(--store-gutter) 4rem;
+  }
+
+  @media (min-width: 64rem) {
+    .store-product {
+      grid-template-columns: minmax(0, 1fr) 22rem;
+      gap: 3rem;
+      align-items: start;
+      padding-right: 1.5rem;
+    }
+
+    .store-product-info {
+      position: sticky;
+      top: 1.5rem;
+      padding-top: 2.5rem;
+    }
+
+    .store-media {
+      min-height: min(80dvh, 52rem);
+    }
+  }
+
+  .store-media {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .store-media-stage {
+    display: flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    height: min(72dvh, 48rem);
+    padding: 0 2.5rem;
+  }
+
+  /* Stable portrait stage across the turntable and all four CAD slides. */
+  .store-media-stage > [data-testid="product-spin"],
+  .store-media-skeleton {
+    width: min(100%, calc(min(72dvh, 48rem) * 2 / 3));
+    aspect-ratio: 2 / 3;
+  }
+
+  .store-media-render {
+    position: relative;
+    width: 100%;
+    max-width: 56rem;
+    height: 100%;
+    overflow: hidden;
+    border-radius: 0.25rem;
+  }
+
+  .store-media-arrow {
+    position: absolute;
+    top: 50%;
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    color: hsl(var(--muted-foreground));
+    transform: translateY(-50%);
+    transition: color 160ms ease;
+  }
+
+  .store-media-arrow:hover,
+  .store-media-arrow:focus-visible {
+    color: hsl(var(--foreground));
+    outline: none;
+  }
+
+  .store-media-dots {
+    display: flex;
+    padding-top: 0.5rem;
+    margin-left: -0.5rem;
+  }
+
+  /* 24px tap target around an 8px square. */
+  .store-media-dot {
+    width: 1.5rem;
+    height: 1.5rem;
+    padding: 0.5rem;
+    background-color: hsl(var(--foreground) / 0.25);
+    background-clip: content-box;
+    transition: background-color 160ms ease;
+  }
+
+  .store-media-dot[aria-current="true"] {
+    background-color: hsl(var(--foreground));
+  }
+
+  .store-media-dot:focus-visible {
+    outline: 1px solid hsl(var(--foreground));
+    outline-offset: 2px;
+  }
+
+  .store-product-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .store-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+  }
+
+  .store-button {
+    display: grid;
+    place-items: center;
+    min-height: 2.5rem;
+    padding: 0.5rem 0.75rem;
+    text-align: center;
+    border: 1px solid hsl(var(--foreground) / 0.3);
+    transition:
+      background-color 160ms ease,
+      border-color 160ms ease,
+      color 160ms ease;
+  }
+
+  .store-button:hover,
+  .store-button:focus-visible {
+    outline: none;
+    border-color: hsl(var(--foreground));
+  }
+
+  .store-button[data-primary] {
+    color: hsl(var(--background));
+    background-color: hsl(var(--foreground));
+    border-color: hsl(var(--foreground));
+  }
+
+  .store-button[data-primary]:hover,
+  .store-button[data-primary]:focus-visible {
+    background-color: hsl(var(--foreground) / 0.85);
+  }
+
+  .store-prose {
+    font-size: 0.875rem;
+    line-height: 1.7;
+    color: hsl(var(--foreground) / 0.75);
+  }
+
+  .store-details {
+    padding-left: 1.1rem;
+    list-style: disc;
+  }
+
+  .store-details li::marker {
+    color: hsl(var(--muted-foreground));
+  }
+}
