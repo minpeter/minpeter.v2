@@ -266,6 +266,51 @@
           "license": "CC BY-NC 4.0 — 개인·비상업 용도로만 출력하고 수정할 수 있습니다. 출력물이나 파일 판매는 허용하지 않습니다."
         }
       }
+    },
+    "customization": {
+      "modeLabel": "제품 보기",
+      "showcase": "개인 키보드 자랑",
+      "customize": "기성 키캡 조합 보기",
+      "showcaseNote": "유일한 개인 커스텀 키보드 · 전시용 · 주문 불가",
+      "configurationNote": "하우징과 키캡을 골라 외형을 살펴보세요. 투명 × Inventor는 기존 개인 키보드이며 기성 키캡 조합이 아닙니다. 여기서는 주문할 수 없습니다.",
+      "selected": "{housing} × {keycaps}",
+      "previewLabel": "선택한 조합의 재구성 렌더 — 드래그하거나 화살표 키로 30°씩 회전",
+      "pending": "아직 준비되지 않은 조합입니다",
+      "pendingDetail": "이 조합의 12개 각도를 모두 검수하기 전에는 이미지를 표시하지 않습니다. 개인 키보드 이미지를 이 조합처럼 보여주지 않습니다.",
+      "kitQA": "키 하나씩 검수하고 전체 각도 검수를 통과해야 렌더를 표시합니다.",
+      "loading": "선택한 조합을 불러오는 중…",
+      "ready": "검수된 렌더 · 12장 · 30° 간격",
+      "loadError": "선택한 렌더를 불러오지 못했습니다.",
+      "retry": "이 렌더 다시 불러오기",
+      "housing": "하우징",
+      "keycaps": "키캡",
+      "fullRetailSet": "풀세트 · 개인 로고 키 없음",
+      "approximation": "색상·표면 질감·각인은 외형을 근사한 표현입니다. 실제 출력 색상이나 키캡의 물리적 호환성을 보장하지 않으며, 렌더는 주문 또는 재고 확인이 아닙니다.",
+      "materialSource": "제조사 색상 자료",
+      "keycapSource": "제조사 키캡 자료",
+      "housingNames": {
+        "bone-white": "본 화이트",
+        "ash-gray": "애쉬 그레이",
+        "charcoal": "차콜",
+        "ice-blue": "아이스 블루",
+        "lilac-purple": "라일락 퍼플",
+        "dark-green": "다크 그린",
+        "white-marble": "화이트 마블",
+        "transparent": "투명"
+      },
+      "partial": "일부 각도를 불러오지 못했어요. 준비된 가장 가까운 각도로 표시합니다. 불러오기를 다시 시도할 수 있어요.",
+      "renderReady": "이 조합 렌더 준비 완료",
+      "renderPending": "이 조합 렌더 준비 중",
+      "marbleNote": "PLA Marble 13103: 따뜻한 흰색 바탕에 작고 불규칙한 회색 입자가 있는 소재입니다. 색상 견본은 제조사 기준 바탕색이며 실제 출력 질감을 나타내지는 않습니다.",
+      "transparentNote": "기존 반투명 PETG 개인 키보드의 외형을 근사한 표현입니다. Bambu Lab PLA 색상이나 새로운 판매용 소재가 아닙니다.",
+      "personalHousing": "기존 반투명 PETG · 외형 근사",
+      "personalOnly": "개인 전시용 · 주문 불가",
+      "inventorNote": "개인 로고 키가 있는 기존 키캡 · 기성 키트 아님",
+      "pairedPersonal": "기존 개인 키보드를 보여주도록 투명 하우징과 Inventor 키캡을 함께 선택했어요. 주문할 수 없습니다.",
+      "pairedRetail": "기성 조합을 살펴볼 수 있도록 {housing} × {keycaps}로 함께 변경했어요.",
+      "unsupported": "지원하지 않는 조합입니다",
+      "unsupportedDetail": "투명 하우징과 Inventor 키캡은 기존 개인 키보드 조합으로만 표시합니다. 둘을 함께 선택하거나 기성 하우징과 키캡을 선택해 주세요. 다른 조합의 이미지를 대신 보여주지 않습니다.",
+      "switchToRetail": "선택하면 기성 조합으로 함께 변경됩니다"
     }
   },
   "modCodeBlock": {

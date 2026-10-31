@@ -279,3 +279,109 @@ body:has([data-store]) main {
     color: hsl(var(--muted-foreground));
   }
 }
+
+/* Configurations never borrow the personal showcase image while assets are pending. */
+@layer base {
+  .store-customizer {
+    min-width: 0;
+  }
+  .store-custom-note,
+  .store-custom-selection,
+  .store-custom-status {
+    margin-block: 1rem;
+  }
+  .store-custom-note {
+    max-width: 48rem;
+  }
+  .store-custom-pending {
+    text-align: center;
+    border: 1px dashed hsl(var(--foreground) / 0.2);
+  }
+  .store-custom-pending > div {
+    max-width: 28rem;
+  }
+  .store-custom-pending p + p {
+    margin-top: 1rem;
+  }
+  .store-custom-controls {
+    display: grid;
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+  }
+  .store-custom-controls legend {
+    margin-bottom: 0.75rem;
+  }
+  .store-custom-swatches {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.5rem;
+  }
+  .store-custom-kits {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.5rem;
+  }
+  .store-custom-option {
+    display: flex;
+    gap: 0.625rem;
+    align-items: center;
+    min-height: 3.5rem;
+    padding: 0.625rem;
+    font-size: 0.75rem;
+    cursor: pointer;
+    border: 1px solid hsl(var(--foreground) / 0.25);
+  }
+  .store-custom-option[data-selected="true"] {
+    border-color: hsl(var(--foreground));
+  }
+  .store-custom-option:has(input:focus-visible) {
+    outline: 2px solid hsl(var(--foreground));
+    outline-offset: 3px;
+  }
+  .store-custom-option small {
+    display: block;
+    margin-top: 0.25rem;
+    color: hsl(var(--muted-foreground));
+  }
+  .store-custom-swatch {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 1.25rem;
+    height: 1.25rem;
+    border: 1px solid hsl(var(--foreground) / 0.35);
+    border-radius: 50%;
+  }
+  .store-custom-sources {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .store-custom-sources a {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+  @media (max-width: 25rem) {
+    .store-custom-swatches {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .store-custom-kits {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
+.store-custom-swatch[data-transparent="true"] {
+  background-image: linear-gradient(
+    135deg,
+    #ffffff88,
+    #ffffff0a 48%,
+    #ffffff55
+  );
+  border: 1px solid #ffffff99;
+}
+
+.store-custom-pairing {
+  padding-left: 0.75rem;
+  border-left: 1px solid hsl(var(--foreground));
+}

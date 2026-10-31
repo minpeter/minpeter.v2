@@ -2,12 +2,13 @@
 
 import { ChevronLeftIcon, ChevronRightIcon } from "@radix-ui/react-icons";
 import Image, { type StaticImageData } from "next/image";
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 
 import { ProductSpin } from "@/components/product-spin";
 import type { ProductSpin as ProductSpinData } from "@/shared/products";
 
-interface ProductGalleryProps {
+export interface ProductGalleryProps {
+  initialAngle?: number;
   labels: {
     media: string;
     next: string;
@@ -16,12 +17,27 @@ interface ProductGalleryProps {
     showImage: readonly string[];
     spin: string;
   };
+  onAngleChange?: (degrees: number) => void;
   renders: readonly { alt: string; image: StaticImageData }[];
   spin: ProductSpinData;
 }
 
 /** Turntable first, then still images; arrows and square dots as on vercel.store. */
-export function ProductGallery({ labels, renders, spin }: ProductGalleryProps) {
+export function ProductGallery({
+  initialAngle = 0,
+  onAngleChange,
+  labels,
+  renders,
+  spin,
+}: ProductGalleryProps) {
+  const angleRef = useRef(initialAngle);
+  const rememberAngle = useCallback(
+    (angle: number) => {
+      angleRef.current = angle;
+      onAngleChange?.(angle);
+    },
+    [onAngleChange]
+  );
   const count = renders.length + 1;
   const [index, setIndex] = useState(0);
   const render = index > 0 ? renders[index - 1] : undefined;
@@ -56,6 +72,8 @@ export function ProductGallery({ labels, renders, spin }: ProductGalleryProps) {
         ) : (
           <ProductSpin
             alt={labels.spin}
+            initialAngle={angleRef.current}
+            onAngleChange={rememberAngle}
             sizes="(min-width: 64rem) 60vw, 92vw"
             spin={spin}
           />

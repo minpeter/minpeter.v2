@@ -1,0 +1,351 @@
+{
+  "id": "ice-blue--nicepbt-bow-retail",
+  "housingId": "ice-blue",
+  "keycapId": "nicepbt-bow-retail",
+  "status": "validated",
+  "sourceDigest": "f9d100bf9fde1d4a7d27ee145664a4f747577739a9306428afbbe5725e9fb4a3",
+  "kitQaStatus": "60-of-60-passed",
+  "kitQa": {
+    "status": "60-of-60-passed",
+    "reviewer": "model_bow_keycaps_qa",
+    "reviewedAt": "2026-10-31T07:45:10Z",
+    "keys": [
+      {
+        "position": "Esc",
+        "passed": true
+      },
+      {
+        "position": "1",
+        "passed": true
+      },
+      {
+        "position": "2",
+        "passed": true
+      },
+      {
+        "position": "3",
+        "passed": true
+      },
+      {
+        "position": "4",
+        "passed": true
+      },
+      {
+        "position": "5",
+        "passed": true
+      },
+      {
+        "position": "6",
+        "passed": true
+      },
+      {
+        "position": "7",
+        "passed": true
+      },
+      {
+        "position": "8",
+        "passed": true
+      },
+      {
+        "position": "9",
+        "passed": true
+      },
+      {
+        "position": "0",
+        "passed": true
+      },
+      {
+        "position": "minus",
+        "passed": true
+      },
+      {
+        "position": "plus",
+        "passed": true
+      },
+      {
+        "position": "blue",
+        "passed": true
+      },
+      {
+        "position": "white",
+        "passed": true
+      },
+      {
+        "position": "Tab",
+        "passed": true
+      },
+      {
+        "position": "Q",
+        "passed": true
+      },
+      {
+        "position": "W",
+        "passed": true
+      },
+      {
+        "position": "E",
+        "passed": true
+      },
+      {
+        "position": "R",
+        "passed": true
+      },
+      {
+        "position": "T",
+        "passed": true
+      },
+      {
+        "position": "Y",
+        "passed": true
+      },
+      {
+        "position": "U",
+        "passed": true
+      },
+      {
+        "position": "I",
+        "passed": true
+      },
+      {
+        "position": "O",
+        "passed": true
+      },
+      {
+        "position": "P",
+        "passed": true
+      },
+      {
+        "position": "lbracket",
+        "passed": true
+      },
+      {
+        "position": "rbracket",
+        "passed": true
+      },
+      {
+        "position": "backslash",
+        "passed": true
+      },
+      {
+        "position": "CapsLock",
+        "passed": true
+      },
+      {
+        "position": "A",
+        "passed": true
+      },
+      {
+        "position": "S",
+        "passed": true
+      },
+      {
+        "position": "D",
+        "passed": true
+      },
+      {
+        "position": "F",
+        "passed": true
+      },
+      {
+        "position": "G",
+        "passed": true
+      },
+      {
+        "position": "H",
+        "passed": true
+      },
+      {
+        "position": "J",
+        "passed": true
+      },
+      {
+        "position": "K",
+        "passed": true
+      },
+      {
+        "position": "L",
+        "passed": true
+      },
+      {
+        "position": "semicolon",
+        "passed": true
+      },
+      {
+        "position": "quote",
+        "passed": true
+      },
+      {
+        "position": "Enter",
+        "passed": true
+      },
+      {
+        "position": "LeftShift",
+        "passed": true
+      },
+      {
+        "position": "Z",
+        "passed": true
+      },
+      {
+        "position": "X",
+        "passed": true
+      },
+      {
+        "position": "C",
+        "passed": true
+      },
+      {
+        "position": "V",
+        "passed": true
+      },
+      {
+        "position": "B",
+        "passed": true
+      },
+      {
+        "position": "N",
+        "passed": true
+      },
+      {
+        "position": "M",
+        "passed": true
+      },
+      {
+        "position": "comma",
+        "passed": true
+      },
+      {
+        "position": "period",
+        "passed": true
+      },
+      {
+        "position": "slash",
+        "passed": true
+      },
+      {
+        "position": "RightShift",
+        "passed": true
+      },
+      {
+        "position": "Fn",
+        "passed": true
+      },
+      {
+        "position": "ghost",
+        "passed": true
+      },
+      {
+        "position": "LeftAlt",
+        "passed": true
+      },
+      {
+        "position": "space",
+        "passed": true
+      },
+      {
+        "position": "RightAlt",
+        "passed": true
+      },
+      {
+        "position": "arrow",
+        "passed": true
+      }
+    ],
+    "reviewScope": "All 60 caps rendered independently: 320x320 orthographic top and orthographic oblique, 120 PNGs total. All pairs visually inspected on four contact sheets against official kit diagram; automated texture and object alpha bounds and unchanged source layout checks passed. This is individual visualization QA, not 12-angle board QA, exact-product fidelity certification or physical-fit verification. Rerendered and visually reinspected all 120 views after row-sculpt v2 and filled icon-arrow corrections; supplemental side-elevation proof confirms varying upper plane slopes and fixed bases."
+  },
+  "visualQa": {
+    "status": "passed",
+    "reviewer": "Orchestrator render-pipeline worker",
+    "reviewedAt": "2026-10-31T08:05:58.929795+00:00",
+    "angles": [0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330],
+    "scope": "All12actualPNGviews inspected in three contact sheets;0/30/60 individuallyopened. Framing,visibility,correctretailkit,nologo,alphaedges,side/underside geometry,materialshadow/occlusion checked. Qualifiedvisualization, not calibratedmaterial/exacttypeface/manufacturingfit."
+  },
+  "renderer": "Blender 4.3.2",
+  "materialCalibration": "approximate",
+  "frames": [
+    {
+      "angleDegrees": 0,
+      "src": "/assets/products/rule60-hhkb-unibody/customization/v1/ice-blue--nicepbt-bow-retail/frame_000.webp",
+      "sha256": "4c9d1b965469340f343a3ffb43f647a67fe4ddf9bfae8cf95a09085477ce842b",
+      "width": 1024,
+      "height": 1536
+    },
+    {
+      "angleDegrees": 30,
+      "src": "/assets/products/rule60-hhkb-unibody/customization/v1/ice-blue--nicepbt-bow-retail/frame_030.webp",
+      "sha256": "61604ae1cd2faea6026803030d537572550f15d23c7155f544e83114357729e0",
+      "width": 1024,
+      "height": 1536
+    },
+    {
+      "angleDegrees": 60,
+      "src": "/assets/products/rule60-hhkb-unibody/customization/v1/ice-blue--nicepbt-bow-retail/frame_060.webp",
+      "sha256": "1c05bd5a01994c32a12381549b52622185d677249b2b515eea73454b45205798",
+      "width": 1024,
+      "height": 1536
+    },
+    {
+      "angleDegrees": 90,
+      "src": "/assets/products/rule60-hhkb-unibody/customization/v1/ice-blue--nicepbt-bow-retail/frame_090.webp",
+      "sha256": "8733c1bb5cd7365a8476f943a27058c5f0a7657b45012556b986b2d592ef1326",
+      "width": 1024,
+      "height": 1536
+    },
+    {
+      "angleDegrees": 120,
+      "src": "/assets/products/rule60-hhkb-unibody/customization/v1/ice-blue--nicepbt-bow-retail/frame_120.webp",
+      "sha256": "b77e43c0e465ef2f60626adce2fcec373a256088267b64e5d38f62c9b1e06301",
+      "width": 1024,
+      "height": 1536
+    },
+    {
+      "angleDegrees": 150,
+      "src": "/assets/products/rule60-hhkb-unibody/customization/v1/ice-blue--nicepbt-bow-retail/frame_150.webp",
+      "sha256": "50ff023804ea4a5a49ef5ad8869a332eb71b8b23cfb9310e0b911335f904d8b1",
+      "width": 1024,
+      "height": 1536
+    },
+    {
+      "angleDegrees": 180,
+      "src": "/assets/products/rule60-hhkb-unibody/customization/v1/ice-blue--nicepbt-bow-retail/frame_180.webp",
+      "sha256": "ebfc8d74820c1ea6863cc246c72a6fe9393ac09b74a2bbb2c33f22384e512bdd",
+      "width": 1024,
+      "height": 1536
+    },
+    {
+      "angleDegrees": 210,
+      "src": "/assets/products/rule60-hhkb-unibody/customization/v1/ice-blue--nicepbt-bow-retail/frame_210.webp",
+      "sha256": "facdb301549950ad9f0e28f98ca127394e0b5004d3eb2f6be49c17c1fc5a88ac",
+      "width": 1024,
+      "height": 1536
+    },
+    {
+      "angleDegrees": 240,
+      "src": "/assets/products/rule60-hhkb-unibody/customization/v1/ice-blue--nicepbt-bow-retail/frame_240.webp",
+      "sha256": "bf69ef3e492a4feed177cc2bd2d895f37c272e82c2cd1cce39bdf67726ed4006",
+      "width": 1024,
+      "height": 1536
+    },
+    {
+      "angleDegrees": 270,
+      "src": "/assets/products/rule60-hhkb-unibody/customization/v1/ice-blue--nicepbt-bow-retail/frame_270.webp",
+      "sha256": "036471e33a8a437b89bf22aaa4130c6d453431fba084fed922c02762f9cc04d9",
+      "width": 1024,
+      "height": 1536
+    },
+    {
+      "angleDegrees": 300,
+      "src": "/assets/products/rule60-hhkb-unibody/customization/v1/ice-blue--nicepbt-bow-retail/frame_300.webp",
+      "sha256": "1e29fd9a08eae4a07132dbfac51ad852e7d5aed6f4c52ae2696db849e44eabd8",
+      "width": 1024,
+      "height": 1536
+    },
+    {
+      "angleDegrees": 330,
+      "src": "/assets/products/rule60-hhkb-unibody/customization/v1/ice-blue--nicepbt-bow-retail/frame_330.webp",
+      "sha256": "8d9db0aaa83f4e88957b607acf2d0c9e99978f96ede5abb87aa41dadc383b245",
+      "width": 1024,
+      "height": 1536
+    }
+  ]
+}

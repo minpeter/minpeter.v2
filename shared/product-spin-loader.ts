@@ -20,6 +20,8 @@ export function getFrameOrder(frameCount: number): number[] {
 export interface SpinLoaderConfig {
   basePath: string;
   frameCount: number;
+  /** Exact ordered manifest URLs, including version/hash query strings. */
+  frameSources?: readonly string[];
   height: number;
   width: number;
 }
@@ -38,6 +40,56 @@ const IDLE_TIMEOUT = 30_000;
 
 /** Shared compressed cache + small decoded LRU; no hidden full-resolution image elements. */
 export class SpinLoader {
+  private static readonly residents = new Set<SpinLoader>();
+  private static scheduling = false;
+  private static nextGrant = 0;
+
+  private static trimResidents() {
+    for (const loader of SpinLoader.residents) {
+      if (SpinLoader.residents.size <= 2) {
+        break;
+      }
+      if (loader.active.size === 0) {
+        loader.clear();
+      }
+    }
+  }
+
+  private static pumpAll() {
+    // biome-ignore lint/suspicious/noUnnecessaryConditions: Synchronous subscribers may reenter while the scheduler is running.
+    if (SpinLoader.scheduling) {
+      return;
+    }
+    SpinLoader.scheduling = true;
+    try {
+      const residents = [...SpinLoader.residents];
+      let misses = 0;
+      while (
+        residents.length > 0 &&
+        misses < residents.length &&
+        SpinLoader.pendingRequests() < FETCH_LIMIT
+      ) {
+        const position = SpinLoader.nextGrant % residents.length;
+        const loader = residents[position];
+        SpinLoader.nextGrant = (position + 1) % residents.length;
+        misses = loader.pumpNetwork() ? 0 : misses + 1;
+      }
+      for (const loader of residents) {
+        loader.pumpDecode();
+      }
+    } finally {
+      SpinLoader.scheduling = false;
+    }
+  }
+
+  private static pendingRequests() {
+    let count = 0;
+    for (const loader of SpinLoader.residents) {
+      count += loader.controllers.size;
+    }
+    return count;
+  }
+
   private readonly config: SpinLoaderConfig;
   private readonly order: number[];
   private readonly coarse: Set<number>;
@@ -51,16 +103,28 @@ export class SpinLoader {
   private readonly decodeFailed = new Set<number>();
   private readonly controllers = new Map<number, AbortController>();
   private readonly settled = new Set<number>();
+  private readonly retryQueue = new Set<number>();
   private cursor = 0;
   private tier = 0;
   private version = 0;
   private clock = 0;
   private generation = 0;
   private decoding = false;
+  private decodingIndex: number | undefined;
+  private cancelDecode: (() => void) | undefined;
   private idleTimer: ReturnType<typeof setTimeout> | undefined;
 
   constructor(config: SpinLoaderConfig) {
-    this.config = config;
+    if (
+      config.frameSources &&
+      config.frameSources.length !== config.frameCount
+    ) {
+      throw new Error("Spin frameSources must match frameCount");
+    }
+    this.config = {
+      ...config,
+      frameSources: config.frameSources ? [...config.frameSources] : undefined,
+    };
     this.order = getFrameOrder(config.frameCount);
     const coarseStep =
       config.frameCount % 12 === 0 ? config.frameCount / 12 : 1;
@@ -98,6 +162,19 @@ export class SpinLoader {
   get fetchedCount() {
     return this.blobs.size;
   }
+  get settledCount() {
+    return this.settled.size;
+  }
+  get hasFailures() {
+    return this.settled.size > this.blobs.size || this.decodeFailed.size > 0;
+  }
+  get loadingComplete() {
+    return (
+      this.settled.size === this.config.frameCount &&
+      !this.decoding &&
+      this.decodeQueue.size === 0
+    );
+  }
   get pendingCount() {
     return this.controllers.size;
   }
@@ -105,13 +182,18 @@ export class SpinLoader {
   setActive(token: symbol, active: boolean) {
     if (active) {
       this.active.add(token);
+      SpinLoader.residents.delete(this);
+      SpinLoader.residents.add(this);
+      SpinLoader.trimResidents();
       clearTimeout(this.idleTimer);
       this.idleTimer = undefined;
       this.pump();
     } else {
       this.active.delete(token);
+      this.pausePending();
       this.scheduleIdle();
-      this.pumpDecode();
+      SpinLoader.trimResidents();
+      SpinLoader.pumpAll();
     }
   }
 
@@ -129,8 +211,27 @@ export class SpinLoader {
   release(token: symbol) {
     this.active.delete(token);
     this.wanted.delete(token);
+    this.pausePending();
     this.scheduleIdle();
-    this.pumpDecode();
+    SpinLoader.trimResidents();
+    SpinLoader.pumpAll();
+  }
+
+  /** One explicit user action restarts failed requests; no automatic retry loops. */
+  retry() {
+    this.clear();
+    if (this.active.size > 0) {
+      SpinLoader.residents.add(this);
+      SpinLoader.trimResidents();
+      this.pump();
+    }
+  }
+
+  /** Explicit teardown; normal shared consumers should release their own token instead. */
+  dispose() {
+    this.active.clear();
+    this.wanted.clear();
+    this.clear();
   }
 
   /** Call immediately before drawing; the returned bitmap remains owned by this cache. */
@@ -166,14 +267,39 @@ export class SpinLoader {
   }
 
   private scheduleIdle() {
-    if (this.active.size || this.idleTimer) {
+    if (this.active.size || this.idleTimer || !SpinLoader.residents.has(this)) {
       return;
     }
     this.idleTimer = setTimeout(() => this.clear(), IDLE_TIMEOUT);
   }
 
+  /** Switching variants immediately frees global slots while keeping completed cache entries. */
+  private pausePending() {
+    if (this.active.size || (this.controllers.size === 0 && !this.decoding)) {
+      return;
+    }
+    this.generation += 1;
+    for (const [index, controller] of this.controllers) {
+      this.retryQueue.add(index);
+      controller.abort();
+    }
+    this.controllers.clear();
+    if (this.decodingIndex !== undefined) {
+      this.decodeQueue.add(this.decodingIndex);
+    }
+    this.cancelDecode?.();
+    this.cancelDecode = undefined;
+    this.decoding = false;
+    this.decodingIndex = undefined;
+    this.emit();
+  }
+
   private clear() {
     this.generation += 1;
+    clearTimeout(this.idleTimer);
+    SpinLoader.residents.delete(this);
+    this.cancelDecode?.();
+    this.cancelDecode = undefined;
     for (const controller of this.controllers.values()) {
       controller.abort();
     }
@@ -186,16 +312,23 @@ export class SpinLoader {
     this.decodeQueue.clear();
     this.decodeFailed.clear();
     this.settled.clear();
+    this.retryQueue.clear();
     this.cursor = 0;
     this.tier = 0;
     this.decoding = false;
+    this.decodingIndex = undefined;
     this.idleTimer = undefined;
     this.emit();
+    queueMicrotask(() => SpinLoader.pumpAll());
   }
 
   private pump() {
-    if (!this.active.size) {
-      return;
+    SpinLoader.pumpAll();
+  }
+
+  private pumpNetwork(): boolean {
+    if (!this.active.size || SpinLoader.pendingRequests() >= FETCH_LIMIT) {
+      return false;
     }
     while (
       this.tier < this.tierEnds.length - 1 &&
@@ -203,15 +336,22 @@ export class SpinLoader {
     ) {
       this.tier += 1;
     }
-    const end = this.tierEnds[this.tier];
-    while (this.controllers.size < FETCH_LIMIT && this.cursor < end) {
-      const index = this.order[this.cursor];
-      this.cursor += 1;
-      const controller = new AbortController();
-      this.controllers.set(index, controller);
-      this.fetchFrame(index, controller, this.generation);
+    const retry = this.order.find((candidate) =>
+      this.retryQueue.has(candidate)
+    );
+    if (retry === undefined && this.cursor >= this.tierEnds[this.tier]) {
+      return false;
     }
-    this.pumpDecode();
+    const index = retry ?? this.order[this.cursor];
+    if (retry === undefined) {
+      this.cursor += 1;
+    } else {
+      this.retryQueue.delete(retry);
+    }
+    const controller = new AbortController();
+    this.controllers.set(index, controller);
+    this.fetchFrame(index, controller, this.generation);
+    return true;
   }
 
   private async fetchFrame(
@@ -222,12 +362,19 @@ export class SpinLoader {
     let timer: ReturnType<typeof setTimeout> | undefined;
     try {
       const timeout = new Promise<never>((_, reject) => {
+        controller.signal.addEventListener(
+          "abort",
+          () => reject(new Error("Spin request canceled")),
+          { once: true }
+        );
         timer = setTimeout(() => {
           controller.abort();
           reject(new Error("Spin frame request timed out"));
         }, REQUEST_TIMEOUT);
       });
-      const source = `${this.config.basePath}/${String(index + 1).padStart(2, "0")}.webp`;
+      const source =
+        this.config.frameSources?.[index] ??
+        `${this.config.basePath}/${String(index + 1).padStart(2, "0")}.webp`;
       const request = fetch(source, {
         priority: this.coarse.has(index) ? "high" : "low",
         signal: controller.signal,
@@ -312,6 +459,7 @@ export class SpinLoader {
       return;
     }
     this.decoding = true;
+    this.decodingIndex = index;
     this.decodeFrame(index, blob, this.generation);
   }
 
@@ -336,10 +484,11 @@ export class SpinLoader {
         return decoded;
       });
       const timeout = new Promise<never>((_, reject) => {
-        timer = setTimeout(() => {
+        this.cancelDecode = () => {
           expired = true;
-          reject(new Error("Spin decode timed out"));
-        }, DECODE_TIMEOUT);
+          reject(new Error("Spin decode canceled or timed out"));
+        };
+        timer = setTimeout(this.cancelDecode, DECODE_TIMEOUT);
       });
       const bitmap = await Promise.race([decode, timeout]);
       if (generation !== this.generation) {
@@ -357,6 +506,8 @@ export class SpinLoader {
       clearTimeout(timer);
       if (generation === this.generation) {
         this.decoding = false;
+        this.decodingIndex = undefined;
+        this.cancelDecode = undefined;
         this.emit();
         this.pumpDecode();
       }
@@ -384,7 +535,13 @@ const loaders = new Map<string, SpinLoader>();
 
 /** The tiny registry retains identity; idle loaders release all network/bitmap resources. */
 export function getSpinLoader(config: SpinLoaderConfig): SpinLoader {
-  const key = `${config.basePath}:${config.frameCount}:${config.width}:${config.height}`;
+  const key = JSON.stringify([
+    config.basePath,
+    config.frameCount,
+    config.width,
+    config.height,
+    config.frameSources ?? null,
+  ]);
   let loader = loaders.get(key);
   if (!loader) {
     loader = new SpinLoader(config);

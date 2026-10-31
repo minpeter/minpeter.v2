@@ -1,0 +1,351 @@
+{
+  "id": "charcoal--nicepbt-bow-retail",
+  "housingId": "charcoal",
+  "keycapId": "nicepbt-bow-retail",
+  "status": "validated",
+  "sourceDigest": "b4e9e98b210d693d02e9e3a9ca51f12476560210ff969b1d7ac9eb0afca0c0cd",
+  "kitQaStatus": "60-of-60-passed",
+  "kitQa": {
+    "status": "60-of-60-passed",
+    "reviewer": "model_bow_keycaps_qa",
+    "reviewedAt": "2026-10-31T07:45:10Z",
+    "keys": [
+      {
+        "position": "Esc",
+        "passed": true
+      },
+      {
+        "position": "1",
+        "passed": true
+      },
+      {
+        "position": "2",
+        "passed": true
+      },
+      {
+        "position": "3",
+        "passed": true
+      },
+      {
+        "position": "4",
+        "passed": true
+      },
+      {
+        "position": "5",
+        "passed": true
+      },
+      {
+        "position": "6",
+        "passed": true
+      },
+      {
+        "position": "7",
+        "passed": true
+      },
+      {
+        "position": "8",
+        "passed": true
+      },
+      {
+        "position": "9",
+        "passed": true
+      },
+      {
+        "position": "0",
+        "passed": true
+      },
+      {
+        "position": "minus",
+        "passed": true
+      },
+      {
+        "position": "plus",
+        "passed": true
+      },
+      {
+        "position": "blue",
+        "passed": true
+      },
+      {
+        "position": "white",
+        "passed": true
+      },
+      {
+        "position": "Tab",
+        "passed": true
+      },
+      {
+        "position": "Q",
+        "passed": true
+      },
+      {
+        "position": "W",
+        "passed": true
+      },
+      {
+        "position": "E",
+        "passed": true
+      },
+      {
+        "position": "R",
+        "passed": true
+      },
+      {
+        "position": "T",
+        "passed": true
+      },
+      {
+        "position": "Y",
+        "passed": true
+      },
+      {
+        "position": "U",
+        "passed": true
+      },
+      {
+        "position": "I",
+        "passed": true
+      },
+      {
+        "position": "O",
+        "passed": true
+      },
+      {
+        "position": "P",
+        "passed": true
+      },
+      {
+        "position": "lbracket",
+        "passed": true
+      },
+      {
+        "position": "rbracket",
+        "passed": true
+      },
+      {
+        "position": "backslash",
+        "passed": true
+      },
+      {
+        "position": "CapsLock",
+        "passed": true
+      },
+      {
+        "position": "A",
+        "passed": true
+      },
+      {
+        "position": "S",
+        "passed": true
+      },
+      {
+        "position": "D",
+        "passed": true
+      },
+      {
+        "position": "F",
+        "passed": true
+      },
+      {
+        "position": "G",
+        "passed": true
+      },
+      {
+        "position": "H",
+        "passed": true
+      },
+      {
+        "position": "J",
+        "passed": true
+      },
+      {
+        "position": "K",
+        "passed": true
+      },
+      {
+        "position": "L",
+        "passed": true
+      },
+      {
+        "position": "semicolon",
+        "passed": true
+      },
+      {
+        "position": "quote",
+        "passed": true
+      },
+      {
+        "position": "Enter",
+        "passed": true
+      },
+      {
+        "position": "LeftShift",
+        "passed": true
+      },
+      {
+        "position": "Z",
+        "passed": true
+      },
+      {
+        "position": "X",
+        "passed": true
+      },
+      {
+        "position": "C",
+        "passed": true
+      },
+      {
+        "position": "V",
+        "passed": true
+      },
+      {
+        "position": "B",
+        "passed": true
+      },
+      {
+        "position": "N",
+        "passed": true
+      },
+      {
+        "position": "M",
+        "passed": true
+      },
+      {
+        "position": "comma",
+        "passed": true
+      },
+      {
+        "position": "period",
+        "passed": true
+      },
+      {
+        "position": "slash",
+        "passed": true
+      },
+      {
+        "position": "RightShift",
+        "passed": true
+      },
+      {
+        "position": "Fn",
+        "passed": true
+      },
+      {
+        "position": "ghost",
+        "passed": true
+      },
+      {
+        "position": "LeftAlt",
+        "passed": true
+      },
+      {
+        "position": "space",
+        "passed": true
+      },
+      {
+        "position": "RightAlt",
+        "passed": true
+      },
+      {
+        "position": "arrow",
+        "passed": true
+      }
+    ],
+    "reviewScope": "All 60 caps rendered independently: 320x320 orthographic top and orthographic oblique, 120 PNGs total. All pairs visually inspected on four contact sheets against official kit diagram; automated texture and object alpha bounds and unchanged source layout checks passed. This is individual visualization QA, not 12-angle board QA, exact-product fidelity certification or physical-fit verification. Rerendered and visually reinspected all 120 views after row-sculpt v2 and filled icon-arrow corrections; supplemental side-elevation proof confirms varying upper plane slopes and fixed bases."
+  },
+  "visualQa": {
+    "status": "passed",
+    "reviewer": "/root/plan_customization_render_pipeline/review_completed_combinations",
+    "reviewedAt": "2026-10-31T08:27:36.340623+00:00",
+    "angles": [0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330],
+    "scope": "Visually inspected all twelve actual-angle PNGs in three four-frame contact sheets, with front full-frame inspection. Consistent charcoal housing and white black-legend retail caps, no personal brand keys, no keyboard cropping, stable camera and geometry; reviewed visible key profile/occlusion, side USB opening, rear plate/weight, feet, perforations, shadows and silhouette. Exact physical geometry, legends/fonts and filament color are approximate visualization, not fit or color certification. Frozen individual-key QA remains separate."
+  },
+  "renderer": "Blender 4.3.2",
+  "materialCalibration": "approximate",
+  "frames": [
+    {
+      "angleDegrees": 0,
+      "src": "/assets/products/rule60-hhkb-unibody/customization/v1/charcoal--nicepbt-bow-retail/frame_000.webp",
+      "sha256": "ca7336f12a1f76d5ef7fa3caac107974f7c12f1d52300d02d1e587ff23de7e33",
+      "width": 1024,
+      "height": 1536
+    },
+    {
+      "angleDegrees": 30,
+      "src": "/assets/products/rule60-hhkb-unibody/customization/v1/charcoal--nicepbt-bow-retail/frame_030.webp",
+      "sha256": "646869a3fa7c1c268da29d94c488bc69d0a177e8c84ff963b4b5e908766447c8",
+      "width": 1024,
+      "height": 1536
+    },
+    {
+      "angleDegrees": 60,
+      "src": "/assets/products/rule60-hhkb-unibody/customization/v1/charcoal--nicepbt-bow-retail/frame_060.webp",
+      "sha256": "7af79ab8aaa62f67b4e571463d44d5a6267ee38a4bbdeece5a4a6f2f44c3d0c5",
+      "width": 1024,
+      "height": 1536
+    },
+    {
+      "angleDegrees": 90,
+      "src": "/assets/products/rule60-hhkb-unibody/customization/v1/charcoal--nicepbt-bow-retail/frame_090.webp",
+      "sha256": "a9c2ecdd4830c1790f08033581850fb68f89fdb839d6c6657891428910863f02",
+      "width": 1024,
+      "height": 1536
+    },
+    {
+      "angleDegrees": 120,
+      "src": "/assets/products/rule60-hhkb-unibody/customization/v1/charcoal--nicepbt-bow-retail/frame_120.webp",
+      "sha256": "bcdeba3ef144aff2d085ea3284d53310dcb5f08cfc00a7dbdbca9eb0a4fef402",
+      "width": 1024,
+      "height": 1536
+    },
+    {
+      "angleDegrees": 150,
+      "src": "/assets/products/rule60-hhkb-unibody/customization/v1/charcoal--nicepbt-bow-retail/frame_150.webp",
+      "sha256": "0c2a27f759baf6b96e7afd3a064e72f3eae5d3f1b0dc8eb7956a88d5fbda66ca",
+      "width": 1024,
+      "height": 1536
+    },
+    {
+      "angleDegrees": 180,
+      "src": "/assets/products/rule60-hhkb-unibody/customization/v1/charcoal--nicepbt-bow-retail/frame_180.webp",
+      "sha256": "b1c5608139b87309a233bc79b66b60b23094992f9440de01e132b6a5efe33893",
+      "width": 1024,
+      "height": 1536
+    },
+    {
+      "angleDegrees": 210,
+      "src": "/assets/products/rule60-hhkb-unibody/customization/v1/charcoal--nicepbt-bow-retail/frame_210.webp",
+      "sha256": "43fec5f7f945b69d56a5ca58e8de7d191ab0c0fc9c6ed1aa3aafc5edacaf1900",
+      "width": 1024,
+      "height": 1536
+    },
+    {
+      "angleDegrees": 240,
+      "src": "/assets/products/rule60-hhkb-unibody/customization/v1/charcoal--nicepbt-bow-retail/frame_240.webp",
+      "sha256": "a7b20b508628f59bf0cfd994a8899d00045c03b8f93ac0bd3882ef81b947432f",
+      "width": 1024,
+      "height": 1536
+    },
+    {
+      "angleDegrees": 270,
+      "src": "/assets/products/rule60-hhkb-unibody/customization/v1/charcoal--nicepbt-bow-retail/frame_270.webp",
+      "sha256": "a35d61b76c8bc68b2c35eb28e24042d79143c4a15f3f9a5f40c157f3394ba90a",
+      "width": 1024,
+      "height": 1536
+    },
+    {
+      "angleDegrees": 300,
+      "src": "/assets/products/rule60-hhkb-unibody/customization/v1/charcoal--nicepbt-bow-retail/frame_300.webp",
+      "sha256": "e8e6c2c5401192eea4dfc4ad7286587600ed844e65b187badc9eefe164947b67",
+      "width": 1024,
+      "height": 1536
+    },
+    {
+      "angleDegrees": 330,
+      "src": "/assets/products/rule60-hhkb-unibody/customization/v1/charcoal--nicepbt-bow-retail/frame_330.webp",
+      "sha256": "9577dda0bcda24b6213266ce45d633f365a1f208ba0b38f198ae834da3765cb3",
+      "width": 1024,
+      "height": 1536
+    }
+  ]
+}
