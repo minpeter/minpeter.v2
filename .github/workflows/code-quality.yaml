@@ -138,6 +138,20 @@ jobs:
           e2e/language-selector.spec.ts
           e2e/error-recovery.spec.ts
           e2e/products-spin.spec.ts
+          e2e/product-customization.spec.ts
+
+      - name: Preserve browser screenshots for visual review
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: browser-screenshots-${{ github.sha }}
+          path: |
+            test-results/**/*.png
+            test-results/**/*.json
+            test-results/**/*.md
+          retention-days: 3
+          if-no-files-found: warn
+          compression-level: 0
 
   audit:
     name: Security audit

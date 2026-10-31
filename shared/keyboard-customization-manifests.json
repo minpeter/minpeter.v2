@@ -2720,5 +2720,1307 @@
         "height": 1536
       }
     ]
+  },
+  {
+    "id": "charcoal--pbtfans-wob-retail",
+    "housingId": "charcoal",
+    "keycapId": "pbtfans-wob-retail",
+    "status": "validated",
+    "sourceDigest": "a481cf2d947ad4b59ce00a73e46e9990dc7b09b572ca93c241563a00ab842088",
+    "kitQaStatus": "60-of-60-passed",
+    "kitQa": {
+      "status": "60-of-60-passed",
+      "reviewer": "model_bow_keycaps_qa",
+      "reviewedAt": "2026-10-31T08:03:17Z",
+      "keys": [
+        {
+          "position": "Esc",
+          "passed": true
+        },
+        {
+          "position": "1",
+          "passed": true
+        },
+        {
+          "position": "2",
+          "passed": true
+        },
+        {
+          "position": "3",
+          "passed": true
+        },
+        {
+          "position": "4",
+          "passed": true
+        },
+        {
+          "position": "5",
+          "passed": true
+        },
+        {
+          "position": "6",
+          "passed": true
+        },
+        {
+          "position": "7",
+          "passed": true
+        },
+        {
+          "position": "8",
+          "passed": true
+        },
+        {
+          "position": "9",
+          "passed": true
+        },
+        {
+          "position": "0",
+          "passed": true
+        },
+        {
+          "position": "minus",
+          "passed": true
+        },
+        {
+          "position": "plus",
+          "passed": true
+        },
+        {
+          "position": "blue",
+          "passed": true
+        },
+        {
+          "position": "white",
+          "passed": true
+        },
+        {
+          "position": "Tab",
+          "passed": true
+        },
+        {
+          "position": "Q",
+          "passed": true
+        },
+        {
+          "position": "W",
+          "passed": true
+        },
+        {
+          "position": "E",
+          "passed": true
+        },
+        {
+          "position": "R",
+          "passed": true
+        },
+        {
+          "position": "T",
+          "passed": true
+        },
+        {
+          "position": "Y",
+          "passed": true
+        },
+        {
+          "position": "U",
+          "passed": true
+        },
+        {
+          "position": "I",
+          "passed": true
+        },
+        {
+          "position": "O",
+          "passed": true
+        },
+        {
+          "position": "P",
+          "passed": true
+        },
+        {
+          "position": "lbracket",
+          "passed": true
+        },
+        {
+          "position": "rbracket",
+          "passed": true
+        },
+        {
+          "position": "backslash",
+          "passed": true
+        },
+        {
+          "position": "CapsLock",
+          "passed": true
+        },
+        {
+          "position": "A",
+          "passed": true
+        },
+        {
+          "position": "S",
+          "passed": true
+        },
+        {
+          "position": "D",
+          "passed": true
+        },
+        {
+          "position": "F",
+          "passed": true
+        },
+        {
+          "position": "G",
+          "passed": true
+        },
+        {
+          "position": "H",
+          "passed": true
+        },
+        {
+          "position": "J",
+          "passed": true
+        },
+        {
+          "position": "K",
+          "passed": true
+        },
+        {
+          "position": "L",
+          "passed": true
+        },
+        {
+          "position": "semicolon",
+          "passed": true
+        },
+        {
+          "position": "quote",
+          "passed": true
+        },
+        {
+          "position": "Enter",
+          "passed": true
+        },
+        {
+          "position": "LeftShift",
+          "passed": true
+        },
+        {
+          "position": "Z",
+          "passed": true
+        },
+        {
+          "position": "X",
+          "passed": true
+        },
+        {
+          "position": "C",
+          "passed": true
+        },
+        {
+          "position": "V",
+          "passed": true
+        },
+        {
+          "position": "B",
+          "passed": true
+        },
+        {
+          "position": "N",
+          "passed": true
+        },
+        {
+          "position": "M",
+          "passed": true
+        },
+        {
+          "position": "comma",
+          "passed": true
+        },
+        {
+          "position": "period",
+          "passed": true
+        },
+        {
+          "position": "slash",
+          "passed": true
+        },
+        {
+          "position": "RightShift",
+          "passed": true
+        },
+        {
+          "position": "Fn",
+          "passed": true
+        },
+        {
+          "position": "ghost",
+          "passed": true
+        },
+        {
+          "position": "LeftAlt",
+          "passed": true
+        },
+        {
+          "position": "space",
+          "passed": true
+        },
+        {
+          "position": "RightAlt",
+          "passed": true
+        },
+        {
+          "position": "arrow",
+          "passed": true
+        }
+      ],
+      "reviewScope": "All 60 PBTfans WOB PT04-1 selected retail caps rendered individually in top and oblique orthographic views, 120 PNGs total. Every pair visually inspected against the official Base Alpha+Text Modifiers atlas via four sheets (backslash pair also opened separately); all legends readable, correct orientation, no overlap/cropping, all-black supplemental Esc/Enter/arrows confirmed. Automated exact layout and texture/object alpha bounds pass. This is individual visualization QA only, not full-board or 12-angle combination QA."
+    },
+    "visualQa": {
+      "status": "passed",
+      "reviewer": "/root/plan_customization_render_pipeline/review_completed_combinations",
+      "reviewedAt": "2026-10-31T08:50:11.996269+00:00",
+      "angles": [0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330],
+      "scope": "Visually inspected all twelve actual-angle PNGs in three four-frame contact sheets and front full-frame. Consistent charcoal housing and black white-legend PBTFans WOB retail caps; no personal brand keys, no keyboard cropping, stable camera and geometry. Reviewed visible key profile including stepped Caps Lock, occlusion, side USB opening, rear plate/weight, feet, perforations, shadows and silhouette. Dark-on-dark surfaces have subdued contrast but visible keycap boundaries and white legends. Exact physical geometry, legends/fonts and filament color are approximate visualization, not fit or color certification. Frozen individual-key QA remains separate."
+    },
+    "renderer": "Blender 4.3.2",
+    "materialCalibration": "approximate",
+    "frames": [
+      {
+        "angleDegrees": 0,
+        "src": "/assets/products/rule60-hhkb-unibody/customization/v1/charcoal--pbtfans-wob-retail/frame_000.webp",
+        "sha256": "06b502890d8f7e010b0a44395a77ab3a5e2d6c1ff186410233a54bce61bbe80d",
+        "width": 1024,
+        "height": 1536
+      },
+      {
+        "angleDegrees": 30,
+        "src": "/assets/products/rule60-hhkb-unibody/customization/v1/charcoal--pbtfans-wob-retail/frame_030.webp",
+        "sha256": "495ad2716ade57d0eb08d2487021298aeded1c4fe06a9b4cbdd9f9c823d35501",
+        "width": 1024,
+        "height": 1536
+      },
+      {
+        "angleDegrees": 60,
+        "src": "/assets/products/rule60-hhkb-unibody/customization/v1/charcoal--pbtfans-wob-retail/frame_060.webp",
+        "sha256": "e37e46d798e2871daddadaeec7cde5746d4f080249b6fb215a97a441c9d55e55",
+        "width": 1024,
+        "height": 1536
+      },
+      {
+        "angleDegrees": 90,
+        "src": "/assets/products/rule60-hhkb-unibody/customization/v1/charcoal--pbtfans-wob-retail/frame_090.webp",
+        "sha256": "ae5c47e92574c069d1b4ee15bee6bb2498868db9c44d7837077183682c2b56c9",
+        "width": 1024,
+        "height": 1536
+      },
+      {
+        "angleDegrees": 120,
+        "src": "/assets/products/rule60-hhkb-unibody/customization/v1/charcoal--pbtfans-wob-retail/frame_120.webp",
+        "sha256": "e62b5ff55cd82d66204d850af035006c7250674a065e1e358d5cb18b3ced3ba6",
+        "width": 1024,
+        "height": 1536
+      },
+      {
+        "angleDegrees": 150,
+        "src": "/assets/products/rule60-hhkb-unibody/customization/v1/charcoal--pbtfans-wob-retail/frame_150.webp",
+        "sha256": "610d5049928ac687e889046984d865e460ba27c82316e5f6fa245e6438b788f7",
+        "width": 1024,
+        "height": 1536
+      },
+      {
+        "angleDegrees": 180,
+        "src": "/assets/products/rule60-hhkb-unibody/customization/v1/charcoal--pbtfans-wob-retail/frame_180.webp",
+        "sha256": "ada5eba11da0c8f63c8368c38f89a29d89ece22be73811c1590612c35d6818cd",
+        "width": 1024,
+        "height": 1536
+      },
+      {
+        "angleDegrees": 210,
+        "src": "/assets/products/rule60-hhkb-unibody/customization/v1/charcoal--pbtfans-wob-retail/frame_210.webp",
+        "sha256": "bd2739e456bdd04c52565498adbf99b3788ac762f143bdfa5d17c1405b61dc60",
+        "width": 1024,
+        "height": 1536
+      },
+      {
+        "angleDegrees": 240,
+        "src": "/assets/products/rule60-hhkb-unibody/customization/v1/charcoal--pbtfans-wob-retail/frame_240.webp",
+        "sha256": "0752d6a7768a1c80c9df1e314a7fc8e107f2faa9ee44bfe0c5d3c6dc0adb6331",
+        "width": 1024,
+        "height": 1536
+      },
+      {
+        "angleDegrees": 270,
+        "src": "/assets/products/rule60-hhkb-unibody/customization/v1/charcoal--pbtfans-wob-retail/frame_270.webp",
+        "sha256": "74c051b9d514a69099ce81f2b64936bf0a8f7e2b99173789e11cc12801531416",
+        "width": 1024,
+        "height": 1536
+      },
+      {
+        "angleDegrees": 300,
+        "src": "/assets/products/rule60-hhkb-unibody/customization/v1/charcoal--pbtfans-wob-retail/frame_300.webp",
+        "sha256": "4312abd750bf70383bd10518b0b00f8a9638c80f97f0c853faa7722f1a147c2d",
+        "width": 1024,
+        "height": 1536
+      },
+      {
+        "angleDegrees": 330,
+        "src": "/assets/products/rule60-hhkb-unibody/customization/v1/charcoal--pbtfans-wob-retail/frame_330.webp",
+        "sha256": "22c6a6ae5823d340ba4149928fb6376a117cc3b1f145d1cbd2bb26156e583985",
+        "width": 1024,
+        "height": 1536
+      }
+    ]
+  },
+  {
+    "id": "charcoal--nicepbt-noel-latin-retail",
+    "housingId": "charcoal",
+    "keycapId": "nicepbt-noel-latin-retail",
+    "status": "validated",
+    "sourceDigest": "10112d1b08b87e5a335a39e534919fd691f4a273353ca6218397044114817dd4",
+    "kitQaStatus": "60-of-60-passed",
+    "kitQa": {
+      "status": "60-of-60-passed",
+      "reviewer": "model_color_keycap_sets",
+      "reviewedAt": "2026-10-31T08:09:39.465309+00:00",
+      "keys": [
+        {
+          "position": "Esc",
+          "passed": true,
+          "physicalRow": 0,
+          "manufacturerRow": "R1",
+          "widthU": 1,
+          "topSlopeVisualEstimateDeg": 9,
+          "reviewedViews": ["top", "oblique"],
+          "sheet": 1,
+          "shapeReview": "cylindrical dish and beveled shell",
+          "legendReview": "official kit selection, orientation, top-left placement, no clipping or unintended logos checked visually",
+          "paletteReview": "matches intended alpha/modifier/accent assignment; uncalibrated approximation",
+          "textureBindingAndUV": "pass"
+        },
+        {
+          "position": "1",
+          "passed": true,
+          "physicalRow": 0,
+          "manufacturerRow": "R1",
+          "widthU": 1,
+          "topSlopeVisualEstimateDeg": 9,
+          "reviewedViews": ["top", "oblique"],
+          "sheet": 1,
+          "shapeReview": "cylindrical dish and beveled shell",
+          "legendReview": "official kit selection, orientation, top-left placement, no clipping or unintended logos checked visually",
+          "paletteReview": "matches intended alpha/modifier/accent assignment; uncalibrated approximation",
+          "textureBindingAndUV": "pass"
+        },
+        {
+          "position": "2",
+          "passed": true,
+          "physicalRow": 0,
+          "manufacturerRow": "R1",
+          "widthU": 1,
+          "topSlopeVisualEstimateDeg": 9,
+          "reviewedViews": ["top", "oblique"],
+          "sheet": 1,
+          "shapeReview": "cylindrical dish and beveled shell",
+          "legendReview": "official kit selection, orientation, top-left placement, no clipping or unintended logos checked visually",
+          "paletteReview": "matches intended alpha/modifier/accent assignment; uncalibrated approximation",
+          "textureBindingAndUV": "pass"
+        },
+        {
+          "position": "3",
+          "passed": true,
+          "physicalRow": 0,
+          "manufacturerRow": "R1",
+          "widthU": 1,
+          "topSlopeVisualEstimateDeg": 9,
+          "reviewedViews": ["top", "oblique"],
+          "sheet": 1,
+          "shapeReview": "cylindrical dish and beveled shell",
+          "legendReview": "official kit selection, orientation, top-left placement, no clipping or unintended logos checked visually",
+          "paletteReview": "matches intended alpha/modifier/accent assignment; uncalibrated approximation",
+          "textureBindingAndUV": "pass"
+        },
+        {
+          "position": "4",
+          "passed": true,
+          "physicalRow": 0,
+          "manufacturerRow": "R1",
+          "widthU": 1,
+          "topSlopeVisualEstimateDeg": 9,
+          "reviewedViews": ["top", "oblique"],
+          "sheet": 1,
+          "shapeReview": "cylindrical dish and beveled shell",
+          "legendReview": "official kit selection, orientation, top-left placement, no clipping or unintended logos checked visually",
+          "paletteReview": "matches intended alpha/modifier/accent assignment; uncalibrated approximation",
+          "textureBindingAndUV": "pass"
+        },
+        {
+          "position": "5",
+          "passed": true,
+          "physicalRow": 0,
+          "manufacturerRow": "R1",
+          "widthU": 1,
+          "topSlopeVisualEstimateDeg": 9,
+          "reviewedViews": ["top", "oblique"],
+          "sheet": 1,
+          "shapeReview": "cylindrical dish and beveled shell",
+          "legendReview": "official kit selection, orientation, top-left placement, no clipping or unintended logos checked visually",
+          "paletteReview": "matches intended alpha/modifier/accent assignment; uncalibrated approximation",
+          "textureBindingAndUV": "pass"
+        },
+        {
+          "position": "6",
+          "passed": true,
+          "physicalRow": 0,
+          "manufacturerRow": "R1",
+          "widthU": 1,
+          "topSlopeVisualEstimateDeg": 9,
+          "reviewedViews": ["top", "oblique"],
+          "sheet": 1,
+          "shapeReview": "cylindrical dish and beveled shell",
+          "legendReview": "official kit selection, orientation, top-left placement, no clipping or unintended logos checked visually",
+          "paletteReview": "matches intended alpha/modifier/accent assignment; uncalibrated approximation",
+          "textureBindingAndUV": "pass"
+        },
+        {
+          "position": "7",
+          "passed": true,
+          "physicalRow": 0,
+          "manufacturerRow": "R1",
+          "widthU": 1,
+          "topSlopeVisualEstimateDeg": 9,
+          "reviewedViews": ["top", "oblique"],
+          "sheet": 1,
+          "shapeReview": "cylindrical dish and beveled shell",
+          "legendReview": "official kit selection, orientation, top-left placement, no clipping or unintended logos checked visually",
+          "paletteReview": "matches intended alpha/modifier/accent assignment; uncalibrated approximation",
+          "textureBindingAndUV": "pass"
+        },
+        {
+          "position": "8",
+          "passed": true,
+          "physicalRow": 0,
+          "manufacturerRow": "R1",
+          "widthU": 1,
+          "topSlopeVisualEstimateDeg": 9,
+          "reviewedViews": ["top", "oblique"],
+          "sheet": 1,
+          "shapeReview": "cylindrical dish and beveled shell",
+          "legendReview": "official kit selection, orientation, top-left placement, no clipping or unintended logos checked visually",
+          "paletteReview": "matches intended alpha/modifier/accent assignment; uncalibrated approximation",
+          "textureBindingAndUV": "pass"
+        },
+        {
+          "position": "9",
+          "passed": true,
+          "physicalRow": 0,
+          "manufacturerRow": "R1",
+          "widthU": 1,
+          "topSlopeVisualEstimateDeg": 9,
+          "reviewedViews": ["top", "oblique"],
+          "sheet": 1,
+          "shapeReview": "cylindrical dish and beveled shell",
+          "legendReview": "official kit selection, orientation, top-left placement, no clipping or unintended logos checked visually",
+          "paletteReview": "matches intended alpha/modifier/accent assignment; uncalibrated approximation",
+          "textureBindingAndUV": "pass"
+        },
+        {
+          "position": "0",
+          "passed": true,
+          "physicalRow": 0,
+          "manufacturerRow": "R1",
+          "widthU": 1,
+          "topSlopeVisualEstimateDeg": 9,
+          "reviewedViews": ["top", "oblique"],
+          "sheet": 1,
+          "shapeReview": "cylindrical dish and beveled shell",
+          "legendReview": "official kit selection, orientation, top-left placement, no clipping or unintended logos checked visually",
+          "paletteReview": "matches intended alpha/modifier/accent assignment; uncalibrated approximation",
+          "textureBindingAndUV": "pass"
+        },
+        {
+          "position": "minus",
+          "passed": true,
+          "physicalRow": 0,
+          "manufacturerRow": "R1",
+          "widthU": 1,
+          "topSlopeVisualEstimateDeg": 9,
+          "reviewedViews": ["top", "oblique"],
+          "sheet": 1,
+          "shapeReview": "cylindrical dish and beveled shell",
+          "legendReview": "official kit selection, orientation, top-left placement, no clipping or unintended logos checked visually",
+          "paletteReview": "matches intended alpha/modifier/accent assignment; uncalibrated approximation",
+          "textureBindingAndUV": "pass"
+        },
+        {
+          "position": "plus",
+          "passed": true,
+          "physicalRow": 0,
+          "manufacturerRow": "R1",
+          "widthU": 1,
+          "topSlopeVisualEstimateDeg": 9,
+          "reviewedViews": ["top", "oblique"],
+          "sheet": 1,
+          "shapeReview": "cylindrical dish and beveled shell",
+          "legendReview": "official kit selection, orientation, top-left placement, no clipping or unintended logos checked visually",
+          "paletteReview": "matches intended alpha/modifier/accent assignment; uncalibrated approximation",
+          "textureBindingAndUV": "pass"
+        },
+        {
+          "position": "blue",
+          "passed": true,
+          "physicalRow": 0,
+          "manufacturerRow": "R1",
+          "widthU": 1,
+          "topSlopeVisualEstimateDeg": 9,
+          "reviewedViews": ["top", "oblique"],
+          "sheet": 1,
+          "shapeReview": "cylindrical dish and beveled shell",
+          "legendReview": "official kit selection, orientation, top-left placement, no clipping or unintended logos checked visually",
+          "paletteReview": "matches intended alpha/modifier/accent assignment; uncalibrated approximation",
+          "textureBindingAndUV": "pass"
+        },
+        {
+          "position": "white",
+          "passed": true,
+          "physicalRow": 0,
+          "manufacturerRow": "R1",
+          "widthU": 1,
+          "topSlopeVisualEstimateDeg": 9,
+          "reviewedViews": ["top", "oblique"],
+          "sheet": 1,
+          "shapeReview": "cylindrical dish and beveled shell",
+          "legendReview": "official kit selection, orientation, top-left placement, no clipping or unintended logos checked visually",
+          "paletteReview": "matches intended alpha/modifier/accent assignment; uncalibrated approximation",
+          "textureBindingAndUV": "pass"
+        },
+        {
+          "position": "Tab",
+          "passed": true,
+          "physicalRow": 1,
+          "manufacturerRow": "R2",
+          "widthU": 1.5,
+          "topSlopeVisualEstimateDeg": 6,
+          "reviewedViews": ["top", "oblique"],
+          "sheet": 2,
+          "shapeReview": "cylindrical dish and beveled shell",
+          "legendReview": "official kit selection, orientation, top-left placement, no clipping or unintended logos checked visually",
+          "paletteReview": "matches intended alpha/modifier/accent assignment; uncalibrated approximation",
+          "textureBindingAndUV": "pass"
+        },
+        {
+          "position": "Q",
+          "passed": true,
+          "physicalRow": 1,
+          "manufacturerRow": "R2",
+          "widthU": 1,
+          "topSlopeVisualEstimateDeg": 6,
+          "reviewedViews": ["top", "oblique"],
+          "sheet": 2,
+          "shapeReview": "cylindrical dish and beveled shell",
+          "legendReview": "official kit selection, orientation, top-left placement, no clipping or unintended logos checked visually",
+          "paletteReview": "matches intended alpha/modifier/accent assignment; uncalibrated approximation",
+          "textureBindingAndUV": "pass"
+        },
+        {
+          "position": "W",
+          "passed": true,
+          "physicalRow": 1,
+          "manufacturerRow": "R2",
+          "widthU": 1,
+          "topSlopeVisualEstimateDeg": 6,
+          "reviewedViews": ["top", "oblique"],
+          "sheet": 2,
+          "shapeReview": "cylindrical dish and beveled shell",
+          "legendReview": "official kit selection, orientation, top-left placement, no clipping or unintended logos checked visually",
+          "paletteReview": "matches intended alpha/modifier/accent assignment; uncalibrated approximation",
+          "textureBindingAndUV": "pass"
+        },
+        {
+          "position": "E",
+          "passed": true,
+          "physicalRow": 1,
+          "manufacturerRow": "R2",
+          "widthU": 1,
+          "topSlopeVisualEstimateDeg": 6,
+          "reviewedViews": ["top", "oblique"],
+          "sheet": 2,
+          "shapeReview": "cylindrical dish and beveled shell",
+          "legendReview": "official kit selection, orientation, top-left placement, no clipping or unintended logos checked visually",
+          "paletteReview": "matches intended alpha/modifier/accent assignment; uncalibrated approximation",
+          "textureBindingAndUV": "pass"
+        },
+        {
+          "position": "R",
+          "passed": true,
+          "physicalRow": 1,
+          "manufacturerRow": "R2",
+          "widthU": 1,
+          "topSlopeVisualEstimateDeg": 6,
+          "reviewedViews": ["top", "oblique"],
+          "sheet": 2,
+          "shapeReview": "cylindrical dish and beveled shell",
+          "legendReview": "official kit selection, orientation, top-left placement, no clipping or unintended logos checked visually",
+          "paletteReview": "matches intended alpha/modifier/accent assignment; uncalibrated approximation",
+          "textureBindingAndUV": "pass"
+        },
+        {
+          "position": "T",
+          "passed": true,
+          "physicalRow": 1,
+          "manufacturerRow": "R2",
+          "widthU": 1,
+          "topSlopeVisualEstimateDeg": 6,
+          "reviewedViews": ["top", "oblique"],
+          "sheet": 2,
+          "shapeReview": "cylindrical dish and beveled shell",
+          "legendReview": "official kit selection, orientation, top-left placement, no clipping or unintended logos checked visually",
+          "paletteReview": "matches intended alpha/modifier/accent assignment; uncalibrated approximation",
+          "textureBindingAndUV": "pass"
+        },
+        {
+          "position": "Y",
+          "passed": true,
+          "physicalRow": 1,
+          "manufacturerRow": "R2",
+          "widthU": 1,
+          "topSlopeVisualEstimateDeg": 6,
+          "reviewedViews": ["top", "oblique"],
+          "sheet": 2,
+          "shapeReview": "cylindrical dish and beveled shell",
+          "legendReview": "official kit selection, orientation, top-left placement, no clipping or unintended logos checked visually",
+          "paletteReview": "matches intended alpha/modifier/accent assignment; uncalibrated approximation",
+          "textureBindingAndUV": "pass"
+        },
+        {
+          "position": "U",
+          "passed": true,
+          "physicalRow": 1,
+          "manufacturerRow": "R2",
+          "widthU": 1,
+          "topSlopeVisualEstimateDeg": 6,
+          "reviewedViews": ["top", "oblique"],
+          "sheet": 2,
+          "shapeReview": "cylindrical dish and beveled shell",
+          "legendReview": "official kit selection, orientation, top-left placement, no clipping or unintended logos checked visually",
+          "paletteReview": "matches intended alpha/modifier/accent assignment; uncalibrated approximation",
+          "textureBindingAndUV": "pass"
+        },
+        {
+          "position": "I",
+          "passed": true,
+          "physicalRow": 1,
+          "manufacturerRow": "R2",
+          "widthU": 1,
+          "topSlopeVisualEstimateDeg": 6,
+          "reviewedViews": ["top", "oblique"],
+          "sheet": 2,
+          "shapeReview": "cylindrical dish and beveled shell",
+          "legendReview": "official kit selection, orientation, top-left placement, no clipping or unintended logos checked visually",
+          "paletteReview": "matches intended alpha/modifier/accent assignment; uncalibrated approximation",
+          "textureBindingAndUV": "pass"
+        },
+        {
+          "position": "O",
+          "passed": true,
+          "physicalRow": 1,
+          "manufacturerRow": "R2",
+          "widthU": 1,
+          "topSlopeVisualEstimateDeg": 6,
+          "reviewedViews": ["top", "oblique"],
+          "sheet": 2,
+          "shapeReview": "cylindrical dish and beveled shell",
+          "legendReview": "official kit selection, orientation, top-left placement, no clipping or unintended logos checked visually",
+          "paletteReview": "matches intended alpha/modifier/accent assignment; uncalibrated approximation",
+          "textureBindingAndUV": "pass"
+        },
+        {
+          "position": "P",
+          "passed": true,
+          "physicalRow": 1,
+          "manufacturerRow": "R2",
+          "widthU": 1,
+          "topSlopeVisualEstimateDeg": 6,
+          "reviewedViews": ["top", "oblique"],
+          "sheet": 2,
+          "shapeReview": "cylindrical dish and beveled shell",
+          "legendReview": "official kit selection, orientation, top-left placement, no clipping or unintended logos checked visually",
+          "paletteReview": "matches intended alpha/modifier/accent assignment; uncalibrated approximation",
+          "textureBindingAndUV": "pass"
+        },
+        {
+          "position": "lbracket",
+          "passed": true,
+          "physicalRow": 1,
+          "manufacturerRow": "R2",
+          "widthU": 1,
+          "topSlopeVisualEstimateDeg": 6,
+          "reviewedViews": ["top", "oblique"],
+          "sheet": 2,
+          "shapeReview": "cylindrical dish and beveled shell",
+          "legendReview": "official kit selection, orientation, top-left placement, no clipping or unintended logos checked visually",
+          "paletteReview": "matches intended alpha/modifier/accent assignment; uncalibrated approximation",
+          "textureBindingAndUV": "pass"
+        },
+        {
+          "position": "rbracket",
+          "passed": true,
+          "physicalRow": 1,
+          "manufacturerRow": "R2",
+          "widthU": 1,
+          "topSlopeVisualEstimateDeg": 6,
+          "reviewedViews": ["top", "oblique"],
+          "sheet": 2,
+          "shapeReview": "cylindrical dish and beveled shell",
+          "legendReview": "official kit selection, orientation, top-left placement, no clipping or unintended logos checked visually",
+          "paletteReview": "matches intended alpha/modifier/accent assignment; uncalibrated approximation",
+          "textureBindingAndUV": "pass"
+        },
+        {
+          "position": "backslash",
+          "passed": true,
+          "physicalRow": 1,
+          "manufacturerRow": "R2",
+          "widthU": 1.5,
+          "topSlopeVisualEstimateDeg": 6,
+          "reviewedViews": ["top", "oblique"],
+          "sheet": 2,
+          "shapeReview": "cylindrical dish and beveled shell",
+          "legendReview": "official kit selection, orientation, top-left placement, no clipping or unintended logos checked visually",
+          "paletteReview": "matches intended alpha/modifier/accent assignment; uncalibrated approximation",
+          "textureBindingAndUV": "pass"
+        },
+        {
+          "position": "CapsLock",
+          "passed": true,
+          "physicalRow": 2,
+          "manufacturerRow": "R3",
+          "widthU": 1.75,
+          "topSlopeVisualEstimateDeg": 0,
+          "reviewedViews": ["top", "oblique"],
+          "sheet": 2,
+          "shapeReview": "stepped right-side lowered shelf, sculpted fillet, icon/text confined to main left top",
+          "legendReview": "official kit selection, orientation, top-left placement, no clipping or unintended logos checked visually",
+          "paletteReview": "matches intended alpha/modifier/accent assignment; uncalibrated approximation",
+          "textureBindingAndUV": "pass"
+        },
+        {
+          "position": "A",
+          "passed": true,
+          "physicalRow": 2,
+          "manufacturerRow": "R3",
+          "widthU": 1,
+          "topSlopeVisualEstimateDeg": 0,
+          "reviewedViews": ["top", "oblique"],
+          "sheet": 3,
+          "shapeReview": "cylindrical dish and beveled shell",
+          "legendReview": "official kit selection, orientation, top-left placement, no clipping or unintended logos checked visually",
+          "paletteReview": "matches intended alpha/modifier/accent assignment; uncalibrated approximation",
+          "textureBindingAndUV": "pass"
+        },
+        {
+          "position": "S",
+          "passed": true,
+          "physicalRow": 2,
+          "manufacturerRow": "R3",
+          "widthU": 1,
+          "topSlopeVisualEstimateDeg": 0,
+          "reviewedViews": ["top", "oblique"],
+          "sheet": 3,
+          "shapeReview": "cylindrical dish and beveled shell",
+          "legendReview": "official kit selection, orientation, top-left placement, no clipping or unintended logos checked visually",
+          "paletteReview": "matches intended alpha/modifier/accent assignment; uncalibrated approximation",
+          "textureBindingAndUV": "pass"
+        },
+        {
+          "position": "D",
+          "passed": true,
+          "physicalRow": 2,
+          "manufacturerRow": "R3",
+          "widthU": 1,
+          "topSlopeVisualEstimateDeg": 0,
+          "reviewedViews": ["top", "oblique"],
+          "sheet": 3,
+          "shapeReview": "cylindrical dish and beveled shell",
+          "legendReview": "official kit selection, orientation, top-left placement, no clipping or unintended logos checked visually",
+          "paletteReview": "matches intended alpha/modifier/accent assignment; uncalibrated approximation",
+          "textureBindingAndUV": "pass"
+        },
+        {
+          "position": "F",
+          "passed": true,
+          "physicalRow": 2,
+          "manufacturerRow": "R3",
+          "widthU": 1,
+          "topSlopeVisualEstimateDeg": 0,
+          "reviewedViews": ["top", "oblique"],
+          "sheet": 3,
+          "shapeReview": "cylindrical dish with homing bar",
+          "legendReview": "official kit selection, orientation, top-left placement, no clipping or unintended logos checked visually",
+          "paletteReview": "matches intended alpha/modifier/accent assignment; uncalibrated approximation",
+          "textureBindingAndUV": "pass"
+        },
+        {
+          "position": "G",
+          "passed": true,
+          "physicalRow": 2,
+          "manufacturerRow": "R3",
+          "widthU": 1,
+          "topSlopeVisualEstimateDeg": 0,
+          "reviewedViews": ["top", "oblique"],
+          "sheet": 3,
+          "shapeReview": "cylindrical dish and beveled shell",
+          "legendReview": "official kit selection, orientation, top-left placement, no clipping or unintended logos checked visually",
+          "paletteReview": "matches intended alpha/modifier/accent assignment; uncalibrated approximation",
+          "textureBindingAndUV": "pass"
+        },
+        {
+          "position": "H",
+          "passed": true,
+          "physicalRow": 2,
+          "manufacturerRow": "R3",
+          "widthU": 1,
+          "topSlopeVisualEstimateDeg": 0,
+          "reviewedViews": ["top", "oblique"],
+          "sheet": 3,
+          "shapeReview": "cylindrical dish and beveled shell",
+          "legendReview": "official kit selection, orientation, top-left placement, no clipping or unintended logos checked visually",
+          "paletteReview": "matches intended alpha/modifier/accent assignment; uncalibrated approximation",
+          "textureBindingAndUV": "pass"
+        },
+        {
+          "position": "J",
+          "passed": true,
+          "physicalRow": 2,
+          "manufacturerRow": "R3",
+          "widthU": 1,
+          "topSlopeVisualEstimateDeg": 0,
+          "reviewedViews": ["top", "oblique"],
+          "sheet": 3,
+          "shapeReview": "cylindrical dish with homing bar",
+          "legendReview": "official kit selection, orientation, top-left placement, no clipping or unintended logos checked visually",
+          "paletteReview": "matches intended alpha/modifier/accent assignment; uncalibrated approximation",
+          "textureBindingAndUV": "pass"
+        },
+        {
+          "position": "K",
+          "passed": true,
+          "physicalRow": 2,
+          "manufacturerRow": "R3",
+          "widthU": 1,
+          "topSlopeVisualEstimateDeg": 0,
+          "reviewedViews": ["top", "oblique"],
+          "sheet": 3,
+          "shapeReview": "cylindrical dish and beveled shell",
+          "legendReview": "official kit selection, orientation, top-left placement, no clipping or unintended logos checked visually",
+          "paletteReview": "matches intended alpha/modifier/accent assignment; uncalibrated approximation",
+          "textureBindingAndUV": "pass"
+        },
+        {
+          "position": "L",
+          "passed": true,
+          "physicalRow": 2,
+          "manufacturerRow": "R3",
+          "widthU": 1,
+          "topSlopeVisualEstimateDeg": 0,
+          "reviewedViews": ["top", "oblique"],
+          "sheet": 3,
+          "shapeReview": "cylindrical dish and beveled shell",
+          "legendReview": "official kit selection, orientation, top-left placement, no clipping or unintended logos checked visually",
+          "paletteReview": "matches intended alpha/modifier/accent assignment; uncalibrated approximation",
+          "textureBindingAndUV": "pass"
+        },
+        {
+          "position": "semicolon",
+          "passed": true,
+          "physicalRow": 2,
+          "manufacturerRow": "R3",
+          "widthU": 1,
+          "topSlopeVisualEstimateDeg": 0,
+          "reviewedViews": ["top", "oblique"],
+          "sheet": 3,
+          "shapeReview": "cylindrical dish and beveled shell",
+          "legendReview": "official kit selection, orientation, top-left placement, no clipping or unintended logos checked visually",
+          "paletteReview": "matches intended alpha/modifier/accent assignment; uncalibrated approximation",
+          "textureBindingAndUV": "pass"
+        },
+        {
+          "position": "quote",
+          "passed": true,
+          "physicalRow": 2,
+          "manufacturerRow": "R3",
+          "widthU": 1,
+          "topSlopeVisualEstimateDeg": 0,
+          "reviewedViews": ["top", "oblique"],
+          "sheet": 3,
+          "shapeReview": "cylindrical dish and beveled shell",
+          "legendReview": "official kit selection, orientation, top-left placement, no clipping or unintended logos checked visually",
+          "paletteReview": "matches intended alpha/modifier/accent assignment; uncalibrated approximation",
+          "textureBindingAndUV": "pass"
+        },
+        {
+          "position": "Enter",
+          "passed": true,
+          "physicalRow": 2,
+          "manufacturerRow": "R3",
+          "widthU": 2.25,
+          "topSlopeVisualEstimateDeg": 0,
+          "reviewedViews": ["top", "oblique"],
+          "sheet": 3,
+          "shapeReview": "cylindrical dish and beveled shell",
+          "legendReview": "official kit selection, orientation, top-left placement, no clipping or unintended logos checked visually",
+          "paletteReview": "matches intended alpha/modifier/accent assignment; uncalibrated approximation",
+          "textureBindingAndUV": "pass"
+        },
+        {
+          "position": "LeftShift",
+          "passed": true,
+          "physicalRow": 3,
+          "manufacturerRow": "R4",
+          "widthU": 2.25,
+          "topSlopeVisualEstimateDeg": -7,
+          "reviewedViews": ["top", "oblique"],
+          "sheet": 3,
+          "shapeReview": "cylindrical dish and beveled shell",
+          "legendReview": "official kit selection, orientation, top-left placement, no clipping or unintended logos checked visually",
+          "paletteReview": "matches intended alpha/modifier/accent assignment; uncalibrated approximation",
+          "textureBindingAndUV": "pass"
+        },
+        {
+          "position": "Z",
+          "passed": true,
+          "physicalRow": 3,
+          "manufacturerRow": "R4",
+          "widthU": 1,
+          "topSlopeVisualEstimateDeg": -7,
+          "reviewedViews": ["top", "oblique"],
+          "sheet": 3,
+          "shapeReview": "cylindrical dish and beveled shell",
+          "legendReview": "official kit selection, orientation, top-left placement, no clipping or unintended logos checked visually",
+          "paletteReview": "matches intended alpha/modifier/accent assignment; uncalibrated approximation",
+          "textureBindingAndUV": "pass"
+        },
+        {
+          "position": "X",
+          "passed": true,
+          "physicalRow": 3,
+          "manufacturerRow": "R4",
+          "widthU": 1,
+          "topSlopeVisualEstimateDeg": -7,
+          "reviewedViews": ["top", "oblique"],
+          "sheet": 3,
+          "shapeReview": "cylindrical dish and beveled shell",
+          "legendReview": "official kit selection, orientation, top-left placement, no clipping or unintended logos checked visually",
+          "paletteReview": "matches intended alpha/modifier/accent assignment; uncalibrated approximation",
+          "textureBindingAndUV": "pass"
+        },
+        {
+          "position": "C",
+          "passed": true,
+          "physicalRow": 3,
+          "manufacturerRow": "R4",
+          "widthU": 1,
+          "topSlopeVisualEstimateDeg": -7,
+          "reviewedViews": ["top", "oblique"],
+          "sheet": 4,
+          "shapeReview": "cylindrical dish and beveled shell",
+          "legendReview": "official kit selection, orientation, top-left placement, no clipping or unintended logos checked visually",
+          "paletteReview": "matches intended alpha/modifier/accent assignment; uncalibrated approximation",
+          "textureBindingAndUV": "pass"
+        },
+        {
+          "position": "V",
+          "passed": true,
+          "physicalRow": 3,
+          "manufacturerRow": "R4",
+          "widthU": 1,
+          "topSlopeVisualEstimateDeg": -7,
+          "reviewedViews": ["top", "oblique"],
+          "sheet": 4,
+          "shapeReview": "cylindrical dish and beveled shell",
+          "legendReview": "official kit selection, orientation, top-left placement, no clipping or unintended logos checked visually",
+          "paletteReview": "matches intended alpha/modifier/accent assignment; uncalibrated approximation",
+          "textureBindingAndUV": "pass"
+        },
+        {
+          "position": "B",
+          "passed": true,
+          "physicalRow": 3,
+          "manufacturerRow": "R4",
+          "widthU": 1,
+          "topSlopeVisualEstimateDeg": -7,
+          "reviewedViews": ["top", "oblique"],
+          "sheet": 4,
+          "shapeReview": "cylindrical dish and beveled shell",
+          "legendReview": "official kit selection, orientation, top-left placement, no clipping or unintended logos checked visually",
+          "paletteReview": "matches intended alpha/modifier/accent assignment; uncalibrated approximation",
+          "textureBindingAndUV": "pass"
+        },
+        {
+          "position": "N",
+          "passed": true,
+          "physicalRow": 3,
+          "manufacturerRow": "R4",
+          "widthU": 1,
+          "topSlopeVisualEstimateDeg": -7,
+          "reviewedViews": ["top", "oblique"],
+          "sheet": 4,
+          "shapeReview": "cylindrical dish and beveled shell",
+          "legendReview": "official kit selection, orientation, top-left placement, no clipping or unintended logos checked visually",
+          "paletteReview": "matches intended alpha/modifier/accent assignment; uncalibrated approximation",
+          "textureBindingAndUV": "pass"
+        },
+        {
+          "position": "M",
+          "passed": true,
+          "physicalRow": 3,
+          "manufacturerRow": "R4",
+          "widthU": 1,
+          "topSlopeVisualEstimateDeg": -7,
+          "reviewedViews": ["top", "oblique"],
+          "sheet": 4,
+          "shapeReview": "cylindrical dish and beveled shell",
+          "legendReview": "official kit selection, orientation, top-left placement, no clipping or unintended logos checked visually",
+          "paletteReview": "matches intended alpha/modifier/accent assignment; uncalibrated approximation",
+          "textureBindingAndUV": "pass"
+        },
+        {
+          "position": "comma",
+          "passed": true,
+          "physicalRow": 3,
+          "manufacturerRow": "R4",
+          "widthU": 1,
+          "topSlopeVisualEstimateDeg": -7,
+          "reviewedViews": ["top", "oblique"],
+          "sheet": 4,
+          "shapeReview": "cylindrical dish and beveled shell",
+          "legendReview": "official kit selection, orientation, top-left placement, no clipping or unintended logos checked visually",
+          "paletteReview": "matches intended alpha/modifier/accent assignment; uncalibrated approximation",
+          "textureBindingAndUV": "pass"
+        },
+        {
+          "position": "period",
+          "passed": true,
+          "physicalRow": 3,
+          "manufacturerRow": "R4",
+          "widthU": 1,
+          "topSlopeVisualEstimateDeg": -7,
+          "reviewedViews": ["top", "oblique"],
+          "sheet": 4,
+          "shapeReview": "cylindrical dish and beveled shell",
+          "legendReview": "official kit selection, orientation, top-left placement, no clipping or unintended logos checked visually",
+          "paletteReview": "matches intended alpha/modifier/accent assignment; uncalibrated approximation",
+          "textureBindingAndUV": "pass"
+        },
+        {
+          "position": "slash",
+          "passed": true,
+          "physicalRow": 3,
+          "manufacturerRow": "R4",
+          "widthU": 1,
+          "topSlopeVisualEstimateDeg": -7,
+          "reviewedViews": ["top", "oblique"],
+          "sheet": 4,
+          "shapeReview": "cylindrical dish and beveled shell",
+          "legendReview": "official kit selection, orientation, top-left placement, no clipping or unintended logos checked visually",
+          "paletteReview": "matches intended alpha/modifier/accent assignment; uncalibrated approximation",
+          "textureBindingAndUV": "pass"
+        },
+        {
+          "position": "RightShift",
+          "passed": true,
+          "physicalRow": 3,
+          "manufacturerRow": "R4",
+          "widthU": 1.75,
+          "topSlopeVisualEstimateDeg": -7,
+          "reviewedViews": ["top", "oblique"],
+          "sheet": 4,
+          "shapeReview": "cylindrical dish and beveled shell",
+          "legendReview": "official kit selection, orientation, top-left placement, no clipping or unintended logos checked visually",
+          "paletteReview": "matches intended alpha/modifier/accent assignment; uncalibrated approximation",
+          "textureBindingAndUV": "pass"
+        },
+        {
+          "position": "Fn",
+          "passed": true,
+          "physicalRow": 3,
+          "manufacturerRow": "R4",
+          "widthU": 1,
+          "topSlopeVisualEstimateDeg": -7,
+          "reviewedViews": ["top", "oblique"],
+          "sheet": 4,
+          "shapeReview": "cylindrical dish and beveled shell",
+          "legendReview": "official kit selection, orientation, top-left placement, no clipping or unintended logos checked visually",
+          "paletteReview": "matches intended alpha/modifier/accent assignment; uncalibrated approximation",
+          "textureBindingAndUV": "pass"
+        },
+        {
+          "position": "ghost",
+          "passed": true,
+          "physicalRow": 4,
+          "manufacturerRow": "R4",
+          "widthU": 1,
+          "topSlopeVisualEstimateDeg": -7,
+          "reviewedViews": ["top", "oblique"],
+          "sheet": 4,
+          "shapeReview": "cylindrical dish and beveled shell",
+          "legendReview": "official kit selection, orientation, top-left placement, no clipping or unintended logos checked visually",
+          "paletteReview": "matches intended alpha/modifier/accent assignment; uncalibrated approximation",
+          "textureBindingAndUV": "pass"
+        },
+        {
+          "position": "LeftAlt",
+          "passed": true,
+          "physicalRow": 4,
+          "manufacturerRow": "R4",
+          "widthU": 1.5,
+          "topSlopeVisualEstimateDeg": -7,
+          "reviewedViews": ["top", "oblique"],
+          "sheet": 4,
+          "shapeReview": "cylindrical dish and beveled shell",
+          "legendReview": "official kit selection, orientation, top-left placement, no clipping or unintended logos checked visually",
+          "paletteReview": "matches intended alpha/modifier/accent assignment; uncalibrated approximation",
+          "textureBindingAndUV": "pass"
+        },
+        {
+          "position": "space",
+          "passed": true,
+          "physicalRow": 4,
+          "manufacturerRow": "R4",
+          "widthU": 7,
+          "topSlopeVisualEstimateDeg": 0,
+          "reviewedViews": ["top", "oblique"],
+          "sheet": 4,
+          "shapeReview": "convex untilted long spacebar",
+          "legendReview": "official kit selection, orientation, top-left placement, no clipping or unintended logos checked visually",
+          "paletteReview": "matches intended alpha/modifier/accent assignment; uncalibrated approximation",
+          "textureBindingAndUV": "pass"
+        },
+        {
+          "position": "RightAlt",
+          "passed": true,
+          "physicalRow": 4,
+          "manufacturerRow": "R4",
+          "widthU": 1.5,
+          "topSlopeVisualEstimateDeg": -7,
+          "reviewedViews": ["top", "oblique"],
+          "sheet": 4,
+          "shapeReview": "cylindrical dish and beveled shell",
+          "legendReview": "official kit selection, orientation, top-left placement, no clipping or unintended logos checked visually",
+          "paletteReview": "matches intended alpha/modifier/accent assignment; uncalibrated approximation",
+          "textureBindingAndUV": "pass"
+        },
+        {
+          "position": "arrow",
+          "passed": true,
+          "physicalRow": 4,
+          "manufacturerRow": "R4",
+          "widthU": 1,
+          "topSlopeVisualEstimateDeg": -7,
+          "reviewedViews": ["top", "oblique"],
+          "sheet": 4,
+          "shapeReview": "cylindrical dish and beveled shell",
+          "legendReview": "official kit selection, orientation, top-left placement, no clipping or unintended logos checked visually",
+          "paletteReview": "matches intended alpha/modifier/accent assignment; uncalibrated approximation",
+          "textureBindingAndUV": "pass"
+        }
+      ],
+      "reviewScope": "All 60 paired top/oblique diagnostics visually inspected across four sheets against official kitting; units/physical rows, row slope, dish, F/J bars, stepped Caps, space convexity, legends and palette checked. Automated 120 image bounds + 60 texture bounds + actual material texture binding and finite UVs. Visualization-quality approval only, not exact retail mold certification."
+    },
+    "visualQa": {
+      "status": "passed",
+      "reviewer": "/root/plan_customization_render_pipeline/review_completed_combinations",
+      "reviewedAt": "2026-10-31T08:58:01.254896+00:00",
+      "angles": [0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330],
+      "scope": "Visually inspected all twelve actual-angle PNGs in three four-frame contact sheets and front full-frame. Consistent charcoal housing and white/cyan/pink NicePBT Noel Latin retail caps; no personal brand keys, no keyboard cropping, stable camera and geometry. Reviewed visible key profile including stepped Caps Lock, occlusion, side USB opening, rear plate/weight, feet, perforations, shadows and silhouette. Exact physical geometry, legends/fonts and filament color are approximate visualization, not fit or color certification. Frozen individual-key QA remains separate."
+    },
+    "renderer": "Blender 4.3.2",
+    "materialCalibration": "approximate",
+    "frames": [
+      {
+        "angleDegrees": 0,
+        "src": "/assets/products/rule60-hhkb-unibody/customization/v1/charcoal--nicepbt-noel-latin-retail/frame_000.webp",
+        "sha256": "7219aa68aaff51efecadf5ca908124bbe67361006b3d1555542f752902079893",
+        "width": 1024,
+        "height": 1536
+      },
+      {
+        "angleDegrees": 30,
+        "src": "/assets/products/rule60-hhkb-unibody/customization/v1/charcoal--nicepbt-noel-latin-retail/frame_030.webp",
+        "sha256": "dfb6faaf50ba93371323e8e61fed5c5eb203ff5c60e43707cc6a08c7cd3f36b4",
+        "width": 1024,
+        "height": 1536
+      },
+      {
+        "angleDegrees": 60,
+        "src": "/assets/products/rule60-hhkb-unibody/customization/v1/charcoal--nicepbt-noel-latin-retail/frame_060.webp",
+        "sha256": "4c9b3cad10a60caabb7a95450d7f06212c890aea15ced74acd590ea25104e8d8",
+        "width": 1024,
+        "height": 1536
+      },
+      {
+        "angleDegrees": 90,
+        "src": "/assets/products/rule60-hhkb-unibody/customization/v1/charcoal--nicepbt-noel-latin-retail/frame_090.webp",
+        "sha256": "a77426fdfc8f3d53088f095c617f5ca4730748a6705b86dc36a9dc3ddd137f26",
+        "width": 1024,
+        "height": 1536
+      },
+      {
+        "angleDegrees": 120,
+        "src": "/assets/products/rule60-hhkb-unibody/customization/v1/charcoal--nicepbt-noel-latin-retail/frame_120.webp",
+        "sha256": "eabc064ec95a40cb96da98d86e4e70efcea4a36456e89440fc12fc65bc831477",
+        "width": 1024,
+        "height": 1536
+      },
+      {
+        "angleDegrees": 150,
+        "src": "/assets/products/rule60-hhkb-unibody/customization/v1/charcoal--nicepbt-noel-latin-retail/frame_150.webp",
+        "sha256": "14a611ea9142aacb8f33c9261089faefb71bd675f4cc6020fecf2adb86e14711",
+        "width": 1024,
+        "height": 1536
+      },
+      {
+        "angleDegrees": 180,
+        "src": "/assets/products/rule60-hhkb-unibody/customization/v1/charcoal--nicepbt-noel-latin-retail/frame_180.webp",
+        "sha256": "b1c5608139b87309a233bc79b66b60b23094992f9440de01e132b6a5efe33893",
+        "width": 1024,
+        "height": 1536
+      },
+      {
+        "angleDegrees": 210,
+        "src": "/assets/products/rule60-hhkb-unibody/customization/v1/charcoal--nicepbt-noel-latin-retail/frame_210.webp",
+        "sha256": "c9a182081652f033b4b4e3822c86b16eb5502ca59da255f7cdb2f2357f4e4c44",
+        "width": 1024,
+        "height": 1536
+      },
+      {
+        "angleDegrees": 240,
+        "src": "/assets/products/rule60-hhkb-unibody/customization/v1/charcoal--nicepbt-noel-latin-retail/frame_240.webp",
+        "sha256": "19980954b1ad74b246ffaa34bdfdc5e54a0268f6f9ba72f3fd0897d69fe55063",
+        "width": 1024,
+        "height": 1536
+      },
+      {
+        "angleDegrees": 270,
+        "src": "/assets/products/rule60-hhkb-unibody/customization/v1/charcoal--nicepbt-noel-latin-retail/frame_270.webp",
+        "sha256": "b6973cf4f6232b7997c0031ec37fe3f39308233d72250e8ba04bb47df7e68c99",
+        "width": 1024,
+        "height": 1536
+      },
+      {
+        "angleDegrees": 300,
+        "src": "/assets/products/rule60-hhkb-unibody/customization/v1/charcoal--nicepbt-noel-latin-retail/frame_300.webp",
+        "sha256": "cea2ca4cd9b0bb90c5cc92fa7f2875a01a7e86d2cc3043d05a7059562b74a6c8",
+        "width": 1024,
+        "height": 1536
+      },
+      {
+        "angleDegrees": 330,
+        "src": "/assets/products/rule60-hhkb-unibody/customization/v1/charcoal--nicepbt-noel-latin-retail/frame_330.webp",
+        "sha256": "eaa66edb44f4c8e7e21ea7f2ef4f6a3afa282892ee1938cc7f72d81fb6606044",
+        "width": 1024,
+        "height": 1536
+      }
+    ]
   }
 ]
