@@ -56,7 +56,6 @@ export function ProductGallery({ labels, renders, spin }: ProductGalleryProps) {
         ) : (
           <ProductSpin
             alt={labels.spin}
-            className="w-full max-w-[56rem]"
             sizes="(min-width: 64rem) 60vw, 92vw"
             spin={spin}
           />
