@@ -232,6 +232,41 @@
       }
     }
   },
+  "products": {
+    "navigationLabel": "Products navigation",
+    "title": "Products",
+    "description": "Objects I've designed and printed.",
+    "spinLabel": "{product} photo: move the pointer across it, drag on touch, or use the arrow keys to turn it 360°",
+    "mediaLabel": "{product} photos",
+    "previousImage": "Previous image",
+    "nextImage": "Next image",
+    "showImage": "Show image {index}",
+    "viewSource": "View on GitHub",
+    "downloadFiles": "Download print files",
+    "descriptionLabel": "Description",
+    "detailsLabel": "Details",
+    "renderAlts": {
+      "rule60Assembled": "CAD render: the assembled top case with its wrist rest (left half grey, right half blue)",
+      "rule60Top": "CAD render: the top case from above",
+      "rule60Exploded": "CAD render: the two halves pulled apart",
+      "rule60Underside": "CAD render: underside pockets, strike-plate seats, and joints"
+    },
+    "items": {
+      "rule60": {
+        "variant": "Translucent PETG",
+        "license": "CC BY-NC 4.0",
+        "description": "A replacement Rule 60 V3 HHKB top case with the honeycomb wrist rest built in. It keeps the stock bottom case and PC gasket plate; only the top case and wrist rest are printed. The geometry is generated entirely in code.",
+        "details": {
+          "size": "298.1 × 198.3 mm assembled, 20.01 mm case height",
+          "joints": "Two halves joined by three sliding dovetails with compression ribs",
+          "reuse": "Reuses the stock bottom case, PC gasket plate, 12 silicone gasket caps, and four ball-catch strike plates",
+          "print": "X2D · 0.4 mm nozzle · PETG · 0.20 mm layers, no supports; left half about 76 g, right about 65 g",
+          "status": "Experimental — assembly verified on the v7.4 print",
+          "license": "CC BY-NC 4.0 — print and modify for personal, non-commercial use only. Selling prints or files is not permitted."
+        }
+      }
+    }
+  },
   "modCodeBlock": {
     "copy": "Copy",
     "copied": "Copied",
@@ -250,6 +285,10 @@
       "developmentNotes": {
         "title": "Development notes",
         "description": "Technical notes, tutorials, and lessons from building software."
+      },
+      "products": {
+        "title": "Products",
+        "description": "Objects I've designed and printed."
       },
       "interactiveExperiments": {
         "title": "Projects and experiments",

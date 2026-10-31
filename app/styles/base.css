@@ -86,7 +86,9 @@
     --radius: 0.5rem;
   }
 
-  .dark {
+  /* Product store pages are always dark, like a lit display case (see products.css). */
+  .dark,
+  :root:has([data-store]) {
     --scroll-bar-color: #2b2b2b;
 
     --sh-class: #96c3ff;

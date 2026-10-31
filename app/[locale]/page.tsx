@@ -10,6 +10,11 @@ const SECTIONS = [
     titleKey: "sections.developmentNotes.title",
   },
   {
+    descriptionKey: "sections.products.description",
+    href: "/products",
+    titleKey: "sections.products.title",
+  },
+  {
     descriptionKey: "sections.interactiveExperiments.description",
     href: "/show",
     titleKey: "sections.interactiveExperiments.title",
