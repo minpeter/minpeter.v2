@@ -95,7 +95,9 @@ function ValidatedPreview({
       </div>
       <p
         aria-live="polite"
-        className="store-label store-custom-status"
+        className={
+          loadState === "ready" ? "sr-only" : "store-label store-custom-status"
+        }
         role="status"
       >
         {t(statusKey[loadState])}
@@ -304,7 +306,7 @@ export function ProductCustomizer(props: ProductGalleryProps) {
         {pairing?.signature === `${selection.housing}:${selection.keycaps}` ? (
           <p
             aria-live="polite"
-            className="store-prose store-custom-pairing"
+            className="sr-only"
             data-testid="customization-pairing-notice"
             role="status"
           >

@@ -284,6 +284,9 @@ async function expectReadyHistoryState(
   await expect(
     page.locator(".store-custom-preview").getByRole("status")
   ).toHaveText(labels.ready);
+  await expect(
+    page.locator(".store-custom-preview").getByRole("status")
+  ).toHaveClass("sr-only");
   const source = combination.frames[11]?.src;
   if (!source) {
     throw new Error(`Missing 330 degree manifest frame: ${combination.id}`);
@@ -671,6 +674,9 @@ for (const { locale, prefix, messages } of LOCALES) {
         await expect(
           page.getByTestId("customization-pairing-notice")
         ).toHaveText(labels.pairedPersonal);
+        await expect(
+          page.getByTestId("customization-pairing-notice")
+        ).toHaveClass("sr-only");
         await page.goBack();
         await expectHistorySelection(
           page,
@@ -926,6 +932,9 @@ for (const { locale, prefix, messages } of LOCALES) {
         await expect(
           page.locator(".store-custom-preview").getByRole("status")
         ).toHaveText(labels.ready);
+        await expect(
+          page.locator(".store-custom-preview").getByRole("status")
+        ).toHaveClass("sr-only");
         await expect(spin.locator("img")).toHaveCount(0);
         await expect(spin.locator("canvas")).toHaveCount(1);
         await expect(spin.locator("canvas")).toHaveCSS("object-fit", "contain");

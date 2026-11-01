@@ -648,6 +648,9 @@ describe("ProductCustomizer availability and selection", () => {
         document.querySelector(".store-custom-preview") as HTMLElement
       ).getByRole("status").textContent
     ).toBe(en.products.customization.ready);
+    expect(
+      document.querySelector(".store-custom-preview [role=status]")?.className
+    ).toBe("sr-only");
     fireEvent.click(housingRadio("charcoal"));
     await waitFor(() =>
       expect(
@@ -722,6 +725,9 @@ describe("ProductCustomizer availability and selection", () => {
         document.querySelector(".store-custom-preview") as HTMLElement
       ).getByRole("status").textContent
     ).toBe(en.products.customization.ready);
+    expect(
+      document.querySelector(".store-custom-preview [role=status]")?.className
+    ).toBe("sr-only");
     expect(
       screen.queryByRole("button", { name: en.products.customization.retry })
     ).toBeNull();
@@ -833,6 +839,9 @@ describe("ProductCustomizer availability and selection", () => {
         .getByTestId("customization-pairing-notice")
         .getAttribute("aria-live")
     ).toBe("polite");
+    expect(screen.getByTestId("customization-pairing-notice").className).toBe(
+      "sr-only"
+    );
     fireEvent.click(housingRadio("ice-blue"));
     expect(housingRadio("ice-blue").checked).toBe(true);
     expect(keycapRadio("nicepbt-bow-retail").checked).toBe(true);
