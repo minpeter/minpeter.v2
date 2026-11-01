@@ -3,6 +3,8 @@ import { createMDX } from "fumadocs-mdx/next";
 import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
 
+import { productRedirects } from "./shared/product-redirects.js";
+
 /** Hostnames only (no scheme/port). Extra LAN hosts via ALLOWED_DEV_ORIGINS. */
 function resolveAllowedDevOrigins(): string[] {
   const defaults = ["127.0.0.1", "minpeter.localhost", "*.localhost"];
@@ -51,6 +53,7 @@ const nextConfig: NextConfig = {
   partialPrefetching: true,
   poweredByHeader: false,
   reactCompiler: true,
+  redirects: () => productRedirects,
   rewrites: () => [
     {
       destination: "/:locale/blog/llms.md/:path*",

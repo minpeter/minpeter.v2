@@ -127,6 +127,9 @@ const config = {
     }
 
     const basePath = getBasePath(path);
+    if (basePath === "/products/rule60-hhkb-unibody") {
+      return null;
+    }
 
     return {
       alternateRefs: getAlternateRefs(basePath),

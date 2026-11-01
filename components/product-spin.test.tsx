@@ -35,6 +35,8 @@ const cache = vi.hoisted(() => {
     fetchedCount: 0,
     getSnapshot: () => state.version,
     getSource: vi.fn<(index: number) => Blob | undefined>(() => undefined),
+    hasFailures: false,
+    loadingComplete: false,
     nearestFrame: vi.fn((target: number) => {
       let nearest: { index: number; bitmap: ImageBitmap } | null = null;
       let distance = Number.POSITIVE_INFINITY;
@@ -112,6 +114,8 @@ describe("ProductSpin progressive canvas", () => {
     cache.state.version = 0;
     cache.loader.readyCount = 0;
     cache.loader.fetchedCount = 0;
+    cache.loader.hasFailures = false;
+    cache.loader.loadingComplete = false;
     drawImage.mockReset();
     cache.loader.getSource.mockReset();
     vi.spyOn(HTMLCanvasElement.prototype, "getContext").mockReturnValue(
@@ -131,6 +135,162 @@ describe("ProductSpin progressive canvas", () => {
     vi.useRealTimers();
     vi.restoreAllMocks();
     vi.unstubAllGlobals();
+  });
+
+  it("reports partial availability without discarding the decoded preview and recovers to ready", () => {
+    const onLoadStateChange = vi.fn();
+    render(
+      <ProductSpin
+        alt="Retail render"
+        onLoadStateChange={onLoadStateChange}
+        sizes="100vw"
+        spin={{ ...spin, frameCount: 12 }}
+      />
+    );
+    const slider = screen.getByRole("slider", { name: "Retail render" });
+    expect(onLoadStateChange).toHaveBeenLastCalledWith("loading");
+    fireEvent.focus(slider);
+    arrive(0);
+    expect(onLoadStateChange).toHaveBeenLastCalledWith("ready");
+    act(() => {
+      cache.loader.loadingComplete = true;
+      cache.loader.hasFailures = true;
+      cache.state.version += 1;
+      for (const listener of cache.listeners) {
+        listener();
+      }
+    });
+    expect(onLoadStateChange).toHaveBeenLastCalledWith("partial");
+    expect(slider.getAttribute("data-displayed-frame")).toBe("0");
+    expect(
+      slider.querySelector("canvas")?.classList.contains("invisible")
+    ).toBe(false);
+    act(() => {
+      cache.loader.hasFailures = false;
+      cache.state.version += 1;
+      for (const listener of cache.listeners) {
+        listener();
+      }
+    });
+    expect(onLoadStateChange).toHaveBeenLastCalledWith("ready");
+  });
+
+  it("reports error rather than partial when a completed load has no decoded angles", () => {
+    const onLoadStateChange = vi.fn();
+    render(
+      <ProductSpin
+        alt="Retail render"
+        onLoadStateChange={onLoadStateChange}
+        sizes="100vw"
+        spin={{ ...spin, frameCount: 12 }}
+      />
+    );
+    expect(onLoadStateChange).toHaveBeenLastCalledWith("loading");
+    act(() => {
+      cache.loader.loadingComplete = true;
+      cache.loader.hasFailures = true;
+      cache.state.version += 1;
+      for (const listener of cache.listeners) {
+        listener();
+      }
+    });
+    expect(onLoadStateChange).toHaveBeenLastCalledWith("error");
+    expect(onLoadStateChange).not.toHaveBeenCalledWith("partial");
+    act(() => {
+      cache.loader.loadingComplete = false;
+      cache.loader.hasFailures = false;
+      cache.state.version += 1;
+      for (const listener of cache.listeners) {
+        listener();
+      }
+    });
+    expect(onLoadStateChange).toHaveBeenLastCalledWith("loading");
+  });
+
+  it("maps a preserved 270 degree angle to frame nine of a twelve-view retail set", () => {
+    render(
+      <ProductSpin
+        alt="Retail render"
+        initialAngle={270}
+        sizes="100vw"
+        spin={{ ...spin, frameCount: 12 }}
+      />
+    );
+    const slider = screen.getByRole("slider", { name: "Retail render" });
+    fireEvent.focus(slider);
+    expect(slider.getAttribute("data-frame")).toBe("9");
+    expect(slider.getAttribute("aria-valuetext")).toBe("270°");
+    expect(cache.loader.requestFrame).toHaveBeenLastCalledWith(
+      expect.any(Symbol),
+      9
+    );
+  });
+
+  it("preserves the selected angle on pointer leave when resetOnLeave is false", () => {
+    vi.stubGlobal(
+      "matchMedia",
+      vi.fn(() => ({
+        addEventListener: vi.fn(),
+        matches: false,
+        removeEventListener: vi.fn(),
+      }))
+    );
+    const raf = vi.fn(() => 1);
+    vi.stubGlobal("requestAnimationFrame", raf);
+    render(
+      <ProductSpin
+        alt="Retail render"
+        initialAngle={270}
+        resetOnLeave={false}
+        sizes="100vw"
+        spin={{ ...spin, frameCount: 12 }}
+      />
+    );
+    const slider = screen.getByRole("slider", { name: "Retail render" });
+    fireEvent.pointerLeave(slider, { pointerType: "mouse" });
+    expect(slider.getAttribute("data-frame")).toBe("9");
+    expect(raf).not.toHaveBeenCalled();
+  });
+
+  it("reports degree angles after twelve-frame keyboard wrap", () => {
+    const onAngleChange = vi.fn();
+    render(
+      <ProductSpin
+        alt="Retail render"
+        initialAngle={330}
+        onAngleChange={onAngleChange}
+        sizes="100vw"
+        spin={{ ...spin, frameCount: 12 }}
+      />
+    );
+    const slider = screen.getByRole("slider", { name: "Retail render" });
+    press(slider, "ArrowRight");
+    expect(slider.getAttribute("data-frame")).toBe("0");
+    expect(onAngleChange).toHaveBeenLastCalledWith(0);
+    press(slider, "ArrowLeft");
+    expect(slider.getAttribute("data-frame")).toBe("11");
+    expect(onAngleChange).toHaveBeenLastCalledWith(330);
+  });
+
+  it("uses only the loader canvas for explicit manifest frames, without a duplicate poster image", () => {
+    const frameSources = Array.from(
+      { length: 12 },
+      (_, index) => `/retail/${index}.webp?v=fixture`
+    );
+    render(
+      <ProductSpin
+        alt="Retail render"
+        sizes="100vw"
+        spin={{ ...spin, frameCount: 12, frameSources }}
+      />
+    );
+    const slider = screen.getByRole("slider", { name: "Retail render" });
+    expect(slider.querySelectorAll("img")).toHaveLength(0);
+    expect(slider.querySelectorAll("canvas")).toHaveLength(1);
+    fireEvent.focus(slider);
+    arrive(0);
+    expect(slider.querySelectorAll("img")).toHaveLength(0);
+    expect(slider.getAttribute("data-displayed-frame")).toBe("0");
   });
 
   it("retains one poster and one canvas instead of mounting frame images", () => {

@@ -1,0 +1,92 @@
+{
+  "id": "ash-gray--nicepbt-noel-latin-retail",
+  "housingId": "ash-gray",
+  "keycapId": "nicepbt-noel-latin-retail",
+  "orderable": false,
+  "frames": [
+    {
+      "angleDegrees": 0,
+      "height": 1536,
+      "sha256": "63a1bc1fd47710b9092e7730f619a8e031f4bef2f1b8fb31c9af4196822890ba",
+      "src": "/assets/products/maru60/assembled/v1/ash-gray--nicepbt-noel-latin-retail/frame_000.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 30,
+      "height": 1536,
+      "sha256": "2e52feefd3d967c3ebae98fe3cd798a39cdb7083a1ac540137e49953a403f7ae",
+      "src": "/assets/products/maru60/assembled/v1/ash-gray--nicepbt-noel-latin-retail/frame_030.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 60,
+      "height": 1536,
+      "sha256": "6f79fdca97e4ae81fecdf5bc27b260f649c1b423230f2f2cd73e0951c1e4b9a6",
+      "src": "/assets/products/maru60/assembled/v1/ash-gray--nicepbt-noel-latin-retail/frame_060.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 90,
+      "height": 1536,
+      "sha256": "6c02a4e1735bc5e30f558f237d4a8ebe3f3e40c72b03467704adb45b975d98c5",
+      "src": "/assets/products/maru60/assembled/v1/ash-gray--nicepbt-noel-latin-retail/frame_090.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 120,
+      "height": 1536,
+      "sha256": "76366c4d2974cea28d0693d61d39d3aafcdddaf934cfa948daacd6aa6e47c2a9",
+      "src": "/assets/products/maru60/assembled/v1/ash-gray--nicepbt-noel-latin-retail/frame_120.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 150,
+      "height": 1536,
+      "sha256": "638a6318f6d6e9e62740f537d445970427781dca2ebca29d9c53d0b7fcbe6b00",
+      "src": "/assets/products/maru60/assembled/v1/ash-gray--nicepbt-noel-latin-retail/frame_150.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 180,
+      "height": 1536,
+      "sha256": "4d6a8e12366a7ade873452dd251d19054fc12a927c979fc9e528f646b9dafb81",
+      "src": "/assets/products/maru60/assembled/v1/ash-gray--nicepbt-noel-latin-retail/frame_180.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 210,
+      "height": 1536,
+      "sha256": "a80555811b713dd807b98b1c8bf6895b80bad0ad8414168fdc3c7412d584f253",
+      "src": "/assets/products/maru60/assembled/v1/ash-gray--nicepbt-noel-latin-retail/frame_210.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 240,
+      "height": 1536,
+      "sha256": "313171b764e92a9addff0cf8507c155cb8426f9bb78e1d522897249834494d89",
+      "src": "/assets/products/maru60/assembled/v1/ash-gray--nicepbt-noel-latin-retail/frame_240.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 270,
+      "height": 1536,
+      "sha256": "d3dac2120a09cc69f0b88e771443a35172d7b0e6581b684ec697287e6dd7746d",
+      "src": "/assets/products/maru60/assembled/v1/ash-gray--nicepbt-noel-latin-retail/frame_270.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 300,
+      "height": 1536,
+      "sha256": "9ca32f564452fa7c44e3a786df9a87149b7de63126dbdc9347ef78558df81ed4",
+      "src": "/assets/products/maru60/assembled/v1/ash-gray--nicepbt-noel-latin-retail/frame_300.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 330,
+      "height": 1536,
+      "sha256": "48e74afe8beabb887f0ac53aa878d69741378273476e2437f505287a169e0756",
+      "src": "/assets/products/maru60/assembled/v1/ash-gray--nicepbt-noel-latin-retail/frame_330.webp",
+      "width": 1024
+    }
+  ]
+}

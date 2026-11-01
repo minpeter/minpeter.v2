@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { getLocale, getTranslations } from "next-intl/server";
 import { Suspense } from "react";
 
-import { ProductGallery } from "@/components/product-gallery";
+import { ProductCustomizer } from "@/components/product-customizer";
 import { getProduct, PRODUCTS } from "@/shared/products";
 import { createMetadata } from "@/shared/utils/metadata";
 
@@ -60,7 +60,7 @@ async function ProductDetail({
 
   return (
     <article className="store-product" data-testid="product-detail">
-      <ProductGallery
+      <ProductCustomizer
         labels={{
           media: t("mediaLabel", { product: product.name }),
           next: t("nextImage"),

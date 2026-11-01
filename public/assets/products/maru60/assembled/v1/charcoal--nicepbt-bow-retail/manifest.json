@@ -1,0 +1,92 @@
+{
+  "id": "charcoal--nicepbt-bow-retail",
+  "housingId": "charcoal",
+  "keycapId": "nicepbt-bow-retail",
+  "orderable": false,
+  "frames": [
+    {
+      "angleDegrees": 0,
+      "height": 1536,
+      "sha256": "c6c053466b9ca7d40d6e512137455f1e5b33b8cc06c32a3dd8201bb27052c2ef",
+      "src": "/assets/products/maru60/assembled/v1/charcoal--nicepbt-bow-retail/frame_000.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 30,
+      "height": 1536,
+      "sha256": "34d9ea108396a2966959e29b8af7fb8f70e612faf81a841183d8cabcf7c392a3",
+      "src": "/assets/products/maru60/assembled/v1/charcoal--nicepbt-bow-retail/frame_030.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 60,
+      "height": 1536,
+      "sha256": "f2606886b97b0f2286a9c110c3fdb807046c4e390547ff72f2b4dada9dd57c68",
+      "src": "/assets/products/maru60/assembled/v1/charcoal--nicepbt-bow-retail/frame_060.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 90,
+      "height": 1536,
+      "sha256": "c829650de5ff2148070298248321e38f4fba815dd75878d9d028687642900bc8",
+      "src": "/assets/products/maru60/assembled/v1/charcoal--nicepbt-bow-retail/frame_090.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 120,
+      "height": 1536,
+      "sha256": "e2b8374bd2962d310329654b893b729458dd9bcd1b37b6a0e55d12f170713e40",
+      "src": "/assets/products/maru60/assembled/v1/charcoal--nicepbt-bow-retail/frame_120.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 150,
+      "height": 1536,
+      "sha256": "0a9489cc02879256d4b04e898ed635f6bc89054b7cc453c5cea62a84e5cf27b8",
+      "src": "/assets/products/maru60/assembled/v1/charcoal--nicepbt-bow-retail/frame_150.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 180,
+      "height": 1536,
+      "sha256": "f4b5a6bcb73f5dd60e3e0abfc6dfc7df20d15b86a9c8aa95c34da15c5220b2ac",
+      "src": "/assets/products/maru60/assembled/v1/charcoal--nicepbt-bow-retail/frame_180.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 210,
+      "height": 1536,
+      "sha256": "fac9ba5c4f34c6d257e8e5f415e7a96513cc0c4546f728523d0e1fdfaa33ac3a",
+      "src": "/assets/products/maru60/assembled/v1/charcoal--nicepbt-bow-retail/frame_210.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 240,
+      "height": 1536,
+      "sha256": "ffc3ef69718f4654f3bc94815f58997cfda228ed8c2a7d9fee5c92a28b35fa37",
+      "src": "/assets/products/maru60/assembled/v1/charcoal--nicepbt-bow-retail/frame_240.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 270,
+      "height": 1536,
+      "sha256": "ef0414429a78d7828b206bcc9e1c84a9678922544336aebe01eb0606dfbddd2e",
+      "src": "/assets/products/maru60/assembled/v1/charcoal--nicepbt-bow-retail/frame_270.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 300,
+      "height": 1536,
+      "sha256": "d18571b2597161f13e21b8e15b36e5839f94205e0f8d7e478697695517f0aeec",
+      "src": "/assets/products/maru60/assembled/v1/charcoal--nicepbt-bow-retail/frame_300.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 330,
+      "height": 1536,
+      "sha256": "f6d1671b586b8b496b002fc704aba570e13d293a5f770f504adbcc3b82f73ac7",
+      "src": "/assets/products/maru60/assembled/v1/charcoal--nicepbt-bow-retail/frame_330.webp",
+      "width": 1024
+    }
+  ]
+}

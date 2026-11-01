@@ -1,0 +1,92 @@
+{
+  "id": "ice-blue--nicepbt-purple-chonkers-retail",
+  "housingId": "ice-blue",
+  "keycapId": "nicepbt-purple-chonkers-retail",
+  "orderable": false,
+  "frames": [
+    {
+      "angleDegrees": 0,
+      "height": 1536,
+      "sha256": "56c4e5283f63099d1fdb37d2f7484335fd8fe45322185ef2431de68d6c7cef85",
+      "src": "/assets/products/maru60/assembled/v1/ice-blue--nicepbt-purple-chonkers-retail/frame_000.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 30,
+      "height": 1536,
+      "sha256": "5992d3dab7e56db9ac4181b9a43122b75526e1f1577407d031964f305392dfc2",
+      "src": "/assets/products/maru60/assembled/v1/ice-blue--nicepbt-purple-chonkers-retail/frame_030.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 60,
+      "height": 1536,
+      "sha256": "dff43a7a60f40fbda29d8932f6fb79d76562100d020254b1cee11c755510f093",
+      "src": "/assets/products/maru60/assembled/v1/ice-blue--nicepbt-purple-chonkers-retail/frame_060.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 90,
+      "height": 1536,
+      "sha256": "96fc86218a9122ddd16798e5648baa8674e66bd1c0c3daa8fde60de377808fe4",
+      "src": "/assets/products/maru60/assembled/v1/ice-blue--nicepbt-purple-chonkers-retail/frame_090.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 120,
+      "height": 1536,
+      "sha256": "1f4b23a37d93ee2f0b73ee27e97f93aa8fe74913d129b5d52b095f64aafb6313",
+      "src": "/assets/products/maru60/assembled/v1/ice-blue--nicepbt-purple-chonkers-retail/frame_120.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 150,
+      "height": 1536,
+      "sha256": "9aa565e81133b2877a17a8c24346eaa6719bb890b6f608d68fb53dea3f4732e2",
+      "src": "/assets/products/maru60/assembled/v1/ice-blue--nicepbt-purple-chonkers-retail/frame_150.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 180,
+      "height": 1536,
+      "sha256": "bca3d0bb89dd4f8d4708479725e1a4d461e3915d07a231453fa3c824392f4e78",
+      "src": "/assets/products/maru60/assembled/v1/ice-blue--nicepbt-purple-chonkers-retail/frame_180.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 210,
+      "height": 1536,
+      "sha256": "88895dd18a9e7baf813a9dfd72e27a86ab8db8fcec30b9fdfc5258ecab5fa5b3",
+      "src": "/assets/products/maru60/assembled/v1/ice-blue--nicepbt-purple-chonkers-retail/frame_210.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 240,
+      "height": 1536,
+      "sha256": "9ec2fdf10668047373f409b69320a6c92e5f246608fde2d33a1661e2a18971b1",
+      "src": "/assets/products/maru60/assembled/v1/ice-blue--nicepbt-purple-chonkers-retail/frame_240.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 270,
+      "height": 1536,
+      "sha256": "e40fd8ddbef356e2be07924a26d5bd080f8ec7b25f54de4346c8b1ef810d0b29",
+      "src": "/assets/products/maru60/assembled/v1/ice-blue--nicepbt-purple-chonkers-retail/frame_270.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 300,
+      "height": 1536,
+      "sha256": "2c7a203d13d94ec9c786b01fd3cc5162a91f3f6a30ad4abf8d1e507cb22c31cd",
+      "src": "/assets/products/maru60/assembled/v1/ice-blue--nicepbt-purple-chonkers-retail/frame_300.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 330,
+      "height": 1536,
+      "sha256": "c6e81a4678232f3be8bf34de2c433d68c5f140d40b0d44b35573be11fcc62572",
+      "src": "/assets/products/maru60/assembled/v1/ice-blue--nicepbt-purple-chonkers-retail/frame_330.webp",
+      "width": 1024
+    }
+  ]
+}

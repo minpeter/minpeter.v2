@@ -3,7 +3,12 @@ import { readdirSync, readFileSync } from "node:fs";
 
 import { describe, expect, it } from "vitest";
 
-import { PRODUCTS } from "./products";
+import {
+  personalManifestToSpin,
+  validatedPersonalManifest,
+} from "./maru60-personal";
+
+import { getProduct, PRODUCTS } from "./products";
 
 interface SpinManifest {
   angle_step_degrees: number;
@@ -39,18 +44,47 @@ function webpCanvas(bytes: Buffer) {
   };
 }
 
-describe("Rule 60 reconstructed turntable assets", () => {
-  it("keeps the catalog and manifest aligned with the 72-frame render", () => {
-    const product = PRODUCTS.find(
-      (item) => item.slug === "rule60-hhkb-unibody"
+describe("Maru60 naming and historical turntable assets", () => {
+  it("uses the canonical Maru60 slug without claiming printed draft fit", () => {
+    const product = getProduct("maru60");
+    expect(product?.name).toBe("Maru60");
+    expect(product?.sourceHref).toBe(
+      "https://github.com/minpeter/maru60/pull/1"
     );
-    expect(product?.spin).toMatchObject({
-      basePath: "/assets/products/rule60-hhkb-unibody/spin",
-      defaultFrame: 0,
-      frameCount: 72,
-      height: 1536,
-      width: 1024,
-    });
+    expect(product?.downloadHref).toBe(
+      "https://github.com/minpeter/maru60/tree/hhkb-topcase-wrist-rest/models"
+    );
+    for (const locale of ["en", "ko", "ja"]) {
+      const messages = JSON.parse(
+        readFileSync(new URL(`./i18n/${locale}.json`, import.meta.url), "utf8")
+      );
+      expect(messages.products.items.rule60.description).toContain("Maru60");
+      expect(messages.products.items.rule60.details.status).toContain("v7.10");
+      expect(messages.products.items.rule60.details.status).toContain("v0.10");
+      expect(messages.products.items.rule60.details.status).not.toContain(
+        "v7.4"
+      );
+    }
+    const english = JSON.parse(
+      readFileSync(new URL("./i18n/en.json", import.meta.url), "utf8")
+    );
+    expect(english.products.customization.geometryPrevious).toContain(
+      "previous housing revision"
+    );
+  });
+  it("selects validated personal assembly when available and retains the historical 72-frame manifest", () => {
+    const product = PRODUCTS.find((item) => item.slug === "maru60");
+    expect(product?.spin).toMatchObject(
+      validatedPersonalManifest
+        ? personalManifestToSpin(validatedPersonalManifest)
+        : {
+            basePath: "/assets/products/rule60-hhkb-unibody/spin",
+            defaultFrame: 0,
+            frameCount: 72,
+            height: 1536,
+            width: 1024,
+          }
+    );
     expect(product?.renders).toHaveLength(4);
     expect(manifest).toMatchObject({
       angle_step_degrees: 5,

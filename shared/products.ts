@@ -1,10 +1,13 @@
 import type { StaticImageData } from "next/image";
-
 import rule60Assembled from "./assets/products/rule60-render-assembled.webp";
 import rule60Exploded from "./assets/products/rule60-render-exploded.webp";
 import rule60Top from "./assets/products/rule60-render-top.webp";
 import rule60Underside from "./assets/products/rule60-render-underside.webp";
 import rule60SpinPoster from "./assets/products/rule60-spin-poster.webp";
+import {
+  personalManifestToSpin,
+  validatedPersonalManifest,
+} from "./maru60-personal";
 
 /** Message key under `products.items`. */
 type ProductKey = "rule60";
@@ -34,8 +37,12 @@ export interface ProductSpin {
   /** 0-based frame shown at rest; `poster` is the same frame, optimized for first paint. */
   defaultFrame: number;
   frameCount: number;
+  /** Optional manifest-backed sources in angular order; otherwise 01.webp … */
+  frameSources?: readonly string[];
+  /** Verified manifest geometry; omitted for historical turntables. */
+  geometryRevision?: "assembled-draft";
   height: number;
-  poster: StaticImageData;
+  poster: StaticImageData | string;
   width: number;
 }
 
@@ -68,11 +75,12 @@ export interface Product {
 export const PRODUCTS: readonly Product[] = [
   {
     details: ["size", "joints", "reuse", "print", "status", "license"],
-    // The top case lives on this branch; `main` has only the wrist rest.
+    // Historical assets stay stable; the former page slug permanently redirects to maru60.
+    // PR #1 contains the current top case and the unprinted bottom-case draft.
     downloadHref:
-      "https://github.com/minpeter/rule60-wrist-rest/tree/hhkb-topcase-wrist-rest#hhkb-top-case-with-integrated-wrist-rest-experimental",
+      "https://github.com/minpeter/maru60/tree/hhkb-topcase-wrist-rest/models",
     key: "rule60",
-    name: "Rule 60 HHKB Unibody",
+    name: "Maru60",
     preview: {
       image: "/assets/products/rule60-hhkb-unibody/og.png",
       video: {
@@ -87,17 +95,18 @@ export const PRODUCTS: readonly Product[] = [
       { alt: "rule60Exploded", image: rule60Exploded },
       { alt: "rule60Underside", image: rule60Underside },
     ],
-    slug: "rule60-hhkb-unibody",
-    sourceHref:
-      "https://github.com/minpeter/rule60-wrist-rest/tree/hhkb-topcase-wrist-rest",
-    spin: {
-      basePath: "/assets/products/rule60-hhkb-unibody/spin",
-      defaultFrame: 0,
-      frameCount: 72,
-      height: 1536,
-      poster: rule60SpinPoster,
-      width: 1024,
-    },
+    slug: "maru60",
+    sourceHref: "https://github.com/minpeter/maru60/pull/1",
+    spin: validatedPersonalManifest
+      ? personalManifestToSpin(validatedPersonalManifest)
+      : {
+          basePath: "/assets/products/rule60-hhkb-unibody/spin",
+          defaultFrame: 0,
+          frameCount: 72,
+          height: 1536,
+          poster: rule60SpinPoster,
+          width: 1024,
+        },
     upcomingPrice: { max: 300_000, min: 200_000 },
   },
 ];
