@@ -229,7 +229,9 @@ async function expectPending(page: Page, text: string) {
   await expect(
     page.getByTestId("customization-pending").getByRole("status")
   ).toContainText(text);
-  await expect(customizer.locator("img, canvas")).toHaveCount(0);
+  await expect(
+    customizer.locator(".store-media-stage img, .store-media-stage canvas")
+  ).toHaveCount(0);
   await expect(customizer.getByTestId("product-spin")).toHaveCount(0);
   await expect(page.getByTestId("personal-showcase-notice")).toHaveCount(0);
 }
@@ -426,12 +428,25 @@ async function expectCompactPicker(page: Page, messages: typeof en) {
     await expect(
       page.getByRole("radio", { exact: true, name })
     ).toHaveAttribute("value", id);
-    await expect(
-      page
-        .locator(".store-custom-kit")
-        .filter({ has: page.locator(`input[value="${id}"]`) })
-        .locator("span")
-    ).toHaveText(name);
+    const tile = page.locator(".store-custom-kit").filter({
+      has: page.locator(`input[value="${id}"]`),
+    });
+    await expect(tile).toHaveText("");
+    await expect(tile).toHaveAttribute("title", name);
+    const thumbnail = tile.locator("img");
+    await expect(thumbnail).toHaveAttribute(
+      "src",
+      `/assets/products/maru60/keycaps/v1/${id}.webp`
+    );
+    await expect(thumbnail).toBeVisible();
+    await expect
+      .poll(() =>
+        thumbnail.evaluate((image) => (image as HTMLImageElement).naturalWidth)
+      )
+      .toBeGreaterThan(0);
+    const bounds = await tile.boundingBox();
+    expect(bounds?.width).toBeGreaterThanOrEqual(44);
+    expect(bounds?.height).toBeGreaterThanOrEqual(44);
   }
   await summary.focus();
   await summary.press("Enter");
@@ -540,7 +555,9 @@ for (const { locale, prefix, messages } of LOCALES) {
           "false"
         );
         await expect(
-          page.getByTestId("product-customizer").locator("img, canvas")
+          page
+            .getByTestId("product-customizer")
+            .locator(".store-media-stage img, .store-media-stage canvas")
         ).toHaveCount(0);
         await expect(page.getByTestId("personal-showcase-notice")).toHaveCount(
           0
@@ -551,7 +568,9 @@ for (const { locale, prefix, messages } of LOCALES) {
           page.getByTestId("customization-unavailable")
         ).toBeVisible();
         await expect(
-          page.getByTestId("product-customizer").locator("img, canvas")
+          page
+            .getByTestId("product-customizer")
+            .locator(".store-media-stage img, .store-media-stage canvas")
         ).toHaveCount(0);
       }
     });
@@ -1261,3 +1280,36 @@ for (const combination of combinations) {
     });
   });
 }
+
+test("keycap thumbnails support keyboard selection without visible name buttons", async ({
+  page,
+}) => {
+  await page.setViewportSize({ height: 900, width: 320 });
+  await page.goto(`/en${DETAIL}`);
+  const inventor = page.getByRole("radio", { exact: true, name: "Inventor" });
+  await inventor.focus();
+  await expect(inventor).toBeFocused();
+  await inventor.press("ArrowRight");
+  const retro = page.getByRole("radio", {
+    exact: true,
+    name: "Retro Programmer",
+  });
+  await expect(retro).toBeChecked();
+  await expect(retro).toBeFocused();
+  const tile = page.locator(".store-custom-kit").filter({ has: retro });
+  await expect(tile).toHaveAttribute("data-selected", "true");
+  await expect(tile).toHaveText("");
+  await expect(tile.locator("img")).toBeVisible();
+  await retro.press("ArrowLeft");
+  await expect(inventor).toBeChecked();
+  await expect(page.getByTestId("product-customizer")).toHaveAttribute(
+    "data-orderable",
+    "false"
+  );
+  await expect(
+    page.locator('input[name="housing"][value="transparent"]')
+  ).toBeChecked();
+  expect(
+    await page.evaluate(() => document.documentElement.scrollWidth)
+  ).toBeLessThanOrEqual(320);
+});

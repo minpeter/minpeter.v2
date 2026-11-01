@@ -331,16 +331,37 @@ body:has([data-store]) main {
     width: 2.75rem;
     height: 2.75rem;
   }
+  .store-custom-kits {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 5.5rem));
+    gap: 0.5rem;
+  }
   .store-custom-kit {
-    padding: 0.625rem 0.875rem;
-    border-color: hsl(var(--foreground) / 0.25);
+    aspect-ratio: 1;
+    padding: 0.25rem;
+    background: #292929;
+    border-color: hsl(var(--foreground) / 0.18);
+    border-radius: 0.375rem;
+  }
+  .store-keycap-thumbnail {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
+  .store-custom-kit:hover {
+    border-color: hsl(var(--foreground) / 0.65);
+  }
+  @media (min-width: 30rem) {
+    .store-custom-kits {
+      grid-template-columns: repeat(6, minmax(0, 5.5rem));
+    }
   }
   .store-custom-option[data-selected="true"] {
     border-color: hsl(var(--foreground));
   }
   .store-custom-kit[data-selected="true"] {
-    color: hsl(var(--background));
-    background: hsl(var(--foreground));
+    box-shadow: inset 0 0 0 1px hsl(var(--foreground));
   }
   .store-custom-option:has(input:focus-visible) {
     outline: 2px solid hsl(var(--foreground));

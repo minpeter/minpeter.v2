@@ -390,7 +390,11 @@ describe("ProductCustomizer availability and selection", () => {
       render(ui("?customize=true", locale));
       const t = messages[locale].products.customization;
       expect(screen.queryByTestId("personal-spin")).toBeNull();
-      expect(document.querySelectorAll("img, canvas")).toHaveLength(0);
+      expect(
+        document.querySelectorAll(
+          ".store-media-stage img, .store-media-stage canvas"
+        )
+      ).toHaveLength(0);
       expect(screen.getByText(t.configurationNote)).toBeTruthy();
       expect(screen.getByText(t.pending)).toBeTruthy();
       expect(screen.getByText(t.pendingDetail)).toBeTruthy();
@@ -470,7 +474,14 @@ describe("ProductCustomizer availability and selection", () => {
       for (const [id, name] of Object.entries(KEYCAP_CHIPS)) {
         const radio = screen.getByRole("radio", { name });
         expect(radio.getAttribute("value")).toBe(id);
-        expect(radio.closest("label")?.textContent?.trim()).toBe(name);
+        const tile = radio.closest("label");
+        expect(tile?.textContent?.trim()).toBe("");
+        expect(tile?.getAttribute("title")).toBe(name);
+        const thumbnail = tile?.querySelector("img");
+        expect(thumbnail?.getAttribute("src")).toBe(
+          `/assets/products/maru60/keycaps/v1/${id}.webp`
+        );
+        expect(thumbnail?.getAttribute("alt")).toBe("");
         expect(
           radio.closest("label")?.querySelectorAll("p, small, dl")
         ).toHaveLength(0);
@@ -615,7 +626,11 @@ describe("ProductCustomizer availability and selection", () => {
     expect(housingRadio("bone-white").checked).toBe(true);
     expect(keycapRadio("retro-programmer-retail").checked).toBe(true);
     expect(screen.queryByTestId("personal-spin")).toBeNull();
-    expect(document.querySelectorAll("img, canvas")).toHaveLength(0);
+    expect(
+      document.querySelectorAll(
+        ".store-media-stage img, .store-media-stage canvas"
+      )
+    ).toHaveLength(0);
     expect(screen.getByTestId("customization-pairing-notice")).toBeTruthy();
   });
 
@@ -796,7 +811,11 @@ describe("ProductCustomizer availability and selection", () => {
             .getByTestId("product-customizer")
             .getAttribute("data-configuration")
         ).toBe("unsupported");
-        expect(document.querySelectorAll("img, canvas")).toHaveLength(0);
+        expect(
+          document.querySelectorAll(
+            ".store-media-stage img, .store-media-stage canvas"
+          )
+        ).toHaveLength(0);
         expect(screen.queryByTestId("personal-spin")).toBeNull();
         cleanup();
       }

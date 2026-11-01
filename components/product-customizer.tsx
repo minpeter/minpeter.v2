@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useTranslations } from "next-intl";
 import {
   type ChangeEvent,
@@ -352,6 +353,7 @@ export function ProductCustomizer(props: ProductGalleryProps) {
                 className="store-custom-option store-custom-kit"
                 data-selected={selection.keycaps === option.id}
                 key={option.id}
+                title={KEYCAP_LABELS[option.id]}
               >
                 <input
                   aria-label={KEYCAP_LABELS[option.id]}
@@ -362,7 +364,15 @@ export function ProductCustomizer(props: ProductGalleryProps) {
                   type="radio"
                   value={option.id}
                 />
-                <span>{KEYCAP_LABELS[option.id]}</span>
+                <Image
+                  alt=""
+                  aria-hidden="true"
+                  className="store-keycap-thumbnail"
+                  height={256}
+                  src={`/assets/products/maru60/keycaps/v1/${option.id}.webp`}
+                  unoptimized
+                  width={256}
+                />
               </label>
             ))}
           </div>
