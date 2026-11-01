@@ -1,0 +1,92 @@
+{
+  "id": "lilac-purple--nicepbt-purple-chonkers-retail",
+  "housingId": "lilac-purple",
+  "keycapId": "nicepbt-purple-chonkers-retail",
+  "orderable": false,
+  "frames": [
+    {
+      "angleDegrees": 0,
+      "height": 1536,
+      "sha256": "3d65d4c3c5253c762ef07bcdb1b4d37443268622d81d0218e34de119a9879f77",
+      "src": "/assets/products/maru60/assembled/v1/lilac-purple--nicepbt-purple-chonkers-retail/frame_000.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 30,
+      "height": 1536,
+      "sha256": "fd568533fe84572a6d89310addc214d8ae11eac156c8154ebc08d41c420b04dc",
+      "src": "/assets/products/maru60/assembled/v1/lilac-purple--nicepbt-purple-chonkers-retail/frame_030.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 60,
+      "height": 1536,
+      "sha256": "bb4d5c4a590ad93cc281e33d16add628e67a2de7b71f3448e2694f0d6608b675",
+      "src": "/assets/products/maru60/assembled/v1/lilac-purple--nicepbt-purple-chonkers-retail/frame_060.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 90,
+      "height": 1536,
+      "sha256": "c48f05ad23c0aa8ddad60ef62e5afcf8450943f2c65ee035a8b2e014d1bd2d6a",
+      "src": "/assets/products/maru60/assembled/v1/lilac-purple--nicepbt-purple-chonkers-retail/frame_090.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 120,
+      "height": 1536,
+      "sha256": "79a0716c3c8bc9146a527bcd87e65ef9a4f73a404b7a15575525fe09d381d794",
+      "src": "/assets/products/maru60/assembled/v1/lilac-purple--nicepbt-purple-chonkers-retail/frame_120.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 150,
+      "height": 1536,
+      "sha256": "eb7205cc931521d47bd4f89b31940f6379222661ae086be0cdbcb6c7b4e68a86",
+      "src": "/assets/products/maru60/assembled/v1/lilac-purple--nicepbt-purple-chonkers-retail/frame_150.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 180,
+      "height": 1536,
+      "sha256": "15d17685b339dc7804e8d4d4dc94867c3361f4ed77de91724c4f32cc42b0d1f6",
+      "src": "/assets/products/maru60/assembled/v1/lilac-purple--nicepbt-purple-chonkers-retail/frame_180.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 210,
+      "height": 1536,
+      "sha256": "0047123165b530a7ffe42069815bd6da30fca420f442f5232eecf4b1cf3f0e8d",
+      "src": "/assets/products/maru60/assembled/v1/lilac-purple--nicepbt-purple-chonkers-retail/frame_210.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 240,
+      "height": 1536,
+      "sha256": "061f2aec6f1130ac72c54dca759027d0ae87e98134ad0f225de1f29416fd9272",
+      "src": "/assets/products/maru60/assembled/v1/lilac-purple--nicepbt-purple-chonkers-retail/frame_240.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 270,
+      "height": 1536,
+      "sha256": "db8b3da5af457d9598ec36502dc2ef90056ad93943447eab52ffd8ba3e8980b6",
+      "src": "/assets/products/maru60/assembled/v1/lilac-purple--nicepbt-purple-chonkers-retail/frame_270.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 300,
+      "height": 1536,
+      "sha256": "cd8de987bd5e8dec75453a5218af098459b970295dcad64b48510e8a4db88a22",
+      "src": "/assets/products/maru60/assembled/v1/lilac-purple--nicepbt-purple-chonkers-retail/frame_300.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 330,
+      "height": 1536,
+      "sha256": "fff6262514f47e9a42ff46eca7932dc82cd6fbcadf2944426d238fbe785703f0",
+      "src": "/assets/products/maru60/assembled/v1/lilac-purple--nicepbt-purple-chonkers-retail/frame_330.webp",
+      "width": 1024
+    }
+  ]
+}

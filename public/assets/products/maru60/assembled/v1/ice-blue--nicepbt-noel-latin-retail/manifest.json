@@ -1,0 +1,92 @@
+{
+  "id": "ice-blue--nicepbt-noel-latin-retail",
+  "housingId": "ice-blue",
+  "keycapId": "nicepbt-noel-latin-retail",
+  "orderable": false,
+  "frames": [
+    {
+      "angleDegrees": 0,
+      "height": 1536,
+      "sha256": "c42ffbcc1e1f2c9f35e646036f84add57cb14eba454b0034cefda267a55f70cc",
+      "src": "/assets/products/maru60/assembled/v1/ice-blue--nicepbt-noel-latin-retail/frame_000.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 30,
+      "height": 1536,
+      "sha256": "c0cf6382df91d606c2d72cfa503f31bd52731d258a74562c5c38a39d51078059",
+      "src": "/assets/products/maru60/assembled/v1/ice-blue--nicepbt-noel-latin-retail/frame_030.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 60,
+      "height": 1536,
+      "sha256": "785799ec0a2f293f20357f8ffc683e969496886a65f69d5cb35da181b1ca703f",
+      "src": "/assets/products/maru60/assembled/v1/ice-blue--nicepbt-noel-latin-retail/frame_060.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 90,
+      "height": 1536,
+      "sha256": "c073530ed30cb70dc955d99461d5aa43c235bc9cf4bcb65852605ed072bfc291",
+      "src": "/assets/products/maru60/assembled/v1/ice-blue--nicepbt-noel-latin-retail/frame_090.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 120,
+      "height": 1536,
+      "sha256": "c023176f41e932a647317ae7c8709059a0cfea6f8812342a82810a4358d06c21",
+      "src": "/assets/products/maru60/assembled/v1/ice-blue--nicepbt-noel-latin-retail/frame_120.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 150,
+      "height": 1536,
+      "sha256": "614a581e204a160e551c3f54b4bdf2e3e6479acd7539e6a736d253e0263cccae",
+      "src": "/assets/products/maru60/assembled/v1/ice-blue--nicepbt-noel-latin-retail/frame_150.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 180,
+      "height": 1536,
+      "sha256": "0c772c39487ac4db0b517b542a360493845d52ba8d6c7c07517f2027fec0e674",
+      "src": "/assets/products/maru60/assembled/v1/ice-blue--nicepbt-noel-latin-retail/frame_180.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 210,
+      "height": 1536,
+      "sha256": "ba8da18f82f0854702130d9ada960e18a14fe0febee956253ad1d51e775a3cd5",
+      "src": "/assets/products/maru60/assembled/v1/ice-blue--nicepbt-noel-latin-retail/frame_210.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 240,
+      "height": 1536,
+      "sha256": "0573624ac72aa8fd79f5da3cf774a9f414d6f6745c0566357057c3f2ebd2d767",
+      "src": "/assets/products/maru60/assembled/v1/ice-blue--nicepbt-noel-latin-retail/frame_240.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 270,
+      "height": 1536,
+      "sha256": "c54f02a0a3603c9c79219fe1a4b2debe71472781f1dbe37c797009a740f5e760",
+      "src": "/assets/products/maru60/assembled/v1/ice-blue--nicepbt-noel-latin-retail/frame_270.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 300,
+      "height": 1536,
+      "sha256": "de75ee1ffd7e3fcd26925fc8c5e3409bfdb73b831ea53aa4a9f34300609df6b2",
+      "src": "/assets/products/maru60/assembled/v1/ice-blue--nicepbt-noel-latin-retail/frame_300.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 330,
+      "height": 1536,
+      "sha256": "f0156cd4b50a937ed34979d933ebcdad32c394d4e1c05446c605ce06715fe677",
+      "src": "/assets/products/maru60/assembled/v1/ice-blue--nicepbt-noel-latin-retail/frame_330.webp",
+      "width": 1024
+    }
+  ]
+}

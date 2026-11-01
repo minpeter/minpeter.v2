@@ -1,0 +1,92 @@
+{
+  "id": "lilac-purple--retro-programmer-retail",
+  "housingId": "lilac-purple",
+  "keycapId": "retro-programmer-retail",
+  "orderable": false,
+  "frames": [
+    {
+      "angleDegrees": 0,
+      "height": 1536,
+      "sha256": "520404750632cbc23256d1d782aa9c2cc33198c10de74b67194f24e8afd1cd71",
+      "src": "/assets/products/maru60/assembled/v1/lilac-purple--retro-programmer-retail/frame_000.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 30,
+      "height": 1536,
+      "sha256": "89d12c9cf15798352885d2e86d5e499abd65134a923cd3d8c2d1804ba50dcfa9",
+      "src": "/assets/products/maru60/assembled/v1/lilac-purple--retro-programmer-retail/frame_030.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 60,
+      "height": 1536,
+      "sha256": "fe13a1cf9cd9646ee3532df25fc193c4aa5e99a4aa6574866f17a518a80f33aa",
+      "src": "/assets/products/maru60/assembled/v1/lilac-purple--retro-programmer-retail/frame_060.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 90,
+      "height": 1536,
+      "sha256": "cc805b99601834c17197f5157e521dc11f694575ede73410efb9fbce5545cbe8",
+      "src": "/assets/products/maru60/assembled/v1/lilac-purple--retro-programmer-retail/frame_090.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 120,
+      "height": 1536,
+      "sha256": "5364c496709e4cae901b9896aed15bf176331bdc08903edaae4e398e757698bb",
+      "src": "/assets/products/maru60/assembled/v1/lilac-purple--retro-programmer-retail/frame_120.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 150,
+      "height": 1536,
+      "sha256": "76f8a541eaf15088b85d5354c1a63ebf0e560793837cc2999a9a4dd918995202",
+      "src": "/assets/products/maru60/assembled/v1/lilac-purple--retro-programmer-retail/frame_150.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 180,
+      "height": 1536,
+      "sha256": "368a01dc2875f6b4c2e57343dbcd05a7303253c2fbf80a3c7e507adb2788d890",
+      "src": "/assets/products/maru60/assembled/v1/lilac-purple--retro-programmer-retail/frame_180.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 210,
+      "height": 1536,
+      "sha256": "12414ce8e2750780461dddd21136e73c68a9384e40cdac8b1fa99719492b90b1",
+      "src": "/assets/products/maru60/assembled/v1/lilac-purple--retro-programmer-retail/frame_210.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 240,
+      "height": 1536,
+      "sha256": "d34b98fba76998e714ec0d815484a485fe7d164ad6d011d2ad1daeb63a6dfda1",
+      "src": "/assets/products/maru60/assembled/v1/lilac-purple--retro-programmer-retail/frame_240.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 270,
+      "height": 1536,
+      "sha256": "724656f922ced8bab01498fbb6b9d0fe3d5a4e17b486ececd2d1f608f2a5806b",
+      "src": "/assets/products/maru60/assembled/v1/lilac-purple--retro-programmer-retail/frame_270.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 300,
+      "height": 1536,
+      "sha256": "bf477dc4f7eac75ccb90e59797c9c7849bec8556a9f26cd2d85c5c4ffa01041c",
+      "src": "/assets/products/maru60/assembled/v1/lilac-purple--retro-programmer-retail/frame_300.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 330,
+      "height": 1536,
+      "sha256": "caf640c0564db0e4c68c6e1a185bb856d86ae707f7ab729d16157e2d1a429633",
+      "src": "/assets/products/maru60/assembled/v1/lilac-purple--retro-programmer-retail/frame_330.webp",
+      "width": 1024
+    }
+  ]
+}

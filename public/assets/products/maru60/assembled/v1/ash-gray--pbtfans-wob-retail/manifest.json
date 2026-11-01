@@ -1,0 +1,92 @@
+{
+  "id": "ash-gray--pbtfans-wob-retail",
+  "housingId": "ash-gray",
+  "keycapId": "pbtfans-wob-retail",
+  "orderable": false,
+  "frames": [
+    {
+      "angleDegrees": 0,
+      "height": 1536,
+      "sha256": "d00dc764a395e3e8b7d0354642afe734223c40baf4537ee80303b8bd0a865557",
+      "src": "/assets/products/maru60/assembled/v1/ash-gray--pbtfans-wob-retail/frame_000.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 30,
+      "height": 1536,
+      "sha256": "832887ef916fd16c518eb3de7f99428a5b9a2e26473186a2c831f34110e5f0fe",
+      "src": "/assets/products/maru60/assembled/v1/ash-gray--pbtfans-wob-retail/frame_030.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 60,
+      "height": 1536,
+      "sha256": "8daf7b4cb13aff8f8feeb13e83d86657a1a522472e05300fc431f9f6ed5efead",
+      "src": "/assets/products/maru60/assembled/v1/ash-gray--pbtfans-wob-retail/frame_060.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 90,
+      "height": 1536,
+      "sha256": "0bf5ba7749145ea273566222614d68e54c2485afadac3ed8f1047b73915c8769",
+      "src": "/assets/products/maru60/assembled/v1/ash-gray--pbtfans-wob-retail/frame_090.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 120,
+      "height": 1536,
+      "sha256": "68aae9c0a6593df194a1843482247b4d32fc25a43529e5904e0c07233117fc7f",
+      "src": "/assets/products/maru60/assembled/v1/ash-gray--pbtfans-wob-retail/frame_120.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 150,
+      "height": 1536,
+      "sha256": "a20c79371c11b9ab1f0f6520a8cc486d0a85dc9dbf5fbb15455c2de3293c03e8",
+      "src": "/assets/products/maru60/assembled/v1/ash-gray--pbtfans-wob-retail/frame_150.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 180,
+      "height": 1536,
+      "sha256": "73771dedf94b51c708b823f1ec1fd0c51a90e00c124ee4afd559b53e3e3dac0b",
+      "src": "/assets/products/maru60/assembled/v1/ash-gray--pbtfans-wob-retail/frame_180.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 210,
+      "height": 1536,
+      "sha256": "fc0053a7a0438fce15b22da63b8dcc37fb5f25416996c6be3005d9914d326c0c",
+      "src": "/assets/products/maru60/assembled/v1/ash-gray--pbtfans-wob-retail/frame_210.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 240,
+      "height": 1536,
+      "sha256": "7983e41b4a3883c7f92e942f31a64aafdaa6fb669cd48b872315a29772569fe4",
+      "src": "/assets/products/maru60/assembled/v1/ash-gray--pbtfans-wob-retail/frame_240.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 270,
+      "height": 1536,
+      "sha256": "2aa5513969efb5bbeaf324d4f85d5e7876c87070507c6096c4672655243b4307",
+      "src": "/assets/products/maru60/assembled/v1/ash-gray--pbtfans-wob-retail/frame_270.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 300,
+      "height": 1536,
+      "sha256": "4b80648b9414ea04098114d52301282899889f7f57699d585f84d04d26f71145",
+      "src": "/assets/products/maru60/assembled/v1/ash-gray--pbtfans-wob-retail/frame_300.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 330,
+      "height": 1536,
+      "sha256": "ec063a83b1f312cf644d8d6306ecffd1651a82813a5567f6704441a6770ff1fa",
+      "src": "/assets/products/maru60/assembled/v1/ash-gray--pbtfans-wob-retail/frame_330.webp",
+      "width": 1024
+    }
+  ]
+}

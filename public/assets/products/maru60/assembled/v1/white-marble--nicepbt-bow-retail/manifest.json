@@ -1,0 +1,92 @@
+{
+  "id": "white-marble--nicepbt-bow-retail",
+  "housingId": "white-marble",
+  "keycapId": "nicepbt-bow-retail",
+  "orderable": false,
+  "frames": [
+    {
+      "angleDegrees": 0,
+      "height": 1536,
+      "sha256": "d6d1706d94f2e58847b3f09a227fea6943c505c7973a43d90f147be3cb113e20",
+      "src": "/assets/products/maru60/assembled/v1/white-marble--nicepbt-bow-retail/frame_000.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 30,
+      "height": 1536,
+      "sha256": "c5e4026bce88a6bb930b818b30718500e382885726d597d2016b5e38e614314b",
+      "src": "/assets/products/maru60/assembled/v1/white-marble--nicepbt-bow-retail/frame_030.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 60,
+      "height": 1536,
+      "sha256": "280e91e074fc4cab545a3430b929052d1954ac341049044764930c9ceb85bc83",
+      "src": "/assets/products/maru60/assembled/v1/white-marble--nicepbt-bow-retail/frame_060.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 90,
+      "height": 1536,
+      "sha256": "f2987202d081a19ad1d66ae921aa63aa58623f15362e64ef8c4f6465e3516fb0",
+      "src": "/assets/products/maru60/assembled/v1/white-marble--nicepbt-bow-retail/frame_090.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 120,
+      "height": 1536,
+      "sha256": "aca7aaaebf5e70829a67f4cd08397b7f133e04f5e4cfa318ee4de88a2559bbe9",
+      "src": "/assets/products/maru60/assembled/v1/white-marble--nicepbt-bow-retail/frame_120.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 150,
+      "height": 1536,
+      "sha256": "caebc71b5609f8ae6dfed3e5445cb090f2e63a50236552ad97e8744ea2064a83",
+      "src": "/assets/products/maru60/assembled/v1/white-marble--nicepbt-bow-retail/frame_150.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 180,
+      "height": 1536,
+      "sha256": "748ab3c25d5410386f67e23277e0dbb17fbe07beb6068e1846f889fc673f34f5",
+      "src": "/assets/products/maru60/assembled/v1/white-marble--nicepbt-bow-retail/frame_180.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 210,
+      "height": 1536,
+      "sha256": "8e306a329f4ee60e009b873e3e9281d46af87ff37fa55a73fe6d4428dc742472",
+      "src": "/assets/products/maru60/assembled/v1/white-marble--nicepbt-bow-retail/frame_210.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 240,
+      "height": 1536,
+      "sha256": "bdfd99e690587b015417aa3e6c3d3f45f89bcaeba3c048b368109560670fb588",
+      "src": "/assets/products/maru60/assembled/v1/white-marble--nicepbt-bow-retail/frame_240.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 270,
+      "height": 1536,
+      "sha256": "137037eb1b43650dacf9818daa2387f2b155a2800ddc8f59952e65e55e8ed637",
+      "src": "/assets/products/maru60/assembled/v1/white-marble--nicepbt-bow-retail/frame_270.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 300,
+      "height": 1536,
+      "sha256": "314a7a4a5d131555ee8c559935125e87b69a1a5cdcec80260db64d9958fa9ee2",
+      "src": "/assets/products/maru60/assembled/v1/white-marble--nicepbt-bow-retail/frame_300.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 330,
+      "height": 1536,
+      "sha256": "b0233cc9f5b4c33a84c8086bc4cc46ea4ee06c843c36e42f36af68f10148575b",
+      "src": "/assets/products/maru60/assembled/v1/white-marble--nicepbt-bow-retail/frame_330.webp",
+      "width": 1024
+    }
+  ]
+}

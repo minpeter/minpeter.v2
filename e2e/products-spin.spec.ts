@@ -1,15 +1,16 @@
-// biome-ignore-all lint/performance/noAwaitInLoops: Gesture and gallery steps must run sequentially to exercise intermediate UI states.
+// biome-ignore-all lint/performance/noAwaitInLoops: Gesture and selection steps must run sequentially to exercise intermediate UI states.
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 
 import { expect, test } from "@playwright/test";
 
-const DETAIL = "/products/rule60-hhkb-unibody";
-const FRAME_URL = /\/assets\/products\/rule60-hhkb-unibody\/spin\/\d+\.webp$/;
+const DETAIL = "/products/maru60";
+const FRAME_URL =
+  /\/assets\/products\/maru60\/assembled\/v1\/transparent--inventor\/frame_\d{3}\.webp(?:\?.*)?$/;
 
 for (const width of [1440, 393, 320]) {
   for (const prefix of ["", "/en", "/ja"]) {
-    test(`portrait render and gallery: ${prefix || "ko"}, ${width}px`, async ({
+    test(`single portrait turntable: ${prefix || "ko"}, ${width}px`, async ({
       page,
     }, testInfo) => {
       const height = width === 1440 ? 900 : 852;
@@ -29,12 +30,9 @@ for (const width of [1440, 393, 320]) {
       );
       await page.goto(`${prefix}${DETAIL}`);
       const slider = page.getByRole("slider");
-      await expect(slider).toHaveAttribute("aria-valuemax", "71");
+      await expect(slider).toHaveAttribute("aria-valuemax", "11");
       await expect(slider).toHaveCSS("touch-action", "pan-y");
-      await expect(slider.locator("img").first()).toHaveCSS(
-        "object-fit",
-        "contain"
-      );
+      await expect(slider.locator("canvas")).toHaveCSS("object-fit", "contain");
       const bounds = await slider.boundingBox();
       expect(bounds).not.toBeNull();
       expect(bounds?.height).toBeLessThanOrEqual(height * 0.72 + 1);
@@ -49,33 +47,25 @@ for (const width of [1440, 393, 320]) {
       ).toBe(true);
       await slider.focus();
       await expect(slider).toHaveAttribute("data-displayed-frame", "0");
-      await expect(slider).toHaveAttribute("data-loaded-count", "72", {
+      await expect(slider).toHaveAttribute("data-loaded-count", "12", {
         timeout: 15_000,
       });
       await slider.press("ArrowLeft");
-      await expect(slider).toHaveAttribute("data-frame", "71");
-      await expect(slider).toHaveAttribute("data-displayed-frame", "71");
+      await expect(slider).toHaveAttribute("data-frame", "11");
+      await expect(slider).toHaveAttribute("data-displayed-frame", "11");
       await slider.press("ArrowRight");
       await expect(slider).toHaveAttribute("data-displayed-frame", "0");
-      const stage = page.locator(".store-media-stage");
-      const stageHeight = (await stage.boundingBox())?.height;
-      const dots = page.locator(".store-media-dot");
-      await expect(dots).toHaveCount(5);
-      for (let slide = 1; slide < 5; slide += 1) {
-        await dots.nth(slide).click();
-        await expect(dots.nth(slide)).toHaveAttribute("aria-current", "true");
-        await expect(page.locator(".store-media-render img")).toHaveCSS(
-          "object-fit",
-          "contain"
-        );
-        expect((await stage.boundingBox())?.height).toBe(stageHeight);
-      }
-      await page.locator(".store-media-arrow.right-0").click();
-      await expect(dots.first()).toHaveAttribute("aria-current", "true");
-      await page.locator(".store-media-arrow.left-0").click();
-      await expect(dots.last()).toHaveAttribute("aria-current", "true");
-      await dots.first().click();
       await expect(slider).toBeVisible();
+      await expect(
+        page.getByTestId("product-customizer").locator("canvas")
+      ).toHaveCount(1);
+      await expect(slider.locator("img")).toHaveCount(0);
+      await expect(
+        page.locator(
+          ".store-media-arrow, .store-media-dot, .store-media-dots, .store-media-render"
+        )
+      ).toHaveCount(0);
+      expect((await slider.boundingBox())?.height).toBe(bounds?.height);
       await page.screenshot({
         fullPage: true,
         path: testInfo.outputPath(
@@ -94,67 +84,59 @@ function gate() {
   return { promise, release: () => release() };
 }
 
-function frameBodies() {
-  return Promise.all(
-    Array.from({ length: 72 }, (_, index) =>
-      readFile(
-        path.join(
-          process.cwd(),
-          "public/assets/products/rule60-hhkb-unibody/spin",
-          `${String(index + 1).padStart(2, "0")}.webp`
-        )
-      )
+async function frameBodies() {
+  // Read actual published artifacts only at test runtime, never synthetic substitutes.
+  const manifest = JSON.parse(
+    await readFile(
+      path.join(process.cwd(), "shared/maru60-personal-manifest.json"),
+      "utf8"
     )
+  );
+  if (manifest?.frames?.length !== 12) {
+    throw new Error(
+      "Reviewed personal twelve-frame manifest must be published before browser QA"
+    );
+  }
+  return Promise.all(
+    Array.from({ length: 12 }, (_, index) => {
+      const expected = `/assets/products/maru60/assembled/v1/transparent--inventor/frame_${String(index * 30).padStart(3, "0")}.webp`;
+      expect(manifest.frames[index].src).toBe(expected);
+      expect(manifest.frames[index].angleDegrees).toBe(index * 30);
+      return readFile(path.join(process.cwd(), "public", expected));
+    })
   );
 }
 
-const COARSE = Array.from({ length: 12 }, (_, index) => index * 6);
-const MEDIUM = Array.from({ length: 12 }, (_, index) => index * 6 + 3);
-const FINE = Array.from({ length: 72 }, (_, index) => index).filter(
-  (index) => index % 3 !== 0
-);
+function requestedIndex(url: string) {
+  return (
+    Number(
+      path.basename(new URL(url).pathname, ".webp").replace("frame_", "")
+    ) / 30
+  );
+}
+const COARSE = Array.from({ length: 12 }, (_, index) => index);
 
-test("whole-turn tiers settle before refinement, with bounded network and bitmap memory", async ({
+test("twelve-frame coarse turn stays usable during slow loading with bounded requests and cached refinement", async ({
   page,
 }) => {
   const bodies = await frameBodies();
-  const coarseTail = gate();
-  const medium = gate();
-  const fine = gate();
+  const tail = gate();
   const requested: number[] = [];
-  const settled = new Set<number>();
-  const tierViolations: number[] = [];
   let pending = 0;
   let peakPending = 0;
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.route(FRAME_URL, async (route) => {
-    const index =
-      Number(path.basename(new URL(route.request().url()).pathname, ".webp")) -
-      1;
+    const index = requestedIndex(route.request().url());
     requested.push(index);
     pending += 1;
     peakPending = Math.max(peakPending, pending);
-    if (
-      (index % 6 === 3 && !COARSE.every((value) => settled.has(value))) ||
-      (index % 3 !== 0 &&
-        ![...COARSE, ...MEDIUM].every((value) => settled.has(value)))
-    ) {
-      tierViolations.push(index);
-    }
     try {
-      if (index === 66) {
-        await coarseTail.promise;
-      }
-      if (index % 6 === 3) {
-        await medium.promise;
-      }
-      if (index % 3 !== 0) {
-        await fine.promise;
+      if (index === 11) {
+        await tail.promise;
       }
       await route.fulfill({ body: bodies[index], contentType: "image/webp" });
     } finally {
       pending -= 1;
-      settled.add(index);
     }
   });
   try {
@@ -164,20 +146,15 @@ test("whole-turn tiers settle before refinement, with bounded network and bitmap
     await expect(slider).toHaveAttribute("data-loaded-count", "11");
     expect(requested).toEqual(COARSE);
     expect(pending).toBe(1);
-    coarseTail.release();
-    await expect(slider).toHaveAttribute("data-ready-count", "12");
-    await expect(slider.locator("img")).toHaveCount(1);
+    await expect(slider).toHaveAttribute("data-displayed-frame", "0");
+    await expect(slider.locator("img")).toHaveCount(0);
     await expect(slider.locator("canvas")).toHaveCount(1);
-    await expect(slider.locator("img[data-index]")).toHaveCount(0);
     const canvas = slider.locator("canvas");
-    await expect(canvas).toBeVisible();
     await expect(canvas).toHaveAttribute("width", "1024");
     await expect(canvas).toHaveAttribute("height", "1536");
     await expect(canvas).toHaveCSS("object-fit", "contain");
-    await expect.poll(() => requested.length).toBe(15);
-    const requestsBeforeFullResolution = requested.length;
     await expect(slider).toHaveAttribute("data-resolution", "full");
-    expect(requested).toHaveLength(requestsBeforeFullResolution);
+    expect(requested).toHaveLength(12);
     const pixels = await canvas.evaluate((element: HTMLCanvasElement) => {
       const context = element.getContext("2d");
       if (!context) {
@@ -206,44 +183,29 @@ test("whole-turn tiers settle before refinement, with bounded network and bitmap
     expect(pixels.firstCornerAlpha).toBe(0);
     expect(pixels.lastCornerAlpha).toBe(0);
     await slider.press("ArrowLeft");
-    await expect(slider).toHaveAttribute("data-frame", "71");
+    await expect(slider).toHaveAttribute("data-frame", "11");
     await expect(slider).toHaveAttribute("data-displayed-frame", "0");
-    await slider.press("ArrowRight");
-    for (const index of COARSE.slice(1)) {
-      for (let step = 0; step < 6; step += 1) {
-        await slider.press("ArrowRight");
-      }
-      await expect(slider).toHaveAttribute(
-        "data-displayed-frame",
-        String(index)
-      );
-    }
-    for (let step = 0; step < 9; step += 1) {
+    await expect(canvas).toBeVisible();
+    for (let step = 0; step < 6; step += 1) {
       await slider.press("ArrowRight");
     }
-    await expect(slider).toHaveAttribute("data-frame", "3");
-    await expect(slider).toHaveAttribute("data-displayed-frame", "0");
-    medium.release();
-    await expect(slider).toHaveAttribute("data-loaded-count", "24");
-    await expect(slider).toHaveAttribute("data-displayed-frame", "3");
-    await slider.press("ArrowLeft");
-    await slider.press("ArrowLeft");
-    await expect(slider).toHaveAttribute("data-frame", "1");
-    await expect(slider).toHaveAttribute("data-displayed-frame", "0");
-    fine.release();
-    await expect(slider).toHaveAttribute("data-loaded-count", "72", {
-      timeout: 15_000,
-    });
-    await expect(slider).toHaveAttribute("data-displayed-frame", "1");
-    expect(requested).toEqual([...COARSE, ...MEDIUM, ...FINE]);
-    expect(tierViolations).toEqual([]);
-    expect(peakPending).toBeLessThanOrEqual(3);
-    for (let step = 0; step < 18; step += 1) {
-      await slider.press(step % 2 === 0 ? "ArrowLeft" : "ArrowRight");
+    await expect(slider).toHaveAttribute("data-frame", "5");
+    await expect(slider).toHaveAttribute("data-displayed-frame", "5");
+    tail.release();
+    await expect(slider).toHaveAttribute("data-loaded-count", "12");
+    // Late frame 11 must not overwrite the user's newer frame 5 selection.
+    await expect(slider).toHaveAttribute("data-displayed-frame", "5");
+    for (let step = 0; step < 12; step += 1) {
+      await slider.press("ArrowRight");
+      await expect(slider).toHaveAttribute(
+        "data-displayed-frame",
+        String((6 + step) % 12)
+      );
       expect(
         Number(await slider.getAttribute("data-ready-count"))
-      ).toBeLessThanOrEqual(20);
+      ).toBeLessThanOrEqual(12);
     }
+    expect(peakPending).toBeLessThanOrEqual(3);
     await page.emulateMedia({ reducedMotion: "no-preference" });
     const box = await slider.boundingBox();
     if (!box) {
@@ -252,35 +214,46 @@ test("whole-turn tiers settle before refinement, with bounded network and bitmap
     await page.mouse.move(box.x + box.width * 0.1, box.y + box.height / 2);
     await page.mouse.move(box.x + box.width * 0.9, box.y + box.height / 2);
     await page.mouse.move(0, 0);
-    const dots = page.locator(".store-media-dot");
-    await dots.nth(1).click();
-    await dots.first().click();
-    await expect(slider).toHaveAttribute("data-loaded-count", "72");
-    await expect(slider.locator("img")).toHaveCount(1);
+    await page
+      .locator(
+        'label.store-custom-option:has(input[name="housing"][value="ice-blue"])'
+      )
+      .click();
+    await expect(
+      page.locator('input[name="housing"][value="ice-blue"]')
+    ).toBeChecked();
+    await page
+      .locator(
+        'label.store-custom-option:has(input[name="housing"][value="transparent"])'
+      )
+      .click();
+    await expect(slider).toHaveAttribute("aria-valuemax", "11");
+    await slider.scrollIntoViewIfNeeded();
+    await slider.focus();
+    await expect(
+      page.locator(
+        ".store-media-arrow, .store-media-dot, .store-media-dots, .store-media-render"
+      )
+    ).toHaveCount(0);
+    await expect(slider).toHaveAttribute("data-loaded-count", "12");
+    await expect(slider.locator("img")).toHaveCount(0);
     await expect(slider.locator("canvas")).toHaveCount(1);
-    expect(
-      Number(await slider.getAttribute("data-ready-count"))
-    ).toBeLessThanOrEqual(20);
-    expect(requested).toHaveLength(72);
-    expect(new Set(requested).size).toBe(72);
+    expect(requested).toEqual(COARSE);
+    expect(new Set(requested).size).toBe(12);
   } finally {
-    coarseTail.release();
-    medium.release();
-    fine.release();
+    tail.release();
     await page.unrouteAll({ behavior: "wait" });
   }
 });
 
-test("a failed coarse frame does not stall later tiers or duplicate requests", async ({
+test("a failed coarse frame preserves decoded fallback without stalling or duplicate requests", async ({
   page,
 }) => {
   const bodies = await frameBodies();
   const requested: number[] = [];
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.route(FRAME_URL, async (route) => {
-    const index =
-      Number(path.basename(new URL(route.request().url()).pathname, ".webp")) -
-      1;
+    const index = requestedIndex(route.request().url());
     requested.push(index);
     if (index === 6) {
       await route.abort();
@@ -291,17 +264,27 @@ test("a failed coarse frame does not stall later tiers or duplicate requests", a
   await page.goto(DETAIL);
   const slider = page.getByRole("slider");
   await slider.focus();
-  await expect(slider).toHaveAttribute("data-loaded-count", "71", {
+  await expect(slider).toHaveAttribute("data-loaded-count", "11", {
     timeout: 15_000,
   });
-  await slider.press("ArrowLeft");
-  await expect(slider).toHaveAttribute("data-displayed-frame", "71");
-  expect(requested).toEqual([...COARSE, ...MEDIUM, ...FINE]);
-  expect(new Set(requested).size).toBe(72);
+  for (let step = 0; step < 5; step += 1) {
+    await slider.press("ArrowRight");
+  }
+  await expect(slider).toHaveAttribute("data-displayed-frame", "5");
+  await slider.press("ArrowRight");
+  await expect(slider).toHaveAttribute("data-frame", "6");
+  await expect(slider).toHaveAttribute("data-displayed-frame", "5");
+  await expect(slider.locator("canvas")).toBeVisible();
+  for (let step = 0; step < 5; step += 1) {
+    await slider.press("ArrowRight");
+  }
+  await expect(slider).toHaveAttribute("data-displayed-frame", "11");
+  expect(requested).toEqual(COARSE);
+  expect(new Set(requested).size).toBe(12);
   expect(
     Number(await slider.getAttribute("data-ready-count"))
-  ).toBeLessThanOrEqual(20);
-  await expect(slider.locator("img[data-index]")).toHaveCount(0);
+  ).toBeLessThanOrEqual(12);
+  await expect(slider.locator("img")).toHaveCount(0);
 });
 
 test("touch keeps vertical page scrolling and supports deliberate horizontal rotation", async ({

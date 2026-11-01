@@ -1,0 +1,92 @@
+{
+  "id": "dark-green--nicepbt-purple-chonkers-retail",
+  "housingId": "dark-green",
+  "keycapId": "nicepbt-purple-chonkers-retail",
+  "orderable": false,
+  "frames": [
+    {
+      "angleDegrees": 0,
+      "height": 1536,
+      "sha256": "2f06914b88357a9151a37ba3eb5bc22112d023909aaef2a7569828c51baa8aae",
+      "src": "/assets/products/maru60/assembled/v1/dark-green--nicepbt-purple-chonkers-retail/frame_000.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 30,
+      "height": 1536,
+      "sha256": "d5e67c7f762ecbada81962068aabc0208ab8f4fb9f62d2b905edd4169d6abbb2",
+      "src": "/assets/products/maru60/assembled/v1/dark-green--nicepbt-purple-chonkers-retail/frame_030.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 60,
+      "height": 1536,
+      "sha256": "7087bbb69d8bed285baa95adf26a455c6ffc0d1667c59aa69785e545edeac3c1",
+      "src": "/assets/products/maru60/assembled/v1/dark-green--nicepbt-purple-chonkers-retail/frame_060.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 90,
+      "height": 1536,
+      "sha256": "05321c634f4f580554b87b507b1716ecc09a25c42ec1af8ffd5396f6023ea76d",
+      "src": "/assets/products/maru60/assembled/v1/dark-green--nicepbt-purple-chonkers-retail/frame_090.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 120,
+      "height": 1536,
+      "sha256": "cbe5ddf0ac4451da2699826a65a0aededcae7ffcf051da4b1eabfe8e82512d82",
+      "src": "/assets/products/maru60/assembled/v1/dark-green--nicepbt-purple-chonkers-retail/frame_120.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 150,
+      "height": 1536,
+      "sha256": "968f9abf00efe22e0c87bdfb5edc4be6886761fff5798f44be0cff296db1b19f",
+      "src": "/assets/products/maru60/assembled/v1/dark-green--nicepbt-purple-chonkers-retail/frame_150.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 180,
+      "height": 1536,
+      "sha256": "6221e67dff323512c5214271e39453f991f44416f596be154f4f864bf9f778c2",
+      "src": "/assets/products/maru60/assembled/v1/dark-green--nicepbt-purple-chonkers-retail/frame_180.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 210,
+      "height": 1536,
+      "sha256": "a9f3cb09d5036c7b8aff3ecf8c2a0c1cccf23bde9fe6263e0a9ba816c51db8f1",
+      "src": "/assets/products/maru60/assembled/v1/dark-green--nicepbt-purple-chonkers-retail/frame_210.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 240,
+      "height": 1536,
+      "sha256": "4a6866c37ab3a67b550a8ca9c7f0c63c35b6e058ab4d82c61f3e06e2bab7bdea",
+      "src": "/assets/products/maru60/assembled/v1/dark-green--nicepbt-purple-chonkers-retail/frame_240.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 270,
+      "height": 1536,
+      "sha256": "93f210664a891090b1c8d4b2cd558ef213764b505a0fe8d8d9c25ee2c05023a8",
+      "src": "/assets/products/maru60/assembled/v1/dark-green--nicepbt-purple-chonkers-retail/frame_270.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 300,
+      "height": 1536,
+      "sha256": "23e7f2fb4b6e483ca9ec3b11dbef2712bbaa22b67963ef34c4309b8b017ce07c",
+      "src": "/assets/products/maru60/assembled/v1/dark-green--nicepbt-purple-chonkers-retail/frame_300.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 330,
+      "height": 1536,
+      "sha256": "9c16348cfac369b5260f14a1bc37ccfbc4efca233b6886ff55a220da80852c7b",
+      "src": "/assets/products/maru60/assembled/v1/dark-green--nicepbt-purple-chonkers-retail/frame_330.webp",
+      "width": 1024
+    }
+  ]
+}
