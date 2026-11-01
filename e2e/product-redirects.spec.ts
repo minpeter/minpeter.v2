@@ -25,21 +25,26 @@ for (const locale of ["ko", "en", "ja"]) {
         url.searchParams.get("angle") === "270" &&
         url.searchParams.get("campaign") === "redirect-test"
     );
-    await expect(page.getByTestId("product-detail")).toBeVisible();
+    // Next may retain the previous route under a hidden Activity boundary.
+    // Assert the one visible destination, not retained inactive page DOM.
+    const detail = page.locator('[data-testid="product-detail"]:visible');
+    await expect(detail).toHaveCount(1);
+    await expect(detail.getByTestId("product-customizer")).toBeVisible();
     await expect(
-      page.locator('input[name="housing"][value="ice-blue"]')
+      detail.locator('input[name="housing"][value="ice-blue"]')
     ).toBeChecked();
     await expect(
-      page.locator('input[name="keycaps"][value="nicepbt-bow-retail"]')
+      detail.locator('input[name="keycaps"][value="nicepbt-bow-retail"]')
     ).toBeChecked();
     await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
       "href",
       `https://minpeter.com${prefix}/products/maru60`
     );
     await page.goto(`${prefix}/products/maru60`);
-    await expect(page.getByTestId("product-detail")).toBeVisible();
+    await expect(detail).toHaveCount(1);
+    await expect(detail.getByTestId("product-customizer")).toBeVisible();
     await expect(
-      page.locator('input[name="housing"][value="transparent"]')
+      detail.locator('input[name="housing"][value="transparent"]')
     ).toBeChecked();
   });
 }
