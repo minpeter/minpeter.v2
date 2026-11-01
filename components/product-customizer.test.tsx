@@ -27,6 +27,15 @@ vi.mock("next/navigation", () => ({
   useSearchParams: () => new URLSearchParams(window.location.search),
 }));
 
+const KEYCAP_CHIPS: Record<string, string> = {
+  inventor: "Inventor",
+  "nicepbt-bow-retail": "NicePBT BoW",
+  "nicepbt-noel-latin-retail": "Noel",
+  "nicepbt-purple-chonkers-retail": "Purple Chonkers",
+  "pbtfans-wob-retail": "PBTfans WoB",
+  "retro-programmer-retail": "Retro Programmer",
+};
+
 const fixtures = vi.hoisted(() => ({
   candidates: [] as unknown[],
   retry: vi.fn(),
@@ -265,9 +274,11 @@ describe("ProductCustomizer availability and selection", () => {
       expect(screen.getByText(t.kitQA)).toBeTruthy();
       expect(screen.getByText(t.approximation)).toBeTruthy();
       expect(
-        within(screen.getByRole("group", { name: t.housing })).getAllByRole(
-          "radio"
-        )
+        within(
+          screen.getByRole("group", {
+            name: (name) => name.startsWith(t.housing),
+          })
+        ).getAllByRole("radio")
       ).toHaveLength(8);
       expect(
         within(screen.getByRole("group", { name: t.keycaps })).getAllByRole(
@@ -277,22 +288,75 @@ describe("ProductCustomizer availability and selection", () => {
       for (const housing of HOUSING_OPTIONS) {
         expect(
           screen.getByRole("radio", {
-            name: (name) =>
-              name.includes(t.housingNames[housing.id]) &&
-              name.includes(housing.sku),
+            name: t.housingNames[housing.id],
           })
         ).toBeTruthy();
       }
       for (const kit of KEYCAP_OPTIONS) {
         expect(
           screen.getByRole("radio", {
-            name: (name) =>
-              name.includes(kit.name) && name.includes(t.fullRetailSet),
+            name: KEYCAP_CHIPS[kit.id],
           })
         ).toBeTruthy();
       }
       expect(housingRadio("bone-white").checked).toBe(true);
       expect(keycapRadio("retro-programmer-retail").checked).toBe(true);
+    }
+  );
+
+  it.each(["en", "ja", "ko"] as const)(
+    "keeps compact accessible options and moves material detail into a closed disclosure in %s",
+    (locale) => {
+      render(ui("?housing=bone-white&keycaps=nicepbt-bow-retail", locale));
+      const t = messages[locale].products.customization;
+      const details = screen.getByTestId(
+        "customization-details"
+      ) as HTMLDetailsElement;
+      expect(details.tagName).toBe("DETAILS");
+      expect(details.open).toBe(false);
+      const summary = details.querySelector("summary");
+      expect(summary?.textContent).toBe(t.detailsLabel);
+      expect(summary).not.toBeNull();
+      expect(details.contains(screen.getByText(t.configurationNote))).toBe(
+        true
+      );
+      expect(details.contains(screen.getByText(t.approximation))).toBe(true);
+      expect(details.textContent).toContain("PLA Matte · 11103");
+      expect(details.textContent).toContain("NicePBT BoW (retail set)");
+      expect(
+        document
+          .querySelector("h2.store-custom-selection")
+          ?.classList.contains("sr-only")
+      ).toBe(true);
+      const group = screen.getByRole("group", {
+        name: `${t.housing} ${t.housingNames["bone-white"]}`,
+      });
+      expect(
+        group.querySelectorAll(".store-custom-selected-name")
+      ).toHaveLength(1);
+      expect(
+        group.querySelector(".store-custom-selected-name")?.textContent
+      ).toBe(t.housingNames["bone-white"]);
+      for (const label of group.querySelectorAll("label")) {
+        expect(label.textContent?.trim()).toBe("");
+        expect(label.querySelectorAll("p, small, dl")).toHaveLength(0);
+      }
+      expect(
+        screen.getByRole("radio", { name: t.housingNames.transparent })
+      ).toBeTruthy();
+      for (const [id, name] of Object.entries(KEYCAP_CHIPS)) {
+        const radio = screen.getByRole("radio", { name });
+        expect(radio.getAttribute("value")).toBe(id);
+        expect(radio.closest("label")?.textContent?.trim()).toBe(name);
+        expect(
+          radio.closest("label")?.querySelectorAll("p, small, dl")
+        ).toHaveLength(0);
+      }
+      // jsdom exercises native click disclosure; real Enter/Space behavior is covered by E2E.
+      fireEvent.click(summary as HTMLElement);
+      expect(details.open).toBe(true);
+      fireEvent.click(summary as HTMLElement);
+      expect(details.open).toBe(false);
     }
   );
 

@@ -271,7 +271,7 @@
       "modeLabel": "제품 보기",
       "showcase": "개인 키보드 자랑",
       "customize": "기성 키캡 조합 보기",
-      "showcaseNote": "유일한 개인 커스텀 키보드 · 전시용 · 주문 불가",
+      "showcaseNote": "Inventor · 개인 전시용 · 주문 불가",
       "configurationNote": "하우징과 키캡을 골라 외형을 살펴보세요. 투명 × Inventor는 기존 개인 키보드이며 기성 키캡 조합이 아닙니다. 여기서는 주문할 수 없습니다.",
       "selected": "{housing} × {keycaps}",
       "previewLabel": "선택한 조합의 재구성 렌더 — 드래그하거나 화살표 키로 30°씩 회전",
@@ -306,11 +306,12 @@
       "personalHousing": "기존 반투명 PETG · 외형 근사",
       "personalOnly": "개인 전시용 · 주문 불가",
       "inventorNote": "개인 로고 키가 있는 기존 키캡 · 기성 키트 아님",
-      "pairedPersonal": "기존 개인 키보드를 보여주도록 투명 하우징과 Inventor 키캡을 함께 선택했어요. 주문할 수 없습니다.",
-      "pairedRetail": "기성 조합을 살펴볼 수 있도록 {housing} × {keycaps}로 함께 변경했어요.",
+      "pairedPersonal": "투명 × Inventor · 주문 불가",
+      "pairedRetail": "함께 선택: {housing} × {keycaps}",
       "unsupported": "지원하지 않는 조합입니다",
       "unsupportedDetail": "투명 하우징과 Inventor 키캡은 기존 개인 키보드 조합으로만 표시합니다. 둘을 함께 선택하거나 기성 하우징과 키캡을 선택해 주세요. 다른 조합의 이미지를 대신 보여주지 않습니다.",
-      "switchToRetail": "선택하면 기성 조합으로 함께 변경됩니다"
+      "switchToRetail": "선택하면 기성 조합으로 함께 변경됩니다",
+      "detailsLabel": "제품 정보 · 소재"
     }
   },
   "modCodeBlock": {

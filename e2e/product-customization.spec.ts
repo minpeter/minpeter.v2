@@ -11,8 +11,38 @@ import {
 
 import en from "../shared/i18n/en.json" with { type: "json" };
 import ja from "../shared/i18n/ja.json" with { type: "json" };
+
 import manifests from "../shared/keyboard-customization-manifests.json" with {
   type: "json",
+};
+
+const SR_ONLY = /sr-only/;
+// Independent display expectations: importing the app model here would pull its bundler-only JSON import into Node.
+const KEYCAP_FULL_NAMES: Record<string, string> = {
+  inventor: "Inventor",
+  "nicepbt-bow-retail": "NicePBT BoW (retail set)",
+  "nicepbt-noel-latin-retail": "NicePBT Noel — Latin",
+  "nicepbt-purple-chonkers-retail": "NicePBT Purple Chonkers — Text Keys",
+  "pbtfans-wob-retail": "PBTfans WoB — Base Text Modifiers",
+  "retro-programmer-retail": "Retro Programmer (retail set)",
+};
+const HOUSING_SKUS: Record<string, string> = {
+  "ash-gray": "11102",
+  "bone-white": "11103",
+  charcoal: "11101",
+  "dark-green": "11501",
+  "ice-blue": "11601",
+  "lilac-purple": "11700",
+  "white-marble": "13103",
+};
+
+const KEYCAP_CHIPS: Record<string, string> = {
+  inventor: "Inventor",
+  "nicepbt-bow-retail": "NicePBT BoW",
+  "nicepbt-noel-latin-retail": "Noel",
+  "nicepbt-purple-chonkers-retail": "Purple Chonkers",
+  "pbtfans-wob-retail": "PBTfans WoB",
+  "retro-programmer-retail": "Retro Programmer",
 };
 
 const ko: typeof en = JSON.parse(
@@ -229,15 +259,7 @@ async function expectReadyHistoryState(
     labels.housingNames[
       combination.housingId as keyof typeof labels.housingNames
     ];
-  const kitName = await page
-    .locator("label.store-custom-option")
-    .filter({
-      has: page.locator(
-        `input[name="keycaps"][value="${combination.keycapId}"]`
-      ),
-    })
-    .locator("span")
-    .evaluate((element) => element.firstChild?.textContent?.trim() ?? "");
+  const kitName = KEYCAP_FULL_NAMES[combination.keycapId] ?? "";
   expect(kitName).not.toBe("");
   await expect(page.locator(".store-custom-selection")).toHaveText(
     labels.selected
@@ -341,6 +363,104 @@ async function expectReadyHistoryState(
     width: 1024,
   });
   expect(comparison.visiblePixels).toBeGreaterThan(0);
+}
+
+async function expectCompactPicker(page: Page, messages: typeof en) {
+  const labels = messages.products.customization;
+  const details = page.getByTestId("customization-details");
+  const summary = details.locator("summary");
+  await expect(details).not.toHaveAttribute("open");
+  await expect(summary).toHaveText(labels.detailsLabel);
+  await expect(details.locator(".store-custom-details-body")).not.toBeVisible();
+  await expect(page.locator(".store-custom-selection")).toHaveClass(SR_ONLY);
+  const colors = page.locator(".store-custom-color");
+  await expect(colors).toHaveCount(8);
+  for (const color of [...HOUSINGS, "transparent"] as const) {
+    await expect(
+      page.getByRole("radio", {
+        exact: true,
+        name: labels.housingNames[color as keyof typeof labels.housingNames],
+      })
+    ).toHaveAttribute("value", color);
+  }
+  const dimensions = await colors.evaluateAll((elements) =>
+    elements.map((element) => {
+      const box = element.getBoundingClientRect();
+      const swatch = element
+        .querySelector(".store-custom-swatch")
+        ?.getBoundingClientRect();
+      return {
+        height: box.height,
+        swatchHeight: swatch?.height,
+        swatchWidth: swatch?.width,
+        text: element.textContent?.trim(),
+        width: box.width,
+      };
+    })
+  );
+  for (const dimension of dimensions) {
+    expect(dimension.height).toBeGreaterThanOrEqual(44);
+    expect(dimension.width).toBeGreaterThanOrEqual(44);
+    expect(dimension.swatchHeight).toBe(24);
+    expect(dimension.swatchWidth).toBe(24);
+    expect(dimension.text).toBe("");
+  }
+  await expect(
+    page.locator(
+      "label.store-custom-option p, label.store-custom-option small, label.store-custom-option dl"
+    )
+  ).toHaveCount(0);
+  await expect(page.locator(".store-custom-selected-name")).toHaveCount(1);
+  const housingId = await page
+    .locator('input[name="housing"]:checked')
+    .inputValue();
+  const keycapId = await page
+    .locator('input[name="keycaps"]:checked')
+    .inputValue();
+  await expect(page.locator(".store-custom-selected-name")).toHaveText(
+    labels.housingNames[housingId as keyof typeof labels.housingNames]
+  );
+  for (const [id, name] of Object.entries(KEYCAP_CHIPS)) {
+    await expect(
+      page.getByRole("radio", { exact: true, name })
+    ).toHaveAttribute("value", id);
+    await expect(
+      page
+        .locator(".store-custom-kit")
+        .filter({ has: page.locator(`input[value="${id}"]`) })
+        .locator("span")
+    ).toHaveText(name);
+  }
+  await summary.focus();
+  await summary.press("Enter");
+  await expect(details).toHaveAttribute("open", "");
+  await expect(details.locator(".store-custom-details-body")).toBeVisible();
+  await expect(
+    details.getByText(labels.configurationNote, { exact: true })
+  ).toBeVisible();
+  await expect(
+    details.getByText(labels.approximation, { exact: true })
+  ).toBeVisible();
+  const selectedSku = HOUSING_SKUS[housingId];
+  if (selectedSku) {
+    await expect(details.locator("dd").first()).toContainText(
+      `${housingId === "white-marble" ? "PLA Marble" : "PLA Matte"} · ${selectedSku}`
+    );
+    await expect(
+      details.getByRole("link", { name: labels.materialSource })
+    ).toHaveAttribute(
+      "href",
+      housingId === "white-marble"
+        ? "https://bambu-lab-global.myshopify.com/products/pla-marble"
+        : "https://store.bblcdn.eu/s8/default/f131f643495b417197832b291fc7b068/Bambu_PLA_Matte_Hex_Code.pdf"
+    );
+  }
+  await expect(details.locator("dd").nth(1)).toContainText(
+    KEYCAP_FULL_NAMES[keycapId]
+  );
+  await summary.press("Space");
+  await expect(details).not.toHaveAttribute("open");
+  await expect(details.locator(".store-custom-details-body")).not.toBeVisible();
 }
 
 for (const { locale, prefix, messages } of LOCALES) {
@@ -764,14 +884,7 @@ for (const { locale, prefix, messages } of LOCALES) {
         await expect(page.locator(".store-custom-selection")).toContainText(
           housingName
         );
-        const selectedKit = page.locator("label.store-custom-option").filter({
-          has: page.locator(
-            `input[name="keycaps"][value="${combination.keycapId}"]`
-          ),
-        });
-        const kitName = await selectedKit
-          .locator("span")
-          .evaluate((element) => element.firstChild?.textContent?.trim() ?? "");
+        const kitName = KEYCAP_FULL_NAMES[combination.keycapId] ?? "";
         expect(kitName).not.toBe("");
         await expect(page.locator(".store-custom-selection")).toContainText(
           kitName
@@ -779,6 +892,7 @@ for (const { locale, prefix, messages } of LOCALES) {
         await expect(page.getByTestId("personal-showcase-notice")).toHaveCount(
           0
         );
+        await expectCompactPicker(page, messages);
         for (let index = 1; index <= 12; index += 1) {
           await spin.press("ArrowRight");
           await expect(spin).toHaveAttribute("data-frame", String(index % 12));
@@ -1081,15 +1195,7 @@ for (const combination of combinations) {
       en.products.customization.housingNames[
         combination.housingId as keyof typeof en.products.customization.housingNames
       ];
-    const kitName = await page
-      .locator("label.store-custom-option")
-      .filter({
-        has: page.locator(
-          `input[name="keycaps"][value="${combination.keycapId}"]`
-        ),
-      })
-      .locator("span")
-      .evaluate((element) => element.firstChild?.textContent?.trim() ?? "");
+    const kitName = KEYCAP_FULL_NAMES[combination.keycapId] ?? "";
     expect(kitName).not.toBe("");
     await expect(page.locator(".store-custom-selection")).toHaveText(
       en.products.customization.selected

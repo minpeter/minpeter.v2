@@ -97,17 +97,14 @@ function ValidatedPreview({
   );
 }
 
-function retailOptionHint(
-  housing: SelectionHousingId,
-  keycaps: SelectionKeycapId
-) {
-  if (isUnsupportedPersonalPair(housing, keycaps)) {
-    return "switchToRetail";
-  }
-  return getValidatedCombination(housing, keycaps)
-    ? "renderReady"
-    : "renderPending";
-}
+const KEYCAP_LABELS: Record<SelectionKeycapId, string> = {
+  inventor: "Inventor",
+  "nicepbt-bow-retail": "NicePBT BoW",
+  "nicepbt-noel-latin-retail": "Noel",
+  "nicepbt-purple-chonkers-retail": "Purple Chonkers",
+  "pbtfans-wob-retail": "PBTfans WoB",
+  "retro-programmer-retail": "Retro Programmer",
+};
 
 function SelectionPreview({
   personal,
@@ -166,7 +163,6 @@ function SelectionPreview({
         <p className="store-prose">
           {t(unsupported ? "unsupportedDetail" : "pendingDetail")}
         </p>
-        {!unsupported && <p className="store-label">{t("kitQA")}</p>}
       </div>
     </div>
   );
@@ -279,8 +275,7 @@ export function ProductCustomizer(props: ProductGalleryProps) {
       data-orderable="false"
       data-testid="product-customizer"
     >
-      <p className="store-custom-note store-prose">{t("configurationNote")}</p>
-      <h2 className="store-label store-custom-selection">{selectedLabel}</h2>
+      <h2 className="store-custom-selection sr-only">{selectedLabel}</h2>
       <SelectionPreview
         angle={angleRef.current}
         combination={combination}
@@ -301,23 +296,22 @@ export function ProductCustomizer(props: ProductGalleryProps) {
           </p>
         ) : null}
         <fieldset>
-          <legend className="store-label">{t("housing")}</legend>
-          {selection.housing === "white-marble" ? (
-            <p className="store-prose store-custom-note">{t("marbleNote")}</p>
-          ) : null}
-          {selection.housing === "transparent" ? (
-            <p className="store-prose store-custom-note">
-              {t("transparentNote")}
-            </p>
-          ) : null}
+          <legend className="store-label">
+            {t("housing")}{" "}
+            <span className="store-custom-selected-name">
+              {t(`housingNames.${selectedHousing.id}`)}
+            </span>
+          </legend>
           <div className="store-custom-swatches">
             {SELECTION_HOUSING_OPTIONS.map((option) => (
               <label
-                className="store-custom-option"
+                className="store-custom-option store-custom-color"
                 data-selected={selection.housing === option.id}
                 key={option.id}
+                title={t(`housingNames.${option.id}`)}
               >
                 <input
+                  aria-label={t(`housingNames.${option.id}`)}
                   checked={selection.housing === option.id}
                   className="sr-only"
                   name="housing"
@@ -331,19 +325,6 @@ export function ProductCustomizer(props: ProductGalleryProps) {
                   data-transparent={option.id === "transparent"}
                   style={{ backgroundColor: option.hex }}
                 />
-                <span>
-                  {t(`housingNames.${option.id}`)}
-                  <small>
-                    {option.id === "transparent"
-                      ? t("personalHousing")
-                      : `${option.material} · ${option.sku}`}
-                  </small>
-                  <small>
-                    {option.id === "transparent"
-                      ? t("personalOnly")
-                      : t(retailOptionHint(option.id, selection.keycaps))}
-                  </small>
-                </span>
               </label>
             ))}
           </div>
@@ -353,11 +334,12 @@ export function ProductCustomizer(props: ProductGalleryProps) {
           <div className="store-custom-kits">
             {SELECTION_KEYCAP_OPTIONS.map((option) => (
               <label
-                className="store-custom-option"
+                className="store-custom-option store-custom-kit"
                 data-selected={selection.keycaps === option.id}
                 key={option.id}
               >
                 <input
+                  aria-label={KEYCAP_LABELS[option.id]}
                   checked={selection.keycaps === option.id}
                   className="sr-only"
                   name="keycaps"
@@ -365,46 +347,72 @@ export function ProductCustomizer(props: ProductGalleryProps) {
                   type="radio"
                   value={option.id}
                 />
-                <span>
-                  {option.name}
-                  <small>
-                    {t(
-                      option.id === "inventor"
-                        ? "inventorNote"
-                        : "fullRetailSet"
-                    )}
-                  </small>
-                  <small>
-                    {option.id === "inventor"
-                      ? t("personalOnly")
-                      : t(retailOptionHint(selection.housing, option.id))}
-                  </small>
-                </span>
+                <span>{KEYCAP_LABELS[option.id]}</span>
               </label>
             ))}
           </div>
         </fieldset>
-        <p className="store-prose">{t("approximation")}</p>
-        <div className="store-custom-sources store-label">
-          {"sourceUrl" in selectedHousing ? (
-            <a
-              href={selectedHousing.sourceUrl}
-              rel="noreferrer"
-              target="_blank"
-            >
-              {t("materialSource")}
-            </a>
-          ) : null}
-          {"sourceUrl" in selectedKeycaps ? (
-            <a
-              href={selectedKeycaps.sourceUrl}
-              rel="noreferrer"
-              target="_blank"
-            >
-              {t("keycapSource")}
-            </a>
-          ) : null}
-        </div>
+        <details
+          className="store-custom-details"
+          data-testid="customization-details"
+        >
+          <summary className="store-label">{t("detailsLabel")}</summary>
+          <div className="store-custom-details-body store-prose">
+            <p>{t("configurationNote")}</p>
+            <dl>
+              <div>
+                <dt>{t("housing")}</dt>
+                <dd>
+                  {t(`housingNames.${selectedHousing.id}`)} ·{" "}
+                  {selectedHousing.id === "transparent"
+                    ? t("personalHousing")
+                    : `${selectedHousing.material} · ${selectedHousing.sku}`}
+                </dd>
+              </div>
+              <div>
+                <dt>{t("keycaps")}</dt>
+                <dd>
+                  {selectedKeycaps.name}
+                  <br />
+                  {t(
+                    selectedKeycaps.id === "inventor"
+                      ? "inventorNote"
+                      : "fullRetailSet"
+                  )}
+                </dd>
+              </div>
+            </dl>
+            {selection.housing === "white-marble" ? (
+              <p>{t("marbleNote")}</p>
+            ) : null}
+            {selection.housing === "transparent" ? (
+              <p>{t("transparentNote")}</p>
+            ) : null}
+            <p>{t("approximation")}</p>
+            {personal || unsupported ? null : <p>{t("kitQA")}</p>}
+
+            <div className="store-custom-sources store-label">
+              {"sourceUrl" in selectedHousing ? (
+                <a
+                  href={selectedHousing.sourceUrl}
+                  rel="noreferrer"
+                  target="_blank"
+                >
+                  {t("materialSource")}
+                </a>
+              ) : null}
+              {"sourceUrl" in selectedKeycaps ? (
+                <a
+                  href={selectedKeycaps.sourceUrl}
+                  rel="noreferrer"
+                  target="_blank"
+                >
+                  {t("keycapSource")}
+                </a>
+              ) : null}
+            </div>
+          </div>
+        </details>
       </div>
     </div>
   );

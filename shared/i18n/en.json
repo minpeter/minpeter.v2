@@ -271,7 +271,7 @@
       "modeLabel": "Product view",
       "showcase": "Personal showcase",
       "customize": "Explore retail sets",
-      "showcaseNote": "Unique personal keyboard · showcase only · not available to order",
+      "showcaseNote": "Inventor · personal showcase · not for sale",
       "configurationNote": "Choose a housing and keycap set to explore the appearance. Transparent × Inventor is the original personal keyboard, not a retail set. No ordering is available here.",
       "selected": "{housing} × {keycaps}",
       "previewLabel": "Selected configuration — reconstructed render; drag or use arrow keys to rotate in 30° steps",
@@ -306,11 +306,12 @@
       "personalHousing": "Original translucent PETG · approximate appearance",
       "personalOnly": "Personal showcase · not available to order",
       "inventorNote": "Original personal keycaps with logo keys · not a retail set",
-      "pairedPersonal": "Transparent and Inventor are paired to show the original personal keyboard. Not available to order.",
-      "pairedRetail": "Switched to {housing} × {keycaps} to preview a retail combination.",
+      "pairedPersonal": "Transparent × Inventor · Not for sale",
+      "pairedRetail": "Paired: {housing} × {keycaps}",
       "unsupported": "This pairing is unavailable",
       "unsupportedDetail": "Transparent housing and Inventor keycaps are only shown together as the original personal keyboard. Select both, or choose a retail housing and keycap set. No substitute image is shown.",
-      "switchToRetail": "Selecting this switches to a retail combination"
+      "switchToRetail": "Selecting this switches to a retail combination",
+      "detailsLabel": "Details & materials"
     }
   },
   "modCodeBlock": {

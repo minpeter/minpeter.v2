@@ -271,7 +271,7 @@
       "modeLabel": "製品表示",
       "showcase": "個人キーボード紹介",
       "customize": "市販キーキャップの組み合わせ",
-      "showcaseNote": "唯一の個人カスタムキーボード · 展示専用 · 注文不可",
+      "showcaseNote": "Inventor · 個人展示用 · 注文不可",
       "configurationNote": "ハウジングとキーキャップを選んで外観を確認できます。透明 × Inventorは元の個人キーボードで、市販セットではありません。ここでは注文できません。",
       "selected": "{housing} × {keycaps}",
       "previewLabel": "選択した構成の再構成レンダリング — ドラッグまたは矢印キーで30°ずつ回転",
@@ -306,11 +306,12 @@
       "personalHousing": "元の半透明PETG · 外観の近似",
       "personalOnly": "個人展示用 · 注文不可",
       "inventorNote": "個人ロゴキーを含む元のキーキャップ · 市販セットではありません",
-      "pairedPersonal": "元の個人キーボードを表示するため、透明ハウジングとInventorを一緒に選択しました。注文はできません。",
-      "pairedRetail": "市販セットの外観を確認するため、{housing} × {keycaps}に切り替えました。",
+      "pairedPersonal": "透明 × Inventor · 非売品",
+      "pairedRetail": "組み合わせ: {housing} × {keycaps}",
       "unsupported": "この組み合わせは表示できません",
       "unsupportedDetail": "透明ハウジングとInventorは元の個人キーボードの組み合わせとしてのみ表示します。両方を選ぶか、市販用ハウジングとキーキャップを選んでください。別の構成の画像は表示しません。",
-      "switchToRetail": "選ぶと市販セットの組み合わせに切り替わります"
+      "switchToRetail": "選ぶと市販セットの組み合わせに切り替わります",
+      "detailsLabel": "詳細・素材"
     }
   },
   "modCodeBlock": {
