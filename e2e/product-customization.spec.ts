@@ -433,6 +433,9 @@ async function expectCompactPicker(page: Page, messages: typeof en) {
     });
     await expect(tile).toHaveText("");
     await expect(tile).toHaveAttribute("title", name);
+    await expect(tile).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
+    await expect(tile).toHaveCSS("border-top-width", "0px");
+    await expect(tile).toHaveCSS("box-shadow", "none");
     const thumbnail = tile.locator("img");
     await expect(thumbnail).toHaveAttribute(
       "src",
