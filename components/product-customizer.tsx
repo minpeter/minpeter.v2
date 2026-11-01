@@ -10,10 +10,7 @@ import {
   useState,
 } from "react";
 
-import {
-  ProductGallery,
-  type ProductGalleryProps,
-} from "@/components/product-gallery";
+import type { ProductGalleryProps } from "@/components/product-gallery";
 import { ProductSpin } from "@/components/product-spin";
 import {
   combinationToSpin,
@@ -131,11 +128,17 @@ function SelectionPreview({
         >
           {t("showcaseNote")}
         </p>
-        <ProductGallery
-          {...gallery}
-          initialAngle={angle}
-          onAngleChange={onAngleChange}
-        />
+        <section aria-label={gallery.labels.media} className="store-media">
+          <div className="store-media-stage">
+            <ProductSpin
+              alt={gallery.labels.spin}
+              initialAngle={angle}
+              onAngleChange={onAngleChange}
+              sizes="(min-width: 64rem) 60vw, 92vw"
+              spin={gallery.spin}
+            />
+          </div>
+        </section>
       </>
     );
   }

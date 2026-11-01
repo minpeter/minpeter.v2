@@ -1,4 +1,4 @@
-// biome-ignore-all lint/performance/noAwaitInLoops: Gesture and gallery steps must run sequentially to exercise intermediate UI states.
+// biome-ignore-all lint/performance/noAwaitInLoops: Gesture and selection steps must run sequentially to exercise intermediate UI states.
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 
@@ -9,7 +9,7 @@ const FRAME_URL = /\/assets\/products\/rule60-hhkb-unibody\/spin\/\d+\.webp$/;
 
 for (const width of [1440, 393, 320]) {
   for (const prefix of ["", "/en", "/ja"]) {
-    test(`portrait render and gallery: ${prefix || "ko"}, ${width}px`, async ({
+    test(`single portrait turntable: ${prefix || "ko"}, ${width}px`, async ({
       page,
     }, testInfo) => {
       const height = width === 1440 ? 900 : 852;
@@ -57,25 +57,17 @@ for (const width of [1440, 393, 320]) {
       await expect(slider).toHaveAttribute("data-displayed-frame", "71");
       await slider.press("ArrowRight");
       await expect(slider).toHaveAttribute("data-displayed-frame", "0");
-      const stage = page.locator(".store-media-stage");
-      const stageHeight = (await stage.boundingBox())?.height;
-      const dots = page.locator(".store-media-dot");
-      await expect(dots).toHaveCount(5);
-      for (let slide = 1; slide < 5; slide += 1) {
-        await dots.nth(slide).click();
-        await expect(dots.nth(slide)).toHaveAttribute("aria-current", "true");
-        await expect(page.locator(".store-media-render img")).toHaveCSS(
-          "object-fit",
-          "contain"
-        );
-        expect((await stage.boundingBox())?.height).toBe(stageHeight);
-      }
-      await page.locator(".store-media-arrow.right-0").click();
-      await expect(dots.first()).toHaveAttribute("aria-current", "true");
-      await page.locator(".store-media-arrow.left-0").click();
-      await expect(dots.last()).toHaveAttribute("aria-current", "true");
-      await dots.first().click();
       await expect(slider).toBeVisible();
+      await expect(
+        page.getByTestId("product-customizer").locator("canvas")
+      ).toHaveCount(1);
+      await expect(slider.locator("img")).toHaveCount(1);
+      await expect(
+        page.locator(
+          ".store-media-arrow, .store-media-dot, .store-media-dots, .store-media-render"
+        )
+      ).toHaveCount(0);
+      expect((await slider.boundingBox())?.height).toBe(bounds?.height);
       await page.screenshot({
         fullPage: true,
         path: testInfo.outputPath(
@@ -252,9 +244,28 @@ test("whole-turn tiers settle before refinement, with bounded network and bitmap
     await page.mouse.move(box.x + box.width * 0.1, box.y + box.height / 2);
     await page.mouse.move(box.x + box.width * 0.9, box.y + box.height / 2);
     await page.mouse.move(0, 0);
-    const dots = page.locator(".store-media-dot");
-    await dots.nth(1).click();
-    await dots.first().click();
+    // Remount the original through the shared selectors, not removed gallery navigation.
+    await page
+      .locator(
+        'label.store-custom-option:has(input[name="housing"][value="ice-blue"])'
+      )
+      .click();
+    await expect(
+      page.locator('input[name="housing"][value="ice-blue"]')
+    ).toBeChecked();
+    await page
+      .locator(
+        'label.store-custom-option:has(input[name="housing"][value="transparent"])'
+      )
+      .click();
+    await expect(slider).toHaveAttribute("aria-valuemax", "71");
+    await slider.scrollIntoViewIfNeeded();
+    await slider.focus();
+    await expect(
+      page.locator(
+        ".store-media-arrow, .store-media-dot, .store-media-dots, .store-media-render"
+      )
+    ).toHaveCount(0);
     await expect(slider).toHaveAttribute("data-loaded-count", "72");
     await expect(slider.locator("img")).toHaveCount(1);
     await expect(slider.locator("canvas")).toHaveCount(1);

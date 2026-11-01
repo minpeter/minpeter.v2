@@ -596,6 +596,14 @@ for (const { locale, prefix, messages } of LOCALES) {
           "aria-valuemax",
           "71"
         );
+        await expect(
+          page.getByTestId("product-customizer").locator("canvas")
+        ).toHaveCount(1);
+        await expect(
+          page.locator(
+            ".store-media-arrow, .store-media-dot, .store-media-dots, .store-media-render"
+          )
+        ).toHaveCount(0);
         await expect(page.locator(".store-custom-selection")).toHaveText(
           labels.selected
             .replace("{housing}", labels.housingNames.transparent)
@@ -656,6 +664,14 @@ for (const { locale, prefix, messages } of LOCALES) {
           "aria-valuemax",
           "71"
         );
+        await expect(
+          page.getByTestId("product-customizer").locator("canvas")
+        ).toHaveCount(1);
+        await expect(
+          page.locator(
+            ".store-media-arrow, .store-media-dot, .store-media-dots, .store-media-render"
+          )
+        ).toHaveCount(0);
         await expect(page.getByTestId("product-customizer")).toHaveAttribute(
           "data-orderable",
           "false"
@@ -755,6 +771,14 @@ for (const { locale, prefix, messages } of LOCALES) {
           "aria-valuemax",
           "71"
         );
+        await expect(
+          page.getByTestId("product-customizer").locator("canvas")
+        ).toHaveCount(1);
+        await expect(
+          page.locator(
+            ".store-media-arrow, .store-media-dot, .store-media-dots, .store-media-render"
+          )
+        ).toHaveCount(0);
         await expect(page.getByTestId("product-customizer")).toHaveAttribute(
           "data-orderable",
           "false"

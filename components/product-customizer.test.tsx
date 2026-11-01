@@ -52,29 +52,8 @@ vi.mock("@/shared/keyboard-customization", async (importOriginal) => {
       actual.getValidatedCombination(housing, keycaps, fixtures.candidates),
   };
 });
-vi.mock("@/components/product-gallery", async () => {
-  const { createElement } = await import("react");
-  return {
-    ProductGallery: ({ initialAngle, onAngleChange }: ProductGalleryProps) => {
-      const rotate = () => onAngleChange?.(150);
-      return (
-        <div data-angle={initialAngle} data-testid="personal-gallery">
-          {createElement("img", {
-            alt: "Personal showcase fixture",
-            height: 1536,
-            src: "/personal.webp",
-            width: 1024,
-          })}
-          <button onClick={rotate} type="button">
-            Rotate showcase
-          </button>
-        </div>
-      );
-    },
-  };
-});
 vi.mock("@/components/product-spin", async () => {
-  const { useId } = await import("react");
+  const { createElement, useId } = await import("react");
   return {
     ProductSpin: ({
       initialAngle,
@@ -90,6 +69,29 @@ vi.mock("@/components/product-spin", async () => {
       spin: ProductGalleryProps["spin"];
     }) => {
       const instance = useId();
+      const rotatePersonal = () => onAngleChange(150);
+      if (spin.frameCount === 72) {
+        return (
+          <div
+            data-angle={initialAngle}
+            data-frame-count={spin.frameCount}
+            data-instance={instance}
+            data-testid="personal-spin"
+          >
+            {createElement("img", {
+              alt: "Personal turntable poster fixture",
+              height: 1536,
+              src: "/personal.webp",
+              width: 1024,
+            })}
+            <canvas height={1536} width={1024} />
+            <button onClick={rotatePersonal} type="button">
+              Rotate showcase
+            </button>
+          </div>
+        );
+      }
+
       const rotate = () => onAngleChange(210);
       const ready = () => onLoadStateChange("ready");
       const error = () => onLoadStateChange("error");
@@ -128,10 +130,13 @@ const props: ProductGalleryProps = {
     media: "Media",
     next: "Next",
     previous: "Previous",
-    showImage: ["First"],
+    showImage: ["First", "Second", "Third", "Fourth", "Fifth"],
     spin: "Personal spin",
   },
-  renders: [],
+  renders: Array.from({ length: 4 }, (_, index) => ({
+    alt: `Unused CAD fixture ${index + 1}`,
+    image: { height: 800, src: `/cad-${index}.webp`, width: 1200 },
+  })),
   spin: {
     basePath: "/personal",
     defaultFrame: 0,
@@ -255,7 +260,26 @@ describe("ProductCustomizer availability and selection", () => {
       ).toBe("false");
       expect(housingRadio("transparent").checked).toBe(true);
       expect(keycapRadio("inventor").checked).toBe(true);
-      expect(screen.getByTestId("personal-gallery")).toBeTruthy();
+      const personal = screen.getByTestId("personal-spin");
+      expect(personal.getAttribute("data-frame-count")).toBe("72");
+      expect(personal.querySelectorAll("canvas")).toHaveLength(1);
+      expect(
+        document.querySelectorAll(
+          ".store-media-arrow, .store-media-dot, .store-media-dots, .store-media-render"
+        )
+      ).toHaveLength(0);
+      expect(
+        screen.queryByRole("button", { name: props.labels.next })
+      ).toBeNull();
+      expect(
+        screen.queryByRole("button", { name: props.labels.previous })
+      ).toBeNull();
+      for (const label of props.labels.showImage) {
+        expect(screen.queryByRole("button", { name: label })).toBeNull();
+      }
+      for (const cad of props.renders) {
+        expect(screen.queryByAltText(cad.alt)).toBeNull();
+      }
       expect(screen.queryByTestId("customization-pending")).toBeNull();
       expect(screen.getAllByRole("radio")).toHaveLength(14);
     }
@@ -266,7 +290,7 @@ describe("ProductCustomizer availability and selection", () => {
     (locale) => {
       render(ui("?customize=true", locale));
       const t = messages[locale].products.customization;
-      expect(screen.queryByTestId("personal-gallery")).toBeNull();
+      expect(screen.queryByTestId("personal-spin")).toBeNull();
       expect(document.querySelectorAll("img, canvas")).toHaveLength(0);
       expect(screen.getByText(t.configurationNote)).toBeTruthy();
       expect(screen.getByText(t.pending)).toBeTruthy();
@@ -417,7 +441,7 @@ describe("ProductCustomizer availability and selection", () => {
       ).toBeNull();
       expect(housingRadio("transparent").checked).toBe(true);
       expect(keycapRadio("inventor").checked).toBe(true);
-      expect(screen.getByTestId("personal-gallery")).toBeTruthy();
+      expect(screen.getByTestId("personal-spin")).toBeTruthy();
       expect(screen.queryByTestId("retail-spin")).toBeNull();
       expect(restoredRetro.isConnected).toBe(false);
 
@@ -486,12 +510,12 @@ describe("ProductCustomizer availability and selection", () => {
     render(ui("?housing=unknown&keycaps=personal-logo"));
     expect(housingRadio("transparent").checked).toBe(true);
     expect(keycapRadio("inventor").checked).toBe(true);
-    expect(screen.getByTestId("personal-gallery")).toBeTruthy();
+    expect(screen.getByTestId("personal-spin")).toBeTruthy();
     fireEvent.click(housingRadio("bone-white"));
     expect(screen.getByTestId("customization-pending")).toBeTruthy();
     expect(housingRadio("bone-white").checked).toBe(true);
     expect(keycapRadio("retro-programmer-retail").checked).toBe(true);
-    expect(screen.queryByTestId("personal-gallery")).toBeNull();
+    expect(screen.queryByTestId("personal-spin")).toBeNull();
     expect(document.querySelectorAll("img, canvas")).toHaveLength(0);
     expect(screen.getByTestId("customization-pairing-notice")).toBeTruthy();
   });
@@ -536,7 +560,7 @@ describe("ProductCustomizer availability and selection", () => {
     fireEvent.click(housingRadio("transparent"));
     await waitFor(() =>
       expect(
-        screen.getByTestId("personal-gallery").getAttribute("data-angle")
+        screen.getByTestId("personal-spin").getAttribute("data-angle")
       ).toBe("210")
     );
   });
@@ -638,7 +662,7 @@ describe("ProductCustomizer availability and selection", () => {
       );
       expect(housingRadio("transparent").checked).toBe(true);
       expect(keycapRadio("inventor").checked).toBe(true);
-      expect(screen.getByTestId("personal-gallery")).toBeTruthy();
+      expect(screen.getByTestId("personal-spin")).toBeTruthy();
       expect(window.history.length).toBe(length);
       let params = new URLSearchParams(window.location.search);
       expect(params.has("customize")).toBe(false);
@@ -674,7 +698,7 @@ describe("ProductCustomizer availability and selection", () => {
             .getAttribute("data-configuration")
         ).toBe("unsupported");
         expect(document.querySelectorAll("img, canvas")).toHaveLength(0);
-        expect(screen.queryByTestId("personal-gallery")).toBeNull();
+        expect(screen.queryByTestId("personal-spin")).toBeNull();
         cleanup();
       }
     }
@@ -685,7 +709,7 @@ describe("ProductCustomizer availability and selection", () => {
     fireEvent.click(keycapRadio("inventor"));
     expect(housingRadio("transparent").checked).toBe(true);
     expect(keycapRadio("inventor").checked).toBe(true);
-    expect(screen.getByTestId("personal-gallery")).toBeTruthy();
+    expect(screen.getByTestId("personal-spin")).toBeTruthy();
     expect(
       screen
         .getByTestId("customization-pairing-notice")
@@ -699,6 +723,6 @@ describe("ProductCustomizer availability and selection", () => {
     fireEvent.click(keycapRadio("pbtfans-wob-retail"));
     expect(housingRadio("ice-blue").checked).toBe(true);
     expect(keycapRadio("pbtfans-wob-retail").checked).toBe(true);
-    expect(screen.queryByTestId("personal-gallery")).toBeNull();
+    expect(screen.queryByTestId("personal-spin")).toBeNull();
   });
 });
