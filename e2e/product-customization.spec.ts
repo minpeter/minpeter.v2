@@ -450,6 +450,9 @@ async function expectCompactPicker(page: Page, messages: typeof en) {
     const bounds = await tile.boundingBox();
     expect(bounds?.width).toBeGreaterThanOrEqual(44);
     expect(bounds?.height).toBeGreaterThanOrEqual(44);
+    const imageBounds = await thumbnail.boundingBox();
+    expect(imageBounds?.width).toBeLessThan((bounds?.width ?? 0) * 0.81);
+    expect(imageBounds?.width).toBeGreaterThan((bounds?.width ?? 0) * 0.65);
   }
   await summary.focus();
   await summary.press("Enter");
