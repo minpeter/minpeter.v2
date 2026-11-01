@@ -1,5 +1,9 @@
 import { expect, test } from "@playwright/test";
 
+// The unprefixed Korean route uses normal next-intl language negotiation.
+// Explicit /en and /ja must still win over this browser preference.
+test.use({ locale: "ko-KR" });
+
 for (const locale of ["ko", "en", "ja"]) {
   test(`legacy product redirects preserve ${locale} selections and query`, async ({
     page,
