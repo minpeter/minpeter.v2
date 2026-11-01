@@ -398,7 +398,7 @@ describe("ProductCustomizer availability and selection", () => {
       expect(screen.getByText(t.configurationNote)).toBeTruthy();
       expect(screen.getByText(t.pending)).toBeTruthy();
       expect(screen.getByText(t.pendingDetail)).toBeTruthy();
-      expect(screen.getByText(t.kitQA)).toBeTruthy();
+      expect(screen.queryByText(t.kitQA)).toBeNull();
       expect(screen.getByText(t.approximation)).toBeTruthy();
       expect(
         within(
@@ -449,7 +449,7 @@ describe("ProductCustomizer availability and selection", () => {
       );
       expect(details.contains(screen.getByText(t.approximation))).toBe(true);
       expect(details.textContent).toContain("PLA Matte · 11103");
-      expect(details.textContent).toContain("NicePBT BoW (retail set)");
+      expect(details.textContent).toContain("NicePBT BoW");
       expect(
         document
           .querySelector("h2.store-custom-selection")
@@ -534,7 +534,7 @@ describe("ProductCustomizer availability and selection", () => {
           ?.getAttribute("data-selected")
       ).toBe("false");
       expect(screen.getByRole("heading").textContent).toBe(
-        `${t.housingNames["ice-blue"]} × Retro Programmer (retail set)`
+        `${t.housingNames["ice-blue"]} × Retro Programmer`
       );
       expect(
         screen.getByTestId("retail-spin").getAttribute("data-source")
@@ -574,7 +574,7 @@ describe("ProductCustomizer availability and selection", () => {
           ?.getAttribute("data-selected")
       ).toBe("true");
       expect(screen.getByRole("heading").textContent).toBe(
-        `${t.housingNames["ice-blue"]} × NicePBT BoW (retail set)`
+        `${t.housingNames["ice-blue"]} × NicePBT BoW`
       );
       expect(
         screen.getByTestId("retail-spin").getAttribute("data-source")

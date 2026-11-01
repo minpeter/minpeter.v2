@@ -20,11 +20,11 @@ const SR_ONLY = /sr-only/;
 // Independent display expectations: importing the app model here would pull its bundler-only JSON import into Node.
 const KEYCAP_FULL_NAMES: Record<string, string> = {
   inventor: "Inventor",
-  "nicepbt-bow-retail": "NicePBT BoW (retail set)",
+  "nicepbt-bow-retail": "NicePBT BoW",
   "nicepbt-noel-latin-retail": "NicePBT Noel — Latin",
   "nicepbt-purple-chonkers-retail": "NicePBT Purple Chonkers — Text Keys",
   "pbtfans-wob-retail": "PBTfans WoB — Base Text Modifiers",
-  "retro-programmer-retail": "Retro Programmer (retail set)",
+  "retro-programmer-retail": "Retro Programmer",
 };
 const HOUSING_SKUS: Record<string, string> = {
   "ash-gray": "11102",

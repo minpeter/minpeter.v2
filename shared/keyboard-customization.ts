@@ -32,7 +32,7 @@ export const KEYCAP_OPTIONS = [
   {
     compatibility: "unverified",
     id: "retro-programmer-retail",
-    name: "Retro Programmer (retail set)",
+    name: "Retro Programmer",
     personalLogos: false,
   },
   {
@@ -40,7 +40,7 @@ export const KEYCAP_OPTIONS = [
     id: "nicepbt-bow-retail",
     legendMethod: "dye-sublimation",
     material: "PBT",
-    name: "NicePBT BoW (retail set)",
+    name: "NicePBT BoW",
     personalLogos: false,
     profile: "Cherry",
     sourceUrl: "https://cannonkeys.com/products/nicepbt-bow",

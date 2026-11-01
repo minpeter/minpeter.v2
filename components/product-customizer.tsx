@@ -425,7 +425,6 @@ export function ProductCustomizer(props: ProductGalleryProps) {
                 )}
               </p>
             ) : null}
-            {personal || unsupported ? null : <p>{t("kitQA")}</p>}
 
             <div className="store-custom-sources store-label">
               {"sourceUrl" in selectedHousing ? (
