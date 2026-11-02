@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useTranslations } from "next-intl";
 import {
   type ChangeEvent,
@@ -11,6 +10,7 @@ import {
   useState,
 } from "react";
 
+import { KeycapThumbnail } from "@/components/keycap-thumbnail";
 import type { ProductGalleryProps } from "@/components/product-gallery";
 import { ProductSpin } from "@/components/product-spin";
 import {
@@ -92,23 +92,25 @@ function ValidatedPreview({
           sizes="(min-width: 64rem) 60vw, 92vw"
           spin={spin}
         />
+        <div className="store-custom-feedback">
+          <p
+            aria-live="polite"
+            className={loadState === "ready" ? "sr-only" : "store-label"}
+            role="status"
+          >
+            {t(statusKey[loadState])}
+          </p>
+          {loadState === "error" || loadState === "partial" ? (
+            <button
+              className="store-button store-label"
+              onClick={retry}
+              type="button"
+            >
+              {t("retry")}
+            </button>
+          ) : null}
+        </div>
       </div>
-      <p
-        aria-live="polite"
-        className="store-label store-custom-status"
-        role="status"
-      >
-        {t(statusKey[loadState])}
-      </p>
-      {loadState === "error" || loadState === "partial" ? (
-        <button
-          className="store-button store-label"
-          onClick={retry}
-          type="button"
-        >
-          {t("retry")}
-        </button>
-      ) : null}
     </div>
   );
 }
@@ -140,7 +142,10 @@ function SelectionPreview({
   const t = useTranslations("products.customization");
   if (personal) {
     return (
-      <section aria-label={gallery.labels.media} className="store-media">
+      <section
+        aria-label={gallery.labels.media}
+        className="store-media store-custom-personal"
+      >
         <div className="store-media-stage">
           <ProductSpin
             alt={gallery.labels.spin}
@@ -304,7 +309,7 @@ export function ProductCustomizer(props: ProductGalleryProps) {
         {pairing?.signature === `${selection.housing}:${selection.keycaps}` ? (
           <p
             aria-live="polite"
-            className="store-prose store-custom-pairing"
+            className="sr-only"
             data-testid="customization-pairing-notice"
             role="status"
           >
@@ -364,15 +369,7 @@ export function ProductCustomizer(props: ProductGalleryProps) {
                   type="radio"
                   value={option.id}
                 />
-                <Image
-                  alt=""
-                  aria-hidden="true"
-                  className="store-keycap-thumbnail"
-                  height={256}
-                  src={`/assets/products/maru60/keycaps/v1/${option.id}.webp`}
-                  unoptimized
-                  width={256}
-                />
+                <KeycapThumbnail id={option.id} />
               </label>
             ))}
           </div>
@@ -423,7 +420,6 @@ export function ProductCustomizer(props: ProductGalleryProps) {
                 )}
               </p>
             ) : null}
-            {personal || unsupported ? null : <p>{t("kitQA")}</p>}
 
             <div className="store-custom-sources store-label">
               {"sourceUrl" in selectedHousing ? (

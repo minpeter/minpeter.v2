@@ -327,6 +327,11 @@ describe("ProductCustomizer availability and selection", () => {
           .querySelector(".store-custom-preview")
           ?.getAttribute("data-geometry-revision")
       ).toBe("assembled-draft");
+      expect(
+        document.querySelector(
+          ".store-media-stage .store-custom-feedback [role=status]"
+        )
+      ).toBeTruthy();
       const before = screen.getByTestId("retail-spin");
       fixtures.candidates = [
         {
@@ -398,7 +403,7 @@ describe("ProductCustomizer availability and selection", () => {
       expect(screen.getByText(t.configurationNote)).toBeTruthy();
       expect(screen.getByText(t.pending)).toBeTruthy();
       expect(screen.getByText(t.pendingDetail)).toBeTruthy();
-      expect(screen.getByText(t.kitQA)).toBeTruthy();
+      expect(screen.queryByText(t.kitQA)).toBeNull();
       expect(screen.getByText(t.approximation)).toBeTruthy();
       expect(
         within(
@@ -449,7 +454,7 @@ describe("ProductCustomizer availability and selection", () => {
       );
       expect(details.contains(screen.getByText(t.approximation))).toBe(true);
       expect(details.textContent).toContain("PLA Matte · 11103");
-      expect(details.textContent).toContain("NicePBT BoW (retail set)");
+      expect(details.textContent).toContain("NicePBT BoW");
       expect(
         document
           .querySelector("h2.store-custom-selection")
@@ -478,9 +483,10 @@ describe("ProductCustomizer availability and selection", () => {
         expect(tile?.textContent?.trim()).toBe("");
         expect(tile?.getAttribute("title")).toBe(name);
         const thumbnail = tile?.querySelector("img");
-        expect(thumbnail?.getAttribute("src")).toBe(
-          `/assets/products/maru60/keycaps/v1/${id}.webp`
-        );
+        expect(
+          new URL(thumbnail?.getAttribute("src") ?? "", window.location.href)
+            .pathname
+        ).toBe(`/assets/products/maru60/keycaps/v1/${id}.webp`);
         expect(thumbnail?.getAttribute("alt")).toBe("");
         expect(
           radio.closest("label")?.querySelectorAll("p, small, dl")
@@ -534,7 +540,7 @@ describe("ProductCustomizer availability and selection", () => {
           ?.getAttribute("data-selected")
       ).toBe("false");
       expect(screen.getByRole("heading").textContent).toBe(
-        `${t.housingNames["ice-blue"]} × Retro Programmer (retail set)`
+        `${t.housingNames["ice-blue"]} × Retro Programmer`
       );
       expect(
         screen.getByTestId("retail-spin").getAttribute("data-source")
@@ -574,7 +580,7 @@ describe("ProductCustomizer availability and selection", () => {
           ?.getAttribute("data-selected")
       ).toBe("true");
       expect(screen.getByRole("heading").textContent).toBe(
-        `${t.housingNames["ice-blue"]} × NicePBT BoW (retail set)`
+        `${t.housingNames["ice-blue"]} × NicePBT BoW`
       );
       expect(
         screen.getByTestId("retail-spin").getAttribute("data-source")
@@ -648,6 +654,9 @@ describe("ProductCustomizer availability and selection", () => {
         document.querySelector(".store-custom-preview") as HTMLElement
       ).getByRole("status").textContent
     ).toBe(en.products.customization.ready);
+    expect(
+      document.querySelector(".store-custom-preview [role=status]")?.className
+    ).toBe("sr-only");
     fireEvent.click(housingRadio("charcoal"));
     await waitFor(() =>
       expect(
@@ -695,6 +704,11 @@ describe("ProductCustomizer availability and selection", () => {
         document.querySelector(".store-custom-preview") as HTMLElement
       ).getByRole("status").textContent
     ).toBe(en.products.customization.loadError);
+    expect(
+      screen
+        .getByRole("button", { name: en.products.customization.retry })
+        .closest(".store-media-stage")
+    ).toBeTruthy();
     fireEvent.click(
       screen.getByRole("button", { name: en.products.customization.retry })
     );
@@ -722,6 +736,9 @@ describe("ProductCustomizer availability and selection", () => {
         document.querySelector(".store-custom-preview") as HTMLElement
       ).getByRole("status").textContent
     ).toBe(en.products.customization.ready);
+    expect(
+      document.querySelector(".store-custom-preview [role=status]")?.className
+    ).toBe("sr-only");
     expect(
       screen.queryByRole("button", { name: en.products.customization.retry })
     ).toBeNull();
@@ -833,6 +850,9 @@ describe("ProductCustomizer availability and selection", () => {
         .getByTestId("customization-pairing-notice")
         .getAttribute("aria-live")
     ).toBe("polite");
+    expect(screen.getByTestId("customization-pairing-notice").className).toBe(
+      "sr-only"
+    );
     fireEvent.click(housingRadio("ice-blue"));
     expect(housingRadio("ice-blue").checked).toBe(true);
     expect(keycapRadio("nicepbt-bow-retail").checked).toBe(true);

@@ -1,0 +1,11 @@
+{
+  "source": "public/assets/products/maru60/assembled/v1/transparent--inventor/frame_000.webp",
+  "sourceSha256": "26c6fa23a83124cb5a7a4c5cf9dc6196f0c9f42ceffb7e139d765b0cd4457e6b",
+  "outline": {
+    "width": 1024,
+    "height": 1536,
+    "polygons": [
+      "331,199 943,362 954,366 960,375 712,1311 707,1328 698,1336 678,1334 81,1174 70,1170 64,1161 315,214 322,202"
+    ]
+  }
+}

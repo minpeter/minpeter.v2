@@ -20,11 +20,11 @@ const SR_ONLY = /sr-only/;
 // Independent display expectations: importing the app model here would pull its bundler-only JSON import into Node.
 const KEYCAP_FULL_NAMES: Record<string, string> = {
   inventor: "Inventor",
-  "nicepbt-bow-retail": "NicePBT BoW (retail set)",
+  "nicepbt-bow-retail": "NicePBT BoW",
   "nicepbt-noel-latin-retail": "NicePBT Noel — Latin",
   "nicepbt-purple-chonkers-retail": "NicePBT Purple Chonkers — Text Keys",
   "pbtfans-wob-retail": "PBTfans WoB — Base Text Modifiers",
-  "retro-programmer-retail": "Retro Programmer (retail set)",
+  "retro-programmer-retail": "Retro Programmer",
 };
 const HOUSING_SKUS: Record<string, string> = {
   "ash-gray": "11102",
@@ -284,6 +284,9 @@ async function expectReadyHistoryState(
   await expect(
     page.locator(".store-custom-preview").getByRole("status")
   ).toHaveText(labels.ready);
+  await expect(
+    page.locator(".store-custom-preview").getByRole("status")
+  ).toHaveClass("sr-only");
   const source = combination.frames[11]?.src;
   if (!source) {
     throw new Error(`Missing 330 degree manifest frame: ${combination.id}`);
@@ -437,9 +440,9 @@ async function expectCompactPicker(page: Page, messages: typeof en) {
     await expect(tile).toHaveCSS("border-top-width", "0px");
     await expect(tile).toHaveCSS("box-shadow", "none");
     const thumbnail = tile.locator("img");
-    await expect(thumbnail).toHaveAttribute(
+    await expect(thumbnail).toHaveJSProperty(
       "src",
-      `/assets/products/maru60/keycaps/v1/${id}.webp`
+      new URL(`/assets/products/maru60/keycaps/v1/${id}.webp`, page.url()).href
     );
     await expect(thumbnail).toBeVisible();
     await expect
@@ -671,6 +674,9 @@ for (const { locale, prefix, messages } of LOCALES) {
         await expect(
           page.getByTestId("customization-pairing-notice")
         ).toHaveText(labels.pairedPersonal);
+        await expect(
+          page.getByTestId("customization-pairing-notice")
+        ).toHaveClass("sr-only");
         await page.goBack();
         await expectHistorySelection(
           page,
@@ -926,6 +932,9 @@ for (const { locale, prefix, messages } of LOCALES) {
         await expect(
           page.locator(".store-custom-preview").getByRole("status")
         ).toHaveText(labels.ready);
+        await expect(
+          page.locator(".store-custom-preview").getByRole("status")
+        ).toHaveClass("sr-only");
         await expect(spin.locator("img")).toHaveCount(0);
         await expect(spin.locator("canvas")).toHaveCount(1);
         await expect(spin.locator("canvas")).toHaveCSS("object-fit", "contain");
