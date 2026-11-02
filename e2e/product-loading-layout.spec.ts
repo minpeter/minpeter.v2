@@ -78,105 +78,107 @@ for (const viewport of [
   { height: 844, locale: "ko", width: 390 },
   { height: 844, locale: "ja", width: 390 },
 ]) {
-  test(`loading, failure, retry and personal selection keep controls stable at ${viewport.width}px ${viewport.locale ?? "en"}`, async ({
-    page,
-  }, testInfo) => {
-    const messages = { en, ja, ko }[
-      (viewport.locale ?? "en") as "ko" | "ja" | "en"
-    ];
-    const labels = messages.products.customization;
-    const prefix =
-      viewport.locale === "ko" ? "" : `/${viewport.locale ?? "en"}`;
-    await page.setViewportSize(viewport);
-    await page.setExtraHTTPHeaders({
-      "Accept-Language": viewport.locale ?? "en",
+  test.describe(`${viewport.width}px ${viewport.locale ?? "en"} loading layout`, () => {
+    test.use({ locale: viewport.locale ?? "en" });
+    test(`loading, failure, retry and personal selection keep controls stable at ${viewport.width}px ${viewport.locale ?? "en"}`, async ({
+      page,
+    }, testInfo) => {
+      const messages = { en, ja, ko }[
+        (viewport.locale ?? "en") as "ko" | "ja" | "en"
+      ];
+      const labels = messages.products.customization;
+      const prefix =
+        viewport.locale === "ko" ? "" : `/${viewport.locale ?? "en"}`;
+      await page.setViewportSize(viewport);
+      await page.goto(
+        `${prefix}/products/maru60?housing=ash-gray&keycaps=nicepbt-bow-retail`
+      );
+      const status = page.locator(".store-custom-preview").getByRole("status");
+      await expect(status).toHaveText(labels.ready, { timeout: 15_000 });
+      const before = await layout(page);
+      const phases = {
+        before,
+        error: {},
+        loading: {},
+        personal: {},
+        retried: {},
+      };
+      await page.screenshot({
+        fullPage: true,
+        path: testInfo.outputPath("before.png"),
+      });
+      let release: () => void = () => undefined;
+      const pending = new Promise<void>((resolve) => {
+        release = resolve;
+      });
+      await page.route(
+        "**/assembled/**/charcoal--nicepbt-bow-retail/**",
+        async (route) => {
+          await pending;
+          await route.abort();
+        }
+      );
+      await page
+        .locator("label")
+        .filter({
+          has: page.locator('input[name="housing"][value="charcoal"]'),
+        })
+        .click();
+      await expect(status).toHaveText(labels.loading);
+      phases.loading = await layout(page);
+      await expectFeedbackInsideStage(page);
+      expect(await layout(page)).toEqual(before);
+      await page.screenshot({
+        fullPage: true,
+        path: testInfo.outputPath("loading.png"),
+      });
+      release();
+      await expect(status).toHaveText(labels.loadError);
+      phases.error = await layout(page);
+      await expectFeedbackInsideStage(page);
+      expect(await layout(page)).toEqual(before);
+      await page.screenshot({
+        fullPage: true,
+        path: testInfo.outputPath("error.png"),
+      });
+      await page.unroute("**/assembled/**/charcoal--nicepbt-bow-retail/**");
+      await page.getByRole("button", { name: labels.retry }).click();
+      await expect(status).toHaveText(labels.ready, { timeout: 15_000 });
+      phases.retried = await layout(page);
+      expect(await layout(page)).toEqual(before);
+      await page
+        .locator("label")
+        .filter({
+          has: page.locator('input[name="housing"][value="transparent"]'),
+        })
+        .click();
+      await expect(page.getByTestId("product-customizer")).toHaveAttribute(
+        "data-configuration",
+        "personal"
+      );
+      expect(await layout(page)).toEqual(before);
+      await expect(
+        page.getByTestId("product-spin").locator("canvas")
+      ).toBeVisible({ timeout: 15_000 });
+      expect(await layout(page)).toEqual(before);
+      phases.personal = await layout(page);
+      await page.screenshot({
+        fullPage: true,
+        path: testInfo.outputPath("personal.png"),
+      });
+      await page.goBack();
+      await expect(status).toHaveText(labels.ready, { timeout: 15_000 });
+      const after = await layout(page);
+      expect(after).toEqual(before);
+      await page.screenshot({
+        fullPage: true,
+        path: testInfo.outputPath("ready.png"),
+      });
+      writeFileSync(
+        testInfo.outputPath("layout.json"),
+        JSON.stringify({ after, ...phases, viewport }, null, 2)
+      );
     });
-    await page.goto(
-      `${prefix}/products/maru60?housing=ash-gray&keycaps=nicepbt-bow-retail`
-    );
-    const status = page.locator(".store-custom-preview").getByRole("status");
-    await expect(status).toHaveText(labels.ready, { timeout: 15_000 });
-    const before = await layout(page);
-    const phases = {
-      before,
-      error: {},
-      loading: {},
-      personal: {},
-      retried: {},
-    };
-    await page.screenshot({
-      fullPage: true,
-      path: testInfo.outputPath("before.png"),
-    });
-    let release: () => void = () => undefined;
-    const pending = new Promise<void>((resolve) => {
-      release = resolve;
-    });
-    await page.route(
-      "**/assembled/**/charcoal--nicepbt-bow-retail/**",
-      async (route) => {
-        await pending;
-        await route.abort();
-      }
-    );
-    await page
-      .locator("label")
-      .filter({ has: page.locator('input[name="housing"][value="charcoal"]') })
-      .click();
-    await expect(status).toHaveText(labels.loading);
-    phases.loading = await layout(page);
-    await expectFeedbackInsideStage(page);
-    expect(await layout(page)).toEqual(before);
-    await page.screenshot({
-      fullPage: true,
-      path: testInfo.outputPath("loading.png"),
-    });
-    release();
-    await expect(status).toHaveText(labels.loadError);
-    phases.error = await layout(page);
-    await expectFeedbackInsideStage(page);
-    expect(await layout(page)).toEqual(before);
-    await page.screenshot({
-      fullPage: true,
-      path: testInfo.outputPath("error.png"),
-    });
-    await page.unroute("**/assembled/**/charcoal--nicepbt-bow-retail/**");
-    await page.getByRole("button", { name: labels.retry }).click();
-    await expect(status).toHaveText(labels.ready, { timeout: 15_000 });
-    phases.retried = await layout(page);
-    expect(await layout(page)).toEqual(before);
-    await page
-      .locator("label")
-      .filter({
-        has: page.locator('input[name="housing"][value="transparent"]'),
-      })
-      .click();
-    await expect(page.getByTestId("product-customizer")).toHaveAttribute(
-      "data-configuration",
-      "personal"
-    );
-    expect(await layout(page)).toEqual(before);
-    await expect(
-      page.getByTestId("product-spin").locator("canvas")
-    ).toBeVisible({ timeout: 15_000 });
-    expect(await layout(page)).toEqual(before);
-    phases.personal = await layout(page);
-    await page.screenshot({
-      fullPage: true,
-      path: testInfo.outputPath("personal.png"),
-    });
-    await page.goBack();
-    await expect(status).toHaveText(labels.ready, { timeout: 15_000 });
-    const after = await layout(page);
-    expect(after).toEqual(before);
-    await page.screenshot({
-      fullPage: true,
-      path: testInfo.outputPath("ready.png"),
-    });
-    writeFileSync(
-      testInfo.outputPath("layout.json"),
-      JSON.stringify({ after, ...phases, viewport }, null, 2)
-    );
   });
 }
 
