@@ -328,6 +328,10 @@ for (const width of [390, 1023, 1440]) {
     });
     await page.setViewportSize({ height: 360, width });
     await page.goto("/en/products");
+    await expect(page.locator("html")).toHaveAttribute(
+      "data-scroll-behavior",
+      "smooth"
+    );
     const card = page.getByTestId("product-link-maru60");
     await expect(
       card.getByTestId("product-spin").locator("canvas")
@@ -424,3 +428,84 @@ for (const width of [390, 1023, 1440]) {
     );
   });
 }
+
+test("records initial spin transfer and cached catalog-to-detail reuse", async ({
+  page,
+}, testInfo) => {
+  const requests: string[] = [];
+  page.on("request", (request) => {
+    if (
+      request.url().includes("/assets/products/maru60/assembled/") &&
+      request.url().includes("/frame_")
+    ) {
+      requests.push(request.url());
+    }
+  });
+  await page.goto("/en/products");
+  const card = page.getByTestId("product-link-maru60");
+  const spin = card.getByTestId("product-spin");
+  await expect(spin.locator("canvas")).toBeVisible({ timeout: 15_000 });
+  const firstCanvasVisibleMs = await page.evaluate(() => performance.now());
+  const requestsAtFirstCanvas = [...requests];
+  await expect(spin).toHaveAttribute("data-loaded-count", "12", {
+    timeout: 20_000,
+  });
+  const resources = await page.evaluate(() =>
+    performance
+      .getEntriesByType("resource")
+      .filter(
+        (entry) =>
+          entry.name.includes("/assets/products/maru60/assembled/") &&
+          entry.name.includes("/frame_")
+      )
+      .map((entry) => {
+        const resource = entry as PerformanceResourceTiming;
+        return {
+          duration: resource.duration,
+          encodedBodySize: resource.encodedBodySize,
+          initiatorType: resource.initiatorType,
+          responseEnd: resource.responseEnd,
+          startTime: resource.startTime,
+          transferSize: resource.transferSize,
+          url: resource.name,
+        };
+      })
+  );
+  const loadedRequests = requests.length;
+  const navigationStart = await page.evaluate(() => performance.now());
+  await card.click();
+  const detail = page.getByTestId("product-detail").filter({ visible: true });
+  await expect(
+    detail.getByTestId("product-spin").locator("canvas")
+  ).toBeVisible({ timeout: 15_000 });
+  const cachedCanvasVisibleMs =
+    (await page.evaluate(() => performance.now())) - navigationStart;
+  writeFileSync(
+    testInfo.outputPath("spin-loading-profile.json"),
+    JSON.stringify(
+      {
+        cachedCanvasVisibleMs,
+        completedInitialRequests: loadedRequests,
+        duplicateRequests: requests.filter(
+          (url, index) => requests.indexOf(url) !== index
+        ),
+        encodedBytes: resources.reduce(
+          (sum, entry) => sum + entry.encodedBodySize,
+          0
+        ),
+        firstCanvasVisibleMs,
+        note: "Chromium production localhost sample; canvas-visible timing, not LCP or a field benchmark.",
+        requestsAfterCachedNavigation: requests.length,
+        requestsAtFirstCanvas,
+        resources,
+        transferBytes: resources.reduce(
+          (sum, entry) => sum + entry.transferSize,
+          0
+        ),
+      },
+      null,
+      2
+    )
+  );
+  expect(resources.length).toBeGreaterThan(0);
+});
