@@ -137,6 +137,50 @@ describe("ProductSpin progressive canvas", () => {
     vi.unstubAllGlobals();
   });
 
+  it("shows the current-angle outline while uncached and removes it after pixels arrive", () => {
+    const outlines = Array.from({ length: 12 }, (_, index) => ({
+      height: 1536,
+      polygons: [`0,0 ${index + 1},0 0,10`],
+      width: 1024,
+    }));
+    render(
+      <ProductSpin
+        alt="Loading shape"
+        initialAngle={90}
+        loadingOutlines={outlines}
+        sizes="100vw"
+        spin={{ ...spin, frameCount: 12 }}
+      />
+    );
+    expect(
+      screen.getByTestId("product-spin-loading").getAttribute("aria-hidden")
+    ).toBe("true");
+    expect(
+      screen
+        .getByTestId("product-silhouette")
+        .querySelector("polygon")
+        ?.getAttribute("points")
+    ).toBe(outlines[3].polygons[0]);
+    fireEvent.focus(screen.getByRole("slider"));
+    arrive(3);
+    expect(screen.queryByTestId("product-spin-loading")).toBeNull();
+  });
+
+  it("skips the outline for decoded cache entries and stops it on terminal errors", () => {
+    cache.loader.readyCount = 1;
+    const outlines = [{ height: 10, polygons: ["0,0 10,0 0,10"], width: 10 }];
+    const { rerender } = render(
+      <ProductSpin loadingOutlines={outlines} sizes="100vw" spin={spin} />
+    );
+    expect(screen.queryByTestId("product-spin-loading")).toBeNull();
+    cache.loader.readyCount = 0;
+    cache.loader.loadingComplete = true;
+    rerender(
+      <ProductSpin loadingOutlines={outlines} sizes="100vw" spin={spin} />
+    );
+    expect(screen.queryByTestId("product-spin-loading")).toBeNull();
+  });
+
   it("reports partial availability without discarding the decoded preview and recovers to ready", () => {
     const onLoadStateChange = vi.fn();
     render(

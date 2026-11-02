@@ -616,6 +616,30 @@ test("compares first-frame-only preload with a cold no-hint baseline", async ({
         // biome-ignore lint/performance/noAwaitInLoops: Isolate cold A/B samples; concurrent loads contaminate timing.
         const context = await browser.newContext();
         const page = await context.newPage();
+        await page.addInitScript(() => {
+          const observeFrame = () => {
+            const canvas = document.querySelector(".store-card canvas");
+            if (canvas) {
+              const style = getComputedStyle(canvas);
+              const rect = canvas.getBoundingClientRect();
+              if (
+                style.visibility === "visible" &&
+                style.display !== "none" &&
+                rect.width > 0 &&
+                rect.height > 0
+              ) {
+                Reflect.set(
+                  window,
+                  "__maruFirstCanvasVisibleMs",
+                  performance.now()
+                );
+                return;
+              }
+            }
+            requestAnimationFrame(observeFrame);
+          };
+          requestAnimationFrame(observeFrame);
+        });
         const frameRequests: string[] = [];
         page.on("request", (request) => {
           if (
@@ -667,8 +691,15 @@ test("compares first-frame-only preload with a cold no-hint baseline", async ({
           .getByTestId("product-link-maru60")
           .getByTestId("product-spin");
         await expect(spin.locator("canvas")).toBeVisible({ timeout: 20_000 });
-        const firstCanvasVisibleMs = await page.evaluate(() =>
-          performance.now()
+        await expect
+          .poll(() =>
+            page.evaluate(() =>
+              Reflect.get(window, "__maruFirstCanvasVisibleMs")
+            )
+          )
+          .toBeGreaterThan(0);
+        const firstCanvasVisibleMs = await page.evaluate(
+          () => Reflect.get(window, "__maruFirstCanvasVisibleMs") as number
         );
         await expect(spin).toHaveAttribute("data-loaded-count", "12", {
           timeout: 20_000,
@@ -720,7 +751,7 @@ test("compares first-frame-only preload with a cold no-hint baseline", async ({
           testInfo.outputPath("first-frame-preload-ab.json"),
           JSON.stringify(
             {
-              note: "Cold production localhost samples; delayed arm adds 250ms to JS and 150ms to frames. Canvas-visible sampled timing, not LCP or field data.",
+              note: "Cold production localhost samples; delayed arm adds 250ms to JS and 150ms to frames. First visible canvas is timestamped in requestAnimationFrame from document start, independently of DOMContentLoaded; not LCP or field data.",
               samples,
             },
             null,

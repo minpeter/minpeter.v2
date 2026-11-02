@@ -6,6 +6,8 @@ import { afterEach, expect, it } from "vitest";
 
 import manifest from "@/shared/maru60-personal-manifest.json";
 import silhouette from "@/shared/maru60-silhouette.json";
+import spinOutlines from "@/shared/maru60-spin-silhouettes.json";
+import spinSources from "@/shared/maru60-spin-silhouettes.sources.json";
 import { ProductMediaSkeleton } from "./product-media-skeleton";
 
 afterEach(cleanup);
@@ -50,4 +52,19 @@ it("keeps the reserved frame as a safe fallback when no transparent outline is a
   expect(
     screen.getByTestId("product-media-skeleton").querySelector("img,canvas,svg")
   ).toBeNull();
+});
+
+it("keeps 12 lightweight outer angle envelopes tied to the exact source frames", () => {
+  expect(Object.keys(spinOutlines)).toHaveLength(12);
+  expect(JSON.stringify(spinOutlines).length).toBeLessThan(3000);
+  for (const [key, shape] of Object.entries(spinOutlines)) {
+    const source = spinSources[key as keyof typeof spinSources];
+    expect(
+      createHash("sha256").update(readFileSync(source.source)).digest("hex")
+    ).toBe(source.sourceSha256);
+    expect(shape.width).toBe(1024);
+    expect(shape.height).toBe(1536);
+    expect(shape.polygons).toHaveLength(1);
+    expect(shape.polygons[0].split(" ").length).toBeLessThan(20);
+  }
 });

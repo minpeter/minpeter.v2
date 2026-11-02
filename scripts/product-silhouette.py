@@ -1,8 +1,9 @@
 """Generate solid outer product outlines offline (Python 3 + Pillow).
 
-Usage: python3 scripts/product-silhouette.py INPUT_FILE_OR_DIRECTORY OUTPUT [--tolerance 3]
+Usage: python3 scripts/product-silhouette.py INPUT_FILE_OR_DIRECTORY OUTPUT [--tolerance 3] [--convex]
 Keeps the full image canvas: never crop, rotate, or infer opaque backgrounds.
 Interior holes are deliberately filled. Concave/disconnected outer shapes remain.
+Optional --convex envelopes each component for simple solid keyboard bodies.
 The browser receives a few SVG points, not the source image or image processing.
 """
 import argparse
@@ -30,7 +31,21 @@ def simplify(points, tolerance):
             + simplify(points[split:], tolerance))
 
 
-def outline(image, tolerance=3):
+def convex_hull(points):
+    points = sorted(set(points))
+    def cross(a, b, c):
+        return (b[0]-a[0])*(c[1]-a[1])-(b[1]-a[1])*(c[0]-a[0])
+    def half(sequence):
+        hull = []
+        for point in sequence:
+            while len(hull) >= 2 and cross(hull[-2], hull[-1], point) <= 0:
+                hull.pop()
+            hull.append(point)
+        return hull[:-1]
+    return half(points) + half(reversed(points))
+
+
+def outline(image, tolerance=3, convex=False):
     alpha = image.convert("RGBA").getchannel("A")
     if alpha.getextrema() in ((255, 255), (0, 0)):
         return None  # Explicit outline or reserved plain placeholder, never segmentation.
@@ -72,6 +87,8 @@ def outline(image, tolerance=3):
         # Clockwise loops are outer contours; reverse loops are interior holes.
         if area < width * height * .001:
             continue
+        if convex:
+            loop = convex_hull(loop)
         split = max(range(len(loop)), key=lambda i: math.dist(loop[i], loop[0]))
         points = (simplify(loop[:split + 1], tolerance)[:-1]
                   + simplify(loop[split:] + loop[:1], tolerance)[:-1])
@@ -84,12 +101,13 @@ if __name__ == "__main__":
     parser.add_argument("input", type=Path)
     parser.add_argument("output", type=Path)
     parser.add_argument("--tolerance", type=float, default=3)
+    parser.add_argument("--convex", action="store_true")
     args = parser.parse_args()
     def entry(source):
         return {
             "source": source.as_posix(),
             "sourceSha256": hashlib.sha256(source.read_bytes()).hexdigest(),
-            "outline": outline(Image.open(source), args.tolerance),
+            "outline": outline(Image.open(source), args.tolerance, args.convex),
         }
 
     if args.input.is_dir():
