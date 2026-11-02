@@ -3,8 +3,9 @@ import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { cleanup, render, screen } from "@testing-library/react";
 import { afterEach, expect, it } from "vitest";
-
 import manifest from "@/shared/maru60-personal-manifest.json";
+import retailOutlines from "@/shared/maru60-retail-silhouettes.json";
+import retailSources from "@/shared/maru60-retail-silhouettes.sources.json";
 import silhouette from "@/shared/maru60-silhouette.json";
 import spinOutlines from "@/shared/maru60-spin-silhouettes.json";
 import spinSources from "@/shared/maru60-spin-silhouettes.sources.json";
@@ -21,8 +22,8 @@ it("uses a solid outer contour aligned to the default frame, with no interior ho
   expect(silhouette.outline.width).toBe(manifest.frames[0].width);
   expect(silhouette.outline.height).toBe(manifest.frames[0].height);
   expect(silhouette.outline.polygons).toHaveLength(1);
-  expect(silhouette.outline.polygons[0].split(" ").length).toBeLessThan(20);
-  expect(JSON.stringify(silhouette.outline).length).toBeLessThan(256);
+  expect(silhouette.outline.polygons[0].split(" ").length).toBeLessThan(32);
+  expect(JSON.stringify(silhouette.outline).length).toBeLessThan(400);
   render(
     <ProductMediaSkeleton
       className="aspect-[2/3]"
@@ -65,6 +66,22 @@ it("keeps 12 lightweight outer angle envelopes tied to the exact source frames",
     expect(shape.width).toBe(1024);
     expect(shape.height).toBe(1536);
     expect(shape.polygons).toHaveLength(1);
-    expect(shape.polygons[0].split(" ").length).toBeLessThan(20);
+    expect(shape.polygons[0].split(" ").length).toBeLessThan(32);
+  }
+});
+
+it("uses opaque retail contours instead of the smaller transparent side profile", () => {
+  expect(silhouette.outline).toEqual(spinOutlines.frame_000);
+  expect(retailOutlines.frame_090.polygons).not.toEqual(
+    spinOutlines.frame_090.polygons
+  );
+  expect(JSON.stringify(retailOutlines).length).toBeLessThan(3000);
+  for (const [key, shape] of Object.entries(retailOutlines)) {
+    const source = retailSources[key as keyof typeof retailSources];
+    expect(
+      createHash("sha256").update(readFileSync(source.source)).digest("hex")
+    ).toBe(source.sourceSha256);
+    expect(shape.polygons).toHaveLength(1);
+    expect(shape.polygons[0].split(" ").length).toBeLessThan(32);
   }
 });

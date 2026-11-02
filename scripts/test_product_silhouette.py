@@ -35,3 +35,24 @@ class OutlineTests(unittest.TestCase):
         draw.rectangle((10, 10, 30, 80), fill="white")
         draw.rectangle((60, 10, 90, 80), fill="white")
         self.assertEqual(len(module.outline(image, 1)["polygons"]), 2)
+
+
+class Maru60AssetAlignmentTests(unittest.TestCase):
+    def test_every_variant_angle_matches_outline_support_bounds(self):
+        import json
+        root = Path(__file__).resolve().parent.parent
+        shapes = json.loads((root / "shared/maru60-spin-silhouettes.json").read_text())
+        retail = json.loads((root / "shared/maru60-retail-silhouettes.json").read_text())
+        frames = list((root / "public/assets/products/maru60/assembled/v1").glob("*/*.webp"))
+        self.assertGreaterEqual(len(frames), 432)
+        for source in frames:
+            with self.subTest(frame=str(source)):
+                image = Image.open(source)
+                alpha = image.getchannel("A").point(lambda a: 255 if a >= 128 else 0)
+                family = shapes if source.parent.name == "transparent--inventor" else retail
+                points = [tuple(map(int, p.split(","))) for p in family[source.stem]["polygons"][0].split()]
+                bounds = (min(x for x,y in points), min(y for x,y in points), max(x for x,y in points), max(y for x,y in points))
+                # Different material alpha antialiasing differs by one source pixel.
+                # The canonical source itself must match exactly; never allow the old 3px inset.
+                limit = 0 if source.parent.name in ("transparent--inventor", "bone-white--nicepbt-bow-retail") else 1
+                self.assertLessEqual(max(abs(a-b) for a,b in zip(bounds, alpha.getbbox())), limit)

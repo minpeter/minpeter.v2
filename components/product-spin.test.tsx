@@ -36,6 +36,7 @@ const cache = vi.hoisted(() => {
     getSnapshot: () => state.version,
     getSource: vi.fn<(index: number) => Blob | undefined>(() => undefined),
     hasFailures: false,
+    hasFrame: (index: number) => frames.has(index),
     loadingComplete: false,
     nearestFrame: vi.fn((target: number) => {
       let nearest: { index: number; bitmap: ImageBitmap } | null = null;
@@ -167,12 +168,13 @@ describe("ProductSpin progressive canvas", () => {
   });
 
   it("skips the outline for decoded cache entries and stops it on terminal errors", () => {
-    cache.loader.readyCount = 1;
+    arrive(0);
     const outlines = [{ height: 10, polygons: ["0,0 10,0 0,10"], width: 10 }];
     const { rerender } = render(
       <ProductSpin loadingOutlines={outlines} sizes="100vw" spin={spin} />
     );
     expect(screen.queryByTestId("product-spin-loading")).toBeNull();
+    cache.frames.clear();
     cache.loader.readyCount = 0;
     cache.loader.loadingComplete = true;
     rerender(
@@ -704,6 +706,117 @@ describe("ProductSpin progressive canvas", () => {
     expect(callbacks.size).toBe(0);
     cleanup();
     expect(listeners.size).toBe(0);
+  });
+
+  it("keeps the selected silhouette until that exact first frame arrives", () => {
+    const outline = {
+      height: 1536,
+      polygons: ["0,0 1024,0 1024,1536 0,1536"],
+      width: 1024,
+    };
+    const status = vi.fn();
+    render(
+      <ProductSpin
+        alt="Matching first paint"
+        loadingOutlines={Array.from({ length: 72 }, () => outline)}
+        onLoadStateChange={status}
+        sizes="100vw"
+        spin={spin}
+      />
+    );
+    const slider = screen.getByRole("slider");
+    fireEvent.focus(slider);
+    arrive(6);
+    expect(drawImage).not.toHaveBeenCalled();
+    expect(screen.getByTestId("product-spin-loading")).toBeDefined();
+    expect(status).toHaveBeenLastCalledWith("loading");
+    const exact = arrive(0);
+    expect(drawImage).toHaveBeenLastCalledWith(exact, 0, 0, 1024, 1536);
+    expect(screen.queryByTestId("product-spin-loading")).toBeNull();
+    expect(status).toHaveBeenLastCalledWith("ready");
+  });
+
+  it("retargets an unpainted silhouette when keyboard input beats decoding", () => {
+    const outlines = Array.from({ length: 72 }, (_, index) => ({
+      height: 1536,
+      polygons: [`0,0 ${index + 1},0 0,10`],
+      width: 1024,
+    }));
+    render(
+      <ProductSpin
+        alt="Pending keyboard navigation"
+        loadingOutlines={outlines}
+        sizes="100vw"
+        spin={spin}
+      />
+    );
+    const slider = screen.getByRole("slider");
+    fireEvent.focus(slider);
+    press(slider, "ArrowRight");
+    arrive(0);
+    expect(drawImage).not.toHaveBeenCalled();
+    expect(
+      screen
+        .getByTestId("product-silhouette")
+        .querySelector("polygon")
+        ?.getAttribute("points")
+    ).toBe(outlines[1].polygons[0]);
+    const exact = arrive(1);
+    expect(drawImage).toHaveBeenLastCalledWith(exact, 0, 0, 1024, 1536);
+    expect(slider.getAttribute("data-displayed-frame")).toBe("1");
+  });
+
+  it("closes a full-resolution decode arriving after unmount without repainting", async () => {
+    vi.useFakeTimers();
+    cache.loader.getSource.mockReturnValue(new Blob(["frame"]));
+    const pending = Promise.withResolvers<ImageBitmap>();
+    vi.stubGlobal(
+      "createImageBitmap",
+      vi.fn(() => pending.promise)
+    );
+    mountSpin();
+    arrive(0);
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(200);
+    });
+    const paints = drawImage.mock.calls.length;
+    cleanup();
+    const late = {
+      close: vi.fn(),
+      height: 1536,
+      width: 1024,
+    } as unknown as ImageBitmap;
+    await act(async () => {
+      pending.resolve(late);
+      await pending.promise;
+    });
+    expect(late.close).toHaveBeenCalledOnce();
+    expect(drawImage).toHaveBeenCalledTimes(paints);
+  });
+
+  it("uses an available fallback after the requested first frame has terminally failed", () => {
+    const outline = {
+      height: 1536,
+      polygons: ["0,0 1024,0 1024,1536 0,1536"],
+      width: 1024,
+    };
+    const status = vi.fn();
+    render(
+      <ProductSpin
+        alt="Partial preview"
+        loadingOutlines={[outline]}
+        onLoadStateChange={status}
+        sizes="100vw"
+        spin={spin}
+      />
+    );
+    fireEvent.focus(screen.getByRole("slider"));
+    cache.loader.loadingComplete = true;
+    cache.loader.hasFailures = true;
+    const fallback = arrive(6);
+    expect(drawImage).toHaveBeenLastCalledWith(fallback, 0, 0, 1024, 1536);
+    expect(screen.queryByTestId("product-spin-loading")).toBeNull();
+    expect(status).toHaveBeenLastCalledWith("partial");
   });
 
   it("turns by mouse movement over the render, not by where the pointer enters", () => {
