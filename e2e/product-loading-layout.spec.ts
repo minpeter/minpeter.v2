@@ -156,6 +156,10 @@ for (const viewport of [
       "personal"
     );
     expect(await layout(page)).toEqual(before);
+    await expect(
+      page.getByTestId("product-spin").locator("canvas")
+    ).toBeVisible({ timeout: 15_000 });
+    expect(await layout(page)).toEqual(before);
     phases.personal = await layout(page);
     await page.screenshot({
       fullPage: true,
