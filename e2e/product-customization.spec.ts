@@ -408,8 +408,8 @@ async function expectCompactPicker(page: Page, messages: typeof en) {
   for (const dimension of dimensions) {
     expect(dimension.height).toBeGreaterThanOrEqual(44);
     expect(dimension.width).toBeGreaterThanOrEqual(44);
-    expect(dimension.swatchHeight).toBe(24);
-    expect(dimension.swatchWidth).toBe(24);
+    expect(dimension.swatchHeight).toBe(16);
+    expect(dimension.swatchWidth).toBe(16);
     expect(dimension.text).toBe("");
   }
   await expect(

@@ -153,6 +153,9 @@ for (const viewport of [
           has: page.locator('input[name="housing"][value="charcoal"]'),
         })
         .click();
+      // A short landscape viewport can scroll the lazy preview offscreen when
+      // focusing options. Bring it back before testing request completion.
+      await page.getByTestId("product-spin").scrollIntoViewIfNeeded();
       await expect(status).toHaveText(labels.loading);
       await expect(status).toHaveClass("sr-only");
       const shape = page.getByTestId("product-spin-loading");
