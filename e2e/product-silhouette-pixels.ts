@@ -8,7 +8,15 @@ export async function captureSilhouette(shape: Locator) {
       throw new Error("Missing loading silhouette");
     }
     const rect = svg.getBoundingClientRect();
-    return { height: rect.height, svg: svg.outerHTML, width: rect.width };
+    return {
+      frame:
+        element
+          .closest("[data-testid=product-spin]")
+          ?.getAttribute("data-frame") ?? "0",
+      height: rect.height,
+      svg: svg.outerHTML,
+      width: rect.width,
+    };
   });
 }
 
@@ -17,6 +25,11 @@ export async function expectSilhouettePixels(
   page: Page,
   saved: Awaited<ReturnType<typeof captureSilhouette>>
 ) {
+  await expect(page.getByTestId("product-spin")).toHaveAttribute(
+    "data-displayed-frame",
+    saved.frame,
+    { timeout: 15_000 }
+  );
   const pixels = await page
     .getByTestId("product-spin")
     .locator("canvas")
@@ -107,10 +120,18 @@ export async function expectSilhouettePixels(
         ready: bounds(ready),
         silhouette: bounds(mask),
         silhouetteSize: [shape.width, shape.height],
+        viewport: {
+          dpr: devicePixelRatio,
+          height: innerHeight,
+          width: innerWidth,
+          zoom: visualViewport?.scale ?? 1,
+        },
       };
     }, saved);
   expect(pixels.canvasSize).toEqual(pixels.silhouetteSize);
   expect(pixels.foreground).toBeGreaterThan(100);
+  expect(pixels.viewport.dpr).toBe(1);
+  expect(pixels.viewport.zoom).toBe(1);
   for (let i = 0; i < 4; i += 1) {
     expect(
       Math.abs(pixels.ready[i] - pixels.silhouette[i])

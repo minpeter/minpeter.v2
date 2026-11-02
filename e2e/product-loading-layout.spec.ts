@@ -12,6 +12,19 @@ import {
   expectSilhouettePixels,
 } from "./product-silhouette-pixels";
 
+function desktopHeight(width: number) {
+  if (width >= 3840) {
+    return 2160;
+  }
+  if (width >= 2560) {
+    return 1440;
+  }
+  if (width >= 1920) {
+    return 1080;
+  }
+  return 844;
+}
+
 const ko: typeof en = JSON.parse(
   readFileSync(new URL("../shared/i18n/ko.json", import.meta.url), "utf8")
 );
@@ -78,6 +91,10 @@ async function expectFeedbackInsideStage(page: Page) {
 
 for (const viewport of [
   { height: 1000, width: 1440 },
+  { height: 1080, width: 1920 },
+  { height: 1440, width: 2560 },
+  { height: 1440, width: 3440 },
+  { height: 2160, width: 3840 },
   { height: 844, width: 390 },
   { height: 640, width: 320 },
   { height: 390, width: 844 },
@@ -216,7 +233,7 @@ for (const width of [390, 1023, 1024, 1440]) {
   test(`delayed completion and cached selections preserve focus and scroll at ${width}px`, async ({
     page,
   }, testInfo) => {
-    await page.setViewportSize({ height: 844, width });
+    await page.setViewportSize({ height: desktopHeight(width), width });
     await page.goto(
       "/en/products/maru60?housing=ash-gray&keycaps=nicepbt-bow-retail"
     );
@@ -280,7 +297,7 @@ for (const width of [390, 1440]) {
   test(`current-angle loading silhouette survives rapid cached selection at ${width}px`, async ({
     page,
   }, testInfo) => {
-    await page.setViewportSize({ height: 844, width });
+    await page.setViewportSize({ height: desktopHeight(width), width });
     await page.emulateMedia({ reducedMotion: "reduce" });
     await page.goto(
       "/en/products/maru60?housing=ash-gray&keycaps=nicepbt-bow-retail"
@@ -351,11 +368,14 @@ for (const width of [390, 1440]) {
 }
 
 for (const frame of Array.from({ length: 12 }, (_, index) => index)) {
-  for (const width of [390, 1024, 1440]) {
+  for (const width of [390, 1024, 1440, 1920, 2560, 3440, 3840]) {
+    if (width > 1920 && frame % 3 !== 0) {
+      continue;
+    }
     test(`painted silhouette fits selected frame ${frame * 30} degrees at ${width}px`, async ({
       page,
     }, testInfo) => {
-      await page.setViewportSize({ height: 844, width });
+      await page.setViewportSize({ height: desktopHeight(width), width });
       await page.emulateMedia({ reducedMotion: "reduce" });
       await page.goto(
         "/en/products/maru60?housing=ash-gray&keycaps=nicepbt-bow-retail"
@@ -384,6 +404,9 @@ for (const frame of Array.from({ length: 12 }, (_, index) => index)) {
       await page.locator('label[title="PBTfans WoB"]').click();
       const loading = page.getByTestId("product-spin-loading");
       await expect(loading).toBeVisible();
+      // Keycaps are below the fold on mobile. The loader intentionally pauses
+      // offscreen previews; return to the actual viewport before measuring paint.
+      await spin.scrollIntoViewIfNeeded();
       const saved = await captureSilhouette(loading);
       await page.screenshot({
         fullPage: true,
@@ -407,4 +430,64 @@ for (const frame of Array.from({ length: 12 }, (_, index) => index)) {
       );
     });
   }
+}
+
+for (const width of [390, 1440]) {
+  test(`other decoded angles cannot replace the selected loading silhouette at ${width}px`, async ({
+    page,
+  }, testInfo) => {
+    await page.setViewportSize({ height: desktopHeight(width), width });
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.goto(
+      "/en/products/maru60?housing=ash-gray&keycaps=nicepbt-bow-retail"
+    );
+    const spin = page.getByTestId("product-spin");
+    await expect(spin).toHaveAttribute("data-ready-count", "12", {
+      timeout: 15_000,
+    });
+    let release: () => void = () => undefined;
+    const held = new Promise<void>((resolve) => {
+      release = resolve;
+    });
+    await page.route(
+      "**/charcoal--nicepbt-bow-retail/frame_000.webp*",
+      async (route) => {
+        await held;
+        await route.continue();
+      }
+    );
+    await page
+      .locator("label")
+      .filter({ has: page.locator('input[name="housing"][value="charcoal"]') })
+      .click();
+    await spin.scrollIntoViewIfNeeded();
+    await expect(spin).toHaveAttribute("data-ready-count", "11", {
+      timeout: 15_000,
+    });
+    await expect(spin).toHaveAttribute("data-displayed-frame", "poster");
+    const shape = page.getByTestId("product-spin-loading");
+    await expect(shape).toBeVisible();
+    const saved = await captureSilhouette(shape);
+    await expect(spin.locator("canvas")).toBeHidden();
+    await expect(
+      page.locator(".store-custom-preview").getByRole("status")
+    ).toHaveText(englishLabels.loading);
+    await page.screenshot({
+      fullPage: true,
+      path: testInfo.outputPath("other-angles-ready-silhouette.png"),
+    });
+    release();
+    await expect(spin).toHaveAttribute("data-displayed-frame", "0", {
+      timeout: 15_000,
+    });
+    const pixels = await expectSilhouettePixels(page, saved);
+    writeFileSync(
+      testInfo.outputPath("initial-angle-pixels.json"),
+      JSON.stringify(pixels, null, 2)
+    );
+    await page.screenshot({
+      fullPage: true,
+      path: testInfo.outputPath("selected-angle-ready.png"),
+    });
+  });
 }

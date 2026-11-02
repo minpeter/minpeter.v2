@@ -12,6 +12,19 @@ import {
   expectSilhouettePixels,
 } from "./product-silhouette-pixels";
 
+function desktopHeight(width: number) {
+  if (width >= 3840) {
+    return 2160;
+  }
+  if (width >= 2560) {
+    return 1440;
+  }
+  if (width >= 1920) {
+    return 1080;
+  }
+  return 844;
+}
+
 const detailMarkup = renderToStaticMarkup(createElement(DetailLoading));
 const listMarkup = renderToStaticMarkup(createElement(ListLoading));
 const LINK_HEADER_SEPARATOR = /,(?=\s*<)/;
@@ -62,11 +75,18 @@ for (const scenario of [
   { locale: "en", width: 1023 },
   { locale: "en", width: 1024 },
   { locale: "en", width: 1440 },
+  { locale: "en", width: 1920 },
+  { locale: "en", width: 2560 },
+  { locale: "en", width: 3440 },
+  { locale: "en", width: 3840 },
 ]) {
   test.describe(`product skeleton ${scenario.width}px ${scenario.locale}`, () => {
     test.use({
       locale: scenario.locale,
-      viewport: { height: 844, width: scenario.width },
+      viewport: {
+        height: desktopHeight(scenario.width),
+        width: scenario.width,
+      },
     });
     test("static shell preserves localized information and full-page geometry", async ({
       browser,
@@ -79,7 +99,10 @@ for (const scenario of [
       const shellContext = await browser.newContext({
         baseURL: testInfo.project.use.baseURL,
         locale: scenario.locale,
-        viewport: { height: 844, width: scenario.width },
+        viewport: {
+          height: desktopHeight(scenario.width),
+          width: scenario.width,
+        },
       });
       try {
         await shellContext.route("**/_next/static/**/*.js", (route) =>
@@ -237,10 +260,12 @@ for (const scenario of [
 }
 
 for (const scenario of [
-  ...[320, 390, 479, 480, 1023, 1024, 1440].map((width) => ({
-    locale: "en",
-    width,
-  })),
+  ...[320, 390, 479, 480, 1023, 1024, 1440, 1920, 2560, 3440, 3840].map(
+    (width) => ({
+      locale: "en",
+      width,
+    })
+  ),
   { locale: "ko", width: 390 },
   { locale: "ja", width: 390 },
 ]) {
@@ -250,7 +275,7 @@ for (const scenario of [
     test(`catalog skeleton matches portrait card at ${width}px`, async ({
       page,
     }, testInfo) => {
-      await page.setViewportSize({ height: 844, width });
+      await page.setViewportSize({ height: desktopHeight(width), width });
       await page.goto(`${locale === "ko" ? "" : `/${locale}`}/products`);
       const card = page.getByTestId("product-link-maru60");
       await expect(card).toBeVisible();
@@ -535,7 +560,7 @@ for (const width of [390, 1440]) {
   test(`keycap outlines preserve loading/error/ready frames at ${width}px`, async ({
     page,
   }, testInfo) => {
-    await page.setViewportSize({ height: 844, width });
+    await page.setViewportSize({ height: desktopHeight(width), width });
     await page.emulateMedia({ reducedMotion: "reduce" });
     let release: () => void = () => undefined;
     const delayed = new Promise<void>((resolve) => {

@@ -156,6 +156,11 @@ export class SpinLoader {
     return this.blobs.get(index);
   }
 
+  /** Pure readiness probe for matching a loading silhouette to its first paint. */
+  hasFrame(index: number) {
+    return this.bitmaps.has(index);
+  }
+
   get readyCount() {
     return this.bitmaps.size;
   }

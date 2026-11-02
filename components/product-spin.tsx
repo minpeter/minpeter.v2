@@ -121,14 +121,27 @@ export function ProductSpin({
       return;
     }
     let state: "loading" | "ready" | "partial" | "error" = "loading";
-    if (loader.readyCount > 0) {
+    if (
+      loadingOutlines?.[frame] &&
+      displayedFrame === null &&
+      !loader.loadingComplete
+    ) {
+      state = "loading";
+    } else if (loader.readyCount > 0) {
       state =
         loader.loadingComplete && loader.hasFailures ? "partial" : "ready";
     } else if (loader.loadingComplete) {
       state = "error";
     }
     onLoadStateChange?.(state);
-  }, [loader, onLoadStateChange, version]);
+  }, [
+    displayedFrame,
+    frame,
+    loader,
+    loadingOutlines,
+    onLoadStateChange,
+    version,
+  ]);
 
   useEffect(() => {
     const stage = stageRef.current;
@@ -164,6 +177,10 @@ export function ProductSpin({
     const canvas = canvasRef.current;
     if (
       !(nearest && canvas) ||
+      (loadingOutlines?.[frame] &&
+        displayedFrame === null &&
+        !loader.loadingComplete &&
+        nearest.index !== frame) ||
       nearest.bitmap === paintedBitmapRef.current ||
       nearest.index === fullResolutionFrameRef.current
     ) {
@@ -183,7 +200,16 @@ export function ProductSpin({
     } catch {
       // An unavailable bitmap must not erase the already painted frame or poster.
     }
-  }, [active, frame, inView, loader, token, version]);
+  }, [
+    active,
+    displayedFrame,
+    frame,
+    inView,
+    loader,
+    loadingOutlines,
+    token,
+    version,
+  ]);
 
   useEffect(() => {
     if (
@@ -394,9 +420,7 @@ export function ProductSpin({
       ref={stageRef}
       style={{ aspectRatio: `${width} / ${height}` }}
     >
-      {!showFrames &&
-      loader.readyCount === 0 &&
-      !loader.loadingComplete &&
+      {!(showFrames || loader.hasFrame(frame) || loader.loadingComplete) &&
       loadingOutlines?.[frame] ? (
         <div
           aria-hidden="true"
