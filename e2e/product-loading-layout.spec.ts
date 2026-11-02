@@ -1,9 +1,11 @@
 import { readFileSync, writeFileSync } from "node:fs";
 
 import { expect, type Page, test } from "@playwright/test";
-
 import en from "../shared/i18n/en.json" with { type: "json" };
 import ja from "../shared/i18n/ja.json" with { type: "json" };
+import spinOutlines from "../shared/maru60-spin-silhouettes.json" with {
+  type: "json",
+};
 
 const ko: typeof en = JSON.parse(
   readFileSync(new URL("../shared/i18n/ko.json", import.meta.url), "utf8")
@@ -90,6 +92,7 @@ for (const viewport of [
       const prefix =
         viewport.locale === "ko" ? "" : `/${viewport.locale ?? "en"}`;
       await page.setViewportSize(viewport);
+      await page.emulateMedia({ reducedMotion: "reduce" });
       await page.goto(
         `${prefix}/products/maru60?housing=ash-gray&keycaps=nicepbt-bow-retail`
       );
@@ -125,6 +128,16 @@ for (const viewport of [
         })
         .click();
       await expect(status).toHaveText(labels.loading);
+      await expect(status).toHaveClass("sr-only");
+      const shape = page.getByTestId("product-spin-loading");
+      await expect(shape).toBeVisible();
+      expect(await shape.boundingBox()).toEqual(
+        await page.getByTestId("product-spin").boundingBox()
+      );
+      await expect(shape.getByTestId("product-media-skeleton")).toHaveCSS(
+        "animation-name",
+        "none"
+      );
       phases.loading = await layout(page);
       await expectFeedbackInsideStage(page);
       expect(await layout(page)).toEqual(before);
@@ -134,6 +147,7 @@ for (const viewport of [
       });
       release();
       await expect(status).toHaveText(labels.loadError);
+      await expect(page.getByTestId("product-spin-loading")).toHaveCount(0);
       phases.error = await layout(page);
       await expectFeedbackInsideStage(page);
       expect(await layout(page)).toEqual(before);
@@ -144,6 +158,7 @@ for (const viewport of [
       await page.unroute("**/assembled/**/charcoal--nicepbt-bow-retail/**");
       await page.getByRole("button", { name: labels.retry }).click();
       await expect(status).toHaveText(labels.ready, { timeout: 15_000 });
+      await expect(page.getByTestId("product-spin-loading")).toHaveCount(0);
       phases.retried = await layout(page);
       expect(await layout(page)).toEqual(before);
       await page
@@ -243,5 +258,73 @@ for (const width of [390, 1023, 1024, 1440]) {
         2
       )
     );
+  });
+}
+
+for (const width of [390, 1440]) {
+  test(`current-angle loading silhouette survives rapid cached selection at ${width}px`, async ({
+    page,
+  }, testInfo) => {
+    await page.setViewportSize({ height: 844, width });
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.goto(
+      "/en/products/maru60?housing=ash-gray&keycaps=nicepbt-bow-retail"
+    );
+    const status = page.locator(".store-custom-preview").getByRole("status");
+    await expect(status).toHaveText(englishLabels.ready, { timeout: 15_000 });
+    const spin = page.getByTestId("product-spin");
+    await spin.press("ArrowRight");
+    await spin.press("ArrowRight");
+    await spin.press("ArrowRight");
+    await expect(spin).toHaveAttribute("aria-valuetext", "90°");
+    await expect(spin).toHaveAttribute("data-displayed-frame", "3");
+    const before = await layout(page);
+    let release: () => void = () => undefined;
+    const held = new Promise<void>((resolve) => {
+      release = resolve;
+    });
+    let settled = 0;
+    await page.route(
+      "**/assembled/**/charcoal--nicepbt-bow-retail/**",
+      async (route) => {
+        await held;
+        await route.abort();
+        settled += 1;
+      }
+    );
+    await page
+      .locator("label")
+      .filter({ has: page.locator('input[name="housing"][value="charcoal"]') })
+      .click();
+    await expect(status).toHaveText(englishLabels.loading);
+    const outline = page.getByTestId("product-spin-loading");
+    await expect(outline).toBeVisible();
+    await expect(spin).toHaveAttribute("aria-valuetext", "90°");
+    const points = await outline.locator("polygon").getAttribute("points");
+    expect(points).toBe(spinOutlines.frame_090.polygons[0]);
+    expect(await layout(page)).toEqual(before);
+    await page.screenshot({
+      fullPage: true,
+      path: testInfo.outputPath("angle90-loading.png"),
+    });
+    await page
+      .locator("label")
+      .filter({ has: page.locator('input[name="housing"][value="ash-gray"]') })
+      .click();
+    await expect(status).toHaveText(englishLabels.ready);
+    await expect(outline).toHaveCount(0);
+    release();
+    await expect.poll(() => settled).toBeGreaterThan(0);
+    await expect(page.locator(".store-custom-preview")).toHaveAttribute(
+      "data-combination",
+      "ash-gray--nicepbt-bow-retail"
+    );
+    await expect(status).toHaveText(englishLabels.ready);
+    await expect(outline).toHaveCount(0);
+    expect(await layout(page)).toEqual(before);
+    await page.screenshot({
+      fullPage: true,
+      path: testInfo.outputPath("angle90-cached-ready.png"),
+    });
   });
 }

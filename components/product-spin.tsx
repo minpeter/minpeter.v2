@@ -10,6 +10,10 @@ import {
   useState,
   useSyncExternalStore,
 } from "react";
+import {
+  ProductMediaSkeleton,
+  type ProductOutline,
+} from "@/components/product-media-skeleton";
 
 import { getSpinLoader } from "@/shared/product-spin-loader";
 import type { ProductSpin as ProductSpinData } from "@/shared/products";
@@ -35,6 +39,7 @@ interface ProductSpinProps {
   alt?: string;
   className?: string;
   initialAngle?: number;
+  loadingOutlines?: readonly ProductOutline[];
   onAngleChange?: (degrees: number) => void;
   onLoadStateChange?: (
     state: "loading" | "ready" | "partial" | "error"
@@ -57,6 +62,7 @@ export function ProductSpin({
   alt,
   className,
   initialAngle,
+  loadingOutlines,
   onAngleChange,
   onLoadStateChange,
   resetOnLeave = true,
@@ -388,6 +394,21 @@ export function ProductSpin({
       ref={stageRef}
       style={{ aspectRatio: `${width} / ${height}` }}
     >
+      {!showFrames &&
+      loader.readyCount === 0 &&
+      !loader.loadingComplete &&
+      loadingOutlines?.[frame] ? (
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0"
+          data-testid="product-spin-loading"
+        >
+          <ProductMediaSkeleton
+            className="h-full w-full rounded-none"
+            outline={loadingOutlines[frame]}
+          />
+        </div>
+      ) : null}
       {frameSources ? null : (
         <Image
           alt=""

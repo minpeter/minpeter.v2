@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 
+import { ProductFirstFramePreload } from "@/components/product-first-frame-preload";
 import { ProductSpin } from "@/components/product-spin";
 import { Link } from "@/shared/i18n/navigation";
 import { PRODUCTS } from "@/shared/products";
@@ -19,6 +20,10 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function Page(_props: PageProps<"/[locale]/products">) {
   const t = await getTranslations();
+  // Only the first visible catalog turntable: never preload every angle or product.
+  // Detail URLs may select another configuration, so do not guess their frame here.
+  const firstSpin = PRODUCTS[0]?.spin;
+  const firstFrame = firstSpin?.frameSources?.[firstSpin.defaultFrame];
 
   return (
     <section
@@ -26,6 +31,7 @@ export default async function Page(_props: PageProps<"/[locale]/products">) {
       className="store-grid"
       data-testid="products-page"
     >
+      {firstFrame ? <ProductFirstFramePreload source={firstFrame} /> : null}
       {PRODUCTS.map((product) => (
         <Link
           aria-label={product.name}

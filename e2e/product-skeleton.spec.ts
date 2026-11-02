@@ -9,6 +9,7 @@ import ListLoading from "../app/[locale]/products/loading";
 
 const detailMarkup = renderToStaticMarkup(createElement(DetailLoading));
 const listMarkup = renderToStaticMarkup(createElement(ListLoading));
+const LINK_HEADER_SEPARATOR = /,(?=\s*<)/;
 const selectors = [
   ".store-media-stage",
   ".store-custom-controls",
@@ -601,3 +602,167 @@ for (const width of [390, 1440]) {
     );
   });
 }
+
+// Same production build, cold contexts, same resource responses. The baseline
+// removes only the server hint; its first-frame initiator must remain fetch.
+test("compares first-frame-only preload with a cold no-hint baseline", async ({
+  browser,
+}, testInfo) => {
+  test.setTimeout(180_000);
+  const samples: Record<string, unknown>[] = [];
+  for (const delayed of [false, true]) {
+    for (const repeat of [0, 1]) {
+      for (const preload of [false, true]) {
+        // biome-ignore lint/performance/noAwaitInLoops: Isolate cold A/B samples; concurrent loads contaminate timing.
+        const context = await browser.newContext();
+        const page = await context.newPage();
+        await page.addInitScript(() => {
+          const observeFrame = () => {
+            const canvas = document.querySelector(".store-card canvas");
+            if (canvas) {
+              const style = getComputedStyle(canvas);
+              const rect = canvas.getBoundingClientRect();
+              if (
+                style.visibility === "visible" &&
+                style.display !== "none" &&
+                rect.width > 0 &&
+                rect.height > 0
+              ) {
+                Reflect.set(
+                  window,
+                  "__maruFirstCanvasVisibleMs",
+                  performance.now()
+                );
+                return;
+              }
+            }
+            requestAnimationFrame(observeFrame);
+          };
+          requestAnimationFrame(observeFrame);
+        });
+        const frameRequests: string[] = [];
+        page.on("request", (request) => {
+          if (
+            request.url().includes("/assembled/") &&
+            request.url().includes("/frame_")
+          ) {
+            frameRequests.push(request.url());
+          }
+        });
+        await page.route("**/en/products", async (route) => {
+          const response = await route.fetch();
+          const headers = response.headers();
+          // Prevent a response-header hint from contaminating the no-hint arm.
+          if (!preload && headers.link) {
+            headers.link = headers.link
+              .split(LINK_HEADER_SEPARATOR)
+              .filter((hint) => !hint.includes("/frame_"))
+              .join(",");
+          }
+          const body = await response.text();
+          await route.fulfill({
+            body: preload
+              ? body
+              : body.replace(
+                  /<link\b[^>]*href="[^"]*\/frame_[^"]*"[^>]*>/g,
+                  ""
+                ),
+            headers,
+            response,
+          });
+        });
+        await page.route("**/_next/static/**/*.js", async (route) => {
+          if (delayed) {
+            await new Promise((resolve) => setTimeout(resolve, 250));
+          }
+          await route.continue();
+        });
+        await page.route(
+          "**/assets/products/maru60/assembled/**",
+          async (route) => {
+            if (delayed) {
+              await new Promise((resolve) => setTimeout(resolve, 150));
+            }
+            await route.continue();
+          }
+        );
+        await page.goto("/en/products", { waitUntil: "domcontentloaded" });
+        const spin = page
+          .getByTestId("product-link-maru60")
+          .getByTestId("product-spin");
+        await expect(spin.locator("canvas")).toBeVisible({ timeout: 20_000 });
+        await expect
+          .poll(() =>
+            page.evaluate(() =>
+              Reflect.get(window, "__maruFirstCanvasVisibleMs")
+            )
+          )
+          .toBeGreaterThan(0);
+        const firstCanvasVisibleMs = await page.evaluate(
+          () => Reflect.get(window, "__maruFirstCanvasVisibleMs") as number
+        );
+        await expect(spin).toHaveAttribute("data-loaded-count", "12", {
+          timeout: 20_000,
+        });
+        const resources = await page.evaluate(() =>
+          performance
+            .getEntriesByType("resource")
+            .filter(
+              (entry) =>
+                entry.name.includes("/assembled/") &&
+                entry.name.includes("/frame_")
+            )
+            .map((entry) => {
+              const resource = entry as PerformanceResourceTiming;
+              return {
+                encodedBodySize: resource.encodedBodySize,
+                initiatorType: resource.initiatorType,
+                responseEnd: resource.responseEnd,
+                startTime: resource.startTime,
+                transferSize: resource.transferSize,
+                url: resource.name,
+              };
+            })
+        );
+        const duplicates = frameRequests.filter(
+          (url, index) => frameRequests.indexOf(url) !== index
+        );
+        const first = resources.find((entry) =>
+          new URL(entry.url).pathname.endsWith("/frame_000.webp")
+        );
+        samples.push({
+          delayed,
+          duplicates,
+          encodedBytes: resources.reduce(
+            (sum, item) => sum + item.encodedBodySize,
+            0
+          ),
+          firstCanvasVisibleMs,
+          preload,
+          repeat,
+          requests: frameRequests.length,
+          resources,
+          transferBytes: resources.reduce(
+            (sum, item) => sum + item.transferSize,
+            0
+          ),
+        });
+        writeFileSync(
+          testInfo.outputPath("first-frame-preload-ab.json"),
+          JSON.stringify(
+            {
+              note: "Cold production localhost samples; delayed arm adds 250ms to JS and 150ms to frames. First visible canvas is timestamped in requestAnimationFrame from document start, independently of DOMContentLoaded; not LCP or field data.",
+              samples,
+            },
+            null,
+            2
+          )
+        );
+        expect(first?.initiatorType).toBe(preload ? "link" : "fetch");
+        expect(duplicates).toEqual([]);
+        expect(frameRequests).toHaveLength(12);
+        await context.close();
+      }
+    }
+  }
+});

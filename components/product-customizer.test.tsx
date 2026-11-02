@@ -696,6 +696,9 @@ describe("ProductCustomizer availability and selection", () => {
         document.querySelector(".store-custom-preview") as HTMLElement
       ).getByRole("status").textContent
     ).toBe(en.products.customization.loading);
+    expect(
+      document.querySelector(".store-custom-preview [role=status]")?.className
+    ).toBe("sr-only");
     const before = screen.getByTestId("retail-spin");
     fireEvent.click(screen.getByRole("button", { name: "Rotate retail" }));
     fireEvent.click(screen.getByRole("button", { name: "Fail render" }));

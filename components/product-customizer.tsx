@@ -27,8 +27,12 @@ import {
   type ValidatedCombination,
 } from "@/shared/keyboard-customization";
 
+import spinSilhouettes from "@/shared/maru60-spin-silhouettes.json";
+
 import { getSpinLoader } from "@/shared/product-spin-loader";
 import { useKeyboardCustomizationQuery } from "@/shared/use-keyboard-customization-query";
+
+const SPIN_OUTLINES = Object.values(spinSilhouettes);
 
 function geometryRevision(
   personal: boolean,
@@ -86,6 +90,7 @@ function ValidatedPreview({
         <ProductSpin
           alt={t("previewLabel")}
           initialAngle={angleRef.current}
+          loadingOutlines={SPIN_OUTLINES}
           onAngleChange={rememberAngle}
           onLoadStateChange={setLoadState}
           resetOnLeave={false}
@@ -95,7 +100,11 @@ function ValidatedPreview({
         <div className="store-custom-feedback">
           <p
             aria-live="polite"
-            className={loadState === "ready" ? "sr-only" : "store-label"}
+            className={
+              loadState === "ready" || loadState === "loading"
+                ? "sr-only"
+                : "store-label"
+            }
             role="status"
           >
             {t(statusKey[loadState])}
@@ -150,6 +159,9 @@ function SelectionPreview({
           <ProductSpin
             alt={gallery.labels.spin}
             initialAngle={angle}
+            loadingOutlines={
+              gallery.spin.geometryRevision ? SPIN_OUTLINES : undefined
+            }
             onAngleChange={onAngleChange}
             sizes="(min-width: 64rem) 60vw, 92vw"
             spin={gallery.spin}
