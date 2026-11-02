@@ -97,6 +97,7 @@ for (const scenario of [
           .innerText();
         const shellGeometry = await geometry(shell);
         const shellFrame = await shell
+          .locator(".store-media-stage")
           .getByTestId("product-media-skeleton")
           .boundingBox();
         expect(
@@ -574,7 +575,9 @@ for (const width of [390, 1440]) {
     expect(readyBox?.width).toBe(before?.width);
     expect(readyBox?.height).toBe(before?.height);
     const completedRequests = requests;
-    await page.getByRole("radio", { exact: true, name: "NicePBT BoW" }).check();
+    const bow = page.getByRole("radio", { exact: true, name: "NicePBT BoW" });
+    await page.locator(".store-custom-kit").filter({ has: bow }).click();
+    await expect(bow).toBeChecked();
     await expect(thumb).toHaveAttribute("data-state", "ready");
     expect(requests).toBe(completedRequests);
     await page.screenshot({

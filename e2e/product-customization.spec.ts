@@ -440,9 +440,9 @@ async function expectCompactPicker(page: Page, messages: typeof en) {
     await expect(tile).toHaveCSS("border-top-width", "0px");
     await expect(tile).toHaveCSS("box-shadow", "none");
     const thumbnail = tile.locator("img");
-    await expect(thumbnail).toHaveAttribute(
+    await expect(thumbnail).toHaveJSProperty(
       "src",
-      `/assets/products/maru60/keycaps/v1/${id}.webp`
+      new URL(`/assets/products/maru60/keycaps/v1/${id}.webp`, page.url()).href
     );
     await expect(thumbnail).toBeVisible();
     await expect
