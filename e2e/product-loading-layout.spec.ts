@@ -491,3 +491,184 @@ for (const width of [390, 1440]) {
     });
   });
 }
+
+for (const scenario of [
+  { dpr: 1, from: 390, name: "mobile-to-desktop", to: 1024 },
+  { dpr: 1, from: 1440, name: "desktop-to-mobile", to: 390 },
+  { dpr: 1, from: 1023, name: "breakpoint-crossing", to: 1024 },
+  { dpr: 2, from: 1280, name: "retina-desktop", to: 1280 },
+  { dpr: 3, from: 390, name: "retina-mobile", to: 390 },
+]) {
+  test.describe(`loading corner ${scenario.name}`, () => {
+    test.use({ deviceScaleFactor: scenario.dpr });
+    test("resize or high DPR preserves actual painted outline and cached history", async ({
+      page,
+    }, testInfo) => {
+      await page.setViewportSize({ height: 900, width: scenario.from });
+      await page.emulateMedia({ reducedMotion: "reduce" });
+      await page.goto(
+        "/en/products/maru60?housing=ash-gray&keycaps=nicepbt-bow-retail"
+      );
+      const spin = page.getByTestId("product-spin");
+      await expect(spin).toHaveAttribute("data-ready-count", "12", {
+        timeout: 15_000,
+      });
+      await spin.press("ArrowRight");
+      await expect(spin).toHaveAttribute("data-displayed-frame", "1");
+      let release: () => void = () => undefined;
+      const held = new Promise<void>((resolve) => {
+        release = resolve;
+      });
+      await page.route("**/charcoal--nicepbt-bow-retail/**", async (route) => {
+        await held;
+        await route.continue();
+      });
+      await page
+        .locator("label")
+        .filter({
+          has: page.locator('input[name="housing"][value="charcoal"]'),
+        })
+        .click();
+      await expect(page.getByTestId("product-spin-loading")).toBeVisible();
+      await page.setViewportSize({ height: 900, width: scenario.to });
+      await spin.scrollIntoViewIfNeeded();
+      const shape = page.getByTestId("product-spin-loading");
+      const saved = await captureSilhouette(shape);
+      const before = await layout(page);
+      await page.screenshot({
+        fullPage: true,
+        path: testInfo.outputPath("corner-loading.png"),
+      });
+      release();
+      const pixels = await expectSilhouettePixels(page, saved, scenario.dpr);
+      expect(await layout(page)).toEqual(before);
+      await expect(shape).toHaveCount(0);
+      await page.screenshot({
+        fullPage: true,
+        path: testInfo.outputPath("corner-ready.png"),
+      });
+      await page.goBack();
+      await expect(spin.locator("canvas")).toBeVisible();
+      await expect(page.locator(".store-custom-preview")).toHaveAttribute(
+        "data-combination",
+        "ash-gray--nicepbt-bow-retail"
+      );
+      await page.goForward();
+      await expect(page.locator(".store-custom-preview")).toHaveAttribute(
+        "data-combination",
+        "charcoal--nicepbt-bow-retail"
+      );
+      await expect(shape).toHaveCount(0);
+      expect(await layout(page)).toEqual(before);
+      writeFileSync(
+        testInfo.outputPath("corner-pixels.json"),
+        JSON.stringify({ scenario, ...pixels }, null, 2)
+      );
+    });
+  });
+}
+
+test("offscreen selected render cancels pending work and resumes the same outline", async ({
+  page,
+}, testInfo) => {
+  await page.setViewportSize({ height: 844, width: 390 });
+  await page.goto(
+    "/en/products/maru60?housing=ash-gray&keycaps=nicepbt-bow-retail"
+  );
+  const spin = page.getByTestId("product-spin");
+  await expect(spin).toHaveAttribute("data-ready-count", "12", {
+    timeout: 15_000,
+  });
+  let release: () => void = () => undefined;
+  const held = new Promise<void>((resolve) => {
+    release = resolve;
+  });
+  let canceled = 0;
+  let started = 0;
+  page.on("requestfailed", (request) => {
+    if (request.url().includes("charcoal--nicepbt-bow-retail")) {
+      canceled += 1;
+    }
+  });
+  await page.route("**/charcoal--nicepbt-bow-retail/**", async (route) => {
+    started += 1;
+    await held;
+    try {
+      await route.continue();
+    } catch (error) {
+      if (!route.request().failure()) {
+        throw error;
+      }
+    }
+  });
+  await page
+    .locator("label")
+    .filter({ has: page.locator('input[name="housing"][value="charcoal"]') })
+    .click();
+  await spin.scrollIntoViewIfNeeded();
+  await expect(page.getByTestId("product-spin-loading")).toBeVisible();
+  await expect.poll(() => started).toBeGreaterThan(0);
+  await page.evaluate(() =>
+    window.scrollTo(0, document.documentElement.scrollHeight)
+  );
+  await expect
+    .poll(() => spin.evaluate((e) => e.getBoundingClientRect().bottom))
+    .toBeLessThan(0);
+  await expect.poll(() => canceled).toBeGreaterThan(0);
+  release();
+  await expect(spin).toHaveAttribute("data-displayed-frame", "poster");
+  await spin.scrollIntoViewIfNeeded();
+  await expect(spin).toHaveAttribute("data-displayed-frame", "0", {
+    timeout: 15_000,
+  });
+  await expect(page.getByTestId("product-spin-loading")).toHaveCount(0);
+  await expect(page.locator(".store-custom-preview")).toHaveAttribute(
+    "data-combination",
+    "charcoal--nicepbt-bow-retail"
+  );
+  await page.screenshot({
+    fullPage: true,
+    path: testInfo.outputPath("resumed-ready.png"),
+  });
+});
+
+test("missing selected frame uses terminal partial fallback and exact-angle retry", async ({
+  page,
+}, testInfo) => {
+  await page.setViewportSize({ height: 900, width: 1440 });
+  await page.goto(
+    "/en/products/maru60?housing=ash-gray&keycaps=nicepbt-bow-retail"
+  );
+  const spin = page.getByTestId("product-spin");
+  await expect(spin).toHaveAttribute("data-ready-count", "12", {
+    timeout: 15_000,
+  });
+  await page.route("**/charcoal--nicepbt-bow-retail/frame_000.webp*", (route) =>
+    route.abort()
+  );
+  await page
+    .locator("label")
+    .filter({ has: page.locator('input[name="housing"][value="charcoal"]') })
+    .click();
+  const status = page.locator(".store-custom-preview").getByRole("status");
+  await expect(status).toHaveText(englishLabels.partial, { timeout: 15_000 });
+  await expect(spin.locator("canvas")).toBeVisible();
+  await expect(page.getByTestId("product-spin-loading")).toHaveCount(0);
+  await expect(spin).not.toHaveAttribute("data-displayed-frame", "0");
+  const before = await layout(page);
+  await page.screenshot({
+    fullPage: true,
+    path: testInfo.outputPath("partial-fallback.png"),
+  });
+  await page.unroute("**/charcoal--nicepbt-bow-retail/frame_000.webp*");
+  await page.getByRole("button", { name: englishLabels.retry }).click();
+  await expect(spin).toHaveAttribute("data-displayed-frame", "0", {
+    timeout: 15_000,
+  });
+  await expect(status).toHaveText(englishLabels.ready);
+  expect(await layout(page)).toEqual(before);
+  await page.screenshot({
+    fullPage: true,
+    path: testInfo.outputPath("partial-retried.png"),
+  });
+});

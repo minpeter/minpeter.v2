@@ -23,7 +23,8 @@ export async function captureSilhouette(shape: Locator) {
 /** Compare painted alpha, not just equal outer DOM boxes. Interior holes are intentional. */
 export async function expectSilhouettePixels(
   page: Page,
-  saved: Awaited<ReturnType<typeof captureSilhouette>>
+  saved: Awaited<ReturnType<typeof captureSilhouette>>,
+  expectedDpr = 1
 ) {
   await expect(page.getByTestId("product-spin")).toHaveAttribute(
     "data-displayed-frame",
@@ -130,7 +131,7 @@ export async function expectSilhouettePixels(
     }, saved);
   expect(pixels.canvasSize).toEqual(pixels.silhouetteSize);
   expect(pixels.foreground).toBeGreaterThan(100);
-  expect(pixels.viewport.dpr).toBe(1);
+  expect(pixels.viewport.dpr).toBe(expectedDpr);
   expect(pixels.viewport.zoom).toBe(1);
   for (let i = 0; i < 4; i += 1) {
     expect(
