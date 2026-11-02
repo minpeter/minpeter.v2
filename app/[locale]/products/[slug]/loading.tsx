@@ -23,6 +23,10 @@ export default function Loading() {
       className="store-product"
       data-testid="product-detail-skeleton"
     >
+      <div aria-hidden="true" className="store-product-heading">
+        <Skeleton className="h-10 w-40 rounded-none" />
+        <Skeleton className="store-skeleton-label store-label w-48 rounded-none" />
+      </div>
       <ProductCustomizerSkeleton />
       <div aria-hidden="true" className="store-product-info">
         <div className="store-label">

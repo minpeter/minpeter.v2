@@ -12,6 +12,8 @@ describe("product loading skeletons", () => {
     render(<DetailLoading />);
     const skeleton = screen.getByTestId("product-detail-skeleton");
     expect(skeleton.getAttribute("aria-busy")).toBe("true");
+    expect(skeleton.querySelectorAll(".store-product-heading")).toHaveLength(1);
+    expect(skeleton.querySelectorAll(".store-custom-visual")).toHaveLength(1);
     expect(skeleton.querySelectorAll(".store-media-stage")).toHaveLength(1);
     expect(skeleton.querySelectorAll(".store-custom-color")).toHaveLength(8);
     expect(skeleton.querySelectorAll(".store-custom-kit")).toHaveLength(6);

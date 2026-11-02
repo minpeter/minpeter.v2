@@ -72,7 +72,10 @@ async function expectFeedbackInsideStage(page: Page) {
       throw new Error("Missing preview feedback geometry");
     }
     return {
-      clearOfControls: feedback.bottom < controls.top,
+      clearOfControls:
+        feedback.bottom < controls.top ||
+        feedback.right < controls.left ||
+        feedback.left > controls.right,
       contained:
         feedback.left >= stage.left &&
         feedback.right <= stage.right &&
@@ -672,3 +675,51 @@ test("missing selected frame uses terminal partial fallback and exact-angle retr
     path: testInfo.outputPath("partial-retried.png"),
   });
 });
+
+for (const width of [390, 768, 1440, 1920]) {
+  test(`gallery layout keeps visual and option rail separate at ${width}px`, async ({
+    page,
+  }, testInfo) => {
+    await page.setViewportSize({ height: 1000, width });
+    await page.goto("/en/products");
+    await expect(page.getByTestId("product-spin")).toHaveAttribute(
+      "data-ready-count",
+      "12"
+    );
+    await expect(page.locator(".store-card-caption")).toHaveCSS("opacity", "1");
+    await page.screenshot({
+      fullPage: true,
+      path: testInfo.outputPath("gallery-catalog.png"),
+    });
+    await page.getByTestId("product-link-maru60").click();
+    await expect(
+      page.getByRole("heading", { level: 1, name: "Maru60" })
+    ).toBeVisible();
+    await expect(page.getByTestId("product-spin")).toHaveAttribute(
+      "data-ready-count",
+      "12"
+    );
+    const geometry = await page.evaluate(() => {
+      const visual = document
+        .querySelector(".store-custom-visual")
+        ?.getBoundingClientRect();
+      const controls = document
+        .querySelector(".store-custom-controls")
+        ?.getBoundingClientRect();
+      if (!(visual && controls)) {
+        throw new Error("Missing gallery or option rail");
+      }
+      return {
+        noOverflow: document.documentElement.scrollWidth <= window.innerWidth,
+        sideBySide: controls.left >= visual.right,
+        stacked: controls.top >= visual.bottom,
+      };
+    });
+    expect(geometry.noOverflow).toBe(true);
+    expect(width >= 1024 ? geometry.sideBySide : geometry.stacked).toBe(true);
+    await page.screenshot({
+      fullPage: true,
+      path: testInfo.outputPath("gallery-detail.png"),
+    });
+  });
+}

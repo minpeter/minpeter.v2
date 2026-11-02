@@ -33,11 +33,13 @@ export function ProductCustomizerSkeleton() {
       className="store-customizer"
       data-testid="product-customizer-skeleton"
     >
-      <div className="store-media-stage">
-        <ProductMediaSkeleton
-          className="store-media-skeleton rounded-none"
-          outline={silhouette.outline}
-        />
+      <div className="store-custom-visual">
+        <div className="store-media-stage">
+          <ProductMediaSkeleton
+            className="store-media-skeleton rounded-none"
+            outline={silhouette.outline}
+          />
+        </div>
       </div>
       <div className="store-custom-controls">
         <fieldset disabled>

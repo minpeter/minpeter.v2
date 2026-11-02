@@ -311,14 +311,16 @@ export function ProductCustomizer(props: ProductGalleryProps) {
       data-testid="product-customizer"
     >
       <h2 className="store-custom-selection sr-only">{selectedLabel}</h2>
-      <SelectionPreview
-        angle={angleRef.current}
-        combination={combination}
-        gallery={props}
-        onAngleChange={rememberAngle}
-        personal={personal}
-        unsupported={unsupported}
-      />
+      <div className="store-custom-visual">
+        <SelectionPreview
+          angle={angleRef.current}
+          combination={combination}
+          gallery={props}
+          onAngleChange={rememberAngle}
+          personal={personal}
+          unsupported={unsupported}
+        />
+      </div>
       <div className="store-custom-controls">
         {pairing?.signature === `${selection.housing}:${selection.keycaps}` ? (
           <p

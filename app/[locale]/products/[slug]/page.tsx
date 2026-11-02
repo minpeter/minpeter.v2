@@ -60,6 +60,10 @@ async function ProductDetail({
 
   return (
     <article className="store-product" data-testid="product-detail">
+      <header className="store-product-heading">
+        <h1>{product.name}</h1>
+        <span className="store-label">{t(`items.${product.key}.variant`)}</span>
+      </header>
       {/* Keep localized content in the static shell; only URL-dependent controls suspend. */}
       <Suspense fallback={<ProductCustomizerSkeleton />}>
         <ProductCustomizer
@@ -83,7 +87,7 @@ async function ProductDetail({
       <div className="store-product-info">
         <div>
           <div className="flex items-baseline justify-between gap-4">
-            <h1 className="store-label text-foreground">{product.name}</h1>
+            <span className="store-label text-foreground">{product.name}</span>
             <span className="store-label shrink-0">
               {t(`items.${product.key}.license`)}
             </span>

@@ -11,7 +11,7 @@ export default function Loading() {
     >
       <div aria-hidden="true" className="store-card">
         <ProductMediaSkeleton
-          className="aspect-[2/3] w-full rounded-none"
+          className="aspect-[2/3] rounded-none"
           outline={silhouette.outline}
         />
         <div className="store-card-caption store-label opacity-100">
