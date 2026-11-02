@@ -940,7 +940,9 @@ for (const { locale, prefix, messages } of LOCALES) {
         await expect(spin.locator("canvas")).toHaveCSS("object-fit", "contain");
         const bounds = await spin.boundingBox();
         expect(bounds).not.toBeNull();
-        expect(bounds?.height).toBeLessThanOrEqual(height * 0.72 + 1);
+        expect(bounds?.height).toBeLessThanOrEqual(
+          height * (width >= 1024 ? 0.82 : 0.62) + 1
+        );
         expect((bounds?.width ?? 0) / (bounds?.height ?? 1)).toBeCloseTo(
           2 / 3,
           2

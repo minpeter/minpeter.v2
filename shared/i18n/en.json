@@ -256,7 +256,8 @@
       "rule60": {
         "variant": "HHKB housing · integrated wrist rest",
         "license": "CC BY-NC 4.0",
-        "description": "Maru60 is an independent HHKB housing for Rule 60 V3 internals, with a honeycomb wrist rest built in. The current design combines the v7.10 top case with the v0.10 draft bottom case. It is not an INKC STUDIO product.",
+        "intro": "MARU60 is an independent HHKB housing for Rule 60 V3 internals, with a honeycomb wrist rest built in.",
+        "description": "MARU60 is an independent HHKB housing for Rule 60 V3 internals, with a honeycomb wrist rest built in. The current design combines the v7.10 top case with the v0.10 draft bottom case. It is not an INKC STUDIO product.",
         "details": {
           "size": "Current top-case footprint: 298.1 × 198.3 mm; complete assembly dimensions and physical fit are not yet verified",
           "joints": "Split top case with three central dovetails; draft bottom case with five sliding dovetails",

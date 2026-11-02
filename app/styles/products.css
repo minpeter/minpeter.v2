@@ -483,174 +483,147 @@ body:has([data-store]) main {
   }
 }
 
-/* Gallery layout experiment: shared shell and ready-state geometry. Render sources,
-   camera angles and silhouette transforms are deliberately unchanged. */
+/* Detail-only experiment. The catalog and render coordinate system stay unchanged. */
 @layer base {
-  .store {
-    --store-stage-height: min(62dvh, 42rem);
-  }
-
-  .store-header {
-    min-height: 4.5rem;
-    border-bottom: 1px solid hsl(var(--foreground) / 0.12);
-  }
-
-  .store-grid {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 2rem;
-    width: 100%;
-    max-width: 100rem;
-    padding: 1.25rem var(--store-gutter) 4rem;
-    margin-inline: auto;
-  }
-
-  .store-card {
-    padding: 1.25rem;
-    background: hsl(var(--foreground) / 0.025);
-    border: 1px solid hsl(var(--foreground) / 0.12);
-  }
-
-  .store-card > [data-testid="product-spin"],
-  .store-card > [data-testid="product-media-skeleton"] {
-    width: min(100%, calc(var(--store-stage-height) * 2 / 3));
-    margin-inline: auto;
-  }
-
-  .store-card-caption {
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 0.5rem 1.5rem;
-    align-items: baseline;
-    justify-content: space-between;
-    padding-top: 1.25rem;
-    margin-top: 1.25rem;
-    border-top: 1px solid hsl(var(--foreground) / 0.12);
-    opacity: 1;
-  }
-
-  .store-card-caption > :first-child {
-    color: hsl(var(--foreground));
-  }
-
   .store-product {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 2.5rem;
+    --store-stage-height: min(62dvh, 42rem);
+    display: block;
     width: 100%;
-    max-width: 100rem;
-    padding: 1.25rem var(--store-gutter) 4rem;
+    max-width: 90rem;
+    padding: 1.5rem var(--store-gutter) 5rem;
     margin-inline: auto;
   }
-
   .store-customizer {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
-    gap: 1.5rem;
+    gap: 2rem;
     align-items: start;
   }
-
-  .store-custom-visual {
+  .store-custom-visual,
+  .store-custom-sidebar {
     min-width: 0;
-    background: hsl(var(--foreground) / 0.025);
-    border: 1px solid hsl(var(--foreground) / 0.12);
   }
-
+  .store-custom-sidebar {
+    display: grid;
+    gap: 2.5rem;
+    align-content: start;
+  }
   .store-media {
     min-height: 0;
   }
-
   .store-media-stage {
     height: var(--store-stage-height);
-    padding-inline: 0.75rem;
+    padding-inline: 0;
   }
-
   .store-media-stage > [data-testid="product-spin"],
   .store-media-skeleton {
     width: min(100%, calc(var(--store-stage-height) * 2 / 3));
   }
-
-  .store-custom-controls {
-    gap: 1.75rem;
-    padding: 1.25rem 0;
-    margin-top: 0;
+  .store-product-heading {
+    display: grid;
+    gap: 1rem;
   }
-
+  .store-product-heading h1 {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: -0.045em;
+  }
+  .store-product-intro {
+    margin: 0;
+    font-size: 0.9375rem;
+    line-height: 1.65;
+    color: hsl(var(--foreground) / 0.65);
+  }
+  .store-custom-controls {
+    gap: 2rem;
+    margin: 0;
+  }
   .store-custom-controls fieldset {
     min-width: 0;
   }
-
+  .store-custom-controls legend {
+    margin-bottom: 0.5rem;
+    font-family: inherit;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    text-transform: none;
+    letter-spacing: 0;
+  }
+  .store-custom-selected-name {
+    margin-left: 0.5rem;
+  }
+  .store-custom-swatches {
+    display: grid;
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+    gap: 0;
+  }
+  .store-custom-color {
+    position: relative;
+    width: 100%;
+    border: 0;
+  }
+  .store-custom-swatch {
+    width: 1rem;
+    height: 1rem;
+  }
+  .store-custom-color[data-selected="true"]::after {
+    position: absolute;
+    bottom: 0;
+    left: calc(50% - 0.375rem);
+    width: 0.75rem;
+    height: 1px;
+    content: "";
+    background: hsl(var(--foreground));
+  }
+  .store-custom-kits {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 0.5rem;
+  }
+  .store-custom-details {
+    border: 0;
+  }
   .store-product-info {
     position: static;
     display: grid;
     gap: 2rem;
-    padding-top: 2rem;
-    border-top: 1px solid hsl(var(--foreground) / 0.2);
+    padding: 0;
   }
-
-  .store-product-heading {
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-    gap: 0.5rem 2rem;
-    align-items: baseline;
-    justify-content: space-between;
-    color: hsl(var(--muted-foreground));
-  }
-
-  .store-product-heading h1 {
-    font-size: 2.25rem;
-    line-height: 2.5rem;
+  .store-product-info .store-button {
+    justify-items: start;
+    min-height: 2.75rem;
+    padding-inline: 0;
     color: hsl(var(--foreground));
-    letter-spacing: -0.05em;
+    text-align: left;
+    text-decoration: underline;
+    text-underline-offset: 0.3em;
+    background: transparent;
+    border: 0;
   }
-
+  .store-product-info .store-button:focus-visible {
+    outline: 2px solid hsl(var(--foreground));
+    outline-offset: 3px;
+  }
   @media (min-width: 64rem) {
-    .store {
-      --store-stage-height: min(82dvh, 56rem);
-    }
-
-    .store-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      padding-top: 2rem;
-    }
-
-    .store-card:only-of-type {
-      grid-column: 1 / -1;
-    }
-
-    .store-card {
-      padding: 2rem;
-    }
-
-    .store-product-heading {
-      flex-direction: row;
-    }
-
     .store-product {
-      padding-top: 2rem;
+      --store-stage-height: min(82dvh, 56rem);
+      padding-top: 3rem;
     }
-
     .store-customizer {
-      grid-template-columns: minmax(0, 1fr) 22rem;
-      gap: 2.5rem;
+      grid-template-columns: minmax(0, 1fr) 24rem;
+      gap: clamp(3rem, 6vw, 6rem);
     }
-
-    .store-custom-controls {
-      padding: 1.5rem;
-      border: 1px solid hsl(var(--foreground) / 0.18);
+    .store-custom-visual {
+      position: sticky;
+      top: 1.5rem;
     }
-
+    .store-custom-sidebar {
+      gap: 3rem;
+    }
     .store-custom-kits {
       grid-template-columns: repeat(3, minmax(0, 1fr));
-      column-gap: 0.75rem;
-    }
-
-    .store-product-info {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      column-gap: 4rem;
-    }
-
-    .store-actions {
-      align-self: start;
+      gap: 0.75rem 1.5rem;
     }
   }
 }

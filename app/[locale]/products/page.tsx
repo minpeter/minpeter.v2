@@ -42,7 +42,7 @@ export default async function Page(_props: PageProps<"/[locale]/products">) {
         >
           {/* Hovering scrubs the turntable; the link itself carries the name. */}
           <ProductSpin
-            sizes="(min-width: 64rem) 40vw, 90vw"
+            sizes="(min-width: 64rem) 25vw, 50vw"
             spin={product.spin}
           />
           <span aria-hidden="true" className="store-card-caption store-label">

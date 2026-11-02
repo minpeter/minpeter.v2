@@ -1,15 +1,42 @@
 // @vitest-environment jsdom
 import { cleanup, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
-
-import DetailLoading from "../app/[locale]/products/[slug]/loading";
+import { ProductDetailSkeleton } from "../app/[locale]/products/[slug]/loading";
 import ListLoading from "../app/[locale]/products/loading";
+import en from "../shared/i18n/en.json";
+import { ProductCustomizerSkeleton } from "./product-customizer-skeleton";
 
 afterEach(cleanup);
 
 describe("product loading skeletons", () => {
+  it("keeps real introduction and details accessible while the preview suspends", () => {
+    render(
+      <ProductCustomizerSkeleton
+        details={<p>Existing product description</p>}
+        intro={<h1>MARU60</h1>}
+      />
+    );
+    expect(
+      screen
+        .getByRole("heading", { name: "MARU60" })
+        .closest('[aria-hidden="true"]')
+    ).toBeNull();
+    expect(
+      screen
+        .getByText("Existing product description")
+        .closest('[aria-hidden="true"]')
+    ).toBeNull();
+    expect(
+      screen
+        .getByTestId("product-customizer-skeleton")
+        .querySelectorAll(".store-custom-sidebar")
+    ).toHaveLength(1);
+  });
+
   it("reserves the stage, selectors, details row and full information hierarchy", () => {
-    render(<DetailLoading />);
+    render(
+      <ProductDetailSkeleton introText={en.products.items.rule60.intro} />
+    );
     const skeleton = screen.getByTestId("product-detail-skeleton");
     expect(skeleton.getAttribute("aria-busy")).toBe("true");
     expect(skeleton.querySelectorAll(".store-product-heading")).toHaveLength(1);

@@ -681,24 +681,13 @@ for (const width of [390, 768, 1440, 1920]) {
     page,
   }, testInfo) => {
     await page.setViewportSize({ height: 1000, width });
-    await page.goto("/en/products");
-    await expect(page.getByTestId("product-spin")).toHaveAttribute(
-      "data-ready-count",
-      "12"
-    );
-    await expect(page.locator(".store-card-caption")).toHaveCSS("opacity", "1");
-    await page.screenshot({
-      fullPage: true,
-      path: testInfo.outputPath("gallery-catalog.png"),
-    });
-    await page.getByTestId("product-link-maru60").click();
+    await page.goto("/en/products/maru60");
     await expect(
-      page.getByRole("heading", { level: 1, name: "Maru60" })
+      page.getByRole("heading", { level: 1, name: "MARU60" })
     ).toBeVisible();
-    await expect(page.getByTestId("product-spin")).toHaveAttribute(
-      "data-ready-count",
-      "12"
-    );
+    await expect(
+      page.getByTestId("product-spin").filter({ visible: true })
+    ).toHaveAttribute("data-ready-count", "12");
     const geometry = await page.evaluate(() => {
       const visual = document
         .querySelector(".store-custom-visual")
@@ -723,3 +712,46 @@ for (const width of [390, 768, 1440, 1920]) {
     });
   });
 }
+
+test("borderless detail keeps the product sticky while the page scrolls through options", async ({
+  page,
+}, testInfo) => {
+  await page.setViewportSize({ height: 900, width: 1440 });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/en/products/maru60");
+  await expect(
+    page.getByRole("heading", { level: 1, name: "MARU60" })
+  ).toBeVisible();
+  await expect(page.locator(".store-product-intro")).toContainText(
+    "Rule 60 V3"
+  );
+  await expect(page.getByTestId("product-spin")).toHaveAttribute(
+    "data-ready-count",
+    "12"
+  );
+  await expect(page.locator(".store-custom-sidebar")).toHaveCSS(
+    "overflow-y",
+    "visible"
+  );
+  await expect(page.locator(".store-custom-visual")).toHaveCSS(
+    "border-top-width",
+    "0px"
+  );
+  await expect(page.getByText("Drag to rotate", { exact: true })).toHaveCount(
+    0
+  );
+  await page.screenshot({
+    fullPage: true,
+    path: testInfo.outputPath("refined-detail-full.png"),
+  });
+  await page.evaluate(() => window.scrollTo({ behavior: "instant", top: 180 }));
+  const first = await page.locator(".store-custom-visual").boundingBox();
+  await page.evaluate(() => window.scrollTo({ behavior: "instant", top: 300 }));
+  const second = await page.locator(".store-custom-visual").boundingBox();
+  expect(first?.y).toBe(24);
+  expect(second?.y).toBe(24);
+  expect(second?.width).toBe(first?.width);
+  await page.screenshot({
+    path: testInfo.outputPath("refined-detail-sticky.png"),
+  });
+});
