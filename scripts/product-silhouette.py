@@ -1,6 +1,6 @@
 """Generate solid outer product outlines offline (Python 3 + Pillow).
 
-Usage: python3 scripts/product-silhouette.py INPUT OUTPUT [--tolerance 3]
+Usage: python3 scripts/product-silhouette.py INPUT_FILE_OR_DIRECTORY OUTPUT [--tolerance 3]
 Keeps the full image canvas: never crop, rotate, or infer opaque backgrounds.
 Interior holes are deliberately filled. Concave/disconnected outer shapes remain.
 The browser receives a few SVG points, not the source image or image processing.
@@ -85,9 +85,20 @@ if __name__ == "__main__":
     parser.add_argument("output", type=Path)
     parser.add_argument("--tolerance", type=float, default=3)
     args = parser.parse_args()
-    result = outline(Image.open(args.input), args.tolerance)
-    args.output.write_text(json.dumps({
-        "source": args.input.as_posix(),
-        "sourceSha256": hashlib.sha256(args.input.read_bytes()).hexdigest(),
-        "outline": result,
-    }, indent=2) + "\n")
+    def entry(source):
+        return {
+            "source": source.as_posix(),
+            "sourceSha256": hashlib.sha256(source.read_bytes()).hexdigest(),
+            "outline": outline(Image.open(source), args.tolerance),
+        }
+
+    if args.input.is_dir():
+        entries = {source.stem: entry(source) for source in sorted(args.input.glob("*.webp"))}
+        result = {key: value["outline"] for key, value in entries.items()}
+        # Keep source paths/hashes out of the runtime/client payload.
+        provenance = {key: {field: value[field] for field in ("source", "sourceSha256")}
+                      for key, value in entries.items()}
+        args.output.with_suffix(".sources.json").write_text(json.dumps(provenance, indent=2) + "\n")
+    else:
+        result = entry(args.input)
+    args.output.write_text(json.dumps(result, indent=2) + "\n")

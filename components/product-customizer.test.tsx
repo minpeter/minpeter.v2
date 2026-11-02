@@ -483,9 +483,10 @@ describe("ProductCustomizer availability and selection", () => {
         expect(tile?.textContent?.trim()).toBe("");
         expect(tile?.getAttribute("title")).toBe(name);
         const thumbnail = tile?.querySelector("img");
-        expect(thumbnail?.getAttribute("src")).toBe(
-          `/assets/products/maru60/keycaps/v1/${id}.webp`
-        );
+        expect(
+          new URL(thumbnail?.getAttribute("src") ?? "", window.location.href)
+            .pathname
+        ).toBe(`/assets/products/maru60/keycaps/v1/${id}.webp`);
         expect(thumbnail?.getAttribute("alt")).toBe("");
         expect(
           radio.closest("label")?.querySelectorAll("p, small, dl")

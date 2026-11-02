@@ -1,0 +1,26 @@
+{
+  "inventor": {
+    "source": "public/assets/products/maru60/keycaps/v1/inventor.webp",
+    "sourceSha256": "d55168a91d39a6c071c41368e15c037363313428f19c11bf1831c5e1fe2f1128"
+  },
+  "nicepbt-bow-retail": {
+    "source": "public/assets/products/maru60/keycaps/v1/nicepbt-bow-retail.webp",
+    "sourceSha256": "66c28500a076339e54f5ef9d7e57a2310ff7272d77870ed67d7cc9b504277af7"
+  },
+  "nicepbt-noel-latin-retail": {
+    "source": "public/assets/products/maru60/keycaps/v1/nicepbt-noel-latin-retail.webp",
+    "sourceSha256": "4e7b141530e31ec78a7b54b2e5312c20667d527f3161f1f404a955520fd09044"
+  },
+  "nicepbt-purple-chonkers-retail": {
+    "source": "public/assets/products/maru60/keycaps/v1/nicepbt-purple-chonkers-retail.webp",
+    "sourceSha256": "a34849f2d170dae0d318bc1f18f96acf40434b1ca24770f42cc206a80faf8798"
+  },
+  "pbtfans-wob-retail": {
+    "source": "public/assets/products/maru60/keycaps/v1/pbtfans-wob-retail.webp",
+    "sourceSha256": "249fa3b7df2c3059bc4cfa97571ed198e7d48b6511b42d28ce038fb6ae49c6c9"
+  },
+  "retro-programmer-retail": {
+    "source": "public/assets/products/maru60/keycaps/v1/retro-programmer-retail.webp",
+    "sourceSha256": "6747910863d1e26dc97c1032043d030196a4f3c1cc4d7f1186b73702a1ce4509"
+  }
+}

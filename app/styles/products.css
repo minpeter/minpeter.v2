@@ -374,9 +374,11 @@ body:has([data-store]) main {
     transform: translateX(-50%);
   }
   .store-keycap-thumbnail {
+    position: relative;
     display: block;
     width: 80%;
     height: auto;
+    aspect-ratio: 1;
     object-fit: contain;
   }
   .store-custom-kit:hover::after {

@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useTranslations } from "next-intl";
 import {
   type ChangeEvent,
@@ -11,6 +10,7 @@ import {
   useState,
 } from "react";
 
+import { KeycapThumbnail } from "@/components/keycap-thumbnail";
 import type { ProductGalleryProps } from "@/components/product-gallery";
 import { ProductSpin } from "@/components/product-spin";
 import {
@@ -369,15 +369,7 @@ export function ProductCustomizer(props: ProductGalleryProps) {
                   type="radio"
                   value={option.id}
                 />
-                <Image
-                  alt=""
-                  aria-hidden="true"
-                  className="store-keycap-thumbnail"
-                  height={256}
-                  src={`/assets/products/maru60/keycaps/v1/${option.id}.webp`}
-                  unoptimized
-                  width={256}
-                />
+                <KeycapThumbnail id={option.id} />
               </label>
             ))}
           </div>

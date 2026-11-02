@@ -100,7 +100,10 @@ for (const scenario of [
           .getByTestId("product-media-skeleton")
           .boundingBox();
         expect(
-          await shell.getByTestId("product-silhouette").boundingBox()
+          await shell
+            .locator(".store-media-stage")
+            .getByTestId("product-silhouette")
+            .boundingBox()
         ).toEqual(shellFrame);
         const shellBox = await shell.boundingBox();
         const shellHeight = await shellPage.evaluate(
@@ -188,12 +191,15 @@ for (const scenario of [
       await expect(skeleton.locator(".store-custom-color")).toHaveCount(8);
       await expect(skeleton.locator(".store-custom-kit")).toHaveCount(6);
       await expect(skeleton.locator("input,button,a,summary")).toHaveCount(0);
-      await expect(skeleton.getByTestId("product-silhouette")).toHaveCount(1);
+      await expect(
+        skeleton.locator(".store-media-stage").getByTestId("product-silhouette")
+      ).toHaveCount(1);
       await page.emulateMedia({ reducedMotion: "reduce" });
-      await expect(skeleton.getByTestId("product-media-skeleton")).toHaveCSS(
-        "animation-name",
-        "none"
-      );
+      await expect(
+        skeleton
+          .locator(".store-media-stage")
+          .getByTestId("product-media-skeleton")
+      ).toHaveCSS("animation-name", "none");
       const skeletonGeometry = await geometry(skeleton);
       await page.screenshot({
         animations: "disabled",
@@ -509,3 +515,86 @@ test("records initial spin transfer and cached catalog-to-detail reuse", async (
   );
   expect(resources.length).toBeGreaterThan(0);
 });
+
+for (const width of [390, 1440]) {
+  test(`keycap outlines preserve loading/error/ready frames at ${width}px`, async ({
+    page,
+  }, testInfo) => {
+    await page.setViewportSize({ height: 844, width });
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    let release: () => void = () => undefined;
+    const delayed = new Promise<void>((resolve) => {
+      release = resolve;
+    });
+    const pattern =
+      "**/assets/products/maru60/keycaps/v1/nicepbt-bow-retail.webp";
+    let requests = 0;
+    page.on("request", (request) => {
+      if (request.url().endsWith("/nicepbt-bow-retail.webp")) {
+        requests += 1;
+      }
+    });
+    await page.route(pattern, async (route) => {
+      await delayed;
+      await route.abort();
+    });
+    await page.goto("/en/products/maru60", { waitUntil: "domcontentloaded" });
+    const thumb = page
+      .getByTestId("keycap-thumbnail-nicepbt-bow-retail")
+      .filter({ visible: true });
+    await thumb.scrollIntoViewIfNeeded();
+    await expect(thumb).toHaveAttribute("data-state", "loading");
+    const before = await thumb.boundingBox();
+    expect(await thumb.getByTestId("product-silhouette").boundingBox()).toEqual(
+      before
+    );
+    await expect(thumb.getByTestId("product-media-skeleton")).toHaveCSS(
+      "animation-name",
+      "none"
+    );
+    await page.screenshot({
+      animations: "disabled",
+      fullPage: true,
+      path: testInfo.outputPath("keycap-loading.png"),
+    });
+    release();
+    await expect(thumb).toHaveAttribute("data-state", "error");
+    expect(await thumb.boundingBox()).toEqual(before);
+    await expect(thumb.locator("img")).toHaveCSS("opacity", "0");
+    await page.screenshot({
+      animations: "disabled",
+      fullPage: true,
+      path: testInfo.outputPath("keycap-error.png"),
+    });
+    await page.unroute(pattern);
+    await page.reload();
+    await expect(thumb).toHaveAttribute("data-state", "ready");
+    await expect(thumb.locator("img")).toHaveCSS("opacity", "1");
+    const readyBox = await thumb.boundingBox();
+    expect(readyBox?.width).toBe(before?.width);
+    expect(readyBox?.height).toBe(before?.height);
+    const completedRequests = requests;
+    await page.getByRole("radio", { exact: true, name: "NicePBT BoW" }).check();
+    await expect(thumb).toHaveAttribute("data-state", "ready");
+    expect(requests).toBe(completedRequests);
+    await page.screenshot({
+      animations: "disabled",
+      fullPage: true,
+      path: testInfo.outputPath("keycap-ready.png"),
+    });
+    writeFileSync(
+      testInfo.outputPath("keycap-geometry.json"),
+      JSON.stringify(
+        {
+          loading: before,
+          noRefetchOnSelection: requests === completedRequests,
+          ready: readyBox,
+          requests,
+          width,
+        },
+        null,
+        2
+      )
+    );
+  });
+}

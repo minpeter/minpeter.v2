@@ -1,5 +1,8 @@
 import { ProductMediaSkeleton } from "@/components/product-media-skeleton";
 import { Skeleton } from "@/components/ui/skeleton";
+import keycapSilhouettes from "@/shared/keycap-silhouettes.json" with {
+  type: "json",
+};
 import silhouette from "@/shared/maru60-silhouette.json" with { type: "json" };
 
 const HOUSING_SLOTS = [
@@ -12,7 +15,14 @@ const HOUSING_SLOTS = [
   "green",
   "marble",
 ];
-const KEYCAP_SLOTS = ["inventor", "retro", "bow", "wob", "noel", "purple"];
+const KEYCAP_SLOTS = [
+  "inventor",
+  "retro-programmer-retail",
+  "nicepbt-bow-retail",
+  "pbtfans-wob-retail",
+  "nicepbt-noel-latin-retail",
+  "nicepbt-purple-chonkers-retail",
+] as const;
 
 /** Shared by the route fallback and the customizer-only streaming boundary. */
 export function ProductCustomizerSkeleton() {
@@ -52,7 +62,10 @@ export function ProductCustomizerSkeleton() {
           <div className="store-custom-kits">
             {KEYCAP_SLOTS.map((slot) => (
               <div className="store-custom-option store-custom-kit" key={slot}>
-                <Skeleton className="aspect-square w-4/5 rounded-none" />
+                <ProductMediaSkeleton
+                  className="aspect-square w-4/5 rounded-none"
+                  outline={keycapSilhouettes[slot]}
+                />
               </div>
             ))}
           </div>
