@@ -1,16 +1,6 @@
+import { ProductCustomizerSkeleton } from "@/components/product-customizer-skeleton";
 import { Skeleton } from "@/components/ui/skeleton";
 
-const HOUSING_SLOTS = [
-  "transparent",
-  "white",
-  "gray",
-  "charcoal",
-  "blue",
-  "purple",
-  "green",
-  "marble",
-];
-const KEYCAP_SLOTS = ["inventor", "retro", "bow", "wob", "noel", "purple"];
 const DESCRIPTION_LINES = ["first", "second", "third", "fourth", "fifth"];
 const DETAIL_LINES = [
   "first",
@@ -33,48 +23,7 @@ export default function Loading() {
       className="store-product"
       data-testid="product-detail-skeleton"
     >
-      <div aria-hidden="true" className="store-customizer">
-        <div className="store-media-stage">
-          <Skeleton className="store-media-skeleton rounded-none" />
-        </div>
-        <div className="store-custom-controls">
-          <fieldset disabled>
-            <legend className="store-label">
-              <Skeleton className="store-skeleton-label w-32 rounded-none" />
-            </legend>
-            <div className="store-custom-swatches">
-              {HOUSING_SLOTS.map((slot) => (
-                <div
-                  className="store-custom-option store-custom-color"
-                  key={slot}
-                >
-                  <Skeleton className="size-6 rounded-full" />
-                </div>
-              ))}
-            </div>
-          </fieldset>
-          <fieldset disabled>
-            <legend className="store-label">
-              <Skeleton className="store-skeleton-label w-20 rounded-none" />
-            </legend>
-            <div className="store-custom-kits">
-              {KEYCAP_SLOTS.map((slot) => (
-                <div
-                  className="store-custom-option store-custom-kit"
-                  key={slot}
-                >
-                  <Skeleton className="aspect-square w-4/5 rounded-none" />
-                </div>
-              ))}
-            </div>
-          </fieldset>
-          <div className="store-custom-details">
-            <div className="store-custom-details-placeholder store-label">
-              <Skeleton className="store-skeleton-label w-40 rounded-none" />
-            </div>
-          </div>
-        </div>
-      </div>
+      <ProductCustomizerSkeleton />
       <div aria-hidden="true" className="store-product-info">
         <div className="store-label">
           <div className="flex items-baseline justify-between gap-4">

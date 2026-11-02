@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getLocale, getTranslations } from "next-intl/server";
 import { Suspense } from "react";
-
 import { ProductCustomizer } from "@/components/product-customizer";
+import { ProductCustomizerSkeleton } from "@/components/product-customizer-skeleton";
 import { getProduct, PRODUCTS } from "@/shared/products";
 import { createMetadata } from "@/shared/utils/metadata";
 
@@ -60,22 +60,25 @@ async function ProductDetail({
 
   return (
     <article className="store-product" data-testid="product-detail">
-      <ProductCustomizer
-        labels={{
-          media: t("mediaLabel", { product: product.name }),
-          next: t("nextImage"),
-          previous: t("previousImage"),
-          showImage: Array.from({ length: slides }, (_, index) =>
-            t("showImage", { index: String(index + 1) })
-          ),
-          spin: t("spinLabel", { product: product.name }),
-        }}
-        renders={product.renders.map((render) => ({
-          alt: t(`renderAlts.${render.alt}`),
-          image: render.image,
-        }))}
-        spin={product.spin}
-      />
+      {/* Keep localized content in the static shell; only URL-dependent controls suspend. */}
+      <Suspense fallback={<ProductCustomizerSkeleton />}>
+        <ProductCustomizer
+          labels={{
+            media: t("mediaLabel", { product: product.name }),
+            next: t("nextImage"),
+            previous: t("previousImage"),
+            showImage: Array.from({ length: slides }, (_, index) =>
+              t("showImage", { index: String(index + 1) })
+            ),
+            spin: t("spinLabel", { product: product.name }),
+          }}
+          renders={product.renders.map((render) => ({
+            alt: t(`renderAlts.${render.alt}`),
+            image: render.image,
+          }))}
+          spin={product.spin}
+        />
+      </Suspense>
 
       <div className="store-product-info">
         <div>

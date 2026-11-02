@@ -62,6 +62,91 @@ for (const scenario of [
       locale: scenario.locale,
       viewport: { height: 844, width: scenario.width },
     });
+    test("static shell preserves localized information and full-page geometry", async ({
+      browser,
+      page,
+    }, testInfo) => {
+      const prefix = scenario.locale === "ko" ? "" : `/${scenario.locale}`;
+      const path = `${prefix}/products/maru60`;
+      // No JavaScript means streamed replacement scripts cannot reveal a late island.
+      // This captures the real server fallback, not an injected imitation.
+      const shellContext = await browser.newContext({
+        baseURL: testInfo.project.use.baseURL,
+        javaScriptEnabled: false,
+        locale: scenario.locale,
+        viewport: { height: 844, width: scenario.width },
+      });
+      try {
+        const shellPage = await shellContext.newPage();
+        await shellPage.goto(path);
+        await shellPage.evaluate(() =>
+          document.fonts.ready.then(() => undefined)
+        );
+        const shell = shellPage
+          .getByTestId("product-detail")
+          .filter({ visible: true });
+        await expect(shell).toBeVisible();
+        await expect(
+          shell.getByTestId("product-customizer-skeleton")
+        ).toBeVisible();
+        await expect(shell.locator("h1")).toHaveText("Maru60");
+        const shellInfo = await shell
+          .locator(".store-product-info")
+          .innerText();
+        const shellGeometry = await geometry(shell);
+        const shellBox = await shell.boundingBox();
+        const shellHeight = await shellPage.evaluate(
+          () => document.documentElement.scrollHeight
+        );
+        await shellPage.screenshot({
+          animations: "disabled",
+          fullPage: true,
+          path: testInfo.outputPath("shell.png"),
+        });
+
+        await page.goto(path);
+        const ready = page
+          .getByTestId("product-detail")
+          .filter({ visible: true });
+        await expect(
+          ready.getByTestId("product-spin").locator("canvas")
+        ).toBeVisible({ timeout: 15_000 });
+        const readyGeometry = await geometry(ready);
+        const readyBox = await ready.boundingBox();
+        const readyHeight = await page.evaluate(
+          () => document.documentElement.scrollHeight
+        );
+        await page.screenshot({
+          animations: "disabled",
+          fullPage: true,
+          path: testInfo.outputPath("ready.png"),
+        });
+        writeFileSync(
+          testInfo.outputPath("shell-geometry.json"),
+          JSON.stringify(
+            {
+              ready: readyGeometry,
+              readyBox,
+              readyHeight,
+              scenario,
+              shell: shellGeometry,
+              shellBox,
+              shellHeight,
+            },
+            null,
+            2
+          )
+        );
+        expect(await ready.locator(".store-product-info").innerText()).toBe(
+          shellInfo
+        );
+        expect(shellGeometry).toEqual(readyGeometry);
+        expect(shellBox).toEqual(readyBox);
+        expect(shellHeight).toBe(readyHeight);
+      } finally {
+        await shellContext.close();
+      }
+    });
     test("matches ready customizer geometry and responsive wraps", async ({
       page,
     }, testInfo) => {
