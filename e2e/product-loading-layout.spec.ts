@@ -209,6 +209,7 @@ for (const viewport of [
         "data-configuration",
         "personal"
       );
+      await page.getByTestId("product-spin").scrollIntoViewIfNeeded();
       expect(await layout(page)).toEqual(before);
       await expect(
         page.getByTestId("product-spin").locator("canvas")
