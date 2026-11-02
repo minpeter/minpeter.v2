@@ -68,15 +68,17 @@ for (const scenario of [
     }, testInfo) => {
       const prefix = scenario.locale === "ko" ? "" : `/${scenario.locale}`;
       const path = `${prefix}/products/maru60`;
-      // No JavaScript means streamed replacement scripts cannot reveal a late island.
-      // This captures the real server fallback, not an injected imitation.
+      // Keep inline server-stream boundary swaps working, but block the client bundle.
+      // This captures the real unhydrated shell, not an injected imitation.
       const shellContext = await browser.newContext({
         baseURL: testInfo.project.use.baseURL,
-        javaScriptEnabled: false,
         locale: scenario.locale,
         viewport: { height: 844, width: scenario.width },
       });
       try {
+        await shellContext.route("**/_next/static/**/*.js", (route) =>
+          route.abort()
+        );
         const shellPage = await shellContext.newPage();
         await shellPage.goto(path);
         await shellPage.evaluate(() =>
