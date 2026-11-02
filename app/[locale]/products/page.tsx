@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 
+import { ProductFirstFramePreload } from "@/components/product-first-frame-preload";
 import { ProductSpin } from "@/components/product-spin";
 import { Link } from "@/shared/i18n/navigation";
 import { PRODUCTS } from "@/shared/products";
@@ -30,16 +31,7 @@ export default async function Page(_props: PageProps<"/[locale]/products">) {
       className="store-grid"
       data-testid="products-page"
     >
-      {firstFrame ? (
-        <link
-          as="fetch"
-          crossOrigin="anonymous"
-          data-testid="product-first-frame-preload"
-          fetchPriority="high"
-          href={firstFrame}
-          rel="preload"
-        />
-      ) : null}
+      {firstFrame ? <ProductFirstFramePreload source={firstFrame} /> : null}
       {PRODUCTS.map((product) => (
         <Link
           aria-label={product.name}

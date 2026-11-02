@@ -697,7 +697,7 @@ test("compares first-frame-only preload with a cold no-hint baseline", async ({
           (url, index) => frameRequests.indexOf(url) !== index
         );
         const first = resources.find((entry) =>
-          entry.url.endsWith("/frame_000.webp")
+          new URL(entry.url).pathname.endsWith("/frame_000.webp")
         );
         samples.push({
           delayed,
