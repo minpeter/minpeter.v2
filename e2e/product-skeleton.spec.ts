@@ -76,6 +76,7 @@ for (const scenario of [
       ).toBeVisible({ timeout: 15_000 });
       const readyGeometry = await geometry(ready);
       await page.screenshot({
+        animations: "disabled",
         fullPage: true,
         path: testInfo.outputPath("ready.png"),
       });
@@ -93,6 +94,7 @@ for (const scenario of [
       await expect(skeleton.locator("input,button,a,summary")).toHaveCount(0);
       const skeletonGeometry = await geometry(skeleton);
       await page.screenshot({
+        animations: "disabled",
         fullPage: true,
         path: testInfo.outputPath("skeleton.png"),
       });
@@ -119,8 +121,12 @@ for (const width of [390, 1440]) {
     await page.goto("/en/products");
     const card = page.getByTestId("product-link-maru60");
     await expect(card).toBeVisible();
+    await expect(
+      card.getByTestId("product-spin").locator("canvas")
+    ).toBeVisible({ timeout: 15_000 });
     const before = await card.boundingBox();
     await page.screenshot({
+      animations: "disabled",
       fullPage: true,
       path: testInfo.outputPath("catalog-ready.png"),
     });
@@ -133,6 +139,7 @@ for (const width of [390, 1440]) {
       .boundingBox();
     expect(after).toEqual(before);
     await page.screenshot({
+      animations: "disabled",
       fullPage: true,
       path: testInfo.outputPath("catalog-skeleton.png"),
     });
