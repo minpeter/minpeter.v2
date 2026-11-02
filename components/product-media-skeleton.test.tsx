@@ -33,6 +33,9 @@ it("uses a solid outer contour aligned to the default frame, with no interior ho
   expect(
     screen.getByTestId("product-silhouette").querySelectorAll("polygon")
   ).toHaveLength(1);
+  expect(
+    screen.getByTestId("product-media-skeleton").className.split(" ")
+  ).toContain("relative");
   expect(screen.getByTestId("product-media-skeleton").className).toContain(
     "motion-reduce:animate-none"
   );

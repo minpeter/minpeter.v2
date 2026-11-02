@@ -96,6 +96,12 @@ for (const scenario of [
           .locator(".store-product-info")
           .innerText();
         const shellGeometry = await geometry(shell);
+        const shellFrame = await shell
+          .getByTestId("product-media-skeleton")
+          .boundingBox();
+        expect(
+          await shell.getByTestId("product-silhouette").boundingBox()
+        ).toEqual(shellFrame);
         const shellBox = await shell.boundingBox();
         const shellHeight = await shellPage.evaluate(
           () => document.documentElement.scrollHeight
@@ -114,6 +120,9 @@ for (const scenario of [
           ready.getByTestId("product-spin").locator("canvas")
         ).toBeVisible({ timeout: 15_000 });
         const readyGeometry = await geometry(ready);
+        expect(await ready.getByTestId("product-spin").boundingBox()).toEqual(
+          shellFrame
+        );
         const readyBox = await ready.boundingBox();
         const readyHeight = await page.evaluate(
           () => document.documentElement.scrollHeight
@@ -233,6 +242,7 @@ for (const scenario of [
         "1"
       );
       const before = await card.boundingBox();
+      const mediaBefore = await card.getByTestId("product-spin").boundingBox();
       const captionBefore = await card
         .locator(".store-card-caption")
         .boundingBox();
@@ -249,6 +259,12 @@ for (const scenario of [
         .locator(".store-card")
         .boundingBox();
       expect(after).toEqual(before);
+      expect(
+        await page
+          .getByTestId("product-list-skeleton")
+          .getByTestId("product-silhouette")
+          .boundingBox()
+      ).toEqual(mediaBefore);
       const skeletonCard = page
         .getByTestId("product-list-skeleton")
         .locator(".store-card");
@@ -287,6 +303,29 @@ for (const width of [390, 1023, 1440]) {
   test(`catalog history restores layout and scroll at ${width}px`, async ({
     page,
   }, testInfo) => {
+    await page.addInitScript(() => {
+      const events: object[] = [];
+      const record = (event: string) => {
+        events.push({
+          event,
+          height: document.documentElement.scrollHeight,
+          path: location.pathname,
+          time: performance.now(),
+          y: scrollY,
+        });
+        sessionStorage.setItem(
+          "catalog-qa-scroll-events",
+          JSON.stringify(events.slice(-100))
+        );
+      };
+      addEventListener("scroll", () => record("scroll"));
+      addEventListener("popstate", () => record("popstate"));
+      addEventListener("DOMContentLoaded", () =>
+        new ResizeObserver(() => record("resize")).observe(
+          document.documentElement
+        )
+      );
+    });
     await page.setViewportSize({ height: 360, width });
     await page.goto("/en/products");
     const card = page.getByTestId("product-link-maru60");
@@ -338,6 +377,30 @@ for (const width of [390, 1023, 1440]) {
     ).toBeVisible({ timeout: 15_000 });
     await page.goBack();
     await expect(card).toBeVisible();
+    await page.screenshot({
+      animations: "disabled",
+      fullPage: true,
+      path: testInfo.outputPath("catalog-returned-before-assert.png"),
+    });
+    writeFileSync(
+      testInfo.outputPath("scroll-diagnostics.json"),
+      JSON.stringify(
+        {
+          departure,
+          events: await page.evaluate(() =>
+            JSON.parse(
+              sessionStorage.getItem("catalog-qa-scroll-events") ?? "[]"
+            )
+          ),
+          restored: await page.evaluate(() => ({
+            height: document.documentElement.scrollHeight,
+            y: scrollY,
+          })),
+        },
+        null,
+        2
+      )
+    );
     await expect.poll(() => page.evaluate(() => scrollY)).toBe(scrollBefore);
     expect(await card.boundingBox()).toEqual(boxBefore);
     await page.screenshot({

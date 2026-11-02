@@ -1,4 +1,5 @@
 import { Skeleton } from "@/components/ui/skeleton";
+import { cn } from "@/shared/utils/tailwind";
 
 export interface ProductOutline {
   height: number;
@@ -16,7 +17,7 @@ export function ProductMediaSkeleton({
 }) {
   return (
     <Skeleton
-      className={`${className}${outline ? "relative bg-transparent" : ""}`}
+      className={cn(className, outline && "relative bg-transparent")}
       data-testid="product-media-skeleton"
     >
       {outline ? (
