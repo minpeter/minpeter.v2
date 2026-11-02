@@ -413,7 +413,8 @@ body:has([data-store]) main {
     border-top: 1px solid hsl(var(--foreground) / 0.25);
     border-bottom: 1px solid hsl(var(--foreground) / 0.25);
   }
-  .store-custom-details summary {
+  .store-custom-details summary,
+  .store-custom-details-placeholder {
     min-height: 2.75rem;
     padding-block: 0.875rem;
     cursor: pointer;
@@ -458,4 +459,24 @@ body:has([data-store]) main {
 .store-custom-pairing {
   padding-left: 0.75rem;
   border-left: 1px solid hsl(var(--foreground));
+}
+
+@layer base {
+  .store-skeleton-label {
+    height: 1lh;
+  }
+  .store-skeleton-copy {
+    display: grid;
+    gap: 0.5rem;
+  }
+  .store-skeleton-copy > div {
+    height: calc(1lh - 0.5rem);
+  }
+  .store-skeleton-copy > div:last-child {
+    width: 70%;
+  }
+  [data-testid="product-detail-skeleton"] .store-custom-option,
+  .store-custom-details-placeholder {
+    cursor: default;
+  }
 }

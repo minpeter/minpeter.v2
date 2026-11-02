@@ -140,6 +140,7 @@ jobs:
           e2e/products-spin.spec.ts
           e2e/product-customization.spec.ts
           e2e/product-loading-layout.spec.ts
+          e2e/product-skeleton.spec.ts
           e2e/product-redirects.spec.ts
 
       - name: Preserve browser screenshots for visual review
