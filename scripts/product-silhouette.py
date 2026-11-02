@@ -1,9 +1,10 @@
 """Generate solid outer product outlines offline (Python 3 + Pillow).
 
-Usage: python3 scripts/product-silhouette.py INPUT_FILE_OR_DIRECTORY OUTPUT [--tolerance 3] [--convex]
+Usage: python3 scripts/product-silhouette.py INPUT_FILE_OR_DIRECTORY OUTPUT [--tolerance 3] [--convex] [--envelope]
 Keeps the full image canvas: never crop, rotate, or infer opaque backgrounds.
 Interior holes are deliberately filled. Concave/disconnected outer shapes remain.
 Optional --convex envelopes each component for simple solid keyboard bodies.
+--envelope joins all alpha components into one body envelope (keyboard only).
 The browser receives a few SVG points, not the source image or image processing.
 """
 import argparse
@@ -45,7 +46,20 @@ def convex_hull(points):
     return half(points) + half(reversed(points))
 
 
-def outline(image, tolerance=3, convex=False):
+def simplify_closed(loop, tolerance):
+    # Keep the four support extrema as anchors. A single RDP split can
+    # discard a rounded corner's extreme and shrink the visible product.
+    anchors = sorted({0, *(min(range(len(loop)), key=lambda i: sign * loop[i][axis])
+                           for axis in (0, 1) for sign in (-1, 1))})
+    points = []
+    for index, start in enumerate(anchors):
+        end = anchors[(index + 1) % len(anchors)]
+        segment = loop[start:end + 1] if end > start else loop[start:] + loop[:end + 1]
+        points.extend(simplify(segment, tolerance)[:-1])
+    return points
+
+
+def outline(image, tolerance=3, convex=False, envelope=False):
     alpha = image.convert("RGBA").getchannel("A")
     if alpha.getextrema() in ((255, 255), (0, 0)):
         return None  # Explicit outline or reserved plain placeholder, never segmentation.
@@ -70,6 +84,12 @@ def outline(image, tolerance=3, convex=False):
                 edges[(x + 1, y + 1)].append((x, y + 1))
             if not inside(x - 1, y):
                 edges[(x, y + 1)].append((x, y))
+    if envelope:
+        # Explicit single-body envelope: include even tiny disconnected edge pixels.
+        # Generic outlines still preserve meaningful disconnected/concave parts.
+        points = simplify_closed(convex_hull(list(edges)), tolerance)
+        return {"width": width, "height": height,
+                "polygons": [" ".join(f"{x},{y}" for x, y in points)]}
     polygons = []
     while edges:
         start = next(iter(edges))
@@ -89,9 +109,7 @@ def outline(image, tolerance=3, convex=False):
             continue
         if convex:
             loop = convex_hull(loop)
-        split = max(range(len(loop)), key=lambda i: math.dist(loop[i], loop[0]))
-        points = (simplify(loop[:split + 1], tolerance)[:-1]
-                  + simplify(loop[split:] + loop[:1], tolerance)[:-1])
+        points = simplify_closed(loop, tolerance)
         polygons.append(" ".join(f"{x},{y}" for x, y in points))
     return {"width": width, "height": height, "polygons": polygons} if polygons else None
 
@@ -102,12 +120,13 @@ if __name__ == "__main__":
     parser.add_argument("output", type=Path)
     parser.add_argument("--tolerance", type=float, default=3)
     parser.add_argument("--convex", action="store_true")
+    parser.add_argument("--envelope", action="store_true")
     args = parser.parse_args()
     def entry(source):
         return {
             "source": source.as_posix(),
             "sourceSha256": hashlib.sha256(source.read_bytes()).hexdigest(),
-            "outline": outline(Image.open(source), args.tolerance, args.convex),
+            "outline": outline(Image.open(source), args.tolerance, args.convex, args.envelope),
         }
 
     if args.input.is_dir():

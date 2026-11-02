@@ -3,9 +3,14 @@ import { readFileSync, writeFileSync } from "node:fs";
 import { expect, type Page, test } from "@playwright/test";
 import en from "../shared/i18n/en.json" with { type: "json" };
 import ja from "../shared/i18n/ja.json" with { type: "json" };
-import spinOutlines from "../shared/maru60-spin-silhouettes.json" with {
+import spinOutlines from "../shared/maru60-retail-silhouettes.json" with {
   type: "json",
 };
+
+import {
+  captureSilhouette,
+  expectSilhouettePixels,
+} from "./product-silhouette-pixels";
 
 const ko: typeof en = JSON.parse(
   readFileSync(new URL("../shared/i18n/ko.json", import.meta.url), "utf8")
@@ -75,6 +80,7 @@ for (const viewport of [
   { height: 1000, width: 1440 },
   { height: 844, width: 390 },
   { height: 640, width: 320 },
+  { height: 390, width: 844 },
   { height: 900, width: 1023 },
   { height: 900, width: 1024 },
   { height: 844, locale: "ko", width: 390 },
@@ -138,6 +144,7 @@ for (const viewport of [
         "animation-name",
         "none"
       );
+      const savedSilhouette = await captureSilhouette(shape);
       phases.loading = await layout(page);
       await expectFeedbackInsideStage(page);
       expect(await layout(page)).toEqual(before);
@@ -159,6 +166,14 @@ for (const viewport of [
       await page.getByRole("button", { name: labels.retry }).click();
       await expect(status).toHaveText(labels.ready, { timeout: 15_000 });
       await expect(page.getByTestId("product-spin-loading")).toHaveCount(0);
+      const pixelAlignment = await expectSilhouettePixels(
+        page,
+        savedSilhouette
+      );
+      writeFileSync(
+        testInfo.outputPath("pixel-alignment.json"),
+        JSON.stringify(pixelAlignment, null, 2)
+      );
       phases.retried = await layout(page);
       expect(await layout(page)).toEqual(before);
       await page
@@ -300,6 +315,7 @@ for (const width of [390, 1440]) {
     const outline = page.getByTestId("product-spin-loading");
     await expect(outline).toBeVisible();
     await expect(spin).toHaveAttribute("aria-valuetext", "90°");
+    const savedSilhouette = await captureSilhouette(outline);
     const points = await outline.locator("polygon").getAttribute("points");
     expect(points).toBe(spinOutlines.frame_090.polygons[0]);
     expect(await layout(page)).toEqual(before);
@@ -326,5 +342,69 @@ for (const width of [390, 1440]) {
       fullPage: true,
       path: testInfo.outputPath("angle90-cached-ready.png"),
     });
+    const pixels = await expectSilhouettePixels(page, savedSilhouette);
+    writeFileSync(
+      testInfo.outputPath("angle90-pixels.json"),
+      JSON.stringify(pixels, null, 2)
+    );
   });
+}
+
+for (const frame of Array.from({ length: 12 }, (_, index) => index)) {
+  for (const width of [390, 1024, 1440]) {
+    test(`painted silhouette fits selected frame ${frame * 30} degrees at ${width}px`, async ({
+      page,
+    }, testInfo) => {
+      await page.setViewportSize({ height: 844, width });
+      await page.emulateMedia({ reducedMotion: "reduce" });
+      await page.goto(
+        "/en/products/maru60?housing=ash-gray&keycaps=nicepbt-bow-retail"
+      );
+      const spin = page.getByTestId("product-spin");
+      await expect(spin).toHaveAttribute("data-ready-count", "12", {
+        timeout: 15_000,
+      });
+      for (let index = 0; index < frame; index += 1) {
+        // biome-ignore lint/performance/noAwaitInLoops: keyboard turns must occur in order
+        await spin.press("ArrowRight");
+      }
+      await expect(spin).toHaveAttribute("data-displayed-frame", String(frame));
+      let release: () => void = () => undefined;
+      const pending = new Promise<void>((resolve) => {
+        release = resolve;
+      });
+      // Change keycaps, not only housing. Different keycap assets share the body envelope.
+      await page.route(
+        "**/assembled/**/ash-gray--pbtfans-wob-retail/**",
+        async (route) => {
+          await pending;
+          await route.continue();
+        }
+      );
+      await page.locator('label[title="PBTfans WoB"]').click();
+      const loading = page.getByTestId("product-spin-loading");
+      await expect(loading).toBeVisible();
+      const saved = await captureSilhouette(loading);
+      await page.screenshot({
+        fullPage: true,
+        path: testInfo.outputPath("silhouette.png"),
+      });
+      release();
+      await expect(spin).toHaveAttribute(
+        "data-displayed-frame",
+        String(frame),
+        { timeout: 15_000 }
+      );
+      await expect(loading).toHaveCount(0);
+      const pixels = await expectSilhouettePixels(page, saved);
+      await page.screenshot({
+        fullPage: true,
+        path: testInfo.outputPath("render.png"),
+      });
+      writeFileSync(
+        testInfo.outputPath("pixels.json"),
+        JSON.stringify({ frame, width, ...pixels }, null, 2)
+      );
+    });
+  }
 }

@@ -7,6 +7,11 @@ import { renderToStaticMarkup } from "react-dom/server";
 import DetailLoading from "../app/[locale]/products/[slug]/loading";
 import ListLoading from "../app/[locale]/products/loading";
 
+import {
+  captureSilhouette,
+  expectSilhouettePixels,
+} from "./product-silhouette-pixels";
+
 const detailMarkup = renderToStaticMarkup(createElement(DetailLoading));
 const listMarkup = renderToStaticMarkup(createElement(ListLoading));
 const LINK_HEADER_SEPARATOR = /,(?=\s*<)/;
@@ -107,6 +112,9 @@ for (const scenario of [
             .getByTestId("product-silhouette")
             .boundingBox()
         ).toEqual(shellFrame);
+        const savedSilhouette = await captureSilhouette(
+          shell.locator(".store-media-stage")
+        );
         const shellBox = await shell.boundingBox();
         const shellHeight = await shellPage.evaluate(
           () => document.documentElement.scrollHeight
@@ -127,6 +135,11 @@ for (const scenario of [
         const readyGeometry = await geometry(ready);
         expect(await ready.getByTestId("product-spin").boundingBox()).toEqual(
           shellFrame
+        );
+        const pixels = await expectSilhouettePixels(page, savedSilhouette);
+        writeFileSync(
+          testInfo.outputPath("shell-pixels.json"),
+          JSON.stringify(pixels, null, 2)
         );
         const readyBox = await ready.boundingBox();
         const readyHeight = await page.evaluate(

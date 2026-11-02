@@ -27,11 +27,13 @@ import {
   type ValidatedCombination,
 } from "@/shared/keyboard-customization";
 
+import retailSilhouettes from "@/shared/maru60-retail-silhouettes.json";
 import spinSilhouettes from "@/shared/maru60-spin-silhouettes.json";
 
 import { getSpinLoader } from "@/shared/product-spin-loader";
 import { useKeyboardCustomizationQuery } from "@/shared/use-keyboard-customization-query";
 
+const RETAIL_OUTLINES = Object.values(retailSilhouettes);
 const SPIN_OUTLINES = Object.values(spinSilhouettes);
 
 function geometryRevision(
@@ -90,7 +92,7 @@ function ValidatedPreview({
         <ProductSpin
           alt={t("previewLabel")}
           initialAngle={angleRef.current}
-          loadingOutlines={SPIN_OUTLINES}
+          loadingOutlines={RETAIL_OUTLINES}
           onAngleChange={rememberAngle}
           onLoadStateChange={setLoadState}
           resetOnLeave={false}
