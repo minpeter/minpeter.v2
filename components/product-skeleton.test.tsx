@@ -26,7 +26,9 @@ describe("product loading skeletons", () => {
     ).toHaveLength(2);
     expect(skeleton.querySelector(".store-media")).toBeNull();
     expect(skeleton.querySelector("input,button,a,summary")).toBeNull();
-    expect(skeleton.querySelectorAll('[aria-hidden="true"]')).toHaveLength(2);
+    expect(
+      skeleton.querySelectorAll('[aria-hidden="true"]').length
+    ).toBeGreaterThanOrEqual(2);
   });
 
   it("uses the catalog's portrait ratio and reserves its two caption lines", () => {

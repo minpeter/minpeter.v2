@@ -1,4 +1,6 @@
+import { ProductMediaSkeleton } from "@/components/product-media-skeleton";
 import { Skeleton } from "@/components/ui/skeleton";
+import silhouette from "@/shared/maru60-silhouette.json" with { type: "json" };
 
 const HOUSING_SLOTS = [
   "transparent",
@@ -22,7 +24,10 @@ export function ProductCustomizerSkeleton() {
       data-testid="product-customizer-skeleton"
     >
       <div className="store-media-stage">
-        <Skeleton className="store-media-skeleton rounded-none" />
+        <ProductMediaSkeleton
+          className="store-media-skeleton rounded-none"
+          outline={silhouette.outline}
+        />
       </div>
       <div className="store-custom-controls">
         <fieldset disabled>

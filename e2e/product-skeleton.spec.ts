@@ -179,6 +179,12 @@ for (const scenario of [
       await expect(skeleton.locator(".store-custom-color")).toHaveCount(8);
       await expect(skeleton.locator(".store-custom-kit")).toHaveCount(6);
       await expect(skeleton.locator("input,button,a,summary")).toHaveCount(0);
+      await expect(skeleton.getByTestId("product-silhouette")).toHaveCount(1);
+      await page.emulateMedia({ reducedMotion: "reduce" });
+      await expect(skeleton.getByTestId("product-media-skeleton")).toHaveCSS(
+        "animation-name",
+        "none"
+      );
       const skeletonGeometry = await geometry(skeleton);
       await page.screenshot({
         animations: "disabled",
@@ -257,7 +263,13 @@ for (const scenario of [
       writeFileSync(
         testInfo.outputPath("catalog-geometry.json"),
         JSON.stringify(
-          { caption: captionBefore, ready: before, skeleton: after, width },
+          {
+            caption: captionBefore,
+            locale,
+            ready: before,
+            skeleton: after,
+            width,
+          },
           null,
           2
         )
@@ -288,10 +300,37 @@ for (const width of [390, 1023, 1440]) {
         Math.min(100, document.documentElement.scrollHeight - innerHeight)
       )
     );
-    const scrollBefore = await page.evaluate(() => scrollY);
-    expect(scrollBefore).toBeGreaterThan(0);
-    const boxBefore = await card.boundingBox();
+    expect(await page.evaluate(() => scrollY)).toBeGreaterThan(0);
+    // Playwright may scroll a tall link into view before clicking it. Record the
+    // actual departure, not the earlier setup position, just as history does.
+    await card.evaluate((element) => {
+      element.addEventListener(
+        "click",
+        () => {
+          const {
+            x,
+            y,
+            width: cardWidth,
+            height,
+          } = element.getBoundingClientRect();
+          sessionStorage.setItem(
+            "catalog-qa-departure",
+            JSON.stringify({
+              box: { height, width: cardWidth, x, y },
+              scroll: scrollY,
+            })
+          );
+        },
+        { capture: true, once: true }
+      );
+    });
     await card.click({ position: { x: 10, y: 10 } });
+    const departure = await page.evaluate(() =>
+      JSON.parse(sessionStorage.getItem("catalog-qa-departure") ?? "null")
+    );
+    expect(departure).not.toBeNull();
+    const { scroll: scrollBefore, box: boxBefore } = departure;
+    expect(scrollBefore).toBeGreaterThan(0);
     const detail = page.getByTestId("product-detail").filter({ visible: true });
     await expect(detail).toBeVisible();
     await expect(
