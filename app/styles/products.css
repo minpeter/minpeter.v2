@@ -155,6 +155,7 @@ body:has([data-store]) main {
   }
 
   .store-media-stage {
+    position: relative;
     display: flex;
     flex: none;
     align-items: center;
@@ -286,9 +287,27 @@ body:has([data-store]) main {
     min-width: 0;
   }
   .store-custom-note,
-  .store-custom-selection,
-  .store-custom-status {
+  .store-custom-selection {
     margin-block: 1rem;
+  }
+  /* Every selection uses the same stage footprint, including the personal view. */
+  .store-custom-personal {
+    min-height: 0;
+  }
+  /* Status changes never add flow height or move the selection controls. */
+  .store-custom-feedback {
+    position: absolute;
+    right: 1rem;
+    bottom: 1rem;
+    left: 1rem;
+    display: grid;
+    gap: 0.5rem;
+    justify-items: center;
+    text-align: center;
+    pointer-events: none;
+  }
+  .store-custom-feedback > .store-button {
+    pointer-events: auto;
   }
   .store-custom-note {
     max-width: 48rem;

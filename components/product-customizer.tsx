@@ -92,25 +92,25 @@ function ValidatedPreview({
           sizes="(min-width: 64rem) 60vw, 92vw"
           spin={spin}
         />
+        <div className="store-custom-feedback">
+          <p
+            aria-live="polite"
+            className={loadState === "ready" ? "sr-only" : "store-label"}
+            role="status"
+          >
+            {t(statusKey[loadState])}
+          </p>
+          {loadState === "error" || loadState === "partial" ? (
+            <button
+              className="store-button store-label"
+              onClick={retry}
+              type="button"
+            >
+              {t("retry")}
+            </button>
+          ) : null}
+        </div>
       </div>
-      <p
-        aria-live="polite"
-        className={
-          loadState === "ready" ? "sr-only" : "store-label store-custom-status"
-        }
-        role="status"
-      >
-        {t(statusKey[loadState])}
-      </p>
-      {loadState === "error" || loadState === "partial" ? (
-        <button
-          className="store-button store-label"
-          onClick={retry}
-          type="button"
-        >
-          {t("retry")}
-        </button>
-      ) : null}
     </div>
   );
 }
@@ -142,7 +142,10 @@ function SelectionPreview({
   const t = useTranslations("products.customization");
   if (personal) {
     return (
-      <section aria-label={gallery.labels.media} className="store-media">
+      <section
+        aria-label={gallery.labels.media}
+        className="store-media store-custom-personal"
+      >
         <div className="store-media-stage">
           <ProductSpin
             alt={gallery.labels.spin}

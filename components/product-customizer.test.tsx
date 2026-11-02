@@ -327,6 +327,11 @@ describe("ProductCustomizer availability and selection", () => {
           .querySelector(".store-custom-preview")
           ?.getAttribute("data-geometry-revision")
       ).toBe("assembled-draft");
+      expect(
+        document.querySelector(
+          ".store-media-stage .store-custom-feedback [role=status]"
+        )
+      ).toBeTruthy();
       const before = screen.getByTestId("retail-spin");
       fixtures.candidates = [
         {
@@ -698,6 +703,11 @@ describe("ProductCustomizer availability and selection", () => {
         document.querySelector(".store-custom-preview") as HTMLElement
       ).getByRole("status").textContent
     ).toBe(en.products.customization.loadError);
+    expect(
+      screen
+        .getByRole("button", { name: en.products.customization.retry })
+        .closest(".store-media-stage")
+    ).toBeTruthy();
     fireEvent.click(
       screen.getByRole("button", { name: en.products.customization.retry })
     );
