@@ -1,6 +1,6 @@
 import { writeFileSync } from "node:fs";
 
-import { expect, type Page, test } from "@playwright/test";
+import { expect, type Locator, test } from "@playwright/test";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 
@@ -17,11 +17,11 @@ const selectors = [
   ".store-custom-details",
 ];
 
-async function geometry(page: Page) {
-  return await page.evaluate((targets) => {
+async function geometry(root: Locator) {
+  return await root.evaluate((container, targets) => {
     const boxes = Object.fromEntries(
       targets.map((selector) => {
-        const element = document.querySelector(selector);
+        const element = container.querySelector(selector);
         if (!element) {
           throw new Error(`Missing ${selector}`);
         }
@@ -39,7 +39,7 @@ async function geometry(page: Page) {
     );
     return {
       boxes,
-      infoTop: document
+      infoTop: container
         .querySelector(".store-product-info")
         ?.getBoundingClientRect().top,
       noOverflow: document.documentElement.scrollWidth <= innerWidth,
@@ -67,12 +67,14 @@ for (const scenario of [
     }, testInfo) => {
       const prefix = scenario.locale === "ko" ? "" : `/${scenario.locale}`;
       await page.goto(`${prefix}/products/maru60`);
-      const ready = page.getByTestId("product-detail");
+      const ready = page
+        .getByTestId("product-detail")
+        .filter({ visible: true });
       await expect(ready).toBeVisible();
       await expect(
-        page.getByTestId("product-spin").locator("canvas")
+        ready.getByTestId("product-spin").locator("canvas")
       ).toBeVisible({ timeout: 15_000 });
-      const readyGeometry = await geometry(page);
+      const readyGeometry = await geometry(ready);
       await page.screenshot({
         fullPage: true,
         path: testInfo.outputPath("ready.png"),
@@ -82,15 +84,14 @@ for (const scenario of [
       await ready.evaluate((element, markup) => {
         element.outerHTML = markup;
       }, detailMarkup);
-      const skeleton = page.getByTestId("product-detail-skeleton");
+      const skeleton = page
+        .getByTestId("product-detail-skeleton")
+        .filter({ visible: true });
       await expect(skeleton).toHaveAttribute("aria-busy", "true");
       await expect(skeleton.locator(".store-custom-color")).toHaveCount(8);
       await expect(skeleton.locator(".store-custom-kit")).toHaveCount(6);
       await expect(skeleton.locator("input,button,a,summary")).toHaveCount(0);
-      const skeletonGeometry = await geometry(page);
-      expect(skeletonGeometry.boxes).toEqual(readyGeometry.boxes);
-      expect(skeletonGeometry.infoTop).toBe(readyGeometry.infoTop);
-      expect(skeletonGeometry.noOverflow).toBe(true);
+      const skeletonGeometry = await geometry(skeleton);
       await page.screenshot({
         fullPage: true,
         path: testInfo.outputPath("skeleton.png"),
@@ -103,6 +104,9 @@ for (const scenario of [
           2
         )
       );
+      expect(skeletonGeometry.boxes).toEqual(readyGeometry.boxes);
+      expect(skeletonGeometry.infoTop).toBe(readyGeometry.infoTop);
+      expect(skeletonGeometry.noOverflow).toBe(true);
     });
   });
 }
