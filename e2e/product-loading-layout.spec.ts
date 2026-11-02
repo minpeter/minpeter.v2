@@ -88,6 +88,9 @@ for (const viewport of [
     const prefix =
       viewport.locale === "ko" ? "" : `/${viewport.locale ?? "en"}`;
     await page.setViewportSize(viewport);
+    await page.setExtraHTTPHeaders({
+      "Accept-Language": viewport.locale ?? "en",
+    });
     await page.goto(
       `${prefix}/products/maru60?housing=ash-gray&keycaps=nicepbt-bow-retail`
     );
@@ -194,6 +197,10 @@ for (const width of [390, 1023, 1024, 1440]) {
         await route.continue();
       }
     );
+    await page.mouse.wheel(0, 300);
+    await expect
+      .poll(() => page.evaluate(() => window.scrollY))
+      .toBeGreaterThan(0);
     const radio = page.locator('input[name="housing"][value="charcoal"]');
     await page.locator("label").filter({ has: radio }).click();
     await expect(status).toHaveText(englishLabels.loading);
