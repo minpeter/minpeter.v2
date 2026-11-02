@@ -6,8 +6,8 @@ import { renderToStaticMarkup } from "react-dom/server";
 
 import { ProductDetailSkeleton } from "../app/[locale]/products/[slug]/loading";
 import ListLoading from "../app/[locale]/products/loading";
-import en from "../shared/i18n/en.json";
-import ja from "../shared/i18n/ja.json";
+import en from "../shared/i18n/en.json" with { type: "json" };
+import ja from "../shared/i18n/ja.json" with { type: "json" };
 
 import {
   captureSilhouette,
