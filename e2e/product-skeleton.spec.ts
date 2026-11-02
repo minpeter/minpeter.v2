@@ -198,35 +198,125 @@ for (const scenario of [
   });
 }
 
-for (const width of [390, 1440]) {
-  test(`catalog skeleton matches portrait card at ${width}px`, async ({
+for (const scenario of [
+  ...[320, 390, 479, 480, 1023, 1024, 1440].map((width) => ({
+    locale: "en",
+    width,
+  })),
+  { locale: "ko", width: 390 },
+  { locale: "ja", width: 390 },
+]) {
+  const { width, locale } = scenario;
+  test.describe(`catalog ${width}px ${locale}`, () => {
+    test.use({ locale });
+    test(`catalog skeleton matches portrait card at ${width}px`, async ({
+      page,
+    }, testInfo) => {
+      await page.setViewportSize({ height: 844, width });
+      await page.goto(`${locale === "ko" ? "" : `/${locale}`}/products`);
+      const card = page.getByTestId("product-link-maru60");
+      await expect(card).toBeVisible();
+      await expect(
+        card.getByTestId("product-spin").locator("canvas")
+      ).toBeVisible({ timeout: 15_000 });
+      await card.focus();
+      await expect(card.locator(".store-card-caption")).toHaveCSS(
+        "opacity",
+        "1"
+      );
+      const before = await card.boundingBox();
+      const captionBefore = await card
+        .locator(".store-card-caption")
+        .boundingBox();
+      await page.screenshot({
+        animations: "disabled",
+        fullPage: true,
+        path: testInfo.outputPath("catalog-ready.png"),
+      });
+      await page.getByTestId("products-page").evaluate((element, markup) => {
+        element.outerHTML = markup;
+      }, listMarkup);
+      const after = await page
+        .getByTestId("product-list-skeleton")
+        .locator(".store-card")
+        .boundingBox();
+      expect(after).toEqual(before);
+      const skeletonCard = page
+        .getByTestId("product-list-skeleton")
+        .locator(".store-card");
+      expect(
+        await skeletonCard.locator(".store-card-caption").boundingBox()
+      ).toEqual(captionBefore);
+      expect(
+        await page.evaluate(
+          () => document.documentElement.scrollWidth <= innerWidth
+        )
+      ).toBe(true);
+      writeFileSync(
+        testInfo.outputPath("catalog-geometry.json"),
+        JSON.stringify(
+          { caption: captionBefore, ready: before, skeleton: after, width },
+          null,
+          2
+        )
+      );
+      await page.screenshot({
+        animations: "disabled",
+        fullPage: true,
+        path: testInfo.outputPath("catalog-skeleton.png"),
+      });
+    });
+  });
+}
+
+for (const width of [390, 1023, 1440]) {
+  test(`catalog history restores layout and scroll at ${width}px`, async ({
     page,
   }, testInfo) => {
-    await page.setViewportSize({ height: 844, width });
+    await page.setViewportSize({ height: 360, width });
     await page.goto("/en/products");
     const card = page.getByTestId("product-link-maru60");
-    await expect(card).toBeVisible();
     await expect(
       card.getByTestId("product-spin").locator("canvas")
     ).toBeVisible({ timeout: 15_000 });
-    const before = await card.boundingBox();
+    // Use a short viewport so even the current single-item catalog can scroll.
+    await page.evaluate(() =>
+      scrollTo(
+        0,
+        Math.min(100, document.documentElement.scrollHeight - innerHeight)
+      )
+    );
+    const scrollBefore = await page.evaluate(() => scrollY);
+    expect(scrollBefore).toBeGreaterThan(0);
+    const boxBefore = await card.boundingBox();
+    await card.click({ position: { x: 10, y: 10 } });
+    const detail = page.getByTestId("product-detail").filter({ visible: true });
+    await expect(detail).toBeVisible();
+    await expect(
+      detail.getByTestId("product-spin").locator("canvas")
+    ).toBeVisible({ timeout: 15_000 });
+    await page.goBack();
+    await expect(card).toBeVisible();
+    await expect.poll(() => page.evaluate(() => scrollY)).toBe(scrollBefore);
+    expect(await card.boundingBox()).toEqual(boxBefore);
     await page.screenshot({
       animations: "disabled",
       fullPage: true,
-      path: testInfo.outputPath("catalog-ready.png"),
+      path: testInfo.outputPath("catalog-returned.png"),
     });
-    await page.getByTestId("products-page").evaluate((element, markup) => {
-      element.outerHTML = markup;
-    }, listMarkup);
-    const after = await page
-      .getByTestId("product-list-skeleton")
-      .locator(".store-card")
-      .boundingBox();
-    expect(after).toEqual(before);
-    await page.screenshot({
-      animations: "disabled",
-      fullPage: true,
-      path: testInfo.outputPath("catalog-skeleton.png"),
-    });
+    await page.goForward();
+    await expect(detail).toBeVisible();
+    await expect(
+      detail.getByTestId("product-spin").locator("canvas")
+    ).toBeVisible({ timeout: 15_000 });
+    expect(
+      await page.evaluate(
+        () => document.documentElement.scrollWidth <= innerWidth
+      )
+    ).toBe(true);
+    writeFileSync(
+      testInfo.outputPath("history.json"),
+      JSON.stringify({ restoredBox: boxBefore, scrollBefore, width }, null, 2)
+    );
   });
 }
