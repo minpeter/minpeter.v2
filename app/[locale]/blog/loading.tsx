@@ -29,7 +29,7 @@ export default function Loading() {
       </header>
 
       <div className="fieldnotes-search">
-        <Skeleton className="h-8 w-full rounded-none bg-primary/5" />
+        <Skeleton className="bg-primary/5 h-8 w-full rounded-none" />
       </div>
 
       <div className="fieldnotes-list">

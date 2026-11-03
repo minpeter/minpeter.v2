@@ -37,7 +37,7 @@ export default async function Page(
 
       <div className="grid grid-cols-3 items-start gap-3">
         {modelCardArtworks.map((artwork, index) => (
-          <div className="overflow-hidden bg-secondary" key={artwork.alt}>
+          <div className="bg-secondary overflow-hidden" key={artwork.alt}>
             <Image
               alt={artwork.alt}
               className="h-auto w-full"
@@ -50,11 +50,11 @@ export default async function Page(
         ))}
       </div>
 
-      <aside className="mt-12 border-foreground/15 border-t pt-5">
+      <aside className="border-foreground/15 mt-12 border-t pt-5">
         <p className="showcase-kicker">
           {t("showcase.items.modelCard.credits")}
         </p>
-        <div className="space-y-1 text-[0.6875rem] text-muted-foreground leading-relaxed">
+        <div className="text-muted-foreground space-y-1 text-[0.6875rem] leading-relaxed">
           <p>{t("showcase.items.modelCard.creditNous")}</p>
           <p>{t("showcase.items.modelCard.creditIshigami")}</p>
         </div>

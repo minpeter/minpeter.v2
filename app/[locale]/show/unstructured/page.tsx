@@ -37,7 +37,7 @@ export default async function Page(
 
       <div className="space-y-10">
         <figure>
-          <figcaption className="mb-3 flex items-center justify-between text-[0.6875rem] text-muted-foreground uppercase tracking-[0.08em]">
+          <figcaption className="text-muted-foreground mb-3 flex items-center justify-between text-[0.6875rem] tracking-[0.08em] uppercase">
             <span>{t("showcase.items.unstructured.counterRotation")}</span>
             <span className="font-mono">01</span>
           </figcaption>
@@ -47,7 +47,7 @@ export default async function Page(
               className={cn(
                 styles.demo,
                 styles.stack,
-                "relative h-full w-full rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                "focus-visible:ring-ring relative h-full w-full rounded-md focus-visible:ring-2 focus-visible:outline-none"
               )}
               role="img"
             >
@@ -63,7 +63,7 @@ export default async function Page(
                   "absolute inset-0 rotate-1 transform rounded-md bg-neutral-500 p-8 transition-all duration-300"
                 )}
               >
-                <h2 className="font-medium text-2xl text-neutral-100 tracking-[-0.04em]">
+                <h2 className="text-2xl font-medium tracking-[-0.04em] text-neutral-100">
                   {t("showcase.items.unstructured.hoverMe")}
                 </h2>
               </div>
@@ -72,7 +72,7 @@ export default async function Page(
         </figure>
 
         <figure>
-          <figcaption className="mb-3 flex items-center justify-between text-[0.6875rem] text-muted-foreground uppercase tracking-[0.08em]">
+          <figcaption className="text-muted-foreground mb-3 flex items-center justify-between text-[0.6875rem] tracking-[0.08em] uppercase">
             <span>{t("showcase.items.unstructured.depthSeparation")}</span>
             <span className="font-mono">02</span>
           </figcaption>
@@ -82,7 +82,7 @@ export default async function Page(
               className={cn(
                 styles.demo,
                 styles.depth,
-                "relative h-full w-full rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                "focus-visible:ring-ring relative h-full w-full rounded-md focus-visible:ring-2 focus-visible:outline-none"
               )}
               role="img"
             >
@@ -92,7 +92,7 @@ export default async function Page(
                   "absolute inset-0 flex transform items-center justify-center rounded-md bg-neutral-600 transition-all duration-500 ease-out"
                 )}
               >
-                <span className="font-medium text-2xl text-white tracking-[-0.04em] drop-shadow-md">
+                <span className="text-2xl font-medium tracking-[-0.04em] text-white drop-shadow-md">
                   {t("showcase.items.unstructured.layer1")}
                 </span>
               </div>
@@ -102,7 +102,7 @@ export default async function Page(
                   "absolute inset-0 flex transform items-center justify-center rounded-md bg-neutral-500 transition-all duration-500 ease-out"
                 )}
               >
-                <span className="font-medium text-2xl text-white tracking-[-0.04em] drop-shadow-md">
+                <span className="text-2xl font-medium tracking-[-0.04em] text-white drop-shadow-md">
                   {t("showcase.items.unstructured.layer2")}
                 </span>
               </div>
@@ -112,7 +112,7 @@ export default async function Page(
                   "absolute inset-0 flex transform items-center justify-center rounded-md bg-neutral-400 transition-all duration-500 ease-out"
                 )}
               >
-                <span className="font-medium text-2xl text-white tracking-[-0.04em] drop-shadow-md">
+                <span className="text-2xl font-medium tracking-[-0.04em] text-white drop-shadow-md">
                   {t("showcase.items.unstructured.layer3")}
                 </span>
               </div>
@@ -121,7 +121,7 @@ export default async function Page(
         </figure>
 
         <figure>
-          <figcaption className="mb-3 flex items-center justify-between text-[0.6875rem] text-muted-foreground uppercase tracking-[0.08em]">
+          <figcaption className="text-muted-foreground mb-3 flex items-center justify-between text-[0.6875rem] tracking-[0.08em] uppercase">
             <span>{t("showcase.items.unstructured.sideView")}</span>
             <span className="font-mono">03</span>
           </figcaption>
@@ -131,7 +131,7 @@ export default async function Page(
               className={cn(
                 styles.demo,
                 styles.side,
-                "relative h-full w-full rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                "focus-visible:ring-ring relative h-full w-full rounded-md focus-visible:ring-2 focus-visible:outline-none"
               )}
               role="img"
             >
@@ -142,7 +142,7 @@ export default async function Page(
                 )}
               >
                 <div className="flex h-full p-6">
-                  <span className="font-medium text-2xl text-white tracking-[-0.04em] drop-shadow-md">
+                  <span className="text-2xl font-medium tracking-[-0.04em] text-white drop-shadow-md">
                     {t("showcase.items.unstructured.front")}
                   </span>
                 </div>
@@ -158,7 +158,7 @@ export default async function Page(
                   <span
                     className={cn(
                       styles.copy,
-                      "font-medium text-white text-xl tracking-[-0.04em] opacity-0 drop-shadow-md transition-opacity delay-100 duration-300"
+                      "text-xl font-medium tracking-[-0.04em] text-white opacity-0 drop-shadow-md transition-opacity delay-100 duration-300"
                     )}
                   >
                     {t("showcase.items.unstructured.middle")}
@@ -176,7 +176,7 @@ export default async function Page(
                   <span
                     className={cn(
                       styles.copy,
-                      "font-medium text-lg text-white tracking-[-0.04em] opacity-0 drop-shadow-md transition-opacity delay-200 duration-300"
+                      "text-lg font-medium tracking-[-0.04em] text-white opacity-0 drop-shadow-md transition-opacity delay-200 duration-300"
                     )}
                   >
                     {t("showcase.items.unstructured.back1")}
@@ -186,7 +186,7 @@ export default async function Page(
                   <span
                     className={cn(
                       styles.copy,
-                      "font-medium text-lg text-white tracking-[-0.04em] opacity-0 drop-shadow-md transition-opacity delay-300 duration-300"
+                      "text-lg font-medium tracking-[-0.04em] text-white opacity-0 drop-shadow-md transition-opacity delay-300 duration-300"
                     )}
                   >
                     {t("showcase.items.unstructured.back2")}

@@ -13,7 +13,7 @@ export default defineConfig({
     },
     {
       name: "mobile-chromium",
-      testMatch: /(?:site-journeys|language-selector)\.spec\.ts/,
+      testMatch: /(?:site-journeys|language-selector)\.spec\.ts/u,
       use: { ...devices["Pixel 7"] },
     },
   ],

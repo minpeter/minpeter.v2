@@ -78,7 +78,7 @@ export default function TmpfUI() {
         </Label>
         <div className="flex flex-col gap-2 sm:flex-row">
           <Input
-            className="h-10 min-w-0 bg-background text-sm shadow-none sm:flex-1"
+            className="bg-background h-10 min-w-0 text-sm shadow-none sm:flex-1"
             id="uploadfiles"
             multiple={true}
             onChange={handleFileChange}
@@ -97,12 +97,12 @@ export default function TmpfUI() {
 
       {error ? (
         <div
-          className="flex items-start gap-2.5 text-muted-foreground text-xs leading-relaxed"
+          className="text-muted-foreground flex items-start gap-2.5 text-xs leading-relaxed"
           role="alert"
         >
           <ExclamationTriangleIcon
             aria-hidden="true"
-            className="mt-0.5 size-3.5 shrink-0 text-destructive/75"
+            className="text-destructive/75 mt-0.5 size-3.5 shrink-0"
           />
           <span>{t("uploadFailed", { error })}</span>
         </div>
@@ -110,7 +110,7 @@ export default function TmpfUI() {
       {loading ? (
         <div
           aria-live="polite"
-          className="flex items-center gap-2 text-muted-foreground text-xs"
+          className="text-muted-foreground flex items-center gap-2 text-xs"
           role="status"
         >
           <ReloadIcon aria-hidden="true" className="size-3.5 animate-spin" />
@@ -121,35 +121,35 @@ export default function TmpfUI() {
         <div className="border-foreground/10 border-t pt-5">
           <div className="mb-4 flex flex-wrap items-start justify-between gap-2">
             <div className="min-w-0 space-y-1">
-              <p className="text-[10px] text-muted-foreground uppercase tracking-widest">
+              <p className="text-muted-foreground text-[10px] tracking-widest uppercase">
                 {t("folderLabel")}
               </p>
-              <code className="block break-all font-mono text-xs">
+              <code className="block font-mono text-xs break-all">
                 {uploaded.folderId}
               </code>
             </div>
-            <span className="rounded-full border border-foreground/10 px-2 py-0.5 text-[10px] text-muted-foreground">
+            <span className="border-foreground/10 text-muted-foreground rounded-full border px-2 py-0.5 text-[10px]">
               {t("uploadedLabel")}
             </span>
           </div>
 
-          <ul className="divide-y divide-foreground/10 border-foreground/10 border-y">
+          <ul className="divide-foreground/10 border-foreground/10 divide-y border-y">
             {uploaded.files.map((f) => (
               <li key={f.fileName}>
                 <a
-                  className="group flex min-w-0 items-center gap-3 rounded-sm py-3 text-sm transition-colors hover:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  className="group hover:text-muted-foreground focus-visible:ring-ring flex min-w-0 items-center gap-3 rounded-sm py-3 text-sm transition-colors focus-visible:ring-2 focus-visible:outline-none"
                   href={`${TMPF_API_BASE}${API_SUFFIX.VIEW(uploaded.folderId, f.fileName)}`}
                   rel="noreferrer noopener"
                   target="_blank"
                 >
                   <FileTextIcon
                     aria-hidden="true"
-                    className="size-4 shrink-0 text-muted-foreground"
+                    className="text-muted-foreground size-4 shrink-0"
                   />
                   <span className="min-w-0 flex-1 break-all">{f.fileName}</span>
                   <EyeOpenIcon
                     aria-hidden="true"
-                    className="size-4 shrink-0 text-muted-foreground transition-colors group-hover:text-foreground"
+                    className="text-muted-foreground group-hover:text-foreground size-4 shrink-0 transition-colors"
                   />
                 </a>
               </li>
@@ -158,12 +158,12 @@ export default function TmpfUI() {
           <div className="mt-4 space-y-3">
             {downloadFailed ? (
               <div
-                className="flex items-start gap-2.5 rounded-md bg-secondary/70 p-3 text-muted-foreground text-xs leading-relaxed"
+                className="bg-secondary/70 text-muted-foreground flex items-start gap-2.5 rounded-md p-3 text-xs leading-relaxed"
                 role="alert"
               >
                 <ExclamationTriangleIcon
                   aria-hidden="true"
-                  className="mt-0.5 size-3.5 shrink-0 text-foreground/70"
+                  className="text-foreground/70 mt-0.5 size-3.5 shrink-0"
                 />
                 <p>{t("downloadFailed")}</p>
               </div>
@@ -189,7 +189,7 @@ export default function TmpfUI() {
             {downloading ? (
               <p
                 aria-live="polite"
-                className="text-center text-muted-foreground text-xs"
+                className="text-muted-foreground text-center text-xs"
                 role="status"
               >
                 {t("downloading")}

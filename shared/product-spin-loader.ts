@@ -192,7 +192,7 @@ export class SpinLoader {
       SpinLoader.trimResidents();
       clearTimeout(this.idleTimer);
       this.idleTimer = undefined;
-      this.pump();
+      SpinLoader.pumpAll();
     } else {
       this.active.delete(token);
       this.pausePending();
@@ -228,7 +228,7 @@ export class SpinLoader {
     if (this.active.size > 0) {
       SpinLoader.residents.add(this);
       SpinLoader.trimResidents();
-      this.pump();
+      SpinLoader.pumpAll();
     }
   }
 
@@ -327,10 +327,6 @@ export class SpinLoader {
     queueMicrotask(() => SpinLoader.pumpAll());
   }
 
-  private pump() {
-    SpinLoader.pumpAll();
-  }
-
   private pumpNetwork(): boolean {
     if (!this.active.size || SpinLoader.pendingRequests() >= FETCH_LIMIT) {
       return false;
@@ -403,7 +399,7 @@ export class SpinLoader {
         this.controllers.delete(index);
         this.settled.add(index);
         this.emit();
-        this.pump();
+        SpinLoader.pumpAll();
       }
     }
   }

@@ -17,7 +17,7 @@ export async function RssLink({ locale }: RssLinkProps) {
         "flex items-center gap-1 rounded-md px-2 py-1 text-sm",
         "text-muted-foreground hover:bg-secondary hover:text-primary",
         "transition-colors duration-150",
-        "focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        "focus-visible:ring-ring focus:outline-none focus-visible:ring-2"
       )}
       href={`/${locale}/blog/rss.xml`}
       rel="noopener noreferrer"

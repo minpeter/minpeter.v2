@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test as it, test } from "@playwright/test";
 
 for (const scenario of [
   {
@@ -30,9 +30,9 @@ for (const scenario of [
   },
 ]) {
   test.describe(`${scenario.locale} error recovery`, () => {
-    test.use({ locale: scenario.locale, viewport: scenario.viewport });
+    it.use({ locale: scenario.locale, viewport: scenario.viewport });
 
-    test("recovers from a missing route chunk without losing the locale", async ({
+    it("recovers from a missing route chunk without losing the locale", async ({
       page,
     }, testInfo) => {
       // Identify the experiment's client chunk by its alphabet, not a build hash.
@@ -98,11 +98,11 @@ for (const scenario of [
           ? "/ja"
           : `${scenario.home}/show/dynamic-hacked-text`
       );
-      if (scenario.locale === "ja") {
-        await expect(page.getByTestId("home-page")).toBeVisible();
-      } else {
-        await expect(page.getByTestId("showcase-detail-shell")).toBeVisible();
-      }
+      await expect(
+        page.getByTestId(
+          scenario.locale === "ja" ? "home-page" : "showcase-detail-shell"
+        )
+      ).toBeVisible();
       // Hydration and interaction still work after recovery, not only the HTML.
       await page.getByRole("button", { name: scenario.theme }).click();
       await expect(page.locator("html")).toHaveClass("light");

@@ -34,7 +34,7 @@ export function MachineTranslationNotice({
 
   return (
     <div className={cn("flex flex-col gap-1", className)}>
-      <div className="flex items-center gap-1.5 text-foreground">
+      <div className="text-foreground flex items-center gap-1.5">
         {generatedBy ? (
           <AiOutlineOpenAI
             aria-hidden="true"

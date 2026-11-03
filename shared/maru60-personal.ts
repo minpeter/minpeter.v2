@@ -4,7 +4,7 @@ import manifest from "./maru60-personal-manifest.json";
 import type { ProductSpin } from "./products";
 
 const angles = Array.from({ length: 12 }, (_, index) => index * 30);
-const digest = z.string().regex(/^[a-f0-9]{64}$/);
+const digest = z.string().regex(/^[a-f0-9]{64}$/u);
 const basePath = "/assets/products/maru60/assembled/v1/transparent--inventor";
 
 /** Public structure only; no QA evidence or orderability claims are encoded here. */

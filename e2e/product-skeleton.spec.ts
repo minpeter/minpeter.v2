@@ -1,6 +1,6 @@
 import { readFileSync, writeFileSync } from "node:fs";
 
-import { expect, type Locator, test } from "@playwright/test";
+import { expect, test as it, type Locator, test } from "@playwright/test";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 
@@ -37,7 +37,7 @@ const detailMarkup = (locale: string) =>
     })
   );
 const listMarkup = renderToStaticMarkup(createElement(ListLoading));
-const LINK_HEADER_SEPARATOR = /,(?=\s*<)/;
+const LINK_HEADER_SEPARATOR = /,(?=\s*<)/u;
 const selectors = [
   ".store-media-stage",
   ".store-custom-controls",
@@ -91,14 +91,14 @@ for (const scenario of [
   { locale: "en", width: 3840 },
 ]) {
   test.describe(`product skeleton ${scenario.width}px ${scenario.locale}`, () => {
-    test.use({
+    it.use({
       locale: scenario.locale,
       viewport: {
         height: desktopHeight(scenario.width),
         width: scenario.width,
       },
     });
-    test("static shell preserves localized information and full-page geometry", async ({
+    it("static shell preserves localized information and full-page geometry", async ({
       browser,
       page,
     }, testInfo) => {
@@ -131,9 +131,9 @@ for (const scenario of [
           shell.getByTestId("product-customizer-skeleton")
         ).toBeVisible();
         await expect(shell.locator("h1")).toHaveText("MARU60");
-        const shellInfo = await shell
+        const [shellInfo] = await shell
           .locator(".store-product-info")
-          .innerText();
+          .allInnerTexts();
         const shellGeometry = await geometry(shell);
         const shellFrame = await shell
           .locator(".store-media-stage")
@@ -199,9 +199,9 @@ for (const scenario of [
             2
           )
         );
-        expect(await ready.locator(".store-product-info").innerText()).toBe(
-          shellInfo
-        );
+        expect(
+          await ready.locator(".store-product-info").allInnerTexts()
+        ).toEqual([shellInfo]);
         expect(shellGeometry).toEqual(readyGeometry);
         expect(shellBox).toEqual(readyBox);
         expect(shellHeight).toBe(readyHeight);
@@ -209,7 +209,7 @@ for (const scenario of [
         await shellContext.close();
       }
     });
-    test("matches ready customizer geometry and responsive wraps", async ({
+    it("matches ready customizer geometry and responsive wraps", async ({
       page,
     }, testInfo) => {
       const prefix = scenario.locale === "ko" ? "" : `/${scenario.locale}`;
@@ -281,8 +281,8 @@ for (const scenario of [
 ]) {
   const { width, locale } = scenario;
   test.describe(`catalog ${width}px ${locale}`, () => {
-    test.use({ locale });
-    test(`catalog skeleton matches portrait card at ${width}px`, async ({
+    it.use({ locale });
+    it(`catalog skeleton matches portrait card at ${width}px`, async ({
       page,
     }, testInfo) => {
       await page.setViewportSize({ height: desktopHeight(width), width });
@@ -712,7 +712,7 @@ test("compares first-frame-only preload with a cold no-hint baseline", async ({
             body: preload
               ? body
               : body.replace(
-                  /<link\b[^>]*href="[^"]*\/frame_[^"]*"[^>]*>/g,
+                  /<link\b[^>]*href="[^"]*\/frame_[^"]*"[^>]*>/gu,
                   ""
                 ),
             headers,

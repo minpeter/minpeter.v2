@@ -27,11 +27,7 @@ function fixture() {
 }
 
 describe("independent Maru60 personal manifest gate", () => {
-  it("verifies every actual personal frame and exact poster when a manifest is published", () => {
-    if (manifest === null) {
-      expect(validatedPersonalManifest).toBeNull();
-      return;
-    }
+  it("verifies every actual personal frame and exact poster in the published manifest", () => {
     expect(validatedPersonalManifest).not.toBeNull();
     if (!validatedPersonalManifest) {
       throw new Error(
@@ -79,15 +75,13 @@ describe("independent Maru60 personal manifest gate", () => {
     ]) {
       expect(validatePersonalManifest(invalid)).toBeNull();
     }
-    if (manifest) {
-      expect(Object.keys(manifest).sort()).toEqual([
-        "frames",
-        "housingId",
-        "id",
-        "keycapId",
-        "orderable",
-      ]);
-    }
+    expect(Object.keys(manifest).sort()).toEqual([
+      "frames",
+      "housingId",
+      "id",
+      "keycapId",
+      "orderable",
+    ]);
   });
 
   it("rejects partial, reordered, mixed-path, wrong-dimension and unversionable frames", () => {

@@ -50,7 +50,7 @@ export default function AnimatedText({ data }: { data: string }) {
 
   return (
     <button
-      className="cursor-pointer rounded-md px-3 py-2 font-medium font-mono text-2xl tracking-[-0.04em] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:text-3xl"
+      className="focus-visible:ring-ring cursor-pointer rounded-md px-3 py-2 font-mono text-2xl font-medium tracking-[-0.04em] focus-visible:ring-2 focus-visible:outline-none sm:text-3xl"
       onFocus={handleMouseOver}
       onMouseOver={handleMouseOver}
       type="button"

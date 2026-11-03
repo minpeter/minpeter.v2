@@ -2,7 +2,7 @@
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { cleanup, render, screen } from "@testing-library/react";
-import { afterEach, expect, it } from "vitest";
+import { afterEach, expect, it as test } from "vitest";
 import manifest from "@/shared/maru60-personal-manifest.json";
 import retailOutlines from "@/shared/maru60-retail-silhouettes.json";
 import retailSources from "@/shared/maru60-retail-silhouettes.sources.json";
@@ -13,7 +13,7 @@ import { ProductMediaSkeleton } from "./product-media-skeleton";
 
 afterEach(cleanup);
 
-it("uses a solid outer contour aligned to the default frame, with no interior holes", () => {
+test("uses a solid outer contour aligned to the default frame, with no interior holes", () => {
   expect(silhouette.source).toBe(`public${manifest.frames[0].src}`);
   expect(silhouette.sourceSha256).toBe(manifest.frames[0].sha256);
   expect(
@@ -44,7 +44,7 @@ it("uses a solid outer contour aligned to the default frame, with no interior ho
   );
 });
 
-it("keeps the reserved frame as a safe fallback when no transparent outline is available", () => {
+test("keeps the reserved frame as a safe fallback when no transparent outline is available", () => {
   render(<ProductMediaSkeleton className="aspect-[2/3]" outline={null} />);
   expect(screen.queryByTestId("product-silhouette")).toBeNull();
   expect(screen.getByTestId("product-media-skeleton").className).toContain(
@@ -55,7 +55,7 @@ it("keeps the reserved frame as a safe fallback when no transparent outline is a
   ).toBeNull();
 });
 
-it("keeps 12 lightweight outer angle envelopes tied to the exact source frames", () => {
+test("keeps 12 lightweight outer angle envelopes tied to the exact source frames", () => {
   expect(Object.keys(spinOutlines)).toHaveLength(12);
   expect(JSON.stringify(spinOutlines).length).toBeLessThan(3000);
   for (const [key, shape] of Object.entries(spinOutlines)) {
@@ -70,7 +70,7 @@ it("keeps 12 lightweight outer angle envelopes tied to the exact source frames",
   }
 });
 
-it("uses opaque retail contours instead of the smaller transparent side profile", () => {
+test("uses opaque retail contours instead of the smaller transparent side profile", () => {
   expect(silhouette.outline).toEqual(spinOutlines.frame_000);
   expect(retailOutlines.frame_090.polygons).not.toEqual(
     spinOutlines.frame_090.polygons

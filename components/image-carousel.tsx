@@ -168,17 +168,17 @@ export function ImageCarousel({
             </CarouselItem>
           ))}
         </CarouselContent>
-        <CarouselPrevious className="left-2 border-0 bg-background/80 backdrop-blur-sm hover:bg-background/90" />
-        <CarouselNext className="right-2 border-0 bg-background/80 backdrop-blur-sm hover:bg-background/90" />
+        <CarouselPrevious className="bg-background/80 hover:bg-background/90 left-2 border-0 backdrop-blur-sm" />
+        <CarouselNext className="bg-background/80 hover:bg-background/90 right-2 border-0 backdrop-blur-sm" />
       </Carousel>
       <div className="mt-3 flex justify-center gap-1.5">
         {images.map((src, index) => (
           <button
             aria-label={`Go to slide ${index + 1}`}
             className={cn(
-              "h-1.5 w-1.5 rounded-full transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+              "focus-visible:ring-ring h-1.5 w-1.5 rounded-full transition-all focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none",
               current === index
-                ? "w-3 bg-foreground"
+                ? "bg-foreground w-3"
                 : "bg-muted-foreground/30 hover:bg-muted-foreground/50"
             )}
             data-index={index}

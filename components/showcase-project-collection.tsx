@@ -45,7 +45,7 @@ export async function ShowcaseProjectCollection({
 
       <ul
         aria-label={t("showcase.projectsLabel")}
-        className="divide-y divide-foreground/15 has-[figure]:border-foreground/15 has-[figure]:border-b"
+        className="divide-foreground/15 has-[figure]:border-foreground/15 divide-y has-[figure]:border-b"
       >
         {projects.map((project) => {
           const projectName = project.wordmark ? (
@@ -61,7 +61,7 @@ export async function ShowcaseProjectCollection({
           const projectBadge = (
             <span
               aria-hidden={project.href ? true : undefined}
-              className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-foreground/10 bg-foreground/[0.03] px-2 py-1 font-medium text-[0.6875rem] text-muted-foreground leading-none transition-colors group-hover:border-foreground/20 group-hover:bg-foreground/[0.07] group-hover:text-foreground group-focus-visible:text-foreground"
+              className="border-foreground/10 bg-foreground/[0.03] text-muted-foreground group-hover:border-foreground/20 group-hover:bg-foreground/[0.07] group-hover:text-foreground group-focus-visible:text-foreground inline-flex shrink-0 items-center gap-1.5 rounded-full border px-2 py-1 text-[0.6875rem] leading-none font-medium transition-colors"
             >
               {project.href ? (
                 <GitHubLogoIcon
@@ -82,10 +82,10 @@ export async function ShowcaseProjectCollection({
 
           return (
             <li className="py-4 first:pt-0" key={project.name}>
-              <h2 className="text-[0.9375rem] text-foreground/90 leading-snug">
+              <h2 className="text-foreground/90 text-[0.9375rem] leading-snug">
                 {project.href ? (
                   <a
-                    className="group -mx-2 -my-1 flex items-center justify-between gap-4 rounded-sm px-2 py-1 transition-colors hover:bg-secondary focus-visible:outline-2 focus-visible:outline-ring"
+                    className="group hover:bg-secondary focus-visible:outline-ring -mx-2 -my-1 flex items-center justify-between gap-4 rounded-sm px-2 py-1 transition-colors focus-visible:outline-2"
                     href={project.href}
                     rel="noreferrer"
                     target="_blank"
@@ -107,16 +107,16 @@ export async function ShowcaseProjectCollection({
               <div className="mt-2 flex items-start gap-4">
                 <div className="min-w-0 flex-1">
                   {project.href && project.label ? (
-                    <p className="text-[0.6875rem] text-muted-foreground">
+                    <p className="text-muted-foreground text-[0.6875rem]">
                       {project.label}
                     </p>
                   ) : null}
-                  <p className="not-first:mt-1.5 text-[0.8125rem] text-foreground/80 leading-relaxed">
+                  <p className="text-foreground/80 text-[0.8125rem] leading-relaxed not-first:mt-1.5">
                     {project.description}
                   </p>
                   {project.details ? (
-                    <details className="mt-2 text-[0.6875rem] text-muted-foreground">
-                      <summary className="w-fit cursor-pointer rounded-sm hover:text-foreground focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2">
+                    <details className="text-muted-foreground mt-2 text-[0.6875rem]">
+                      <summary className="hover:text-foreground focus-visible:outline-ring w-fit cursor-pointer rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2">
                         {t("showcase.connectionSettings")}
                       </summary>
                       <dl className="mt-3 space-y-2 leading-relaxed">

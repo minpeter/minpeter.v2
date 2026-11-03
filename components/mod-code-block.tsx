@@ -6,7 +6,7 @@ import { useCallback, useState } from "react";
 
 import { copyToClipboard, useCopyStatus } from "./code-block-copy";
 
-const TEMPLATE_TOKEN_REGEX = /{{([^}]+)}}/g;
+const TEMPLATE_TOKEN_REGEX = /\{\{(?<token>[^}]+)\}\}/gu;
 const LEADING_NEWLINE = "\n";
 const TAB_PLACEHOLDER = "%TAB";
 const TAB_REPLACEMENT = "    ";
@@ -37,7 +37,7 @@ function parseTemplate(template: string): TemplateSegment[] {
     }
 
     segments.push({
-      content: match[1],
+      content: match.groups?.token ?? "",
       id: `dynamic-${segments.length}`,
       type: "dynamic",
     });
@@ -166,7 +166,7 @@ export function ModCodeBlock({
   return (
     <div className="relative flex flex-col gap-1">
       <button
-        className="absolute top-3 right-3 rounded-md border bg-card px-2 py-1 text-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        className="bg-card focus-visible:ring-ring absolute top-3 right-3 rounded-md border px-2 py-1 text-xs focus-visible:ring-2 focus-visible:outline-none"
         onClick={handleCopy}
         type="button"
       >
@@ -196,7 +196,7 @@ export function ModCodeBlock({
                     aria-label={t("valueFor", { name: segment.content })}
                     autoComplete="off"
                     autoFocus
-                    className="inline h-5 rounded-md bg-secondary px-1 py-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    className="bg-secondary focus-visible:ring-ring inline h-5 rounded-md px-1 py-0.5 focus-visible:ring-2 focus-visible:outline-none"
                     data-segment-key={segment.content}
                     key={segment.id}
                     onBlur={handleSegmentBlur}
@@ -214,7 +214,7 @@ export function ModCodeBlock({
 
               return (
                 <button
-                  className="cursor-pointer rounded-md bg-secondary px-1 py-0.5 text-blue-700 hover:bg-blue-700 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:text-blue-400 dark:hover:bg-blue-700 dark:hover:text-white"
+                  className="bg-secondary focus-visible:ring-ring cursor-pointer rounded-md px-1 py-0.5 text-blue-700 hover:bg-blue-700 hover:text-white focus-visible:ring-2 focus-visible:outline-none dark:text-blue-400 dark:hover:bg-blue-700 dark:hover:text-white"
                   data-segment-index={index}
                   key={segment.id}
                   onClick={handleSegmentActivate}
@@ -227,11 +227,11 @@ export function ModCodeBlock({
           </code>
         </pre>
       </div>
-      <p className="mb-4 pl-1 text-muted-foreground text-xs">
+      <p className="text-muted-foreground mb-4 pl-1 text-xs">
         *{t("instruction")}
       </p>
       {status === "error" && (
-        <output className="pl-1 text-destructive text-xs">
+        <output className="text-destructive pl-1 text-xs">
           {t("copyFailed")}
         </output>
       )}

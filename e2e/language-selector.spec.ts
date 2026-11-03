@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test as it, test } from "@playwright/test";
 
 const languages = {
   en: { label: "English", prefix: "/en", short: "EN" },
@@ -77,13 +77,12 @@ for (const [pathname, landmark] of [
         )?.value
       ).toBe(locale);
 
-      if (locale === "ko") {
-        await page.reload();
-        await expect(page).toHaveURL(pathname);
-        await expect(page.locator("html")).toHaveAttribute("lang", "ko");
-        await expect(trigger).toHaveText("KO");
-        await expect(pageContent).toBeVisible();
-      }
+      // The saved locale survives a reload, including Korean on the prefix-free URL.
+      await page.reload();
+      await expect(page).toHaveURL(`${language.prefix}${pathname}`);
+      await expect(page.locator("html")).toHaveAttribute("lang", locale);
+      await expect(trigger).toHaveText(language.short);
+      await expect(pageContent).toBeVisible();
       expect(pageErrors).toEqual([]);
     });
   }
@@ -128,9 +127,9 @@ test("language menu supports pointer opening and keyboard selection", async ({
 });
 
 test.describe("touch trigger", () => {
-  test.use({ hasTouch: true });
+  it.use({ hasTouch: true });
 
-  test("opens after release and can close and reopen without selecting a language", async ({
+  it("opens after release and can close and reopen without selecting a language", async ({
     page,
   }) => {
     await page.goto("/ko/blog");
@@ -159,7 +158,7 @@ test.describe("touch trigger", () => {
     await expect(trigger).toHaveText("KO");
   });
 
-  test("canceled touches do not leak their toggle into later clicks", async ({
+  it("canceled touches do not leak their toggle into later clicks", async ({
     page,
   }) => {
     await page.goto("/ko/blog");

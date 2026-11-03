@@ -5,5 +5,19 @@
     "ultracite/biome/next",
     "ultracite/biome/react",
     "ultracite/biome/vitest"
-  ]
+  ],
+  "linter": {
+    "rules": {
+      "suspicious": {
+        "useBaseline": {
+          "level": "error",
+          "options": {
+            // @supports selector() cannot gate pseudo-elements for Biome; removing
+            // these would change the visible text-selection and list-marker colors.
+            "allowSelectors": ["selection", "marker"]
+          }
+        }
+      }
+    }
+  }
 }

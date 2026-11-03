@@ -10,7 +10,7 @@ import type * as sourceModule from "@/shared/source";
 import type * as mdxComponentsModule from "../mdx-components";
 import { PostBody } from "../page";
 
-const COUNTDOWN_RE = /초 후 외부 링크로 이동합니다/;
+const COUNTDOWN_RE = /초 후 외부 링크로 이동합니다/u;
 vi.mock(
   import("next-intl/server"),
   () =>

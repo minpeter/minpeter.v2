@@ -7,7 +7,7 @@ const SEARCH_SETTLE_TIMEOUT_MS = 3000;
 const MULTI_WORD_QUERY = "cache components";
 const CANONICAL_DIRECT_QUERY = "😀".repeat(200);
 const OVER_LIMIT_DIRECT_QUERY = ` ${CANONICAL_DIRECT_QUERY}`;
-const TRAEFIK_QUERY_URL_RE = /\?q=traefik$/;
+const TRAEFIK_QUERY_URL_RE = /\?q=traefik$/u;
 
 test.use({ channel: "chrome" });
 

@@ -9,8 +9,8 @@ export default function Loading() {
       className="blog-post-page flex flex-1 flex-col"
       data-testid="blog-post-shell"
     >
-      <header className="relative z-10 mx-auto mb-16 w-full max-w-2xl border-foreground/20 border-b pb-10 sm:mb-20">
-        <div className="flex items-center justify-between font-mono text-[11px] uppercase tracking-[-0.05em]">
+      <header className="border-foreground/20 relative z-10 mx-auto mb-16 w-full max-w-2xl border-b pb-10 sm:mb-20">
+        <div className="flex items-center justify-between font-mono text-[11px] tracking-[-0.05em] uppercase">
           <Skeleton className="h-4 w-24 rounded-sm" />
           <Skeleton className="h-4 w-10 rounded-sm" />
         </div>

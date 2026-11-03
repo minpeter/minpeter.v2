@@ -8,7 +8,7 @@ import {
   waitFor,
 } from "@testing-library/react";
 import { NextIntlClientProvider } from "next-intl";
-import { afterEach, expect, it, vi } from "vitest";
+import { afterEach, expect, it as test, vi } from "vitest";
 import TmpfUI from "./tmpf";
 import { downloadFile, uploadFile } from "./tmpf-api";
 
@@ -41,7 +41,7 @@ afterEach(() => {
   vi.resetAllMocks();
 });
 
-it("waits for every download after a partial failure, prevents duplicates, and clears the error on retry", async () => {
+test("waits for every download after a partial failure, prevents duplicates, and clears the error on retry", async () => {
   vi.mocked(uploadFile).mockResolvedValue({
     files: [{ fileName: "failed.txt" }, { fileName: "slow.txt" }],
     folderId: "folder",

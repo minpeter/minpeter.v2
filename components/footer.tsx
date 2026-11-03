@@ -26,10 +26,10 @@ export default async function Footer({
     <footer
       className={cn(
         className,
-        "mx-auto flex w-full max-w-lg flex-wrap items-center gap-x-1 gap-y-0 px-5 py-4 font-mono text-[11px] text-muted-foreground sm:px-0"
+        "text-muted-foreground mx-auto flex w-full max-w-lg flex-wrap items-center gap-x-1 gap-y-0 px-5 py-4 font-mono text-[11px] sm:px-0"
       )}
     >
-      <p className="font-mono text-[11px] text-muted-foreground uppercase tracking-[0.08em]">
+      <p className="text-muted-foreground font-mono text-[11px] tracking-[0.08em] uppercase">
         © {SITE_COPYRIGHT_YEAR} Woonggi Min ·
         <Link
           className={linkClassName}

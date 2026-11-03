@@ -61,10 +61,10 @@ export default function Page() {
           />
         </Link>
         <h1 className="text-base leading-tight tracking-tight">
-          <span className="font-semibold text-foreground">MINPETER</span>
+          <span className="text-foreground font-semibold">MINPETER</span>
           <span className="text-muted-foreground"> — {t("role")}</span>
         </h1>
-        <p className="mt-4 max-w-md text-foreground/85 text-sm leading-snug">
+        <p className="text-foreground/85 mt-4 max-w-md text-sm leading-snug">
           {t("introduction")}
         </p>
       </header>
@@ -89,7 +89,7 @@ export default function Page() {
 
       <section aria-labelledby="connect-title" className="mt-16">
         <h2
-          className="mb-5 text-[13px] text-muted-foreground tracking-[-0.02em]"
+          className="text-muted-foreground mb-5 text-[13px] tracking-[-0.02em]"
           id="connect-title"
         >
           {t("socialTitle")}

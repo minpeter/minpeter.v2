@@ -29,14 +29,14 @@ export const DiagramFigure = ({
 }: DiagramFigureProps) => (
   <figure
     aria-label={description}
-    className="not-prose my-6 rounded-xl border border-border bg-muted/20 p-3 text-foreground sm:p-4"
+    className="not-prose border-border bg-muted/20 text-foreground my-6 rounded-xl border p-3 sm:p-4"
     data-diagram={name}
   >
     <div className="mb-3 text-center">
-      <div className="font-semibold text-sm leading-snug">{title}</div>
+      <div className="text-sm leading-snug font-semibold">{title}</div>
     </div>
     {children}
-    <figcaption className="mt-3 text-center text-foreground text-sm leading-relaxed">
+    <figcaption className="text-foreground mt-3 text-center text-sm leading-relaxed">
       {description}
     </figcaption>
   </figure>
@@ -66,9 +66,9 @@ export const FlowStage = ({
     data-stage={stage}
     data-tone={tone}
   >
-    <div className="font-semibold text-sm leading-snug">{title}</div>
+    <div className="text-sm leading-snug font-semibold">{title}</div>
     {detail ? (
-      <div className="mt-1 text-foreground text-sm leading-snug">{detail}</div>
+      <div className="text-foreground mt-1 text-sm leading-snug">{detail}</div>
     ) : null}
     {children}
   </li>
@@ -77,7 +77,7 @@ export const FlowStage = ({
 export const FlowArrow = ({ label }: { label: string }) => (
   <li
     aria-label={label}
-    className="flex h-5 list-none items-center justify-center font-semibold text-base text-foreground leading-none"
+    className="text-foreground flex h-5 list-none items-center justify-center text-base leading-none font-semibold"
     role="img"
   >
     ↓
@@ -85,7 +85,7 @@ export const FlowArrow = ({ label }: { label: string }) => (
 );
 
 export const LossNote = ({ children }: { children: ReactNode }) => (
-  <div className="mt-3 border-foreground border-t border-dashed pt-2 font-medium text-foreground text-sm leading-snug">
+  <div className="border-foreground text-foreground mt-3 border-t border-dashed pt-2 text-sm leading-snug font-medium">
     <span aria-hidden="true" className="mr-1">
       ×
     </span>
@@ -103,10 +103,10 @@ export const FieldCard = ({
   value: string;
 }) => (
   <div
-    className="rounded-lg border border-border bg-background px-3 py-3 text-center"
+    className="border-border bg-background rounded-lg border px-3 py-3 text-center"
     data-field={field}
   >
-    <div className="font-mono font-semibold text-base">{value}</div>
-    <div className="mt-1 text-foreground text-sm leading-snug">{children}</div>
+    <div className="font-mono text-base font-semibold">{value}</div>
+    <div className="text-foreground mt-1 text-sm leading-snug">{children}</div>
   </div>
 );

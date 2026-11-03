@@ -38,13 +38,13 @@ export default async function Page(
         title={t("showcase.items.unstructured0828.title")}
       />
 
-      <div className="relative z-10 flex min-h-[340px] w-full max-w-full items-center justify-center overflow-hidden rounded-lg border border-foreground/10 bg-secondary/20 sm:min-h-[430px] md:min-h-[520px] lg:min-h-[560px] xl:min-h-[700px] 2xl:min-h-[820px]">
+      <div className="border-foreground/10 bg-secondary/20 relative z-10 flex min-h-[340px] w-full max-w-full items-center justify-center overflow-hidden rounded-lg border sm:min-h-[430px] md:min-h-[520px] lg:min-h-[560px] xl:min-h-[700px] 2xl:min-h-[820px]">
         <div className="origin-center scale-[0.55] sm:scale-[0.72] md:scale-[0.82] lg:scale-[0.7] xl:scale-100 2xl:scale-[1.25]">
           <div className="[transform:perspective(4101px)_rotateX(40deg)_rotateY(5deg)_rotateZ(55deg)]">
             <div className="relative inline-block [transform:scaleX(-1)_scaleY(-1)_rotate(90deg)]">
               <Image
                 alt={t("showcase.items.unstructured0828.imageAlt")}
-                className="rounded-lg border border-border"
+                className="border-border rounded-lg border"
                 src={SaaSPageImage}
               />
 
@@ -64,7 +64,7 @@ export default async function Page(
         </div>
       </div>
 
-      <p className="mx-auto mt-3 w-full max-w-lg text-[0.6875rem] text-muted-foreground leading-relaxed">
+      <p className="text-muted-foreground mx-auto mt-3 w-full max-w-lg text-[0.6875rem] leading-relaxed">
         {t("showcase.items.unstructured0828.instruction")}
       </p>
     </section>

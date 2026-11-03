@@ -25,7 +25,7 @@ export function applyStoredTheme(): void {
 
 /** Promote deferred font preload to stylesheet (race-safe). */
 export function promoteDeferredFonts(): void {
-  const el = document.getElementById("deferred-fonts");
+  const el = document.querySelector("#deferred-fonts");
   if (!(el instanceof HTMLLinkElement)) {
     return;
   }

@@ -35,12 +35,12 @@ export default function Header({
   return (
     <header
       className={cn(
-        "relative z-10 mx-auto mb-16 w-full max-w-2xl border-foreground/20 border-b pb-10 sm:mb-20",
+        "border-foreground/20 relative z-10 mx-auto mb-16 w-full max-w-2xl border-b pb-10 sm:mb-20",
         styles.stagger_container
       )}
       data-testid="site-header"
     >
-      <div className="flex items-center justify-between font-mono text-[11px] uppercase tracking-[-0.05em]">
+      <div className="flex items-center justify-between font-mono text-[11px] tracking-[-0.05em] uppercase">
         {link ? (
           <Backlink
             href={link.href}
@@ -50,7 +50,7 @@ export default function Header({
         ) : (
           <Link href="/">minpeter</Link>
         )}
-        <div className="flex items-center gap-2 text-foreground/80">
+        <div className="text-foreground/80 flex items-center gap-2">
           {rightContent}
           {rightContent ? <span>·</span> : null}
           <Suspense fallback={null}>
@@ -69,7 +69,7 @@ export default function Header({
           )}
         </h1>
         {description ? (
-          <p className="mt-5 max-w-lg text-[15px] text-foreground/80 leading-relaxed sm:text-base">
+          <p className="text-foreground/80 mt-5 max-w-lg text-[15px] leading-relaxed sm:text-base">
             {description}
           </p>
         ) : null}

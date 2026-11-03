@@ -1,5 +1,5 @@
 import { instant } from "@next/playwright";
-import { expect, test } from "@playwright/test";
+import { expect, test as it, test } from "@playwright/test";
 
 /**
  * Soft-nav instant() guards. Run against a production build with
@@ -7,7 +7,7 @@ import { expect, test } from "@playwright/test";
  */
 
 test.describe("instant soft-nav: home → blog", () => {
-  test("blog list shell commits under instant()", async ({ page }) => {
+  it("blog list shell commits under instant()", async ({ page }) => {
     await page.goto("/");
     const trigger = page.getByTestId("home-link-blog");
     await expect(trigger).toBeVisible({ timeout: 20_000 });
@@ -20,7 +20,7 @@ test.describe("instant soft-nav: home → blog", () => {
 });
 
 test.describe("instant soft-nav: blog → post", () => {
-  test("blog post shell commits under instant()", async ({ page }) => {
+  it("blog post shell commits under instant()", async ({ page }) => {
     await page.goto("/blog");
     // Prefer an in-app post link (external_url posts open a new origin).
     const trigger = page.locator('a[data-testid="blog-post-link"]').first();
@@ -34,7 +34,7 @@ test.describe("instant soft-nav: blog → post", () => {
 });
 
 test.describe("instant soft-nav: show → tech-stack-ball", () => {
-  test("showcase shell commits under instant()", async ({ page }) => {
+  it("showcase shell commits under instant()", async ({ page }) => {
     await page.goto("/show");
     const trigger = page
       .locator('a[href*="/show/tech-stack-ball"]')
