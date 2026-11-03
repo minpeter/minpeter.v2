@@ -6,7 +6,7 @@ import { expect, test } from "@playwright/test";
 
 const DETAIL = "/products/maru60";
 const FRAME_URL =
-  /\/assets\/products\/maru60\/assembled\/v1\/transparent--inventor\/frame_\d{3}\.webp(?:\?.*)?$/;
+  /\/assets\/products\/maru60\/assembled\/v1\/transparent--inventor\/frame_\d{3}\.webp(?:\?.*)?$/u;
 
 for (const width of [1440, 393, 320]) {
   for (const prefix of ["", "/en", "/ja"]) {

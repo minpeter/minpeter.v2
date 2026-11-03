@@ -23,7 +23,7 @@ export function ProductMediaSkeleton({
       {outline ? (
         <svg
           aria-hidden="true"
-          className="absolute inset-0 h-full w-full fill-primary/10"
+          className="fill-primary/10 absolute inset-0 h-full w-full"
           data-testid="product-silhouette"
           focusable="false"
           viewBox={`0 0 ${outline.width} ${outline.height}`}

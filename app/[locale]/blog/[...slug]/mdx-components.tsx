@@ -19,7 +19,7 @@ export function createBlogMdxComponents() {
       if (isInternalLink) {
         return (
           <Link
-            className="rounded-md px-2 py-1 text-primary hover:bg-secondary"
+            className="text-primary hover:bg-secondary rounded-md px-2 py-1"
             href={href as Route}
             {...(rest as Record<string, unknown>)}
           >
@@ -29,7 +29,7 @@ export function createBlogMdxComponents() {
       }
       return (
         <a
-          className="rounded-md px-2 py-1 text-primary hover:bg-secondary"
+          className="text-primary hover:bg-secondary rounded-md px-2 py-1"
           href={href}
           rel="noopener noreferrer"
           target="_blank"

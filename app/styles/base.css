@@ -42,14 +42,16 @@
     @apply bg-secondary text-secondary-foreground;
   }
 
+  /* Reserve the scrollbar track; older engines without scrollbar-gutter always show it. */
   html {
+    overflow-y: scroll;
     scroll-behavior: smooth;
-    scrollbar-gutter: stable;
   }
 
-  @supports not (scrollbar-gutter: stable) {
+  @supports (scrollbar-gutter: stable) {
     html {
-      overflow-y: scroll;
+      overflow-y: visible;
+      scrollbar-gutter: stable;
     }
   }
 
@@ -133,6 +135,11 @@
 @layer base {
   img {
     -webkit-user-drag: none;
-    user-select: none;
+  }
+
+  @supports (user-select: none) {
+    img {
+      user-select: none;
+    }
   }
 }

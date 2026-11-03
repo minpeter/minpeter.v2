@@ -25,10 +25,10 @@ export function BlogSearchShell({
       <label className="sr-only" htmlFor="blog-search">
         {searchPlaceholder}
       </label>
-      <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+      <Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
       <input
         autoComplete="off"
-        className="w-full bg-transparent px-10 py-4 text-sm placeholder:text-muted-foreground focus:outline-none"
+        className="placeholder:text-muted-foreground w-full bg-transparent px-10 py-4 text-sm focus:outline-none"
         data-testid="blog-search"
         id="blog-search"
         placeholder={searchPlaceholder}

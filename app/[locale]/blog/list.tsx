@@ -178,10 +178,10 @@ export function BlogList({
         <label className="sr-only" htmlFor="blog-search">
           {t("searchPlaceholder")}
         </label>
-        <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+        <Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
         <input
           autoComplete="off"
-          className="w-full bg-transparent px-10 py-4 text-sm placeholder:text-muted-foreground focus:outline-none"
+          className="placeholder:text-muted-foreground w-full bg-transparent px-10 py-4 text-sm focus:outline-none"
           data-testid="blog-search"
           id="blog-search"
           onChange={handleQueryChange}
@@ -192,11 +192,11 @@ export function BlogList({
         {inputQuery ? (
           <div className="absolute top-1/2 right-3 flex h-4 w-4 -translate-y-1/2 items-center justify-center">
             {isSearching ? (
-              <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
+              <Loader2 className="text-muted-foreground h-4 w-4 animate-spin" />
             ) : (
               <button
                 aria-label={t("common.clearSearch")}
-                className="flex h-4 w-4 items-center justify-center rounded text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                className="text-muted-foreground hover:text-foreground focus-visible:ring-ring flex h-4 w-4 items-center justify-center rounded focus-visible:ring-2 focus-visible:outline-none"
                 onClick={handleQueryClear}
                 type="button"
               >
@@ -208,7 +208,7 @@ export function BlogList({
       </div>
       {hasSearchError ? (
         <p
-          className="mt-3 px-1 text-muted-foreground text-sm [overflow-wrap:anywhere] [word-break:keep-all]"
+          className="text-muted-foreground mt-3 px-1 text-sm [overflow-wrap:anywhere] [word-break:keep-all]"
           data-state="unavailable"
           data-testid="blog-search-status"
           role="status"

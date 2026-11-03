@@ -8,7 +8,7 @@ import {
   type SpinLoaderConfig,
 } from "./product-spin-loader";
 
-const FRAME_PATH = /\/(\d+)\.webp$/;
+const FRAME_PATH = /\/(?<frame>\d+)\.webp$/u;
 const config = {
   basePath: "/assets/test-spin",
   frameCount: 72,
@@ -66,7 +66,7 @@ beforeEach(() => {
         new Promise<Response>((resolve, reject) => {
           const match = url.match(FRAME_PATH);
           requests.push({
-            index: Number(match?.[1]) - 1,
+            index: Number(match?.groups?.frame) - 1,
             reject,
             resolve,
             signal: options.signal as AbortSignal,

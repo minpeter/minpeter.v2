@@ -1,9 +1,10 @@
 import type { SortedResult } from "fumadocs-core/search";
 import { describe, expect, it, vi } from "vitest";
 
-vi.mock("@/shared/source", () => ({ blog: {} }));
-
 import { GET, handleSearchRequest } from "./route";
+
+// Vitest hoists vi.mock above the imports, so ./route still sees the mocked source.
+vi.mock("@/shared/source", () => ({ blog: {} }));
 
 function searchResults(count: number): SortedResult[] {
   return Array.from({ length: count }, (_, index) => ({

@@ -1,6 +1,6 @@
 import { readFileSync, writeFileSync } from "node:fs";
 
-import { expect, type Page, test } from "@playwright/test";
+import { expect, test as it, type Page, test } from "@playwright/test";
 import en from "../shared/i18n/en.json" with { type: "json" };
 import ja from "../shared/i18n/ja.json" with { type: "json" };
 import spinOutlines from "../shared/maru60-retail-silhouettes.json" with {
@@ -93,30 +93,27 @@ async function expectFeedbackInsideStage(page: Page) {
 }
 
 for (const viewport of [
-  { height: 1000, width: 1440 },
-  { height: 1080, width: 1920 },
-  { height: 1440, width: 2560 },
-  { height: 1440, width: 3440 },
-  { height: 2160, width: 3840 },
-  { height: 844, width: 390 },
-  { height: 640, width: 320 },
-  { height: 390, width: 844 },
-  { height: 900, width: 1023 },
-  { height: 900, width: 1024 },
+  { height: 1000, locale: "en", width: 1440 },
+  { height: 1080, locale: "en", width: 1920 },
+  { height: 1440, locale: "en", width: 2560 },
+  { height: 1440, locale: "en", width: 3440 },
+  { height: 2160, locale: "en", width: 3840 },
+  { height: 844, locale: "en", width: 390 },
+  { height: 640, locale: "en", width: 320 },
+  { height: 390, locale: "en", width: 844 },
+  { height: 900, locale: "en", width: 1023 },
+  { height: 900, locale: "en", width: 1024 },
   { height: 844, locale: "ko", width: 390 },
   { height: 844, locale: "ja", width: 390 },
 ]) {
-  test.describe(`${viewport.width}px ${viewport.locale ?? "en"} loading layout`, () => {
-    test.use({ locale: viewport.locale ?? "en" });
-    test(`loading, failure, retry and personal selection keep controls stable at ${viewport.width}px ${viewport.locale ?? "en"}`, async ({
+  test.describe(`${viewport.width}px ${viewport.locale} loading layout`, () => {
+    it.use({ locale: viewport.locale });
+    it(`loading, failure, retry and personal selection keep controls stable at ${viewport.width}px ${viewport.locale}`, async ({
       page,
     }, testInfo) => {
-      const messages = { en, ja, ko }[
-        (viewport.locale ?? "en") as "ko" | "ja" | "en"
-      ];
+      const messages = { en, ja, ko }[viewport.locale as "ko" | "ja" | "en"];
       const labels = messages.products.customization;
-      const prefix =
-        viewport.locale === "ko" ? "" : `/${viewport.locale ?? "en"}`;
+      const prefix = viewport.locale === "ko" ? "" : `/${viewport.locale}`;
       await page.setViewportSize(viewport);
       await page.emulateMedia({ reducedMotion: "reduce" });
       await page.goto(
@@ -507,8 +504,8 @@ for (const scenario of [
   { dpr: 3, from: 390, name: "retina-mobile", to: 390 },
 ]) {
   test.describe(`loading corner ${scenario.name}`, () => {
-    test.use({ deviceScaleFactor: scenario.dpr });
-    test("resize or high DPR preserves actual painted outline and cached history", async ({
+    it.use({ deviceScaleFactor: scenario.dpr });
+    it("resize or high DPR preserves actual painted outline and cached history", async ({
       page,
     }, testInfo) => {
       await page.setViewportSize({ height: 900, width: scenario.from });

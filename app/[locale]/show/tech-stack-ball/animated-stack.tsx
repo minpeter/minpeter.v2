@@ -35,7 +35,7 @@ export function Playground({
     <canvas
       aria-label={t("simulationLabel")}
       className={cn(
-        "h-auto w-full max-w-full cursor-grab touch-none rounded-lg border bg-card text-card-foreground shadow-xs active:cursor-grabbing",
+        "bg-card text-card-foreground h-auto w-full max-w-full cursor-grab touch-none rounded-lg border shadow-xs active:cursor-grabbing",
         className
       )}
       height={h}

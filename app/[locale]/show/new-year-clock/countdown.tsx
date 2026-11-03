@@ -86,10 +86,10 @@ export function Countdown() {
       <div className="grid grid-cols-2 gap-x-5 gap-y-8 sm:grid-cols-4">
         {labels.map(({ key, label }) => (
           <div className="border-foreground/15 border-t pt-4" key={key}>
-            <span className="block font-mono text-2xl tabular-nums tracking-[-0.05em] sm:text-[1.75rem]">
+            <span className="block font-mono text-2xl tracking-[-0.05em] tabular-nums sm:text-[1.75rem]">
               --
             </span>
-            <span className="mt-1 block text-[0.6875rem] text-muted-foreground uppercase tracking-[0.08em]">
+            <span className="text-muted-foreground mt-1 block text-[0.6875rem] tracking-[0.08em] uppercase">
               {label}
             </span>
           </div>
@@ -102,7 +102,7 @@ export function Countdown() {
 
   if (!hasTimeLeft) {
     return (
-      <div className="rounded-lg border border-foreground/10 bg-secondary/35 px-5 py-12 text-center">
+      <div className="border-foreground/10 bg-secondary/35 rounded-lg border px-5 py-12 text-center">
         <p className="text-xl tracking-[-0.035em]">{t("happy")}</p>
       </div>
     );
@@ -121,15 +121,15 @@ export function Countdown() {
     >
       {labels.map(({ key, label }) => (
         <div className="border-foreground/15 border-t pt-4" key={label}>
-          <span className="block font-mono text-2xl tabular-nums tracking-[-0.05em] sm:text-[1.75rem]">
+          <span className="block font-mono text-2xl tracking-[-0.05em] tabular-nums sm:text-[1.75rem]">
             {String(remainingTime[key]).padStart(2, "0")}
           </span>
-          <span className="mt-1 block text-[0.6875rem] text-muted-foreground uppercase tracking-[0.08em]">
+          <span className="text-muted-foreground mt-1 block text-[0.6875rem] tracking-[0.08em] uppercase">
             {label}
           </span>
         </div>
       ))}
-      <p className="col-span-full text-[0.6875rem] text-muted-foreground leading-relaxed">
+      <p className="text-muted-foreground col-span-full text-[0.6875rem] leading-relaxed">
         {t("caption", {
           year: String(new Date(targetTimestamp).getFullYear()),
         })}

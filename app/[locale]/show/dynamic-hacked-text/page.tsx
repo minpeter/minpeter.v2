@@ -35,7 +35,7 @@ export default async function Page() {
         title={t("showcase.items.dynamicText.title")}
       />
 
-      <div className="flex min-h-56 items-center justify-center rounded-lg border border-foreground/10 bg-secondary/35 px-5">
+      <div className="border-foreground/10 bg-secondary/35 flex min-h-56 items-center justify-center rounded-lg border px-5">
         <Suspense fallback={<Skeleton className="h-10 w-48" />}>
           <AnimatedText data={"Hello world"} />
         </Suspense>

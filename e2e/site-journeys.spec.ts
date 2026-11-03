@@ -1,8 +1,14 @@
-import { expect, type Locator, test } from "@playwright/test";
+import {
+  expect,
+  test as it,
+  type Locator,
+  type Page,
+  test,
+} from "@playwright/test";
 
-const JAPANESE_POST_URL = /\/ja\/blog\/.+/;
-const REQUEST_SCREEN_URL = /token-hub-requests\..+\.webp$/;
-const DARK_REQUEST_SCREEN_URL = /token-hub-requests-dark\..+\.webp$/;
+const JAPANESE_POST_URL = /\/ja\/blog\/.+/u;
+const REQUEST_SCREEN_URL = /token-hub-requests\..+\.webp$/u;
+const DARK_REQUEST_SCREEN_URL = /token-hub-requests-dark\..+\.webp$/u;
 const SCREEN_ASSETS = [
   ["token-hub-overview", "token-hub-models", "token-hub-requests"],
   ["kiro-lb-overview", "kiro-lb-accounts", "kiro-lb-settings"],
@@ -21,7 +27,7 @@ async function expectScreenshots(projects: Locator, theme: "light" | "dark") {
           const link = figure.getByRole("link").nth(screenIndex);
           await expect(link).toHaveAttribute(
             "href",
-            new RegExp(`^/_next/static/media/${filename}\\..+\\.webp$`)
+            new RegExp(`^/_next/static/media/${filename}\\..+\\.webp$`, "u")
           );
           await expect(link).toHaveAttribute("target", "_blank");
           await expect(link).toHaveCSS(
@@ -30,7 +36,7 @@ async function expectScreenshots(projects: Locator, theme: "light" | "dark") {
           );
           await expect(link.getByRole("img")).toHaveAttribute(
             "src",
-            new RegExp(`${filename}\\..+\\.webp`)
+            new RegExp(`${filename}\\..+\\.webp`, "u")
           );
           await expect(link.getByRole("img")).toHaveCSS(
             "object-position",
@@ -55,6 +61,40 @@ async function expectScreenshots(projects: Locator, theme: "light" | "dark") {
         )
     )
     .toBe(true);
+}
+
+/** Open the load balancer detail with its fan resting, as the collection journey leaves it. */
+async function openLoadBalancer(
+  page: Page,
+  prefix: string,
+  privateLabel: string
+) {
+  await page.goto(`${prefix}/show/the-load-balancer`);
+  const projects = page
+    .getByTestId("showcase-detail-shell")
+    .filter({ visible: true })
+    .getByRole("list");
+  await expect(projects.getByRole("heading")).toHaveCount(3);
+  const tokenhub = projects.getByRole("listitem").filter({
+    has: page.getByRole("heading", {
+      exact: true,
+      name: `Tokenhub ${privateLabel}`,
+    }),
+  });
+  await tokenhub.locator("figure").scrollIntoViewIfNeeded();
+  await page.mouse.move(0, 0);
+  await tokenhub.locator("figure").evaluate(async (figure) => {
+    await Promise.all(
+      figure
+        .getAnimations({ subtree: true })
+        .map((animation) => animation.finished)
+    );
+  });
+  return {
+    cards: tokenhub.locator("figure").getByRole("link"),
+    projects,
+    tokenhub,
+  };
 }
 
 for (const {
@@ -95,10 +135,9 @@ for (const {
   },
 ]) {
   test.describe(`${locale} portfolio`, () => {
-    test.use({ locale });
+    it.use({ locale });
 
-    test(`project collections preserve ${locale} navigation and public links`, async ({
-      isMobile,
+    it(`project collections preserve ${locale} navigation and public links`, async ({
       page,
     }, testInfo) => {
       await page.goto(prefix || "/");
@@ -263,51 +302,6 @@ for (const {
       expect(rotations[0]).toBeLessThan(0);
       expect(rotations[1]).toBe(0);
       expect(rotations[2]).toBeGreaterThan(0);
-      if (!isMobile) {
-        const restTops = await cards.evaluateAll((elements) =>
-          elements.map(
-            (element) => element.getBoundingClientRect().top + window.scrollY
-          )
-        );
-        await tokenhub.locator("figure").hover({ position: { x: 4, y: 4 } });
-        await expect
-          .poll(() =>
-            cards
-              .last()
-              .evaluate(
-                (element) =>
-                  element.getBoundingClientRect().top + window.scrollY
-              )
-          )
-          .toBeLessThan(restTops[2] - 14);
-        await cards.first().hover({ position: { x: 70, y: 30 } });
-        await expect(cards.first()).toHaveCSS("z-index", "4");
-        await expect
-          .poll(() =>
-            cards
-              .first()
-              .evaluate(
-                (element) =>
-                  new DOMMatrix(getComputedStyle(element).transform).a
-              )
-          )
-          .toBeGreaterThan(1.01);
-        await page.screenshot({
-          animations: "disabled",
-          path: testInfo.outputPath("load-balancer-fan-hover.png"),
-        });
-        await page.mouse.move(0, 0);
-        await expect
-          .poll(() =>
-            cards
-              .first()
-              .evaluate(
-                (element) =>
-                  element.getBoundingClientRect().top + window.scrollY
-              )
-          )
-          .toBeCloseTo(restTops[0], 0);
-      }
       const fullSizePagePromise = page.waitForEvent("popup");
       // The center is submerged; click inside the exposed upper half.
       await cards.first().click({ position: { x: 70, y: 30 } });
@@ -383,43 +377,6 @@ for (const {
       await page.keyboard.press("Enter");
       await expect(projects.locator("details[open]")).toHaveCount(0);
 
-      if (locale === "ko") {
-        await page.emulateMedia({
-          colorScheme: "dark",
-          reducedMotion: "reduce",
-        });
-        await expect(cards.first()).toHaveCSS("transition-duration", "0s");
-        const themeToggle = page.getByRole("button", { name: "테마 전환" });
-        await themeToggle.click();
-        await expect(page.locator("html")).toHaveClass("dark");
-        await expectScreenshots(projects, "dark");
-        // Manual light overrides the OS preference; saved dark survives reload.
-        await themeToggle.click();
-        await expect(page.locator("html")).toHaveClass("light");
-        await expectScreenshots(projects, "light");
-        await themeToggle.click();
-        await expect(page.locator("html")).toHaveClass("dark");
-        await page.reload();
-        await expect(page.locator("html")).toHaveClass("dark");
-        await expectScreenshots(projects, "dark");
-        await cards.first().focus();
-        await page.keyboard.press("Tab");
-        await expect(cards.nth(1)).toBeFocused();
-        await page.keyboard.press("Tab");
-        await expect(cards.last()).toBeFocused();
-        const darkScreenPromise = page.waitForEvent("popup");
-        await page.keyboard.press("Enter");
-        const darkScreen = await darkScreenPromise;
-        await expect(darkScreen).toHaveURL(DARK_REQUEST_SCREEN_URL);
-        await darkScreen.close();
-        await page.getByRole("heading", { level: 1 }).click();
-        await page.mouse.move(0, 0);
-        await page.screenshot({
-          fullPage: true,
-          path: testInfo.outputPath("load-balancer-dark.png"),
-        });
-      }
-
       await detail.locator(".showcase-header .fieldnotes-logo-link").click();
       await expect(page).toHaveURL(`${prefix}/show`);
       await page.getByTestId("showcase-link-wrench").click();
@@ -469,8 +426,105 @@ for (const {
         "Project Wrench"
       );
     });
+
+    it(`load balancer fan lifts on hover and settles back in ${locale}`, async ({
+      isMobile,
+      page,
+    }, testInfo) => {
+      // biome-ignore lint/suspicious/noSkippedTests: Touch devices have no hover state to exercise.
+      it.skip(isMobile, "Hovering needs a fine pointer");
+      const { cards, tokenhub } = await openLoadBalancer(
+        page,
+        prefix,
+        privateLabel
+      );
+      const restTops = await cards.evaluateAll((elements) =>
+        elements.map(
+          (element) => element.getBoundingClientRect().top + window.scrollY
+        )
+      );
+      await tokenhub.locator("figure").hover({ position: { x: 4, y: 4 } });
+      await expect
+        .poll(() =>
+          cards
+            .last()
+            .evaluate(
+              (element) => element.getBoundingClientRect().top + window.scrollY
+            )
+        )
+        .toBeLessThan(restTops[2] - 14);
+      await cards.first().hover({ position: { x: 70, y: 30 } });
+      await expect(cards.first()).toHaveCSS("z-index", "4");
+      await expect
+        .poll(() =>
+          cards
+            .first()
+            .evaluate(
+              (element) => new DOMMatrix(getComputedStyle(element).transform).a
+            )
+        )
+        .toBeGreaterThan(1.01);
+      await page.screenshot({
+        animations: "disabled",
+        path: testInfo.outputPath("load-balancer-fan-hover.png"),
+      });
+      await page.mouse.move(0, 0);
+      await expect
+        .poll(() =>
+          cards
+            .first()
+            .evaluate(
+              (element) => element.getBoundingClientRect().top + window.scrollY
+            )
+        )
+        .toBeCloseTo(restTops[0], 0);
+    });
   });
 }
+
+test.describe("ko portfolio dark theme", () => {
+  it.use({ locale: "ko" });
+
+  it("load balancer screens follow the saved dark theme with reduced motion", async ({
+    page,
+  }, testInfo) => {
+    const { cards, projects } = await openLoadBalancer(page, "", "프라이빗");
+    await page.emulateMedia({
+      colorScheme: "dark",
+      reducedMotion: "reduce",
+    });
+    await expect(cards.first()).toHaveCSS("transition-duration", "0s");
+    const themeToggle = page.getByRole("button", { name: "테마 전환" });
+    await themeToggle.click();
+    await expect(page.locator("html")).toHaveClass("dark");
+    await expectScreenshots(projects, "dark");
+    // Manual light overrides the OS preference; saved dark survives reload.
+    await themeToggle.click();
+    await expect(page.locator("html")).toHaveClass("light");
+    await expectScreenshots(projects, "light");
+    await themeToggle.click();
+    await expect(page.locator("html")).toHaveClass("dark");
+    await page.reload();
+    await expect(page.locator("html")).toHaveClass("dark");
+    await expectScreenshots(projects, "dark");
+    await cards.first().focus();
+    await page.keyboard.press("Tab");
+    await expect(cards.nth(1)).toBeFocused();
+    await page.keyboard.press("Tab");
+    await expect(cards.last()).toBeFocused();
+    const darkScreenPromise = page.waitForEvent("popup");
+    await page.keyboard.press("Enter");
+    const darkScreen = await darkScreenPromise;
+    await expect(darkScreen).toHaveURL(DARK_REQUEST_SCREEN_URL);
+    await darkScreen.close();
+    await page.getByRole("heading", { level: 1 }).click();
+    await page.mouse.move(0, 0);
+    await page.screenshot({
+      fullPage: true,
+      path: testInfo.outputPath("load-balancer-dark.png"),
+    });
+  });
+});
 
 for (const destination of ["show", "resume"]) {
   test(`home link reaches ${destination}`, async ({ page }) => {

@@ -29,11 +29,11 @@ export const CsiUAnatomyDiagram = () => (
     </div>
 
     <div aria-hidden="true" className="my-3 flex items-center gap-2">
-      <div className="h-px flex-1 bg-foreground" />
-      <div className="font-semibold text-foreground text-xs">
+      <div className="bg-foreground h-px flex-1" />
+      <div className="text-foreground text-xs font-semibold">
         Shift+A 공식 예시
       </div>
-      <div className="h-px flex-1 bg-foreground" />
+      <div className="bg-foreground h-px flex-1" />
     </div>
 
     <div
@@ -52,7 +52,7 @@ export const CsiUAnatomyDiagram = () => (
       </FieldCard>
     </div>
 
-    <div className="mt-3 rounded-lg border border-border bg-background px-3 py-2 text-center font-mono text-foreground text-sm">
+    <div className="border-border bg-background text-foreground mt-3 rounded-lg border px-3 py-2 text-center font-mono text-sm">
       ESC[97;2;65u · bytes 1B 5B 39 37 3B 32 3B 36 35 75
     </div>
   </DiagramFigure>

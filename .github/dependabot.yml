@@ -15,12 +15,12 @@ updates:
       # rejected by `trustPolicy: no-downgrade`; it would fail the whole grouped
       # PR. Drop once a vitest 5 release installs cleanly.
       - dependency-name: "vitest"
-        update-types: ["version-update:semver-major"]
+        update-types: [ "version-update:semver-major" ]
       - dependency-name: "@vitest/ui"
-        update-types: ["version-update:semver-major"]
+        update-types: [ "version-update:semver-major" ]
       # Track the Node major pinned in package.json `engines.node` (24.x).
       - dependency-name: "@types/node"
-        update-types: ["version-update:semver-major"]
+        update-types: [ "version-update:semver-major" ]
     groups:
       dependencies:
         patterns:

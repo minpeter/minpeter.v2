@@ -110,7 +110,7 @@ export function isUnsupportedPersonalPair(housing: string, keycaps: string) {
 }
 
 const angles = Array.from({ length: 12 }, (_, index) => index * 30);
-const digest = z.string().regex(/^[a-f0-9]{64}$/);
+const digest = z.string().regex(/^[a-f0-9]{64}$/u);
 /** Public structural completeness only. Rendering QA is a separate prepublication process. */
 const combinationSchema = z
   .strictObject({

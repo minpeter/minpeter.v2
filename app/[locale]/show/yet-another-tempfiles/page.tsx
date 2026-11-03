@@ -35,12 +35,12 @@ export default async function Page() {
         title={t("showcase.items.tempfiles.title")}
       />
 
-      <div className="rounded-lg border border-foreground/10 bg-secondary/25 p-5 sm:p-6">
+      <div className="border-foreground/10 bg-secondary/25 rounded-lg border p-5 sm:p-6">
         <Suspense fallback={<Skeleton className="h-48 w-full" />}>
           <TmpfUI />
         </Suspense>
       </div>
-      <p className="mt-3 text-[0.6875rem] text-muted-foreground leading-relaxed">
+      <p className="text-muted-foreground mt-3 text-[0.6875rem] leading-relaxed">
         {t("showcase.items.tempfiles.notice")}
       </p>
     </section>

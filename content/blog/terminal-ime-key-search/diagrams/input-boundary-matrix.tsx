@@ -54,25 +54,25 @@ export const InputBoundaryMatrix = () => (
     <div className="grid gap-3" data-matrix="platform-boundaries">
       {boundaryRows.map((row) => (
         <article
-          className="rounded-lg border border-border bg-background p-3"
+          className="border-border bg-background rounded-lg border p-3"
           data-boundary={row.path}
           key={row.path}
         >
           <div className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between">
-            <div className="font-semibold text-sm">{row.title}</div>
+            <div className="text-sm font-semibold">{row.title}</div>
             <div className="text-foreground text-sm">{row.examples}</div>
           </div>
           <dl className="mt-3 grid gap-2 sm:grid-cols-3">
             <div>
-              <dt className="font-semibold text-xs">누가 key를 보는가</dt>
+              <dt className="text-xs font-semibold">누가 key를 보는가</dt>
               <dd className="mt-1 text-sm leading-snug">{row.observer}</dd>
             </div>
             <div>
-              <dt className="font-semibold text-xs">PTY / Atuin에 도착</dt>
+              <dt className="text-xs font-semibold">PTY / Atuin에 도착</dt>
               <dd className="mt-1 text-sm leading-snug">{row.output}</dd>
             </div>
             <div>
-              <dt className="font-semibold text-xs">provenance 복원</dt>
+              <dt className="text-xs font-semibold">provenance 복원</dt>
               <dd className="mt-1 text-sm leading-snug">{row.recovery}</dd>
             </div>
           </dl>
@@ -81,19 +81,19 @@ export const InputBoundaryMatrix = () => (
     </div>
 
     <div aria-hidden="true" className="my-3 flex items-center gap-2">
-      <div className="h-px flex-1 bg-foreground" />
-      <div className="font-semibold text-xs">Atuin에서 가능한 해석</div>
-      <div className="h-px flex-1 bg-foreground" />
+      <div className="bg-foreground h-px flex-1" />
+      <div className="text-xs font-semibold">Atuin에서 가능한 해석</div>
+      <div className="bg-foreground h-px flex-1" />
     </div>
 
     <div className="grid gap-2 sm:grid-cols-3" data-matrix="input-feasibility">
       {feasibilityRows.map((row) => (
         <div
-          className="rounded-lg border border-border bg-background p-3 text-center"
+          className="border-border bg-background rounded-lg border p-3 text-center"
           data-input={row.input}
           key={row.input}
         >
-          <div className="font-semibold text-sm">{row.title}</div>
+          <div className="text-sm font-semibold">{row.title}</div>
           <div className="mt-2 text-sm leading-snug">{row.outcome}</div>
         </div>
       ))}

@@ -14,26 +14,26 @@
 
 @keyframes slide-out-left {
   to {
-    transform: translateX(-30%);
     opacity: 0;
+    transform: translateX(-30%);
   }
 }
 @keyframes slide-in-right {
   from {
-    transform: translateX(30%);
     opacity: 0;
+    transform: translateX(30%);
   }
 }
 @keyframes slide-out-right {
   to {
-    transform: translateX(30%);
     opacity: 0;
+    transform: translateX(30%);
   }
 }
 @keyframes slide-in-left {
   from {
-    transform: translateX(-30%);
     opacity: 0;
+    transform: translateX(-30%);
   }
 }
 

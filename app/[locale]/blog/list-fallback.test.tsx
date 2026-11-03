@@ -7,7 +7,7 @@ import type { postMetadataType } from "@/shared/source";
 
 import { BlogListFallback } from "./list-fallback";
 
-const EXT_LINK_NAME_RE = /Ext/;
+const EXT_LINK_NAME_RE = /Ext/u;
 vi.mock(import("@/shared/styles/stagger-fade-in.module.css"), () => ({
   default: new Proxy({}, { get: (_target, key) => String(key) }),
 }));

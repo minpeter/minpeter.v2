@@ -32,7 +32,7 @@ export function PostFooter({
 
   return (
     <section className="mt-32">
-      <div className="mb-8 flex flex-row flex-wrap items-center gap-2 text-foreground/88 text-sm">
+      <div className="text-foreground/88 mb-8 flex flex-row flex-wrap items-center gap-2 text-sm">
         {post.data.drafted ? (
           <>
             <div className="flex gap-2">
@@ -74,7 +74,7 @@ export function PostFooter({
       <div className="flex justify-between">
         {previousPost ? (
           <NavLink
-            className="max-w-[45%] truncate rounded-md px-2 py-1 text-primary hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="text-primary hover:bg-secondary focus-visible:ring-ring max-w-[45%] truncate rounded-md px-2 py-1 focus-visible:ring-2 focus-visible:outline-none"
             href={previousPost.url as Route}
             transitionTypes={["slide-back"]}
           >
@@ -86,7 +86,7 @@ export function PostFooter({
 
         {nextPost ? (
           <NavLink
-            className="max-w-[45%] truncate rounded-md px-2 py-1 text-primary hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="text-primary hover:bg-secondary focus-visible:ring-ring max-w-[45%] truncate rounded-md px-2 py-1 focus-visible:ring-2 focus-visible:outline-none"
             href={nextPost.url as Route}
             transitionTypes={["slide-forward"]}
           >

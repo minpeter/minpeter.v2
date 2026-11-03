@@ -80,7 +80,7 @@ export function PlaygroundWrapper({ className, h, w }: PlaygroundProps) {
 
   return (
     <>
-      <div className="overflow-hidden rounded-lg border border-foreground/10 bg-secondary/20">
+      <div className="border-foreground/10 bg-secondary/20 overflow-hidden rounded-lg border">
         <div ref={frameRef} style={{ aspectRatio: `${w} / ${h}` }}>
           {dimensions ? (
             <Playground
@@ -94,10 +94,10 @@ export function PlaygroundWrapper({ className, h, w }: PlaygroundProps) {
           )}
         </div>
       </div>
-      <div className="mt-3 flex items-center justify-between gap-4 text-[0.6875rem] text-muted-foreground leading-relaxed">
+      <div className="text-muted-foreground mt-3 flex items-center justify-between gap-4 text-[0.6875rem] leading-relaxed">
         <p>{t("instruction")}</p>
         <button
-          className="inline-flex shrink-0 items-center gap-1 rounded px-1.5 py-1 transition-colors hover:bg-secondary hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="hover:bg-secondary hover:text-foreground focus-visible:ring-ring inline-flex shrink-0 items-center gap-1 rounded px-1.5 py-1 transition-colors focus-visible:ring-2 focus-visible:outline-none"
           onClick={handleReplay}
           type="button"
         >

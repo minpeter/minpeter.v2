@@ -3,6 +3,7 @@ import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 
 import {
   expect,
+  test as it,
   type Page,
   type Request,
   type TestInfo,
@@ -16,7 +17,7 @@ import assembledManifests from "../shared/maru60-assembled-manifests.json" with 
   type: "json",
 };
 
-const SR_ONLY = /sr-only/;
+const SR_ONLY = /sr-only/u;
 // Independent display expectations: importing the app model here would pull its bundler-only JSON import into Node.
 const KEYCAP_FULL_NAMES: Record<string, string> = {
   inventor: "Inventor",
@@ -64,7 +65,7 @@ const isValidated = (housing: string, keycaps: string) =>
 
 const DETAIL = "/products/maru60";
 const CUSTOM_FRAME =
-  /\/assets\/products\/(?:rule60-hhkb-unibody\/customization|maru60\/assembled)\//;
+  /\/assets\/products\/(?:rule60-hhkb-unibody\/customization|maru60\/assembled)\//u;
 const HOUSINGS = [
   "bone-white",
   "ash-gray",
@@ -193,20 +194,18 @@ async function expectRegistryPreview(
   housing: string,
   keycaps: string
 ) {
-  if (isValidated(housing, keycaps)) {
-    await expect(page.locator(".store-custom-preview")).toHaveAttribute(
-      "data-combination",
-      `${housing}--${keycaps}`
-    );
-    await expect(page.getByTestId("customization-pending")).toHaveCount(0);
-    await expect(page.getByTestId("product-spin")).toHaveAttribute(
-      "data-loaded-count",
-      "12",
-      { timeout: 15_000 }
-    );
-  } else {
-    await expectPending(page, en.products.customization.pending);
-  }
+  // Callers pass reviewed combinations only; pending states go through expectPending.
+  expect(isValidated(housing, keycaps)).toBe(true);
+  await expect(page.locator(".store-custom-preview")).toHaveAttribute(
+    "data-combination",
+    `${housing}--${keycaps}`
+  );
+  await expect(page.getByTestId("customization-pending")).toHaveCount(0);
+  await expect(page.getByTestId("product-spin")).toHaveAttribute(
+    "data-loaded-count",
+    "12",
+    { timeout: 15_000 }
+  );
   await expect(page.getByTestId("personal-showcase-notice")).toHaveCount(0);
 }
 
@@ -467,20 +466,20 @@ async function expectCompactPicker(page: Page, messages: typeof en) {
   await expect(
     details.getByText(labels.approximation, { exact: true })
   ).toBeVisible();
+  // The compact picker is checked on reviewed retail renders, which always have a filament SKU.
   const selectedSku = HOUSING_SKUS[housingId];
-  if (selectedSku) {
-    await expect(details.locator("dd").first()).toContainText(
-      `${housingId === "white-marble" ? "PLA Marble" : "PLA Matte"} · ${selectedSku}`
-    );
-    await expect(
-      details.getByRole("link", { name: labels.materialSource })
-    ).toHaveAttribute(
-      "href",
-      housingId === "white-marble"
-        ? "https://bambu-lab-global.myshopify.com/products/pla-marble"
-        : "https://store.bblcdn.eu/s8/default/f131f643495b417197832b291fc7b068/Bambu_PLA_Matte_Hex_Code.pdf"
-    );
-  }
+  expect(selectedSku).toBeDefined();
+  await expect(details.locator("dd").first()).toContainText(
+    `${housingId === "white-marble" ? "PLA Marble" : "PLA Matte"} · ${selectedSku}`
+  );
+  await expect(
+    details.getByRole("link", { name: labels.materialSource })
+  ).toHaveAttribute(
+    "href",
+    housingId === "white-marble"
+      ? "https://bambu-lab-global.myshopify.com/products/pla-marble"
+      : "https://store.bblcdn.eu/s8/default/f131f643495b417197832b291fc7b068/Bambu_PLA_Matte_Hex_Code.pdf"
+  );
   await expect(details.locator("dd").nth(1)).toContainText(
     KEYCAP_FULL_NAMES[keycapId]
   );
@@ -491,8 +490,8 @@ async function expectCompactPicker(page: Page, messages: typeof en) {
 
 for (const { locale, prefix, messages } of LOCALES) {
   test.describe(`${locale} customization`, () => {
-    test.use({ locale });
-    test("legacy URLs canonicalize and explicit personal cross-pairs stay image-free", async ({
+    it.use({ locale });
+    it("legacy URLs canonicalize and explicit personal cross-pairs stay image-free", async ({
       page,
     }) => {
       const labels = messages.products.customization;
@@ -585,7 +584,7 @@ for (const { locale, prefix, messages } of LOCALES) {
     });
 
     for (const width of [320, 393, 1440]) {
-      test(`unified personal and retail selectors preserve history and refresh: ${prefix || "ko"}, ${width}px`, async ({
+      it(`unified personal and retail selectors preserve history and refresh: ${prefix || "ko"}, ${width}px`, async ({
         page,
       }, testInfo) => {
         const [retail] = combinations;
@@ -731,11 +730,11 @@ for (const { locale, prefix, messages } of LOCALES) {
         });
       });
 
-      test(`pending retail configuration, controls and history: ${prefix || "ko"}, ${width}px`, async ({
+      it(`pending retail configuration, controls and history: ${prefix || "ko"}, ${width}px`, async ({
         page,
       }, testInfo) => {
         // biome-ignore lint/suspicious/noSkippedTests: This scenario needs three connected unvalidated configurations; all-ready catalogs have no pending UI.
-        test.skip(
+        it.skip(
           !pendingTrail,
           "Insufficient pending configurations to exercise both controls without activating a reviewed render"
         );
@@ -845,7 +844,7 @@ for (const { locale, prefix, messages } of LOCALES) {
         });
       });
 
-      test(`ready retail history preserves selection, pixels and angle: ${prefix || "ko"}, ${width}px`, async ({
+      it(`ready retail history preserves selection, pixels and angle: ${prefix || "ko"}, ${width}px`, async ({
         page,
       }, testInfo) => {
         // This must not silently disappear when the pending catalog becomes empty.
@@ -900,12 +899,12 @@ for (const { locale, prefix, messages } of LOCALES) {
         });
       });
 
-      test(`reviewed retail render layout and all angles: ${prefix || "ko"}, ${width}px`, async ({
+      it(`reviewed retail render layout and all angles: ${prefix || "ko"}, ${width}px`, async ({
         page,
       }, testInfo) => {
         const [combination] = combinations;
         // biome-ignore lint/suspicious/noSkippedTests: A render-layout check requires at least one reviewed manifest.
-        test.skip(!combination, "No reviewed render is available");
+        it.skip(!combination, "No reviewed render is available");
         const labels = messages.products.customization;
         const height = width === 1440 ? 900 : 852;
         await page.setViewportSize({ height, width });
@@ -1017,12 +1016,46 @@ test("every unvalidated retail combination stays image-free without custom-frame
   expect(customRequests).toEqual([]);
 });
 
+test("switching from a validated render to a pending combination adds no frame requests", async ({
+  page,
+}) => {
+  // biome-ignore lint/suspicious/noSkippedTests: Once every catalog combination is reviewed there is no pending state to exercise.
+  test.skip(PENDING.length === 0, "All catalog combinations are validated");
+  const [pendingTarget] = PENDING;
+  const reviewed =
+    combinations.find((item) => item.keycapId === pendingTarget.keycaps) ??
+    combinations.find((item) => item.housingId === pendingTarget.housing);
+  if (!reviewed) {
+    // biome-ignore lint/suspicious/noSkippedTests: Incremental publication may not yet have a reviewed render next to the first pending pair.
+    test.skip(true, "No reviewed render shares a housing or kit");
+    return;
+  }
+  const { requests } = trackCustomRequests(page);
+  await page.goto(
+    `/en${DETAIL}?housing=${reviewed.housingId}&keycaps=${reviewed.keycapId}`
+  );
+  await expect(page.getByTestId("product-spin")).toHaveAttribute(
+    "data-loaded-count",
+    "12",
+    { timeout: 15_000 }
+  );
+  const loaded = requests.length;
+  const group =
+    reviewed.keycapId === pendingTarget.keycaps ? "housing" : "keycaps";
+  await selectOption(page, group, pendingTarget[group]);
+  await expectPending(page, en.products.customization.pending);
+  expect(requests).toHaveLength(loaded);
+});
+
 test("invalid URL options select safe defaults and render only the registry-backed state", async ({
   page,
 }) => {
   await page.goto(
     `/en${DETAIL}?customize=true&housing=unknown&keycaps=personal-logo`
   );
+  await expect(
+    page.locator('input[value="unknown"], input[value="personal-logo"]')
+  ).toHaveCount(0);
   await expectSelection(page, {
     housing: "bone-white",
     keycaps: "retro-programmer-retail",
@@ -1148,18 +1181,6 @@ test("validated retail frames load only the selection, stay bounded and refine a
       fullPage: true,
       path: testInfo.outputPath("validated-retail-render.png"),
     });
-    const pendingTarget =
-      PENDING.find((item) => item.keycaps === combination.keycapId) ??
-      PENDING.find((item) => item.housing === combination.housingId);
-    if (pendingTarget) {
-      if (pendingTarget.housing === combination.housingId) {
-        await selectOption(page, "keycaps", pendingTarget.keycaps);
-      } else {
-        await selectOption(page, "housing", pendingTarget.housing);
-      }
-      await expectPending(page, en.products.customization.pending);
-      expect(requests).toHaveLength(12);
-    }
   } finally {
     gate.release();
     await page.unrouteAll({ behavior: "wait" });
