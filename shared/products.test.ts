@@ -58,7 +58,7 @@ describe("Maru60 naming and historical turntable assets", () => {
       const messages = JSON.parse(
         readFileSync(new URL(`./i18n/${locale}.json`, import.meta.url), "utf8")
       );
-      expect(messages.products.items.rule60.description).toContain("Maru60");
+      expect(messages.products.items.rule60.description).toContain("MARU60");
       expect(messages.products.items.rule60.details.status).toContain("v7.10");
       expect(messages.products.items.rule60.details.status).toContain("v0.10");
       expect(messages.products.items.rule60.details.status).not.toContain(

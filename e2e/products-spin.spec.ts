@@ -35,7 +35,9 @@ for (const width of [1440, 393, 320]) {
       await expect(slider.locator("canvas")).toHaveCSS("object-fit", "contain");
       const bounds = await slider.boundingBox();
       expect(bounds).not.toBeNull();
-      expect(bounds?.height).toBeLessThanOrEqual(height * 0.72 + 1);
+      expect(bounds?.height).toBeLessThanOrEqual(
+        height * (width >= 1024 ? 0.82 : 0.62) + 1
+      );
       expect((bounds?.width ?? 0) / (bounds?.height ?? 1)).toBeCloseTo(
         2 / 3,
         2

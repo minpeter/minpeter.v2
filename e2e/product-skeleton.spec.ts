@@ -1,11 +1,13 @@
-import { writeFileSync } from "node:fs";
+import { readFileSync, writeFileSync } from "node:fs";
 
 import { expect, type Locator, test } from "@playwright/test";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 
-import DetailLoading from "../app/[locale]/products/[slug]/loading";
+import { ProductDetailSkeleton } from "../app/[locale]/products/[slug]/loading";
 import ListLoading from "../app/[locale]/products/loading";
+import en from "../shared/i18n/en.json" with { type: "json" };
+import ja from "../shared/i18n/ja.json" with { type: "json" };
 
 import {
   captureSilhouette,
@@ -25,7 +27,15 @@ function desktopHeight(width: number) {
   return 844;
 }
 
-const detailMarkup = renderToStaticMarkup(createElement(DetailLoading));
+const ko: typeof en = JSON.parse(
+  readFileSync(new URL("../shared/i18n/ko.json", import.meta.url), "utf8")
+);
+const detailMarkup = (locale: string) =>
+  renderToStaticMarkup(
+    createElement(ProductDetailSkeleton, {
+      introText: ({ en, ja, ko }[locale] ?? en).products.items.rule60.intro,
+    })
+  );
 const listMarkup = renderToStaticMarkup(createElement(ListLoading));
 const LINK_HEADER_SEPARATOR = /,(?=\s*<)/;
 const selectors = [
@@ -120,7 +130,7 @@ for (const scenario of [
         await expect(
           shell.getByTestId("product-customizer-skeleton")
         ).toBeVisible();
-        await expect(shell.locator("h1")).toHaveText("Maru60");
+        await expect(shell.locator("h1")).toHaveText("MARU60");
         const shellInfo = await shell
           .locator(".store-product-info")
           .innerText();
@@ -221,7 +231,7 @@ for (const scenario of [
       // both states deterministically without adding a test-only public application route.
       await ready.evaluate((element, markup) => {
         element.outerHTML = markup;
-      }, detailMarkup);
+      }, detailMarkup(scenario.locale));
       const skeleton = page
         .getByTestId("product-detail-skeleton")
         .filter({ visible: true });

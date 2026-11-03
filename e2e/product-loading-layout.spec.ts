@@ -72,7 +72,10 @@ async function expectFeedbackInsideStage(page: Page) {
       throw new Error("Missing preview feedback geometry");
     }
     return {
-      clearOfControls: feedback.bottom < controls.top,
+      clearOfControls:
+        feedback.bottom < controls.top ||
+        feedback.right < controls.left ||
+        feedback.left > controls.right,
       contained:
         feedback.left >= stage.left &&
         feedback.right <= stage.right &&
@@ -150,6 +153,9 @@ for (const viewport of [
           has: page.locator('input[name="housing"][value="charcoal"]'),
         })
         .click();
+      // A short landscape viewport can scroll the lazy preview offscreen when
+      // focusing options. Bring it back before testing request completion.
+      await page.getByTestId("product-spin").scrollIntoViewIfNeeded();
       await expect(status).toHaveText(labels.loading);
       await expect(status).toHaveClass("sr-only");
       const shape = page.getByTestId("product-spin-loading");
@@ -203,6 +209,7 @@ for (const viewport of [
         "data-configuration",
         "personal"
       );
+      await page.getByTestId("product-spin").scrollIntoViewIfNeeded();
       expect(await layout(page)).toEqual(before);
       await expect(
         page.getByTestId("product-spin").locator("canvas")
@@ -670,5 +677,85 @@ test("missing selected frame uses terminal partial fallback and exact-angle retr
   await page.screenshot({
     fullPage: true,
     path: testInfo.outputPath("partial-retried.png"),
+  });
+});
+
+for (const width of [390, 768, 1440, 1920]) {
+  test(`gallery layout keeps visual and option rail separate at ${width}px`, async ({
+    page,
+  }, testInfo) => {
+    await page.setViewportSize({ height: 1000, width });
+    await page.goto("/en/products/maru60");
+    await expect(
+      page.getByRole("heading", { level: 1, name: "MARU60" })
+    ).toBeVisible();
+    await expect(
+      page.getByTestId("product-spin").filter({ visible: true })
+    ).toHaveAttribute("data-ready-count", "12");
+    const geometry = await page.evaluate(() => {
+      const visual = document
+        .querySelector(".store-custom-visual")
+        ?.getBoundingClientRect();
+      const controls = document
+        .querySelector(".store-custom-controls")
+        ?.getBoundingClientRect();
+      if (!(visual && controls)) {
+        throw new Error("Missing gallery or option rail");
+      }
+      return {
+        noOverflow: document.documentElement.scrollWidth <= window.innerWidth,
+        sideBySide: controls.left >= visual.right,
+        stacked: controls.top >= visual.bottom,
+      };
+    });
+    expect(geometry.noOverflow).toBe(true);
+    expect(width >= 1024 ? geometry.sideBySide : geometry.stacked).toBe(true);
+    await page.screenshot({
+      fullPage: true,
+      path: testInfo.outputPath("gallery-detail.png"),
+    });
+  });
+}
+
+test("borderless detail keeps the product sticky while the page scrolls through options", async ({
+  page,
+}, testInfo) => {
+  await page.setViewportSize({ height: 900, width: 1440 });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/en/products/maru60");
+  await expect(
+    page.getByRole("heading", { level: 1, name: "MARU60" })
+  ).toBeVisible();
+  await expect(page.locator(".store-product-intro")).toContainText(
+    "Rule 60 V3"
+  );
+  await expect(page.getByTestId("product-spin")).toHaveAttribute(
+    "data-ready-count",
+    "12"
+  );
+  await expect(page.locator(".store-custom-sidebar")).toHaveCSS(
+    "overflow-y",
+    "visible"
+  );
+  await expect(page.locator(".store-custom-visual")).toHaveCSS(
+    "border-top-width",
+    "0px"
+  );
+  await expect(page.getByText("Drag to rotate", { exact: true })).toHaveCount(
+    0
+  );
+  await page.screenshot({
+    fullPage: true,
+    path: testInfo.outputPath("refined-detail-full.png"),
+  });
+  await page.evaluate(() => window.scrollTo({ behavior: "instant", top: 180 }));
+  const first = await page.locator(".store-custom-visual").boundingBox();
+  await page.evaluate(() => window.scrollTo({ behavior: "instant", top: 300 }));
+  const second = await page.locator(".store-custom-visual").boundingBox();
+  expect(first?.y).toBe(24);
+  expect(second?.y).toBe(24);
+  expect(second?.width).toBe(first?.width);
+  await page.screenshot({
+    path: testInfo.outputPath("refined-detail-sticky.png"),
   });
 });

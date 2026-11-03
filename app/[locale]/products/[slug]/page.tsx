@@ -58,11 +58,91 @@ async function ProductDetail({
   ]);
   const slides = product.renders.length + 1;
 
+  const intro = (
+    <header className="store-product-heading">
+      <h1>{product.name.toUpperCase()}</h1>
+      <p className="store-product-intro">{t(`items.${product.key}.intro`)}</p>
+    </header>
+  );
+  const details = (
+    <div className="store-product-info">
+      <div>
+        <div className="flex items-baseline justify-between gap-4">
+          <span className="store-label text-foreground">
+            {product.name.toUpperCase()}
+          </span>
+          <span className="store-label shrink-0">
+            {t(`items.${product.key}.license`)}
+          </span>
+        </div>
+        <p className="store-label text-muted-foreground">
+          {t(`items.${product.key}.variant`)}
+        </p>
+        {product.upcomingPrice ? (
+          <p
+            className="store-label mt-3 flex flex-wrap items-baseline gap-x-3"
+            data-testid="product-price"
+          >
+            <span className="text-foreground">
+              {new Intl.NumberFormat(locale, {
+                currency: "KRW",
+                currencyDisplay: "code",
+                style: "currency",
+              }).formatRange(
+                product.upcomingPrice.min,
+                product.upcomingPrice.max
+              )}
+            </span>
+            <span className="text-muted-foreground">{t("upcoming")}</span>
+          </p>
+        ) : null}
+      </div>
+
+      <div className="store-actions">
+        <a
+          className="store-button store-label"
+          href={product.sourceHref}
+          rel="noreferrer"
+          target="_blank"
+        >
+          {t("viewSource")}
+        </a>
+        <a
+          className="store-button store-label"
+          data-primary
+          href={product.downloadHref}
+          rel="noreferrer"
+          target="_blank"
+        >
+          {t("downloadFiles")}
+        </a>
+      </div>
+
+      <section>
+        <h2 className="store-label mb-3">{t("descriptionLabel")}</h2>
+        <p className="store-prose">{t(`items.${product.key}.description`)}</p>
+      </section>
+
+      <section>
+        <h2 className="store-label mb-3">{t("detailsLabel")}</h2>
+        <ul className="store-prose store-details">
+          {product.details.map((detail) => (
+            <li key={detail}>{t(`items.${product.key}.details.${detail}`)}</li>
+          ))}
+        </ul>
+      </section>
+    </div>
+  );
+
   return (
     <article className="store-product" data-testid="product-detail">
       {/* Keep localized content in the static shell; only URL-dependent controls suspend. */}
-      <Suspense fallback={<ProductCustomizerSkeleton />}>
+      <Suspense
+        fallback={<ProductCustomizerSkeleton details={details} intro={intro} />}
+      >
         <ProductCustomizer
+          details={details}
+          intro={intro}
           labels={{
             media: t("mediaLabel", { product: product.name }),
             next: t("nextImage"),
@@ -79,74 +159,6 @@ async function ProductDetail({
           spin={product.spin}
         />
       </Suspense>
-
-      <div className="store-product-info">
-        <div>
-          <div className="flex items-baseline justify-between gap-4">
-            <h1 className="store-label text-foreground">{product.name}</h1>
-            <span className="store-label shrink-0">
-              {t(`items.${product.key}.license`)}
-            </span>
-          </div>
-          <p className="store-label text-muted-foreground">
-            {t(`items.${product.key}.variant`)}
-          </p>
-          {product.upcomingPrice ? (
-            <p
-              className="store-label mt-3 flex flex-wrap items-baseline gap-x-3"
-              data-testid="product-price"
-            >
-              <span className="text-foreground">
-                {new Intl.NumberFormat(locale, {
-                  currency: "KRW",
-                  currencyDisplay: "code",
-                  style: "currency",
-                }).formatRange(
-                  product.upcomingPrice.min,
-                  product.upcomingPrice.max
-                )}
-              </span>
-              <span className="text-muted-foreground">{t("upcoming")}</span>
-            </p>
-          ) : null}
-        </div>
-
-        <div className="store-actions">
-          <a
-            className="store-button store-label"
-            href={product.sourceHref}
-            rel="noreferrer"
-            target="_blank"
-          >
-            {t("viewSource")}
-          </a>
-          <a
-            className="store-button store-label"
-            data-primary
-            href={product.downloadHref}
-            rel="noreferrer"
-            target="_blank"
-          >
-            {t("downloadFiles")}
-          </a>
-        </div>
-
-        <section>
-          <h2 className="store-label mb-3">{t("descriptionLabel")}</h2>
-          <p className="store-prose">{t(`items.${product.key}.description`)}</p>
-        </section>
-
-        <section>
-          <h2 className="store-label mb-3">{t("detailsLabel")}</h2>
-          <ul className="store-prose store-details">
-            {product.details.map((detail) => (
-              <li key={detail}>
-                {t(`items.${product.key}.details.${detail}`)}
-              </li>
-            ))}
-          </ul>
-        </section>
-      </div>
     </article>
   );
 }
