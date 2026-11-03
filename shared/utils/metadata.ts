@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import type { LocaleCode } from "@/shared/constants/locales";
+import { getBaseUrl } from "@/shared/env";
 import { routing } from "@/shared/i18n/routing";
 import { ogImageSize } from "@/shared/og-image";
 import { siteConfig } from "@/shared/site-config";
@@ -57,6 +58,18 @@ interface MetadataImage {
   url: string;
 }
 
+/** A 1200x630 MP4 clip plus its link-preview companions, all paths under `public/`. */
+interface MetadataVideo {
+  /** Looping GIF of the clip, listed before the still in og:image for unfurlers that animate images. */
+  animatedImage: string;
+  /** Page with a muted looping `<video>`, iframed by X's player card. */
+  player: string;
+  url: string;
+}
+
+// Next resolves og:image against metadataBase but leaves og:video and twitter:player relative; crawlers need them absolute.
+const toAbsoluteUrl = (path: string) => new URL(path, getBaseUrl()).toString();
+
 export function createMetadata({
   article,
   description,
@@ -64,6 +77,7 @@ export function createMetadata({
   locale,
   path,
   title,
+  video,
 }: {
   article?: ArticleMetadata;
   description?: string;
@@ -71,6 +85,7 @@ export function createMetadata({
   locale?: LocaleCode;
   path?: string;
   title?: string;
+  video?: MetadataVideo;
 }): Metadata {
   const resolvedLocale = resolveLocale(locale);
   const resolvedDescription =
@@ -96,7 +111,30 @@ export function createMetadata({
   const sharedOpenGraph = {
     alternateLocale,
     description: resolvedDescription,
-    ...(resolvedImage ? { images: resolvedImage } : {}),
+    ...(resolvedImage
+      ? {
+          images: video
+            ? [
+                {
+                  ...resolvedImage,
+                  type: "image/gif",
+                  url: video.animatedImage,
+                },
+                resolvedImage,
+              ]
+            : resolvedImage,
+        }
+      : {}),
+    ...(video
+      ? {
+          videos: {
+            height: ogImageSize.height,
+            type: "video/mp4",
+            url: toAbsoluteUrl(video.url),
+            width: ogImageSize.width,
+          },
+        }
+      : {}),
     locale: openGraphLocales[resolvedLocale],
     siteName: siteConfig.title,
     title,
@@ -130,7 +168,17 @@ export function createMetadata({
         },
     title,
     twitter: {
-      card: "summary_large_image",
+      ...(video
+        ? {
+            card: "player",
+            players: {
+              height: ogImageSize.height,
+              playerUrl: toAbsoluteUrl(video.player),
+              streamUrl: toAbsoluteUrl(video.url),
+              width: ogImageSize.width,
+            },
+          }
+        : { card: "summary_large_image" }),
       creator: "@minpeter",
       description: resolvedDescription,
       ...(resolvedImage ? { images: resolvedImage } : {}),

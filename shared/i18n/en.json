@@ -232,6 +232,91 @@
       }
     }
   },
+  "products": {
+    "navigationLabel": "Products navigation",
+    "title": "Products",
+    "description": "Objects I've designed and printed.",
+    "spinLabel": "{product} reconstructed 3D render (not a photograph): move the pointer across it, drag on touch, or use the arrow keys to turn it 360°",
+    "mediaLabel": "{product} renders",
+    "previousImage": "Previous image",
+    "nextImage": "Next image",
+    "showImage": "Show image {index}",
+    "viewSource": "View on GitHub",
+    "downloadFiles": "Download print files",
+    "descriptionLabel": "Description",
+    "detailsLabel": "Details",
+    "upcoming": "Coming soon",
+    "renderAlts": {
+      "rule60Assembled": "CAD render: the assembled top case with its wrist rest (left half grey, right half blue)",
+      "rule60Top": "CAD render: the top case from above",
+      "rule60Exploded": "CAD render: the two halves pulled apart",
+      "rule60Underside": "CAD render: underside pockets, strike-plate seats, and joints"
+    },
+    "items": {
+      "rule60": {
+        "variant": "HHKB housing · integrated wrist rest",
+        "license": "CC BY-NC 4.0",
+        "intro": "MARU60 is an independent HHKB housing for Rule 60 V3 internals, with a honeycomb wrist rest built in.",
+        "description": "MARU60 is an independent HHKB housing for Rule 60 V3 internals, with a honeycomb wrist rest built in. The current design combines the v7.10 top case with the v0.10 draft bottom case. It is not an INKC STUDIO product.",
+        "details": {
+          "size": "Current top-case footprint: 298.1 × 198.3 mm; complete assembly dimensions and physical fit are not yet verified",
+          "joints": "Split top case with three central dovetails; draft bottom case with five sliding dovetails",
+          "reuse": "Designed around the stock PC gasket plate, silicone gasket caps, ball catches, PCB, battery and weight plate",
+          "print": "CAD and slicer checks only for the latest revision; print fit coupons before a full assembly",
+          "status": "Prototype — top case v7.10 and bottom case draft v0.10 have not been printed. CAD clearance checks do not establish physical fit.",
+          "license": "CC BY-NC 4.0 — print and modify for personal, non-commercial use only. Selling prints or files is not permitted."
+        }
+      }
+    },
+    "customization": {
+      "modeLabel": "Product view",
+      "showcase": "Personal showcase",
+      "customize": "Explore keycap sets",
+      "showcaseNote": "Inventor · personal showcase · not for sale",
+      "configurationNote": "Choose a housing and keycap set to explore the appearance. Transparent × Inventor is the original personal keyboard. No ordering is available here.",
+      "selected": "{housing} × {keycaps}",
+      "previewLabel": "Selected configuration — reconstructed render; drag or use arrow keys to rotate in 30° steps",
+      "pending": "This render is not ready",
+      "pendingDetail": "Images for this combination are not available yet. Another configuration will not be shown in its place.",
+      "kitQA": "Individual key and all-angle review must pass before a render appears.",
+      "loading": "Loading the selected render…",
+      "ready": "Ready",
+      "loadError": "The selected render could not be loaded.",
+      "retry": "Retry this render",
+      "housing": "Housing",
+      "keycaps": "Keycaps",
+      "fullRetailSet": "Full set · no personal logo keys",
+      "geometryPrevious": "This preview shows the previous housing revision, not the assembled bottom-case draft.",
+      "geometryAssembled": "Assembled draft: top 7.10 + bottom 0.10. Not yet printed; fit and assembly remain unverified.",
+      "approximation": "Colors, surface finish and legends are visual approximations, not a guarantee of printed color or physical keycap compatibility. A render is not an order or stock confirmation.",
+      "materialSource": "Manufacturer color reference",
+      "keycapSource": "Manufacturer keycap reference",
+      "housingNames": {
+        "bone-white": "Bone White",
+        "ash-gray": "Ash Gray",
+        "charcoal": "Charcoal",
+        "ice-blue": "Ice Blue",
+        "lilac-purple": "Lilac Purple",
+        "dark-green": "Dark Green",
+        "white-marble": "White Marble",
+        "transparent": "Transparent"
+      },
+      "partial": "Some views could not load. Rotation uses the nearest available view. You can retry loading.",
+      "renderReady": "Render ready for this combination",
+      "renderPending": "Render pending for this combination",
+      "marbleNote": "PLA Marble 13103: off-white with fine, irregular gray flecks. The swatch shows only the manufacturer’s base color, not the printed texture.",
+      "transparentNote": "Approximate appearance of the original translucent PETG housing, not a Bambu Lab PLA color.",
+      "personalHousing": "Original translucent PETG · approximate appearance",
+      "personalOnly": "Personal showcase · not available to order",
+      "inventorNote": "Original personal keycaps with logo keys",
+      "pairedPersonal": "Transparent × Inventor · Not for sale",
+      "pairedRetail": "Paired: {housing} × {keycaps}",
+      "unsupported": "This pairing is unavailable",
+      "unsupportedDetail": "Transparent housing and Inventor keycaps are only shown together. Select both, or choose another housing and keycap set. No substitute image is shown.",
+      "switchToRetail": "Selecting this switches to another combination",
+      "detailsLabel": "Details & materials"
+    }
+  },
   "modCodeBlock": {
     "copy": "Copy",
     "copied": "Copied",
@@ -250,6 +335,10 @@
       "developmentNotes": {
         "title": "Development notes",
         "description": "Technical notes, tutorials, and lessons from building software."
+      },
+      "products": {
+        "title": "Products",
+        "description": "Objects I've designed and printed."
       },
       "interactiveExperiments": {
         "title": "Projects and experiments",

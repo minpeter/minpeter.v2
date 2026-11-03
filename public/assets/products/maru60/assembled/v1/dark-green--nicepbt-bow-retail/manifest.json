@@ -1,0 +1,92 @@
+{
+  "id": "dark-green--nicepbt-bow-retail",
+  "housingId": "dark-green",
+  "keycapId": "nicepbt-bow-retail",
+  "orderable": false,
+  "frames": [
+    {
+      "angleDegrees": 0,
+      "height": 1536,
+      "sha256": "b9aab9cc8af78818846cfd77eb392c055637bf4fbb21a1e60e83ef6a478fb671",
+      "src": "/assets/products/maru60/assembled/v1/dark-green--nicepbt-bow-retail/frame_000.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 30,
+      "height": 1536,
+      "sha256": "1668f867cb84db1602189148797183ac65d390ccf9057849494f92c75afcea8a",
+      "src": "/assets/products/maru60/assembled/v1/dark-green--nicepbt-bow-retail/frame_030.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 60,
+      "height": 1536,
+      "sha256": "e25127738c06a9e125be1ac969244e2cc8235d8af0255901a5efb4913501ed36",
+      "src": "/assets/products/maru60/assembled/v1/dark-green--nicepbt-bow-retail/frame_060.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 90,
+      "height": 1536,
+      "sha256": "7e2103230d5b5963d60e4043ce7b52d643e6873174ec5a2615a8e95377937cf6",
+      "src": "/assets/products/maru60/assembled/v1/dark-green--nicepbt-bow-retail/frame_090.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 120,
+      "height": 1536,
+      "sha256": "b5b08e1aa0f56ac7fb10557ff099c0364f464e418fd8e7237a62df066e0bad2b",
+      "src": "/assets/products/maru60/assembled/v1/dark-green--nicepbt-bow-retail/frame_120.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 150,
+      "height": 1536,
+      "sha256": "fb25eaecbf777caf6343d29cb9776c0cf8d93dada1863cdceac8f6c07b2a4d34",
+      "src": "/assets/products/maru60/assembled/v1/dark-green--nicepbt-bow-retail/frame_150.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 180,
+      "height": 1536,
+      "sha256": "8ace8f907a6c12b155a6a64653ac262af49cca382763829d0c0983c073b06b3f",
+      "src": "/assets/products/maru60/assembled/v1/dark-green--nicepbt-bow-retail/frame_180.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 210,
+      "height": 1536,
+      "sha256": "13a420ccaadf66b6a561fa96cdca4d267f5a741d24c3ffe440e68fa7f769bda0",
+      "src": "/assets/products/maru60/assembled/v1/dark-green--nicepbt-bow-retail/frame_210.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 240,
+      "height": 1536,
+      "sha256": "bdf503b692ec061de926265a28fd3e588ceb199129076caf8e736af80f833f33",
+      "src": "/assets/products/maru60/assembled/v1/dark-green--nicepbt-bow-retail/frame_240.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 270,
+      "height": 1536,
+      "sha256": "008e56dbc63fbefdb9de65f308e41b947d7a31425714a3411efe9a4ef0c78278",
+      "src": "/assets/products/maru60/assembled/v1/dark-green--nicepbt-bow-retail/frame_270.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 300,
+      "height": 1536,
+      "sha256": "8a3e5f9f4039635147d1bcf9ac1a615483449f3cf9117ab3af432c262e5670b3",
+      "src": "/assets/products/maru60/assembled/v1/dark-green--nicepbt-bow-retail/frame_300.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 330,
+      "height": 1536,
+      "sha256": "ea807537556fcda9a37d7ec7242246d5289bea47f26a9818135a10bf4dc80e17",
+      "src": "/assets/products/maru60/assembled/v1/dark-green--nicepbt-bow-retail/frame_330.webp",
+      "width": 1024
+    }
+  ]
+}

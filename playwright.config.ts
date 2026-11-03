@@ -23,6 +23,7 @@ export default defineConfig({
   timeout: 60_000,
   use: {
     baseURL,
+    screenshot: "only-on-failure",
     trace: "on-first-retry",
   },
   // Instant() needs a production build with EXPOSE_TESTING_API=1 (see test:e2e:instant).

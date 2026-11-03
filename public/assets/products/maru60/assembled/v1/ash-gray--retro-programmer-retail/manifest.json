@@ -1,0 +1,92 @@
+{
+  "id": "ash-gray--retro-programmer-retail",
+  "housingId": "ash-gray",
+  "keycapId": "retro-programmer-retail",
+  "orderable": false,
+  "frames": [
+    {
+      "angleDegrees": 0,
+      "height": 1536,
+      "sha256": "5cbd7083e76c6a1d71ef59affe26414ac42dd5c4a8dcfa539e646e484de53425",
+      "src": "/assets/products/maru60/assembled/v1/ash-gray--retro-programmer-retail/frame_000.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 30,
+      "height": 1536,
+      "sha256": "413e3c120d57754c478534f0ed1eddae872c31856b68a6cba556919bb420492e",
+      "src": "/assets/products/maru60/assembled/v1/ash-gray--retro-programmer-retail/frame_030.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 60,
+      "height": 1536,
+      "sha256": "fdb8953cba497cfb9be147738c1d390a161dc7df88bd890b5826e2750b0153fd",
+      "src": "/assets/products/maru60/assembled/v1/ash-gray--retro-programmer-retail/frame_060.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 90,
+      "height": 1536,
+      "sha256": "4000a62955c8ef7b43b75154382ee8b0a675da5921ce0809a36d62932cb1ddba",
+      "src": "/assets/products/maru60/assembled/v1/ash-gray--retro-programmer-retail/frame_090.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 120,
+      "height": 1536,
+      "sha256": "8618ccb9a3035bf5abb503a2116a55dc7fc90adf2070a29606de29310004904c",
+      "src": "/assets/products/maru60/assembled/v1/ash-gray--retro-programmer-retail/frame_120.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 150,
+      "height": 1536,
+      "sha256": "47f273c01d042f20071b19db6535a358bf096112aa8ce7ff261be7e604f89008",
+      "src": "/assets/products/maru60/assembled/v1/ash-gray--retro-programmer-retail/frame_150.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 180,
+      "height": 1536,
+      "sha256": "db40def0fe067b94015289c46f22121c87c0b093fb451873a266c296d435eac4",
+      "src": "/assets/products/maru60/assembled/v1/ash-gray--retro-programmer-retail/frame_180.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 210,
+      "height": 1536,
+      "sha256": "e01f7ff55aa4e0cfc8853e1121988c08c29b8eca7a9c924864711af91c9835f6",
+      "src": "/assets/products/maru60/assembled/v1/ash-gray--retro-programmer-retail/frame_210.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 240,
+      "height": 1536,
+      "sha256": "42821c7dfa9baf8e854275ae374d63b4c197404e908b9bda83b45c12cde24af3",
+      "src": "/assets/products/maru60/assembled/v1/ash-gray--retro-programmer-retail/frame_240.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 270,
+      "height": 1536,
+      "sha256": "d00b5b3461e9c3b2e2ad679cb2885d5976af9a4c7035e1a5c4e72e4ad650f37b",
+      "src": "/assets/products/maru60/assembled/v1/ash-gray--retro-programmer-retail/frame_270.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 300,
+      "height": 1536,
+      "sha256": "3a959be5e6f11651a3c7a3ef98d28c803e9b4e0703aab535ab83f6c1855f54c2",
+      "src": "/assets/products/maru60/assembled/v1/ash-gray--retro-programmer-retail/frame_300.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 330,
+      "height": 1536,
+      "sha256": "4b0e4ab4e4b82d8abf3b3a78dab1f701a5d627a0a29e91700ae466eb5758b061",
+      "src": "/assets/products/maru60/assembled/v1/ash-gray--retro-programmer-retail/frame_330.webp",
+      "width": 1024
+    }
+  ]
+}

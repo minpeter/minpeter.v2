@@ -33,7 +33,7 @@ export function RootDocument({ children, lang }: RootDocumentProps) {
   const isVercel = !!env.VERCEL_ENV;
 
   return (
-    <html lang={lang} suppressHydrationWarning>
+    <html data-scroll-behavior="smooth" lang={lang} suppressHydrationWarning>
       <head>
         {/* Native theme (class on <html>). Tell Dark Reader not to inject. */}
         <meta name="darkreader-lock" />

@@ -1,0 +1,92 @@
+{
+  "id": "white-marble--pbtfans-wob-retail",
+  "housingId": "white-marble",
+  "keycapId": "pbtfans-wob-retail",
+  "orderable": false,
+  "frames": [
+    {
+      "angleDegrees": 0,
+      "height": 1536,
+      "sha256": "8d8a46ae843ba426279e65807e753933e42da273b58e758fb7d8d1fa1e8aa0b8",
+      "src": "/assets/products/maru60/assembled/v1/white-marble--pbtfans-wob-retail/frame_000.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 30,
+      "height": 1536,
+      "sha256": "3d2549a3ca40f50bb62b5377d1b0a53126ba5e0c859da782832843b2d76d24c6",
+      "src": "/assets/products/maru60/assembled/v1/white-marble--pbtfans-wob-retail/frame_030.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 60,
+      "height": 1536,
+      "sha256": "8687e8d512185dd467c68d013b6ac1f810fa257c168cccb184ed506acc5cb6f4",
+      "src": "/assets/products/maru60/assembled/v1/white-marble--pbtfans-wob-retail/frame_060.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 90,
+      "height": 1536,
+      "sha256": "35c93c4b7cb373fef08e18be36e1dbaf1a53f6fd33bdcb3e3db35c9e68d6c8a6",
+      "src": "/assets/products/maru60/assembled/v1/white-marble--pbtfans-wob-retail/frame_090.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 120,
+      "height": 1536,
+      "sha256": "df8966d460235c02b8f939e34d58d7bc6b9739e49861d87a7ea4b472865b4bd5",
+      "src": "/assets/products/maru60/assembled/v1/white-marble--pbtfans-wob-retail/frame_120.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 150,
+      "height": 1536,
+      "sha256": "3220a5d0b66ca02d79d56ea89f3af412837e3f5d2d5fe0b6072130f59e0904aa",
+      "src": "/assets/products/maru60/assembled/v1/white-marble--pbtfans-wob-retail/frame_150.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 180,
+      "height": 1536,
+      "sha256": "9ec582ff2880331f5e469c364e60ab146b7bb1bd36802cef6874f982513f3306",
+      "src": "/assets/products/maru60/assembled/v1/white-marble--pbtfans-wob-retail/frame_180.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 210,
+      "height": 1536,
+      "sha256": "3ffff3b50de9960275bb2682267304a66e5dd3fb97006b873ba2b3070606763c",
+      "src": "/assets/products/maru60/assembled/v1/white-marble--pbtfans-wob-retail/frame_210.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 240,
+      "height": 1536,
+      "sha256": "3c430ee855aa8daf80ea1b51873dc80ca5b1ad0aa3eddab97bd0de357c1dfd7e",
+      "src": "/assets/products/maru60/assembled/v1/white-marble--pbtfans-wob-retail/frame_240.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 270,
+      "height": 1536,
+      "sha256": "16474dc5cc68adc05e405f474cc8e30154d187ba75cefe1d2c680d17aaf4bf32",
+      "src": "/assets/products/maru60/assembled/v1/white-marble--pbtfans-wob-retail/frame_270.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 300,
+      "height": 1536,
+      "sha256": "27520784ff44008bd905391810cb2bd65ea1665a4b88e6c9cd93fc4ea27b3b01",
+      "src": "/assets/products/maru60/assembled/v1/white-marble--pbtfans-wob-retail/frame_300.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 330,
+      "height": 1536,
+      "sha256": "4fcaa060087ee37b06662933a37a89c1b113ba54f0084161932f1d4bff734572",
+      "src": "/assets/products/maru60/assembled/v1/white-marble--pbtfans-wob-retail/frame_330.webp",
+      "width": 1024
+    }
+  ]
+}

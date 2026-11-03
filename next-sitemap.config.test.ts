@@ -18,6 +18,18 @@ const transform = (path: string) =>
   );
 
 describe("next-sitemap.config.js", () => {
+  it("excludes redirected product URLs and publishes localized Maru60 alternates", () => {
+    for (const prefix of ["", "/ko", "/en", "/ja"]) {
+      expect(transform(`${prefix}/products/rule60-hhkb-unibody`)).toBeNull();
+      const entry = transform(`${prefix}/products/maru60`);
+      expect(entry.loc).toBe(
+        `${prefix === "/ko" ? "" : prefix}/products/maru60`
+      );
+      expect(entry.alternateRefs.map((item) => item.href)).toContain(
+        "https://minpeter.com/products/maru60"
+      );
+    }
+  });
   it("derives its locales from the same module as next-intl routing", () => {
     // The guard this file exists for: the sitemap used to re-declare the
     // locale list, so adding a locale silently produced a sitemap missing it.
