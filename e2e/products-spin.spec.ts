@@ -5,6 +5,45 @@ import path from "node:path";
 import { expect, test } from "@playwright/test";
 
 const DETAIL = "/products/maru60";
+const OG_ASSETS = "/assets/products/rule60-hhkb-unibody";
+
+test("OG player decodes and loops the latest six-second render", async ({
+  page,
+  request,
+}) => {
+  await page.goto(`${OG_ASSETS}/player.html`);
+  await expect(page.locator("body")).toHaveCSS(
+    "background-color",
+    "rgb(5, 5, 5)"
+  );
+  const video = page.locator("video");
+  await expect(video).toHaveJSProperty("videoWidth", 1200);
+  await expect(video).toHaveJSProperty("videoHeight", 630);
+  await expect(video).toHaveJSProperty("duration", 6);
+  await expect(video).toHaveJSProperty("muted", true);
+  await expect(video).toHaveJSProperty("loop", true);
+  await expect(video).toHaveJSProperty("playsInline", true);
+  await expect
+    .poll(() =>
+      video.evaluate((element: HTMLVideoElement) => element.currentTime)
+    )
+    .toBeGreaterThan(0.1);
+  await video.evaluate((element: HTMLVideoElement) => {
+    element.currentTime = 5.8;
+  });
+  await expect
+    .poll(() =>
+      video.evaluate((element: HTMLVideoElement) => element.currentTime)
+    )
+    .toBeLessThan(2);
+  const poster = await request.get(`${OG_ASSETS}/og.png`);
+  expect(poster.ok()).toBe(true);
+  expect(poster.headers()["content-type"]).toContain("image/png");
+  const gif = await request.get(`${OG_ASSETS}/og.gif`);
+  expect(gif.ok()).toBe(true);
+  expect(gif.headers()["content-type"]).toContain("image/gif");
+});
+
 const FRAME_URL =
   /\/assets\/products\/maru60\/assembled\/v1\/transparent--inventor\/frame_\d{3}\.webp(?:\?.*)?$/u;
 
