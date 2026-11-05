@@ -8,6 +8,7 @@ import type {
 import { toFumadocsSource } from "fumadocs-mdx/runtime/server";
 import { cacheLife } from "next/cache";
 
+import { decodeSlugs } from "./decode-slugs";
 import { routing } from "./i18n/routing";
 
 export type AppLocale = (typeof routing.locales)[number];
@@ -31,13 +32,25 @@ const blogSource = toFumadocsSource<BlogPageData, BlogMetaData>(
   meta as BlogMetaData[]
 );
 
-export const blog = loader(blogSource, {
+const blogLoader = loader(blogSource, {
   baseUrl: "/blog",
   i18n: {
     defaultLanguage: "ko",
     languages: ["ko", "en", "ja"],
   },
 });
+
+// Wrap via prototype so loader getters (e.g. `pageTree`) stay live.
+export const blog: typeof blogLoader = Object.assign(
+  Object.create(blogLoader) as typeof blogLoader,
+  {
+    getPage: ((slugs, language) =>
+      blogLoader.getPage(
+        decodeSlugs(slugs),
+        language
+      )) satisfies typeof blogLoader.getPage,
+  }
+);
 
 export type blogListType = ReturnType<typeof blog.getPages>;
 export type blogType = ReturnType<typeof blog.getPage>;
