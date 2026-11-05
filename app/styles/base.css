@@ -48,6 +48,13 @@
     scroll-behavior: smooth;
   }
 
+  /* Suppress desktop rubber-banding; preserve touch pull-to-refresh. */
+  @media (pointer: fine) {
+    html {
+      overscroll-behavior: none;
+    }
+  }
+
   @supports (scrollbar-gutter: stable) {
     html {
       overflow-y: visible;

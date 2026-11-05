@@ -15,6 +15,14 @@ Preview snapshots live in the git-ignored `.amp/in/previews/` directory.
 After a hard kill or machine crash, remove orphaned snapshots manually once
 their preview processes have stopped. For hot reload, use `pnpm dev` instead.
 
+## Page scrolling
+
+`app/styles/base.css` disables root overscroll only for `(pointer: fine)` to
+prevent desktop rubber-band bounce. Coarse-pointer devices retain the browser
+default so mobile pull-to-refresh remains available. This uses the primary
+pointer, not screen width; touch-capable hybrids with a fine primary pointer
+also get suppression, including native swipe navigation.
+
 ## Inspired by ~
 
 - [Gaudion](https://gaudion.dev/)
