@@ -21,7 +21,9 @@ test.describe("blog routes found by responsive QA", () => {
 
   for (const path of [
     "/blog/tiny-ko:wandb",
+    "/blog/tiny-ko%3Awandb",
     "/en/blog/google-calendar-agent-1:friendli",
+    "/ja/blog/google-calendar-agent-1%3Afriendli",
   ]) {
     it(`external post ${path} renders its redirect shell`, async ({ page }) => {
       const response = await page.goto(path);
