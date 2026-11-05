@@ -53,6 +53,10 @@ vi.mock("ky", () => ({
   },
 }));
 
+// `ky.create` runs once at module load; Vitest 5 clears mock calls before each
+// test (`clearMocks: true` default), so snapshot the import-time calls here.
+const createCallsAtImport = [...mockCreate.mock.calls];
+
 const originalCreateObjectUrl = Object.getOwnPropertyDescriptor(
   window.URL,
   "createObjectURL"
@@ -171,7 +175,7 @@ describe("uploadFile response validation", () => {
     if (!call) {
       throw new TypeError("Expected one upload request");
     }
-    expect(mockCreate).toHaveBeenCalledWith({ baseUrl: TMPF_API_BASE });
+    expect(createCallsAtImport).toStrictEqual([[{ baseUrl: TMPF_API_BASE }]]);
     expect(call).toHaveLength(2);
     expect(call[0]).toBe(API_SUFFIX.UPLOAD);
     expect(call[1]).toMatchObject({ retry: 0, timeout: false });
