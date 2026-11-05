@@ -62,20 +62,20 @@
     "@types/node": "^24.19.2",
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
-    "@vitest/ui": "^4.1.12",
+    "@vitest/ui": "^5.1.0",
     "babel-plugin-react-compiler": "1.0.0",
     "jsdom": "^30.1.3",
     "knip": "^6.44.1",
     "next-sitemap": "^4.2.3",
     "npm-run-all2": "^9.0.4",
-    "portless": "0.15.13",
+    "portless": "0.16.0",
     "react-grab": "0.2.0",
     "tailwind-merge": "^3.7.0",
     "tailwindcss": "^4.3.4",
     "tailwindcss-animate": "^1.0.7",
     "typescript": "7.0.2",
     "ultracite": "8.1.1",
-    "vitest": "^4.1.12"
+    "vitest": "^5.1.0"
   },
   "packageManager": "pnpm@11.28.1+sha512.e02bdf7ef766bfcfd5ba05cccb7bef99391cc8e0dc666f80292e5e21320332250770c532af6e600675045eaed98a49b03ed4abc13ac6fb14a3d1875cf22fbd60",
   "engines": {
