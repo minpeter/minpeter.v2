@@ -1,6 +1,14 @@
 import { describe, expect, it } from "vitest";
 
-import { createMetadata, getLocalizedPath, resolveLocale } from "./metadata";
+import {
+  createMetadata,
+  createNotFoundMetadata,
+  getLocalizedPath,
+  NOT_FOUND_TITLE,
+  resolveLocale,
+} from "./metadata";
+
+const ABSOLUTE_NOT_FOUND_IMAGE = /^https?:\/\/[^/]+\/og\/not-found$/u;
 
 describe("shared metadata", () => {
   it("builds locale-aware canonical and Open Graph metadata", () => {
@@ -99,5 +107,35 @@ describe("shared metadata", () => {
   it("resolves unsupported route locales to the default locale", () => {
     expect(resolveLocale("en")).toBe("en");
     expect(resolveLocale("unsupported")).toBe("ko");
+  });
+});
+
+describe("createNotFoundMetadata", () => {
+  it("localizes the 404 OG image path", () => {
+    const metadata = createNotFoundMetadata({
+      description: "Missing",
+      locale: "ja",
+    });
+
+    expect(metadata.title).toBe(NOT_FOUND_TITLE);
+    expect(metadata.description).toBe("Missing");
+    expect(metadata.openGraph).toMatchObject({
+      images: { alt: NOT_FOUND_TITLE, url: "/ja/og/not-found" },
+      locale: "ja_JP",
+    });
+  });
+
+  it("can emit an absolute image URL for trees without metadataBase", () => {
+    const metadata = createNotFoundMetadata({
+      absoluteImage: true,
+      description: "Missing",
+      locale: "ko",
+    });
+
+    expect(metadata.openGraph).toMatchObject({
+      images: {
+        url: expect.stringMatching(ABSOLUTE_NOT_FOUND_IMAGE),
+      },
+    });
   });
 });

@@ -5,7 +5,10 @@ import { Suspense } from "react";
 import { ProductCustomizer } from "@/components/product-customizer";
 import { ProductCustomizerSkeleton } from "@/components/product-customizer-skeleton";
 import { getProduct, PRODUCTS } from "@/shared/products";
-import { createMetadata, getLocalizedPath } from "@/shared/utils/metadata";
+import {
+  createMetadata,
+  createNotFoundMetadata,
+} from "@/shared/utils/metadata";
 
 import Loading from "./loading";
 
@@ -29,14 +32,9 @@ export async function generateMetadata(
   ]);
 
   if (!product) {
-    return createMetadata({
+    return createNotFoundMetadata({
       description: tRoot("notFound.description"),
-      image: {
-        alt: "minpeter | 404",
-        url: getLocalizedPath(locale, "/og/not-found"),
-      },
       locale,
-      title: "minpeter | 404",
     });
   }
 
