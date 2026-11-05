@@ -28,12 +28,30 @@ export const shouldExclude = (path: string) =>
   isMetadataImagePath(path) ||
   publicAssetPaths.has(path);
 
+const handleDocument = createMiddleware(routing);
+// Client-router fetches (RSC navigations, prefetches) must resolve an
+// unprefixed path to the default locale, never redirect by cookie or
+// Accept-Language: a cross-locale redirect hands the router a tree for a
+// different root layout, which it soft-merges into the current page.
+const handleRouterFetch = createMiddleware({
+  ...routing,
+  localeDetection: false,
+});
+
+/** Browsers send `Sec-Fetch-Dest: document` only for real page loads. */
+export const isRouterFetch = (request: NextRequest) => {
+  const dest = request.headers.get("sec-fetch-dest");
+  return dest !== null && dest !== "document";
+};
+
 export function proxy(request: NextRequest) {
   if (shouldExclude(request.nextUrl.pathname)) {
     return NextResponse.next();
   }
 
-  return createMiddleware(routing)(request);
+  return isRouterFetch(request)
+    ? handleRouterFetch(request)
+    : handleDocument(request);
 }
 
 export const config = {

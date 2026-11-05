@@ -1,8 +1,9 @@
 import { getRewrittenUrl, isRewrite } from "next/experimental/testing/server";
 import { NextRequest, NextResponse } from "next/server";
+import createMiddleware from "next-intl/middleware";
 import { describe, expect, it, vi } from "vitest";
 
-import { proxy, shouldExclude } from "./proxy";
+import { isRouterFetch, proxy, shouldExclude } from "./proxy";
 
 const TEST_TARGET_DOMAIN = "https://minpeter.com";
 const NEXT_INTL_MIDDLEWARE_REWRITE = `${TEST_TARGET_DOMAIN}/HIT/NEXT-INTL`;
@@ -12,6 +13,11 @@ vi.mock(import("next-intl/middleware"), () => ({
     () => () => NextResponse.rewrite(NEXT_INTL_MIDDLEWARE_REWRITE)
   ),
 }));
+
+// Vitest 5 clears mock calls between tests; snapshot the import-time calls.
+const middlewareConfigs = vi
+  .mocked(createMiddleware)
+  .mock.calls.map(([config]) => config);
 
 describe("Proxy", () => {
   it("should exclude", () => {
@@ -61,5 +67,31 @@ describe("Proxy", () => {
     const response = await proxy(request);
 
     expect(isRewrite(response)).toBeFalsy();
+  });
+});
+
+describe("Proxy locale detection", () => {
+  const requestWith = (headers: Record<string, string>) =>
+    new NextRequest(`${TEST_TARGET_DOMAIN}/blog`, { headers });
+
+  it("treats non-document fetches as client-router requests", () => {
+    expect(isRouterFetch(requestWith({ "sec-fetch-dest": "empty" }))).toBe(
+      true
+    );
+    expect(isRouterFetch(requestWith({ "sec-fetch-dest": "document" }))).toBe(
+      false
+    );
+    // Non-browser clients (curl, crawlers) keep full locale detection.
+    expect(isRouterFetch(requestWith({}))).toBe(false);
+  });
+
+  it("disables cookie/Accept-Language redirects only for router fetches", () => {
+    expect(middlewareConfigs).toHaveLength(2);
+    expect(middlewareConfigs).toContainEqual(
+      expect.objectContaining({ localeDetection: false })
+    );
+    expect(
+      middlewareConfigs.some((config) => config?.localeDetection !== false)
+    ).toBe(true);
   });
 });

@@ -36,6 +36,9 @@ const blogLoader = loader(blogSource, {
   baseUrl: "/blog",
   i18n: {
     defaultLanguage: "ko",
+    // Match next-intl `localePrefix: "as-needed"`: Korean URLs stay unprefixed,
+    // so links never take a `/ko/...` → `/...` redirect hop.
+    hideLocale: "default-locale",
     languages: ["ko", "en", "ja"],
   },
 });
