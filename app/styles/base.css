@@ -143,3 +143,21 @@
     }
   }
 }
+
+/* Invisible hit-area expansion for small text links on touch screens: an
+   absolutely positioned ::after grows the tappable box to at least 44×44px,
+   centred on the link, without changing layout or paint. Percent insets
+   resolve against the link itself (position: relative), so links that are
+   already large enough keep their own box. */
+@utility tap-target {
+  @media (pointer: coarse) {
+    position: relative;
+
+    &::after {
+      position: absolute;
+      inset-block: min(0px, calc((100% - 44px) / 2));
+      inset-inline: min(0px, calc((100% - 44px) / 2));
+      content: "";
+    }
+  }
+}

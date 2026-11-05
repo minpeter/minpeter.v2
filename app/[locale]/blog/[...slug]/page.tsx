@@ -18,6 +18,10 @@ import { createBlogMdxComponents } from "./mdx-components";
 import { PostFooter } from "./post-footer";
 import { PostToc } from "./post-toc";
 
+// Unlisted params must finish rendering before the response starts, so
+// `notFound()` yields a real HTTP 404 instead of a streamed soft 404.
+export const ensureStatic = "navigation";
+
 export function generateStaticParams({
   params,
 }: {
