@@ -188,6 +188,21 @@
     outline-offset: 3px;
   }
 
+  /* Below ~400px the fan leaves the description column too narrow to read;
+     stack the screens under the copy instead of beside it. */
+  @media (width < 25rem) {
+    .project-screen-row {
+      flex-direction: column;
+    }
+
+    .project-screen-row .project-screen-fan {
+      flex-basis: auto;
+      align-self: stretch;
+      width: min(100%, 14rem);
+      margin-inline-start: auto;
+    }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .project-screen {
       transition: none;

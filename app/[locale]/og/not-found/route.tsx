@@ -1,12 +1,12 @@
 import { cacheLife } from "next/cache";
 
-import { createOgImageResponse } from "@/shared/og-image";
+import { createOgImageBytes, ogImageBytesResponse } from "@/shared/og-image";
 
 async function getNotFoundOgImage(locale: string) {
   "use cache";
   cacheLife("days");
 
-  return await createOgImageResponse({
+  return await createOgImageBytes({
     locale,
     title: "minpeter | 404",
   });
@@ -18,5 +18,5 @@ export const GET = async (
 ) => {
   const { locale } = await params;
 
-  return getNotFoundOgImage(locale);
+  return ogImageBytesResponse(await getNotFoundOgImage(locale));
 };

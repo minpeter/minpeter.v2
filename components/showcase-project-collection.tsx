@@ -104,7 +104,7 @@ export async function ShowcaseProjectCollection({
                   </span>
                 )}
               </h2>
-              <div className="mt-2 flex items-start gap-4">
+              <div className="project-screen-row mt-2 flex items-start gap-4">
                 <div className="min-w-0 flex-1">
                   {project.href && project.label ? (
                     <p className="text-muted-foreground text-[0.6875rem]">

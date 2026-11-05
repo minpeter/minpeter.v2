@@ -263,3 +263,21 @@ export const createOgImageResponse = async ({
     }
   );
 };
+
+const OG_IMAGE_HEADERS = {
+  "Cache-Control": "public, s-maxage=86400, stale-while-revalidate=604800",
+  "Content-Type": "image/png",
+};
+
+/**
+ * PNG bytes for `"use cache"` callers: a `Response` is not serializable as a
+ * cache entry (it fails at runtime), but an `ArrayBuffer` is.
+ */
+export const createOgImageBytes = async (
+  options: Parameters<typeof createOgImageResponse>[0]
+): Promise<ArrayBuffer> =>
+  await (await createOgImageResponse(options)).arrayBuffer();
+
+/** Wrap bytes from {@link createOgImageBytes} into an image response. */
+export const ogImageBytesResponse = (bytes: ArrayBuffer) =>
+  new Response(bytes, { headers: OG_IMAGE_HEADERS });

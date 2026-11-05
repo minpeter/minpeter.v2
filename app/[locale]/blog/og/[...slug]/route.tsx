@@ -1,7 +1,7 @@
 import { cacheLife } from "next/cache";
 import { notFound } from "next/navigation";
 
-import { createOgImageResponse } from "@/shared/og-image";
+import { createOgImageBytes, ogImageBytesResponse } from "@/shared/og-image";
 import { getOgTitleSize, getOgTitleVisualWidth } from "@/shared/og-title";
 import { siteConfig } from "@/shared/site-config";
 import { blog } from "@/shared/source";
@@ -38,7 +38,7 @@ async function getPostOgImage(locale: string, slug: string[]) {
   });
   const titleSize = getOgTitleSize(Math.max(...localizedTitleWidths));
 
-  return await createOgImageResponse({
+  return await createOgImageBytes({
     detail: publishedIso,
     locale,
     title,
@@ -52,5 +52,5 @@ export const GET = async (
 ) => {
   const { locale, slug } = await params;
 
-  return getPostOgImage(locale, slug);
+  return ogImageBytesResponse(await getPostOgImage(locale, slug));
 };
