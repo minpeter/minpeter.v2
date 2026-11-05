@@ -38,11 +38,15 @@ const handleRouterFetch = createMiddleware({
   localeDetection: false,
 });
 
-/** Browsers send `Sec-Fetch-Dest: document` only for real page loads. */
-export const isRouterFetch = (request: NextRequest) => {
-  const dest = request.headers.get("sec-fetch-dest");
-  return dest !== null && dest !== "document";
-};
+/**
+ * App Router navigations and prefetches are `fetch()` calls (`Sec-Fetch-Dest:
+ * empty`) carrying the `RSC` header. Next strips router headers before Proxy
+ * runs on some paths, so the fetch destination is the reliable signal;
+ * images, scripts and iframes keep document locale handling.
+ */
+export const isRouterFetch = (request: NextRequest) =>
+  request.headers.get("sec-fetch-dest") === "empty" ||
+  request.headers.get("rsc") === "1";
 
 export function proxy(request: NextRequest) {
   if (shouldExclude(request.nextUrl.pathname)) {

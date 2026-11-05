@@ -8,9 +8,17 @@ import { isRouterFetch, proxy, shouldExclude } from "./proxy";
 const TEST_TARGET_DOMAIN = "https://minpeter.com";
 const NEXT_INTL_MIDDLEWARE_REWRITE = `${TEST_TARGET_DOMAIN}/HIT/NEXT-INTL`;
 
+const ROUTER_FETCH_REWRITE = `${TEST_TARGET_DOMAIN}/HIT/NEXT-INTL-NO-DETECTION`;
+
+// Each next-intl instance rewrites to a marker so dispatch is observable.
 vi.mock(import("next-intl/middleware"), () => ({
   default: vi.fn(
-    () => () => NextResponse.rewrite(NEXT_INTL_MIDDLEWARE_REWRITE)
+    (config) => () =>
+      NextResponse.rewrite(
+        config?.localeDetection === false
+          ? ROUTER_FETCH_REWRITE
+          : NEXT_INTL_MIDDLEWARE_REWRITE
+      )
   ),
 }));
 
@@ -74,24 +82,37 @@ describe("Proxy locale detection", () => {
   const requestWith = (headers: Record<string, string>) =>
     new NextRequest(`${TEST_TARGET_DOMAIN}/blog`, { headers });
 
-  it("treats non-document fetches as client-router requests", () => {
+  it("recognizes only client-router fetches", () => {
     expect(isRouterFetch(requestWith({ "sec-fetch-dest": "empty" }))).toBe(
       true
     );
-    expect(isRouterFetch(requestWith({ "sec-fetch-dest": "document" }))).toBe(
-      false
-    );
+    expect(isRouterFetch(requestWith({ rsc: "1" }))).toBe(true);
+    for (const dest of ["document", "image", "script", "style", "iframe"]) {
+      expect(isRouterFetch(requestWith({ "sec-fetch-dest": dest }))).toBe(
+        false
+      );
+    }
     // Non-browser clients (curl, crawlers) keep full locale detection.
     expect(isRouterFetch(requestWith({}))).toBe(false);
   });
 
-  it("disables cookie/Accept-Language redirects only for router fetches", () => {
+  it("creates one detecting and one non-detecting next-intl instance", () => {
     expect(middlewareConfigs).toHaveLength(2);
-    expect(middlewareConfigs).toContainEqual(
-      expect.objectContaining({ localeDetection: false })
-    );
     expect(
-      middlewareConfigs.some((config) => config?.localeDetection !== false)
-    ).toBe(true);
+      middlewareConfigs.map((config) => config?.localeDetection !== false)
+    ).toEqual([true, false]);
+  });
+
+  it.each([
+    [{ "sec-fetch-dest": "empty" }, ROUTER_FETCH_REWRITE],
+    [{ rsc: "1", "sec-fetch-dest": "empty" }, ROUTER_FETCH_REWRITE],
+    [{ "sec-fetch-dest": "document" }, NEXT_INTL_MIDDLEWARE_REWRITE],
+    [{ "sec-fetch-dest": "image" }, NEXT_INTL_MIDDLEWARE_REWRITE],
+    [{}, NEXT_INTL_MIDDLEWARE_REWRITE],
+  ])("dispatches %o to the matching handler", async (headers, expected) => {
+    const response = await proxy(requestWith(headers));
+
+    expect(isRewrite(response)).toBe(true);
+    expect(getRewrittenUrl(response)).toBe(expected);
   });
 });

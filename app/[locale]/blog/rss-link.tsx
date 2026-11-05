@@ -1,6 +1,7 @@
 import { Rss } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
+import { getLocalizedPath } from "@/shared/utils/metadata";
 import { cn } from "@/shared/utils/tailwind";
 
 interface RssLinkProps {
@@ -19,7 +20,7 @@ export async function RssLink({ locale }: RssLinkProps) {
         "transition-colors duration-150",
         "focus-visible:ring-ring focus:outline-none focus-visible:ring-2"
       )}
-      href={`/${locale}/blog/rss.xml`}
+      href={getLocalizedPath(locale, "/blog/rss.xml")}
       rel="noopener noreferrer"
       target="_blank"
       title={t("common.rssFeed")}
