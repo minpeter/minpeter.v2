@@ -4,6 +4,7 @@ import { getBaseUrl } from "@/shared/env";
 import { routing } from "@/shared/i18n/routing";
 import { getSiteDescription, siteConfig } from "@/shared/site-config";
 import { blog } from "@/shared/source";
+import { getLocalizedPath } from "@/shared/utils/metadata";
 
 type Locale = (typeof routing.locales)[number];
 
@@ -35,7 +36,9 @@ async function generateRssFeed(locale: Locale): Promise<string> {
       const link = `${baseUrl}${post.url}`;
       const description = escapeXml(post.data.description ?? "");
       const pubDate = post.data.published.toUTCString();
-      const guid = link;
+      // Feed readers key items by guid: keep the historical always-prefixed
+      // form so switching Korean links to /blog/... does not re-announce posts.
+      const guid = `${baseUrl}/${locale}/blog/${post.slugs.join("/")}`;
 
       return `    <item>
       <title>${title}</title>
@@ -64,7 +67,7 @@ async function generateRssFeed(locale: Locale): Promise<string> {
     <description>${escapeXml(getSiteDescription(locale))}</description>
     <language>${langCode}</language>
     <lastBuildDate>${lastBuildDate}</lastBuildDate>
-    <atom:link href="${baseUrl}/${locale}/blog/rss.xml" rel="self" type="application/rss+xml"/>
+    <atom:link href="${baseUrl}${getLocalizedPath(locale, "/blog/rss.xml")}" rel="self" type="application/rss+xml"/>
 ${items}
   </channel>
 </rss>`;
