@@ -17,10 +17,18 @@ const EXTENSION = 0x21;
 const GRAPHIC_CONTROL = 0xf9;
 const APPLICATION = 0xff;
 
+/** Returns `offset` if it is inside the buffer, so truncated files fail instead of looping. */
+function readable(bytes: Buffer, offset: number): number {
+  if (offset >= bytes.byteLength) {
+    throw new Error(`Truncated GIF: offset ${offset} past ${bytes.byteLength}`);
+  }
+  return offset;
+}
+
 /** Skips a chain of GIF data sub-blocks, returning the offset after the 0 terminator. */
 function skipSubBlocks(bytes: Buffer, offset: number): number {
   let cursor = offset;
-  while (bytes[cursor] !== 0) {
+  while (bytes[readable(bytes, cursor)] !== 0) {
     cursor += bytes[cursor] + 1;
   }
   return cursor + 1;
@@ -39,7 +47,7 @@ function parseGif(bytes: Buffer) {
   let totalDelayCs = 0;
   let loops: number | undefined;
 
-  while (bytes[cursor] !== GIF_TRAILER) {
+  while (bytes[readable(bytes, cursor)] !== GIF_TRAILER) {
     const block = bytes[cursor];
     if (block === EXTENSION) {
       const label = bytes[cursor + 1];
@@ -65,6 +73,15 @@ function parseGif(bytes: Buffer) {
 
   return { frames, height, loops, totalDelayCs, width };
 }
+
+describe("parseGif", () => {
+  it("rejects a truncated file instead of hanging", () => {
+    const bytes = readFileSync(OG_GIF);
+    expect(() => parseGif(bytes.subarray(0, bytes.byteLength / 2))).toThrow(
+      "Truncated GIF"
+    );
+  });
+});
 
 describe("MARU60 animated OG image", () => {
   const bytes = readFileSync(OG_GIF);
