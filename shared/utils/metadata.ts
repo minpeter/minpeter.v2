@@ -186,3 +186,31 @@ export function createMetadata({
     },
   };
 }
+
+export const NOT_FOUND_TITLE = "minpeter | 404";
+
+/**
+ * Shared 404 metadata. `absoluteImage` is for trees outside `[locale]`
+ * (global-not-found) where `metadataBase` is not inherited.
+ */
+export function createNotFoundMetadata({
+  absoluteImage = false,
+  description,
+  locale,
+}: {
+  absoluteImage?: boolean;
+  description: string;
+  locale: string;
+}): Metadata {
+  const imagePath = getLocalizedPath(locale, "/og/not-found");
+
+  return createMetadata({
+    description,
+    image: {
+      alt: NOT_FOUND_TITLE,
+      url: absoluteImage ? toAbsoluteUrl(imagePath) : imagePath,
+    },
+    locale: resolveLocale(locale),
+    title: NOT_FOUND_TITLE,
+  });
+}

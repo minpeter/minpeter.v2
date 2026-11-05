@@ -23,7 +23,7 @@ export function Backlink({
   return (
     <Link
       aria-label={resolvedAriaLabel}
-      className="animation:enter text-muted-foreground hover:bg-secondary/100 focus-visible:ring-ring w-fit rounded-md px-0.5 text-sm underline focus-visible:ring-2 focus-visible:outline-none"
+      className="tap-target animation:enter text-muted-foreground hover:bg-secondary/100 focus-visible:ring-ring w-fit rounded-md px-0.5 text-sm underline focus-visible:ring-2 focus-visible:outline-none"
       href={href}
       onClick={onNavigate}
       prefetch={prefetch}

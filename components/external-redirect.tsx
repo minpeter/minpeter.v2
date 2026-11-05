@@ -38,7 +38,7 @@ export default function ExternalRedirect({
     <div className="flex flex-1 items-center justify-center p-4">
       <div className="space-y-4 text-center">
         <p className="text-lg">{t("message", { count: String(count) })}</p>
-        <a className="text-primary underline" href={url}>
+        <a className="tap-target text-primary underline" href={url}>
           {t("link")}
         </a>
       </div>

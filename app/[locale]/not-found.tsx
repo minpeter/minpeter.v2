@@ -2,19 +2,17 @@ import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 
 import { NotFoundPage } from "@/components/not-found-page";
-import { createMetadata, getLocalizedPath } from "@/shared/utils/metadata";
+import {
+  createNotFoundMetadata,
+  getLocalizedPath,
+} from "@/shared/utils/metadata";
 
 export async function generateMetadata(): Promise<Metadata> {
   const [locale, t] = await Promise.all([getLocale(), getTranslations()]);
 
-  return createMetadata({
+  return createNotFoundMetadata({
     description: t("notFound.description"),
-    image: {
-      alt: "minpeter | 404",
-      url: getLocalizedPath(locale, "/og/not-found"),
-    },
     locale,
-    title: "minpeter | 404",
   });
 }
 

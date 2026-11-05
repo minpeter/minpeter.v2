@@ -59,7 +59,7 @@ export default async function Page() {
         <p className="resume-message-description">
           {t("resume.statusDescription")}
         </p>
-        <Link className="resume-home-link" href="/">
+        <Link className="resume-home-link tap-target" href="/">
           {t("resume.homeLabel")} <span aria-hidden="true">↗</span>
         </Link>
       </section>

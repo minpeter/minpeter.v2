@@ -5,9 +5,16 @@ import { Suspense } from "react";
 import { ProductCustomizer } from "@/components/product-customizer";
 import { ProductCustomizerSkeleton } from "@/components/product-customizer-skeleton";
 import { getProduct, PRODUCTS } from "@/shared/products";
-import { createMetadata } from "@/shared/utils/metadata";
+import {
+  createMetadata,
+  createNotFoundMetadata,
+} from "@/shared/utils/metadata";
 
 import Loading from "./loading";
+
+// Unlisted params must finish rendering before the response starts, so
+// `notFound()` yields a real HTTP 404 instead of a streamed soft 404.
+export const ensureStatic = "navigation";
 
 export function generateStaticParams() {
   return PRODUCTS.map((product) => ({ slug: product.slug }));
@@ -18,13 +25,17 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const { slug } = await props.params;
   const product = getProduct(slug);
-  const [locale, t] = await Promise.all([
+  const [locale, t, tRoot] = await Promise.all([
     getLocale(),
     getTranslations("products"),
+    getTranslations(),
   ]);
 
   if (!product) {
-    return createMetadata({ locale, title: "minpeter | products" });
+    return createNotFoundMetadata({
+      description: tRoot("notFound.description"),
+      locale,
+    });
   }
 
   return createMetadata({

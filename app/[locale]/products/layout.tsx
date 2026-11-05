@@ -17,7 +17,7 @@ export default async function ProductsLayout({
     // `dark` scopes Tailwind dark variants; data-store switches the page tokens (products.css).
     <div className="store dark" data-store>
       <header className="store-header">
-        <Link className="store-header-home store-label" href="/">
+        <Link className="store-header-home store-label tap-target" href="/">
           minpeter
         </Link>
         <Link aria-label={t("navigationLabel")} href="/products">

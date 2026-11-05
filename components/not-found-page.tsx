@@ -30,7 +30,7 @@ export function NotFoundPage({
           {/* A hard navigation escapes the stale not-found route tree. */}
           <a
             aria-label={backLabel}
-            className="fieldnotes-logo-link"
+            className="fieldnotes-logo-link tap-target"
             href={backHref}
           >
             <Image
@@ -53,7 +53,7 @@ export function NotFoundPage({
       </header>
 
       <div className="resume-message">
-        <a className="resume-home-link mt-0" href={backHref}>
+        <a className="resume-home-link tap-target mt-0" href={backHref}>
           {backLabel} <span aria-hidden="true">↗</span>
         </a>
       </div>

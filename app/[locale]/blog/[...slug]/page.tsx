@@ -10,13 +10,21 @@ import { siteConfig } from "@/shared/site-config";
 import { blog } from "@/shared/source";
 import styles from "@/shared/styles/stagger-fade-in.module.css";
 import { formatDateLong } from "@/shared/utils/date";
-import { createMetadata, getLocalizedPath } from "@/shared/utils/metadata";
+import {
+  createMetadata,
+  createNotFoundMetadata,
+  getLocalizedPath,
+} from "@/shared/utils/metadata";
 import { cn } from "@/shared/utils/tailwind";
 
 import Loading from "./loading";
 import { createBlogMdxComponents } from "./mdx-components";
 import { PostFooter } from "./post-footer";
 import { PostToc } from "./post-toc";
+
+// Unlisted params must finish rendering before the response starts, so
+// `notFound()` yields a real HTTP 404 instead of a streamed soft 404.
+export const ensureStatic = "navigation";
 
 export function generateStaticParams({
   params,
@@ -35,14 +43,9 @@ export async function generateMetadata(
   const [locale, t] = await Promise.all([getLocale(), getTranslations()]);
   const page = blog.getPage(slug, locale);
   if (!page) {
-    return createMetadata({
+    return createNotFoundMetadata({
       description: t("notFound.description"),
-      image: {
-        alt: "minpeter | 404",
-        url: getLocalizedPath(locale, "/og/not-found"),
-      },
       locale,
-      title: "minpeter | 404",
     });
   }
 
