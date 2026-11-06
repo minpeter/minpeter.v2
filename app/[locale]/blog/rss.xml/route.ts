@@ -3,7 +3,7 @@ import { cacheLife } from "next/cache";
 import { getBaseUrl } from "@/shared/env";
 import { routing } from "@/shared/i18n/routing";
 import { getSiteDescription, siteConfig } from "@/shared/site-config";
-import { blog } from "@/shared/source";
+import { getLocalizedPosts } from "@/shared/source";
 import { getLocalizedPath } from "@/shared/utils/metadata";
 
 type Locale = (typeof routing.locales)[number];
@@ -22,7 +22,7 @@ async function generateRssFeed(locale: Locale): Promise<string> {
   cacheLife("days");
 
   const baseUrl = getBaseUrl();
-  const posts = blog.getPages(locale);
+  const posts = getLocalizedPosts(locale);
 
   const sortedPosts = posts
     .filter((post) => !post.data.draft)

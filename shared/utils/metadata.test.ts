@@ -139,3 +139,64 @@ describe("createNotFoundMetadata", () => {
     });
   });
 });
+
+describe("createMetadata languages", () => {
+  it("lists every locale by default", () => {
+    const metadata = createMetadata({ locale: "ko", path: "/blog/x" });
+
+    // Order follows routing.locales.
+    expect(Object.keys(metadata.alternates?.languages ?? {})).toStrictEqual([
+      "en",
+      "ko",
+      "ja",
+      "x-default",
+    ]);
+    expect(metadata.openGraph?.alternateLocale).toStrictEqual([
+      "en_US",
+      "ja_JP",
+    ]);
+  });
+
+  it("limits hreflang and og:locale:alternate to existing editions", () => {
+    const metadata = createMetadata({
+      languages: ["ko", "en"],
+      locale: "en",
+      path: "/blog/x",
+    });
+
+    expect(metadata.alternates?.languages).toStrictEqual({
+      en: "/en/blog/x",
+      ko: "/blog/x",
+      "x-default": "/blog/x",
+    });
+    expect(metadata.openGraph?.alternateLocale).toStrictEqual(["ko_KR"]);
+  });
+
+  it("omits x-default when the default locale has no edition", () => {
+    const metadata = createMetadata({
+      languages: ["en", "ja"],
+      locale: "ja",
+      path: "/blog/x",
+    });
+
+    expect(metadata.alternates?.languages).toStrictEqual({
+      en: "/en/blog/x",
+      ja: "/ja/blog/x",
+    });
+    expect(metadata.openGraph?.alternateLocale).toStrictEqual(["en_US"]);
+  });
+
+  it("a single-edition post lists only itself", () => {
+    const metadata = createMetadata({
+      languages: ["ko"],
+      locale: "ko",
+      path: "/blog/x",
+    });
+
+    expect(metadata.alternates?.languages).toStrictEqual({
+      ko: "/blog/x",
+      "x-default": "/blog/x",
+    });
+    expect(metadata.openGraph?.alternateLocale).toStrictEqual([]);
+  });
+});

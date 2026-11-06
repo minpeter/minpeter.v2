@@ -1,5 +1,7 @@
 /** @type {import('next-sitemap').IConfig} */
 
+import { existsSync, readFileSync } from "node:fs";
+
 import { defaultLocale, locales } from "./shared/i18n/locales.js";
 
 const SITE_URL = process.env.SITE_URL || "https://minpeter.com";
@@ -64,26 +66,69 @@ const homepagePaths = new Set(
   locales.map((locale) => getLocalizedPath("/", locale))
 );
 
+const PRERENDER_MANIFEST = ".next/prerender-manifest.json";
+
+/**
+ * Every prerendered app path (`/ko/blog/x`, `/en/blog/x`, ...). Untranslated
+ * posts are not prerendered under other locales, so this is the set of
+ * editions that really exist.
+ * @returns {Set<string> | undefined}
+ */
+function readPrerenderedPaths() {
+  if (!existsSync(PRERENDER_MANIFEST)) {
+    return;
+  }
+  const manifest = JSON.parse(readFileSync(PRERENDER_MANIFEST, "utf8"));
+  return new Set(Object.keys(manifest.routes ?? {}));
+}
+
+/** @type {Set<string> | undefined | null} */
+let prerenderedPaths = null;
+
+/**
+ * Locales that have `basePath`. Only blog posts can be partial; everything else
+ * (and runs without a build, e.g. unit tests) lists all locales.
+ * @param {string} basePath
+ * @returns {readonly string[]}
+ */
+function getAvailableLocales(basePath) {
+  if (!basePath.startsWith("/blog/")) {
+    return locales;
+  }
+  if (prerenderedPaths === null) {
+    prerenderedPaths = readPrerenderedPaths();
+  }
+  const known = prerenderedPaths;
+  if (!known) {
+    return locales;
+  }
+  return locales.filter((locale) => known.has(`/${locale}${basePath}`));
+}
+
 /**
  * Generate alternateRefs for hreflang tags
  * @param {string} basePath
+ * @param {readonly string[]} [available]
  * @returns {Array}
  */
-function getAlternateRefs(basePath) {
-  const refs = locales.map((locale) => ({
+function getAlternateRefs(basePath, available = locales) {
+  const refs = available.map((locale) => ({
     href: `${SITE_URL}${getLocalizedPath(basePath, locale)}`,
     hrefIsAbsolute: true,
     hreflang: locale,
   }));
 
   // Add x-default pointing to default locale for users without language preference
-  refs.push({
-    href: `${SITE_URL}${getLocalizedPath(basePath, defaultLocale)}`,
-    hrefIsAbsolute: true,
-    hreflang: "x-default",
-  });
+  if (available.includes(defaultLocale)) {
+    refs.push({
+      href: `${SITE_URL}${getLocalizedPath(basePath, defaultLocale)}`,
+      hrefIsAbsolute: true,
+      hreflang: "x-default",
+    });
+  }
 
-  return refs;
+  // A lone self-reference is not an alternate set.
+  return available.length > 1 ? refs : [];
 }
 
 const config = {
@@ -132,7 +177,7 @@ const config = {
     }
 
     return {
-      alternateRefs: getAlternateRefs(basePath),
+      alternateRefs: getAlternateRefs(basePath, getAvailableLocales(basePath)),
       changefreq: loc === "/" ? "daily" : "weekly",
       lastmod: sitemapConfig.autoLastmod ? new Date().toISOString() : undefined,
       loc,

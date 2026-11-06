@@ -9,6 +9,7 @@ import { toFumadocsSource } from "fumadocs-mdx/runtime/server";
 import { cacheLife } from "next/cache";
 
 import { decodeSlugs } from "./decode-slugs";
+import { getTranslatedLocales, isTranslated } from "./i18n/post-locales";
 import { routing } from "./i18n/routing";
 
 export type AppLocale = (typeof routing.locales)[number];
@@ -54,6 +55,34 @@ export const blog: typeof blogLoader = Object.assign(
       )) satisfies typeof blogLoader.getPage,
   }
 );
+
+/** Locales with a real edition of the post at `slugs` (fallbacks excluded). */
+export const getPostLocales = (slugs: readonly string[]): AppLocale[] =>
+  getTranslatedLocales(
+    (locale) => blog.getPage([...slugs], locale),
+    routing.locales,
+    routing.defaultLocale
+  );
+
+/**
+ * The post in `locale`, or undefined when only a default-locale fallback
+ * exists: `/en/blog/<korean-only>` is a 404, not a duplicate Korean page.
+ */
+export const getLocalizedPost = (
+  slugs: readonly string[] | undefined,
+  locale: string
+) => {
+  const page = blog.getPage(slugs ? [...slugs] : [], locale);
+  return page && isTranslated(page, locale, routing.defaultLocale)
+    ? page
+    : undefined;
+};
+
+/** Every page fumadocs lists for `locale`, minus default-locale fallbacks. */
+export const getLocalizedPosts = (locale: string) =>
+  blog
+    .getPages(locale)
+    .filter((page) => isTranslated(page, locale, routing.defaultLocale));
 
 export type blogListType = ReturnType<typeof blog.getPages>;
 export type blogType = ReturnType<typeof blog.getPage>;

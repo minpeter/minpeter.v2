@@ -185,6 +185,9 @@ for (const {
       await expect(page.getByRole("heading", { level: 1 })).toHaveText(
         loadBalancerTitle
       );
+      // Soft navigation swaps head metadata; the previous canonical can linger
+      // for a frame, so wait for exactly the new one.
+      await expect(page.locator('link[rel="canonical"]')).toHaveCount(1);
       await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
         "href",
         `https://minpeter.com${prefix}/show/the-load-balancer`
@@ -547,8 +550,12 @@ test("blog navigation and language menu preserve the current page", async ({
   await expect(page).toHaveURL("/ja/blog");
   await expect(page.locator("html")).toHaveAttribute("lang", "ja");
   await page.getByTestId("blog-post-link").first().click();
-  await expect(page.getByTestId("blog-post-shell")).toBeVisible();
   await expect(page).toHaveURL(JAPANESE_POST_URL);
+  // The /ja list is a fresh document; under parallel load the post can stream
+  // in past the default 5s.
+  await expect(page.getByTestId("blog-post-shell")).toBeVisible({
+    timeout: 15_000,
+  });
 });
 
 test("tempfiles reports a failed download and can retry", async ({

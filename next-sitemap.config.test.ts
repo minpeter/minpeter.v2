@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import sitemapConfig from "./next-sitemap.config.js";
 import { defaultLocale, locales } from "./shared/i18n/locales.js";
@@ -48,13 +48,15 @@ describe("next-sitemap.config.js", () => {
   });
 
   it("emits one hreflang per locale plus x-default", () => {
-    const { alternateRefs } = transform("/en/blog/post");
+    // Blog posts depend on the build manifest (covered below); use a page that
+    // exists in every locale.
+    const { alternateRefs } = transform("/en/show");
 
     expect(alternateRefs.map((ref) => ref.hreflang)).toStrictEqual([
       ...locales,
       "x-default",
     ]);
-    expect(alternateRefs.at(-1)?.href).toBe("https://minpeter.com/blog/post");
+    expect(alternateRefs.at(-1)?.href).toBe("https://minpeter.com/show");
   });
 
   it("ranks every localized homepage as the top priority", () => {
@@ -75,6 +77,54 @@ describe("next-sitemap.config.js", () => {
     expect(transform(`/${hash}`)).toBeNull();
     for (const locale of locales) {
       expect(transform(`/${locale}/${hash}`)).toBeNull();
+    }
+  });
+
+  it("lists only prerendered editions of a blog post as alternates", async () => {
+    const { mkdtempSync, mkdirSync, rmSync, writeFileSync } = await import(
+      "node:fs"
+    );
+    const { tmpdir } = await import("node:os");
+    const { join } = await import("node:path");
+    const dir = mkdtempSync(join(tmpdir(), "sitemap-"));
+    mkdirSync(join(dir, ".next"));
+    writeFileSync(
+      join(dir, ".next/prerender-manifest.json"),
+      JSON.stringify({
+        routes: {
+          "/en/blog/both": {},
+          "/en/blog/no-korean": {},
+          "/ja/blog/both": {},
+          "/ja/blog/no-korean": {},
+          "/ko/blog/both": {},
+          "/ko/blog/ko-only": {},
+        },
+      })
+    );
+    const cwd = process.cwd();
+    process.chdir(dir);
+    try {
+      vi.resetModules();
+      const fresh = (await import("./next-sitemap.config.js")).default;
+      const run = (path: string) =>
+        (fresh.transform as (config: object, path: string) => SitemapEntry)(
+          {},
+          path
+        );
+
+      expect(
+        run("/ko/blog/both").alternateRefs.map((ref) => ref.hreflang)
+      ).toStrictEqual(["en", "ko", "ja", "x-default"]);
+      expect(run("/ko/blog/ko-only").alternateRefs).toStrictEqual([]);
+      // Two non-default editions still form an alternate set (no x-default).
+      expect(
+        run("/en/blog/no-korean").alternateRefs.map((ref) => ref.hreflang)
+      ).toStrictEqual(["en", "ja"]);
+      // Non-blog pages exist in every locale regardless of the manifest.
+      expect(run("/ko/show").alternateRefs).toHaveLength(4);
+    } finally {
+      process.chdir(cwd);
+      rmSync(dir, { force: true, recursive: true });
     }
   });
 });

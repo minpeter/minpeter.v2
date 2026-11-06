@@ -29,17 +29,15 @@ vi.mock(
   import("@/shared/source"),
   () =>
     ({
-      blog: {
-        getPage: vi.fn(() => ({
-          data: {
-            external_url: "https://example.com/external-post",
-            published: "2024-01-01",
-            title: "External Post",
-          },
-          slugs: ["external-post"],
-          url: "/blog/external-post",
-        })),
-      },
+      getLocalizedPost: vi.fn(() => ({
+        data: {
+          external_url: "https://example.com/external-post",
+          published: "2024-01-01",
+          title: "External Post",
+        },
+        slugs: ["external-post"],
+        url: "/blog/external-post",
+      })),
     }) as unknown as Partial<typeof sourceModule>
 );
 
