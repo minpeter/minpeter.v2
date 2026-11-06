@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { createOgImageBytes, ogImageBytesResponse } from "@/shared/og-image";
 import { getOgTitleSize, getOgTitleVisualWidth } from "@/shared/og-title";
 import { siteConfig } from "@/shared/site-config";
-import { blog } from "@/shared/source";
+import { getLocalizedPost } from "@/shared/source";
 
 const publishedIsoFormatter = new Intl.DateTimeFormat("sv-SE", {
   day: "2-digit",
@@ -17,7 +17,7 @@ async function getPostOgImage(locale: string, slug: string[]) {
   "use cache";
   cacheLife("days");
 
-  const post = blog.getPage(slug, locale);
+  const post = getLocalizedPost(slug, locale);
 
   if (!post) {
     notFound();
@@ -26,7 +26,7 @@ async function getPostOgImage(locale: string, slug: string[]) {
   const publishedIso = publishedIsoFormatter.format(post.data.published);
   const title = post.data.title ?? siteConfig.title;
   const localizedTitleWidths = ["ko", "en", "ja"].flatMap((localizedLocale) => {
-    const localizedPost = blog.getPage(slug, localizedLocale);
+    const localizedPost = getLocalizedPost(slug, localizedLocale);
     if (!localizedPost) {
       return [];
     }

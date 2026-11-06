@@ -7,7 +7,11 @@ import ExternalRedirect from "@/components/external-redirect";
 import Header from "@/components/header";
 import { MachineTranslationNotice } from "@/components/machine-translation-notice";
 import { siteConfig } from "@/shared/site-config";
-import { blog } from "@/shared/source";
+import {
+  getLocalizedPost,
+  getLocalizedPosts,
+  getPostLocales,
+} from "@/shared/source";
 import styles from "@/shared/styles/stagger-fade-in.module.css";
 import { formatDateLong } from "@/shared/utils/date";
 import {
@@ -32,8 +36,8 @@ export function generateStaticParams({
   params: { locale: string; slug: string[] };
 }) {
   const { locale } = params;
-  const pages = blog.getPages(locale);
-  return pages.map((page) => ({ slug: page.slugs }));
+  // Untranslated posts are not prerendered under other locales (they 404).
+  return getLocalizedPosts(locale).map((page) => ({ slug: page.slugs }));
 }
 
 export async function generateMetadata(
@@ -41,7 +45,7 @@ export async function generateMetadata(
 ) {
   const { slug } = await props.params;
   const [locale, t] = await Promise.all([getLocale(), getTranslations()]);
-  const page = blog.getPage(slug, locale);
+  const page = getLocalizedPost(slug, locale);
   if (!page) {
     return createNotFoundMetadata({
       description: t("notFound.description"),
@@ -65,6 +69,8 @@ export async function generateMetadata(
       alt: title,
       url: getLocalizedPath(locale, `/blog/og/${slugPath}`),
     },
+    // hreflang only for editions that exist; a Korean-only post has none.
+    languages: getPostLocales(page.slugs),
     locale,
     path: `/blog/${slugPath}`,
     title,
@@ -79,7 +85,7 @@ export async function PostBody({
 }) {
   const { locale: routeLocale, slug } = await params;
   const locale = (await getLocale()) || routeLocale;
-  const post = blog.getPage(slug, locale);
+  const post = getLocalizedPost(slug, locale);
 
   if (!post) {
     notFound();

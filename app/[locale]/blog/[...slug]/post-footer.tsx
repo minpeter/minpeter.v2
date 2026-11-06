@@ -2,7 +2,7 @@ import type { Route } from "next";
 
 import { ViewTransition } from "@/components/view-transition";
 import type { blogType } from "@/shared/source";
-import { blog } from "@/shared/source";
+import { getLocalizedPosts } from "@/shared/source";
 import { formatDateLong } from "@/shared/utils/date";
 
 import { NavLink } from "./nav-link";
@@ -24,7 +24,8 @@ export function PostFooter({
   post: NonNullable<blogType>;
   labels: PostFooterLabels;
 }) {
-  const posts = blog.getPages(locale);
+  // Prev/next stay within this locale's real editions.
+  const posts = getLocalizedPosts(locale);
   const { nextPost, previousPost } = getAdjacentPosts(
     posts,
     post.slugs.join("/")

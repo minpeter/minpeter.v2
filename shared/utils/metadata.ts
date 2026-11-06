@@ -39,11 +39,16 @@ export const getLocalizedPath = (locale: string, path: string) => {
   return `/${resolvedLocale}${resolvedPath}`;
 };
 
-const getLanguageAlternates = (path: string) => ({
-  en: getLocalizedPath("en", path),
-  ja: getLocalizedPath("ja", path),
-  ko: getLocalizedPath("ko", path),
-  "x-default": getLocalizedPath(routing.defaultLocale, path),
+const getLanguageAlternates = (
+  path: string,
+  languages: readonly LocaleCode[] = routing.locales
+) => ({
+  ...Object.fromEntries(
+    languages.map((language) => [language, getLocalizedPath(language, path)])
+  ),
+  ...(languages.includes(routing.defaultLocale)
+    ? { "x-default": getLocalizedPath(routing.defaultLocale, path) }
+    : {}),
 });
 
 interface ArticleMetadata {
@@ -74,6 +79,7 @@ export function createMetadata({
   article,
   description,
   image,
+  languages,
   locale,
   path,
   title,
@@ -82,6 +88,8 @@ export function createMetadata({
   article?: ArticleMetadata;
   description?: string;
   image?: MetadataImage;
+  /** Locales that have this page; defaults to all. Drives hreflang alternates. */
+  languages?: readonly LocaleCode[];
   locale?: LocaleCode;
   path?: string;
   title?: string;
@@ -97,7 +105,11 @@ export function createMetadata({
     ? new URL(localizedPath, canonicalOrigin).toString()
     : undefined;
   const alternateLocale = Object.entries(openGraphLocales).flatMap(
-    ([candidate, value]) => (candidate === resolvedLocale ? [] : [value])
+    ([candidate, value]) =>
+      candidate === resolvedLocale ||
+      (languages && !languages.some((language) => language === candidate))
+        ? []
+        : [value]
   );
   const resolvedImage = image
     ? {
@@ -145,7 +157,7 @@ export function createMetadata({
     alternates: path
       ? {
           canonical: canonicalUrl,
-          languages: getLanguageAlternates(path),
+          languages: getLanguageAlternates(path, languages),
         }
       : undefined,
     description: resolvedDescription,
