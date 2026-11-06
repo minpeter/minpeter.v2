@@ -20,6 +20,8 @@ const pages: Record<string, Record<string, string>> = {
     ja: "ko-only/index.mdx",
     ko: "ko-only/index.mdx",
   },
+  // No page at all for ja (e.g. an excluded draft).
+  missingJa: { en: "m/index.en.mdx", ko: "m/index.mdx" },
   // A post named like a locale must not be mistaken for a translation.
   trickyName: { en: "x/pen.mdx", ja: "x/pen.mdx", ko: "x/pen.mdx" },
 };
@@ -42,6 +44,7 @@ describe("post translation detection", () => {
     ["trickyName", ["ko"]],
     ["flat", ["ko", "en"]],
     ["external", ["ko", "en", "ja"]],
+    ["missingJa", ["ko", "en"]],
   ])("%s → %o", (key, expected) => {
     expect(
       getTranslatedLocales(resolve(key), ["ko", "en", "ja"], "ko")

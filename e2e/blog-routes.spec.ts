@@ -30,7 +30,9 @@ test.describe("blog routes found by responsive QA", () => {
       expect(response?.status()).toBe(200);
       // The streamed loading fallback shares the test id until React swaps it out.
       await expect(
-        page.locator('[data-testid="blog-post-shell"]:not([aria-busy="true"])')
+        page
+          .locator('[data-testid="blog-post-shell"]:not([aria-busy="true"])')
+          .filter({ visible: true })
       ).toBeVisible();
     });
   }

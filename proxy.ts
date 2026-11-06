@@ -37,9 +37,8 @@ export const shouldExclude = (path: string) =>
 //   bounced to the saved locale again;
 // - a shared Korean link always opens in Korean.
 const handleDetecting = createMiddleware(routing);
-// Visiting a page must not rewrite the saved preference either: only an
-// explicit language switch (the selector links to a locale-prefixed URL, which
-// the detecting branch below handles) or a page load of `/` updates it.
+// Only page loads of `/` and of locale-prefixed URLs (the language selector's
+// targets) update the saved preference; every other visit leaves it untouched.
 const handleUrlLocale = createMiddleware({
   ...routing,
   localeCookie: false,
@@ -80,20 +79,29 @@ export const foldPathCase = (path: string) =>
     (match, percentEscape?: string) => percentEscape ?? match.toLowerCase()
   );
 
+/** Static files keep their on-disk case (e.g. `/fonts/Pretendard-LICENSE.txt`). */
+const isCaseSensitivePath = (path: string) =>
+  exclusions.some((p) => path.startsWith(p)) ||
+  publicAssetPrefixes.some((p) => path.startsWith(p)) ||
+  publicAssetPaths.has(path);
+
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  if (shouldExclude(pathname)) {
-    return NextResponse.next();
+
+  // Routes are lowercase; fold `/Blog`, `/EN/blog` or `/EN/Show/OpenGraph-Image`
+  // onto one canonical URL before any exclusion. Percent-escapes are kept
+  // verbatim, so `%3A` slugs and Hangul keep their exact encoding.
+  if (!isCaseSensitivePath(pathname)) {
+    const folded = foldPathCase(pathname);
+    if (folded !== pathname) {
+      const url = request.nextUrl.clone();
+      url.pathname = folded;
+      return NextResponse.redirect(url, 308);
+    }
   }
 
-  // Routes are lowercase; fold `/Blog` or `/EN/blog` onto one canonical URL.
-  // Percent-escapes are kept verbatim, so `%3A` slugs and Hangul keep their
-  // exact encoding.
-  const folded = foldPathCase(pathname);
-  if (folded !== pathname) {
-    const url = request.nextUrl.clone();
-    url.pathname = folded;
-    return NextResponse.redirect(url, 308);
+  if (shouldExclude(pathname)) {
+    return NextResponse.next();
   }
 
   return shouldDetectLocale(request)

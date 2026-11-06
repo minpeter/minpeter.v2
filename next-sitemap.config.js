@@ -128,7 +128,7 @@ function getAlternateRefs(basePath, available = locales) {
   }
 
   // A lone self-reference is not an alternate set.
-  return refs.length > 2 ? refs : [];
+  return available.length > 1 ? refs : [];
 }
 
 const config = {

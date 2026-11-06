@@ -69,7 +69,8 @@ export async function generateMetadata(
       alt: title,
       url: getLocalizedPath(locale, `/blog/og/${slugPath}`),
     },
-    // hreflang only for editions that exist; a Korean-only post has none.
+    // hreflang lists only editions that exist; a Korean-only post lists just
+    // itself (ko + x-default).
     languages: getPostLocales(page.slugs),
     locale,
     path: `/blog/${slugPath}`,

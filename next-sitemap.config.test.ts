@@ -81,7 +81,9 @@ describe("next-sitemap.config.js", () => {
   });
 
   it("lists only prerendered editions of a blog post as alternates", async () => {
-    const { mkdtempSync, mkdirSync, writeFileSync } = await import("node:fs");
+    const { mkdtempSync, mkdirSync, rmSync, writeFileSync } = await import(
+      "node:fs"
+    );
     const { tmpdir } = await import("node:os");
     const { join } = await import("node:path");
     const dir = mkdtempSync(join(tmpdir(), "sitemap-"));
@@ -91,7 +93,9 @@ describe("next-sitemap.config.js", () => {
       JSON.stringify({
         routes: {
           "/en/blog/both": {},
+          "/en/blog/no-korean": {},
           "/ja/blog/both": {},
+          "/ja/blog/no-korean": {},
           "/ko/blog/both": {},
           "/ko/blog/ko-only": {},
         },
@@ -112,10 +116,15 @@ describe("next-sitemap.config.js", () => {
         run("/ko/blog/both").alternateRefs.map((ref) => ref.hreflang)
       ).toStrictEqual(["en", "ko", "ja", "x-default"]);
       expect(run("/ko/blog/ko-only").alternateRefs).toStrictEqual([]);
+      // Two non-default editions still form an alternate set (no x-default).
+      expect(
+        run("/en/blog/no-korean").alternateRefs.map((ref) => ref.hreflang)
+      ).toStrictEqual(["en", "ja"]);
       // Non-blog pages exist in every locale regardless of the manifest.
       expect(run("/ko/show").alternateRefs).toHaveLength(4);
     } finally {
       process.chdir(cwd);
+      rmSync(dir, { force: true, recursive: true });
     }
   });
 });

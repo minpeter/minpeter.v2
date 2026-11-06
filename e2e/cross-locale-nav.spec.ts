@@ -34,7 +34,9 @@ for (const savedLocale of ["en", "ja"] as const) {
     await expect(page.locator("html")).toHaveAttribute("lang", "ko");
     await expect(page.locator("main")).toHaveCount(1);
     await expect(
-      page.locator('[data-testid="blog-post-shell"]:not([aria-busy="true"])')
+      page
+        .locator('[data-testid="blog-post-shell"]:not([aria-busy="true"])')
+        .filter({ visible: true })
     ).toBeVisible();
     expect(pageErrors).toEqual([]);
   });

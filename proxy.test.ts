@@ -156,6 +156,7 @@ describe("Proxy case folding", () => {
     ["/BLOG/ai-sdk?q=Traefik", "/blog/ai-sdk?q=Traefik"],
     ["/blog/tiny-ko%3Awandb/X", "/blog/tiny-ko%3Awandb/x"],
     ["/Blog/%EC%95%84", "/blog/%EC%95%84"],
+    ["/EN/Show/OpenGraph-Image", "/en/show/opengraph-image"],
   ])("308-redirects %s to %s", async (from, to) => {
     const response = await proxy(
       new NextRequest(`${TEST_TARGET_DOMAIN}${from}`)
