@@ -9,7 +9,6 @@ export default defineConfig({
     // Playwright e2e lives under e2e/ and is not for Vitest.
     exclude: ["**/node_modules/**", "**/e2e/**", "**/dist/**", "**/.next/**"],
     globals: true,
-    isolate: false,
     server: {
       deps: {
         // `next` ships no "exports" map, so its extensionless deep imports
