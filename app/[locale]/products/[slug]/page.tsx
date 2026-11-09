@@ -67,7 +67,6 @@ async function ProductDetail({
     getLocale(),
     getTranslations("products"),
   ]);
-  const slides = product.renders.length + 1;
 
   const intro = (
     <header className="store-product-heading">
@@ -156,17 +155,8 @@ async function ProductDetail({
           intro={intro}
           labels={{
             media: t("mediaLabel", { product: product.name }),
-            next: t("nextImage"),
-            previous: t("previousImage"),
-            showImage: Array.from({ length: slides }, (_, index) =>
-              t("showImage", { index: String(index + 1) })
-            ),
             spin: t("spinLabel", { product: product.name }),
           }}
-          renders={product.renders.map((render) => ({
-            alt: t(`renderAlts.${render.alt}`),
-            image: render.image,
-          }))}
           spin={product.spin}
         />
       </Suspense>

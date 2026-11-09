@@ -9,13 +9,18 @@ import { useTheme } from "@/components/theme-provider";
 export function ModeToggle({ label }: { label: string }) {
   const { resolvedTheme, setTheme } = useTheme();
   const handleToggleTheme = useCallback(() => {
-    setTheme(resolvedTheme === "dark" ? "light" : "dark");
+    const isDark =
+      resolvedTheme === undefined
+        ? document.documentElement.classList.contains("dark")
+        : resolvedTheme === "dark";
+    setTheme(isDark ? "light" : "dark");
   }, [resolvedTheme, setTheme]);
 
   return (
     <button
       aria-label={label}
-      className="focus-visible:ring-ring relative flex h-6 w-6 items-center justify-center rounded focus-visible:ring-2 focus-visible:outline-none"
+      className="tap-target focus-visible:ring-ring relative ml-1 flex h-6 w-6 items-center justify-center rounded focus-visible:ring-2 focus-visible:outline-none pointer-coarse:ml-3.5"
+      data-theme-toggle=""
       onClick={handleToggleTheme}
       type="button"
     >

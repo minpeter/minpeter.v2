@@ -1,6 +1,8 @@
 import Image from "next/image";
 import { useTranslations } from "next-intl";
+import { Suspense } from "react";
 
+import { LanguageSelector } from "@/components/language-selector";
 import { Link } from "@/shared/i18n/navigation";
 
 const SECTIONS = [
@@ -45,21 +47,26 @@ export default function Page() {
       data-testid="home-page"
     >
       <header className="mb-16">
-        <Link
-          aria-label={t("homeLabel")}
-          className="home-logo-link -m-2.5 mb-6 inline-flex p-2.5 hover:opacity-60"
-          href="/"
-        >
-          <Image
-            alt=""
-            aria-hidden="true"
-            className="home-logo"
-            height={32}
-            priority
-            src="/assets/signature-mark.svg"
-            width={32}
-          />
-        </Link>
+        <div className="mb-6 flex items-center justify-between">
+          <Link
+            aria-label={t("homeLabel")}
+            className="home-logo-link -m-2.5 inline-flex p-2.5 hover:opacity-60"
+            href="/"
+          >
+            <Image
+              alt=""
+              aria-hidden="true"
+              className="home-logo"
+              height={32}
+              priority
+              src="/assets/signature-mark.svg"
+              width={32}
+            />
+          </Link>
+          <Suspense fallback={null}>
+            <LanguageSelector />
+          </Suspense>
+        </div>
         <h1 className="text-base leading-tight tracking-tight">
           <span className="text-foreground font-semibold">MINPETER</span>
           <span className="text-muted-foreground"> — {t("role")}</span>
@@ -94,10 +101,10 @@ export default function Page() {
         >
           {t("socialTitle")}
         </h2>
-        <nav aria-label={t("socialLabel")} className="flex flex-col gap-3">
+        <nav aria-label={t("socialLabel")} className="flex flex-col gap-4">
           {SOCIAL_LINKS.map(({ href, label, slug }) => (
             <a
-              className="home-social-link group"
+              className="home-social-link tap-target group"
               href={href}
               key={href}
               rel="noreferrer"

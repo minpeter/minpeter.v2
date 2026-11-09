@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { Suspense } from "react";
 
 import { LanguageSelector } from "@/components/language-selector";
 
@@ -43,7 +44,11 @@ export function NotFoundPage({
               width={32}
             />
           </a>
-          {showLanguageSelector ? <LanguageSelector /> : null}
+          {showLanguageSelector ? (
+            <Suspense fallback={null}>
+              <LanguageSelector />
+            </Suspense>
+          ) : null}
         </nav>
         <div className="showcase-intro">
           <p className="showcase-kicker">404</p>
@@ -54,7 +59,7 @@ export function NotFoundPage({
 
       <div className="resume-message">
         <a className="resume-home-link tap-target mt-0" href={backHref}>
-          {backLabel} <span aria-hidden="true">↗</span>
+          {backLabel} <span aria-hidden="true">→</span>
         </a>
       </div>
     </section>

@@ -20,8 +20,10 @@ import {
   KEYCAP_OPTIONS,
 } from "@/shared/keyboard-customization";
 
-import { ProductCustomizer } from "./product-customizer";
-import type { ProductGalleryProps } from "./product-gallery";
+import {
+  ProductCustomizer,
+  type ProductCustomizerProps,
+} from "./product-customizer";
 
 vi.mock("next/navigation", () => ({
   useSearchParams: () => new URLSearchParams(window.location.search),
@@ -66,7 +68,7 @@ vi.mock("@/components/product-spin", async () => {
       onLoadStateChange: (
         state: "loading" | "ready" | "partial" | "error"
       ) => void;
-      spin: ProductGalleryProps["spin"];
+      spin: ProductCustomizerProps["spin"];
     }) => {
       const instance = useId();
       const rotatePersonal = () => onAngleChange(150);
@@ -129,18 +131,11 @@ vi.mock("@/components/product-spin", async () => {
   };
 });
 
-const props: ProductGalleryProps = {
+const props: ProductCustomizerProps = {
   labels: {
     media: "Media",
-    next: "Next",
-    previous: "Previous",
-    showImage: ["First", "Second", "Third", "Fourth", "Fifth"],
     spin: "Personal spin",
   },
-  renders: Array.from({ length: 4 }, (_, index) => ({
-    alt: `Unused CAD fixture ${index + 1}`,
-    image: { height: 800, src: `/cad-${index}.webp`, width: 1200 },
-  })),
   spin: {
     basePath: "/personal",
     defaultFrame: 0,
@@ -238,7 +233,7 @@ describe("ProductCustomizer availability and selection", () => {
         (_, index) =>
           `${basePath}/frame_${String(index * 30).padStart(3, "0")}.webp?v=${"a".repeat(64)}`
       );
-      const gallery: ProductGalleryProps = {
+      const gallery: ProductCustomizerProps = {
         ...props,
         spin: {
           ...props.spin,
@@ -372,18 +367,6 @@ describe("ProductCustomizer availability and selection", () => {
           ".store-media-arrow, .store-media-dot, .store-media-dots, .store-media-render"
         )
       ).toHaveLength(0);
-      expect(
-        screen.queryByRole("button", { name: props.labels.next })
-      ).toBeNull();
-      expect(
-        screen.queryByRole("button", { name: props.labels.previous })
-      ).toBeNull();
-      for (const label of props.labels.showImage) {
-        expect(screen.queryByRole("button", { name: label })).toBeNull();
-      }
-      for (const cad of props.renders) {
-        expect(screen.queryByAltText(cad.alt)).toBeNull();
-      }
       expect(screen.queryByTestId("customization-pending")).toBeNull();
       expect(screen.getAllByRole("radio")).toHaveLength(14);
     }

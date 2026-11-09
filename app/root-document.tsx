@@ -5,6 +5,7 @@ import { NextProvider } from "fumadocs-core/framework/next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { NuqsAdapter } from "nuqs/adapters/next";
 import type { ReactNode } from "react";
+import { preload } from "react-dom";
 
 import Footer from "@/components/footer";
 import { ThemeFavicon } from "@/components/theme-favicon";
@@ -32,6 +33,8 @@ export function RootDocument({ children, lang }: RootDocumentProps) {
   const isProduction = env.NODE_ENV === "production";
   const isVercel = !!env.VERCEL_ENV;
 
+  preload("/fonts/deferred-fonts.css", { as: "style" });
+
   return (
     <html data-scroll-behavior="smooth" lang={lang} suppressHydrationWarning>
       <head>
@@ -49,14 +52,11 @@ export function RootDocument({ children, lang }: RootDocumentProps) {
           rel="icon"
           type="image/svg+xml"
         />
-        <link
-          as="style"
-          href="/fonts/deferred-fonts.css"
-          id="deferred-fonts"
-          rel="preload"
-        />
         <noscript>
           <link href="/fonts/deferred-fonts.css" rel="stylesheet" />
+          {lang === "ko" ? (
+            <link href="/fonts/pretendard.css" rel="stylesheet" />
+          ) : null}
         </noscript>
       </head>
       <body
@@ -68,7 +68,7 @@ export function RootDocument({ children, lang }: RootDocumentProps) {
         suppressHydrationWarning
       >
         <NextProvider>
-          <ThemeProvider defaultTheme="light" enableSystem>
+          <ThemeProvider defaultTheme="light">
             <ThemeFavicon />
             <NuqsAdapter>
               <main className="relative mx-auto flex w-full max-w-4xl flex-1 flex-col px-5 font-sans sm:px-8 lg:px-12">

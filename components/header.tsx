@@ -48,13 +48,15 @@ export default function Header({
             text={link.text}
           />
         ) : (
-          <Link href="/">minpeter</Link>
+          <Link className="tap-target" href="/">
+            minpeter
+          </Link>
         )}
         <div className="text-foreground/80 flex items-center gap-2">
           {rightContent}
           {rightContent ? <span>·</span> : null}
           <Suspense fallback={null}>
-            <LanguageSelector />
+            <LanguageSelector className="in-[.blog-post-page]:text-[0.8125rem]" />
           </Suspense>
         </div>
       </div>

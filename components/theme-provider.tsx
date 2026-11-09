@@ -10,33 +10,25 @@ import {
   useState,
 } from "react";
 
-const STORAGE_KEY = "theme";
-const MEDIA_QUERY = "(prefers-color-scheme: dark)";
+import { readStoredTheme } from "@/shared/theme-init";
 
-type Theme = "light" | "dark" | "system";
-type ResolvedTheme = "light" | "dark";
+const STORAGE_KEY = "theme";
+
+type Theme = "light" | "dark";
 
 interface ThemeContextValue {
-  resolvedTheme: ResolvedTheme | undefined;
+  resolvedTheme: Theme | undefined;
   setTheme: (theme: Theme | string) => void;
   theme: Theme | undefined;
 }
 
 const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
 
-function getSystemTheme(): ResolvedTheme {
-  return window.matchMedia(MEDIA_QUERY).matches ? "dark" : "light";
-}
-
-function applyResolvedTheme(resolved: ResolvedTheme) {
+function applyResolvedTheme(resolved: Theme) {
   const root = document.documentElement;
   root.classList.remove("light", "dark");
   root.classList.add(resolved);
   root.style.colorScheme = resolved;
-}
-
-function resolveTheme(theme: Theme): ResolvedTheme {
-  return theme === "system" ? getSystemTheme() : theme;
 }
 
 export function ThemeProvider({
@@ -44,63 +36,35 @@ export function ThemeProvider({
   defaultTheme = "light",
 }: {
   children: ReactNode;
-  /** Kept for call-site compatibility with former next-themes props. */
-  attribute?: string;
   defaultTheme?: Theme;
-  enableSystem?: boolean;
 }) {
   const [theme, setThemeState] = useState<Theme | undefined>(undefined);
-  const [resolvedTheme, setResolvedTheme] = useState<ResolvedTheme | undefined>(
-    undefined
-  );
 
   useEffect(() => {
     let initial: Theme = defaultTheme;
     try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored === "light" || stored === "dark" || stored === "system") {
-        initial = stored;
-      }
+      initial = readStoredTheme(defaultTheme);
     } catch {
       // ignore
     }
-    const resolved = resolveTheme(initial);
     setThemeState(initial);
-    setResolvedTheme(resolved);
-    applyResolvedTheme(resolved);
+    applyResolvedTheme(initial);
   }, [defaultTheme]);
 
-  useEffect(() => {
-    if (theme !== "system") {
-      return;
-    }
-    const media = window.matchMedia(MEDIA_QUERY);
-    const onChange = () => {
-      const resolved = getSystemTheme();
-      setResolvedTheme(resolved);
-      applyResolvedTheme(resolved);
-    };
-    media.addEventListener("change", onChange);
-    return () => media.removeEventListener("change", onChange);
-  }, [theme]);
-
   const setTheme = useCallback((next: Theme | string) => {
-    const value: Theme =
-      next === "dark" || next === "light" || next === "system" ? next : "light";
+    const value: Theme = next === "dark" ? "dark" : "light";
     try {
       localStorage.setItem(STORAGE_KEY, value);
     } catch {
       // ignore
     }
-    const resolved = resolveTheme(value);
     setThemeState(value);
-    setResolvedTheme(resolved);
-    applyResolvedTheme(resolved);
+    applyResolvedTheme(value);
   }, []);
 
   const value = useMemo(
-    () => ({ resolvedTheme, setTheme, theme }),
-    [resolvedTheme, setTheme, theme]
+    () => ({ resolvedTheme: theme, setTheme, theme }),
+    [setTheme, theme]
   );
 
   return (

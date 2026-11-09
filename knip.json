@@ -1,0 +1,14 @@
+{
+  "$schema": "./node_modules/knip/schema.json",
+  "entry": [
+    "doctor.config.ts",
+    "components/ui/aspect-ratio.tsx",
+    "components/ui/typography.tsx"
+  ],
+  "ignore": ["public/fonts/**"],
+  "ignoreIssues": {
+    "components/ui/aspect-ratio.tsx": ["exports"],
+    "components/ui/typography.tsx": ["exports"],
+    "shared/i18n/navigation.ts": ["exports"]
+  }
+}

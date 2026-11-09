@@ -12,7 +12,6 @@ import {
 } from "react";
 
 import { KeycapThumbnail } from "@/components/keycap-thumbnail";
-import type { ProductGalleryProps } from "@/components/product-gallery";
 import { ProductSpin } from "@/components/product-spin";
 import {
   combinationToSpin,
@@ -32,7 +31,18 @@ import retailSilhouettes from "@/shared/maru60-retail-silhouettes.json";
 import spinSilhouettes from "@/shared/maru60-spin-silhouettes.json";
 
 import { getSpinLoader } from "@/shared/product-spin-loader";
+import type { ProductSpin as ProductSpinData } from "@/shared/products";
 import { useKeyboardCustomizationQuery } from "@/shared/use-keyboard-customization-query";
+
+export interface ProductCustomizerProps {
+  details?: ReactNode;
+  intro?: ReactNode;
+  labels: {
+    media: string;
+    spin: string;
+  };
+  spin: ProductSpinData;
+}
 
 const RETAIL_OUTLINES = Object.values(retailSilhouettes);
 const SPIN_OUTLINES = Object.values(spinSilhouettes);
@@ -40,7 +50,7 @@ const SPIN_OUTLINES = Object.values(spinSilhouettes);
 function geometryRevision(
   personal: boolean,
   combination: ValidatedCombination | null,
-  personalSpin?: ProductGalleryProps["spin"]
+  personalSpin?: ProductCustomizerProps["spin"]
 ) {
   if (personal && personalSpin?.geometryRevision) {
     return personalSpin.geometryRevision;
@@ -147,7 +157,7 @@ function SelectionPreview({
   personal: boolean;
   unsupported: boolean;
   combination: ValidatedCombination | null;
-  gallery: ProductGalleryProps;
+  gallery: ProductCustomizerProps;
   angle: number;
   onAngleChange: (angle: number) => void;
 }) {
@@ -203,9 +213,7 @@ function SelectionPreview({
 }
 
 /** Personal and retail appearances share selectors, never interchangeable renders. */
-export function ProductCustomizer(
-  props: ProductGalleryProps & { intro?: ReactNode; details?: ReactNode }
-) {
+export function ProductCustomizer(props: ProductCustomizerProps) {
   const t = useTranslations("products.customization");
   const [selection, setSelection] = useKeyboardCustomizationQuery();
   const lastRetail = useRef<{ housing: HousingId; keycaps: KeycapId }>({

@@ -54,16 +54,8 @@
 
   .fieldnotes-nav-tools {
     display: flex;
-    gap: 0.125rem;
+    gap: 0.25rem;
     align-items: center;
-    font-size: 0.6875rem;
-    line-height: 1.26;
-    color: hsl(var(--muted-foreground));
-  }
-
-  .fieldnotes-nav-tools .fieldnotes-rss,
-  .fieldnotes-nav-tools button {
-    padding: 0.25rem 0.375rem;
     font-size: 0.6875rem;
     line-height: 1.26;
     color: hsl(var(--muted-foreground));
@@ -72,11 +64,6 @@
   .fieldnotes-item-title svg {
     width: 0.8rem;
     height: 0.8rem;
-  }
-
-  .fieldnotes-nav-tools .fieldnotes-rss svg {
-    width: 0.75rem;
-    height: 0.75rem;
   }
 
   .fieldnotes-search {

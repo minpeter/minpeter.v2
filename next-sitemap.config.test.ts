@@ -7,6 +7,7 @@ import { routing } from "./shared/i18n/routing";
 interface SitemapEntry {
   alternateRefs: { href: string; hreflang: string }[];
   changefreq: string;
+  lastmod?: string;
   loc: string;
   priority: number;
 }
@@ -122,9 +123,218 @@ describe("next-sitemap.config.js", () => {
       ).toStrictEqual(["en", "ja"]);
       // Non-blog pages exist in every locale regardless of the manifest.
       expect(run("/ko/show").alternateRefs).toHaveLength(4);
+      expect(run("/ko/show").lastmod).toBeUndefined();
     } finally {
       process.chdir(cwd);
       rmSync(dir, { force: true, recursive: true });
+    }
+  });
+
+  it("derives blog post lastmod from MDX frontmatter instead of build time", async () => {
+    const { mkdtempSync, mkdirSync, rmSync, writeFileSync } = await import(
+      "node:fs"
+    );
+    const { tmpdir } = await import("node:os");
+    const { join } = await import("node:path");
+    const dir = mkdtempSync(join(tmpdir(), "sitemap-lastmod-"));
+    mkdirSync(join(dir, "content/blog/sample-post"), { recursive: true });
+    mkdirSync(join(dir, "content/blog/(awa)/grouped-post"), {
+      recursive: true,
+    });
+    writeFileSync(
+      join(dir, "content/blog/sample-post/index.mdx"),
+      "---\npublished: 2024-12-22 21:16:00\ntitle: Sample\n---\nBody\n"
+    );
+    writeFileSync(
+      join(dir, "content/blog/(awa)/grouped-post/index.mdx"),
+      "---\npublished: 2025-03-10 09:00:00\nlastModified: 2025-04-02 09:00:00\ntitle: Grouped\n---\nBody\n"
+    );
+    const cwd = process.cwd();
+    process.chdir(dir);
+    try {
+      vi.resetModules();
+      const fresh = (await import("./next-sitemap.config.js")).default;
+      const run = (path: string) =>
+        (fresh.transform as (config: object, path: string) => SitemapEntry)(
+          { autoLastmod: true },
+          path
+        );
+
+      expect(run("/ko/blog/sample-post").lastmod).toBe(
+        "2024-12-22T12:16:00.000Z"
+      );
+      expect(run("/en/blog/sample-post").lastmod).toBe(
+        "2024-12-22T12:16:00.000Z"
+      );
+      expect(run("/en/blog/grouped-post").lastmod).toBe(
+        "2025-04-02T00:00:00.000Z"
+      );
+      expect(run("/en/resume").lastmod).toBeUndefined();
+    } finally {
+      process.chdir(cwd);
+      rmSync(dir, { force: true, recursive: true });
+    }
+  });
+
+  it("picks the later of Git commit date and frontmatter published date", async () => {
+    const { execFileSync } = await import("node:child_process");
+    const { mkdtempSync, mkdirSync, rmSync, writeFileSync } = await import(
+      "node:fs"
+    );
+    const { tmpdir } = await import("node:os");
+    const { join } = await import("node:path");
+    const dir = mkdtempSync(join(tmpdir(), "sitemap-git-lastmod-"));
+    mkdirSync(join(dir, "content/blog/edited-later"), { recursive: true });
+    mkdirSync(join(dir, "content/blog/backfilled"), { recursive: true });
+    mkdirSync(join(dir, "content/blog/한글-슬러그"), { recursive: true });
+    mkdirSync(join(dir, "content/blog/series/한글-하위"), { recursive: true });
+    mkdirSync(join(dir, "content/blog/(outer)/(inner)/grouped-post"), {
+      recursive: true,
+    });
+    writeFileSync(
+      join(dir, "content/blog/edited-later/index.mdx"),
+      "---\npublished: 2024-01-10 09:00:00\ntitle: Edited Later\n---\nBody\n"
+    );
+    writeFileSync(
+      join(dir, "content/blog/backfilled/index.mdx"),
+      "---\npublished: 2026-06-15 09:00:00\ntitle: Backfilled\n---\nBody\n"
+    );
+    writeFileSync(
+      join(dir, "content/blog/한글-슬러그/index.mdx"),
+      "---\npublished: 2024-02-01 09:00:00\ntitle: Hangul\n---\nBody\n"
+    );
+    writeFileSync(
+      join(dir, "content/blog/series/한글-하위/index.mdx"),
+      "---\npublished: 2024-03-01 09:00:00\ntitle: Nested Hangul\n---\nBody\n"
+    );
+    writeFileSync(
+      join(dir, "content/blog/(outer)/(inner)/grouped-post/index.mdx"),
+      "---\npublished: 2024-04-01 09:00:00\ntitle: Grouped Post\n---\nBody\n"
+    );
+    const gitEnv = {
+      ...process.env,
+      GIT_AUTHOR_DATE: "2025-05-01T12:00:00Z",
+      GIT_AUTHOR_EMAIL: "test@example.com",
+      GIT_AUTHOR_NAME: "Test",
+      GIT_COMMITTER_DATE: "2025-05-01T12:00:00Z",
+      GIT_COMMITTER_EMAIL: "test@example.com",
+      GIT_COMMITTER_NAME: "Test",
+    };
+    execFileSync("git", ["init"], { cwd: dir, env: gitEnv, stdio: "ignore" });
+    execFileSync("git", ["config", "core.quotePath", "true"], {
+      cwd: dir,
+      env: gitEnv,
+      stdio: "ignore",
+    });
+    execFileSync("git", ["add", "."], {
+      cwd: dir,
+      env: gitEnv,
+      stdio: "ignore",
+    });
+    execFileSync("git", ["commit", "-m", "initial"], {
+      cwd: dir,
+      env: gitEnv,
+      stdio: "ignore",
+    });
+
+    const cwd = process.cwd();
+    process.chdir(dir);
+    try {
+      vi.resetModules();
+      const fresh = (await import("./next-sitemap.config.js")).default;
+      const run = (path: string) =>
+        (fresh.transform as (config: object, path: string) => SitemapEntry)(
+          { autoLastmod: true },
+          path
+        );
+
+      // Git commit (2025-05-01) is newer than published (2024-01-10 KST)
+      expect(run("/ko/blog/edited-later").lastmod).toBe(
+        "2025-05-01T12:00:00.000Z"
+      );
+      // Published (2026-06-15 KST = 00:00Z) is newer than Git commit (2025-05-01)
+      expect(run("/ko/blog/backfilled").lastmod).toBe(
+        "2026-06-15T00:00:00.000Z"
+      );
+      // Non-ASCII and percent-encoded slugs (including nested paths) match Git commit history even with core.quotePath=true
+      expect(run(`/ko/blog/${encodeURIComponent("한글-슬러그")}`).lastmod).toBe(
+        "2025-05-01T12:00:00.000Z"
+      );
+      expect(
+        run(`/ko/blog/series/${encodeURIComponent("한글-하위")}`).lastmod
+      ).toBe("2025-05-01T12:00:00.000Z");
+      // Consecutive Fumadocs route-group folders ((outer)/(inner)) strip cleanly
+      expect(run("/ko/blog/grouped-post").lastmod).toBe(
+        "2025-05-01T12:00:00.000Z"
+      );
+      // %2F inside a single segment must stay encoded and never alias a nested post
+      expect(
+        run(`/ko/blog/series%2F${encodeURIComponent("한글-하위")}`).lastmod
+      ).toBeUndefined();
+    } finally {
+      process.chdir(cwd);
+      rmSync(dir, { force: true, recursive: true });
+    }
+  });
+
+  it("ignores Git dates in shallow clones, where the boundary commit claims every file", async () => {
+    const { execFileSync } = await import("node:child_process");
+    const { mkdtempSync, mkdirSync, rmSync, writeFileSync } = await import(
+      "node:fs"
+    );
+    const { tmpdir } = await import("node:os");
+    const { join } = await import("node:path");
+    const root = mkdtempSync(join(tmpdir(), "sitemap-shallow-lastmod-"));
+    const origin = join(root, "origin");
+    const clone = join(root, "clone");
+    mkdirSync(join(origin, "content/blog/old-post"), { recursive: true });
+    writeFileSync(
+      join(origin, "content/blog/old-post/index.mdx"),
+      "---\npublished: 2024-01-10 09:00:00\ntitle: Old\n---\nBody\n"
+    );
+    const commit = (message: string, date: string) => {
+      const env = {
+        ...process.env,
+        GIT_AUTHOR_DATE: date,
+        GIT_AUTHOR_EMAIL: "test@example.com",
+        GIT_AUTHOR_NAME: "Test",
+        GIT_COMMITTER_DATE: date,
+        GIT_COMMITTER_EMAIL: "test@example.com",
+        GIT_COMMITTER_NAME: "Test",
+      };
+      execFileSync("git", ["add", "."], { cwd: origin, env, stdio: "ignore" });
+      execFileSync("git", ["commit", "-m", message], {
+        cwd: origin,
+        env,
+        stdio: "ignore",
+      });
+    };
+    execFileSync("git", ["init"], { cwd: origin, stdio: "ignore" });
+    commit("old post", "2024-01-10T00:00:00Z");
+    writeFileSync(join(origin, "unrelated.txt"), "later\n");
+    commit("unrelated", "2026-11-01T00:00:00Z");
+    execFileSync(
+      "git",
+      ["clone", "--quiet", "--depth=1", `file://${origin}`, clone],
+      { stdio: "ignore" }
+    );
+
+    const cwd = process.cwd();
+    process.chdir(clone);
+    try {
+      vi.resetModules();
+      const fresh = (await import("./next-sitemap.config.js")).default;
+      const run = (path: string) =>
+        (fresh.transform as (config: object, path: string) => SitemapEntry)(
+          {},
+          path
+        );
+
+      // A depth-1 clone reports old-post as added on 2026-11-01; frontmatter wins.
+      expect(run("/ko/blog/old-post").lastmod).toBe("2024-01-10T00:00:00.000Z");
+    } finally {
+      process.chdir(cwd);
+      rmSync(root, { force: true, recursive: true });
     }
   });
 });

@@ -5,6 +5,7 @@ import { NotFoundPage } from "@/components/not-found-page";
 import {
   createNotFoundMetadata,
   getLocalizedPath,
+  resolveLocale,
 } from "@/shared/utils/metadata";
 
 import "./globals.css";
@@ -21,7 +22,9 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function GlobalNotFound() {
-  const [locale, t] = await Promise.all([getLocale(), getTranslations()]);
+  const rawLocale = await getLocale();
+  const locale = resolveLocale(rawLocale);
+  const t = await getTranslations({ locale });
 
   return (
     <RootDocument lang={locale}>

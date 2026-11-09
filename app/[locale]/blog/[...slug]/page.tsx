@@ -2,10 +2,12 @@ import { DocsBody } from "fumadocs-ui/page";
 import { notFound } from "next/navigation";
 import { getLocale, getTranslations } from "next-intl/server";
 import { Suspense } from "react";
+import { preload } from "react-dom";
 
 import ExternalRedirect from "@/components/external-redirect";
 import Header from "@/components/header";
 import { MachineTranslationNotice } from "@/components/machine-translation-notice";
+import { PretendardFontLoader } from "@/components/pretendard-font-loader";
 import { siteConfig } from "@/shared/site-config";
 import {
   getLocalizedPost,
@@ -53,7 +55,7 @@ export async function generateMetadata(
     });
   }
 
-  const slugPath = slug.join("/");
+  const slugPath = page.slugs.join("/");
   const title = page.data.title ?? siteConfig.title;
 
   return createMetadata({
@@ -92,6 +94,10 @@ export async function PostBody({
     notFound();
   }
 
+  if (locale === "ko") {
+    preload("/fonts/pretendard.css", { as: "style" });
+  }
+
   const t = await getTranslations();
 
   if (post.data.external_url) {
@@ -104,6 +110,7 @@ export async function PostBody({
         )}
         data-testid="blog-post-shell"
       >
+        {locale === "ko" ? <PretendardFontLoader /> : null}
         <Header
           link={{ href: "/blog", text: t("backToBlog") }}
           title={post.data.title}
@@ -121,6 +128,7 @@ export async function PostBody({
       className={cn(styles.stagger_container, styles.post, "blog-post-page")}
       data-testid="blog-post-shell"
     >
+      {locale === "ko" ? <PretendardFontLoader /> : null}
       <Header
         description={formatDateLong(post.data.published)}
         link={{ href: "/blog", text: t("backToBlog") }}

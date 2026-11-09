@@ -1,8 +1,4 @@
 import type { StaticImageData } from "next/image";
-import rule60Assembled from "./assets/products/rule60-render-assembled.webp";
-import rule60Exploded from "./assets/products/rule60-render-exploded.webp";
-import rule60Top from "./assets/products/rule60-render-top.webp";
-import rule60Underside from "./assets/products/rule60-render-underside.webp";
 import rule60SpinPoster from "./assets/products/rule60-spin-poster.webp";
 import {
   personalManifestToSpin,
@@ -11,13 +7,6 @@ import {
 
 /** Message key under `products.items`. */
 type ProductKey = "rule60";
-
-/** Message key under `products.renderAlts`. */
-type ProductRenderAlt =
-  | "rule60Assembled"
-  | "rule60Exploded"
-  | "rule60Top"
-  | "rule60Underside";
 
 /** Message key under `products.items.<key>.details`, in display order. */
 type ProductDetail =
@@ -50,7 +39,7 @@ export interface ProductSpin {
  * 1200×630 link-preview media served from `public/assets`: a PNG still (`og:image`), the turntable MP4
  * (`og:video`), a looping GIF of it, and a player page for X's player card.
  */
-export interface ProductPreview {
+interface ProductPreview {
   image: string;
   video: { animatedImage: string; player: string; url: string };
 }
@@ -62,8 +51,6 @@ export interface Product {
   key: ProductKey;
   name: string;
   preview?: ProductPreview;
-  /** Extra gallery images after the turntable. */
-  renders: readonly { alt: ProductRenderAlt; image: StaticImageData }[];
   slug: string;
   sourceHref: string;
   spin: ProductSpin;
@@ -89,12 +76,6 @@ export const PRODUCTS: readonly Product[] = [
         url: "/assets/products/rule60-hhkb-unibody/og.mp4",
       },
     },
-    renders: [
-      { alt: "rule60Assembled", image: rule60Assembled },
-      { alt: "rule60Top", image: rule60Top },
-      { alt: "rule60Exploded", image: rule60Exploded },
-      { alt: "rule60Underside", image: rule60Underside },
-    ],
     slug: "maru60",
     sourceHref: "https://github.com/minpeter/maru60/pull/1",
     spin: validatedPersonalManifest

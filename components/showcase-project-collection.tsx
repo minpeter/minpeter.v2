@@ -1,6 +1,8 @@
 import { GitHubLogoIcon, LockClosedIcon } from "@radix-ui/react-icons";
 import Image, { type StaticImageData } from "next/image";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
+
+import { cn } from "@/shared/utils/tailwind";
 
 import { ShowcaseDetailHeader } from "./showcase-detail-header";
 
@@ -30,7 +32,7 @@ export async function ShowcaseProjectCollection({
   projects,
   title,
 }: ShowcaseProjectCollectionProps) {
-  const t = await getTranslations();
+  const [locale, t] = await Promise.all([getLocale(), getTranslations()]);
 
   return (
     <section className="showcase-page" data-testid="showcase-detail-shell">
@@ -85,7 +87,7 @@ export async function ShowcaseProjectCollection({
               <h2 className="text-foreground/90 text-[0.9375rem] leading-snug">
                 {project.href ? (
                   <a
-                    className="group hover:bg-secondary focus-visible:outline-ring -mx-2 -my-1 flex items-center justify-between gap-4 rounded-sm px-2 py-1 transition-colors focus-visible:outline-2"
+                    className="group hover:bg-secondary focus-visible:outline-ring -mx-2 -my-1 flex items-center justify-between gap-4 rounded-sm px-2 py-1 transition-colors focus-visible:outline-2 pointer-coarse:-my-3.5 pointer-coarse:py-3.5"
                     href={project.href}
                     rel="noreferrer"
                     target="_blank"
@@ -104,8 +106,13 @@ export async function ShowcaseProjectCollection({
                   </span>
                 )}
               </h2>
-              <div className="project-screen-row mt-2 flex items-start gap-4">
-                <div className="min-w-0 flex-1">
+              <div className="project-screen-row mt-2 flex items-start gap-3 sm:gap-4">
+                <div
+                  className={cn(
+                    "min-w-0 flex-1 wrap-break-word",
+                    locale === "ko" && "break-keep"
+                  )}
+                >
                   {project.href && project.label ? (
                     <p className="text-muted-foreground text-[0.6875rem]">
                       {project.label}
@@ -116,7 +123,7 @@ export async function ShowcaseProjectCollection({
                   </p>
                   {project.details ? (
                     <details className="text-muted-foreground mt-2 text-[0.6875rem]">
-                      <summary className="hover:text-foreground focus-visible:outline-ring w-fit cursor-pointer rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2">
+                      <summary className="tap-target hover:text-foreground focus-visible:outline-ring w-fit cursor-pointer rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2">
                         {t("showcase.connectionSettings")}
                       </summary>
                       <dl className="mt-3 space-y-2 leading-relaxed">

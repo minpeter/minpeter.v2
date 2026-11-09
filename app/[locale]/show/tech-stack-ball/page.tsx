@@ -4,18 +4,20 @@ import { Suspense } from "react";
 
 import { ShowcaseDetailHeader } from "@/components/showcase-detail-header";
 import { Skeleton } from "@/components/ui/skeleton";
-import { createMetadata } from "@/shared/utils/metadata";
+import { createMetadata, createSectionImage } from "@/shared/utils/metadata";
 
 import { PlaygroundWrapper } from "./playground-wrapper";
 
 export async function generateMetadata(): Promise<Metadata> {
   const [locale, t] = await Promise.all([getLocale(), getTranslations()]);
+  const title = `minpeter | ${t("showcase.items.techStack.title")}`;
 
   return createMetadata({
     description: t("showcase.items.techStack.summary"),
+    image: createSectionImage(locale, "/show/tech-stack-ball", title),
     locale,
     path: "/show/tech-stack-ball",
-    title: "minpeter | tech stack ball",
+    title,
   });
 }
 

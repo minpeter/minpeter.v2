@@ -95,9 +95,17 @@
     --radius: 0.5rem;
   }
 
-  /* Product store pages are always dark, like a lit display case (see products.css). */
+  /* Product store pages are always dark, like a lit display case (see products.css).
+     Ignore hidden React <Activity> trees retained during soft navigation. */
   .dark,
-  :root:has([data-store]) {
+  :root:has(
+    [data-store]:not(
+        [style*="display: none"],
+        [style*="display:none"],
+        [style*="display: none"] *,
+        [style*="display:none"] *
+      )
+  ) {
     --scroll-bar-color: #2b2b2b;
 
     --sh-class: #96c3ff;

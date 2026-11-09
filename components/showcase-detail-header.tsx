@@ -30,7 +30,7 @@ export function ShowcaseDetailHeader({
       <nav aria-label={navigationLabel} className="fieldnotes-nav">
         <Link
           aria-label={backLabel}
-          className="fieldnotes-logo-link"
+          className="fieldnotes-logo-link tap-target"
           href={href}
         >
           <Image

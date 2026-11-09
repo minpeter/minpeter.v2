@@ -25,11 +25,14 @@ const renderFooter = async (locale: string) => render(await Footer({ locale }));
 
 describe("components/footer.tsx", () => {
   it("labels itself from the message catalog instead of a local map", async () => {
-    await renderFooter("en");
+    const { container } = await renderFooter("en");
 
     expect(screen.getByRole("link", { name: "notes" })).toBeDefined();
     expect(screen.getByRole("link", { name: "source" })).toBeDefined();
     expect(screen.getByRole("button", { name: "Toggle theme" })).toBeDefined();
+    expect(container.querySelector("p")?.textContent).toContain(
+      "Woonggi Min · notes / source"
+    );
   });
 
   it("prefixes the notes link for non-default locales only", async () => {

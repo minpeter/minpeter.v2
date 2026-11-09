@@ -2,19 +2,21 @@ import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 
 import { ShowcaseProjectCollection } from "@/components/showcase-project-collection";
-import { createMetadata } from "@/shared/utils/metadata";
+import { createMetadata, createSectionImage } from "@/shared/utils/metadata";
 
 export async function generateMetadata(): Promise<Metadata> {
   const [locale, t] = await Promise.all([
     getLocale(),
     getTranslations("showcase.items.wrench"),
   ]);
+  const title = `minpeter | ${t("title")}`;
 
   return createMetadata({
     description: t("summary"),
+    image: createSectionImage(locale, "/show/project-wrench", title),
     locale,
     path: "/show/project-wrench",
-    title: `minpeter | ${t("title")}`,
+    title,
   });
 }
 

@@ -60,8 +60,24 @@ interface ArticleMetadata {
 
 interface MetadataImage {
   alt: string;
+  twitterUrl?: string;
   url: string;
 }
+
+export const createSectionImage = (
+  locale: string,
+  sectionPath: `/${string}`,
+  alt: string
+): MetadataImage => {
+  const resolvedLocale = resolveLocale(locale);
+  const normalized = normalizePath(sectionPath);
+
+  return {
+    alt,
+    twitterUrl: `/${resolvedLocale}${normalized}/twitter-image`,
+    url: `/${resolvedLocale}${normalized}/opengraph-image`,
+  };
+};
 
 /** A 1200x630 MP4 clip plus its link-preview companions, all paths under `public/`. */
 interface MetadataVideo {
@@ -120,6 +136,13 @@ export function createMetadata({
         width: ogImageSize.width,
       }
     : undefined;
+  const resolvedTwitterImage =
+    image && resolvedImage
+      ? {
+          ...resolvedImage,
+          url: image.twitterUrl ?? image.url,
+        }
+      : undefined;
   const sharedOpenGraph = {
     alternateLocale,
     description: resolvedDescription,
@@ -193,7 +216,7 @@ export function createMetadata({
         : { card: "summary_large_image" }),
       creator: "@minpeter",
       description: resolvedDescription,
-      ...(resolvedImage ? { images: resolvedImage } : {}),
+      ...(resolvedTwitterImage ? { images: resolvedTwitterImage } : {}),
       title,
     },
   };

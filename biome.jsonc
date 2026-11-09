@@ -6,6 +6,9 @@
     "ultracite/biome/react",
     "ultracite/biome/vitest"
   ],
+  "files": {
+    "includes": ["!public/fonts/*.css"]
+  },
   "linter": {
     "rules": {
       "suspicious": {

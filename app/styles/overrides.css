@@ -1,4 +1,4 @@
-/* AritaBuri, Pretendard, and Shippori faces load deferred via /fonts/deferred-fonts.css (see root-document); the variables name each family ahead of registration. */
+/* AritaBuri and Shippori faces load deferred via /fonts/deferred-fonts.css (see root-document), while Pretendard loads on demand via /fonts/pretendard.css; the variables name each family ahead of registration. */
 :root {
   --font-arita-buri: "AritaBuri KR";
   --font-pretendard: "Pretendard";

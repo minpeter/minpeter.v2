@@ -110,6 +110,7 @@ test("language menu supports pointer opening and keyboard selection", async ({
   await expect(page).toHaveURL("/ja/blog");
 
   await page.mouse.move(0, 0);
+  await page.waitForLoadState("networkidle");
   await trigger.focus();
   await trigger.press("ArrowDown");
   const english = page.getByRole("menuitem", { name: "English" });
@@ -123,6 +124,84 @@ test("language menu supports pointer opening and keyboard selection", async ({
   await expect(page.getByTestId("blog-search")).toHaveAttribute(
     "placeholder",
     "검색어를 입력하세요..."
+  );
+});
+
+test("home page language selector switches between en, ja, and default ko", async ({
+  context,
+  isMobile,
+  page,
+}) => {
+  await page.goto("/en");
+  await expect(page.locator("html")).toHaveAttribute("lang", "en");
+  const trigger = page
+    .getByTestId("home-page")
+    .filter({ visible: true })
+    .getByTestId("language-selector");
+  await expect(trigger).toHaveText("EN");
+
+  if (isMobile) {
+    await trigger.tap();
+    await page.getByRole("menuitem", { name: "日本語" }).tap();
+  } else {
+    await trigger.hover({ scroll: "none" });
+    await page.getByRole("menuitem", { name: "日本語" }).click({
+      scroll: "none",
+    });
+  }
+  await expect(page).toHaveURL("/ja");
+  await expect(page.locator("html")).toHaveAttribute("lang", "ja");
+
+  if (isMobile) {
+    await trigger.tap();
+    await page.getByRole("menuitem", { name: "한국어" }).tap();
+  } else {
+    await trigger.hover({ scroll: "none" });
+    await page.getByRole("menuitem", { name: "한국어" }).click({
+      scroll: "none",
+    });
+  }
+  await expect(page).toHaveURL("/");
+  await expect(page.locator("html")).toHaveAttribute("lang", "ko");
+  expect(
+    (await context.cookies()).find(
+      (cookie) => cookie.name === "MINPETER-LOCATE"
+    )?.value
+  ).toBe("ko");
+});
+
+test("global 404 omits language selector while localized 404 keeps clean locale links", async ({
+  isMobile,
+  page,
+}) => {
+  const globalResponse = await page.goto("/en/nonexistent");
+  expect(globalResponse?.status()).toBe(404);
+  await expect(page.getByTestId("language-selector")).toHaveCount(0);
+
+  const localizedResponse = await page.goto("/en/blog/does-not-exist", {
+    waitUntil: "networkidle",
+  });
+  expect(localizedResponse?.status()).toBe(404);
+  const trigger = page
+    .getByTestId("language-selector")
+    .filter({ visible: true });
+  await expect(trigger).toHaveText("EN");
+  if (isMobile) {
+    await trigger.tap();
+  } else {
+    await trigger.hover({ scroll: "none" });
+  }
+  await expect(page.getByRole("menuitem", { name: "English" })).toHaveAttribute(
+    "href",
+    "/en/blog/does-not-exist"
+  );
+  await expect(page.getByRole("menuitem", { name: "한국어" })).toHaveAttribute(
+    "href",
+    "/ko/blog/does-not-exist"
+  );
+  await expect(page.getByRole("menuitem", { name: "日本語" })).toHaveAttribute(
+    "href",
+    "/ja/blog/does-not-exist"
   );
 });
 

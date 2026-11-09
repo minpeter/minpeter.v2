@@ -4,18 +4,20 @@ import { Suspense } from "react";
 
 import { ShowcaseDetailHeader } from "@/components/showcase-detail-header";
 import { Skeleton } from "@/components/ui/skeleton";
-import { createMetadata } from "@/shared/utils/metadata";
+import { createMetadata, createSectionImage } from "@/shared/utils/metadata";
 
 import AnimatedText from "./animated-text";
 
 export async function generateMetadata(): Promise<Metadata> {
   const [locale, t] = await Promise.all([getLocale(), getTranslations()]);
+  const title = `minpeter | ${t("showcase.items.dynamicText.title")}`;
 
   return createMetadata({
     description: t("showcase.items.dynamicText.summary"),
+    image: createSectionImage(locale, "/show/dynamic-hacked-text", title),
     locale,
     path: "/show/dynamic-hacked-text",
-    title: "minpeter | dynamic hacked text",
+    title,
   });
 }
 

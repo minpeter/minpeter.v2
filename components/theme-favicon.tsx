@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 
 import { useTheme } from "@/components/theme-provider";
+import { syncThemeColorMeta } from "@/shared/theme-init";
 
 const faviconPaths = {
   dark: "/assets/favicon-dark.svg",
@@ -16,6 +17,8 @@ export const ThemeFavicon = () => {
     if (resolvedTheme !== "dark" && resolvedTheme !== "light") {
       return;
     }
+
+    syncThemeColorMeta(resolvedTheme);
 
     const selector = "link[data-theme-favicon]";
     let favicon = document.head.querySelector<HTMLLinkElement>(selector);

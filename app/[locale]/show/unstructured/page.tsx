@@ -2,19 +2,21 @@ import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 
 import { ShowcaseDetailHeader } from "@/components/showcase-detail-header";
-import { createMetadata } from "@/shared/utils/metadata";
+import { createMetadata, createSectionImage } from "@/shared/utils/metadata";
 import { cn } from "@/shared/utils/tailwind";
 
 import styles from "./styles.module.css";
 
 export async function generateMetadata(): Promise<Metadata> {
   const [locale, t] = await Promise.all([getLocale(), getTranslations()]);
+  const title = `minpeter | ${t("showcase.items.unstructured.title")}`;
 
   return createMetadata({
     description: t("showcase.items.unstructured.summary"),
+    image: createSectionImage(locale, "/show/unstructured", title),
     locale,
     path: "/show/unstructured",
-    title: "minpeter | unstructured",
+    title,
   });
 }
 

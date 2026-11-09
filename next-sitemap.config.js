@@ -1,7 +1,10 @@
 /** @type {import('next-sitemap').IConfig} */
 
-import { existsSync, readFileSync } from "node:fs";
+import { execFileSync } from "node:child_process";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 
+import { decodeSlugs } from "./shared/decode-slugs-core.js";
+import { toAuthorDate } from "./shared/frontmatter-date-core.js";
 import { defaultLocale, locales } from "./shared/i18n/locales.js";
 
 const SITE_URL = process.env.SITE_URL || "https://minpeter.com";
@@ -14,6 +17,12 @@ const hashPathPattern = new RegExp(
   `^(/(${locales.join("|")}))?/[a-f0-9]{32,}`,
   "u"
 );
+const frontmatterBlockPattern = /^---\r?\n(?<block>[\s\S]*?)\r?\n---/u;
+const publishedLinePattern =
+  /^published:\s*['"]?(?<published>[^'"\r\n]+)['"]?\s*$/mu;
+const lastModifiedLinePattern =
+  /^lastModified:\s*['"]?(?<lastModified>[^'"\r\n]+)['"]?\s*$/mu;
+const COMMIT_PREFIX = "__COMMIT__";
 
 /**
  * Get priority based on path
@@ -31,20 +40,20 @@ function getPriority(path) {
 }
 
 /**
- * Extract the base path without locale prefix
+ * Extract the locale and base path without locale prefix
  * @param {string} path
- * @returns {string}
+ * @returns {{ basePath: string; locale: string }}
  */
-function getBasePath(path) {
+function parseLocalizedPath(path) {
   for (const locale of locales) {
     if (path === `/${locale}`) {
-      return "/";
+      return { basePath: "/", locale };
     }
     if (path.startsWith(`/${locale}/`)) {
-      return path.slice(locale.length + 1);
+      return { basePath: path.slice(locale.length + 1), locale };
     }
   }
-  return path;
+  return { basePath: path, locale: defaultLocale };
 }
 
 /**
@@ -84,6 +93,179 @@ function readPrerenderedPaths() {
 
 /** @type {Set<string> | undefined | null} */
 let prerenderedPaths = null;
+
+/** @type {Map<string, Date> | null} */
+let gitLastModifiedByFile = null;
+
+/**
+ * Batch-read latest git commit dates for `content/blog` in a single git call.
+ * Shallow clones (Vercel builds use `--depth=10`) report every file as added by
+ * the boundary commit, so they yield no dates and frontmatter decides instead.
+ * @returns {Map<string, Date>}
+ */
+function getGitLastModifiedMap() {
+  if (gitLastModifiedByFile !== null) {
+    return gitLastModifiedByFile;
+  }
+  const map = new Map();
+  try {
+    const isShallow = execFileSync(
+      "git",
+      ["rev-parse", "--is-shallow-repository"],
+      { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] }
+    ).trim();
+    if (isShallow !== "false") {
+      gitLastModifiedByFile = map;
+      return map;
+    }
+    const output = execFileSync(
+      "git",
+      [
+        "-c",
+        "core.quotePath=false",
+        "log",
+        `--format=${COMMIT_PREFIX}%cI`,
+        "--name-only",
+        "--",
+        "content/blog",
+      ],
+      { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] }
+    );
+    /** @type {Date | null} */
+    let currentCommitDate = null;
+    for (const rawLine of output.split("\n")) {
+      const line = rawLine.trim();
+      if (!line) {
+        continue;
+      }
+      if (line.startsWith(COMMIT_PREFIX)) {
+        const parsed = new Date(line.slice(COMMIT_PREFIX.length));
+        currentCommitDate = Number.isNaN(parsed.getTime()) ? null : parsed;
+        continue;
+      }
+      if (currentCommitDate && !map.has(line)) {
+        map.set(line, currentCommitDate);
+      }
+    }
+  } catch {
+    // Non-git directories (e.g. unit test temp dirs) fall back to frontmatter.
+  }
+  gitLastModifiedByFile = map;
+  return map;
+}
+
+/**
+ * Parse frontmatter `published:` / `lastModified:` dates using KST (+09:00) for offset-less values.
+ * @param {string} filePath
+ * @returns {Date | undefined}
+ */
+function readFrontmatterPublishedDate(filePath) {
+  try {
+    const raw = readFileSync(filePath, "utf8");
+    const block = frontmatterBlockPattern.exec(raw)?.groups?.block;
+    if (!block) {
+      return;
+    }
+    const candidates = [
+      publishedLinePattern.exec(block)?.groups?.published?.trim(),
+      lastModifiedLinePattern.exec(block)?.groups?.lastModified?.trim(),
+    ]
+      .filter((value) => Boolean(value))
+      .map((value) => toAuthorDate(String(value)).getTime())
+      .filter((timestamp) => !Number.isNaN(timestamp));
+    return candidates.length > 0
+      ? new Date(Math.max(...candidates))
+      : undefined;
+  } catch {
+    // Unreadable MDX files omit lastmod rather than failing sitemap generation.
+  }
+}
+
+const routeGroupFolderPattern = /^\([^/]+\)$/u;
+const localeSuffixPattern = new RegExp(
+  `\\.(?<locale>${locales.join("|")})$`,
+  "u"
+);
+
+/** @type {Map<string, string> | null} */
+let blogMdxIndex = null;
+
+/**
+ * Index `content/blog/**\/*.mdx` by `${slug}:${locale}`, stripping Fumadocs
+ * `(group)` folder segments such as `(awa)`, `(external)`, `(k8s-via-proxmox)`.
+ * @returns {Map<string, string>}
+ */
+function getBlogMdxIndex() {
+  if (blogMdxIndex !== null) {
+    return blogMdxIndex;
+  }
+  const index = new Map();
+  if (!existsSync("content/blog")) {
+    blogMdxIndex = index;
+    return index;
+  }
+  const entries = readdirSync("content/blog", { recursive: true });
+  for (const entry of entries) {
+    const rel = String(entry).replaceAll("\\", "/");
+    if (!rel.endsWith(".mdx")) {
+      continue;
+    }
+    const withoutGroups = rel
+      .slice(0, -4)
+      .split("/")
+      .filter((segment) => segment && !routeGroupFolderPattern.test(segment))
+      .join("/");
+    const localeMatch = localeSuffixPattern.exec(withoutGroups);
+    const fileLocale = localeMatch?.groups?.locale ?? defaultLocale;
+    const stem = localeMatch
+      ? withoutGroups.slice(0, -localeMatch[0].length)
+      : withoutGroups;
+    let slug = stem;
+    if (stem === "index") {
+      slug = "";
+    } else if (stem.endsWith("/index")) {
+      slug = stem.slice(0, -6);
+    }
+    if (slug) {
+      index.set(`${slug}:${fileLocale}`, `content/blog/${rel}`);
+    }
+  }
+  blogMdxIndex = index;
+  return index;
+}
+
+/**
+ * Resolve the MDX file backing a blog post URL and return its ISO lastmod timestamp.
+ * @param {string} basePath
+ * @param {string} locale
+ * @returns {string | undefined}
+ */
+function getBlogPostLastmod(basePath, locale) {
+  if (!basePath.startsWith("/blog/")) {
+    return;
+  }
+  const slug = decodeSlugs(basePath.slice("/blog/".length).split("/")).join(
+    "/"
+  );
+  if (!slug || slug.startsWith("og/") || slug.startsWith("llms.md/")) {
+    return;
+  }
+  const index = getBlogMdxIndex();
+  const mdxFile =
+    index.get(`${slug}:${locale}`) ?? index.get(`${slug}:${defaultLocale}`);
+  if (!mdxFile) {
+    return;
+  }
+
+  const gitDate = getGitLastModifiedMap().get(mdxFile);
+  const publishedDate = readFrontmatterPublishedDate(mdxFile);
+  if (gitDate && publishedDate) {
+    return new Date(
+      Math.max(gitDate.getTime(), publishedDate.getTime())
+    ).toISOString();
+  }
+  return (gitDate ?? publishedDate)?.toISOString();
+}
 
 /**
  * Locales that have `basePath`. Only blog posts can be partial; everything else
@@ -137,11 +319,11 @@ const config = {
     {
       alternateRefs: getAlternateRefs("/"),
       changefreq: "daily",
-      lastmod: new Date().toISOString(),
       loc: "/",
       priority: 1,
     },
   ],
+  autoLastmod: false,
   generateIndexSitemap: false,
   generateRobotsTxt: true,
 
@@ -157,7 +339,7 @@ const config = {
 
   // Transform function to handle localePrefix: "as-needed"
   // The default locale has no prefix, every other locale keeps one
-  transform: (sitemapConfig, path) => {
+  transform: (_sitemapConfig, path) => {
     // Skip internal Next.js paths (hash-like paths, _next, etc.)
     if (hashPathPattern.test(path)) {
       return null;
@@ -171,7 +353,7 @@ const config = {
       loc = path.slice(defaultLocalePrefix.length);
     }
 
-    const basePath = getBasePath(path);
+    const { basePath, locale } = parseLocalizedPath(path);
     if (basePath === "/products/rule60-hhkb-unibody") {
       return null;
     }
@@ -179,7 +361,7 @@ const config = {
     return {
       alternateRefs: getAlternateRefs(basePath, getAvailableLocales(basePath)),
       changefreq: loc === "/" ? "daily" : "weekly",
-      lastmod: sitemapConfig.autoLastmod ? new Date().toISOString() : undefined,
+      lastmod: getBlogPostLastmod(basePath, locale),
       loc,
       priority: getPriority(loc),
     };

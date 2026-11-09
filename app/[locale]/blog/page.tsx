@@ -6,7 +6,11 @@ import { Suspense } from "react";
 import { LanguageSelector } from "@/components/language-selector";
 import { Link } from "@/shared/i18n/navigation";
 import { type AppLocale, getCachedPostsForLocale } from "@/shared/source";
-import { createMetadata, getLocalizedPath } from "@/shared/utils/metadata";
+import {
+  createMetadata,
+  createSectionImage,
+  getLocalizedPath,
+} from "@/shared/utils/metadata";
 
 import { BlogList } from "./list";
 import { BlogListFallback, BlogSearchShell } from "./list-fallback";
@@ -14,11 +18,13 @@ import { RssLink } from "./rss-link";
 
 export async function generateMetadata(): Promise<Metadata> {
   const [locale, t] = await Promise.all([getLocale(), getTranslations()]);
+  const title = `minpeter | ${t("blogPageTitle")}`;
   const baseMetadata = createMetadata({
     description: t("blogPageDescription"),
+    image: createSectionImage(locale, "/blog", title),
     locale,
     path: "/blog",
-    title: `minpeter | ${t("blogPageTitle")}`,
+    title,
   });
 
   return {
@@ -42,7 +48,7 @@ export default async function Page() {
         <nav aria-label={t("common.blogNavigation")} className="fieldnotes-nav">
           <Link
             aria-label={t("backToHome")}
-            className="fieldnotes-logo-link"
+            className="fieldnotes-logo-link tap-target"
             href="/"
           >
             <Image

@@ -2,7 +2,7 @@
  * Post dates are authored in KST (`+0900`). Pin formatting to Seoul so the
  * UTC build/runtime on Vercel does not shift early-morning posts a day back.
  */
-export const POST_TIME_ZONE = "Asia/Seoul";
+const POST_TIME_ZONE = "Asia/Seoul";
 
 const seoulDateParts = new Intl.DateTimeFormat("en-CA", {
   day: "2-digit",

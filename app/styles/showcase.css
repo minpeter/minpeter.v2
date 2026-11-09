@@ -14,13 +14,6 @@
     margin-bottom: 3rem;
   }
 
-  .showcase-header > .fieldnotes-nav > button {
-    padding: 0.25rem 0.375rem;
-    font-size: 0.6875rem;
-    line-height: 1.26;
-    color: hsl(var(--muted-foreground));
-  }
-
   .showcase-intro {
     margin-top: 2.5rem;
   }
@@ -111,7 +104,7 @@
 
   .project-screen-fan {
     position: relative;
-    flex: 0 0 clamp(10.75rem, 48vw, 14rem);
+    flex: 0 0 clamp(12.125rem, 47vw, 14rem);
     align-self: flex-end;
     height: 6.5rem;
     margin-bottom: -1rem;
@@ -186,6 +179,21 @@
   .project-screen:focus-visible {
     outline: 2px solid hsl(var(--ring));
     outline-offset: 3px;
+  }
+
+  /* On phones under 480px, opening connection/setup details gives the expanded
+     definition list full width and drops the fan neatly underneath. */
+  @media (width < 30rem) {
+    .project-screen-row:has(details[open]) {
+      flex-direction: column;
+    }
+
+    .project-screen-row:has(details[open]) .project-screen-fan {
+      flex-basis: auto;
+      align-self: stretch;
+      width: min(100%, 14rem);
+      margin-inline-start: auto;
+    }
   }
 
   /* Below ~400px the fan leaves the description column too narrow to read;

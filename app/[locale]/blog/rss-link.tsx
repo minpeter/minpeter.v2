@@ -14,8 +14,8 @@ export async function RssLink({ locale }: RssLinkProps) {
   return (
     <a
       className={cn(
-        "fieldnotes-rss",
-        "flex items-center gap-1 rounded-md px-2 py-1 text-sm",
+        "tap-target",
+        "flex items-center gap-1 rounded-md px-1.5 py-1 text-[0.6875rem] leading-[1.26]",
         "text-muted-foreground hover:bg-secondary hover:text-primary",
         "transition-colors duration-150",
         "focus-visible:ring-ring focus:outline-none focus-visible:ring-2"
@@ -25,7 +25,7 @@ export async function RssLink({ locale }: RssLinkProps) {
       target="_blank"
       title={t("common.rssFeed")}
     >
-      <Rss className="h-3.5 w-3.5" />
+      <Rss className="h-3 w-3" />
       <span>RSS</span>
     </a>
   );
