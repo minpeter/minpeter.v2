@@ -10,7 +10,7 @@ import { ModeToggle } from "./theme-toggle";
 const SITE_COPYRIGHT_YEAR = 2026;
 
 const linkClassName =
-  "underline decoration-foreground/30 underline-offset-4 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring";
+  "inline-block py-2 -my-2 px-0.5 underline decoration-foreground/30 underline-offset-4 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring [@media(pointer:coarse)]:relative [@media(pointer:coarse)]:after:absolute [@media(pointer:coarse)]:after:-inset-x-1 [@media(pointer:coarse)]:after:inset-y-[min(0px,calc((100%-44px)/2))] [@media(pointer:coarse)]:after:content-['']";
 
 export default async function Footer({
   className,
@@ -30,7 +30,7 @@ export default async function Footer({
       )}
     >
       <p className="text-muted-foreground font-mono text-[11px] tracking-[0.08em] uppercase">
-        © {SITE_COPYRIGHT_YEAR} Woonggi Min ·
+        © {SITE_COPYRIGHT_YEAR} Woonggi Min ·{" "}
         <Link
           className={linkClassName}
           href={

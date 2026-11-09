@@ -20,7 +20,11 @@ export default async function ProductsLayout({
         <Link className="store-header-home store-label tap-target" href="/">
           minpeter
         </Link>
-        <Link aria-label={t("navigationLabel")} href="/products">
+        <Link
+          aria-label={t("navigationLabel")}
+          className="tap-target inline-flex"
+          href="/products"
+        >
           <Image
             alt=""
             aria-hidden="true"

@@ -50,7 +50,7 @@ export interface ProductSpin {
  * 1200×630 link-preview media served from `public/assets`: a PNG still (`og:image`), the turntable MP4
  * (`og:video`), a looping GIF of it, and a player page for X's player card.
  */
-export interface ProductPreview {
+interface ProductPreview {
   image: string;
   video: { animatedImage: string; player: string; url: string };
 }

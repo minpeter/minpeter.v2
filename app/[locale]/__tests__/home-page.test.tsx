@@ -1,11 +1,23 @@
 // @vitest-environment jsdom
 import { render, screen } from "@testing-library/react";
+import type * as nextNavigation from "next/navigation";
 import { NextIntlClientProvider } from "next-intl";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import Page from "../page";
 
+vi.mock(import("next/navigation"), async (importOriginal) => {
+  const actual = await importOriginal();
+  return {
+    ...actual,
+    usePathname: () => "/",
+  } satisfies typeof nextNavigation;
+});
+
 const messages = {
+  common: {
+    selectLanguage: "언어 선택",
+  },
   home: {
     exploreLabel: "둘러보기",
     homeLabel: "minpeter 홈",
@@ -20,6 +32,10 @@ const messages = {
       interactiveExperiments: {
         description: "AI 인프라, 에이전트 도구, 작은 인터랙티브 실험.",
         title: "프로젝트와 실험",
+      },
+      products: {
+        description: "직접 설계하고 출력한 물건들.",
+        title: "제품",
       },
       resume: {
         description: "경력과 활동 이력 — 곧 공개합니다.",
@@ -40,12 +56,13 @@ function renderHome() {
 }
 
 describe("app/[locale]/page.tsx home", () => {
-  it("extends the logo link tap target beyond the 32px icon", () => {
+  it("extends the logo link tap target beyond the 32px icon and renders language selector", () => {
     renderHome();
 
     const homeLink = screen.getByRole("link", { name: "minpeter 홈" });
     expect(homeLink.className).toContain("p-2.5");
     expect(homeLink.className).toContain("-m-2.5");
+    expect(screen.getByTestId("language-selector")).toBeDefined();
   });
 
   it("uses type scale tokens instead of arbitrary bracket values", () => {

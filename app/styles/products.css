@@ -12,6 +12,12 @@ body:has([data-store]) main {
   padding-inline: 0;
 }
 
+/* Store pages are locked to pure black; hide the global footer theme toggle
+   so clicking it never appears broken while mutating other routes' theme. */
+body:has([data-store]) [data-theme-toggle] {
+  display: none;
+}
+
 @layer base {
   .store {
     --store-gutter: 1.25rem;

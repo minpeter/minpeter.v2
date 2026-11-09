@@ -7,6 +7,7 @@ import { routing } from "./shared/i18n/routing";
 interface SitemapEntry {
   alternateRefs: { href: string; hreflang: string }[];
   changefreq: string;
+  lastmod?: string;
   loc: string;
   priority: number;
 }
@@ -122,6 +123,53 @@ describe("next-sitemap.config.js", () => {
       ).toStrictEqual(["en", "ja"]);
       // Non-blog pages exist in every locale regardless of the manifest.
       expect(run("/ko/show").alternateRefs).toHaveLength(4);
+      expect(run("/ko/show").lastmod).toBeUndefined();
+    } finally {
+      process.chdir(cwd);
+      rmSync(dir, { force: true, recursive: true });
+    }
+  });
+
+  it("derives blog post lastmod from MDX frontmatter instead of build time", async () => {
+    const { mkdtempSync, mkdirSync, rmSync, writeFileSync } = await import(
+      "node:fs"
+    );
+    const { tmpdir } = await import("node:os");
+    const { join } = await import("node:path");
+    const dir = mkdtempSync(join(tmpdir(), "sitemap-lastmod-"));
+    mkdirSync(join(dir, "content/blog/sample-post"), { recursive: true });
+    mkdirSync(join(dir, "content/blog/(awa)/grouped-post"), {
+      recursive: true,
+    });
+    writeFileSync(
+      join(dir, "content/blog/sample-post/index.mdx"),
+      "---\npublished: 2024-12-22 21:16:00\ntitle: Sample\n---\nBody\n"
+    );
+    writeFileSync(
+      join(dir, "content/blog/(awa)/grouped-post/index.mdx"),
+      "---\npublished: 2025-03-10 09:00:00\ntitle: Grouped\n---\nBody\n"
+    );
+    const cwd = process.cwd();
+    process.chdir(dir);
+    try {
+      vi.resetModules();
+      const fresh = (await import("./next-sitemap.config.js")).default;
+      const run = (path: string) =>
+        (fresh.transform as (config: object, path: string) => SitemapEntry)(
+          { autoLastmod: true },
+          path
+        );
+
+      expect(run("/ko/blog/sample-post").lastmod).toBe(
+        "2024-12-22T12:16:00.000Z"
+      );
+      expect(run("/en/blog/sample-post").lastmod).toBe(
+        "2024-12-22T12:16:00.000Z"
+      );
+      expect(run("/en/blog/grouped-post").lastmod).toBe(
+        "2025-03-10T00:00:00.000Z"
+      );
+      expect(run("/en/resume").lastmod).toBeUndefined();
     } finally {
       process.chdir(cwd);
       rmSync(dir, { force: true, recursive: true });

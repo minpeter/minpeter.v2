@@ -14,7 +14,7 @@ export async function generateMetadata(): Promise<Metadata> {
     description: t("resume.metadataDescription"),
     locale,
     path: "/resume",
-    title: "minpeter | resume",
+    title: `minpeter | ${t("resume.kicker")}`,
   });
 }
 
@@ -30,7 +30,7 @@ export default async function Page() {
         >
           <Link
             aria-label={t("backToHome")}
-            className="fieldnotes-logo-link"
+            className="fieldnotes-logo-link tap-target"
             href="/"
           >
             <Image
@@ -60,7 +60,7 @@ export default async function Page() {
           {t("resume.statusDescription")}
         </p>
         <Link className="resume-home-link tap-target" href="/">
-          {t("resume.homeLabel")} <span aria-hidden="true">↗</span>
+          {t("resume.homeLabel")} <span aria-hidden="true">→</span>
         </Link>
       </section>
     </section>

@@ -4,6 +4,7 @@ import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getLocale, getTranslations } from "next-intl/server";
 import type { ReactNode } from "react";
 
+import { FumadocsI18nProvider } from "@/components/fumadocs-i18n-provider";
 import { ViewTransition } from "@/components/view-transition";
 import { getCachedMessages } from "@/shared/i18n/messages-cache";
 import { routing } from "@/shared/i18n/routing";
@@ -72,7 +73,9 @@ export default async function LocaleLayout({ children, params }: Props) {
   return (
     <RootDocument lang={locale}>
       <NextIntlClientProvider locale={locale} messages={messages}>
-        <ViewTransition>{children}</ViewTransition>
+        <FumadocsI18nProvider locale={locale}>
+          <ViewTransition>{children}</ViewTransition>
+        </FumadocsI18nProvider>
       </NextIntlClientProvider>
     </RootDocument>
   );

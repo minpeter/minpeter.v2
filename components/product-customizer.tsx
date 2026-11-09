@@ -1,5 +1,6 @@
 "use client";
 
+import type { StaticImageData } from "next/image";
 import { useTranslations } from "next-intl";
 import {
   type ChangeEvent,
@@ -12,7 +13,6 @@ import {
 } from "react";
 
 import { KeycapThumbnail } from "@/components/keycap-thumbnail";
-import type { ProductGalleryProps } from "@/components/product-gallery";
 import { ProductSpin } from "@/components/product-spin";
 import {
   combinationToSpin,
@@ -32,7 +32,23 @@ import retailSilhouettes from "@/shared/maru60-retail-silhouettes.json";
 import spinSilhouettes from "@/shared/maru60-spin-silhouettes.json";
 
 import { getSpinLoader } from "@/shared/product-spin-loader";
+import type { ProductSpin as ProductSpinData } from "@/shared/products";
 import { useKeyboardCustomizationQuery } from "@/shared/use-keyboard-customization-query";
+
+export interface ProductGalleryProps {
+  initialAngle?: number;
+  labels: {
+    media: string;
+    next: string;
+    previous: string;
+    /** One entry per slide: "Show image N". */
+    showImage: readonly string[];
+    spin: string;
+  };
+  onAngleChange?: (degrees: number) => void;
+  renders: readonly { alt: string; image: StaticImageData }[];
+  spin: ProductSpinData;
+}
 
 const RETAIL_OUTLINES = Object.values(retailSilhouettes);
 const SPIN_OUTLINES = Object.values(spinSilhouettes);

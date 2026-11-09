@@ -20,8 +20,10 @@ import {
   KEYCAP_OPTIONS,
 } from "@/shared/keyboard-customization";
 
-import { ProductCustomizer } from "./product-customizer";
-import type { ProductGalleryProps } from "./product-gallery";
+import {
+  ProductCustomizer,
+  type ProductGalleryProps,
+} from "./product-customizer";
 
 vi.mock("next/navigation", () => ({
   useSearchParams: () => new URLSearchParams(window.location.search),

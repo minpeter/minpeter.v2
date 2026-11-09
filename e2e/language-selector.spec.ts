@@ -126,6 +126,49 @@ test("language menu supports pointer opening and keyboard selection", async ({
   );
 });
 
+test("home page language selector switches between en, ja, and default ko", async ({
+  context,
+  isMobile,
+  page,
+}) => {
+  await page.goto("/en");
+  await expect(page.locator("html")).toHaveAttribute("lang", "en");
+  const trigger = page
+    .getByTestId("home-page")
+    .filter({ visible: true })
+    .getByTestId("language-selector");
+  await expect(trigger).toHaveText("EN");
+
+  if (isMobile) {
+    await trigger.tap();
+    await page.getByRole("menuitem", { name: "日本語" }).tap();
+  } else {
+    await trigger.hover({ scroll: "none" });
+    await page.getByRole("menuitem", { name: "日本語" }).click({
+      scroll: "none",
+    });
+  }
+  await expect(page).toHaveURL("/ja");
+  await expect(page.locator("html")).toHaveAttribute("lang", "ja");
+
+  if (isMobile) {
+    await trigger.tap();
+    await page.getByRole("menuitem", { name: "한국어" }).tap();
+  } else {
+    await trigger.hover({ scroll: "none" });
+    await page.getByRole("menuitem", { name: "한국어" }).click({
+      scroll: "none",
+    });
+  }
+  await expect(page).toHaveURL("/");
+  await expect(page.locator("html")).toHaveAttribute("lang", "ko");
+  expect(
+    (await context.cookies()).find(
+      (cookie) => cookie.name === "MINPETER-LOCATE"
+    )?.value
+  ).toBe("ko");
+});
+
 test.describe("touch trigger", () => {
   it.use({ hasTouch: true });
 

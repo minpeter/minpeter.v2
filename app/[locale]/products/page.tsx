@@ -14,7 +14,7 @@ export async function generateMetadata(): Promise<Metadata> {
     description: t("products.description"),
     locale,
     path: "/products",
-    title: "minpeter | products",
+    title: `minpeter | ${t("products.title")}`,
   });
 }
 

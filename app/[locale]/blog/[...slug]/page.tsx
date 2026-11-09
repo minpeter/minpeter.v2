@@ -6,6 +6,7 @@ import { Suspense } from "react";
 import ExternalRedirect from "@/components/external-redirect";
 import Header from "@/components/header";
 import { MachineTranslationNotice } from "@/components/machine-translation-notice";
+import { PretendardFontLoader } from "@/components/pretendard-font-loader";
 import { siteConfig } from "@/shared/site-config";
 import {
   getLocalizedPost,
@@ -104,6 +105,7 @@ export async function PostBody({
         )}
         data-testid="blog-post-shell"
       >
+        {locale === "ko" ? <PretendardFontLoader /> : null}
         <Header
           link={{ href: "/blog", text: t("backToBlog") }}
           title={post.data.title}
@@ -121,6 +123,7 @@ export async function PostBody({
       className={cn(styles.stagger_container, styles.post, "blog-post-page")}
       data-testid="blog-post-shell"
     >
+      {locale === "ko" ? <PretendardFontLoader /> : null}
       <Header
         description={formatDateLong(post.data.published)}
         link={{ href: "/blog", text: t("backToBlog") }}

@@ -544,8 +544,9 @@ test("blog navigation and language menu preserve the current page", async ({
 }) => {
   await page.goto("/en");
   await page.getByTestId("home-link-blog").click();
-  await expect(page.getByTestId("blog-list-shell")).toBeVisible();
-  await page.getByTestId("language-selector").click();
+  const blogShell = page.getByTestId("blog-list-shell");
+  await expect(blogShell).toBeVisible();
+  await blogShell.getByTestId("language-selector").click();
   await page.getByRole("menuitem", { name: "日本語" }).click();
   await expect(page).toHaveURL("/ja/blog");
   await expect(page.locator("html")).toHaveAttribute("lang", "ja");

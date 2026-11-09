@@ -57,6 +57,7 @@ export function RootDocument({ children, lang }: RootDocumentProps) {
         />
         <noscript>
           <link href="/fonts/deferred-fonts.css" rel="stylesheet" />
+          <link href="/fonts/pretendard.css" rel="stylesheet" />
         </noscript>
       </head>
       <body
@@ -68,7 +69,7 @@ export function RootDocument({ children, lang }: RootDocumentProps) {
         suppressHydrationWarning
       >
         <NextProvider>
-          <ThemeProvider defaultTheme="light" enableSystem>
+          <ThemeProvider defaultTheme="light">
             <ThemeFavicon />
             <NuqsAdapter>
               <main className="relative mx-auto flex w-full max-w-4xl flex-1 flex-col px-5 font-sans sm:px-8 lg:px-12">

@@ -13,7 +13,7 @@ export async function generateMetadata(): Promise<Metadata> {
     description: t("showcase.description"),
     locale,
     path: "/show",
-    title: "minpeter | showcase",
+    title: `minpeter | ${t("showcase.kicker")}`,
   });
 }
 
@@ -73,7 +73,7 @@ export default async function Page(_props: PageProps<"/[locale]/show">) {
         >
           <Link
             aria-label={t("backToHome")}
-            className="fieldnotes-logo-link"
+            className="fieldnotes-logo-link tap-target"
             href="/"
           >
             <Image

@@ -42,7 +42,7 @@ export default async function Page() {
         <nav aria-label={t("common.blogNavigation")} className="fieldnotes-nav">
           <Link
             aria-label={t("backToHome")}
-            className="fieldnotes-logo-link"
+            className="fieldnotes-logo-link tap-target"
             href="/"
           >
             <Image

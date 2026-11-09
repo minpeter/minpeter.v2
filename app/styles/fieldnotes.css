@@ -54,7 +54,7 @@
 
   .fieldnotes-nav-tools {
     display: flex;
-    gap: 0.125rem;
+    gap: 0.25rem;
     align-items: center;
     font-size: 0.6875rem;
     line-height: 1.26;

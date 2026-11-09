@@ -15,10 +15,9 @@ Run with: uv run scripts/slice-fonts.py
 
 from pathlib import Path
 
-from fontTools.subset import main as subset_font
-
 ROOT = Path(__file__).resolve().parents[1]
 CSS_OUTPUT = ROOT / "public/fonts/deferred-fonts.css"
+PRETENDARD_CSS_OUTPUT = ROOT / "public/fonts/pretendard.css"
 
 KR_RANGES = (
     'U+f9ca-fa0b, U+ff03-ff05, U+ff07, U+ff0a-ff0b, U+ff0d-ff19, U+ff1b, U+ff1d, U+ff20-ff5b, U+ff5d, U+ffe0-ffe3, U+ffe5-ffe6',
@@ -287,12 +286,13 @@ FONTS = (
     {
         "family": "Pretendard",
         "variable": "--font-pretendard",
-        "source": ROOT / "public/fonts/PretendardVariable.woff2",
+        "source": ROOT / "shared/font.Pretendard/PretendardVariable.woff2",
         "out_dir": ROOT / "public/fonts/pretendard",
         "url_prefix": "/fonts/pretendard",
         "file_prefix": "pretendard",
         "ranges": KR_RANGES,
         "weight": "100 900",
+        "css_output": PRETENDARD_CSS_OUTPUT,
     },
     {
         "family": "Shippori Mincho",
@@ -312,14 +312,27 @@ def normalize_range(unicode_range: str) -> str:
         token = part.strip().lower().removeprefix("u+")
         if "-" in token:
             start, end = token.split("-", 1)
-            tokens.append((int(start, 16), f"u+{int(start, 16):04x}-{int(end, 16):04x}"))
+            tokens.append((int(start, 16), f"u+{int(start, 16):x}-{int(end, 16):x}"))
         else:
-            tokens.append((int(token, 16), f"u+{int(token, 16):04x}"))
+            tokens.append((int(token, 16), f"u+{int(token, 16):x}"))
     tokens.sort(key=lambda item: item[0])
-    return ", ".join(token for _, token in tokens)
+    return ",".join(token for _, token in tokens)
+
+
+def format_font_face(config: dict, index: int, unicode_range: str) -> str:
+    weight = config.get("weight", "400")
+    url = f"{config['url_prefix']}/{config['file_prefix']}.{index}.woff2"
+    ranges = normalize_range(unicode_range)
+    return (
+        f'@font-face{{font-family:"{config["family"]}";font-style:normal;'
+        f'font-weight:{weight};font-display:swap;src:url("{url}") format("woff2");'
+        f"unicode-range:{ranges}}}"
+    )
 
 
 def slice_font(config: dict) -> list[str]:
+    from fontTools.subset import main as subset_font
+
     out_dir: Path = config["out_dir"]
     out_dir.mkdir(parents=True, exist_ok=True)
     for old_slice in out_dir.glob(f"{config['file_prefix']}.*.woff2"):
@@ -336,21 +349,25 @@ def slice_font(config: dict) -> list[str]:
                 f"--output-file={output}",
             ]
         )
-        weight = config.get("weight", "400")
-        blocks.append(
-            f"""@font-face {{
-  font-family: \"{config['family']}\";
-  font-style: normal;
-  font-weight: {weight};
-  font-display: swap;
-  src: url(\"{config['url_prefix']}/{config['file_prefix']}.{index}.woff2\") format(\"woff2\");
-  unicode-range: {normalize_range(unicode_range)};
-}}"""
-        )
+        blocks.append(format_font_face(config, index, unicode_range))
 
     total = sum(path.stat().st_size for path in out_dir.glob("*.woff2"))
     print(f"{config['family']}: {len(blocks)} slices, {total:,} bytes")
     return blocks
+
+
+def write_css_outputs(per_font_blocks: list[tuple[dict, list[str]]]) -> None:
+    grouped: dict[Path, tuple[list[str], list[str]]] = {}
+    for config, font_blocks in per_font_blocks:
+        target: Path = config.get("css_output", CSS_OUTPUT)
+        blocks, variables = grouped.setdefault(target, ([], []))
+        blocks.extend(font_blocks)
+        variables.append(f'{config["variable"]}:"{config["family"]}"')
+
+    for target, (blocks, variables) in grouped.items():
+        root_rule = f":root{{{';'.join(variables)}}}"
+        target.write_text("\n".join([*blocks, root_rule]) + "\n", encoding="utf-8")
+        print(f"Generated {target.relative_to(ROOT)} ({target.stat().st_size:,} bytes)")
 
 
 def main() -> None:
@@ -360,15 +377,8 @@ def main() -> None:
         message = "brotli is required for woff2 output; run via `uv run scripts/slice-fonts.py`"
         raise SystemExit(message) from None
 
-    blocks: list[str] = []
-    variables: list[str] = []
-    for config in FONTS:
-        blocks.extend(slice_font(config))
-        variables.append(f'  {config["variable"]}: "{config["family"]}";')
-
-    blocks.append(":root {\n" + "\n".join(variables) + "\n}")
-    CSS_OUTPUT.write_text("\n\n".join(blocks) + "\n", encoding="utf-8")
-    print(f"Generated {CSS_OUTPUT.relative_to(ROOT)}")
+    per_font_blocks = [(config, slice_font(config)) for config in FONTS]
+    write_css_outputs(per_font_blocks)
 
 
 if __name__ == "__main__":

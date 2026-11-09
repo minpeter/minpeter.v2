@@ -104,8 +104,8 @@ export async function ShowcaseProjectCollection({
                   </span>
                 )}
               </h2>
-              <div className="project-screen-row mt-2 flex items-start gap-4">
-                <div className="min-w-0 flex-1">
+              <div className="project-screen-row mt-2 flex items-start gap-3 sm:gap-4">
+                <div className="min-w-0 flex-1 wrap-break-word break-keep">
                   {project.href && project.label ? (
                     <p className="text-muted-foreground text-[0.6875rem]">
                       {project.label}
@@ -116,7 +116,7 @@ export async function ShowcaseProjectCollection({
                   </p>
                   {project.details ? (
                     <details className="text-muted-foreground mt-2 text-[0.6875rem]">
-                      <summary className="hover:text-foreground focus-visible:outline-ring w-fit cursor-pointer rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2">
+                      <summary className="tap-target hover:text-foreground focus-visible:outline-ring w-fit cursor-pointer rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2">
                         {t("showcase.connectionSettings")}
                       </summary>
                       <dl className="mt-3 space-y-2 leading-relaxed">

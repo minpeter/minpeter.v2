@@ -70,7 +70,7 @@ export function LanguageSelector() {
       <Trigger asChild>
         <button
           aria-label={`${currentLabel.short} - ${t("selectLanguage")}`}
-          className="text-muted-foreground hover:bg-secondary hover:text-primary focus-visible:ring-ring flex items-center gap-1 rounded-md px-2 py-1 text-sm transition-colors duration-150 focus:outline-none focus-visible:ring-2"
+          className="tap-target text-muted-foreground hover:bg-secondary hover:text-primary focus-visible:ring-ring flex items-center gap-1 rounded-md px-2 py-1 text-sm transition-colors duration-150 focus:outline-none focus-visible:ring-2"
           data-testid="language-selector"
           onClick={handleTriggerClick}
           onKeyDown={clearTouchOpen}
@@ -103,7 +103,7 @@ export function LanguageSelector() {
             // locale cookie before redirecting to the unprefixed URL.
             const href = getPathname({
               forcePrefix: true,
-              href: pathname,
+              href: pathname || "/",
               locale: l,
             });
 
