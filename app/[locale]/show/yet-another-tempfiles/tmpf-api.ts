@@ -46,12 +46,12 @@ function isUploadResponse(value: unknown): value is UploadResponse {
   if (typeof value !== "object" || value === null) {
     return false;
   }
-  const candidate = value as Partial<UploadResponse>;
+  const candidate = value as { files?: unknown; folderId?: unknown };
   return (
     typeof candidate.folderId === "string" &&
     Array.isArray(candidate.files) &&
     candidate.files.every(
-      (file) =>
+      (file: unknown) =>
         typeof file === "object" &&
         file !== null &&
         typeof (file as { fileName?: unknown }).fileName === "string"
