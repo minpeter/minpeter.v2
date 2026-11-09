@@ -10,6 +10,8 @@ import {
   useState,
 } from "react";
 
+import { syncThemeColorMeta } from "@/shared/theme-init";
+
 const STORAGE_KEY = "theme";
 
 type Theme = "light" | "dark";
@@ -27,6 +29,7 @@ function applyResolvedTheme(resolved: Theme) {
   root.classList.remove("light", "dark");
   root.classList.add(resolved);
   root.style.colorScheme = resolved;
+  syncThemeColorMeta(resolved);
 }
 
 export function ThemeProvider({

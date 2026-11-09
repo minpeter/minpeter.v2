@@ -165,13 +165,15 @@ export function ModCodeBlock({
 
   return (
     <div className="relative flex flex-col gap-1">
-      <button
-        className="bg-card focus-visible:ring-ring absolute top-3 right-3 rounded-md border px-2 py-1 text-xs focus-visible:ring-2 focus-visible:outline-none"
-        onClick={handleCopy}
-        type="button"
-      >
-        {copyLabel}
-      </button>
+      <div className="absolute top-3 right-3">
+        <button
+          className="tap-target bg-card focus-visible:ring-ring rounded-md border px-2 py-1 text-xs focus-visible:ring-2 focus-visible:outline-none"
+          onClick={handleCopy}
+          type="button"
+        >
+          {copyLabel}
+        </button>
+      </div>
       <div style={{ overflowX: "auto" }}>
         <pre className="mb-0">
           <code>

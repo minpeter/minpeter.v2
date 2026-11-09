@@ -15,9 +15,8 @@ describe("promoteDeferredFonts", () => {
     localStorage.clear();
   });
 
-  it("promotes preload links immediately even when sheet is null and load already fired", () => {
+  it("promotes SSR preload links without pre-assigned ids immediately", () => {
     const link = document.createElement("link");
-    link.id = "deferred-fonts";
     link.rel = "preload";
     link.as = "style";
     link.href = "/fonts/deferred-fonts.css";
@@ -33,6 +32,7 @@ describe("promoteDeferredFonts", () => {
 
     promoteDeferredFonts();
 
+    expect(link.id).toBe("deferred-fonts");
     expect(link.rel).toBe("stylesheet");
     expect(pretendard.id).toBe("pretendard-fonts");
     expect(pretendard.rel).toBe("stylesheet");
@@ -82,19 +82,27 @@ describe("promoteDeferredFonts", () => {
 
 describe("applyStoredTheme", () => {
   afterEach(() => {
+    document.head.innerHTML = "";
     document.documentElement.className = "";
     document.documentElement.style.colorScheme = "";
     localStorage.clear();
     vi.restoreAllMocks();
   });
 
-  it("applies light by default and respects stored dark preference", () => {
+  it("applies light by default, syncs meta theme-color, and respects stored dark preference", () => {
+    const meta = document.createElement("meta");
+    meta.name = "theme-color";
+    meta.content = "#0a0a0b";
+    document.head.append(meta);
+
     applyStoredTheme();
     expect(document.documentElement.classList.contains("light")).toBe(true);
+    expect(meta.content).toBe("#ffffff");
 
     localStorage.setItem("theme", "dark");
     applyStoredTheme();
     expect(document.documentElement.classList.contains("dark")).toBe(true);
     expect(document.documentElement.style.colorScheme).toBe("dark");
+    expect(meta.content).toBe("#0a0a0b");
   });
 });

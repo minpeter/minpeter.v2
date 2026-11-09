@@ -196,7 +196,7 @@ export function BlogList({
             ) : (
               <button
                 aria-label={t("common.clearSearch")}
-                className="text-muted-foreground hover:text-foreground focus-visible:ring-ring flex h-4 w-4 items-center justify-center rounded focus-visible:ring-2 focus-visible:outline-none"
+                className="tap-target text-muted-foreground hover:text-foreground focus-visible:ring-ring flex h-4 w-4 items-center justify-center rounded focus-visible:ring-2 focus-visible:outline-none"
                 onClick={handleQueryClear}
                 type="button"
               >

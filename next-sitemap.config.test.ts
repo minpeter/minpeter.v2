@@ -147,7 +147,7 @@ describe("next-sitemap.config.js", () => {
     );
     writeFileSync(
       join(dir, "content/blog/(awa)/grouped-post/index.mdx"),
-      "---\npublished: 2025-03-10 09:00:00\ntitle: Grouped\n---\nBody\n"
+      "---\npublished: 2025-03-10 09:00:00\nlastModified: 2025-04-02 09:00:00\ntitle: Grouped\n---\nBody\n"
     );
     const cwd = process.cwd();
     process.chdir(dir);
@@ -167,7 +167,7 @@ describe("next-sitemap.config.js", () => {
         "2024-12-22T12:16:00.000Z"
       );
       expect(run("/en/blog/grouped-post").lastmod).toBe(
-        "2025-03-10T00:00:00.000Z"
+        "2025-04-02T00:00:00.000Z"
       );
       expect(run("/en/resume").lastmod).toBeUndefined();
     } finally {

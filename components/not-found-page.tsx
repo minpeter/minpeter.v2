@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { Suspense } from "react";
 
 import { LanguageSelector } from "@/components/language-selector";
 
@@ -11,6 +12,7 @@ interface NotFoundPageProps {
   backLabel: string;
   description: string;
   navigationLabel: string;
+  showLanguageSelector?: boolean;
   title: string;
 }
 
@@ -19,6 +21,7 @@ export function NotFoundPage({
   backLabel,
   description,
   navigationLabel,
+  showLanguageSelector = true,
   title,
 }: NotFoundPageProps) {
   return (
@@ -41,7 +44,11 @@ export function NotFoundPage({
               width={32}
             />
           </a>
-          <LanguageSelector />
+          {showLanguageSelector ? (
+            <Suspense fallback={null}>
+              <LanguageSelector />
+            </Suspense>
+          ) : null}
         </nav>
         <div className="showcase-intro">
           <p className="showcase-kicker">404</p>

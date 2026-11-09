@@ -19,7 +19,7 @@ export function ModeToggle({ label }: { label: string }) {
   return (
     <button
       aria-label={label}
-      className="tap-target focus-visible:ring-ring relative ml-1 flex h-6 w-6 items-center justify-center rounded focus-visible:ring-2 focus-visible:outline-none"
+      className="tap-target focus-visible:ring-ring relative ml-1 flex h-6 w-6 items-center justify-center rounded focus-visible:ring-2 focus-visible:outline-none pointer-coarse:ml-3.5"
       data-theme-toggle=""
       onClick={handleToggleTheme}
       type="button"

@@ -3,6 +3,18 @@
  * Must not be rendered as a React <script> — React 19 warns on client re-render
  * (e.g. locale soft-nav). Call from instrumentation-client only.
  */
+const THEME_COLORS = {
+  dark: "#0a0a0b",
+  light: "#ffffff",
+} as const;
+
+export function syncThemeColorMeta(resolved: "light" | "dark"): void {
+  const meta = document.querySelector('meta[name="theme-color"]');
+  if (meta) {
+    meta.setAttribute("content", THEME_COLORS[resolved]);
+  }
+}
+
 export function applyStoredTheme(): void {
   try {
     const stored = localStorage.getItem("theme");
@@ -11,6 +23,7 @@ export function applyStoredTheme(): void {
     root.classList.remove("light", "dark");
     root.classList.add(resolved);
     root.style.colorScheme = resolved;
+    syncThemeColorMeta(resolved);
   } catch {
     // private mode / blocked storage
   }
@@ -24,12 +37,15 @@ export function applyStoredTheme(): void {
  */
 export function promoteDeferredFonts(): void {
   for (const el of document.querySelectorAll(
-    '#deferred-fonts, link[rel="preload"][href="/fonts/pretendard.css"]'
+    '#deferred-fonts, link[rel="preload"][href="/fonts/deferred-fonts.css"], link[rel="preload"][href="/fonts/pretendard.css"]'
   )) {
     if (!(el instanceof HTMLLinkElement)) {
       continue;
     }
-    if (el.getAttribute("href") === "/fonts/pretendard.css") {
+    const href = el.getAttribute("href");
+    if (href === "/fonts/deferred-fonts.css") {
+      el.id = "deferred-fonts";
+    } else if (href === "/fonts/pretendard.css") {
       el.id = "pretendard-fonts";
     }
     if (el.rel !== "stylesheet") {

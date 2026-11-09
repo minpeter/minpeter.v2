@@ -2,19 +2,43 @@
    The dark token palette comes from base.css (`:root:has([data-store])`). */
 
 /* Tokens resolve on :root (Tailwind's --color-* reference them there), so the store's black page
-   is set on :root too. The full-bleed main override sits outside layers to beat its utilities. */
-:root:has([data-store]) {
+   is set on :root too. The full-bleed main override sits outside layers to beat its utilities.
+   Exclude hidden React <Activity> trees retained in the DOM after soft navigation. */
+:root:has(
+  [data-store]:not(
+      [style*="display: none"],
+      [style*="display:none"],
+      [style*="display: none"] *,
+      [style*="display:none"] *
+    )
+) {
   --background: 0 0% 0%;
 }
 
-body:has([data-store]) main {
+body:has(
+    [data-store]:not(
+        [style*="display: none"],
+        [style*="display:none"],
+        [style*="display: none"] *,
+        [style*="display:none"] *
+      )
+  )
+  main {
   max-width: none;
   padding-inline: 0;
 }
 
 /* Store pages are locked to pure black; hide the global footer theme toggle
    so clicking it never appears broken while mutating other routes' theme. */
-body:has([data-store]) [data-theme-toggle] {
+body:has(
+    [data-store]:not(
+        [style*="display: none"],
+        [style*="display:none"],
+        [style*="display: none"] *,
+        [style*="display:none"] *
+      )
+  )
+  [data-theme-toggle] {
   display: none;
 }
 

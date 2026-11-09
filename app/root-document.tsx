@@ -5,6 +5,7 @@ import { NextProvider } from "fumadocs-core/framework/next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { NuqsAdapter } from "nuqs/adapters/next";
 import type { ReactNode } from "react";
+import { preload } from "react-dom";
 
 import Footer from "@/components/footer";
 import { ThemeFavicon } from "@/components/theme-favicon";
@@ -32,6 +33,8 @@ export function RootDocument({ children, lang }: RootDocumentProps) {
   const isProduction = env.NODE_ENV === "production";
   const isVercel = !!env.VERCEL_ENV;
 
+  preload("/fonts/deferred-fonts.css", { as: "style" });
+
   return (
     <html data-scroll-behavior="smooth" lang={lang} suppressHydrationWarning>
       <head>
@@ -48,12 +51,6 @@ export function RootDocument({ children, lang }: RootDocumentProps) {
           media="(prefers-color-scheme: dark)"
           rel="icon"
           type="image/svg+xml"
-        />
-        <link
-          as="style"
-          href="/fonts/deferred-fonts.css"
-          id="deferred-fonts"
-          rel="preload"
         />
         <noscript>
           <link href="/fonts/deferred-fonts.css" rel="stylesheet" />

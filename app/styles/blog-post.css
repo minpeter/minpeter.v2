@@ -345,17 +345,28 @@
 
 /* Unlayered so `opacity: 1` outranks Fumadocs's `.opacity-0` utility on touch devices. */
 @media (pointer: coarse) {
-  .blog-post-page [data-blog-body] :is(h2, h3, h4) > button,
-  .blog-post-page [data-blog-body] figure button {
+  .blog-post-page [data-blog-body] :is(h1, h2, h3, h4, h5, h6) > button,
+  .blog-post-page [data-blog-body] figure.shiki button {
     position: relative;
     opacity: 1;
   }
 
-  .blog-post-page [data-blog-body] :is(h2, h3, h4) > button::after,
-  .blog-post-page [data-blog-body] figure button::after {
+  .blog-post-page [data-blog-body] :is(h1, h2, h3, h4, h5, h6) > button::after {
     position: absolute;
     inset-block: min(0px, calc((100% - 44px) / 2));
     inset-inline: min(0px, calc((100% - 44px) / 2));
+    content: "";
+  }
+
+  /* Fumadocs `<figure class="shiki ... overflow-hidden">` places its 24×24px
+     copy button 7–12px from top and 8px from right; bias the 44×44px hit box
+     inward so none of it is clipped by the figure border. */
+  .blog-post-page [data-blog-body] figure.shiki button::after {
+    position: absolute;
+    inset-block: min(0px, max(-7px, calc(100% - 44px)))
+      min(0px, calc(100% - 37px));
+    inset-inline: min(0px, calc(100% - 36px))
+      min(0px, max(-8px, calc(100% - 44px)));
     content: "";
   }
 }

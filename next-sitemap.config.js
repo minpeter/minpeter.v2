@@ -20,6 +20,8 @@ const hashPathPattern = new RegExp(
 const frontmatterBlockPattern = /^---\r?\n(?<block>[\s\S]*?)\r?\n---/u;
 const publishedLinePattern =
   /^published:\s*['"]?(?<published>[^'"\r\n]+)['"]?\s*$/mu;
+const lastModifiedLinePattern =
+  /^lastModified:\s*['"]?(?<lastModified>[^'"\r\n]+)['"]?\s*$/mu;
 const COMMIT_PREFIX = "__COMMIT__";
 
 /**
@@ -142,7 +144,7 @@ function getGitLastModifiedMap() {
 }
 
 /**
- * Parse frontmatter `published:` date using KST (+09:00) for offset-less values.
+ * Parse frontmatter `published:` / `lastModified:` dates using KST (+09:00) for offset-less values.
  * @param {string} filePath
  * @returns {Date | undefined}
  */
@@ -150,14 +152,19 @@ function readFrontmatterPublishedDate(filePath) {
   try {
     const raw = readFileSync(filePath, "utf8");
     const block = frontmatterBlockPattern.exec(raw)?.groups?.block;
-    const value = block
-      ? publishedLinePattern.exec(block)?.groups?.published?.trim()
-      : undefined;
-    if (!value) {
+    if (!block) {
       return;
     }
-    const date = toAuthorDate(value);
-    return Number.isNaN(date.getTime()) ? undefined : date;
+    const candidates = [
+      publishedLinePattern.exec(block)?.groups?.published?.trim(),
+      lastModifiedLinePattern.exec(block)?.groups?.lastModified?.trim(),
+    ]
+      .filter((value) => Boolean(value))
+      .map((value) => toAuthorDate(String(value)).getTime())
+      .filter((timestamp) => !Number.isNaN(timestamp));
+    return candidates.length > 0
+      ? new Date(Math.max(...candidates))
+      : undefined;
   } catch {
     // Unreadable MDX files omit lastmod rather than failing sitemap generation.
   }

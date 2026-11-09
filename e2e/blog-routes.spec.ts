@@ -1,6 +1,7 @@
 import { expect, test as it, test } from "@playwright/test";
 
 const PNG_SIGNATURE = [0x89, 0x50, 0x4e, 0x47];
+const HOME_URL = /\/(?:en|ja)?$/u;
 
 test.describe("blog routes found by responsive QA", () => {
   for (const path of [
@@ -75,6 +76,69 @@ test.describe("blog routes found by responsive QA", () => {
       )
       .toBeGreaterThan(0);
   });
+
+  it("soft-navigating out of /products restores light theme tokens, main width, and theme toggle", async ({
+    page,
+  }) => {
+    await page.goto("/products", { waitUntil: "networkidle" });
+    const toggle = page.locator("[data-theme-toggle]");
+    await expect(toggle).toBeHidden();
+    await expect
+      .poll(() =>
+        page.evaluate(() => getComputedStyle(document.body).backgroundColor)
+      )
+      .toBe("rgb(0, 0, 0)");
+
+    await page.locator("a.store-header-home").filter({ visible: true }).click();
+    await expect(page).toHaveURL(HOME_URL);
+    await expect(toggle).toBeVisible();
+    await expect
+      .poll(() =>
+        page.evaluate(() => getComputedStyle(document.body).backgroundColor)
+      )
+      .not.toBe("rgb(0, 0, 0)");
+    await expect
+      .poll(() =>
+        page.evaluate(
+          () =>
+            getComputedStyle(document.querySelector("main") as HTMLElement)
+              .maxWidth
+        )
+      )
+      .not.toBe("none");
+  });
+
+  it("global 404 omits language selector while localized 404 keeps clean locale links", async ({
+    isMobile,
+    page,
+  }) => {
+    const globalResponse = await page.goto("/en/nonexistent");
+    expect(globalResponse?.status()).toBe(404);
+    await expect(page.getByTestId("language-selector")).toHaveCount(0);
+
+    const localizedResponse = await page.goto("/en/blog/does-not-exist", {
+      waitUntil: "networkidle",
+    });
+    expect(localizedResponse?.status()).toBe(404);
+    const trigger = page
+      .getByTestId("language-selector")
+      .filter({ visible: true });
+    await expect(trigger).toHaveText("EN");
+    if (isMobile) {
+      await trigger.tap();
+    } else {
+      await trigger.hover({ scroll: "none" });
+    }
+    await expect(
+      page.getByRole("menuitem", { name: "English" })
+    ).toHaveAttribute("href", "/en/blog/does-not-exist");
+    await expect(
+      page.getByRole("menuitem", { name: "한국어" })
+    ).toHaveAttribute("href", "/ko/blog/does-not-exist");
+    await expect(
+      page.getByRole("menuitem", { name: "日本語" })
+    ).toHaveAttribute("href", "/ja/blog/does-not-exist");
+  });
 });
 
 test.describe("touch targets", () => {
@@ -118,4 +182,59 @@ test.describe("touch targets", () => {
       }
     });
   }
+
+  it("footer links and theme toggle do not steal taps from adjacent targets at 320px", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ height: 800, width: 320 });
+    await page.goto("/resume");
+    const footer = page.locator("footer");
+    const notesLink = footer.getByRole("link", { name: "글" });
+    const sourceLink = footer.getByRole("link", { name: "소스" });
+    const toggle = footer.locator("[data-theme-toggle]");
+
+    await notesLink.scrollIntoViewIfNeeded();
+    const notesBox = await notesLink.boundingBox();
+    const sourceBox = await sourceLink.boundingBox();
+    const toggleBox = await toggle.boundingBox();
+    expect(notesBox).not.toBeNull();
+    expect(sourceBox).not.toBeNull();
+    expect(toggleBox).not.toBeNull();
+
+    const hitTargets = await page.evaluate(
+      ({ notes, source, theme }) => ({
+        notesRightEdge: document
+          .elementFromPoint(
+            notes.x + notes.width - 1,
+            notes.y + notes.height / 2
+          )
+          ?.closest("a, button")?.textContent,
+        sourceLeftEdge: document
+          .elementFromPoint(source.x + 1, source.y + source.height / 2)
+          ?.closest("a, button")?.textContent,
+        sourceRightEdge: document
+          .elementFromPoint(
+            source.x + source.width - 1,
+            source.y + source.height / 2
+          )
+          ?.closest("a, button")?.textContent,
+        toggleLeftEdge: document
+          .elementFromPoint(theme.x - 8, theme.y + theme.height / 2)
+          ?.closest("a, button")
+          ?.hasAttribute("data-theme-toggle"),
+      }),
+      {
+        notes: notesBox as NonNullable<typeof notesBox>,
+        source: sourceBox as NonNullable<typeof sourceBox>,
+        theme: toggleBox as NonNullable<typeof toggleBox>,
+      }
+    );
+
+    expect(hitTargets).toEqual({
+      notesRightEdge: "글",
+      sourceLeftEdge: "소스",
+      sourceRightEdge: "소스",
+      toggleLeftEdge: true,
+    });
+  });
 });

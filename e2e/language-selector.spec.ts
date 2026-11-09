@@ -110,6 +110,7 @@ test("language menu supports pointer opening and keyboard selection", async ({
   await expect(page).toHaveURL("/ja/blog");
 
   await page.mouse.move(0, 0);
+  await page.waitForLoadState("networkidle");
   await trigger.focus();
   await trigger.press("ArrowDown");
   const english = page.getByRole("menuitem", { name: "English" });
