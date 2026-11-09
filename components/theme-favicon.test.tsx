@@ -15,7 +15,7 @@ describe("ThemeFavicon", () => {
     localStorage.clear();
   });
 
-  it("hoists a single <meta name='theme-color'> and updates it across theme changes", () => {
+  it("syncs a single <meta name='theme-color'> and favicon link across theme changes", () => {
     localStorage.setItem("theme", "dark");
     render(
       <ThemeProvider defaultTheme="light">
@@ -42,5 +42,10 @@ describe("ThemeFavicon", () => {
         .querySelector('meta[name="theme-color"]')
         ?.getAttribute("content")
     ).toBe("#ffffff");
+    expect(
+      document.head
+        .querySelector<HTMLLinkElement>("link[data-theme-favicon]")
+        ?.getAttribute("href")
+    ).toBe("/assets/favicon-light.svg?theme=light");
   });
 });

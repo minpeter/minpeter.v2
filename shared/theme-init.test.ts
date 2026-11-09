@@ -89,20 +89,29 @@ describe("applyStoredTheme", () => {
     vi.restoreAllMocks();
   });
 
-  it("applies light by default, respects stored dark preference, and leaves SSR meta theme-color untouched for React hydration", () => {
-    const meta = document.createElement("meta");
-    meta.name = "theme-color";
-    meta.content = "#ffffff";
-    document.head.append(meta);
-
+  it("applies light by default, creates/updates a single meta theme-color, and respects stored dark preference", () => {
     applyStoredTheme();
     expect(document.documentElement.classList.contains("light")).toBe(true);
-    expect(meta.content).toBe("#ffffff");
+    expect(
+      document.head.querySelectorAll('meta[name="theme-color"]')
+    ).toHaveLength(1);
+    expect(
+      document.head
+        .querySelector('meta[name="theme-color"]')
+        ?.getAttribute("content")
+    ).toBe("#ffffff");
 
     localStorage.setItem("theme", "dark");
     applyStoredTheme();
     expect(document.documentElement.classList.contains("dark")).toBe(true);
     expect(document.documentElement.style.colorScheme).toBe("dark");
-    expect(meta.content).toBe("#ffffff");
+    expect(
+      document.head.querySelectorAll('meta[name="theme-color"]')
+    ).toHaveLength(1);
+    expect(
+      document.head
+        .querySelector('meta[name="theme-color"]')
+        ?.getAttribute("content")
+    ).toBe("#0a0a0b");
   });
 });

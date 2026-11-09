@@ -3,26 +3,22 @@
 import { useEffect } from "react";
 
 import { useTheme } from "@/components/theme-provider";
+import { syncThemeColorMeta } from "@/shared/theme-init";
 
 const faviconPaths = {
   dark: "/assets/favicon-dark.svg",
   light: "/assets/favicon-light.svg",
 } as const;
 
-const themeColors = {
-  dark: "#0a0a0b",
-  light: "#ffffff",
-} as const;
-
 export const ThemeFavicon = () => {
   const { resolvedTheme } = useTheme();
-  const themeColor =
-    resolvedTheme === "dark" ? themeColors.dark : themeColors.light;
 
   useEffect(() => {
     if (resolvedTheme !== "dark" && resolvedTheme !== "light") {
       return;
     }
+
+    syncThemeColorMeta(resolvedTheme);
 
     const selector = "link[data-theme-favicon]";
     let favicon = document.head.querySelector<HTMLLinkElement>(selector);
@@ -38,5 +34,5 @@ export const ThemeFavicon = () => {
     favicon.href = `${faviconPaths[resolvedTheme]}?theme=${resolvedTheme}`;
   }, [resolvedTheme]);
 
-  return <meta content={themeColor} name="theme-color" />;
+  return null;
 };

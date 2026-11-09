@@ -1,3 +1,28 @@
+const THEME_COLORS = {
+  dark: "#0a0a0b",
+  light: "#ffffff",
+} as const;
+
+/**
+ * Synchronize a single imperative `<meta name="theme-color">` in `<head>`.
+ * Kept outside React/Next ViewportBoundary so pre-hydration bootstrap neither
+ * flashes light chrome for dark users nor collides with React hoistable hydration,
+ * and soft navigations never reset it.
+ */
+export function syncThemeColorMeta(resolved: "light" | "dark"): void {
+  const [existing, ...duplicates] =
+    document.head.querySelectorAll<HTMLMetaElement>('meta[name="theme-color"]');
+  for (const duplicate of duplicates) {
+    duplicate.remove();
+  }
+  const meta = existing ?? document.createElement("meta");
+  if (!existing) {
+    meta.name = "theme-color";
+    document.head.append(meta);
+  }
+  meta.content = THEME_COLORS[resolved];
+}
+
 /**
  * Apply stored theme to <html> before paint when possible.
  * Must not be rendered as a React <script> — React 19 warns on client re-render
@@ -11,6 +36,7 @@ export function applyStoredTheme(): void {
     root.classList.remove("light", "dark");
     root.classList.add(resolved);
     root.style.colorScheme = resolved;
+    syncThemeColorMeta(resolved);
   } catch {
     // private mode / blocked storage
   }
