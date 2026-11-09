@@ -47,7 +47,7 @@ export default function Page() {
       data-testid="home-page"
     >
       <header className="mb-16">
-        <div className="home-header-nav mb-6 flex items-center justify-between">
+        <div className="mb-6 flex items-center justify-between">
           <Link
             aria-label={t("homeLabel")}
             className="home-logo-link -m-2.5 inline-flex p-2.5 hover:opacity-60"
@@ -64,7 +64,7 @@ export default function Page() {
             />
           </Link>
           <Suspense fallback={null}>
-            <LanguageSelector />
+            <LanguageSelector className="px-1.5 py-1 text-[0.6875rem] leading-[1.26]" />
           </Suspense>
         </div>
         <h1 className="text-base leading-tight tracking-tight">

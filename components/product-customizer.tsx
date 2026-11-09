@@ -1,6 +1,5 @@
 "use client";
 
-import type { StaticImageData } from "next/image";
 import { useTranslations } from "next-intl";
 import {
   type ChangeEvent,
@@ -35,18 +34,13 @@ import { getSpinLoader } from "@/shared/product-spin-loader";
 import type { ProductSpin as ProductSpinData } from "@/shared/products";
 import { useKeyboardCustomizationQuery } from "@/shared/use-keyboard-customization-query";
 
-export interface ProductGalleryProps {
-  initialAngle?: number;
+export interface ProductCustomizerProps {
+  details?: ReactNode;
+  intro?: ReactNode;
   labels: {
     media: string;
-    next: string;
-    previous: string;
-    /** One entry per slide: "Show image N". */
-    showImage: readonly string[];
     spin: string;
   };
-  onAngleChange?: (degrees: number) => void;
-  renders: readonly { alt: string; image: StaticImageData }[];
   spin: ProductSpinData;
 }
 
@@ -56,7 +50,7 @@ const SPIN_OUTLINES = Object.values(spinSilhouettes);
 function geometryRevision(
   personal: boolean,
   combination: ValidatedCombination | null,
-  personalSpin?: ProductGalleryProps["spin"]
+  personalSpin?: ProductCustomizerProps["spin"]
 ) {
   if (personal && personalSpin?.geometryRevision) {
     return personalSpin.geometryRevision;
@@ -163,7 +157,7 @@ function SelectionPreview({
   personal: boolean;
   unsupported: boolean;
   combination: ValidatedCombination | null;
-  gallery: ProductGalleryProps;
+  gallery: ProductCustomizerProps;
   angle: number;
   onAngleChange: (angle: number) => void;
 }) {
@@ -219,9 +213,7 @@ function SelectionPreview({
 }
 
 /** Personal and retail appearances share selectors, never interchangeable renders. */
-export function ProductCustomizer(
-  props: ProductGalleryProps & { intro?: ReactNode; details?: ReactNode }
-) {
+export function ProductCustomizer(props: ProductCustomizerProps) {
   const t = useTranslations("products.customization");
   const [selection, setSelection] = useKeyboardCustomizationQuery();
   const lastRetail = useRef<{ housing: HousingId; keycaps: KeycapId }>({

@@ -3,6 +3,7 @@
 import { execFileSync } from "node:child_process";
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 
+import { toAuthorDate } from "./shared/frontmatter-date-core.js";
 import { defaultLocale, locales } from "./shared/i18n/locales.js";
 
 const SITE_URL = process.env.SITE_URL || "https://minpeter.com";
@@ -18,8 +19,6 @@ const hashPathPattern = new RegExp(
 const frontmatterBlockPattern = /^---\r?\n(?<block>[\s\S]*?)\r?\n---/u;
 const publishedLinePattern =
   /^published:\s*['"]?(?<published>[^'"\r\n]+)['"]?\s*$/mu;
-const localDateTimePattern =
-  /^(?<date>\d{4}-\d{2}-\d{2})[ T](?<time>\d{2}:\d{2}(?::\d{2}(?:\.\d+)?)?)$/u;
 const COMMIT_PREFIX = "__COMMIT__";
 
 /**
@@ -154,10 +153,7 @@ function readFrontmatterPublishedDate(filePath) {
     if (!value) {
       return;
     }
-    const groups = localDateTimePattern.exec(value)?.groups;
-    const date = groups
-      ? new Date(`${groups.date}T${groups.time}+09:00`)
-      : new Date(value);
+    const date = toAuthorDate(value);
     return Number.isNaN(date.getTime()) ? undefined : date;
   } catch {
     // Unreadable MDX files omit lastmod rather than failing sitemap generation.

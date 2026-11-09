@@ -37,7 +37,14 @@ export function promoteDeferredFonts(): void {
  * avoiding 124 extra @font-face declarations on routes that never use it.
  */
 export function ensurePretendardFonts(): void {
-  if (document.querySelector("#pretendard-fonts")) {
+  const existing = document.querySelector(
+    '#pretendard-fonts, link[href="/fonts/pretendard.css"]'
+  );
+  if (existing instanceof HTMLLinkElement) {
+    existing.id = "pretendard-fonts";
+    if (existing.rel !== "stylesheet") {
+      existing.rel = "stylesheet";
+    }
     return;
   }
   const link = document.createElement("link");

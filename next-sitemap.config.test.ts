@@ -175,4 +175,68 @@ describe("next-sitemap.config.js", () => {
       rmSync(dir, { force: true, recursive: true });
     }
   });
+
+  it("picks the later of Git commit date and frontmatter published date", async () => {
+    const { execFileSync } = await import("node:child_process");
+    const { mkdtempSync, mkdirSync, rmSync, writeFileSync } = await import(
+      "node:fs"
+    );
+    const { tmpdir } = await import("node:os");
+    const { join } = await import("node:path");
+    const dir = mkdtempSync(join(tmpdir(), "sitemap-git-lastmod-"));
+    mkdirSync(join(dir, "content/blog/edited-later"), { recursive: true });
+    mkdirSync(join(dir, "content/blog/backfilled"), { recursive: true });
+    writeFileSync(
+      join(dir, "content/blog/edited-later/index.mdx"),
+      "---\npublished: 2024-01-10 09:00:00\ntitle: Edited Later\n---\nBody\n"
+    );
+    writeFileSync(
+      join(dir, "content/blog/backfilled/index.mdx"),
+      "---\npublished: 2026-06-15 09:00:00\ntitle: Backfilled\n---\nBody\n"
+    );
+    const gitEnv = {
+      ...process.env,
+      GIT_AUTHOR_DATE: "2025-05-01T12:00:00Z",
+      GIT_AUTHOR_EMAIL: "test@example.com",
+      GIT_AUTHOR_NAME: "Test",
+      GIT_COMMITTER_DATE: "2025-05-01T12:00:00Z",
+      GIT_COMMITTER_EMAIL: "test@example.com",
+      GIT_COMMITTER_NAME: "Test",
+    };
+    execFileSync("git", ["init"], { cwd: dir, env: gitEnv, stdio: "ignore" });
+    execFileSync("git", ["add", "."], {
+      cwd: dir,
+      env: gitEnv,
+      stdio: "ignore",
+    });
+    execFileSync("git", ["commit", "-m", "initial"], {
+      cwd: dir,
+      env: gitEnv,
+      stdio: "ignore",
+    });
+
+    const cwd = process.cwd();
+    process.chdir(dir);
+    try {
+      vi.resetModules();
+      const fresh = (await import("./next-sitemap.config.js")).default;
+      const run = (path: string) =>
+        (fresh.transform as (config: object, path: string) => SitemapEntry)(
+          { autoLastmod: true },
+          path
+        );
+
+      // Git commit (2025-05-01) is newer than published (2024-01-10 KST)
+      expect(run("/ko/blog/edited-later").lastmod).toBe(
+        "2025-05-01T12:00:00.000Z"
+      );
+      // Published (2026-06-15 KST = 00:00Z) is newer than Git commit (2025-05-01)
+      expect(run("/ko/blog/backfilled").lastmod).toBe(
+        "2026-06-15T00:00:00.000Z"
+      );
+    } finally {
+      process.chdir(cwd);
+      rmSync(dir, { force: true, recursive: true });
+    }
+  });
 });

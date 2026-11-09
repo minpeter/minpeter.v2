@@ -21,7 +21,7 @@ function preventCloseAutoFocus(event: Event) {
   event.preventDefault();
 }
 
-export function LanguageSelector() {
+export function LanguageSelector({ className }: { className?: string } = {}) {
   const locale = useLocale();
   const t = useTranslations("common");
   const pathname = usePathname();
@@ -70,7 +70,10 @@ export function LanguageSelector() {
       <Trigger asChild>
         <button
           aria-label={`${currentLabel.short} - ${t("selectLanguage")}`}
-          className="tap-target text-muted-foreground hover:bg-secondary hover:text-primary focus-visible:ring-ring flex items-center gap-1 rounded-md px-2 py-1 text-sm transition-colors duration-150 focus:outline-none focus-visible:ring-2"
+          className={cn(
+            "tap-target text-muted-foreground hover:bg-secondary hover:text-primary focus-visible:ring-ring flex items-center gap-1 rounded-md px-2 py-1 text-sm transition-colors duration-150 focus:outline-none focus-visible:ring-2",
+            className
+          )}
           data-testid="language-selector"
           onClick={handleTriggerClick}
           onKeyDown={clearTouchOpen}

@@ -1,6 +1,8 @@
 import { GitHubLogoIcon, LockClosedIcon } from "@radix-ui/react-icons";
 import Image, { type StaticImageData } from "next/image";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
+
+import { cn } from "@/shared/utils/tailwind";
 
 import { ShowcaseDetailHeader } from "./showcase-detail-header";
 
@@ -30,7 +32,7 @@ export async function ShowcaseProjectCollection({
   projects,
   title,
 }: ShowcaseProjectCollectionProps) {
-  const t = await getTranslations();
+  const [locale, t] = await Promise.all([getLocale(), getTranslations()]);
 
   return (
     <section className="showcase-page" data-testid="showcase-detail-shell">
@@ -105,7 +107,12 @@ export async function ShowcaseProjectCollection({
                 )}
               </h2>
               <div className="project-screen-row mt-2 flex items-start gap-3 sm:gap-4">
-                <div className="min-w-0 flex-1 wrap-break-word break-keep">
+                <div
+                  className={cn(
+                    "min-w-0 flex-1 wrap-break-word",
+                    locale === "ko" && "break-keep"
+                  )}
+                >
                   {project.href && project.label ? (
                     <p className="text-muted-foreground text-[0.6875rem]">
                       {project.label}

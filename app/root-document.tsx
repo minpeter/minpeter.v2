@@ -57,7 +57,9 @@ export function RootDocument({ children, lang }: RootDocumentProps) {
         />
         <noscript>
           <link href="/fonts/deferred-fonts.css" rel="stylesheet" />
-          <link href="/fonts/pretendard.css" rel="stylesheet" />
+          {lang === "ko" ? (
+            <link href="/fonts/pretendard.css" rel="stylesheet" />
+          ) : null}
         </noscript>
       </head>
       <body

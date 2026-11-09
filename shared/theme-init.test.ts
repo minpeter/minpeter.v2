@@ -54,6 +54,23 @@ describe("promoteDeferredFonts", () => {
       "/fonts/pretendard.css"
     );
   });
+
+  it("promotes an SSR preload link for /fonts/pretendard.css in place without duplicating it", () => {
+    const preloadLink = document.createElement("link");
+    preloadLink.rel = "preload";
+    preloadLink.as = "style";
+    preloadLink.href = "/fonts/pretendard.css";
+    document.head.append(preloadLink);
+
+    ensurePretendardFonts();
+
+    const links = document.head.querySelectorAll(
+      'link[href="/fonts/pretendard.css"]'
+    );
+    expect(links).toHaveLength(1);
+    expect(preloadLink.id).toBe("pretendard-fonts");
+    expect(preloadLink.rel).toBe("stylesheet");
+  });
 });
 
 describe("applyStoredTheme", () => {

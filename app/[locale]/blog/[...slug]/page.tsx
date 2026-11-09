@@ -2,6 +2,7 @@ import { DocsBody } from "fumadocs-ui/page";
 import { notFound } from "next/navigation";
 import { getLocale, getTranslations } from "next-intl/server";
 import { Suspense } from "react";
+import { preload } from "react-dom";
 
 import ExternalRedirect from "@/components/external-redirect";
 import Header from "@/components/header";
@@ -91,6 +92,10 @@ export async function PostBody({
 
   if (!post) {
     notFound();
+  }
+
+  if (locale === "ko") {
+    preload("/fonts/pretendard.css", { as: "style" });
   }
 
   const t = await getTranslations();

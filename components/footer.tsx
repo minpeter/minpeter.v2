@@ -10,7 +10,7 @@ import { ModeToggle } from "./theme-toggle";
 const SITE_COPYRIGHT_YEAR = 2026;
 
 const linkClassName =
-  "inline-block py-2 -my-2 px-0.5 underline decoration-foreground/30 underline-offset-4 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring [@media(pointer:coarse)]:relative [@media(pointer:coarse)]:after:absolute [@media(pointer:coarse)]:after:-inset-x-1 [@media(pointer:coarse)]:after:inset-y-[min(0px,calc((100%-44px)/2))] [@media(pointer:coarse)]:after:content-['']";
+  "tap-target inline-block py-2 -my-2 px-0.5 underline decoration-foreground/30 underline-offset-4 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring";
 
 export default async function Footer({
   className,
