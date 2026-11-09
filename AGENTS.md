@@ -40,6 +40,7 @@
 Keep under `experimental` until they gain a stable top-level rename (Next 16.3 types still list these as experimental-only):
 - `experimental.globalNotFound`
 - `experimental.useTypeScriptCli`
+  - The tsc CLI path does not skip `.next/dev/types` the way Next's API checker does, so types left by an old `next dev` break checks on deleted routes. `scripts/prune-stale-dev-types.mjs` removes them (unless `.next/dev/lock` names a live dev server) before `pnpm build`, `check:types`, `build:analyze`, and `test:e2e*`; go through those scripts instead of bare `next build` / `tsc`.
 - `experimental.optimizePackageImports` (`lucide-react`, `@radix-ui/react-icons`, `react-icons`)
 
 ## i18n: Server Components vs Route Handlers

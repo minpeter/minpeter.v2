@@ -4,13 +4,14 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "prebuild": "node scripts/prune-stale-dev-types.mjs",
     "build": "next build",
     "postbuild": "next-sitemap",
-    "build:analyze": "ANALYZE=true next build",
+    "build:analyze": "node scripts/prune-stale-dev-types.mjs && ANALYZE=true next build",
     "check": "run-p check:**",
     "check:knip": "knip",
     "check:lint": "ultracite check",
-    "precheck:types": "next typegen",
+    "precheck:types": "node scripts/prune-stale-dev-types.mjs && next typegen",
     "check:types": "tsc --noEmit",
     "dev": "portless minpeter next dev",
     "fmt": "ultracite fix",
@@ -18,8 +19,8 @@
     "knip": "knip",
     "preview": "NEXT_PREVIEW=1 pnpm build && node scripts/preview.mjs",
     "test": "vitest run",
-    "test:e2e": "EXPOSE_TESTING_API=1 next build && playwright test",
-    "test:e2e:instant": "EXPOSE_TESTING_API=1 next build && playwright test e2e/soft-nav.instant.spec.ts"
+    "test:e2e": "node scripts/prune-stale-dev-types.mjs && EXPOSE_TESTING_API=1 next build && playwright test",
+    "test:e2e:instant": "node scripts/prune-stale-dev-types.mjs && EXPOSE_TESTING_API=1 next build && playwright test e2e/soft-nav.instant.spec.ts"
   },
   "dependencies": {
     "@next/third-parties": "16.4.5",
