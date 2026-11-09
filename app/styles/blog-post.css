@@ -345,13 +345,24 @@
 
 /* Unlayered so `opacity: 1` outranks Fumadocs's `.opacity-0` utility on touch devices. */
 @media (pointer: coarse) {
-  .blog-post-page [data-blog-body] :is(h1, h2, h3, h4, h5, h6) > button,
+  /* Fumadocs tab triggers are 32px `py-1.5` buttons inside an overflow-x
+     tablist that would clip an ::after hit box, so pad them to 44px instead. */
+  .blog-post-page [data-blog-body] [role="tab"] {
+    justify-content: center;
+    min-width: 44px;
+    padding-block: 0.75rem;
+  }
+
+  .blog-post-page [data-blog-body] :is(h1, h2, h3, h4, h5, h6) > :is(a, button),
   .blog-post-page [data-blog-body] figure.shiki button {
     position: relative;
     opacity: 1;
   }
 
-  .blog-post-page [data-blog-body] :is(h1, h2, h3, h4, h5, h6) > button::after {
+  .blog-post-page
+    [data-blog-body]
+    :is(h1, h2, h3, h4, h5, h6)
+    > :is(a, button)::after {
     position: absolute;
     inset-block: min(0px, calc((100% - 44px) / 2));
     inset-inline: min(0px, calc((100% - 44px) / 2));

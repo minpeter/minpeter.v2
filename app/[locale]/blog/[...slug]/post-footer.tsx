@@ -75,7 +75,7 @@ export function PostFooter({
       <div className="flex justify-between">
         {previousPost ? (
           <NavLink
-            className="text-primary hover:bg-secondary focus-visible:ring-ring max-w-[45%] truncate rounded-md px-2 py-1 focus-visible:ring-2 focus-visible:outline-none"
+            className="text-primary hover:bg-secondary focus-visible:ring-ring max-w-[45%] truncate rounded-md px-2 py-1 focus-visible:ring-2 focus-visible:outline-none pointer-coarse:py-3"
             href={previousPost.url as Route}
             transitionTypes={["slide-back"]}
           >
@@ -87,7 +87,7 @@ export function PostFooter({
 
         {nextPost ? (
           <NavLink
-            className="text-primary hover:bg-secondary focus-visible:ring-ring max-w-[45%] truncate rounded-md px-2 py-1 focus-visible:ring-2 focus-visible:outline-none"
+            className="text-primary hover:bg-secondary focus-visible:ring-ring max-w-[45%] truncate rounded-md px-2 py-1 focus-visible:ring-2 focus-visible:outline-none pointer-coarse:py-3"
             href={nextPost.url as Route}
             transitionTypes={["slide-forward"]}
           >

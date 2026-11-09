@@ -87,7 +87,7 @@ export async function ShowcaseProjectCollection({
               <h2 className="text-foreground/90 text-[0.9375rem] leading-snug">
                 {project.href ? (
                   <a
-                    className="group hover:bg-secondary focus-visible:outline-ring -mx-2 -my-1 flex items-center justify-between gap-4 rounded-sm px-2 py-1 transition-colors focus-visible:outline-2"
+                    className="group hover:bg-secondary focus-visible:outline-ring -mx-2 -my-1 flex items-center justify-between gap-4 rounded-sm px-2 py-1 transition-colors focus-visible:outline-2 pointer-coarse:-my-3.5 pointer-coarse:py-3.5"
                     href={project.href}
                     rel="noreferrer"
                     target="_blank"

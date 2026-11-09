@@ -25,7 +25,7 @@ export async function RssLink({ locale }: RssLinkProps) {
       target="_blank"
       title={t("common.rssFeed")}
     >
-      <Rss className="h-3.5 w-3.5" />
+      <Rss className="h-3 w-3" />
       <span>RSS</span>
     </a>
   );
