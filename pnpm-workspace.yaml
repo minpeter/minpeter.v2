@@ -7,6 +7,13 @@ minimumReleaseAge: 1440
 minimumReleaseAgeStrict: true
 trustPolicy: no-downgrade
 
+# pnpm 12 otherwise prepends an environment document pinning pnpm itself to
+# pnpm-lock.yaml, and GitHub's dependency graph / Dependabot read only that
+# first document (dependabot-core#15904), so they would see no dependencies.
+# `ignore` keeps the lockfile one document; CI still installs the pinned pnpm
+# from package.json#packageManager via pnpm/setup.
+pmOnFail: ignore
+
 overrides:
   source-map-js: ">=1.2.2"
   vite: ">=8.1.6"
