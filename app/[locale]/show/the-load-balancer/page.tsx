@@ -28,22 +28,18 @@ import tokenHubRequestsDark from "./assets/token-hub-requests-dark.webp";
 import tokenHubWordmark from "./assets/token-hub-wordmark.svg";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const [locale, t, tShowcase] = await Promise.all([
+  const [locale, t] = await Promise.all([
     getLocale(),
     getTranslations("showcase.items.loadBalancer"),
-    getTranslations("showcase"),
   ]);
+  const title = `minpeter | ${t("title")}`;
 
   return createMetadata({
     description: t("summary"),
-    image: createSectionImage(
-      locale,
-      "/show",
-      `minpeter | ${tShowcase("kicker")}`
-    ),
+    image: createSectionImage(locale, "/show/the-load-balancer", title),
     locale,
     path: "/show/the-load-balancer",
-    title: `minpeter | ${t("title")}`,
+    title,
   });
 }
 

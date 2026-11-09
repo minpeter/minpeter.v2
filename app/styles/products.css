@@ -171,58 +171,6 @@ body:has([data-store]) [data-theme-toggle] {
     aspect-ratio: 2 / 3;
   }
 
-  .store-media-render {
-    position: relative;
-    width: 100%;
-    max-width: 56rem;
-    height: 100%;
-    overflow: hidden;
-    border-radius: 0.25rem;
-  }
-
-  .store-media-arrow {
-    position: absolute;
-    top: 50%;
-    display: grid;
-    place-items: center;
-    width: 2.75rem;
-    height: 2.75rem;
-    color: hsl(var(--muted-foreground));
-    transform: translateY(-50%);
-    transition: color 160ms ease;
-  }
-
-  .store-media-arrow:hover,
-  .store-media-arrow:focus-visible {
-    color: hsl(var(--foreground));
-    outline: none;
-  }
-
-  .store-media-dots {
-    display: flex;
-    padding-top: 0.5rem;
-    margin-left: -0.5rem;
-  }
-
-  /* 24px tap target around an 8px square. */
-  .store-media-dot {
-    width: 1.5rem;
-    height: 1.5rem;
-    padding: 0.5rem;
-    background-color: hsl(var(--foreground) / 0.25);
-    background-clip: content-box;
-    transition: background-color 160ms ease;
-  }
-
-  .store-media-dot[aria-current="true"] {
-    background-color: hsl(var(--foreground));
-  }
-
-  .store-media-dot:focus-visible {
-    outline: 1px solid hsl(var(--foreground));
-    outline-offset: 2px;
-  }
-
   .store-product-info {
     position: static;
     display: grid;

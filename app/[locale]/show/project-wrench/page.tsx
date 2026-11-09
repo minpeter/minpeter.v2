@@ -5,22 +5,18 @@ import { ShowcaseProjectCollection } from "@/components/showcase-project-collect
 import { createMetadata, createSectionImage } from "@/shared/utils/metadata";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const [locale, t, tShowcase] = await Promise.all([
+  const [locale, t] = await Promise.all([
     getLocale(),
     getTranslations("showcase.items.wrench"),
-    getTranslations("showcase"),
   ]);
+  const title = `minpeter | ${t("title")}`;
 
   return createMetadata({
     description: t("summary"),
-    image: createSectionImage(
-      locale,
-      "/show",
-      `minpeter | ${tShowcase("kicker")}`
-    ),
+    image: createSectionImage(locale, "/show/project-wrench", title),
     locale,
     path: "/show/project-wrench",
-    title: `minpeter | ${t("title")}`,
+    title,
   });
 }
 

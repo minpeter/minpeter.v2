@@ -17,18 +17,24 @@ export function applyStoredTheme(): void {
 }
 
 /**
- * Promote deferred font preload to stylesheet.
+ * Promote deferred font preloads to stylesheets before hydration.
  * `<link rel="preload" as="style">` always has `sheet === null` even after the
  * preload finishes, so waiting for `load` misses fast/cached responses.
  * Switching `rel` to `"stylesheet"` immediately consumes the preload entry.
  */
 export function promoteDeferredFonts(): void {
-  const el = document.querySelector("#deferred-fonts");
-  if (!(el instanceof HTMLLinkElement)) {
-    return;
-  }
-  if (el.rel !== "stylesheet") {
-    el.rel = "stylesheet";
+  for (const el of document.querySelectorAll(
+    '#deferred-fonts, link[rel="preload"][href="/fonts/pretendard.css"]'
+  )) {
+    if (!(el instanceof HTMLLinkElement)) {
+      continue;
+    }
+    if (el.getAttribute("href") === "/fonts/pretendard.css") {
+      el.id = "pretendard-fonts";
+    }
+    if (el.rel !== "stylesheet") {
+      el.rel = "stylesheet";
+    }
   }
 }
 

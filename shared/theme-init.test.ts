@@ -15,13 +15,18 @@ describe("promoteDeferredFonts", () => {
     localStorage.clear();
   });
 
-  it("promotes a preload link immediately even when sheet is null and load already fired", () => {
+  it("promotes preload links immediately even when sheet is null and load already fired", () => {
     const link = document.createElement("link");
     link.id = "deferred-fonts";
     link.rel = "preload";
     link.as = "style";
     link.href = "/fonts/deferred-fonts.css";
-    document.head.append(link);
+
+    const pretendard = document.createElement("link");
+    pretendard.rel = "preload";
+    pretendard.as = "style";
+    pretendard.href = "/fonts/pretendard.css";
+    document.head.append(link, pretendard);
 
     // Preload links always report sheet === null before rel="stylesheet".
     expect(link.sheet).toBeNull();
@@ -29,6 +34,8 @@ describe("promoteDeferredFonts", () => {
     promoteDeferredFonts();
 
     expect(link.rel).toBe("stylesheet");
+    expect(pretendard.id).toBe("pretendard-fonts");
+    expect(pretendard.rel).toBe("stylesheet");
   });
 
   it("is a safe no-op when #deferred-fonts is absent or already a stylesheet", () => {

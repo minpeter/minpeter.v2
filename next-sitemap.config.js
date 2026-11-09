@@ -107,6 +107,8 @@ function getGitLastModifiedMap() {
     const output = execFileSync(
       "git",
       [
+        "-c",
+        "core.quotePath=false",
         "log",
         `--format=${COMMIT_PREFIX}%cI`,
         "--name-only",
@@ -209,6 +211,18 @@ function getBlogMdxIndex() {
 }
 
 /**
+ * @param {string} rawSlug
+ * @returns {string}
+ */
+function decodeSlug(rawSlug) {
+  try {
+    return decodeURIComponent(rawSlug);
+  } catch {
+    return rawSlug;
+  }
+}
+
+/**
  * Resolve the MDX file backing a blog post URL and return its ISO lastmod timestamp.
  * @param {string} basePath
  * @param {string} locale
@@ -218,8 +232,8 @@ function getBlogPostLastmod(basePath, locale) {
   if (!basePath.startsWith("/blog/")) {
     return;
   }
-  const slug = basePath.slice("/blog/".length);
-  if (!slug || slug.startsWith("og/")) {
+  const slug = decodeSlug(basePath.slice("/blog/".length));
+  if (!slug || slug.startsWith("og/") || slug.startsWith("llms.md/")) {
     return;
   }
   const index = getBlogMdxIndex();
