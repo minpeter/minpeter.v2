@@ -1,6 +1,11 @@
-import { createOgImageResponse } from "@/shared/og-image";
+import { getTranslations } from "next-intl/server";
 
-export const alt = "minpeter | model card artwork";
+import en from "@/shared/i18n/en.json";
+import { createOgImageResponse } from "@/shared/og-image";
+import { resolveLocale } from "@/shared/utils/metadata";
+
+// Next reads this alt once per route (not per locale); localized alts come from page metadata.
+export const alt = `minpeter | ${en.showcase.items.modelCard.title}`;
 export const size = { height: 630, width: 1200 };
 export const contentType = "image/png";
 
@@ -9,10 +14,15 @@ export default async function Image({
 }: {
   params: Promise<{ locale: string }>;
 }) {
-  const { locale } = await params;
+  const { locale: routeLocale } = await params;
+  const locale = resolveLocale(routeLocale);
+  const t = await getTranslations({
+    locale,
+    namespace: "showcase.items.modelCard",
+  });
 
   return createOgImageResponse({
     locale,
-    title: "minpeter | model card artwork",
+    title: `minpeter | ${t("title")}`,
   });
 }

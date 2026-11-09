@@ -1,9 +1,11 @@
 import { getTranslations } from "next-intl/server";
 
+import en from "@/shared/i18n/en.json";
 import { createOgImageResponse } from "@/shared/og-image";
 import { resolveLocale } from "@/shared/utils/metadata";
 
-export const alt = "minpeter | products";
+// Next reads this alt once per route (not per locale); localized alts come from page metadata.
+export const alt = `minpeter | ${en.products.title}`;
 export const size = { height: 630, width: 1200 };
 export const contentType = "image/png";
 

@@ -3,18 +3,20 @@ import Image from "next/image";
 import { getLocale, getTranslations } from "next-intl/server";
 
 import { ShowcaseDetailHeader } from "@/components/showcase-detail-header";
-import { createMetadata } from "@/shared/utils/metadata";
+import { createMetadata, createSectionImage } from "@/shared/utils/metadata";
 
 import { modelCardArtworks } from "./assets";
 
 export async function generateMetadata(): Promise<Metadata> {
   const [locale, t] = await Promise.all([getLocale(), getTranslations()]);
+  const title = `minpeter | ${t("showcase.items.modelCard.title")}`;
 
   return createMetadata({
     description: t("showcase.items.modelCard.summary"),
+    image: createSectionImage(locale, "/show/model-card-artwork", title),
     locale,
     path: "/show/model-card-artwork",
-    title: "minpeter | model card artwork",
+    title,
   });
 }
 

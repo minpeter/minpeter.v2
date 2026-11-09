@@ -18,13 +18,13 @@ import { RssLink } from "./rss-link";
 
 export async function generateMetadata(): Promise<Metadata> {
   const [locale, t] = await Promise.all([getLocale(), getTranslations()]);
-  const blogTitle = t("blogPageTitle");
+  const title = `minpeter | ${t("blogPageTitle")}`;
   const baseMetadata = createMetadata({
     description: t("blogPageDescription"),
-    image: createSectionImage(locale, "/blog", blogTitle),
+    image: createSectionImage(locale, "/blog", title),
     locale,
     path: "/blog",
-    title: `minpeter | ${blogTitle}`,
+    title,
   });
 
   return {

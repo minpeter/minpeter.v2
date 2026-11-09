@@ -4,18 +4,20 @@ import { Suspense } from "react";
 
 import { ShowcaseDetailHeader } from "@/components/showcase-detail-header";
 import { Skeleton } from "@/components/ui/skeleton";
-import { createMetadata } from "@/shared/utils/metadata";
+import { createMetadata, createSectionImage } from "@/shared/utils/metadata";
 
 import { Countdown } from "./countdown";
 
 export async function generateMetadata(): Promise<Metadata> {
   const [locale, t] = await Promise.all([getLocale(), getTranslations()]);
+  const title = `minpeter | ${t("showcase.items.newYear.title")}`;
 
   return createMetadata({
     description: t("showcase.items.newYear.summary"),
+    image: createSectionImage(locale, "/show/new-year-clock", title),
     locale,
     path: "/show/new-year-clock",
-    title: "minpeter | new year clock",
+    title,
   });
 }
 

@@ -4,19 +4,21 @@ import Link from "next/link";
 import { getLocale, getTranslations } from "next-intl/server";
 
 import { ShowcaseDetailHeader } from "@/components/showcase-detail-header";
-import { createMetadata } from "@/shared/utils/metadata";
+import { createMetadata, createSectionImage } from "@/shared/utils/metadata";
 
 import SaaSComponentImage from "./saas-component.png";
 import SaaSPageImage from "./saas-page.png";
 
 export async function generateMetadata(): Promise<Metadata> {
   const [locale, t] = await Promise.all([getLocale(), getTranslations()]);
+  const title = `minpeter | ${t("showcase.items.unstructured0828.title")}`;
 
   return createMetadata({
     description: t("showcase.items.unstructured0828.summary"),
+    image: createSectionImage(locale, "/show/unstructured-0828", title),
     locale,
     path: "/show/unstructured-0828",
-    title: "minpeter | unstructured 0828",
+    title,
   });
 }
 

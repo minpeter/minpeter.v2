@@ -4,18 +4,20 @@ import { Suspense } from "react";
 
 import { ShowcaseDetailHeader } from "@/components/showcase-detail-header";
 import { Skeleton } from "@/components/ui/skeleton";
-import { createMetadata } from "@/shared/utils/metadata";
+import { createMetadata, createSectionImage } from "@/shared/utils/metadata";
 
 import TmpfUI from "./tmpf";
 
 export async function generateMetadata(): Promise<Metadata> {
   const [locale, t] = await Promise.all([getLocale(), getTranslations()]);
+  const title = `minpeter | ${t("showcase.items.tempfiles.title")}`;
 
   return createMetadata({
     description: t("showcase.items.tempfiles.summary"),
+    image: createSectionImage(locale, "/show/yet-another-tempfiles", title),
     locale,
     path: "/show/yet-another-tempfiles",
-    title: "minpeter | yet another tempfiles",
+    title,
   });
 }
 
