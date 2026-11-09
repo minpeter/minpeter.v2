@@ -211,35 +211,6 @@
     }
   }
 
-  /* On touch screens the default fan leaves the two back screens ~12px
-     slivers. Stack it under the copy, widen it, and step the screens 3rem
-     apart so every screen exposes a tappable strip of at least 44px. */
-  @media (pointer: coarse) {
-    .project-screen-row {
-      flex-direction: column;
-    }
-
-    .project-screen-row .project-screen-fan {
-      flex-basis: auto;
-      align-self: stretch;
-      width: min(100%, 24rem);
-      margin-inline-start: auto;
-      margin-top: 0.5rem;
-    }
-
-    .project-screen {
-      width: calc(100% - 8rem);
-    }
-
-    .project-screen[data-screen-index="1"] {
-      --screen-x: 3rem;
-    }
-
-    .project-screen[data-screen-index="2"] {
-      --screen-x: 6rem;
-    }
-  }
-
   @media (prefers-reduced-motion: reduce) {
     .project-screen {
       transition: none;
