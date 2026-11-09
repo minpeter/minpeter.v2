@@ -1,19 +1,13 @@
 {
-  "404": "ページが見つかりません。",
-  "blogTitle": "開発の話と日常を記録する空間",
   "back": "戻る",
   "backToBlog": "記事一覧へ",
   "backToHome": "ホームへ",
-  "aboutTitle": "こんにちは、ミン・ウンギです :)",
-  "aboutMe": "ソフトウェアエンジニアとして働いています。\n新しい技術を学び、アイデアを役に立つソフトウェアにすることを楽しんでいます。\n作ったものを使う人に、わかりやすく丁寧な体験を届けたいと考えています。",
   "blogPageTitle": "Peterの開発ノート",
   "blogPageDescription": "ソフトウェアや技術、日々の学びを記録しています。",
   "publishedDate": "公開",
   "draftedDate": "下書き",
   "lastModifiedDate": "更新",
   "draft": "下書き",
-  "nextPost": "次の記事",
-  "prevPost": "前の記事",
   "translatedBy": "Claude Opus 4.5による翻訳",
   "aiDisclaimer": "AI生成コンテンツは不正確または誤解を招く可能性があります。",
   "generatedBy": "{model}による生成",
@@ -260,7 +254,6 @@
       }
     },
     "customization": {
-      "modeLabel": "製品表示",
       "showcase": "個人キーボード紹介",
       "customize": "キーキャップの組み合わせ",
       "showcaseNote": "Inventor · 個人展示用 · 注文不可",
@@ -293,18 +286,14 @@
         "transparent": "透明"
       },
       "partial": "一部の角度を読み込めませんでした。利用できる最も近い角度を表示しています。読み込みを再試行できます。",
-      "renderReady": "この組み合わせのレンダー準備完了",
-      "renderPending": "この組み合わせのレンダー準備中",
       "marbleNote": "PLA Marble 13103：オフホワイトに細かく不規則な灰色の粒がある素材です。色見本はメーカーのベース色のみで、実際の造形表面を表すものではありません。",
       "transparentNote": "元の半透明PETG製個人キーボードの外観を近似したものです。Bambu Lab PLAの色や新しい販売用素材ではありません。",
       "personalHousing": "元の半透明PETG · 外観の近似",
-      "personalOnly": "個人展示用 · 注文不可",
       "inventorNote": "個人ロゴキーを含む元のキーキャップ",
       "pairedPersonal": "透明 × Inventor · 非売品",
       "pairedRetail": "組み合わせ: {housing} × {keycaps}",
       "unsupported": "この組み合わせは表示できません",
       "unsupportedDetail": "透明ハウジングとInventorキーキャップは一緒に選択できます。両方を選ぶか、別のハウジングとキーキャップを選んでください。別の構成の画像は表示しません。",
-      "switchToRetail": "選ぶと別の組み合わせに切り替わります",
       "detailsLabel": "詳細・素材"
     }
   },
@@ -348,7 +337,6 @@
     "title": "ページが見つかりません",
     "description": "URLが間違っているか、ページが移動した可能性があります。"
   },
-  "siteDescription": "minpeterの文章、デザイン、コード",
   "noSearchResults": "検索結果がありません :/",
   "searchUnavailableTitleFallback": "全文検索を利用できないため、タイトルが一致する記事のみ表示しています。",
   "searchPlaceholder": "検索..."

@@ -3,6 +3,7 @@
 import { execFileSync } from "node:child_process";
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 
+import { decodeSlugs } from "./shared/decode-slugs-core.js";
 import { toAuthorDate } from "./shared/frontmatter-date-core.js";
 import { defaultLocale, locales } from "./shared/i18n/locales.js";
 
@@ -211,18 +212,6 @@ function getBlogMdxIndex() {
 }
 
 /**
- * @param {string} rawSlug
- * @returns {string}
- */
-function decodeSlug(rawSlug) {
-  try {
-    return decodeURIComponent(rawSlug);
-  } catch {
-    return rawSlug;
-  }
-}
-
-/**
  * Resolve the MDX file backing a blog post URL and return its ISO lastmod timestamp.
  * @param {string} basePath
  * @param {string} locale
@@ -232,7 +221,9 @@ function getBlogPostLastmod(basePath, locale) {
   if (!basePath.startsWith("/blog/")) {
     return;
   }
-  const slug = decodeSlug(basePath.slice("/blog/".length));
+  const slug = decodeSlugs(basePath.slice("/blog/".length).split("/")).join(
+    "/"
+  );
   if (!slug || slug.startsWith("og/") || slug.startsWith("llms.md/")) {
     return;
   }

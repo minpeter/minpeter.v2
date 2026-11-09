@@ -240,7 +240,6 @@ body:has([data-store]) [data-theme-toggle] {
     align-items: start;
     min-width: 0;
   }
-  .store-custom-note,
   .store-custom-selection {
     margin-block: 1rem;
   }
@@ -262,9 +261,6 @@ body:has([data-store]) [data-theme-toggle] {
   }
   .store-custom-feedback > .store-button {
     pointer-events: auto;
-  }
-  .store-custom-note {
-    max-width: 48rem;
   }
   .store-custom-pending {
     text-align: center;
@@ -412,11 +408,6 @@ body:has([data-store]) [data-theme-toggle] {
     #ffffff55
   );
   border: 1px solid #ffffff99;
-}
-
-.store-custom-pairing {
-  padding-left: 0.75rem;
-  border-left: 1px solid hsl(var(--foreground));
 }
 
 @layer base {
