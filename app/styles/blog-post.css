@@ -341,20 +341,21 @@
     font-family: var(--font-pretendard), var(--font-geist), Arial, sans-serif;
     letter-spacing: -0.04em;
   }
+}
 
-  @media (pointer: coarse) {
-    .blog-post-page [data-blog-body] :is(h2, h3, h4) > button,
-    .blog-post-page [data-blog-body] figure button {
-      position: relative;
-      opacity: 1;
-    }
+/* Unlayered so `opacity: 1` outranks Fumadocs's `.opacity-0` utility on touch devices. */
+@media (pointer: coarse) {
+  .blog-post-page [data-blog-body] :is(h2, h3, h4) > button,
+  .blog-post-page [data-blog-body] figure button {
+    position: relative;
+    opacity: 1;
+  }
 
-    .blog-post-page [data-blog-body] :is(h2, h3, h4) > button::after,
-    .blog-post-page [data-blog-body] figure button::after {
-      position: absolute;
-      inset-block: min(0px, calc((100% - 44px) / 2));
-      inset-inline: min(0px, calc((100% - 44px) / 2));
-      content: "";
-    }
+  .blog-post-page [data-blog-body] :is(h2, h3, h4) > button::after,
+  .blog-post-page [data-blog-body] figure button::after {
+    position: absolute;
+    inset-block: min(0px, calc((100% - 44px) / 2));
+    inset-inline: min(0px, calc((100% - 44px) / 2));
+    content: "";
   }
 }

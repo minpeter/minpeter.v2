@@ -55,7 +55,7 @@ export async function generateMetadata(
     });
   }
 
-  const slugPath = slug.join("/");
+  const slugPath = page.slugs.join("/");
   const title = page.data.title ?? siteConfig.title;
 
   return createMetadata({

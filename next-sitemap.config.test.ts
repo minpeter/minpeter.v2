@@ -188,6 +188,9 @@ describe("next-sitemap.config.js", () => {
     mkdirSync(join(dir, "content/blog/backfilled"), { recursive: true });
     mkdirSync(join(dir, "content/blog/한글-슬러그"), { recursive: true });
     mkdirSync(join(dir, "content/blog/series/한글-하위"), { recursive: true });
+    mkdirSync(join(dir, "content/blog/(outer)/(inner)/grouped-post"), {
+      recursive: true,
+    });
     writeFileSync(
       join(dir, "content/blog/edited-later/index.mdx"),
       "---\npublished: 2024-01-10 09:00:00\ntitle: Edited Later\n---\nBody\n"
@@ -203,6 +206,10 @@ describe("next-sitemap.config.js", () => {
     writeFileSync(
       join(dir, "content/blog/series/한글-하위/index.mdx"),
       "---\npublished: 2024-03-01 09:00:00\ntitle: Nested Hangul\n---\nBody\n"
+    );
+    writeFileSync(
+      join(dir, "content/blog/(outer)/(inner)/grouped-post/index.mdx"),
+      "---\npublished: 2024-04-01 09:00:00\ntitle: Grouped Post\n---\nBody\n"
     );
     const gitEnv = {
       ...process.env,
@@ -256,6 +263,10 @@ describe("next-sitemap.config.js", () => {
       expect(
         run(`/ko/blog/series/${encodeURIComponent("한글-하위")}`).lastmod
       ).toBe("2025-05-01T12:00:00.000Z");
+      // Consecutive Fumadocs route-group folders ((outer)/(inner)) strip cleanly
+      expect(run("/ko/blog/grouped-post").lastmod).toBe(
+        "2025-05-01T12:00:00.000Z"
+      );
       // %2F inside a single segment must stay encoded and never alias a nested post
       expect(
         run(`/ko/blog/series%2F${encodeURIComponent("한글-하위")}`).lastmod

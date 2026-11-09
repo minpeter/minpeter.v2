@@ -163,8 +163,7 @@ function readFrontmatterPublishedDate(filePath) {
   }
 }
 
-const routeGroupSegmentPattern = /(?:^|\/)\([^/]+\)\//gu;
-const leadingSlashPattern = /^\/+/u;
+const routeGroupFolderPattern = /^\([^/]+\)$/u;
 const localeSuffixPattern = new RegExp(
   `\\.(?<locale>${locales.join("|")})$`,
   "u"
@@ -195,14 +194,20 @@ function getBlogMdxIndex() {
     }
     const withoutGroups = rel
       .slice(0, -4)
-      .replace(routeGroupSegmentPattern, "/")
-      .replace(leadingSlashPattern, "");
+      .split("/")
+      .filter((segment) => segment && !routeGroupFolderPattern.test(segment))
+      .join("/");
     const localeMatch = localeSuffixPattern.exec(withoutGroups);
     const fileLocale = localeMatch?.groups?.locale ?? defaultLocale;
     const stem = localeMatch
       ? withoutGroups.slice(0, -localeMatch[0].length)
       : withoutGroups;
-    const slug = stem.endsWith("/index") ? stem.slice(0, -6) : stem;
+    let slug = stem;
+    if (stem === "index") {
+      slug = "";
+    } else if (stem.endsWith("/index")) {
+      slug = stem.slice(0, -6);
+    }
     if (slug) {
       index.set(`${slug}:${fileLocale}`, `content/blog/${rel}`);
     }
