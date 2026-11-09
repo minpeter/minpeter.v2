@@ -89,10 +89,10 @@ describe("applyStoredTheme", () => {
     vi.restoreAllMocks();
   });
 
-  it("applies light by default, syncs meta theme-color, and respects stored dark preference", () => {
+  it("applies light by default, respects stored dark preference, and leaves SSR meta theme-color untouched for React hydration", () => {
     const meta = document.createElement("meta");
     meta.name = "theme-color";
-    meta.content = "#0a0a0b";
+    meta.content = "#ffffff";
     document.head.append(meta);
 
     applyStoredTheme();
@@ -103,6 +103,6 @@ describe("applyStoredTheme", () => {
     applyStoredTheme();
     expect(document.documentElement.classList.contains("dark")).toBe(true);
     expect(document.documentElement.style.colorScheme).toBe("dark");
-    expect(meta.content).toBe("#0a0a0b");
+    expect(meta.content).toBe("#ffffff");
   });
 });

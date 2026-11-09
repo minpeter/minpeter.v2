@@ -170,6 +170,41 @@ test("home page language selector switches between en, ja, and default ko", asyn
   ).toBe("ko");
 });
 
+test("global 404 omits language selector while localized 404 keeps clean locale links", async ({
+  isMobile,
+  page,
+}) => {
+  const globalResponse = await page.goto("/en/nonexistent");
+  expect(globalResponse?.status()).toBe(404);
+  await expect(page.getByTestId("language-selector")).toHaveCount(0);
+
+  const localizedResponse = await page.goto("/en/blog/does-not-exist", {
+    waitUntil: "networkidle",
+  });
+  expect(localizedResponse?.status()).toBe(404);
+  const trigger = page
+    .getByTestId("language-selector")
+    .filter({ visible: true });
+  await expect(trigger).toHaveText("EN");
+  if (isMobile) {
+    await trigger.tap();
+  } else {
+    await trigger.hover({ scroll: "none" });
+  }
+  await expect(page.getByRole("menuitem", { name: "English" })).toHaveAttribute(
+    "href",
+    "/en/blog/does-not-exist"
+  );
+  await expect(page.getByRole("menuitem", { name: "한국어" })).toHaveAttribute(
+    "href",
+    "/ko/blog/does-not-exist"
+  );
+  await expect(page.getByRole("menuitem", { name: "日本語" })).toHaveAttribute(
+    "href",
+    "/ja/blog/does-not-exist"
+  );
+});
+
 test.describe("touch trigger", () => {
   it.use({ hasTouch: true });
 

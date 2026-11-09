@@ -9,8 +9,15 @@ const faviconPaths = {
   light: "/assets/favicon-light.svg",
 } as const;
 
+const themeColors = {
+  dark: "#0a0a0b",
+  light: "#ffffff",
+} as const;
+
 export const ThemeFavicon = () => {
   const { resolvedTheme } = useTheme();
+  const themeColor =
+    resolvedTheme === "dark" ? themeColors.dark : themeColors.light;
 
   useEffect(() => {
     if (resolvedTheme !== "dark" && resolvedTheme !== "light") {
@@ -31,5 +38,5 @@ export const ThemeFavicon = () => {
     favicon.href = `${faviconPaths[resolvedTheme]}?theme=${resolvedTheme}`;
   }, [resolvedTheme]);
 
-  return null;
+  return <meta content={themeColor} name="theme-color" />;
 };

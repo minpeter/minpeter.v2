@@ -359,14 +359,23 @@
   }
 
   /* Fumadocs `<figure class="shiki ... overflow-hidden">` places its 24×24px
-     copy button 7–12px from top and 8px from right; bias the 44×44px hit box
-     inward so none of it is clipped by the figure border. */
+     copy button 12px from top on untitled blocks (which can be ~46.6px tall on
+     1-line snippets) and 7px from top inside `h-9.5` titled headers; bias each
+     44×44px hit box inward so none of it is clipped by the figure border. */
   .blog-post-page [data-blog-body] figure.shiki button::after {
     position: absolute;
-    inset-block: min(0px, max(-7px, calc(100% - 44px)))
-      min(0px, calc(100% - 37px));
+    inset-block: min(0px, max(-12px, calc(100% - 44px)))
+      min(0px, calc(100% - 32px));
     inset-inline: min(0px, calc(100% - 36px))
       min(0px, max(-8px, calc(100% - 44px)));
     content: "";
+  }
+
+  .blog-post-page
+    [data-blog-body]
+    figure.shiki:has(> div > figcaption)
+    button::after {
+    inset-block: min(0px, max(-7px, calc(100% - 44px)))
+      min(0px, calc(100% - 37px));
   }
 }
