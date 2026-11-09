@@ -10,6 +10,8 @@ import {
   useState,
 } from "react";
 
+import { readStoredTheme } from "@/shared/theme-init";
+
 const STORAGE_KEY = "theme";
 
 type Theme = "light" | "dark";
@@ -41,10 +43,7 @@ export function ThemeProvider({
   useEffect(() => {
     let initial: Theme = defaultTheme;
     try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored === "light" || stored === "dark") {
-        initial = stored;
-      }
+      initial = readStoredTheme(defaultTheme);
     } catch {
       // ignore
     }

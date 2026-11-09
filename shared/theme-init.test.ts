@@ -4,8 +4,16 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   applyStoredTheme,
   ensurePretendardFonts,
+  holdStoreThemeColor,
   promoteDeferredFonts,
+  syncThemeColorMeta,
 } from "./theme-init";
+
+const readThemeColors = () =>
+  Array.from(
+    document.head.querySelectorAll('meta[name="theme-color"]'),
+    (meta) => meta.getAttribute("content")
+  );
 
 describe("promoteDeferredFonts", () => {
   afterEach(() => {
@@ -113,5 +121,53 @@ describe("applyStoredTheme", () => {
         .querySelector('meta[name="theme-color"]')
         ?.getAttribute("content")
     ).toBe("#0a0a0b");
+  });
+
+  it("resolves a legacy stored system theme from the OS preference", () => {
+    vi.stubGlobal(
+      "matchMedia",
+      vi.fn(() => ({ matches: true }))
+    );
+    localStorage.setItem("theme", "system");
+
+    applyStoredTheme();
+
+    expect(document.documentElement.classList.contains("dark")).toBe(true);
+    expect(readThemeColors()).toEqual(["#0a0a0b"]);
+    vi.unstubAllGlobals();
+  });
+
+  it("starts store routes black before hydration and leaves other routes on the theme color", () => {
+    for (const [path, color] of [
+      ["/products", "#000000"],
+      ["/en/products/maru60", "#000000"],
+      ["/products-archive", "#ffffff"],
+      ["/ja/blog", "#ffffff"],
+    ] as const) {
+      window.history.replaceState(null, "", path);
+      applyStoredTheme();
+      expect(readThemeColors(), path).toEqual([color]);
+    }
+    window.history.replaceState(null, "", "/");
+  });
+});
+
+describe("holdStoreThemeColor", () => {
+  afterEach(() => {
+    document.head.innerHTML = "";
+    document.documentElement.className = "";
+  });
+
+  it("keeps theme-color black while held, then restores the applied theme", () => {
+    document.documentElement.classList.add("light");
+    syncThemeColorMeta("light");
+
+    const release = holdStoreThemeColor();
+    expect(readThemeColors()).toEqual(["#000000"]);
+    syncThemeColorMeta("light");
+    expect(readThemeColors()).toEqual(["#000000"]);
+
+    release();
+    expect(readThemeColors()).toEqual(["#ffffff"]);
   });
 });

@@ -1,7 +1,36 @@
+import { locales } from "./i18n/locales.js";
+
 const THEME_COLORS = {
   dark: "#0a0a0b",
   light: "#ffffff",
 } as const;
+
+/** Product store pages paint pure black regardless of the site theme. */
+const STORE_THEME_COLOR = "#000000";
+const STORE_PATH = new RegExp(
+  `^(?:/(?:${locales.join("|")}))?/products(?:/|$)`,
+  "u"
+);
+let storeThemeColorHolds = 0;
+
+/**
+ * Read the saved theme. A legacy `system` value (from the former next-themes
+ * setup) keeps following the OS instead of silently becoming light.
+ */
+export function readStoredTheme(
+  fallback: "light" | "dark" = "light"
+): "light" | "dark" {
+  const stored = localStorage.getItem("theme");
+  if (stored === "light" || stored === "dark") {
+    return stored;
+  }
+  if (stored === "system") {
+    return window.matchMedia("(prefers-color-scheme: dark)").matches
+      ? "dark"
+      : "light";
+  }
+  return fallback;
+}
 
 /**
  * Synchronize a single imperative `<meta name="theme-color">` in `<head>`.
@@ -10,6 +39,27 @@ const THEME_COLORS = {
  * and soft navigations never reset it.
  */
 export function syncThemeColorMeta(resolved: "light" | "dark"): void {
+  writeThemeColorMeta(
+    storeThemeColorHolds > 0 ? STORE_THEME_COLOR : THEME_COLORS[resolved]
+  );
+}
+
+/**
+ * Keep the browser chrome black while a store page is mounted; the returned
+ * release restores the color of the theme applied to `<html>`.
+ */
+export function holdStoreThemeColor(): () => void {
+  storeThemeColorHolds += 1;
+  writeThemeColorMeta(STORE_THEME_COLOR);
+  return () => {
+    storeThemeColorHolds -= 1;
+    syncThemeColorMeta(
+      document.documentElement.classList.contains("dark") ? "dark" : "light"
+    );
+  };
+}
+
+function writeThemeColorMeta(color: string): void {
   const [existing, ...duplicates] =
     document.head.querySelectorAll<HTMLMetaElement>('meta[name="theme-color"]');
   for (const duplicate of duplicates) {
@@ -20,7 +70,7 @@ export function syncThemeColorMeta(resolved: "light" | "dark"): void {
     meta.name = "theme-color";
     document.head.append(meta);
   }
-  meta.content = THEME_COLORS[resolved];
+  meta.content = color;
 }
 
 /**
@@ -30,13 +80,17 @@ export function syncThemeColorMeta(resolved: "light" | "dark"): void {
  */
 export function applyStoredTheme(): void {
   try {
-    const stored = localStorage.getItem("theme");
-    const resolved = stored === "dark" ? "dark" : "light";
+    const resolved = readStoredTheme();
     const root = document.documentElement;
     root.classList.remove("light", "dark");
     root.classList.add(resolved);
     root.style.colorScheme = resolved;
-    syncThemeColorMeta(resolved);
+    // Store pages hold black once hydrated; start black so the chrome never flashes the theme color.
+    writeThemeColorMeta(
+      STORE_PATH.test(window.location.pathname)
+        ? STORE_THEME_COLOR
+        : THEME_COLORS[resolved]
+    );
   } catch {
     // private mode / blocked storage
   }

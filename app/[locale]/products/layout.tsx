@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 import { Suspense } from "react";
 
 import { LanguageSelector } from "@/components/language-selector";
+import { StoreThemeColor } from "@/components/store-theme-color";
 import { Link } from "@/shared/i18n/navigation";
 
 export default async function ProductsLayout({
@@ -16,6 +17,7 @@ export default async function ProductsLayout({
   return (
     // `dark` scopes Tailwind dark variants; data-store switches the page tokens (products.css).
     <div className="store dark" data-store>
+      <StoreThemeColor />
       <header className="store-header">
         <Link className="store-header-home store-label tap-target" href="/">
           minpeter

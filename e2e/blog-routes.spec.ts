@@ -80,12 +80,44 @@ test.describe("blog routes found by responsive QA", () => {
       .toBeGreaterThan(0);
   });
 
-  it("soft-navigating out of /products restores light theme tokens, main width, and theme toggle", async ({
+  it("soft-navigating out of /products restores light theme tokens, theme-color, main width, and theme toggle", async ({
     page,
   }) => {
+    const readThemeColors = () =>
+      page.evaluate(() =>
+        Array.from(document.querySelectorAll('meta[name="theme-color"]')).map(
+          (el) => el.getAttribute("content")
+        )
+      );
+    // Record every theme-color value from the first byte so a pre-hydration flash fails the test.
+    await page.addInitScript(() => {
+      const seen: string[] = [];
+      Object.assign(window, { __themeColorHistory: seen });
+      new MutationObserver(() => {
+        const color = document
+          .querySelector('meta[name="theme-color"]')
+          ?.getAttribute("content");
+        if (color && seen.at(-1) !== color) {
+          seen.push(color);
+        }
+      }).observe(document, {
+        attributeFilter: ["content"],
+        attributes: true,
+        childList: true,
+        subtree: true,
+      });
+    });
     await page.goto("/products", { waitUntil: "networkidle" });
     const toggle = page.locator("[data-theme-toggle]");
     await expect(toggle).toBeHidden();
+    await expect.poll(readThemeColors).toEqual(["#000000"]);
+    expect(
+      await page.evaluate(
+        () =>
+          (window as unknown as { __themeColorHistory: string[] })
+            .__themeColorHistory
+      )
+    ).toEqual(["#000000"]);
     await expect
       .poll(() =>
         page.evaluate(() => getComputedStyle(document.body).backgroundColor)
@@ -95,6 +127,7 @@ test.describe("blog routes found by responsive QA", () => {
     await page.locator("a.store-header-home").filter({ visible: true }).click();
     await expect(page).toHaveURL(HOME_URL);
     await expect(toggle).toBeVisible();
+    await expect.poll(readThemeColors).toEqual(["#ffffff"]);
     await expect
       .poll(() =>
         page.evaluate(() => getComputedStyle(document.body).backgroundColor)
