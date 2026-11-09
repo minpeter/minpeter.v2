@@ -1,7 +1,6 @@
 import { cacheLife } from "next/cache";
 import { notFound } from "next/navigation";
 
-import { decodeSlugs } from "@/shared/decode-slugs";
 import { createOgImageBytes, ogImageBytesResponse } from "@/shared/og-image";
 import { getOgTitleSize, getOgTitleVisualWidth } from "@/shared/og-title";
 import { siteConfig } from "@/shared/site-config";
@@ -53,5 +52,5 @@ export const GET = async (
 ) => {
   const { locale, slug } = await params;
 
-  return ogImageBytesResponse(await getPostOgImage(locale, decodeSlugs(slug)));
+  return ogImageBytesResponse(await getPostOgImage(locale, slug));
 };
