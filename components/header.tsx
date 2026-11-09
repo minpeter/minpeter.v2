@@ -56,7 +56,7 @@ export default function Header({
           {rightContent}
           {rightContent ? <span>·</span> : null}
           <Suspense fallback={null}>
-            <LanguageSelector />
+            <LanguageSelector className="in-[.blog-post-page]:text-[0.8125rem]" />
           </Suspense>
         </div>
       </div>

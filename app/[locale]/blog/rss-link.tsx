@@ -15,7 +15,7 @@ export async function RssLink({ locale }: RssLinkProps) {
     <a
       className={cn(
         "fieldnotes-rss tap-target",
-        "flex items-center gap-1 rounded-md px-2 py-1 text-sm",
+        "flex items-center gap-1 rounded-md px-1.5 py-1 text-[0.6875rem] leading-[1.26]",
         "text-muted-foreground hover:bg-secondary hover:text-primary",
         "transition-colors duration-150",
         "focus-visible:ring-ring focus:outline-none focus-visible:ring-2"

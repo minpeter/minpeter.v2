@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import {
   createMetadata,
   createNotFoundMetadata,
+  createSectionImage,
   getLocalizedPath,
   NOT_FOUND_TITLE,
   resolveLocale,
@@ -57,6 +58,34 @@ describe("shared metadata", () => {
         height: 630,
         type: "image/png",
         url: "/og/not-found",
+        width: 1200,
+      },
+    });
+  });
+
+  it("builds distinct opengraph-image and twitter-image URLs for section images", () => {
+    const metadata = createMetadata({
+      image: createSectionImage("ko", "/products", "minpeter | 제품"),
+      locale: "ko",
+      path: "/products",
+      title: "minpeter | 제품",
+    });
+
+    expect(metadata.openGraph).toMatchObject({
+      images: {
+        alt: "minpeter | 제품",
+        height: 630,
+        type: "image/png",
+        url: "/ko/products/opengraph-image",
+        width: 1200,
+      },
+    });
+    expect(metadata.twitter).toMatchObject({
+      images: {
+        alt: "minpeter | 제품",
+        height: 630,
+        type: "image/png",
+        url: "/ko/products/twitter-image",
         width: 1200,
       },
     });

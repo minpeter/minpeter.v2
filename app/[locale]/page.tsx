@@ -64,7 +64,7 @@ export default function Page() {
             />
           </Link>
           <Suspense fallback={null}>
-            <LanguageSelector className="px-1.5 py-1 text-[0.6875rem] leading-[1.26]" />
+            <LanguageSelector />
           </Suspense>
         </div>
         <h1 className="text-base leading-tight tracking-tight">

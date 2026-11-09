@@ -71,7 +71,7 @@ export function LanguageSelector({ className }: { className?: string } = {}) {
         <button
           aria-label={`${currentLabel.short} - ${t("selectLanguage")}`}
           className={cn(
-            "tap-target text-muted-foreground hover:bg-secondary hover:text-primary focus-visible:ring-ring flex items-center gap-1 rounded-md px-2 py-1 text-sm transition-colors duration-150 focus:outline-none focus-visible:ring-2",
+            "tap-target text-muted-foreground hover:bg-secondary hover:text-primary focus-visible:ring-ring flex items-center gap-1 rounded-md px-1.5 py-1 text-[0.6875rem] leading-[1.26] transition-colors duration-150 focus:outline-none focus-visible:ring-2",
             className
           )}
           data-testid="language-selector"

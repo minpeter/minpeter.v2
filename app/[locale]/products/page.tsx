@@ -5,16 +5,18 @@ import { ProductFirstFramePreload } from "@/components/product-first-frame-prelo
 import { ProductSpin } from "@/components/product-spin";
 import { Link } from "@/shared/i18n/navigation";
 import { PRODUCTS } from "@/shared/products";
-import { createMetadata } from "@/shared/utils/metadata";
+import { createMetadata, createSectionImage } from "@/shared/utils/metadata";
 
 export async function generateMetadata(): Promise<Metadata> {
   const [locale, t] = await Promise.all([getLocale(), getTranslations()]);
+  const title = `minpeter | ${t("products.title")}`;
 
   return createMetadata({
     description: t("products.description"),
+    image: createSectionImage(locale, "/products", title),
     locale,
     path: "/products",
-    title: `minpeter | ${t("products.title")}`,
+    title,
   });
 }
 

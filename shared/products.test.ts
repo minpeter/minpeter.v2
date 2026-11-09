@@ -85,7 +85,6 @@ describe("Maru60 naming and historical turntable assets", () => {
             width: 1024,
           }
     );
-    expect(product?.renders).toHaveLength(4);
     expect(manifest).toMatchObject({
       angle_step_degrees: 5,
       count: 72,

@@ -36,7 +36,7 @@ export default async function ProductsLayout({
           />
         </Link>
         <Suspense fallback={null}>
-          <LanguageSelector />
+          <LanguageSelector className="text-xs" />
         </Suspense>
       </header>
       {children}

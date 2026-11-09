@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 
 import { ShowcaseProjectCollection } from "@/components/showcase-project-collection";
-import { createMetadata } from "@/shared/utils/metadata";
+import { createMetadata, createSectionImage } from "@/shared/utils/metadata";
 
 // KiroLB and InferX retain their wordmarks; Token Hub pairs its original H with outlined lettering.
 import inferxAnalytics from "./assets/inferx-analytics.webp";
@@ -28,13 +28,19 @@ import tokenHubRequestsDark from "./assets/token-hub-requests-dark.webp";
 import tokenHubWordmark from "./assets/token-hub-wordmark.svg";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const [locale, t] = await Promise.all([
+  const [locale, t, tShowcase] = await Promise.all([
     getLocale(),
     getTranslations("showcase.items.loadBalancer"),
+    getTranslations("showcase"),
   ]);
 
   return createMetadata({
     description: t("summary"),
+    image: createSectionImage(
+      locale,
+      "/show",
+      `minpeter | ${tShowcase("kicker")}`
+    ),
     locale,
     path: "/show/the-load-balancer",
     title: `minpeter | ${t("title")}`,

@@ -4,17 +4,18 @@ import { getLocale, getTranslations } from "next-intl/server";
 
 import { LanguageSelector } from "@/components/language-selector";
 import { Link } from "@/shared/i18n/navigation";
-import { createMetadata } from "@/shared/utils/metadata";
+import { createMetadata, createSectionImage } from "@/shared/utils/metadata";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const locale = await getLocale();
-  const t = await getTranslations();
+  const [locale, t] = await Promise.all([getLocale(), getTranslations()]);
+  const title = `minpeter | ${t("resume.kicker")}`;
 
   return createMetadata({
     description: t("resume.metadataDescription"),
+    image: createSectionImage(locale, "/resume", title),
     locale,
     path: "/resume",
-    title: `minpeter | ${t("resume.kicker")}`,
+    title,
   });
 }
 
