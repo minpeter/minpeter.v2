@@ -6,6 +6,7 @@ import {
   getOgTitleSize,
   getOgTitleVisualWidth,
   getTitleTokens,
+  OG_CJK_SCALE,
 } from "./og-title";
 
 export const ogImageSize = {
@@ -43,13 +44,14 @@ const OG_BAR_SEGMENTS = [
 ] as const;
 
 const CatMark = () => (
+  // Decorative; no <title>: the OG renderer paints it as visible text.
   <svg
+    aria-hidden="true"
     height={104}
     viewBox="0 0 118 104"
     width={118}
     xmlns="http://www.w3.org/2000/svg"
   >
-    <title>minpeter mark</title>
     <path d={catPaths.face} fill="#f7f7f2" />
     <path d={catPaths.eyes} fill="#050505" />
   </svg>
@@ -147,7 +149,8 @@ const OgImage = ({
             fontSize: titleSize,
             letterSpacing: 0,
             lineHeight: 1.1,
-            maxHeight: 104,
+            // Room for two full lines at any title size (up to 54px).
+            maxHeight: Math.max(104, Math.ceil(titleSize * 1.1 * 2)),
             overflow: "hidden",
             overflowWrap: "break-word",
             width: "100%",
@@ -158,7 +161,7 @@ const OgImage = ({
               key={`${token.offset}:${token.text}`}
               style={{
                 fontSize: token.isCjk
-                  ? Math.round(titleSize * 0.78)
+                  ? Math.round(titleSize * OG_CJK_SCALE)
                   : titleSize,
                 transform: token.isCjk
                   ? `translateY(-${Math.round(titleSize * 0.13)}px)`
@@ -227,16 +230,15 @@ export const createOgImageResponse = async ({
   detail = "WWW",
   locale,
   title,
-  titleSize,
 }: {
   detail?: string;
   locale: string;
   title: string;
-  titleSize?: number;
 }) => {
   const localizedTitle = title.toLocaleUpperCase(locale);
-  const resolvedTitleSize =
-    titleSize ?? getOgTitleSize(getOgTitleVisualWidth(localizedTitle));
+  const resolvedTitleSize = getOgTitleSize(
+    getOgTitleVisualWidth(localizedTitle)
+  );
   const fusionPixelFontData = await readFile(
     locale === "ja" ? fusionPixelFontUrls.ja : fusionPixelFontUrls.ko
   );

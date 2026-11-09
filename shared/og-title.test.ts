@@ -4,31 +4,38 @@ import {
   getOgTitleSize,
   getOgTitleVisualWidth,
   getTitleTokens,
+  OG_CJK_SCALE,
 } from "./og-title";
 
 describe(getOgTitleVisualWidth, () => {
   it("counts latin letters at the default width", () => {
-    expect(getOgTitleVisualWidth("Hello")).toBeCloseTo(5 * 0.62);
+    expect(getOgTitleVisualWidth("Hello")).toBeCloseTo(5 * 0.6);
   });
 
-  it("counts CJK characters as full width", () => {
-    expect(getOgTitleVisualWidth("한글")).toBe(2);
-    expect(getOgTitleVisualWidth("日本語")).toBe(3);
+  it("counts CJK characters at the scaled CJK size", () => {
+    expect(getOgTitleVisualWidth("한글")).toBeCloseTo(2 * OG_CJK_SCALE);
+    expect(getOgTitleVisualWidth("日本語")).toBeCloseTo(3 * OG_CJK_SCALE);
   });
 
-  it("counts spaces and narrow punctuation at 0.35", () => {
-    expect(getOgTitleVisualWidth(" ")).toBe(0.35);
-    expect(getOgTitleVisualWidth("I")).toBe(0.35);
-    expect(getOgTitleVisualWidth("!")).toBe(0.35);
+  it("counts narrow punctuation at 0.4", () => {
+    expect(getOgTitleVisualWidth("I")).toBe(0.4);
+    expect(getOgTitleVisualWidth("!")).toBe(0.4);
   });
 
-  it("counts wide latin characters at 0.85", () => {
-    expect(getOgTitleVisualWidth("M")).toBe(0.85);
-    expect(getOgTitleVisualWidth("@")).toBe(0.85);
+  it("counts spaces, digits and medium letters at 0.5", () => {
+    expect(getOgTitleVisualWidth(" ")).toBe(0.5);
+    expect(getOgTitleVisualWidth("1")).toBe(0.5);
+    expect(getOgTitleVisualWidth("L")).toBe(0.5);
+  });
+
+  it("counts wide latin characters at 0.8 and the em dash at 1", () => {
+    expect(getOgTitleVisualWidth("M")).toBe(0.8);
+    expect(getOgTitleVisualWidth("%")).toBe(0.8);
+    expect(getOgTitleVisualWidth("\u2014")).toBe(1);
   });
 
   it("sums mixed character widths", () => {
-    expect(getOgTitleVisualWidth("I M")).toBeCloseTo(0.35 + 0.35 + 0.85);
+    expect(getOgTitleVisualWidth("I M")).toBeCloseTo(0.4 + 0.5 + 0.8);
   });
 
   it("returns 0 for an empty title", () => {
@@ -43,7 +50,7 @@ describe(getOgTitleSize, () => {
   });
 
   it("floors the fitted size", () => {
-    expect(getOgTitleSize(20)).toBe(48);
+    expect(getOgTitleSize(20)).toBe(46);
   });
 
   it("clamps the size at 28 for long titles", () => {
