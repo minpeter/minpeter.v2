@@ -99,6 +99,8 @@ let gitLastModifiedByFile = null;
 
 /**
  * Batch-read latest git commit dates for `content/blog` in a single git call.
+ * Shallow clones (Vercel builds use `--depth=10`) report every file as added by
+ * the boundary commit, so they yield no dates and frontmatter decides instead.
  * @returns {Map<string, Date>}
  */
 function getGitLastModifiedMap() {
@@ -107,6 +109,15 @@ function getGitLastModifiedMap() {
   }
   const map = new Map();
   try {
+    const isShallow = execFileSync(
+      "git",
+      ["rev-parse", "--is-shallow-repository"],
+      { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] }
+    ).trim();
+    if (isShallow !== "false") {
+      gitLastModifiedByFile = map;
+      return map;
+    }
     const output = execFileSync(
       "git",
       [

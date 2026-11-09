@@ -276,4 +276,65 @@ describe("next-sitemap.config.js", () => {
       rmSync(dir, { force: true, recursive: true });
     }
   });
+
+  it("ignores Git dates in shallow clones, where the boundary commit claims every file", async () => {
+    const { execFileSync } = await import("node:child_process");
+    const { mkdtempSync, mkdirSync, rmSync, writeFileSync } = await import(
+      "node:fs"
+    );
+    const { tmpdir } = await import("node:os");
+    const { join } = await import("node:path");
+    const root = mkdtempSync(join(tmpdir(), "sitemap-shallow-lastmod-"));
+    const origin = join(root, "origin");
+    const clone = join(root, "clone");
+    mkdirSync(join(origin, "content/blog/old-post"), { recursive: true });
+    writeFileSync(
+      join(origin, "content/blog/old-post/index.mdx"),
+      "---\npublished: 2024-01-10 09:00:00\ntitle: Old\n---\nBody\n"
+    );
+    const commit = (message: string, date: string) => {
+      const env = {
+        ...process.env,
+        GIT_AUTHOR_DATE: date,
+        GIT_AUTHOR_EMAIL: "test@example.com",
+        GIT_AUTHOR_NAME: "Test",
+        GIT_COMMITTER_DATE: date,
+        GIT_COMMITTER_EMAIL: "test@example.com",
+        GIT_COMMITTER_NAME: "Test",
+      };
+      execFileSync("git", ["add", "."], { cwd: origin, env, stdio: "ignore" });
+      execFileSync("git", ["commit", "-m", message], {
+        cwd: origin,
+        env,
+        stdio: "ignore",
+      });
+    };
+    execFileSync("git", ["init"], { cwd: origin, stdio: "ignore" });
+    commit("old post", "2024-01-10T00:00:00Z");
+    writeFileSync(join(origin, "unrelated.txt"), "later\n");
+    commit("unrelated", "2026-11-01T00:00:00Z");
+    execFileSync(
+      "git",
+      ["clone", "--quiet", "--depth=1", `file://${origin}`, clone],
+      { stdio: "ignore" }
+    );
+
+    const cwd = process.cwd();
+    process.chdir(clone);
+    try {
+      vi.resetModules();
+      const fresh = (await import("./next-sitemap.config.js")).default;
+      const run = (path: string) =>
+        (fresh.transform as (config: object, path: string) => SitemapEntry)(
+          {},
+          path
+        );
+
+      // A depth-1 clone reports old-post as added on 2026-11-01; frontmatter wins.
+      expect(run("/ko/blog/old-post").lastmod).toBe("2024-01-10T00:00:00.000Z");
+    } finally {
+      process.chdir(cwd);
+      rmSync(root, { force: true, recursive: true });
+    }
+  });
 });
