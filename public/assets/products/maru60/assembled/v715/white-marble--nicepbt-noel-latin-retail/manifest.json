@@ -1,0 +1,92 @@
+{
+  "id": "white-marble--nicepbt-noel-latin-retail",
+  "housingId": "white-marble",
+  "keycapId": "nicepbt-noel-latin-retail",
+  "orderable": false,
+  "frames": [
+    {
+      "angleDegrees": 0,
+      "height": 1536,
+      "sha256": "393ff5382d8158a1d97a437982fc6b05bdcd82a15003c11b27efd55a3372f240",
+      "src": "/assets/products/maru60/assembled/v715/white-marble--nicepbt-noel-latin-retail/frame_000.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 30,
+      "height": 1536,
+      "sha256": "49377c62b8bb54dae38cae2d99e94f784dc2026fa810e85e80e8c8f8a6c7f224",
+      "src": "/assets/products/maru60/assembled/v715/white-marble--nicepbt-noel-latin-retail/frame_030.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 60,
+      "height": 1536,
+      "sha256": "96ccd4d173598fc6236aa40f9219561c7927009834d1f2da9118a69244eceebf",
+      "src": "/assets/products/maru60/assembled/v715/white-marble--nicepbt-noel-latin-retail/frame_060.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 90,
+      "height": 1536,
+      "sha256": "a417d0fc79e27cd8eec6d03bd781e9f12a2d3c71c9a3a7d5360af2bfa66de584",
+      "src": "/assets/products/maru60/assembled/v715/white-marble--nicepbt-noel-latin-retail/frame_090.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 120,
+      "height": 1536,
+      "sha256": "589310512ab7ae23fba2057e4e72d3ae77fe28e82aa6caa01eeabac20a198e03",
+      "src": "/assets/products/maru60/assembled/v715/white-marble--nicepbt-noel-latin-retail/frame_120.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 150,
+      "height": 1536,
+      "sha256": "977868177107a0c30a8b20017c29f6c7bdbda311ff7af3e20a2cdf60fda71826",
+      "src": "/assets/products/maru60/assembled/v715/white-marble--nicepbt-noel-latin-retail/frame_150.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 180,
+      "height": 1536,
+      "sha256": "a6d8657eae59ab94965aed42d41d74c5b64e7f6d13b23638293dafeea1c3db92",
+      "src": "/assets/products/maru60/assembled/v715/white-marble--nicepbt-noel-latin-retail/frame_180.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 210,
+      "height": 1536,
+      "sha256": "a057137f4e1af8f85746cfc98bc8039b64c697d0cfa3ec7e2f7b8472121bc6e8",
+      "src": "/assets/products/maru60/assembled/v715/white-marble--nicepbt-noel-latin-retail/frame_210.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 240,
+      "height": 1536,
+      "sha256": "ab5cd9e062c60b454ba6921e8480fcadbd68cc2ce9a8605898c85a44051f9fa8",
+      "src": "/assets/products/maru60/assembled/v715/white-marble--nicepbt-noel-latin-retail/frame_240.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 270,
+      "height": 1536,
+      "sha256": "928f0b49b6493a76c670f25c6e9c9bdb8fb0cf76d75ad399c1616d9dca96df51",
+      "src": "/assets/products/maru60/assembled/v715/white-marble--nicepbt-noel-latin-retail/frame_270.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 300,
+      "height": 1536,
+      "sha256": "b14ee669e3ca81fef5ddf73d0cb4ca6f45373f07c175755d8303ba1ff73386b0",
+      "src": "/assets/products/maru60/assembled/v715/white-marble--nicepbt-noel-latin-retail/frame_300.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 330,
+      "height": 1536,
+      "sha256": "98546a4561cc4d8484698c10747600098e937eea6fc837a961e79892fc529ec4",
+      "src": "/assets/products/maru60/assembled/v715/white-marble--nicepbt-noel-latin-retail/frame_330.webp",
+      "width": 1024
+    }
+  ]
+}

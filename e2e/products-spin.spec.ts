@@ -140,7 +140,7 @@ async function frameBodies() {
   }
   return Promise.all(
     Array.from({ length: 12 }, (_, index) => {
-      const expected = `/assets/products/maru60/assembled/v1/transparent--inventor/frame_${String(index * 30).padStart(3, "0")}.webp`;
+      const expected = `/assets/products/maru60/assembled/v715/transparent--inventor/frame_${String(index * 30).padStart(3, "0")}.webp`;
       expect(manifest.frames[index].src).toBe(expected);
       expect(manifest.frames[index].angleDegrees).toBe(index * 30);
       return readFile(path.join(process.cwd(), "public", expected));

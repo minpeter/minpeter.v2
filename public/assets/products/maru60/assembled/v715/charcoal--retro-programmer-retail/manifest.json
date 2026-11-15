@@ -1,0 +1,92 @@
+{
+  "id": "charcoal--retro-programmer-retail",
+  "housingId": "charcoal",
+  "keycapId": "retro-programmer-retail",
+  "orderable": false,
+  "frames": [
+    {
+      "angleDegrees": 0,
+      "height": 1536,
+      "sha256": "cefcb7c76e74798cfbf880817996d7233286580488f95a77874aac696194ed7a",
+      "src": "/assets/products/maru60/assembled/v715/charcoal--retro-programmer-retail/frame_000.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 30,
+      "height": 1536,
+      "sha256": "d68e7805fd6297d24904c381f796326f5f7c3b29a5afd3b163dab120d33ac1b8",
+      "src": "/assets/products/maru60/assembled/v715/charcoal--retro-programmer-retail/frame_030.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 60,
+      "height": 1536,
+      "sha256": "2cd73db0bd56c8005ab56f9ac63a0d0a6ae6fdc58dfb5a39be97a869b9c38b0c",
+      "src": "/assets/products/maru60/assembled/v715/charcoal--retro-programmer-retail/frame_060.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 90,
+      "height": 1536,
+      "sha256": "99d7a11f5e60acf26e8a6e7a3d6611963f6ee0e082ca9cb6883404c77345b91c",
+      "src": "/assets/products/maru60/assembled/v715/charcoal--retro-programmer-retail/frame_090.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 120,
+      "height": 1536,
+      "sha256": "fb7b975eff9cb4951cb00990844ec8f6a936cdf57b72c69e1c72797577464c4c",
+      "src": "/assets/products/maru60/assembled/v715/charcoal--retro-programmer-retail/frame_120.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 150,
+      "height": 1536,
+      "sha256": "582c3aea2b70aa7ca900be0f80f0eb48be49fb12ee5e5d0174ee69b6b67f5b99",
+      "src": "/assets/products/maru60/assembled/v715/charcoal--retro-programmer-retail/frame_150.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 180,
+      "height": 1536,
+      "sha256": "d75b73cf63f59cf1d89279e8229750f69f4cbe877cd0c08e465ca3c3538368d0",
+      "src": "/assets/products/maru60/assembled/v715/charcoal--retro-programmer-retail/frame_180.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 210,
+      "height": 1536,
+      "sha256": "886dd5e2eee30806cf37f953492761f4dee8b7e1d766c1639ac4542bee19b605",
+      "src": "/assets/products/maru60/assembled/v715/charcoal--retro-programmer-retail/frame_210.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 240,
+      "height": 1536,
+      "sha256": "132b32106fb6caf4fe39b72cabf99b4a2ad0e8a01eb2d8bee7ce6bf02ca976d6",
+      "src": "/assets/products/maru60/assembled/v715/charcoal--retro-programmer-retail/frame_240.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 270,
+      "height": 1536,
+      "sha256": "e3d06b88e9938d75cb5fc40963455b4b779d4005e10513cb9aa92bfc4c6d2a36",
+      "src": "/assets/products/maru60/assembled/v715/charcoal--retro-programmer-retail/frame_270.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 300,
+      "height": 1536,
+      "sha256": "3b3d5343f9788812aa5c27adabb20dbd88d5b08e116b01753b424f8818e8c0c5",
+      "src": "/assets/products/maru60/assembled/v715/charcoal--retro-programmer-retail/frame_300.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 330,
+      "height": 1536,
+      "sha256": "79cf8db9ffeb9db5242b36092cdd9252afc832a663f0bb16eda1eed985a0f091",
+      "src": "/assets/products/maru60/assembled/v715/charcoal--retro-programmer-retail/frame_330.webp",
+      "width": 1024
+    }
+  ]
+}

@@ -1,0 +1,92 @@
+{
+  "id": "bone-white--pbtfans-wob-retail",
+  "housingId": "bone-white",
+  "keycapId": "pbtfans-wob-retail",
+  "orderable": false,
+  "frames": [
+    {
+      "angleDegrees": 0,
+      "height": 1536,
+      "sha256": "5d59bd529c73dbdf7d4df3af76848567cdeec74e8c686b60b9a1c9d9d5200c8c",
+      "src": "/assets/products/maru60/assembled/v715/bone-white--pbtfans-wob-retail/frame_000.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 30,
+      "height": 1536,
+      "sha256": "a5dfa416af3b5df2c7dfe235c7dbd4ccbeff3c3b9b57b7a3080cf8fbf209bc4c",
+      "src": "/assets/products/maru60/assembled/v715/bone-white--pbtfans-wob-retail/frame_030.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 60,
+      "height": 1536,
+      "sha256": "3250d7fd9bc2c1533eadb10ed9223d378611a6d2b5760448eadd4284c185faf5",
+      "src": "/assets/products/maru60/assembled/v715/bone-white--pbtfans-wob-retail/frame_060.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 90,
+      "height": 1536,
+      "sha256": "d92b157586de0bc361b909fe63d05ea627f221937bc096b6d6c6d36e97424a24",
+      "src": "/assets/products/maru60/assembled/v715/bone-white--pbtfans-wob-retail/frame_090.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 120,
+      "height": 1536,
+      "sha256": "7d3fd9dd644ee356db334cb6050e357630aafc367e90f74f2fbd5d15c207c8cb",
+      "src": "/assets/products/maru60/assembled/v715/bone-white--pbtfans-wob-retail/frame_120.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 150,
+      "height": 1536,
+      "sha256": "70090a1d71f8b22c0177f199b8b7a63eec7f9047f3ad0bdca6d889ebc9ca652b",
+      "src": "/assets/products/maru60/assembled/v715/bone-white--pbtfans-wob-retail/frame_150.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 180,
+      "height": 1536,
+      "sha256": "f1e1fc1a43da533b6fb700cf94ac119ffda1e15d6033fcfc2d29d6440ca9c732",
+      "src": "/assets/products/maru60/assembled/v715/bone-white--pbtfans-wob-retail/frame_180.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 210,
+      "height": 1536,
+      "sha256": "9f035dfe44c3e434408b012509a39535bfd8b5da6ef8f235f6156e1c69d18157",
+      "src": "/assets/products/maru60/assembled/v715/bone-white--pbtfans-wob-retail/frame_210.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 240,
+      "height": 1536,
+      "sha256": "69409ff2301e85bba235a23b2a59a7b60676f4d88478ae1339fd3beea2ad796b",
+      "src": "/assets/products/maru60/assembled/v715/bone-white--pbtfans-wob-retail/frame_240.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 270,
+      "height": 1536,
+      "sha256": "891b339ad764166da1e9c6b264b54df49b8afac710147841bebe4765ea5c8e78",
+      "src": "/assets/products/maru60/assembled/v715/bone-white--pbtfans-wob-retail/frame_270.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 300,
+      "height": 1536,
+      "sha256": "a2432a1f8a38a8dc09542712cf116d7b2f659c37264986bad88a4bcfec2cfafe",
+      "src": "/assets/products/maru60/assembled/v715/bone-white--pbtfans-wob-retail/frame_300.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 330,
+      "height": 1536,
+      "sha256": "32e2d499a7af3d7504fc7b362bcb99787170c8202066fbe3735295f77ab051fe",
+      "src": "/assets/products/maru60/assembled/v715/bone-white--pbtfans-wob-retail/frame_330.webp",
+      "width": 1024
+    }
+  ]
+}

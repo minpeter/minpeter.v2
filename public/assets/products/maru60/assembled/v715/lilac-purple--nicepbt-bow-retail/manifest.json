@@ -1,0 +1,92 @@
+{
+  "id": "lilac-purple--nicepbt-bow-retail",
+  "housingId": "lilac-purple",
+  "keycapId": "nicepbt-bow-retail",
+  "orderable": false,
+  "frames": [
+    {
+      "angleDegrees": 0,
+      "height": 1536,
+      "sha256": "f8339d4b4621d650644093b1789693af7cbda27ab6546dee74afaebf778e4f0c",
+      "src": "/assets/products/maru60/assembled/v715/lilac-purple--nicepbt-bow-retail/frame_000.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 30,
+      "height": 1536,
+      "sha256": "befae0b847c81dc59c65308d578bf717255a2eae20f52d27de42c621f7442db4",
+      "src": "/assets/products/maru60/assembled/v715/lilac-purple--nicepbt-bow-retail/frame_030.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 60,
+      "height": 1536,
+      "sha256": "568a2fed3d49a5ff3bc925593be5578795b9bad2a114c94b49d2637a70afdaea",
+      "src": "/assets/products/maru60/assembled/v715/lilac-purple--nicepbt-bow-retail/frame_060.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 90,
+      "height": 1536,
+      "sha256": "7f6d7cfa3e8b6769804bada62d723ac2e0413e1c19773b6ea9e5e20dee6ec707",
+      "src": "/assets/products/maru60/assembled/v715/lilac-purple--nicepbt-bow-retail/frame_090.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 120,
+      "height": 1536,
+      "sha256": "442f97954266583c5f062ee6306ed7c7faa4fd975ba1977c120b24df1bcbc7bd",
+      "src": "/assets/products/maru60/assembled/v715/lilac-purple--nicepbt-bow-retail/frame_120.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 150,
+      "height": 1536,
+      "sha256": "e774dbceecf1f723abdfeb974da796c8382022c1903947a323e264190ced0460",
+      "src": "/assets/products/maru60/assembled/v715/lilac-purple--nicepbt-bow-retail/frame_150.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 180,
+      "height": 1536,
+      "sha256": "c8eb42175df6867d59706267333cf19c5db69148b076f67885ac7b3757f4d46a",
+      "src": "/assets/products/maru60/assembled/v715/lilac-purple--nicepbt-bow-retail/frame_180.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 210,
+      "height": 1536,
+      "sha256": "34ee7ab7ba844d560598d3f26995619964c983a8d36b7518a31864759de8e53d",
+      "src": "/assets/products/maru60/assembled/v715/lilac-purple--nicepbt-bow-retail/frame_210.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 240,
+      "height": 1536,
+      "sha256": "05a74bcaaf9312e951ae70b9442811dab72b31bd85d9e8a6020c2e2926ff3cd3",
+      "src": "/assets/products/maru60/assembled/v715/lilac-purple--nicepbt-bow-retail/frame_240.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 270,
+      "height": 1536,
+      "sha256": "76b3c6d087f13d469fdf4f9d74c83ff916c2791373f6776b7b18d53bb737b4d6",
+      "src": "/assets/products/maru60/assembled/v715/lilac-purple--nicepbt-bow-retail/frame_270.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 300,
+      "height": 1536,
+      "sha256": "627599a75907fea918d53622a630a0bbd6b3765020aa27b7b1764b4d6ed496d1",
+      "src": "/assets/products/maru60/assembled/v715/lilac-purple--nicepbt-bow-retail/frame_300.webp",
+      "width": 1024
+    },
+    {
+      "angleDegrees": 330,
+      "height": 1536,
+      "sha256": "2bd74635ace03695ad2e58d7cfad95b9af7826761cd853dc845a2ea8450a0cd1",
+      "src": "/assets/products/maru60/assembled/v715/lilac-purple--nicepbt-bow-retail/frame_330.webp",
+      "width": 1024
+    }
+  ]
+}
