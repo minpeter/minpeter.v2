@@ -1,0 +1,140 @@
+/* The page shell the index-style surfaces share (home, blog list, showcase,
+   resume, not-found): a centered column, the logo/tools bar on top of it, and
+   the kicker/title/description intro. Blog posts keep their own header. */
+
+@layer components {
+  .site-page {
+    width: 100%;
+    max-width: var(--measure);
+    padding-top: 6.5rem;
+    padding-bottom: 4rem;
+    margin-inline: auto;
+    font-family: var(--font-body);
+  }
+
+  .site-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 2rem;
+  }
+
+  .site-nav-tools {
+    display: flex;
+    gap: 0.25rem;
+    align-items: center;
+    font-size: var(--text-caption);
+    line-height: 1.26;
+    color: var(--ink-muted);
+  }
+
+  .site-logo-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 0.5rem;
+    opacity: 0.68;
+    transition:
+      background-color 160ms ease,
+      filter 300ms ease,
+      opacity 300ms ease;
+  }
+
+  .site-logo-link:hover,
+  .site-logo-link:focus-visible {
+    outline: none;
+    background-color: hsl(var(--secondary));
+    opacity: 1;
+  }
+
+  .site-logo {
+    width: 2rem;
+    height: 2rem;
+    transition: filter 300ms ease;
+  }
+
+  .dark .site-logo {
+    filter: invert(1);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not(.light, .dark) .site-logo {
+      filter: invert(1);
+    }
+  }
+
+  /* Header tools (RSS, language) are one quiet control family. */
+  .site-tool {
+    display: flex;
+    gap: 0.25rem;
+    align-items: center;
+    padding: 0.25rem 0.375rem;
+    font-size: var(--text-caption);
+    line-height: 1.26;
+    color: var(--ink-muted);
+    border-radius: 0.375rem;
+    transition:
+      background-color 150ms ease,
+      color 150ms ease;
+  }
+
+  .site-tool:hover {
+    color: hsl(var(--primary));
+    background-color: hsl(var(--secondary));
+  }
+
+  .site-tool:focus {
+    outline: none;
+  }
+
+  .site-tool:focus-visible {
+    outline: 2px solid hsl(var(--ring));
+  }
+
+  /* Keyboard focus. The hover wash alone is too close to the page colour to
+     show where focus is, so focus-visible also draws a ring. */
+  :is(
+    .site-logo-link,
+    .home-link,
+    .home-social-link,
+    .home-more-link,
+    .showcase-item-link,
+    .resume-home-link
+  ):focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+  }
+
+  .site-intro {
+    margin-top: 2.5rem;
+    margin-bottom: 3rem;
+  }
+
+  .site-kicker {
+    margin-bottom: 0.75rem;
+    font-size: var(--text-caption);
+    line-height: 1.26;
+    color: var(--ink-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .site-title {
+    margin: 0;
+    font-size: var(--text-heading);
+    font-weight: 400;
+    line-height: 1.1;
+    color: var(--ink-body);
+    letter-spacing: -0.035em;
+  }
+
+  .site-description {
+    max-width: 26rem;
+    margin-top: 0.75rem;
+    font-size: var(--text-ui);
+    line-height: 1.35;
+    color: var(--ink-muted);
+  }
+}

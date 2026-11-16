@@ -1,10 +1,8 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import { getLocale, getTranslations } from "next-intl/server";
 import { Suspense } from "react";
 
-import { LanguageSelector } from "@/components/language-selector";
-import { Link } from "@/shared/i18n/navigation";
+import { SiteNav } from "@/components/site-nav";
 import { type AppLocale, getCachedPostsForLocale } from "@/shared/source";
 import {
   createMetadata,
@@ -43,32 +41,16 @@ export default async function Page() {
   const posts = await getCachedPostsForLocale(locale as AppLocale);
 
   return (
-    <section className="fieldnotes-page" data-testid="blog-list-shell">
+    <section
+      className="site-page fieldnotes-page"
+      data-testid="blog-list-shell"
+    >
       <header className="fieldnotes-header">
-        <nav aria-label={t("common.blogNavigation")} className="fieldnotes-nav">
-          <Link
-            aria-label={t("backToHome")}
-            className="fieldnotes-logo-link tap-target"
-            href="/"
-          >
-            <Image
-              alt=""
-              aria-hidden="true"
-              className="fieldnotes-logo"
-              height={32}
-              priority
-              src="/assets/signature-mark.svg"
-              width={32}
-            />
-          </Link>
-          <div className="fieldnotes-nav-tools">
-            <RssLink locale={locale} />
-            <span aria-hidden="true">·</span>
-            <Suspense fallback={null}>
-              <LanguageSelector />
-            </Suspense>
-          </div>
-        </nav>
+        <SiteNav
+          home={{ href: "/", label: t("backToHome") }}
+          navigationLabel={t("common.blogNavigation")}
+          tools={<RssLink locale={locale} />}
+        />
       </header>
       {/*
         Soft-nav / streaming shell: header + search placeholder + full post list.
@@ -78,12 +60,12 @@ export default async function Page() {
         fallback={
           <>
             <BlogSearchShell searchPlaceholder={t("searchPlaceholder")} />
-            <BlogListFallback lang={locale} posts={posts} />
+            <BlogListFallback posts={posts} />
           </>
         }
       >
         <BlogList lang={locale} posts={posts}>
-          <BlogListFallback lang={locale} posts={posts} />
+          <BlogListFallback posts={posts} />
         </BlogList>
       </Suspense>
     </section>

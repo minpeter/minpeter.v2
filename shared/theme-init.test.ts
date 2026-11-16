@@ -6,7 +6,9 @@ import {
   ensurePretendardFonts,
   holdStoreThemeColor,
   promoteDeferredFonts,
+  readStoredTheme,
   syncThemeColorMeta,
+  THEME_BOOTSTRAP_SCRIPT,
 } from "./theme-init";
 
 const readThemeColors = () =>
@@ -169,5 +171,60 @@ describe("holdStoreThemeColor", () => {
 
     release();
     expect(readThemeColors()).toEqual(["#ffffff"]);
+  });
+});
+
+const NEEDS_ESCAPING = /[<&]/u;
+
+describe("THEME_BOOTSTRAP_SCRIPT", () => {
+  const run = (stored: string | null, osDark: boolean) => {
+    localStorage.clear();
+    if (stored !== null) {
+      localStorage.setItem("theme", stored);
+    }
+    document.documentElement.className = "";
+    vi.stubGlobal(
+      "matchMedia",
+      vi.fn(() => ({ matches: osDark }))
+    );
+    // The script ships as text and only ever runs by being evaluated.
+    new Function(THEME_BOOTSTRAP_SCRIPT)();
+    const resolved = readStoredTheme();
+    vi.unstubAllGlobals();
+    return { cls: document.documentElement.className, resolved };
+  };
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+    vi.unstubAllGlobals();
+    localStorage.clear();
+    document.documentElement.className = "";
+    document.documentElement.style.colorScheme = "";
+  });
+
+  it("puts the same theme on <html> that readStoredTheme resolves", () => {
+    for (const stored of [null, "light", "dark", "system", "nonsense"]) {
+      for (const osDark of [false, true]) {
+        const { cls, resolved } = run(stored, osDark);
+        expect(cls, `${stored} / osDark=${osDark}`).toBe(resolved);
+      }
+    }
+  });
+
+  it("lets a stored choice beat the OS in both directions", () => {
+    expect(run("light", true).cls).toBe("light");
+    expect(run("dark", false).cls).toBe("dark");
+  });
+
+  it("uses the OS before hydration even when storage is blocked", () => {
+    vi.spyOn(Storage.prototype, "getItem").mockImplementation(() => {
+      throw new DOMException("Storage blocked", "SecurityError");
+    });
+    expect(run(null, true)).toEqual({ cls: "dark", resolved: "dark" });
+    expect(run(null, false)).toEqual({ cls: "light", resolved: "light" });
+  });
+
+  it("needs no escaping inside a script tag", () => {
+    expect(THEME_BOOTSTRAP_SCRIPT).not.toMatch(NEEDS_ESCAPING);
   });
 });

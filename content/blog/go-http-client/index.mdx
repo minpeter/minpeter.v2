@@ -158,7 +158,7 @@ HTTP/1.1은 클라이언트가 서버와의 TCP 연결을 유지하여 여러 �
 
 1. head 메소드를 이용해 필요한 데이터인지 확인하고 요청한다.
 
-   ```jsx
+   ```go
    func TestHeadTime(t *testing.T) {
    	//바디를 소비하는데 발생하는 오버해드 방지
    	resp, err := http.Head("https://www.time.gov")

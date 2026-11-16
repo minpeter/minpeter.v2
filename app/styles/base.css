@@ -19,6 +19,39 @@
   }
 }
 
+/* The dark palette, applied by the `.dark` class, by store pages, and by a
+   dark OS before any class is set (see base layer below). */
+@utility theme-dark {
+  --scroll-bar-color: #2b2b2b;
+
+  --sh-class: #96c3ff;
+  --sh-jsxliterals: #797dff;
+  --sh-identifier: #f6f6f6;
+  --sh-property: #3c94ff;
+  --sh-entity: #34e4df;
+  --sh-string: #00f9e4;
+  --sh-keyword: #f87d74;
+  --sh-sign: #a5a5a5;
+  --sh-comment: #a5a5a5;
+
+  --background: 240 10% 3.9%;
+  --foreground: 0 0% 98%;
+  --card: 240 10% 3.9%;
+  --card-foreground: 0 0% 98%;
+  --primary: 0 0% 98%;
+  --primary-foreground: 240 5.9% 10%;
+  --secondary: 240 3.7% 15.9%;
+  --secondary-foreground: 0 0% 98%;
+  --muted: 240 3.7% 15.9%;
+  --muted-foreground: 240 5% 64.9%;
+  --accent: 240 3.7% 15.9%;
+  --accent-foreground: 0 0% 98%;
+  --destructive: 0 62.8% 30.6%;
+  --border: 240 3.7% 15.9%;
+  --input: 240 3.7% 15.9%;
+  --ring: 240 4.9% 83.9%;
+}
+
 @layer base {
   ::-webkit-scrollbar {
     @apply h-1 w-1.5;
@@ -62,7 +95,24 @@
     }
   }
 
+  /* Site-wide scales come first: every surface picks from these instead of
+     minting its own size or opacity. Four type steps, three text inks, two
+     rule weights and the reading measure. The light palette follows. */
   :root {
+    --text-caption: 0.6875rem;
+    --text-meta: 0.8125rem;
+    --text-ui: 0.9375rem;
+    --text-heading: 1.3125rem;
+
+    --ink: hsl(var(--foreground));
+    --ink-body: hsl(var(--foreground) / 0.85);
+    --ink-muted: hsl(var(--muted-foreground));
+
+    --line: hsl(var(--border));
+    --line-strong: hsl(var(--foreground) / 0.16);
+
+    --measure: 32rem;
+
     --background: 180 7% 96%;
     --foreground: 180 8% 6%;
 
@@ -82,7 +132,9 @@
     --card-foreground: 180 8% 6%;
     --primary: 240 5.9% 10%;
     --primary-foreground: 0 0% 98%;
-    --secondary: 240 4.8% 95.9%;
+    /* Hover washes and quiet badges. Sits ~4.5% below the page background so
+       it reads as a wash; the stock 95.9% vanished against the 96% page. */
+    --secondary: 180 5% 91.5%;
     --secondary-foreground: 240 5.9% 10%;
     --muted: 240 4.8% 95.9%;
     --muted-foreground: 240 3.8% 44%;
@@ -106,34 +158,17 @@
         [style*="display:none"] *
       )
   ) {
-    --scroll-bar-color: #2b2b2b;
+    @apply theme-dark;
+  }
 
-    --sh-class: #96c3ff;
-    --sh-jsxliterals: #797dff;
-    --sh-identifier: #f6f6f6;
-    --sh-property: #3c94ff;
-    --sh-entity: #34e4df;
-    --sh-string: #00f9e4;
-    --sh-keyword: #f87d74;
-    --sh-sign: #a5a5a5;
-    --sh-comment: #a5a5a5;
-
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 240 10% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 240 5.9% 10%;
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
-    --accent: 240 3.7% 15.9%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 240 4.9% 83.9%;
+  /* Before the client script runs there is no theme class on <html>. A dark
+     OS then gets the dark palette straight from CSS, so first paint is not a
+     light flash. Once a class is set (stored choice or resolved OS), it wins. */
+  @media (prefers-color-scheme: dark) {
+    :root:not(.light, .dark) {
+      color-scheme: dark;
+      @apply theme-dark;
+    }
   }
 }
 
@@ -142,8 +177,21 @@
     @apply border-border;
   }
 
+  /* The UI sans stack. Declared on `body` because that is where next/font
+     publishes `--font-geist`. */
   body {
+    --font-body: var(--font-geist), Arial, sans-serif;
+
     @apply bg-background text-foreground;
+  }
+
+  /* Tailwind v4 leaves buttons on the default cursor; links right next to
+     them get a pointer, so restore it for anything clickable. */
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]),
+  [role="tab"],
+  summary {
+    cursor: pointer;
   }
 }
 

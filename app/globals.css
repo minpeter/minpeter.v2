@@ -7,6 +7,7 @@
    is emitted before the page-level rules that build on it. */
 @import "./styles/theme.css";
 @import "./styles/base.css";
+@import "./styles/shell.css";
 @import "./styles/fieldnotes.css";
 @import "./styles/showcase.css";
 @import "./styles/products.css";

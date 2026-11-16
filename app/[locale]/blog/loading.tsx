@@ -1,5 +1,4 @@
-import Image from "next/image";
-
+import { SiteNavSkeleton } from "@/components/site-nav";
 import { Skeleton } from "@/components/ui/skeleton";
 
 const YEAR_GROUPS = ["group-1", "group-2", "group-3", "group-4"] as const;
@@ -7,25 +6,9 @@ const POSTS = ["post-1", "post-2", "post-3"] as const;
 
 export default function Loading() {
   return (
-    <div aria-busy="true" className="fieldnotes-page">
+    <div aria-busy="true" className="site-page fieldnotes-page">
       <header className="fieldnotes-header">
-        <div className="fieldnotes-nav">
-          <div aria-hidden="true" className="fieldnotes-logo-link">
-            <Image
-              alt=""
-              aria-hidden="true"
-              className="fieldnotes-logo"
-              height={32}
-              priority
-              src="/assets/signature-mark.svg"
-              width={32}
-            />
-          </div>
-          <div className="flex items-center gap-2">
-            <Skeleton className="h-3 w-8" />
-            <Skeleton className="h-3 w-8" />
-          </div>
-        </div>
+        <SiteNavSkeleton tools />
       </header>
 
       <div className="fieldnotes-search">
@@ -36,10 +19,10 @@ export default function Loading() {
         {YEAR_GROUPS.map((groupKey) => (
           <section className="fieldnotes-year" key={groupKey}>
             <Skeleton className="mb-4 h-3 w-10 rounded-sm" />
-            <ul className="fieldnotes-year-posts">
+            <ul className="post-rows">
               {POSTS.map((postKey) => (
-                <li className="fieldnotes-item" key={postKey}>
-                  <div className="fieldnotes-item-link">
+                <li key={postKey}>
+                  <div className="post-row">
                     <Skeleton className="h-4 w-3/5 rounded-sm" />
                     <Skeleton className="h-3 w-24 rounded-sm" />
                   </div>

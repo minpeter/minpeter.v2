@@ -11,6 +11,7 @@ import Footer from "@/components/footer";
 import { ThemeFavicon } from "@/components/theme-favicon";
 import { ThemeProvider } from "@/components/theme-provider";
 import { env } from "@/shared/env";
+import { THEME_BOOTSTRAP_SCRIPT } from "@/shared/theme-init";
 import { cn } from "@/shared/utils/tailwind";
 
 const geistMono = Geist_Mono({
@@ -40,6 +41,8 @@ export function RootDocument({ children, lang }: RootDocumentProps) {
       <head>
         {/* Native theme (class on <html>). Tell Dark Reader not to inject. */}
         <meta name="darkreader-lock" />
+        {/* Parser-blocking on purpose: sets the theme class before first paint. */}
+        <script>{THEME_BOOTSTRAP_SCRIPT}</script>
         <link
           href="/assets/favicon-light.svg"
           media="(prefers-color-scheme: light)"

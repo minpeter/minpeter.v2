@@ -161,7 +161,7 @@ You have 2 options:
 
 1. Use the HEAD method to check if the data is needed before requesting.
 
-   ```jsx
+   ```go
    func TestHeadTime(t *testing.T) {
    	// Prevent overhead from consuming body
    	resp, err := http.Head("https://www.time.gov")

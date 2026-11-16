@@ -162,7 +162,7 @@ HTTP/1.1はクライアントがサーバーとのTCP接続を維持して複数
 
 1. headメソッドを使用して必要なデータかどうか確認してから要求する。
 
-   ```jsx
+   ```go
    func TestHeadTime(t *testing.T) {
    	//ボディ消費時のオーバーヘッド防止
    	resp, err := http.Head("https://www.time.gov")

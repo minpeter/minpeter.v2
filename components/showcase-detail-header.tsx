@@ -1,9 +1,6 @@
-import Image from "next/image";
-
-import { Link } from "@/shared/i18n/navigation";
 import { cn } from "@/shared/utils/tailwind";
 
-import { LanguageSelector } from "./language-selector";
+import { SiteIntro, SiteNav } from "./site-nav";
 
 interface ShowcaseDetailHeaderProps {
   backLabel: string;
@@ -27,29 +24,12 @@ export function ShowcaseDetailHeader({
 }: ShowcaseDetailHeaderProps) {
   return (
     <header className={cn("showcase-header", className)}>
-      <nav aria-label={navigationLabel} className="fieldnotes-nav">
-        <Link
-          aria-label={backLabel}
-          className="fieldnotes-logo-link tap-target"
-          href={href}
-        >
-          <Image
-            alt=""
-            aria-hidden="true"
-            className="fieldnotes-logo"
-            height={32}
-            priority
-            src="/assets/signature-mark.svg"
-            width={32}
-          />
-        </Link>
-        <LanguageSelector />
-      </nav>
-      <div className="showcase-intro">
-        <p className="showcase-kicker">{kicker}</p>
-        <h1 className="showcase-title">{title}</h1>
-        <p className="showcase-description">{description}</p>
-      </div>
+      {/* On a detail page the logo is the way back to the index. */}
+      <SiteNav
+        home={{ href, label: backLabel }}
+        navigationLabel={navigationLabel}
+      />
+      <SiteIntro description={description} kicker={kicker} title={title} />
     </header>
   );
 }

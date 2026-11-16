@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import { getLocale, getTranslations } from "next-intl/server";
 
-import { LanguageSelector } from "@/components/language-selector";
+import { SiteIntro, SiteNav } from "@/components/site-nav";
 import { Link } from "@/shared/i18n/navigation";
 import { createMetadata, createSectionImage } from "@/shared/utils/metadata";
 
@@ -67,40 +66,23 @@ const SHOWCASE_GROUPS = [
 export default async function Page(_props: PageProps<"/[locale]/show">) {
   const t = await getTranslations();
   return (
-    <section className="showcase-page">
-      <header className="showcase-header">
-        <nav
-          aria-label={t("showcase.navigationLabel")}
-          className="fieldnotes-nav"
-        >
-          <Link
-            aria-label={t("backToHome")}
-            className="fieldnotes-logo-link tap-target"
-            href="/"
-          >
-            <Image
-              alt=""
-              aria-hidden="true"
-              className="fieldnotes-logo"
-              height={32}
-              priority
-              src="/assets/signature-mark.svg"
-              width={32}
-            />
-          </Link>
-          <LanguageSelector />
-        </nav>
-        <div className="showcase-intro">
-          <p className="showcase-kicker">{t("showcase.kicker")}</p>
-          <h1 className="showcase-title">{t("showcase.title")}</h1>
-          <p className="showcase-description">{t("showcase.description")}</p>
-        </div>
+    <section className="site-page">
+      <header>
+        <SiteNav
+          home={{ href: "/", label: t("backToHome") }}
+          navigationLabel={t("showcase.navigationLabel")}
+        />
+        <SiteIntro
+          description={t("showcase.description")}
+          kicker={t("showcase.kicker")}
+          title={t("showcase.title")}
+        />
       </header>
 
       <div className="space-y-8">
         {SHOWCASE_GROUPS.map(({ key: group, items }) => (
           <section key={group}>
-            <h2 className="showcase-kicker" id={`showcase-${group}`}>
+            <h2 className="site-kicker" id={`showcase-${group}`}>
               {t(`showcase.${group}Label`)}
             </h2>
             <nav
