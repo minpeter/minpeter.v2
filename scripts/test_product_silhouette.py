@@ -45,6 +45,9 @@ class Maru60AssetAlignmentTests(unittest.TestCase):
         retail = json.loads((root / "shared/maru60-retail-silhouettes.json").read_text())
         frames = list((root / "public/assets/products/maru60/assembled/v715-corrected").glob("*/*.webp"))
         self.assertEqual(len(frames), 420)
+        personal = list((root / "public/assets/products/maru60/assembled/v716-exterior/transparent--inventor").glob("*.webp"))
+        self.assertEqual(len(personal), 12)
+        frames += personal
         for source in frames:
             with self.subTest(frame=str(source)):
                 image = Image.open(source)

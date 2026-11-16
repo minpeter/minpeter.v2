@@ -60,6 +60,11 @@ describe("Maru60 naming and historical turntable assets", () => {
       );
       expect(messages.products.items.rule60.description).toContain("MARU60");
       expect(messages.products.items.rule60.details.status).toContain("v7.15");
+      expect(messages.products.items.rule60.details.status).toContain("PCB");
+      expect(messages.products.items.rule60.details.status).toContain(
+        "a552798"
+      );
+      expect(messages.products.customization.transparentNote).toContain("PCB");
       expect(messages.products.items.rule60.details.status).not.toContain(
         "v0.10"
       );
