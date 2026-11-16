@@ -1,0 +1,92 @@
+{
+  "id": "ice-blue--pbtfans-wob-retail",
+  "housingId": "ice-blue",
+  "keycapId": "pbtfans-wob-retail",
+  "orderable": false,
+  "frames": [
+    {
+      "angleDegrees": 0,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "717abc000b665d01cf48468a031e369b6858ee3c075ece9dea1f6b091071a2f7",
+      "src": "/assets/products/maru60/assembled/v715-corrected/ice-blue--pbtfans-wob-retail/frame_000.webp"
+    },
+    {
+      "angleDegrees": 30,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "f0d33fa3ea3cd3596900bc076e9436cb5d9756f7f1fd8eb82dad9f8716975512",
+      "src": "/assets/products/maru60/assembled/v715-corrected/ice-blue--pbtfans-wob-retail/frame_030.webp"
+    },
+    {
+      "angleDegrees": 60,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "257b0c153fabfcc21a1618b91fbe7afc77e749e1a53bc63373bc4156209837af",
+      "src": "/assets/products/maru60/assembled/v715-corrected/ice-blue--pbtfans-wob-retail/frame_060.webp"
+    },
+    {
+      "angleDegrees": 90,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "7b1cd44f4646cd08fc8c9a4a5abd8c6dc47f715a7aabe810bd5ca023e15ff152",
+      "src": "/assets/products/maru60/assembled/v715-corrected/ice-blue--pbtfans-wob-retail/frame_090.webp"
+    },
+    {
+      "angleDegrees": 120,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "dd490597544c6aa17923ddaaa6acd97285bf960d7daa59be4d02d6f4d03909ed",
+      "src": "/assets/products/maru60/assembled/v715-corrected/ice-blue--pbtfans-wob-retail/frame_120.webp"
+    },
+    {
+      "angleDegrees": 150,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "ad5bf30a2fc48fc38df390ca64adde6782d63049567087c224d007f34da48101",
+      "src": "/assets/products/maru60/assembled/v715-corrected/ice-blue--pbtfans-wob-retail/frame_150.webp"
+    },
+    {
+      "angleDegrees": 180,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "5d37eea3bc33bedee30949c33a50713ec441ab39ea369c425345d92575b57a00",
+      "src": "/assets/products/maru60/assembled/v715-corrected/ice-blue--pbtfans-wob-retail/frame_180.webp"
+    },
+    {
+      "angleDegrees": 210,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "a8ba8324bcfd90544414c0c92a96ccb0324894089b08c4d6ab08e4f6b29ea1f8",
+      "src": "/assets/products/maru60/assembled/v715-corrected/ice-blue--pbtfans-wob-retail/frame_210.webp"
+    },
+    {
+      "angleDegrees": 240,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "7a482206903fc833401595b1ced190bf245e495916c2e5aedd293a7b93b2f634",
+      "src": "/assets/products/maru60/assembled/v715-corrected/ice-blue--pbtfans-wob-retail/frame_240.webp"
+    },
+    {
+      "angleDegrees": 270,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "0c811112fda2070797317445681fc605b45a27aa4addfd74660439f114edbcdc",
+      "src": "/assets/products/maru60/assembled/v715-corrected/ice-blue--pbtfans-wob-retail/frame_270.webp"
+    },
+    {
+      "angleDegrees": 300,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "f72371a7965e481ff9da6a1e005a9f3ca5b2753823d54dcf18b7ee76f2d1330c",
+      "src": "/assets/products/maru60/assembled/v715-corrected/ice-blue--pbtfans-wob-retail/frame_300.webp"
+    },
+    {
+      "angleDegrees": 330,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "8645ba984534ef29fe8c9fc472a05113c5f917b1d4fab9501e4ade27549b6912",
+      "src": "/assets/products/maru60/assembled/v715-corrected/ice-blue--pbtfans-wob-retail/frame_330.webp"
+    }
+  ]
+}

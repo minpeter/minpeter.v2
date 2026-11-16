@@ -1,0 +1,92 @@
+{
+  "id": "lilac-purple--nicepbt-noel-latin-retail",
+  "housingId": "lilac-purple",
+  "keycapId": "nicepbt-noel-latin-retail",
+  "orderable": false,
+  "frames": [
+    {
+      "angleDegrees": 0,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "dc0c8ffb99fec14e264adc227b75d28c6264c0cb3d1f3a8205b97a439764003d",
+      "src": "/assets/products/maru60/assembled/v715-corrected/lilac-purple--nicepbt-noel-latin-retail/frame_000.webp"
+    },
+    {
+      "angleDegrees": 30,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "7a105ab89a495745accc85ee5da4d8909b8c1de3feaea46f1bdd76905236106d",
+      "src": "/assets/products/maru60/assembled/v715-corrected/lilac-purple--nicepbt-noel-latin-retail/frame_030.webp"
+    },
+    {
+      "angleDegrees": 60,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "0df4c8a7aee5a07ffc9b87cf507d3c9b013b4519cbf12fa116fcfa5351d6f7b8",
+      "src": "/assets/products/maru60/assembled/v715-corrected/lilac-purple--nicepbt-noel-latin-retail/frame_060.webp"
+    },
+    {
+      "angleDegrees": 90,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "d120e87b2c7714cf84eddf91940d2122f000fdc7801fa25886b2189e492aea83",
+      "src": "/assets/products/maru60/assembled/v715-corrected/lilac-purple--nicepbt-noel-latin-retail/frame_090.webp"
+    },
+    {
+      "angleDegrees": 120,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "db4577db9000e02a5fa420e646bedb916280ac9a3174b7a269cba0ae9e033625",
+      "src": "/assets/products/maru60/assembled/v715-corrected/lilac-purple--nicepbt-noel-latin-retail/frame_120.webp"
+    },
+    {
+      "angleDegrees": 150,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "3ff66a29214b9cee9544c76dcb854d7f491a599282a416dcef07913db519175d",
+      "src": "/assets/products/maru60/assembled/v715-corrected/lilac-purple--nicepbt-noel-latin-retail/frame_150.webp"
+    },
+    {
+      "angleDegrees": 180,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "f5b81c9474cab84e1395157c4aa248f3af44e6877317cd97c5fcf899fcf4aba7",
+      "src": "/assets/products/maru60/assembled/v715-corrected/lilac-purple--nicepbt-noel-latin-retail/frame_180.webp"
+    },
+    {
+      "angleDegrees": 210,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "5cea853a896b909fe1bfd0e5bdd89a0665d688e0e93b61eab1ac806d23bf864b",
+      "src": "/assets/products/maru60/assembled/v715-corrected/lilac-purple--nicepbt-noel-latin-retail/frame_210.webp"
+    },
+    {
+      "angleDegrees": 240,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "3dfdee0af32a74c993e6a3e4d787387cbec3272040b3944e6ff42fcb3b0c4812",
+      "src": "/assets/products/maru60/assembled/v715-corrected/lilac-purple--nicepbt-noel-latin-retail/frame_240.webp"
+    },
+    {
+      "angleDegrees": 270,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "cc70782088b20991c47cc038b8221e138671364fad1145fd277e287e6533132a",
+      "src": "/assets/products/maru60/assembled/v715-corrected/lilac-purple--nicepbt-noel-latin-retail/frame_270.webp"
+    },
+    {
+      "angleDegrees": 300,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "a8a6b578e9f296016de11516481721f1fb2c65c8485dedcfd22994433a76081b",
+      "src": "/assets/products/maru60/assembled/v715-corrected/lilac-purple--nicepbt-noel-latin-retail/frame_300.webp"
+    },
+    {
+      "angleDegrees": 330,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "e44910239c3e2dd1cedfb4119b609caee1990d3230f9916e297fc768746813c9",
+      "src": "/assets/products/maru60/assembled/v715-corrected/lilac-purple--nicepbt-noel-latin-retail/frame_330.webp"
+    }
+  ]
+}

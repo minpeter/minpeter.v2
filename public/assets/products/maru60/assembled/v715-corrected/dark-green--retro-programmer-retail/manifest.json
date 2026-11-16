@@ -1,0 +1,92 @@
+{
+  "id": "dark-green--retro-programmer-retail",
+  "housingId": "dark-green",
+  "keycapId": "retro-programmer-retail",
+  "orderable": false,
+  "frames": [
+    {
+      "angleDegrees": 0,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "ac36f48740795f8607419a6cdad1cb8e4b624e74026215903053c322bc668ac8",
+      "src": "/assets/products/maru60/assembled/v715-corrected/dark-green--retro-programmer-retail/frame_000.webp"
+    },
+    {
+      "angleDegrees": 30,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "1588b675c2d5a2ce1c97a29b0d0fd4d9dc38198d2350ed8610e210cc708a2d76",
+      "src": "/assets/products/maru60/assembled/v715-corrected/dark-green--retro-programmer-retail/frame_030.webp"
+    },
+    {
+      "angleDegrees": 60,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "911f015a4fd40eafb5a9754e127b0b0dee066913ef5f86f9627d9f48e7593fa6",
+      "src": "/assets/products/maru60/assembled/v715-corrected/dark-green--retro-programmer-retail/frame_060.webp"
+    },
+    {
+      "angleDegrees": 90,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "240f51e963cfd5dedefae15e095127258aaac02eb104d2f40d6ed41e1f5762b1",
+      "src": "/assets/products/maru60/assembled/v715-corrected/dark-green--retro-programmer-retail/frame_090.webp"
+    },
+    {
+      "angleDegrees": 120,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "c1a0d4529ecc911a339b473a915390b8e98492ff0eaab29a6727bb50e284f0a0",
+      "src": "/assets/products/maru60/assembled/v715-corrected/dark-green--retro-programmer-retail/frame_120.webp"
+    },
+    {
+      "angleDegrees": 150,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "cd8aa90a3581d603bb56b02873c5c6479fa1ca07ced9f4453e5ae43e8976e961",
+      "src": "/assets/products/maru60/assembled/v715-corrected/dark-green--retro-programmer-retail/frame_150.webp"
+    },
+    {
+      "angleDegrees": 180,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "647f212ce5ba47e493c911feda7a25d920c0a78274e0eb8edb95561b59a93c08",
+      "src": "/assets/products/maru60/assembled/v715-corrected/dark-green--retro-programmer-retail/frame_180.webp"
+    },
+    {
+      "angleDegrees": 210,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "57c5ee38a409efc64bb4e855cf2609d7a8dfdbb2f16f85f1172ca57d46c917cf",
+      "src": "/assets/products/maru60/assembled/v715-corrected/dark-green--retro-programmer-retail/frame_210.webp"
+    },
+    {
+      "angleDegrees": 240,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "7bbe5a474eef1d91f58fb5701e63e9b69b9a150c0f5da8c76aab1e55b571ad8c",
+      "src": "/assets/products/maru60/assembled/v715-corrected/dark-green--retro-programmer-retail/frame_240.webp"
+    },
+    {
+      "angleDegrees": 270,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "080318f4424fb0c14f8163a2eb6b6a7b4f507db86cb76ac029819613b2542dd9",
+      "src": "/assets/products/maru60/assembled/v715-corrected/dark-green--retro-programmer-retail/frame_270.webp"
+    },
+    {
+      "angleDegrees": 300,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "9243d20b0de8001afe8a1a9fadebf6cd8520c4f47e54a67b2f6dd43cb41a056a",
+      "src": "/assets/products/maru60/assembled/v715-corrected/dark-green--retro-programmer-retail/frame_300.webp"
+    },
+    {
+      "angleDegrees": 330,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "fbfd7052739708c53d221dfc05e3fa9ed3258cd88a9bd56e4e5140f06b22e30f",
+      "src": "/assets/products/maru60/assembled/v715-corrected/dark-green--retro-programmer-retail/frame_330.webp"
+    }
+  ]
+}

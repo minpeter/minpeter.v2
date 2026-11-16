@@ -1,0 +1,92 @@
+{
+  "id": "charcoal--pbtfans-wob-retail",
+  "housingId": "charcoal",
+  "keycapId": "pbtfans-wob-retail",
+  "orderable": false,
+  "frames": [
+    {
+      "angleDegrees": 0,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "4b6159278aa8dcebf0435457663a95ec0282ca52aff293c8ed429310e1b81cfa",
+      "src": "/assets/products/maru60/assembled/v715-corrected/charcoal--pbtfans-wob-retail/frame_000.webp"
+    },
+    {
+      "angleDegrees": 30,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "adc9b0b90ff8c93a5b75830a858c98e6eba3a612de6d855ad6d57d8e1ff1e115",
+      "src": "/assets/products/maru60/assembled/v715-corrected/charcoal--pbtfans-wob-retail/frame_030.webp"
+    },
+    {
+      "angleDegrees": 60,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "41aa22394c5e0c700b8070e14303a89e7e2dc7d628d90fb6ef8d5e0fc7c7d13e",
+      "src": "/assets/products/maru60/assembled/v715-corrected/charcoal--pbtfans-wob-retail/frame_060.webp"
+    },
+    {
+      "angleDegrees": 90,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "d09509460589afef1fe50a52343e3917eee351bd885e9588b8c1ef0ad31bc629",
+      "src": "/assets/products/maru60/assembled/v715-corrected/charcoal--pbtfans-wob-retail/frame_090.webp"
+    },
+    {
+      "angleDegrees": 120,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "a5e5c6c0640b7ca5892dae06ca2365560399d8b98b3d75c83694d6237d0e1e92",
+      "src": "/assets/products/maru60/assembled/v715-corrected/charcoal--pbtfans-wob-retail/frame_120.webp"
+    },
+    {
+      "angleDegrees": 150,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "3315d94fc91ad7a770bc1d6c0287f9ea706d5c528bbf781f0bacb79f8c2aa865",
+      "src": "/assets/products/maru60/assembled/v715-corrected/charcoal--pbtfans-wob-retail/frame_150.webp"
+    },
+    {
+      "angleDegrees": 180,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "36153544b9aaea7ac47aa546c73e26b0ff5e18a3bd3a9e007fef4dbec4a69326",
+      "src": "/assets/products/maru60/assembled/v715-corrected/charcoal--pbtfans-wob-retail/frame_180.webp"
+    },
+    {
+      "angleDegrees": 210,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "ef13b9e79a669928f0b2023f50ceba64ae7875dfb72cd5469b85baa3e3f10749",
+      "src": "/assets/products/maru60/assembled/v715-corrected/charcoal--pbtfans-wob-retail/frame_210.webp"
+    },
+    {
+      "angleDegrees": 240,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "83fadf4c415ba42f4168d86817926879eb56e287f7820cfc184db50718a123bd",
+      "src": "/assets/products/maru60/assembled/v715-corrected/charcoal--pbtfans-wob-retail/frame_240.webp"
+    },
+    {
+      "angleDegrees": 270,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "2229006c11f1bacb8abc555c3bf32948deae030047405f346ad6329b58f71e69",
+      "src": "/assets/products/maru60/assembled/v715-corrected/charcoal--pbtfans-wob-retail/frame_270.webp"
+    },
+    {
+      "angleDegrees": 300,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "c0847ef3eac5181d8ceb64781c2f110c242bcdb09919cb9c4746dcac3677979d",
+      "src": "/assets/products/maru60/assembled/v715-corrected/charcoal--pbtfans-wob-retail/frame_300.webp"
+    },
+    {
+      "angleDegrees": 330,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "1add8146c1877db0ceb16346ff3ef887c11c8f5d417ab38a2e829546f45adc92",
+      "src": "/assets/products/maru60/assembled/v715-corrected/charcoal--pbtfans-wob-retail/frame_330.webp"
+    }
+  ]
+}

@@ -1,50 +1,50 @@
 {
   "frame_000": {
-    "source": "public/assets/products/maru60/assembled/v715/transparent--inventor/frame_000.webp",
-    "sourceSha256": "5dd1b024326a52476de7a7ca9df28b27ea9b3603d3ffd99dea484177e20bac01"
+    "source": "public/assets/products/maru60/assembled/v1/transparent--inventor/frame_000.webp",
+    "sourceSha256": "26c6fa23a83124cb5a7a4c5cf9dc6196f0c9f42ceffb7e139d765b0cd4457e6b"
   },
   "frame_030": {
-    "source": "public/assets/products/maru60/assembled/v715/transparent--inventor/frame_030.webp",
-    "sourceSha256": "8c001b33bbfe28302195ec5b3cb8efa867d9f5b60e792d3218475ed4edd1484f"
+    "source": "public/assets/products/maru60/assembled/v1/transparent--inventor/frame_030.webp",
+    "sourceSha256": "905104bd9266013ecc6225da9a787ba0c702506beaede79ede73020f89ab33bb"
   },
   "frame_060": {
-    "source": "public/assets/products/maru60/assembled/v715/transparent--inventor/frame_060.webp",
-    "sourceSha256": "07d66a70eb0851b5e222bf2b20e86887f538967b5536f115b588bea9b0b4030f"
+    "source": "public/assets/products/maru60/assembled/v1/transparent--inventor/frame_060.webp",
+    "sourceSha256": "877769b420e937842c419858d665fb3a6c43affd8be8c208c045382a1afd5860"
   },
   "frame_090": {
-    "source": "public/assets/products/maru60/assembled/v715/transparent--inventor/frame_090.webp",
-    "sourceSha256": "522275f610aa7fb515ae102866817ea513e8ae7b4ec6d59f47e0fb46470ae0ee"
+    "source": "public/assets/products/maru60/assembled/v1/transparent--inventor/frame_090.webp",
+    "sourceSha256": "39962c4d975a98df549631065353f8aa755ec55f7de059821a5a438728bc21e6"
   },
   "frame_120": {
-    "source": "public/assets/products/maru60/assembled/v715/transparent--inventor/frame_120.webp",
-    "sourceSha256": "4400dc0a52a29e49ca3b56a6ab9f607774f8b330ff4bac09aba1610ded1791d3"
+    "source": "public/assets/products/maru60/assembled/v1/transparent--inventor/frame_120.webp",
+    "sourceSha256": "4251dc6fea4f56ff37bf9f41b4e3716a882256a8165cc6babd840cf30194b841"
   },
   "frame_150": {
-    "source": "public/assets/products/maru60/assembled/v715/transparent--inventor/frame_150.webp",
-    "sourceSha256": "0fe3639d0cdae7cc01d523b3cbd4cd874fb6f612f06cfbdd13d7f0774fc5c438"
+    "source": "public/assets/products/maru60/assembled/v1/transparent--inventor/frame_150.webp",
+    "sourceSha256": "5bf193d8c581ac4f0f5719f4fdd7be9e84fa607e7dc746eeee11c9fd2ae0635c"
   },
   "frame_180": {
-    "source": "public/assets/products/maru60/assembled/v715/transparent--inventor/frame_180.webp",
-    "sourceSha256": "0a5338b39303defd0f8bf5129372b2bd257006ce5a1333b65be770379ba6e484"
+    "source": "public/assets/products/maru60/assembled/v1/transparent--inventor/frame_180.webp",
+    "sourceSha256": "c417831ae9f502d6539d1086914d84ce69ab82eabfadc032d0e555b3d5db1f94"
   },
   "frame_210": {
-    "source": "public/assets/products/maru60/assembled/v715/transparent--inventor/frame_210.webp",
-    "sourceSha256": "e07d21bc03eea2b10418a31cf345ef4db1def25cc6f75fc89ba1f99b36975d82"
+    "source": "public/assets/products/maru60/assembled/v1/transparent--inventor/frame_210.webp",
+    "sourceSha256": "b9c115ea09223af3c2f4e54e61b362633b894927b436e472a679d0b16912f244"
   },
   "frame_240": {
-    "source": "public/assets/products/maru60/assembled/v715/transparent--inventor/frame_240.webp",
-    "sourceSha256": "e1d1fe1444d2897c20257cee6b8aa6afc0bcb886e72a2dfd1b5895188c87cb37"
+    "source": "public/assets/products/maru60/assembled/v1/transparent--inventor/frame_240.webp",
+    "sourceSha256": "6515af7d96139280ff553a35c0184122025d599a8d9905a8ac0e6cf6f0ad89bf"
   },
   "frame_270": {
-    "source": "public/assets/products/maru60/assembled/v715/transparent--inventor/frame_270.webp",
-    "sourceSha256": "2ad552a93008a269eb800017de0dc55a994d99c58f7a4007b88b969354b45792"
+    "source": "public/assets/products/maru60/assembled/v1/transparent--inventor/frame_270.webp",
+    "sourceSha256": "7f77abeaaae7b4ad17e69f6fdbbe76030ec1082085af17b14f652fde43d1d490"
   },
   "frame_300": {
-    "source": "public/assets/products/maru60/assembled/v715/transparent--inventor/frame_300.webp",
-    "sourceSha256": "bb2cd2738ca30a999b6b98bbc5c6b90e3e64d013430c47fabd0a547d70342245"
+    "source": "public/assets/products/maru60/assembled/v1/transparent--inventor/frame_300.webp",
+    "sourceSha256": "930539a4edd8157199e2739ce8a736392b943425674dad06baf9ffb02493258b"
   },
   "frame_330": {
-    "source": "public/assets/products/maru60/assembled/v715/transparent--inventor/frame_330.webp",
-    "sourceSha256": "84fe2a26309c795768a093019a5ba58b8753c78aad17ba691ffff9e2a57a1a9f"
+    "source": "public/assets/products/maru60/assembled/v1/transparent--inventor/frame_330.webp",
+    "sourceSha256": "34d3ce7a837c6e0356444547c06ec16c56c597cd27caa483e115ac56d179ee35"
   }
 }

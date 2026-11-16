@@ -136,7 +136,7 @@ const combinationSchema = z
       (frame, index) =>
         frame.angleDegrees === angles[index] &&
         frame.src ===
-          `/assets/products/maru60/assembled/v715/${value.id}/frame_${String(angles[index]).padStart(3, "0")}.webp`
+          `/assets/products/maru60/assembled/v715-corrected/${value.id}/frame_${String(angles[index]).padStart(3, "0")}.webp`
     )
   );
 
