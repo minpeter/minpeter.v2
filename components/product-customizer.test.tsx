@@ -75,7 +75,7 @@ vi.mock("@/components/product-spin", async () => {
       if (
         spin.basePath === "/personal" ||
         spin.basePath ===
-          "/assets/products/maru60/assembled/v1/transparent--inventor"
+          "/assets/products/maru60/assembled/v716-exterior/transparent--inventor"
       ) {
         return (
           <div
@@ -227,7 +227,7 @@ describe("ProductCustomizer availability and selection", () => {
     "uses the assembled personal twelve-frame fixture without retail classification in %s",
     (locale) => {
       const basePath =
-        "/assets/products/maru60/assembled/v1/transparent--inventor";
+        "/assets/products/maru60/assembled/v716-exterior/transparent--inventor";
       const frameSources = Array.from(
         { length: 12 },
         (_, index) =>

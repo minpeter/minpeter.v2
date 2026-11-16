@@ -1,0 +1,92 @@
+{
+  "id": "transparent--inventor",
+  "housingId": "transparent",
+  "keycapId": "inventor",
+  "orderable": false,
+  "frames": [
+    {
+      "angleDegrees": 0,
+      "height": 1536,
+      "width": 1024,
+      "src": "/assets/products/maru60/assembled/v716-exterior/transparent--inventor/frame_000.webp",
+      "sha256": "e7625f2f22646c48702a461db48ae1fdbbd8254cadf438e2dccef6f5c61e35ad"
+    },
+    {
+      "angleDegrees": 30,
+      "height": 1536,
+      "width": 1024,
+      "src": "/assets/products/maru60/assembled/v716-exterior/transparent--inventor/frame_030.webp",
+      "sha256": "cf00ce80a6205fdcee2c0f79572acd823500e90d2eb3ea02a283d19c8716802f"
+    },
+    {
+      "angleDegrees": 60,
+      "height": 1536,
+      "width": 1024,
+      "src": "/assets/products/maru60/assembled/v716-exterior/transparent--inventor/frame_060.webp",
+      "sha256": "066d4f8459ff466afea175a9e1b4bf7ce0fc9c5ffb044dc906b7491ccbcef2bb"
+    },
+    {
+      "angleDegrees": 90,
+      "height": 1536,
+      "width": 1024,
+      "src": "/assets/products/maru60/assembled/v716-exterior/transparent--inventor/frame_090.webp",
+      "sha256": "f6a3b746d1c89bc8ad8d8c3c900017a3a5846eae24c316f881c67e6158c90310"
+    },
+    {
+      "angleDegrees": 120,
+      "height": 1536,
+      "width": 1024,
+      "src": "/assets/products/maru60/assembled/v716-exterior/transparent--inventor/frame_120.webp",
+      "sha256": "6437c470a9b5db251248841253153a8624d1b0d156c0ae02164dc404ffc54d9e"
+    },
+    {
+      "angleDegrees": 150,
+      "height": 1536,
+      "width": 1024,
+      "src": "/assets/products/maru60/assembled/v716-exterior/transparent--inventor/frame_150.webp",
+      "sha256": "4637f146d6d13c6fcf815f163d3338a05db2837ad32619aaeb8a90ccf84455f0"
+    },
+    {
+      "angleDegrees": 180,
+      "height": 1536,
+      "width": 1024,
+      "src": "/assets/products/maru60/assembled/v716-exterior/transparent--inventor/frame_180.webp",
+      "sha256": "0ac1dac4db14477898fe3cda52dfdd726662373e619a0866fcd10e221db54fe5"
+    },
+    {
+      "angleDegrees": 210,
+      "height": 1536,
+      "width": 1024,
+      "src": "/assets/products/maru60/assembled/v716-exterior/transparent--inventor/frame_210.webp",
+      "sha256": "c95948b7d250a562befd205e6f88557da98bb2b5a11709234a5894122aff8248"
+    },
+    {
+      "angleDegrees": 240,
+      "height": 1536,
+      "width": 1024,
+      "src": "/assets/products/maru60/assembled/v716-exterior/transparent--inventor/frame_240.webp",
+      "sha256": "757c4e219755bb3f99618e6a1f4a6aedb2284fe6b4996727b0a57ecfa6e590aa"
+    },
+    {
+      "angleDegrees": 270,
+      "height": 1536,
+      "width": 1024,
+      "src": "/assets/products/maru60/assembled/v716-exterior/transparent--inventor/frame_270.webp",
+      "sha256": "65b2263f84a8817a9c0fba25d388ee447ccc6d2cab600c5ae049b1f9891229f3"
+    },
+    {
+      "angleDegrees": 300,
+      "height": 1536,
+      "width": 1024,
+      "src": "/assets/products/maru60/assembled/v716-exterior/transparent--inventor/frame_300.webp",
+      "sha256": "7361ba77e3585776edb83aec82bb9645bfafc0732cb8feba7c18d92590e67354"
+    },
+    {
+      "angleDegrees": 330,
+      "height": 1536,
+      "width": 1024,
+      "src": "/assets/products/maru60/assembled/v716-exterior/transparent--inventor/frame_330.webp",
+      "sha256": "58635ef99daca5f9a432cb093930105a1808765ad12a909836e1ff6b6a52ccb3"
+    }
+  ]
+}
