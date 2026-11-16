@@ -333,6 +333,13 @@ describe("ProductSpin progressive canvas", () => {
     const slider = screen.getByRole("slider", { name: "Retail render" });
     expect(slider.querySelectorAll("img")).toHaveLength(0);
     expect(slider.querySelectorAll("canvas")).toHaveLength(1);
+    expect(slider.querySelector("canvas")?.hasAttribute("inert")).toBe(true);
+    expect(slider.querySelector("canvas")?.hasAttribute("tabindex")).toBe(
+      false
+    );
+    expect(
+      slider.querySelector("canvas")?.classList.contains("pointer-events-none")
+    ).toBe(true);
     fireEvent.focus(slider);
     arrive(0);
     expect(slider.querySelectorAll("img")).toHaveLength(0);

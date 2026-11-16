@@ -1,0 +1,92 @@
+{
+  "id": "lilac-purple--pbtfans-wob-retail",
+  "housingId": "lilac-purple",
+  "keycapId": "pbtfans-wob-retail",
+  "orderable": false,
+  "frames": [
+    {
+      "angleDegrees": 0,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "7303fb6903edb09cf3b44e836862a5bb5d3d0334bed0b846fcd1b9656ae41002",
+      "src": "/assets/products/maru60/assembled/v715-corrected/lilac-purple--pbtfans-wob-retail/frame_000.webp"
+    },
+    {
+      "angleDegrees": 30,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "2dbf67f9c2f0e7f04bde3830c4db7f36dc1b20d0f5a983d390df1c755a4f8b10",
+      "src": "/assets/products/maru60/assembled/v715-corrected/lilac-purple--pbtfans-wob-retail/frame_030.webp"
+    },
+    {
+      "angleDegrees": 60,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "64f1e895320aa00a77b4f1f1ebc99c8243fc11c5b40c8a19ca0127d69db0f575",
+      "src": "/assets/products/maru60/assembled/v715-corrected/lilac-purple--pbtfans-wob-retail/frame_060.webp"
+    },
+    {
+      "angleDegrees": 90,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "f88615c76ac20400f0c55abae2dd79a82bc8cdf1e48736fc629f6946ccf76c6b",
+      "src": "/assets/products/maru60/assembled/v715-corrected/lilac-purple--pbtfans-wob-retail/frame_090.webp"
+    },
+    {
+      "angleDegrees": 120,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "d52ec6fd0ec68f1f3b0cdd9ab180955083aa662aaa68879aec1700a479936cf5",
+      "src": "/assets/products/maru60/assembled/v715-corrected/lilac-purple--pbtfans-wob-retail/frame_120.webp"
+    },
+    {
+      "angleDegrees": 150,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "1f60725fc3680b9f1018e2bcb8ef38b24f93177d0fcc055d283ca64ca0dc2c37",
+      "src": "/assets/products/maru60/assembled/v715-corrected/lilac-purple--pbtfans-wob-retail/frame_150.webp"
+    },
+    {
+      "angleDegrees": 180,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "ba40cfef03d64a2a943f6efe1042273962c653fa8f7dbed50849b28c1506e0e3",
+      "src": "/assets/products/maru60/assembled/v715-corrected/lilac-purple--pbtfans-wob-retail/frame_180.webp"
+    },
+    {
+      "angleDegrees": 210,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "a3bb882d7ebee68103326fbc5e041e4abff9c6de3c5a106e57920b9f4a639d28",
+      "src": "/assets/products/maru60/assembled/v715-corrected/lilac-purple--pbtfans-wob-retail/frame_210.webp"
+    },
+    {
+      "angleDegrees": 240,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "c7f63a8f408537652af7addc0efd600080e106e0f830f59c5c0b3857831df618",
+      "src": "/assets/products/maru60/assembled/v715-corrected/lilac-purple--pbtfans-wob-retail/frame_240.webp"
+    },
+    {
+      "angleDegrees": 270,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "02063334c26d32c189ddb6e230e76729f3cd6e135dca1ae19c10a63daa0d37d6",
+      "src": "/assets/products/maru60/assembled/v715-corrected/lilac-purple--pbtfans-wob-retail/frame_270.webp"
+    },
+    {
+      "angleDegrees": 300,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "68eba5d87fc4982249b989f23b0d9e3e0f243567e8abb7084ecf501e73d6c34d",
+      "src": "/assets/products/maru60/assembled/v715-corrected/lilac-purple--pbtfans-wob-retail/frame_300.webp"
+    },
+    {
+      "angleDegrees": 330,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "39e8b7684e3c6664709b828edd2049c4e60983604bb085b8f39996bc72c0a212",
+      "src": "/assets/products/maru60/assembled/v715-corrected/lilac-purple--pbtfans-wob-retail/frame_330.webp"
+    }
+  ]
+}

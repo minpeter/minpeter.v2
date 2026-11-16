@@ -1,0 +1,92 @@
+{
+  "id": "ash-gray--nicepbt-bow-retail",
+  "housingId": "ash-gray",
+  "keycapId": "nicepbt-bow-retail",
+  "orderable": false,
+  "frames": [
+    {
+      "angleDegrees": 0,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "7f292b4cffde5b0135f3dc07153e765a6d334398e25984a09b54aeb4897289e4",
+      "src": "/assets/products/maru60/assembled/v715-corrected/ash-gray--nicepbt-bow-retail/frame_000.webp"
+    },
+    {
+      "angleDegrees": 30,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "552049aca70043e4648873023c45d325e5767c76d5b711dad027acb980404bf0",
+      "src": "/assets/products/maru60/assembled/v715-corrected/ash-gray--nicepbt-bow-retail/frame_030.webp"
+    },
+    {
+      "angleDegrees": 60,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "724a1b2d595909f2579284e0981a055fbbb277aa22b7449005d0aaf09097cc21",
+      "src": "/assets/products/maru60/assembled/v715-corrected/ash-gray--nicepbt-bow-retail/frame_060.webp"
+    },
+    {
+      "angleDegrees": 90,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "8271376acec1859a95d79cb5a390aea92d22a0a5569beda662597ed1b2eb30ed",
+      "src": "/assets/products/maru60/assembled/v715-corrected/ash-gray--nicepbt-bow-retail/frame_090.webp"
+    },
+    {
+      "angleDegrees": 120,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "598643a6aedba04d9bb55b282ae958df41238b77b7117350f1acd022f1415f10",
+      "src": "/assets/products/maru60/assembled/v715-corrected/ash-gray--nicepbt-bow-retail/frame_120.webp"
+    },
+    {
+      "angleDegrees": 150,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "ad1f8314733f489bfb874e54bdf5161ad2359be364c138183ec9d006b954b85c",
+      "src": "/assets/products/maru60/assembled/v715-corrected/ash-gray--nicepbt-bow-retail/frame_150.webp"
+    },
+    {
+      "angleDegrees": 180,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "027a269d896b7f15b9417946ea928ed2e44873f3ba1ac0a68fcda18aafa8e5f5",
+      "src": "/assets/products/maru60/assembled/v715-corrected/ash-gray--nicepbt-bow-retail/frame_180.webp"
+    },
+    {
+      "angleDegrees": 210,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "289147fad452b29e8a0d5975565eca6e1439e32b0897a59dff323ac2a61a0adb",
+      "src": "/assets/products/maru60/assembled/v715-corrected/ash-gray--nicepbt-bow-retail/frame_210.webp"
+    },
+    {
+      "angleDegrees": 240,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "a4b9dd4c44f87d6aed3eb2b356e0a7067261aa778071bc5e420f0ed40eda8ff3",
+      "src": "/assets/products/maru60/assembled/v715-corrected/ash-gray--nicepbt-bow-retail/frame_240.webp"
+    },
+    {
+      "angleDegrees": 270,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "0011e679a2a2726a442e439a1ef4d1fdfc06aeb488eb200f1c7b422851471246",
+      "src": "/assets/products/maru60/assembled/v715-corrected/ash-gray--nicepbt-bow-retail/frame_270.webp"
+    },
+    {
+      "angleDegrees": 300,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "f07c341745409aedee8de72639a6fa461f4edd1a52de370fa6de956888e4e327",
+      "src": "/assets/products/maru60/assembled/v715-corrected/ash-gray--nicepbt-bow-retail/frame_300.webp"
+    },
+    {
+      "angleDegrees": 330,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "1e08ac620f24b097608145f4bb6af6dd1ad9be043c21100c0701934d83581a81",
+      "src": "/assets/products/maru60/assembled/v715-corrected/ash-gray--nicepbt-bow-retail/frame_330.webp"
+    }
+  ]
+}

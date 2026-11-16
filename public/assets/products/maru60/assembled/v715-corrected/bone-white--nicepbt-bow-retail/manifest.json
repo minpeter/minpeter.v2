@@ -1,0 +1,92 @@
+{
+  "id": "bone-white--nicepbt-bow-retail",
+  "housingId": "bone-white",
+  "keycapId": "nicepbt-bow-retail",
+  "orderable": false,
+  "frames": [
+    {
+      "angleDegrees": 0,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "757c530baddc3db9f41cb9cdfd5471e7b4a8671989df6aa1cb9304447b97effe",
+      "src": "/assets/products/maru60/assembled/v715-corrected/bone-white--nicepbt-bow-retail/frame_000.webp"
+    },
+    {
+      "angleDegrees": 30,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "d906c6236c7065699fc2e47f1090c39ec3208511b5f8594ed9c10f983e11dd6c",
+      "src": "/assets/products/maru60/assembled/v715-corrected/bone-white--nicepbt-bow-retail/frame_030.webp"
+    },
+    {
+      "angleDegrees": 60,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "d6a9f73a9f4c04ae266e09155de787bd2e886d0584a1370da14803a2511fcab8",
+      "src": "/assets/products/maru60/assembled/v715-corrected/bone-white--nicepbt-bow-retail/frame_060.webp"
+    },
+    {
+      "angleDegrees": 90,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "c788082e7f60a8bd43efa7a061a0d2e8b6d38b76c0467cc95bb6d33871422657",
+      "src": "/assets/products/maru60/assembled/v715-corrected/bone-white--nicepbt-bow-retail/frame_090.webp"
+    },
+    {
+      "angleDegrees": 120,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "df17a5164d21c9fd71c20df5fda25b2b43096d28cac4e312ab30e83444f118af",
+      "src": "/assets/products/maru60/assembled/v715-corrected/bone-white--nicepbt-bow-retail/frame_120.webp"
+    },
+    {
+      "angleDegrees": 150,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "842abdc1abbdc4b9471925c653b5885c18d6d4ae1108b71b6012f68e35c37c7d",
+      "src": "/assets/products/maru60/assembled/v715-corrected/bone-white--nicepbt-bow-retail/frame_150.webp"
+    },
+    {
+      "angleDegrees": 180,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "e24a0e50611db24c4da6ce2ee2c9f5faf1282a92ac21688b51f40a4c757c1e50",
+      "src": "/assets/products/maru60/assembled/v715-corrected/bone-white--nicepbt-bow-retail/frame_180.webp"
+    },
+    {
+      "angleDegrees": 210,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "4538c4ef6a59495a459897636da02b1ae3f74615448492bcf8c2b12e90519688",
+      "src": "/assets/products/maru60/assembled/v715-corrected/bone-white--nicepbt-bow-retail/frame_210.webp"
+    },
+    {
+      "angleDegrees": 240,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "47f6484336c42a91a6ed83a7d6c0eca761199a13a44c5f58683348dacf6d3862",
+      "src": "/assets/products/maru60/assembled/v715-corrected/bone-white--nicepbt-bow-retail/frame_240.webp"
+    },
+    {
+      "angleDegrees": 270,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "62d48bb8a85a85c56ea99a034fac013ecbc691cbfbed7f7908c3766d10a9a544",
+      "src": "/assets/products/maru60/assembled/v715-corrected/bone-white--nicepbt-bow-retail/frame_270.webp"
+    },
+    {
+      "angleDegrees": 300,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "38a0ebb4e4c45e4c3aaad5f3f168e0aafd35a879c40c75a78f6a197883fdb3b8",
+      "src": "/assets/products/maru60/assembled/v715-corrected/bone-white--nicepbt-bow-retail/frame_300.webp"
+    },
+    {
+      "angleDegrees": 330,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "14c465322254e1f3240bec868e4c3fd853b10facb7bae835876dc663472cae69",
+      "src": "/assets/products/maru60/assembled/v715-corrected/bone-white--nicepbt-bow-retail/frame_330.webp"
+    }
+  ]
+}

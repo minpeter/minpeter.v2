@@ -1,0 +1,92 @@
+{
+  "id": "white-marble--retro-programmer-retail",
+  "housingId": "white-marble",
+  "keycapId": "retro-programmer-retail",
+  "orderable": false,
+  "frames": [
+    {
+      "angleDegrees": 0,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "4607f27dedde926920dcb64eb568b34b6f2f83f8b481489a3751ba62211eecda",
+      "src": "/assets/products/maru60/assembled/v715-corrected/white-marble--retro-programmer-retail/frame_000.webp"
+    },
+    {
+      "angleDegrees": 30,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "425dfd479e750c819431b10c02f1e2ecc8da46d9ef32036534e3c5e3c927e666",
+      "src": "/assets/products/maru60/assembled/v715-corrected/white-marble--retro-programmer-retail/frame_030.webp"
+    },
+    {
+      "angleDegrees": 60,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "cfb62765e0a481c4dff21e818950025eeb3e9d59506b1a3278550318d11cbbb1",
+      "src": "/assets/products/maru60/assembled/v715-corrected/white-marble--retro-programmer-retail/frame_060.webp"
+    },
+    {
+      "angleDegrees": 90,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "46d18fb2c0d149b29ad4a872b43e6c2472b84da43357b57f0ceb6baaa4e81c3c",
+      "src": "/assets/products/maru60/assembled/v715-corrected/white-marble--retro-programmer-retail/frame_090.webp"
+    },
+    {
+      "angleDegrees": 120,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "c25029f07dadb8621ba45189d5c71063021949d39ee573d0c109e9c4a7a0edda",
+      "src": "/assets/products/maru60/assembled/v715-corrected/white-marble--retro-programmer-retail/frame_120.webp"
+    },
+    {
+      "angleDegrees": 150,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "205e1f1daff8adfec51bb207cd0bdbe56193f1a642ec93a1ffbd69c435b1d6b0",
+      "src": "/assets/products/maru60/assembled/v715-corrected/white-marble--retro-programmer-retail/frame_150.webp"
+    },
+    {
+      "angleDegrees": 180,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "45520e0347407596e773c84b2650bafe202a680f805941ba20a289055c850b39",
+      "src": "/assets/products/maru60/assembled/v715-corrected/white-marble--retro-programmer-retail/frame_180.webp"
+    },
+    {
+      "angleDegrees": 210,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "53a963b95d2e16591a0654cd22ddcabb2304a8691a2933a78647059cacda514d",
+      "src": "/assets/products/maru60/assembled/v715-corrected/white-marble--retro-programmer-retail/frame_210.webp"
+    },
+    {
+      "angleDegrees": 240,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "8889c765bc783ee048d1e89cf6b978fa88f5d54298c814e08b86a102a0bb826b",
+      "src": "/assets/products/maru60/assembled/v715-corrected/white-marble--retro-programmer-retail/frame_240.webp"
+    },
+    {
+      "angleDegrees": 270,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "2948213bfaafa63ed7ad2048e6516c0c15de7b64f60d1d12e0cef7b10e6023ac",
+      "src": "/assets/products/maru60/assembled/v715-corrected/white-marble--retro-programmer-retail/frame_270.webp"
+    },
+    {
+      "angleDegrees": 300,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "aa9db7f40b0393d8e965b1a502651a6d9b08e3b91df705bf23c7bda8d7b8b5f2",
+      "src": "/assets/products/maru60/assembled/v715-corrected/white-marble--retro-programmer-retail/frame_300.webp"
+    },
+    {
+      "angleDegrees": 330,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "4c45eb33682ae7d64a1bc47470c8f47543d4f51d3b51b465d07c6848462bcea3",
+      "src": "/assets/products/maru60/assembled/v715-corrected/white-marble--retro-programmer-retail/frame_330.webp"
+    }
+  ]
+}

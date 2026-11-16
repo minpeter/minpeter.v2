@@ -186,7 +186,7 @@ function candidate(
       angleDegrees,
       height: 1536,
       sha256: "a".repeat(64),
-      src: `/assets/products/maru60/assembled/v1/${id}/frame_${String(angleDegrees).padStart(3, "0")}.webp`,
+      src: `/assets/products/maru60/assembled/v715-corrected/${id}/frame_${String(angleDegrees).padStart(3, "0")}.webp`,
       width: 1024,
     })),
     housingId,

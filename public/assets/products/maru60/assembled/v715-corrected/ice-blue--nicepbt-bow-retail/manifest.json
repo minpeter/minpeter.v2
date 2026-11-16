@@ -1,0 +1,92 @@
+{
+  "id": "ice-blue--nicepbt-bow-retail",
+  "housingId": "ice-blue",
+  "keycapId": "nicepbt-bow-retail",
+  "orderable": false,
+  "frames": [
+    {
+      "angleDegrees": 0,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "98c124f15a064a3b0cb8aa64068a38a388636a8f43332345778aab0aa72749de",
+      "src": "/assets/products/maru60/assembled/v715-corrected/ice-blue--nicepbt-bow-retail/frame_000.webp"
+    },
+    {
+      "angleDegrees": 30,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "3f5953b80d85738c735ce662528dfd1e675b7bb21f4f6230cde78e65fb0a41d7",
+      "src": "/assets/products/maru60/assembled/v715-corrected/ice-blue--nicepbt-bow-retail/frame_030.webp"
+    },
+    {
+      "angleDegrees": 60,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "ab29a9c0837f5dbecbebe37c475105466cd4bfcf5d52120c6961ae0bc7826680",
+      "src": "/assets/products/maru60/assembled/v715-corrected/ice-blue--nicepbt-bow-retail/frame_060.webp"
+    },
+    {
+      "angleDegrees": 90,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "6d7c801109fb5d4f4de01779ca71c090cc6417b9460b2a7adca558dd84d82cc3",
+      "src": "/assets/products/maru60/assembled/v715-corrected/ice-blue--nicepbt-bow-retail/frame_090.webp"
+    },
+    {
+      "angleDegrees": 120,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "9ccdd8a75061992ff67c637868327dc98907ce844e1befdd28a7cf1907598870",
+      "src": "/assets/products/maru60/assembled/v715-corrected/ice-blue--nicepbt-bow-retail/frame_120.webp"
+    },
+    {
+      "angleDegrees": 150,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "3c77861d337aae5bc9714f1809fdead078c11477c278ff32b8bbadb3b8fc198c",
+      "src": "/assets/products/maru60/assembled/v715-corrected/ice-blue--nicepbt-bow-retail/frame_150.webp"
+    },
+    {
+      "angleDegrees": 180,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "c9ea8458dc25c0c7026b52785320152561b93eac23b7a84e3a838948a8c383ad",
+      "src": "/assets/products/maru60/assembled/v715-corrected/ice-blue--nicepbt-bow-retail/frame_180.webp"
+    },
+    {
+      "angleDegrees": 210,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "89615d62a60692b65bff71b68a7217459fcf4bb7e883217cb28553eb02887bf1",
+      "src": "/assets/products/maru60/assembled/v715-corrected/ice-blue--nicepbt-bow-retail/frame_210.webp"
+    },
+    {
+      "angleDegrees": 240,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "99e8a2a3de6f6cf9992152ff196e6cce39cb8b6ec14c666913ba1bcbc703c8ec",
+      "src": "/assets/products/maru60/assembled/v715-corrected/ice-blue--nicepbt-bow-retail/frame_240.webp"
+    },
+    {
+      "angleDegrees": 270,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "92d94c5aff3240b09b63ab3c13228bc1c02d251706b944564a05e6e60e8cb31f",
+      "src": "/assets/products/maru60/assembled/v715-corrected/ice-blue--nicepbt-bow-retail/frame_270.webp"
+    },
+    {
+      "angleDegrees": 300,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "e4bbf872a28516436d1059aa8d57c12839aa5290fd1ea9d26c7f6f3ccf5cf324",
+      "src": "/assets/products/maru60/assembled/v715-corrected/ice-blue--nicepbt-bow-retail/frame_300.webp"
+    },
+    {
+      "angleDegrees": 330,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "063ddbac4dd14bcf65762a4a1b0001f3f97d8d01abba934854d446b626913115",
+      "src": "/assets/products/maru60/assembled/v715-corrected/ice-blue--nicepbt-bow-retail/frame_330.webp"
+    }
+  ]
+}

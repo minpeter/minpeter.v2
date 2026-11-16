@@ -1,0 +1,92 @@
+{
+  "id": "white-marble--nicepbt-purple-chonkers-retail",
+  "housingId": "white-marble",
+  "keycapId": "nicepbt-purple-chonkers-retail",
+  "orderable": false,
+  "frames": [
+    {
+      "angleDegrees": 0,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "33d719bf5795ad5bf9f786e6fa0637476b128f05ce2e989386a9f72586ac6420",
+      "src": "/assets/products/maru60/assembled/v715-corrected/white-marble--nicepbt-purple-chonkers-retail/frame_000.webp"
+    },
+    {
+      "angleDegrees": 30,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "f93ad155b46927ffb19207d346ccf3df574ef6e5e333b2c84579c6ff0c31b1e3",
+      "src": "/assets/products/maru60/assembled/v715-corrected/white-marble--nicepbt-purple-chonkers-retail/frame_030.webp"
+    },
+    {
+      "angleDegrees": 60,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "e13d90c61d0b579c91f67a0e7d4430ac43c64a8cacef8bc613bbfdea565508b9",
+      "src": "/assets/products/maru60/assembled/v715-corrected/white-marble--nicepbt-purple-chonkers-retail/frame_060.webp"
+    },
+    {
+      "angleDegrees": 90,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "10e8680417f437f184b999fdc0fb7950a3035e72632e1bb6468af59278844643",
+      "src": "/assets/products/maru60/assembled/v715-corrected/white-marble--nicepbt-purple-chonkers-retail/frame_090.webp"
+    },
+    {
+      "angleDegrees": 120,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "5c68d4e13bb83a59098bddfadb682546ff0c0f380b71abbda4e8fa1aeeb1e98c",
+      "src": "/assets/products/maru60/assembled/v715-corrected/white-marble--nicepbt-purple-chonkers-retail/frame_120.webp"
+    },
+    {
+      "angleDegrees": 150,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "9d03137c02acc94c95459dacef52329a6bc75b2a0fbd970cdd44d03b77ed3ea8",
+      "src": "/assets/products/maru60/assembled/v715-corrected/white-marble--nicepbt-purple-chonkers-retail/frame_150.webp"
+    },
+    {
+      "angleDegrees": 180,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "f12846e3198fc4c92e0316fadfdab3386de68e1ac0af92842becff43b20fbb8d",
+      "src": "/assets/products/maru60/assembled/v715-corrected/white-marble--nicepbt-purple-chonkers-retail/frame_180.webp"
+    },
+    {
+      "angleDegrees": 210,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "84215dcb7b707c41433e8785c104c90f67e6cd148a5ceefea3c68ed9524284cd",
+      "src": "/assets/products/maru60/assembled/v715-corrected/white-marble--nicepbt-purple-chonkers-retail/frame_210.webp"
+    },
+    {
+      "angleDegrees": 240,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "5b228a7982885d82e0e58a038c66d60359154fe14eaf7ba8b41e2ddd98ecc123",
+      "src": "/assets/products/maru60/assembled/v715-corrected/white-marble--nicepbt-purple-chonkers-retail/frame_240.webp"
+    },
+    {
+      "angleDegrees": 270,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "cefab92d2ea32b73d5c5a4efead08e9f1b184ed443b8e347ea186a9b59c601af",
+      "src": "/assets/products/maru60/assembled/v715-corrected/white-marble--nicepbt-purple-chonkers-retail/frame_270.webp"
+    },
+    {
+      "angleDegrees": 300,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "c946458440a5e6b68b69afd4405022d9d1e14c3722da38edca6644776412f812",
+      "src": "/assets/products/maru60/assembled/v715-corrected/white-marble--nicepbt-purple-chonkers-retail/frame_300.webp"
+    },
+    {
+      "angleDegrees": 330,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "cc6a006faefea124db3d6bdede32cadb53f32aed6e353f651d36ae5f6bef4cf7",
+      "src": "/assets/products/maru60/assembled/v715-corrected/white-marble--nicepbt-purple-chonkers-retail/frame_330.webp"
+    }
+  ]
+}

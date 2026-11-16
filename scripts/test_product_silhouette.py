@@ -43,8 +43,8 @@ class Maru60AssetAlignmentTests(unittest.TestCase):
         root = Path(__file__).resolve().parent.parent
         shapes = json.loads((root / "shared/maru60-spin-silhouettes.json").read_text())
         retail = json.loads((root / "shared/maru60-retail-silhouettes.json").read_text())
-        frames = list((root / "public/assets/products/maru60/assembled/v1").glob("*/*.webp"))
-        self.assertGreaterEqual(len(frames), 432)
+        frames = list((root / "public/assets/products/maru60/assembled/v715-corrected").glob("*/*.webp"))
+        self.assertEqual(len(frames), 420)
         for source in frames:
             with self.subTest(frame=str(source)):
                 image = Image.open(source)
