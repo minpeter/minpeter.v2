@@ -445,14 +445,13 @@ export function ProductSpin({
         />
       )}
       <canvas
-        aria-hidden="true"
         className={cn(
-          "absolute inset-0 h-full w-full object-contain",
+          "pointer-events-none absolute inset-0 h-full w-full object-contain",
           !showFrames && "invisible"
         )}
         height={height}
+        inert
         ref={canvasRef}
-        tabIndex={-1}
         width={width}
       />
     </div>

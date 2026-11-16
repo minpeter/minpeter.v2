@@ -242,13 +242,13 @@
         "variant": "HHKB housing · integrated wrist rest",
         "license": "CC BY-NC 4.0",
         "intro": "MARU60 is an independent HHKB housing for Rule 60 V3 internals, with a honeycomb wrist rest built in.",
-        "description": "MARU60 is an independent HHKB housing for Rule 60 V3 internals, with a honeycomb wrist rest built in. The current design combines the v7.10 top case with the v0.10 draft bottom case. It is not an INKC STUDIO product.",
+        "description": "MARU60 is an independent HHKB housing for Rule 60 V3 internals, with a honeycomb wrist rest built in. Opaque renders reflect the v7.15 top case and current wired bottom case; Transparent Inventor retains its previous render. It is not an INKC STUDIO product.",
         "details": {
           "size": "Current top-case footprint: 298.1 × 198.3 mm; complete assembly dimensions and physical fit are not yet verified",
           "joints": "Split top case with three central dovetails; draft bottom case with five sliding dovetails",
           "reuse": "Designed around the stock PC gasket plate, silicone gasket caps, ball catches, PCB, battery and weight plate",
-          "print": "CAD and slicer checks only for the latest revision; print fit coupons before a full assembly",
-          "status": "Prototype — top case v7.10 and bottom case draft v0.10 have not been printed. CAD clearance checks do not establish physical fit.",
+          "print": "v7.15 is designated for the second physical build. Print completion and assembly results are unconfirmed; check fit coupons before printing a full assembly",
+          "status": "Prototype — opaque renders use the v7.15 top case and current wired bottom case. Transparent Inventor retains its previous render. CAD checks do not establish physical fit or assembly.",
           "license": "CC BY-NC 4.0 — print and modify for personal, non-commercial use only. Selling prints or files is not permitted."
         }
       }
@@ -271,7 +271,7 @@
       "keycaps": "Keycaps",
       "fullRetailSet": "Full set · no personal logo keys",
       "geometryPrevious": "This preview shows the previous housing revision, not the assembled bottom-case draft.",
-      "geometryAssembled": "Assembled draft: top 7.10 + bottom 0.10. Not yet printed; fit and assembly remain unverified.",
+      "geometryAssembled": "Assembly render: opaque options use top v7.15 + the current wired bottom; Transparent Inventor remains on its previous revision. Physical fit and assembly are unverified.",
       "approximation": "Colors, surface finish and legends are visual approximations, not a guarantee of printed color or physical keycap compatibility. A render is not an order or stock confirmation.",
       "materialSource": "Manufacturer color reference",
       "keycapSource": "Manufacturer keycap reference",
