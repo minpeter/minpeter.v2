@@ -45,7 +45,7 @@ test("OG player decodes and loops the latest six-second render", async ({
 });
 
 const FRAME_URL =
-  /\/assets\/products\/maru60\/assembled\/v1\/transparent--inventor\/frame_\d{3}\.webp(?:\?.*)?$/u;
+  /\/assets\/products\/maru60\/assembled\/v716-exterior\/transparent--inventor\/frame_\d{3}\.webp(?:\?.*)?$/u;
 
 for (const width of [1440, 393, 320]) {
   for (const prefix of ["", "/en", "/ja"]) {

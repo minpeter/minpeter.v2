@@ -34,7 +34,7 @@ spec.loader.exec_module(module)
 shapes, sources = {}, {}
 for frame in frames:
     key = Path(frame['src']).stem
-    shapes[key] = module.outline(Image.open(root / ('public' + frame['src'])), 3, envelope=True)
+    shapes[key] = module.outline(Image.open(root / ('public' + frame['src'])), 0.75, envelope=True)
     assert shapes[key] is not None
     sources[key] = {'source': 'public' + frame['src'], 'sourceSha256': frame['sha256']}
 for name, value in [('maru60-spin-silhouettes.json', shapes),
