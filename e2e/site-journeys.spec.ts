@@ -15,6 +15,25 @@ const SCREEN_ASSETS = [
   ["inferx-overview", "inferx-usage", "inferx-analytics"],
 ];
 
+for (const colorScheme of ["light", "dark"] as const) {
+  test.describe(`${colorScheme} OS without JavaScript`, () => {
+    it.use({ colorScheme, javaScriptEnabled: false });
+
+    it("keeps the site logo visible before theme hydration", async ({
+      page,
+    }) => {
+      await page.goto("/");
+      await expect(page.locator("html")).not.toHaveAttribute("class");
+      const logo = page.getByTestId("site-header").locator(".site-logo");
+      await expect(logo).toBeVisible();
+      await expect(logo).toHaveCSS(
+        "filter",
+        colorScheme === "dark" ? "invert(1)" : "none"
+      );
+    });
+  });
+}
+
 async function expectScreenshots(projects: Locator, theme: "light" | "dark") {
   await expect(projects.getByRole("img")).toHaveCount(12);
   await Promise.all(

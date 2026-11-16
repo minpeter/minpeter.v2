@@ -195,6 +195,8 @@ describe("THEME_BOOTSTRAP_SCRIPT", () => {
   };
 
   afterEach(() => {
+    vi.restoreAllMocks();
+    vi.unstubAllGlobals();
     localStorage.clear();
     document.documentElement.className = "";
     document.documentElement.style.colorScheme = "";
@@ -212,6 +214,14 @@ describe("THEME_BOOTSTRAP_SCRIPT", () => {
   it("lets a stored choice beat the OS in both directions", () => {
     expect(run("light", true).cls).toBe("light");
     expect(run("dark", false).cls).toBe("dark");
+  });
+
+  it("uses the OS before hydration even when storage is blocked", () => {
+    vi.spyOn(Storage.prototype, "getItem").mockImplementation(() => {
+      throw new DOMException("Storage blocked", "SecurityError");
+    });
+    expect(run(null, true)).toEqual({ cls: "dark", resolved: "dark" });
+    expect(run(null, false)).toEqual({ cls: "light", resolved: "light" });
   });
 
   it("needs no escaping inside a script tag", () => {

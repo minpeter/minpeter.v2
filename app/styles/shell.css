@@ -59,6 +59,12 @@
     filter: invert(1);
   }
 
+  @media (prefers-color-scheme: dark) {
+    :root:not(.light, .dark) .site-logo {
+      filter: invert(1);
+    }
+  }
+
   /* Header tools (RSS, language) are one quiet control family. */
   .site-tool {
     display: flex;

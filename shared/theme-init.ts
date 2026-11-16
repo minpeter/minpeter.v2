@@ -18,9 +18,18 @@ const prefersDark = (): boolean | undefined =>
     ? window.matchMedia("(prefers-color-scheme: dark)").matches
     : undefined;
 
+function readThemePreference(): string | null {
+  try {
+    return localStorage.getItem("theme");
+  } catch {
+    // Blocked storage is no saved choice; the OS preference still applies.
+    return null;
+  }
+}
+
 /** Whether the visitor picked a theme with the toggle (as opposed to the OS). */
 export function hasStoredTheme(): boolean {
-  const stored = localStorage.getItem("theme");
+  const stored = readThemePreference();
   return stored === "light" || stored === "dark";
 }
 
@@ -32,7 +41,7 @@ export function hasStoredTheme(): boolean {
 export function readStoredTheme(
   fallback: "light" | "dark" = "light"
 ): "light" | "dark" {
-  const stored = localStorage.getItem("theme");
+  const stored = readThemePreference();
   if (stored === "light" || stored === "dark") {
     return stored;
   }
@@ -52,8 +61,8 @@ export function readStoredTheme(
  * Kept free of `<` and `&` so it needs no escaping inside the tag.
  */
 export const THEME_BOOTSTRAP_SCRIPT =
-  '(function(){try{var s=localStorage.getItem("theme");' +
-  'var d=s==="dark"?true:s==="light"?false:window.matchMedia("(prefers-color-scheme: dark)").matches;' +
+  '(function(){try{var s;try{s=localStorage.getItem("theme")}catch(e){}' +
+  'var d=s==="dark"?true:s==="light"?false:typeof window.matchMedia==="function"?window.matchMedia("(prefers-color-scheme: dark)").matches:false;' +
   'var r=document.documentElement;r.classList.remove("light","dark");' +
   'r.classList.add(d?"dark":"light");r.style.colorScheme=d?"dark":"light"}catch(e){}})()';
 
