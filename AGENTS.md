@@ -15,12 +15,23 @@
 ## Runtime verification checklist
 - Home / locale: `/`, `/en`, `/ja` (`data-testid="home-page"`)
 - Blog list + search: `#blog-search` / `[data-testid=blog-search]` (debounce ~500ms)
+- Home recent posts: `[data-testid=home-recent-posts]` (rows are `home-post-link`, not `blog-post-link`)
 - Blog post: soft-nav from list; avoid external_url posts for in-app checks
-- Header / locale: `[data-testid=site-header]`, `[data-testid=language-selector]`
+- Header / locale: `[data-testid=site-header]`, `[data-testid=language-selector]`; theme toggle `[data-theme-toggle]` (footer)
 - Showcase: prefer title/description, not canvas pixels
 - Products: `[data-testid=products-page]`, detail `[data-testid=product-detail]`; turntable `[data-testid=product-spin]` exposes `data-frame` (horizontal pointer movement over it turns it; entering does not). Catalog: `shared/products.ts`; spin frames must live under `public/assets/` (other public paths get locale-rewritten by `proxy.ts`).
 - Lint/format: `pnpm check:lint` / `pnpm fmt` (Ultracite → Biome; no oxlint/oxfmt)
 - Typecheck: `pnpm check` · Tests: `pnpm test` · Build: `pnpm build` · Audit: `pnpm audit --prod`
+
+## Design system
+- The committed look is the design: neutral gray palette, flat text links with only a hover wash, no cards, shadows or accent colour. Treat uncommitted style experiments in the tree as experiments, not as the baseline.
+- Tokens live in `app/styles/base.css` (`:root`): type scale `--text-caption|meta|ui|heading`, text inks `--ink|--ink-body|--ink-muted`, rules `--line|--line-strong`, width `--measure` (32rem). Shell, home, list and showcase styles pick from these; do not mint new `font-size` or `foreground / α` values there.
+- Shell: index-style pages (home, `/blog`, `/show` and its details, `/resume`, not-found) are `<section class="site-page">` + `SiteNav` (`components/site-nav.tsx`: logo link, page `tools`, language) + optional `SiteIntro`. Loaders use `SiteNavSkeleton` / `SiteIntroSkeleton`. Styles: `app/styles/shell.css`. On detail pages the logo links one level up.
+- Blog posts keep their own chrome on purpose: `components/header.tsx`, `post-toc.tsx`, `post-footer.tsx` (published and modified dates are both shown deliberately) and `app/styles/blog-post.css`. The store (`/products`) also keeps its own header.
+- Post rows: `components/post-row.tsx` (`.post-row`) is shared by `/blog` and the home page's recent posts; only the home page shows the one-line description.
+- `--font-sans` (the default under `<main>`) is the serif stack; pages opt into the UI sans via `.site-page` / `--font-body`. The poem page and parts of the post page rely on the serif default.
+- Theme follows the OS until the visitor uses the footer toggle (`shared/theme-init.ts`). `THEME_BOOTSTRAP_SCRIPT` is rendered inline in `<head>` (`app/root-document.tsx`) so the class is set before first paint. It is the only React-rendered `<script>`: React logs a dev error if it ever has to create one on the client, which only happens when the `[locale]` root layout remounts. Keep language switching a full document navigation and do not add cross-locale `<Link>`s.
+- Dates: one format everywhere, `formatDateLong` (`25. 09. 28.`).
 
 ## Cache Components
 - `cacheComponents: true` and `partialPrefetching: true` in `next.config.mts` (stable top-level).

@@ -380,7 +380,7 @@ for (const {
       await page.keyboard.press("Enter");
       await expect(projects.locator("details[open]")).toHaveCount(0);
 
-      await detail.locator(".showcase-header .fieldnotes-logo-link").click();
+      await detail.locator(".showcase-header .site-logo-link").click();
       await expect(page).toHaveURL(`${prefix}/show`);
       await page.getByTestId("showcase-link-wrench").click();
       await expect(page).toHaveURL(`${prefix}/show/project-wrench`);
@@ -497,11 +497,11 @@ test.describe("ko portfolio dark theme", () => {
       reducedMotion: "reduce",
     });
     await expect(cards.first()).toHaveCSS("transition-duration", "0s");
-    const themeToggle = page.getByRole("button", { name: "테마 전환" });
-    await themeToggle.click();
+    // With no saved choice the site follows the OS, including a live switch.
     await expect(page.locator("html")).toHaveClass("dark");
     await expectScreenshots(projects, "dark");
     // Manual light overrides the OS preference; saved dark survives reload.
+    const themeToggle = page.getByRole("button", { name: "테마 전환" });
     await themeToggle.click();
     await expect(page.locator("html")).toHaveClass("light");
     await expectScreenshots(projects, "light");

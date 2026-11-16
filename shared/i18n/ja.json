@@ -20,7 +20,8 @@
     "nextSlide": "次のスライド",
     "rssFeed": "RSSフィード",
     "notes": "記事",
-    "source": "ソース"
+    "source": "ソース",
+    "siteNavigation": "サイトナビゲーション"
   },
   "errors": {
     "reload": "再読み込み",
@@ -330,7 +331,9 @@
       }
     },
     "socialTitle": "ソーシャル",
-    "socialLabel": "ソーシャルリンク"
+    "socialLabel": "ソーシャルリンク",
+    "recentTitle": "最近の記事",
+    "allPosts": "すべての記事"
   },
   "notFound": {
     "navigationLabel": "404ページのナビゲーション",

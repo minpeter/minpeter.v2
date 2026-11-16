@@ -27,7 +27,7 @@ export default async function Page(
 ) {
   const t = await getTranslations();
   return (
-    <section className="showcase-page max-w-4xl">
+    <section className="site-page max-w-4xl">
       <ShowcaseDetailHeader
         backLabel={t("back")}
         className="mx-auto w-full max-w-lg"

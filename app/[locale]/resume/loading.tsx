@@ -1,30 +1,12 @@
-import Image from "next/image";
-
+import { SiteIntroSkeleton, SiteNavSkeleton } from "@/components/site-nav";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export default function Loading() {
   return (
-    <div aria-busy="true" className="showcase-page resume-page">
-      <header className="showcase-header">
-        <div className="fieldnotes-nav">
-          <div aria-hidden="true" className="fieldnotes-logo-link">
-            <Image
-              alt=""
-              aria-hidden="true"
-              className="fieldnotes-logo"
-              height={32}
-              priority
-              src="/assets/signature-mark.svg"
-              width={32}
-            />
-          </div>
-          <Skeleton className="h-3 w-12" />
-        </div>
-        <div className="showcase-intro">
-          <Skeleton className="mb-3 h-3 w-12 rounded-sm" />
-          <Skeleton className="mb-3 h-6 w-48 rounded-sm" />
-          <Skeleton className="h-4 w-full max-w-sm rounded-sm" />
-        </div>
+    <div aria-busy="true" className="site-page resume-page">
+      <header>
+        <SiteNavSkeleton />
+        <SiteIntroSkeleton />
       </header>
 
       <section className="resume-message">

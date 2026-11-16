@@ -143,8 +143,11 @@ export function BlogList({
     },
     []
   );
+  const inputRef = useRef<HTMLInputElement>(null);
   const handleQueryClear = useCallback(() => {
     setInputQuery("");
+    // The clear button unmounts with the query; keep focus in the field.
+    inputRef.current?.focus();
   }, []);
 
   const filteredPosts = useMemo(() => {
@@ -178,7 +181,7 @@ export function BlogList({
         <label className="sr-only" htmlFor="blog-search">
           {t("searchPlaceholder")}
         </label>
-        <Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
+        <Search className="text-muted-foreground pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
         <input
           autoComplete="off"
           className="placeholder:text-muted-foreground w-full bg-transparent px-10 py-4 text-sm focus:outline-none"
@@ -186,6 +189,7 @@ export function BlogList({
           id="blog-search"
           onChange={handleQueryChange}
           placeholder={t("searchPlaceholder")}
+          ref={inputRef}
           type="text"
           value={inputQuery}
         />
@@ -217,11 +221,7 @@ export function BlogList({
         </p>
       ) : null}
       {filteredPosts ? (
-        <BlogListFallback
-          isLoading={isSearching}
-          lang={lang}
-          posts={filteredPosts}
-        />
+        <BlogListFallback isLoading={isSearching} posts={filteredPosts} />
       ) : (
         children
       )}

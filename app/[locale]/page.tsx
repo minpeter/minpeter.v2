@@ -1,9 +1,10 @@
-import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Suspense } from "react";
 
-import { LanguageSelector } from "@/components/language-selector";
+import { SiteNav } from "@/components/site-nav";
 import { Link } from "@/shared/i18n/navigation";
+
+import { RecentPosts } from "./recent-posts";
 
 const SECTIONS = [
   {
@@ -39,47 +40,32 @@ const SOCIAL_LINKS = [
 ] as const;
 
 export default function Page() {
-  const t = useTranslations("home");
+  const t = useTranslations();
 
   return (
     <section
-      className="home-page mx-auto flex w-full max-w-lg flex-1 flex-col pt-[6.5rem] pb-12"
+      className="site-page home-page flex flex-1 flex-col pb-12"
       data-testid="home-page"
     >
       <header className="mb-16">
-        <div className="mb-6 flex items-center justify-between">
-          <Link
-            aria-label={t("homeLabel")}
-            className="home-logo-link -m-2.5 inline-flex p-2.5 hover:opacity-60"
-            href="/"
-          >
-            <Image
-              alt=""
-              aria-hidden="true"
-              className="home-logo"
-              height={32}
-              priority
-              src="/assets/signature-mark.svg"
-              width={32}
-            />
-          </Link>
-          <Suspense fallback={null}>
-            <LanguageSelector />
-          </Suspense>
-        </div>
+        <SiteNav
+          className="mb-6"
+          home={{ href: "/", label: t("home.homeLabel") }}
+          navigationLabel={t("common.siteNavigation")}
+        />
         <h1 className="text-base leading-tight tracking-tight">
           <span className="text-foreground font-semibold">MINPETER</span>
-          <span className="text-muted-foreground"> — {t("role")}</span>
+          <span className="text-muted-foreground"> — {t("home.role")}</span>
         </h1>
         <p className="text-foreground/85 mt-4 max-w-md text-sm leading-snug">
-          {t("introduction")}
+          {t("home.introduction")}
         </p>
       </header>
 
-      <nav aria-label={t("exploreLabel")} className="home-links">
+      <nav aria-label={t("home.exploreLabel")} className="home-links">
         {SECTIONS.map(({ descriptionKey, href, titleKey }) => (
           <Link
-            className="home-link group"
+            className="home-link"
             data-testid={`home-link-${href.slice(1)}`}
             href={href}
             key={href}
@@ -88,23 +74,26 @@ export default function Page() {
             // See: next-partial-prefetching-adoption step 5 / runtime-prefetching.
             prefetch={href === "/blog" ? true : undefined}
           >
-            <span className="home-link-title">{t(titleKey)}</span>
-            <span className="home-link-description">{t(descriptionKey)}</span>
+            <span className="home-link-title">{t(`home.${titleKey}`)}</span>
+            <span className="home-link-description">
+              {t(`home.${descriptionKey}`)}
+            </span>
           </Link>
         ))}
       </nav>
 
+      <Suspense fallback={null}>
+        <RecentPosts />
+      </Suspense>
+
       <section aria-labelledby="connect-title" className="mt-16">
-        <h2
-          className="text-muted-foreground mb-5 text-[13px] tracking-[-0.02em]"
-          id="connect-title"
-        >
-          {t("socialTitle")}
+        <h2 className="home-section-label mb-5" id="connect-title">
+          {t("home.socialTitle")}
         </h2>
-        <nav aria-label={t("socialLabel")} className="flex flex-col gap-4">
+        <nav aria-label={t("home.socialLabel")} className="home-social-links">
           {SOCIAL_LINKS.map(({ href, label, slug }) => (
             <a
-              className="home-social-link tap-target group"
+              className="home-social-link tap-target"
               href={href}
               key={href}
               rel="noreferrer"

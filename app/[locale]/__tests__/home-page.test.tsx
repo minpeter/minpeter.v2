@@ -5,6 +5,16 @@ import { NextIntlClientProvider } from "next-intl";
 import { describe, expect, it, vi } from "vitest";
 
 import Page from "../page";
+import type * as recentPostsModule from "../recent-posts";
+
+// Async server component: jsdom cannot render it, so stub it out here.
+vi.mock(
+  import("../recent-posts"),
+  () =>
+    ({
+      RecentPosts: () => null,
+    }) as unknown as Partial<typeof recentPostsModule>
+);
 
 vi.mock(import("next/navigation"), async (importOriginal) => {
   const actual = await importOriginal();
@@ -17,6 +27,7 @@ vi.mock(import("next/navigation"), async (importOriginal) => {
 const messages = {
   common: {
     selectLanguage: "언어 선택",
+    siteNavigation: "사이트 탐색",
   },
   home: {
     exploreLabel: "둘러보기",
@@ -56,12 +67,12 @@ function renderHome() {
 }
 
 describe("app/[locale]/page.tsx home", () => {
-  it("extends the logo link tap target beyond the 32px icon and renders language selector", () => {
+  it("renders the shared site bar: tappable logo and language selector", () => {
     renderHome();
 
     const homeLink = screen.getByRole("link", { name: "minpeter 홈" });
-    expect(homeLink.className).toContain("p-2.5");
-    expect(homeLink.className).toContain("-m-2.5");
+    // `tap-target` grows the 32px icon's hit area to 44px on touch screens.
+    expect(homeLink.className).toContain("tap-target");
     expect(screen.getByTestId("language-selector")).toBeDefined();
   });
 

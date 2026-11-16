@@ -22,24 +22,8 @@ export function formatYear(date?: string | number | Date) {
   return Number(getSeoulDateParts(date).year);
 }
 
-// 2022-1-1 -> 22. 01. 01.
+// 2022-1-1 -> 22. 01. 01. The one date format on the site: lists and posts.
 export function formatDateLong(date?: string | number | Date) {
   const { day, month, year } = getSeoulDateParts(date);
   return `${year.slice(-2)}. ${month}. ${day}.`;
-}
-
-const postDateFormatters = new Map<string, Intl.DateTimeFormat>();
-
-export function formatPostDate(date: Date, locale: string) {
-  let formatter = postDateFormatters.get(locale);
-  if (!formatter) {
-    formatter = new Intl.DateTimeFormat(locale, {
-      day: "numeric",
-      month: "short",
-      timeZone: POST_TIME_ZONE,
-      year: "numeric",
-    });
-    postDateFormatters.set(locale, formatter);
-  }
-  return formatter.format(date);
 }

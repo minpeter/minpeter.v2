@@ -13,9 +13,21 @@ const STORE_PATH = new RegExp(
 );
 let storeThemeColorHolds = 0;
 
+const prefersDark = (): boolean | undefined =>
+  typeof window.matchMedia === "function"
+    ? window.matchMedia("(prefers-color-scheme: dark)").matches
+    : undefined;
+
+/** Whether the visitor picked a theme with the toggle (as opposed to the OS). */
+export function hasStoredTheme(): boolean {
+  const stored = localStorage.getItem("theme");
+  return stored === "light" || stored === "dark";
+}
+
 /**
- * Read the saved theme. A legacy `system` value (from the former next-themes
- * setup) keeps following the OS instead of silently becoming light.
+ * Read the saved theme. Until the visitor picks one with the toggle (or when
+ * a legacy `system` value from the former next-themes setup is stored), the
+ * site follows the OS; `fallback` only applies where that cannot be read.
  */
 export function readStoredTheme(
   fallback: "light" | "dark" = "light"
@@ -24,13 +36,26 @@ export function readStoredTheme(
   if (stored === "light" || stored === "dark") {
     return stored;
   }
-  if (stored === "system") {
-    return window.matchMedia("(prefers-color-scheme: dark)").matches
-      ? "dark"
-      : "light";
+  const dark = prefersDark();
+  if (dark === undefined) {
+    return fallback;
   }
-  return fallback;
+  return dark ? "dark" : "light";
 }
+
+/**
+ * `readStoredTheme` again, as source text for the one inline `<script>` in the
+ * document head (app/root-document.tsx). Being parser-blocking, it puts the
+ * theme class on `<html>` before first paint, so a stored choice that differs
+ * from the OS no longer flashes the other theme while the bundle loads.
+ *
+ * Kept free of `<` and `&` so it needs no escaping inside the tag.
+ */
+export const THEME_BOOTSTRAP_SCRIPT =
+  '(function(){try{var s=localStorage.getItem("theme");' +
+  'var d=s==="dark"?true:s==="light"?false:window.matchMedia("(prefers-color-scheme: dark)").matches;' +
+  'var r=document.documentElement;r.classList.remove("light","dark");' +
+  'r.classList.add(d?"dark":"light");r.style.colorScheme=d?"dark":"light"}catch(e){}})()';
 
 /**
  * Synchronize a single imperative `<meta name="theme-color">` in `<head>`.
@@ -74,9 +99,9 @@ function writeThemeColorMeta(color: string): void {
 }
 
 /**
- * Apply stored theme to <html> before paint when possible.
- * Must not be rendered as a React <script> — React 19 warns on client re-render
- * (e.g. locale soft-nav). Call from instrumentation-client only.
+ * Apply the stored theme to `<html>` and sync the theme-color meta as soon as
+ * the client bundle runs. The class itself is already set before paint by
+ * `THEME_BOOTSTRAP_SCRIPT`; this keeps the two in agreement and owns the meta.
  */
 export function applyStoredTheme(): void {
   try {

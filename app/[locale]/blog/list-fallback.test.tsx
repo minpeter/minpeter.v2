@@ -60,10 +60,10 @@ describe(BlogListFallback, () => {
     expect(yearHeadings).toStrictEqual(["2024", "2023"]);
   });
 
-  it("formats dates with the locale short month pattern", () => {
+  it("formats dates the same way a post does", () => {
     renderFallback([makePost({})]);
 
-    const time = screen.getByText("Mar 5, 2024");
+    const time = screen.getByText("24. 03. 05.");
     expect(time.tagName).toBe("TIME");
     expect(time.getAttribute("datetime")).toBe(
       new Date("2024-03-05T00:00:00Z").toISOString()

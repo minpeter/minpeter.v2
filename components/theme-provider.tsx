@@ -10,7 +10,7 @@ import {
   useState,
 } from "react";
 
-import { readStoredTheme } from "@/shared/theme-init";
+import { hasStoredTheme, readStoredTheme } from "@/shared/theme-init";
 
 const STORAGE_KEY = "theme";
 
@@ -41,14 +41,33 @@ export function ThemeProvider({
   const [theme, setThemeState] = useState<Theme | undefined>(undefined);
 
   useEffect(() => {
-    let initial: Theme = defaultTheme;
-    try {
-      initial = readStoredTheme(defaultTheme);
-    } catch {
-      // ignore
-    }
-    setThemeState(initial);
-    applyResolvedTheme(initial);
+    const sync = () => {
+      let resolved: Theme = defaultTheme;
+      try {
+        resolved = readStoredTheme(defaultTheme);
+      } catch {
+        // ignore
+      }
+      setThemeState(resolved);
+      applyResolvedTheme(resolved);
+    };
+    sync();
+
+    // With no saved choice the site tracks the OS, including live switches.
+    const query = window.matchMedia?.("(prefers-color-scheme: dark)");
+    const handleChange = () => {
+      let pinned = false;
+      try {
+        pinned = hasStoredTheme();
+      } catch {
+        // ignore
+      }
+      if (!pinned) {
+        sync();
+      }
+    };
+    query?.addEventListener("change", handleChange);
+    return () => query?.removeEventListener("change", handleChange);
   }, [defaultTheme]);
 
   const setTheme = useCallback((next: Theme | string) => {

@@ -25,7 +25,7 @@ export default async function Page(
 ) {
   const t = await getTranslations();
   return (
-    <section className="showcase-page">
+    <section className="site-page">
       <ShowcaseDetailHeader
         backLabel={t("back")}
         description={t("showcase.items.modelCard.description")}
@@ -53,9 +53,7 @@ export default async function Page(
       </div>
 
       <aside className="border-foreground/15 mt-12 border-t pt-5">
-        <p className="showcase-kicker">
-          {t("showcase.items.modelCard.credits")}
-        </p>
+        <p className="site-kicker">{t("showcase.items.modelCard.credits")}</p>
         <div className="text-muted-foreground space-y-1 text-[0.6875rem] leading-relaxed">
           <p>{t("showcase.items.modelCard.creditNous")}</p>
           <p>{t("showcase.items.modelCard.creditIshigami")}</p>

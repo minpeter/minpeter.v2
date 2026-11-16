@@ -88,6 +88,7 @@ export type blogListType = ReturnType<typeof blog.getPages>;
 export type blogType = ReturnType<typeof blog.getPage>;
 
 export interface postMetadataType {
+  description?: string;
   draft: boolean;
   drafted?: Date;
   external_url?: string;
@@ -99,6 +100,7 @@ export interface postMetadataType {
 
 function getPostMetadata(post: NonNullable<blogType>): postMetadataType {
   return {
+    description: post.data.description,
     draft: post.data.draft,
     drafted: post.data.drafted,
     external_url: post.data.external_url,

@@ -25,7 +25,7 @@ export default async function Page() {
   const t = await getTranslations();
 
   return (
-    <section className="showcase-page" data-testid="showcase-detail-shell">
+    <section className="site-page" data-testid="showcase-detail-shell">
       <ShowcaseDetailHeader
         backLabel={t("back")}
         description={t("showcase.items.techStack.description")}

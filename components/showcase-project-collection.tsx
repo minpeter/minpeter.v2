@@ -35,7 +35,7 @@ export async function ShowcaseProjectCollection({
   const [locale, t] = await Promise.all([getLocale(), getTranslations()]);
 
   return (
-    <section className="showcase-page" data-testid="showcase-detail-shell">
+    <section className="site-page" data-testid="showcase-detail-shell">
       <ShowcaseDetailHeader
         backLabel={t("back")}
         description={description}

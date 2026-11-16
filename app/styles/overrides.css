@@ -12,22 +12,49 @@ figure figcaption.flex-1.truncate {
   color: hsl(var(--foreground) / 84%) !important;
 }
 
-/* GitHub-light Shiki token colors need modern Primer contrast on the code-block surface. */
-.shiki span[style*="--shiki-light:#005CC5"] {
+/* GitHub-light Shiki token colors need modern Primer contrast on the code-block surface.
+   Each token is matched in both spellings of its inline style: the server
+   writes `--shiki-light:#hex`, but once React sets the style on the client
+   (any soft navigation) the browser re-serializes it as `--shiki-light: #hex`. */
+.shiki
+  span:is(
+    [style*="--shiki-light:#005CC5" i],
+    [style*="--shiki-light: #005CC5" i]
+  ) {
   --shiki-light: #0550ae !important;
 }
-.shiki span[style*="--shiki-light:#032F62"] {
+.shiki
+  span:is(
+    [style*="--shiki-light:#032F62" i],
+    [style*="--shiki-light: #032F62" i]
+  ) {
   --shiki-light: #0a3069 !important;
 }
-.shiki span[style*="--shiki-light:#22863A"] {
+.shiki
+  span:is(
+    [style*="--shiki-light:#22863A" i],
+    [style*="--shiki-light: #22863A" i]
+  ) {
   --shiki-light: #116329 !important;
 }
-.shiki span[style*="--shiki-light:#6A737D"] {
+.shiki
+  span:is(
+    [style*="--shiki-light:#6A737D" i],
+    [style*="--shiki-light: #6A737D" i]
+  ) {
   --shiki-light: #57606a !important;
 }
-.shiki span[style*="--shiki-light:#D73A49"] {
+.shiki
+  span:is(
+    [style*="--shiki-light:#D73A49" i],
+    [style*="--shiki-light: #D73A49" i]
+  ) {
   --shiki-light: #b31d28 !important;
 }
-.shiki span[style*="--shiki-light:#E36209"] {
+.shiki
+  span:is(
+    [style*="--shiki-light:#E36209" i],
+    [style*="--shiki-light: #E36209" i]
+  ) {
   --shiki-light: #953800 !important;
 }

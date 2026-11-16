@@ -2,7 +2,6 @@ import { Rss } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
 import { getLocalizedPath } from "@/shared/utils/metadata";
-import { cn } from "@/shared/utils/tailwind";
 
 interface RssLinkProps {
   locale: string;
@@ -13,13 +12,7 @@ export async function RssLink({ locale }: RssLinkProps) {
 
   return (
     <a
-      className={cn(
-        "tap-target",
-        "flex items-center gap-1 rounded-md px-1.5 py-1 text-[0.6875rem] leading-[1.26]",
-        "text-muted-foreground hover:bg-secondary hover:text-primary",
-        "transition-colors duration-150",
-        "focus-visible:ring-ring focus:outline-none focus-visible:ring-2"
-      )}
+      className="site-tool tap-target"
       href={getLocalizedPath(locale, "/blog/rss.xml")}
       rel="noopener noreferrer"
       target="_blank"

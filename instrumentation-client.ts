@@ -1,7 +1,12 @@
 /**
  * Client instrumentation runs before the app becomes interactive.
- * Keep all side-effect bootstrapping here — never put <script> / next/script
- * in React trees (locale soft-nav re-renders them and React 19 errors).
+ * Keep side-effect bootstrapping here rather than in <script> / next/script
+ * tags inside React trees: React logs an error whenever it has to create a
+ * script element on the client (anything that remounts on navigation).
+ *
+ * The single exception is the theme bootstrap in app/root-document.tsx, which
+ * must block first paint. It is server-rendered into <head> and never
+ * remounts, because switching language is a full document navigation.
  *
  * @see https://nextjs.org/docs/app/api-reference/file-conventions/instrumentation-client
  */

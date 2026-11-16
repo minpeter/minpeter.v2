@@ -30,7 +30,7 @@ export default async function ProductsLayout({
           <Image
             alt=""
             aria-hidden="true"
-            className="fieldnotes-logo"
+            className="site-logo"
             height={28}
             priority
             src="/assets/signature-mark.svg"

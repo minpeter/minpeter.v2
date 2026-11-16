@@ -1,7 +1,4 @@
-import Image from "next/image";
-import { Suspense } from "react";
-
-import { LanguageSelector } from "@/components/language-selector";
+import { SiteIntro, SiteNav } from "@/components/site-nav";
 
 interface NotFoundPageProps {
   /**
@@ -25,36 +22,15 @@ export function NotFoundPage({
   title,
 }: NotFoundPageProps) {
   return (
-    <section className="showcase-page">
-      <header className="showcase-header">
-        <nav aria-label={navigationLabel} className="fieldnotes-nav">
-          {/* A hard navigation escapes the stale not-found route tree. */}
-          <a
-            aria-label={backLabel}
-            className="fieldnotes-logo-link tap-target"
-            href={backHref}
-          >
-            <Image
-              alt=""
-              aria-hidden="true"
-              className="fieldnotes-logo"
-              height={32}
-              priority
-              src="/assets/signature-mark.svg"
-              width={32}
-            />
-          </a>
-          {showLanguageSelector ? (
-            <Suspense fallback={null}>
-              <LanguageSelector />
-            </Suspense>
-          ) : null}
-        </nav>
-        <div className="showcase-intro">
-          <p className="showcase-kicker">404</p>
-          <h1 className="showcase-title">{title}</h1>
-          <p className="showcase-description">{description}</p>
-        </div>
+    <section className="site-page">
+      <header>
+        {/* A hard navigation escapes the stale not-found route tree. */}
+        <SiteNav
+          home={{ hard: true, href: backHref, label: backLabel }}
+          navigationLabel={navigationLabel}
+          showLanguageSelector={showLanguageSelector}
+        />
+        <SiteIntro description={description} kicker="404" title={title} />
       </header>
 
       <div className="resume-message">

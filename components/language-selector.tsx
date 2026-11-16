@@ -70,10 +70,7 @@ export function LanguageSelector({ className }: { className?: string } = {}) {
       <Trigger asChild>
         <button
           aria-label={`${currentLabel.short} - ${t("selectLanguage")}`}
-          className={cn(
-            "tap-target text-muted-foreground hover:bg-secondary hover:text-primary focus-visible:ring-ring flex items-center gap-1 rounded-md px-1.5 py-1 text-[0.6875rem] leading-[1.26] transition-colors duration-150 focus:outline-none focus-visible:ring-2",
-            className
-          )}
+          className={cn("site-tool tap-target", className)}
           data-testid="language-selector"
           onClick={handleTriggerClick}
           onKeyDown={clearTouchOpen}
@@ -89,10 +86,12 @@ export function LanguageSelector({ className }: { className?: string } = {}) {
         </button>
       </Trigger>
 
+      {/* Portaled to <body>, outside the page column, so it would otherwise
+          inherit the serif default instead of the UI sans the trigger uses. */}
       <Portal>
         <Content
           align="end"
-          className="fade-in-0 zoom-in-95 data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[side=bottom]:slide-in-from-top-2 data-[side=top]:slide-in-from-bottom-2 animate-in border-border bg-background data-[state=closed]:animate-out z-50 min-w-[120px] rounded-md border p-1 shadow-md"
+          className="fade-in-0 zoom-in-95 data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[side=bottom]:slide-in-from-top-2 data-[side=top]:slide-in-from-bottom-2 animate-in border-border bg-background data-[state=closed]:animate-out z-50 min-w-[120px] rounded-md border p-1 font-[family-name:var(--font-body)] shadow-md"
           onCloseAutoFocus={preventCloseAutoFocus}
           onPointerEnter={handleContentMouseEnter}
           onPointerLeave={handleContentMouseLeave}

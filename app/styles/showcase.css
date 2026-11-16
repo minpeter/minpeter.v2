@@ -1,49 +1,6 @@
-/* Experiment index (`/show`) and the resume redirect notice. */
+/* Experiment index (`/show`), project screens and the resume notice. */
 
-@layer base {
-  .showcase-page {
-    width: 100%;
-    max-width: 32rem;
-    padding-top: 6.5rem;
-    padding-bottom: 4rem;
-    margin-inline: auto;
-    font-family: var(--font-geist), Arial, sans-serif;
-  }
-
-  .showcase-header {
-    margin-bottom: 3rem;
-  }
-
-  .showcase-intro {
-    margin-top: 2.5rem;
-  }
-
-  .showcase-kicker {
-    margin-bottom: 0.75rem;
-    font-size: 0.6875rem;
-    line-height: 1.26;
-    color: hsl(var(--muted-foreground));
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-  }
-
-  .showcase-title {
-    margin: 0;
-    font-size: 1.3125rem;
-    font-weight: 400;
-    line-height: 1.1;
-    color: hsl(var(--foreground) / 0.9);
-    letter-spacing: -0.035em;
-  }
-
-  .showcase-description {
-    max-width: 26rem;
-    margin-top: 0.75rem;
-    font-size: 0.9375rem;
-    line-height: 1.35;
-    color: hsl(var(--muted-foreground));
-  }
-
+@layer components {
   .showcase-list {
     display: flex;
     flex-direction: column;
@@ -56,7 +13,7 @@
     gap: 0.25rem;
     padding: 0.5rem 0.75rem;
     margin: 0 -0.75rem;
-    color: hsl(var(--foreground) / 0.82);
+    color: var(--ink-body);
     border-radius: 0.5rem;
     transition:
       background-color 160ms ease,
@@ -65,8 +22,7 @@
 
   .showcase-item-link:hover,
   .showcase-item-link:focus-visible {
-    color: hsl(var(--foreground));
-    outline: none;
+    color: var(--ink);
     background-color: hsl(var(--secondary));
   }
 
@@ -78,22 +34,22 @@
   }
 
   .showcase-item-title {
-    font-size: 0.9375rem;
+    font-size: var(--text-ui);
     font-weight: 400;
     line-height: 1.26;
   }
 
   .showcase-item-description {
-    font-size: 0.8125rem;
+    font-size: var(--text-meta);
     line-height: 1.26;
-    color: hsl(var(--muted-foreground));
+    color: var(--ink-muted);
   }
 
   .showcase-item-arrow {
     flex: 0 0 auto;
     font-family: var(--font-geist-mono), monospace;
     font-size: 0.75rem;
-    color: hsl(var(--muted-foreground));
+    color: var(--ink-muted);
     transition: transform 160ms ease;
   }
 
@@ -120,7 +76,7 @@
     aspect-ratio: 3 / 2;
     overflow: hidden;
     background: hsl(var(--background));
-    border: 1px solid hsl(var(--foreground) / 0.18);
+    border: 1px solid var(--line-strong);
     border-radius: 0.25rem;
     box-shadow: 0 2px 6px hsl(var(--foreground) / 0.12);
     transform: translate(var(--screen-x), calc(-62% + var(--screen-y)))
@@ -219,38 +175,37 @@
 
   .resume-message {
     padding-top: 1.5rem;
-    border-top: 1px solid hsl(var(--foreground) / 0.14);
+    border-top: 1px solid var(--line);
   }
 
   .resume-message-title {
     margin: 0;
-    font-size: 0.9375rem;
+    font-size: var(--text-ui);
     font-weight: 400;
     line-height: 1.26;
-    color: hsl(var(--foreground) / 0.88);
+    color: var(--ink-body);
   }
 
   .resume-message-description {
     max-width: 24rem;
     margin-top: 0.5rem;
-    font-size: 0.8125rem;
+    font-size: var(--text-meta);
     line-height: 1.35;
-    color: hsl(var(--muted-foreground));
+    color: var(--ink-muted);
   }
 
   .resume-home-link {
     display: inline-flex;
     gap: 0.25rem;
     margin-top: 1.5rem;
-    font-size: 0.8125rem;
+    font-size: var(--text-meta);
     line-height: 1.26;
-    color: hsl(var(--foreground) / 0.82);
+    color: var(--ink-body);
     transition: color 160ms ease;
   }
 
   .resume-home-link:hover,
   .resume-home-link:focus-visible {
-    color: hsl(var(--foreground));
-    outline: none;
+    color: var(--ink);
   }
 }
