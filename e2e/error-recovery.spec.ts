@@ -35,11 +35,12 @@ for (const scenario of [
     it("recovers from a missing route chunk without losing the locale", async ({
       page,
     }, testInfo) => {
-      // Identify the experiment's client chunk by its alphabet, not a build hash.
-      // Failing it on soft navigation exercises the real Next error boundary.
+      // Identify the countdown's client chunk by its message namespace, not a
+      // build hash. Failing it on soft navigation exercises the real Next error
+      // boundary.
       await page.route("**/_next/static/chunks/*.js", async (route) => {
         const response = await route.fetch();
-        if ((await response.text()).includes("ABCDEFGHIJKLMNOPQRSTUVWXYZ")) {
+        if ((await response.text()).includes("showcase.items.newYear")) {
           await route.fulfill({
             body: "Missing route chunk (test)",
             contentType: "text/plain",
@@ -51,7 +52,7 @@ for (const scenario of [
       });
 
       await page.goto(`${scenario.home}/show`);
-      await page.getByTestId("showcase-link-dynamicText").click();
+      await page.getByTestId("showcase-link-newYear").click();
       const panel = page.getByTestId("error-panel");
       await expect(panel.getByRole("heading")).toHaveText(scenario.title);
       await expect(panel.getByRole("link")).toHaveAttribute(
@@ -96,7 +97,7 @@ for (const scenario of [
       await expect(page).toHaveURL(
         scenario.locale === "ja"
           ? "/ja"
-          : `${scenario.home}/show/dynamic-hacked-text`
+          : `${scenario.home}/show/new-year-clock`
       );
       await expect(
         page.getByTestId(

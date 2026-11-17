@@ -198,6 +198,9 @@ test.describe("touch targets", () => {
       await page.goto(path);
       const link = page.locator(".tap-target", { hasText: name }).first();
       await expect(link).toBeVisible();
+      // `elementFromPoint` only sees the viewport; the resume's link sits
+      // below the fold.
+      await link.scrollIntoViewIfNeeded();
       const box = await link.boundingBox();
       expect(box).not.toBeNull();
       const hits = await page.evaluate(

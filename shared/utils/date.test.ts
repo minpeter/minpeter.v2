@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { formatDateLong, formatYear } from "./date";
+import { formatDateLong, formatMonthLong, formatYear } from "./date";
 
 // 2025-02-02 05:20:25 +0900 — still Feb 1 in UTC.
 const EARLY_KST = new Date("2025-02-01T20:20:25.000Z");
@@ -14,5 +14,12 @@ describe("post date formatting pins Asia/Seoul", () => {
 
   it("groups by the KST year", () => {
     expect(formatYear(NEW_YEAR_KST)).toBe(2025);
+  });
+});
+
+describe("resume month formatting", () => {
+  it("drops the day from the site date format", () => {
+    expect(formatMonthLong("2026-11")).toBe("26. 11.");
+    expect(formatMonthLong("2024-2")).toBe("24. 02.");
   });
 });
