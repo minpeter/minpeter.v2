@@ -34,7 +34,7 @@ export function NotFoundPage({
       </header>
 
       <div className="resume-message">
-        <a className="resume-home-link tap-target mt-0" href={backHref}>
+        <a className="resume-home-link tap-target" href={backHref}>
           {backLabel} <span aria-hidden="true">→</span>
         </a>
       </div>

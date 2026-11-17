@@ -43,10 +43,6 @@ const SHOWCASE_GROUPS = [
         path: "/show/tech-stack-ball",
       },
       {
-        key: "dynamicText",
-        path: "/show/dynamic-hacked-text",
-      },
-      {
         key: "newYear",
         path: "/show/new-year-clock",
       },

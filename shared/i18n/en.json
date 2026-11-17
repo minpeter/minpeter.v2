@@ -55,12 +55,8 @@
   "resume": {
     "navigationLabel": "Resume navigation",
     "kicker": "Resume",
-    "title": "Work in progress",
-    "description": "I'm still assembling a useful version of this page.",
-    "statusTitle": "Coming soon.",
-    "statusDescription": "For now, this site is a better record of what I'm working on.",
     "homeLabel": "Back home",
-    "metadataDescription": "Work history and background — coming soon."
+    "metadataDescription": "Work history, projects and open-source contributions of minpeter, software engineer."
   },
   "showcase": {
     "navigationLabel": "Showcase navigation",
@@ -168,12 +164,6 @@
         "replay": "Replay",
         "simulationLabel": "Interactive physics simulation with technology stack icons"
       },
-      "dynamicText": {
-        "title": "Dynamic hacked text",
-        "summary": "Hover over the letters and watch them react.",
-        "kicker": "Interaction study",
-        "description": "Move across the letters and watch the text reconstruct itself."
-      },
       "newYear": {
         "title": "New year clock",
         "summary": "A live countdown to the next year.",
@@ -215,15 +205,6 @@
         "middle": "Middle",
         "back1": "Back 1",
         "back2": "Back 2"
-      },
-      "unstructured0828": {
-        "title": "Unstructured 0828",
-        "summary": "A perspective study in layered product interfaces.",
-        "kicker": "Perspective study",
-        "description": "A perspective study built from layered product interfaces.",
-        "imageAlt": "Layered SaaS interface",
-        "overlayAlt": "Floating SaaS interface panel",
-        "instruction": "Select the floating panel to open the referenced model page."
       }
     }
   },
@@ -326,8 +307,8 @@
         "description": "AI infrastructure, agent tools, and small interactive experiments."
       },
       "resume": {
-        "title": "Resume (in progress)",
-        "description": "Work history and background — coming soon."
+        "title": "Resume",
+        "description": "Work history, projects and open source."
       }
     },
     "socialTitle": "Connect",

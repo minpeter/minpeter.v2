@@ -22,6 +22,12 @@ export function formatYear(date?: string | number | Date) {
   return Number(getSeoulDateParts(date).year);
 }
 
+/** `2026-11` -> `26. 11.`: `formatDateLong` without the day, for resume periods. */
+export function formatMonthLong(yearMonth: string) {
+  const [year = "", month = ""] = yearMonth.split("-");
+  return `${year.slice(-2)}. ${month.padStart(2, "0")}.`;
+}
+
 // 2022-1-1 -> 22. 01. 01. The one date format on the site: lists and posts.
 export function formatDateLong(date?: string | number | Date) {
   const { day, month, year } = getSeoulDateParts(date);

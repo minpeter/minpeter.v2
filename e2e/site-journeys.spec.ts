@@ -173,7 +173,7 @@ for (const {
         .getByRole("navigation", { exact: true, name: experimentsLabel })
         .getByRole("link");
       await expect(projectLinks).toHaveCount(2);
-      await expect(experimentLinks).toHaveCount(6);
+      await expect(experimentLinks).toHaveCount(5);
       expect(
         await projectLinks.evaluateAll((links) =>
           links.map((link) => link.getAttribute("href"))
@@ -189,7 +189,6 @@ for (const {
       ).toEqual([
         `${prefix}/show/yet-another-tempfiles`,
         `${prefix}/show/tech-stack-ball`,
-        `${prefix}/show/dynamic-hacked-text`,
         `${prefix}/show/new-year-clock`,
         `${prefix}/show/model-card-artwork`,
         `${prefix}/show/unstructured`,

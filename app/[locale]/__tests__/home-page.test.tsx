@@ -49,8 +49,8 @@ const messages = {
         title: "제품",
       },
       resume: {
-        description: "경력과 활동 이력 — 곧 공개합니다.",
-        title: "이력서 (작성 중)",
+        description: "경력, 프로젝트, 오픈소스 활동.",
+        title: "이력서",
       },
     },
     socialLabel: "소셜 링크",
