@@ -4,18 +4,17 @@ import {
   personalManifestToSpin,
   validatedPersonalManifest,
 } from "./maru60-personal";
+import { getDefaultStandSpin } from "./skateboard-stand";
 
-/** Message key under `products.items`. */
-type ProductKey = "rule60";
-
-/** Message key under `products.items.<key>.details`, in display order. */
-type ProductDetail =
+/** Message keys under `products.items.<key>.details`, per product. */
+type Rule60Detail =
   | "joints"
   | "license"
   | "print"
   | "reuse"
   | "size"
   | "status";
+type SkateboardStandDetail = "fit" | "pads" | "size" | "slot";
 
 /**
  * Reconstructed 3D turntable renders (not photographs): `frameCount` transparent WebP frames served from
@@ -41,26 +40,46 @@ export interface ProductSpin {
  */
 interface ProductPreview {
   image: string;
-  video: { animatedImage: string; player: string; url: string };
+  video?: { animatedImage: string; player: string; url: string };
 }
 
-export interface Product {
-  details: readonly ProductDetail[];
-  /** Where the print files live. */
-  downloadHref: string;
-  key: ProductKey;
+interface ProductStoreChannel {
+  /** Leave omitted while the Naver Smart Store listing is in preparation. */
+  href?: string;
+  kind: "naver-smart-store";
+}
+
+interface ProductBase {
+  /** Where the print files live (omitted for closed-source retail products). */
+  downloadHref?: string;
   name: string;
   preview?: ProductPreview;
   slug: string;
-  sourceHref: string;
+  /** Public source repository (omitted for closed-source retail products). */
+  sourceHref?: string;
   spin: ProductSpin;
+  /** External sales channel (e.g. Naver Smart Store) for commercial listings. */
+  storeChannel?: ProductStoreChannel;
   /** Expected price range in KRW before launch; shown with a "coming soon" label. */
   upcomingPrice?: { max: number; min: number };
 }
 
+export type Product =
+  | (ProductBase & {
+      customizer: "maru60";
+      details: readonly Rule60Detail[];
+      key: "rule60";
+    })
+  | (ProductBase & {
+      customizer: "skateboard-stand";
+      details: readonly SkateboardStandDetail[];
+      key: "skateboardStand";
+    });
+
 /** Display order on `/products`; add a product here plus `products.items.<key>` messages. */
 export const PRODUCTS: readonly Product[] = [
   {
+    customizer: "maru60",
     details: ["size", "joints", "reuse", "print", "status", "license"],
     // Historical assets stay stable; the former page slug permanently redirects to maru60.
     // PR #1 contains the current top case and the unprinted bottom-case draft.
@@ -89,6 +108,19 @@ export const PRODUCTS: readonly Product[] = [
           width: 1024,
         },
     upcomingPrice: { max: 300_000, min: 200_000 },
+  },
+  {
+    customizer: "skateboard-stand",
+    details: ["size", "slot", "pads", "fit"],
+    key: "skateboardStand",
+    name: "Skateboard Stand",
+    preview: {
+      image: "/assets/products/skateboard-stand/og.png",
+    },
+    slug: "skateboard-stand",
+    spin: getDefaultStandSpin(),
+    // Add the live Naver Smart Store listing URL here once pricing and launch are finalized.
+    storeChannel: { kind: "naver-smart-store" },
   },
 ];
 

@@ -1,0 +1,1276 @@
+[
+  {
+    "colorId": "cobalt-blue",
+    "frames": [
+      {
+        "angleDegrees": 0,
+        "height": 1536,
+        "sha256": "36567ddb32d80fe96c194d07c0f7b047d9e0c831ff5bb67f4c555388c9e0e28f",
+        "src": "/assets/products/skateboard-stand/turntable/stand/cobalt-blue/frame_000.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 30,
+        "height": 1536,
+        "sha256": "604074c0e8706584e781e6f697efe13470274deff024427ec29dea93bc99f479",
+        "src": "/assets/products/skateboard-stand/turntable/stand/cobalt-blue/frame_030.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 60,
+        "height": 1536,
+        "sha256": "c06092ae81402f661b4e2dc1fb81376ecff5475897b4ef5019a08bd81451f592",
+        "src": "/assets/products/skateboard-stand/turntable/stand/cobalt-blue/frame_060.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 90,
+        "height": 1536,
+        "sha256": "4e32a9bd4facf242d8778f911b9c54d7696866f1b5be0f19a3fa06cb6e4fd5ab",
+        "src": "/assets/products/skateboard-stand/turntable/stand/cobalt-blue/frame_090.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 120,
+        "height": 1536,
+        "sha256": "bdc4ea37b361a76c947f22c29e9c1c5cb968d1fca48dd4c4483a2d08eb6e5a19",
+        "src": "/assets/products/skateboard-stand/turntable/stand/cobalt-blue/frame_120.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 150,
+        "height": 1536,
+        "sha256": "6568f9aafb1bdc1faec0fc1dd1298daf53170d43e7bacd7ff993e19838a620f8",
+        "src": "/assets/products/skateboard-stand/turntable/stand/cobalt-blue/frame_150.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 180,
+        "height": 1536,
+        "sha256": "9c954cb7663b569f988e3a533bdbf35110d9d87391dac2fa86735164559e6a94",
+        "src": "/assets/products/skateboard-stand/turntable/stand/cobalt-blue/frame_180.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 210,
+        "height": 1536,
+        "sha256": "82744c37d503c8793fa6510d0fc04e31c48fe31f76c936f07a4dc3addca40829",
+        "src": "/assets/products/skateboard-stand/turntable/stand/cobalt-blue/frame_210.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 240,
+        "height": 1536,
+        "sha256": "70c6bbd41921bead766be76ab78d81448cfa513777364085fca00402d2877410",
+        "src": "/assets/products/skateboard-stand/turntable/stand/cobalt-blue/frame_240.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 270,
+        "height": 1536,
+        "sha256": "5bd5549a4050635a21600fb0789963030ab6a66134175c08ee0a44d572cdc322",
+        "src": "/assets/products/skateboard-stand/turntable/stand/cobalt-blue/frame_270.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 300,
+        "height": 1536,
+        "sha256": "ee706d19b84dbc51b74266bdf7df218a6f4a7d0b0f2145208191e8fa7a9aeba7",
+        "src": "/assets/products/skateboard-stand/turntable/stand/cobalt-blue/frame_300.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 330,
+        "height": 1536,
+        "sha256": "d35d05c1686352df0a5e67fb4a5b2bca8338b84d4c2c32effa66cb05d6eb3a74",
+        "src": "/assets/products/skateboard-stand/turntable/stand/cobalt-blue/frame_330.webp",
+        "width": 1024
+      }
+    ],
+    "id": "stand--cobalt-blue",
+    "viewId": "stand"
+  },
+  {
+    "colorId": "charcoal",
+    "frames": [
+      {
+        "angleDegrees": 0,
+        "height": 1536,
+        "sha256": "bec5076edd726d4fa0bca0526912f17db46502133fc54d147a670bcb097c56e1",
+        "src": "/assets/products/skateboard-stand/turntable/stand/charcoal/frame_000.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 30,
+        "height": 1536,
+        "sha256": "19459ce15ec8a40b85a1e454b957c1989d8b5dc50afd7d6b04eea767fffc9b76",
+        "src": "/assets/products/skateboard-stand/turntable/stand/charcoal/frame_030.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 60,
+        "height": 1536,
+        "sha256": "fb8e57d285b694f6a1140a654175ad2f9b12a7ac76453516f6531c44f7c57e68",
+        "src": "/assets/products/skateboard-stand/turntable/stand/charcoal/frame_060.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 90,
+        "height": 1536,
+        "sha256": "c7c1c5afcdee95496e519f914d01d9216037c22b1c260fce90c3d564822781c3",
+        "src": "/assets/products/skateboard-stand/turntable/stand/charcoal/frame_090.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 120,
+        "height": 1536,
+        "sha256": "efb0620a30c3e668df0205e97269a6495601a784b422150b431e518be8fbebd2",
+        "src": "/assets/products/skateboard-stand/turntable/stand/charcoal/frame_120.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 150,
+        "height": 1536,
+        "sha256": "343ecc73e3cca31597d8b1dd51a90c717bc862461ab5148c0bea18a6edf56b82",
+        "src": "/assets/products/skateboard-stand/turntable/stand/charcoal/frame_150.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 180,
+        "height": 1536,
+        "sha256": "943a925f3947983047b8126c7c839477658adc06b17401dcbd45a43fba17b888",
+        "src": "/assets/products/skateboard-stand/turntable/stand/charcoal/frame_180.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 210,
+        "height": 1536,
+        "sha256": "d7d8ffe21331e72a4d095c85af132a5430e7d4d753d04b536b294d50494d02db",
+        "src": "/assets/products/skateboard-stand/turntable/stand/charcoal/frame_210.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 240,
+        "height": 1536,
+        "sha256": "ddefe99dfafb191aebaa1fa8fe64842d1bb78ff76f5b93220b127ee10d4aa039",
+        "src": "/assets/products/skateboard-stand/turntable/stand/charcoal/frame_240.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 270,
+        "height": 1536,
+        "sha256": "a437a66334bdfe54c7f9e98334562d35cc7f2fcb060edc6eef5d6e60c38eed04",
+        "src": "/assets/products/skateboard-stand/turntable/stand/charcoal/frame_270.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 300,
+        "height": 1536,
+        "sha256": "e7cd42f1428891e543b28b72cf9bfd90555e68f1b528bd50b0908dffc14a1ecd",
+        "src": "/assets/products/skateboard-stand/turntable/stand/charcoal/frame_300.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 330,
+        "height": 1536,
+        "sha256": "8f71abe0f8fdb50a7bf9122060916f1e3a83278c79ac42518e4c16f82e4ac5bf",
+        "src": "/assets/products/skateboard-stand/turntable/stand/charcoal/frame_330.webp",
+        "width": 1024
+      }
+    ],
+    "id": "stand--charcoal",
+    "viewId": "stand"
+  },
+  {
+    "colorId": "bone-white",
+    "frames": [
+      {
+        "angleDegrees": 0,
+        "height": 1536,
+        "sha256": "b024be8f834d1e0ad62cbad16c2b26c2c9280d11f2e8039a0b757b46bbac3811",
+        "src": "/assets/products/skateboard-stand/turntable/stand/bone-white/frame_000.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 30,
+        "height": 1536,
+        "sha256": "e2bd464541747f735c4ef4874ab31a2b8b32965ec3fdc0b0244a73b59b945621",
+        "src": "/assets/products/skateboard-stand/turntable/stand/bone-white/frame_030.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 60,
+        "height": 1536,
+        "sha256": "2685df04ee0fb89b7be6261a10034954104f766dbce969416dec610a6a4650d9",
+        "src": "/assets/products/skateboard-stand/turntable/stand/bone-white/frame_060.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 90,
+        "height": 1536,
+        "sha256": "1eb85fe41817381ac71ff13409a8758ded58762d17e34940c02422aa6a8a34ff",
+        "src": "/assets/products/skateboard-stand/turntable/stand/bone-white/frame_090.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 120,
+        "height": 1536,
+        "sha256": "fb25462fdcb351712f0c13ea95e95dfc7b75baaab4fbfb300d87788e4ed6d4aa",
+        "src": "/assets/products/skateboard-stand/turntable/stand/bone-white/frame_120.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 150,
+        "height": 1536,
+        "sha256": "66e8503f3c4d6551e25e2a6a812450f8811df806228f1f63599fa4d8dd135191",
+        "src": "/assets/products/skateboard-stand/turntable/stand/bone-white/frame_150.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 180,
+        "height": 1536,
+        "sha256": "853e3ba742578bbae405ec4f05f8006c27ba3112204ee0d22761325e3b47f563",
+        "src": "/assets/products/skateboard-stand/turntable/stand/bone-white/frame_180.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 210,
+        "height": 1536,
+        "sha256": "aab834dd4b7fac8a4dcb05fe957b85f3aea120e708073454c992df1afce68e1f",
+        "src": "/assets/products/skateboard-stand/turntable/stand/bone-white/frame_210.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 240,
+        "height": 1536,
+        "sha256": "a0e032c19f2b14953b57ee0c611f9ac294fd3f856b65248fbffc66feee209109",
+        "src": "/assets/products/skateboard-stand/turntable/stand/bone-white/frame_240.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 270,
+        "height": 1536,
+        "sha256": "aad8874e8026e1cfe3420d998b146cbc75c72dcb9cf8515fec44bc3db5a7b643",
+        "src": "/assets/products/skateboard-stand/turntable/stand/bone-white/frame_270.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 300,
+        "height": 1536,
+        "sha256": "efd66b423eb90bb6b9d527cfc65a604c7ce09fc22a5ce6668172bf1ca435052d",
+        "src": "/assets/products/skateboard-stand/turntable/stand/bone-white/frame_300.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 330,
+        "height": 1536,
+        "sha256": "107e41d993dcd735625122882d4c4c7229c64d9e58e439fa27d4973dd1f870e3",
+        "src": "/assets/products/skateboard-stand/turntable/stand/bone-white/frame_330.webp",
+        "width": 1024
+      }
+    ],
+    "id": "stand--bone-white",
+    "viewId": "stand"
+  },
+  {
+    "colorId": "ash-gray",
+    "frames": [
+      {
+        "angleDegrees": 0,
+        "height": 1536,
+        "sha256": "674f7e317c255f4fd595f507948af280c2d732936d82ba2b509c2db5726ff9ec",
+        "src": "/assets/products/skateboard-stand/turntable/stand/ash-gray/frame_000.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 30,
+        "height": 1536,
+        "sha256": "7112546f34fcc2cfd34a70410f72e40687a7a789e96ffcfc2fbeca8cd6d9a95f",
+        "src": "/assets/products/skateboard-stand/turntable/stand/ash-gray/frame_030.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 60,
+        "height": 1536,
+        "sha256": "fc164a61bf9763bc5afd6f2114fcbdcf0d51c8e5532ec74b68270bc3a0099148",
+        "src": "/assets/products/skateboard-stand/turntable/stand/ash-gray/frame_060.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 90,
+        "height": 1536,
+        "sha256": "83c7c22a89d1d51e1c73ead47617e936136c92e0bacaf6e65654cc5a8b7223a4",
+        "src": "/assets/products/skateboard-stand/turntable/stand/ash-gray/frame_090.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 120,
+        "height": 1536,
+        "sha256": "0bf6b0ae5870f5004d9624caf701cae07f48f32dfbea401a3e8c14e2da846fc6",
+        "src": "/assets/products/skateboard-stand/turntable/stand/ash-gray/frame_120.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 150,
+        "height": 1536,
+        "sha256": "cd3cd4a6e5bf82869b70cf1413a6754a68a92cf9554f8ba0e5e75af905fb2d61",
+        "src": "/assets/products/skateboard-stand/turntable/stand/ash-gray/frame_150.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 180,
+        "height": 1536,
+        "sha256": "33d0d3c5039c3ebe4a98c8a4c88a2a9ed7d396c191ebeddc7aa3f9c45c22ec6d",
+        "src": "/assets/products/skateboard-stand/turntable/stand/ash-gray/frame_180.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 210,
+        "height": 1536,
+        "sha256": "87815647c36162b6e0221a39d4ad0b4de7d0cfd28296593bf5a6dfb96ff029d5",
+        "src": "/assets/products/skateboard-stand/turntable/stand/ash-gray/frame_210.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 240,
+        "height": 1536,
+        "sha256": "72b1dfbbbb8048f51cf9988b310c9b21f5adac5be05c4a6903bf0ee42a671425",
+        "src": "/assets/products/skateboard-stand/turntable/stand/ash-gray/frame_240.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 270,
+        "height": 1536,
+        "sha256": "d65b7ede2a44d775bbce0c38136ba9876c5762d1da6a9fb8eed7689b7073e18d",
+        "src": "/assets/products/skateboard-stand/turntable/stand/ash-gray/frame_270.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 300,
+        "height": 1536,
+        "sha256": "0d58c3915a0480b20a27b720057ecf036a4322e64110e8b6289a551cb623295e",
+        "src": "/assets/products/skateboard-stand/turntable/stand/ash-gray/frame_300.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 330,
+        "height": 1536,
+        "sha256": "fa1c5ad6bc59d498a851d3532279ec225405f0bfe486d8445af34f78d4154162",
+        "src": "/assets/products/skateboard-stand/turntable/stand/ash-gray/frame_330.webp",
+        "width": 1024
+      }
+    ],
+    "id": "stand--ash-gray",
+    "viewId": "stand"
+  },
+  {
+    "colorId": "ice-blue",
+    "frames": [
+      {
+        "angleDegrees": 0,
+        "height": 1536,
+        "sha256": "462ef44f3c1527bf5beac9f85a967773214419482de674742b9f0a5bb51d5d45",
+        "src": "/assets/products/skateboard-stand/turntable/stand/ice-blue/frame_000.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 30,
+        "height": 1536,
+        "sha256": "e8e4532f80638d3990ddf4df47c990ec9cc086d9d704384d3b71f6d99f9e45a2",
+        "src": "/assets/products/skateboard-stand/turntable/stand/ice-blue/frame_030.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 60,
+        "height": 1536,
+        "sha256": "645e56ddf95efc41273676cc1e0d9807b196cf7bf0c7d14fc75e3dc9db5471a8",
+        "src": "/assets/products/skateboard-stand/turntable/stand/ice-blue/frame_060.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 90,
+        "height": 1536,
+        "sha256": "cfde4e08504e5c466f7faf3fe42e85fd4ef5695a924a332bb3db1ac2a9d0eaa6",
+        "src": "/assets/products/skateboard-stand/turntable/stand/ice-blue/frame_090.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 120,
+        "height": 1536,
+        "sha256": "2e458370e908ba3cb613809d36c9130254313c3216e1515c7d059c54cf9e5ef3",
+        "src": "/assets/products/skateboard-stand/turntable/stand/ice-blue/frame_120.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 150,
+        "height": 1536,
+        "sha256": "19b44bb42560c9c5aa056e2eb26117dd6636f124c5dabf344df0b312b880f638",
+        "src": "/assets/products/skateboard-stand/turntable/stand/ice-blue/frame_150.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 180,
+        "height": 1536,
+        "sha256": "23ad4118ea0786e31afc0b9da7b18ad65368bcb9c36173e7fc7d104311bbe535",
+        "src": "/assets/products/skateboard-stand/turntable/stand/ice-blue/frame_180.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 210,
+        "height": 1536,
+        "sha256": "4cf141a63dbeb7a70035cfb5406ebabf290c348b2e8a12ab39174688d8d825d4",
+        "src": "/assets/products/skateboard-stand/turntable/stand/ice-blue/frame_210.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 240,
+        "height": 1536,
+        "sha256": "26a4dc6bae4b0be2669566e6904863eb7182f3e3e8dcc005a92297a34fdbaf25",
+        "src": "/assets/products/skateboard-stand/turntable/stand/ice-blue/frame_240.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 270,
+        "height": 1536,
+        "sha256": "3bcf9c659e6b87a05cd4a4cf25e2ef7450e62612c841e063ad195dddf3565baa",
+        "src": "/assets/products/skateboard-stand/turntable/stand/ice-blue/frame_270.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 300,
+        "height": 1536,
+        "sha256": "f01f2b4fa7576c767976abdab8d4c1c6d916f74035ce655cccedf829b6c47fda",
+        "src": "/assets/products/skateboard-stand/turntable/stand/ice-blue/frame_300.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 330,
+        "height": 1536,
+        "sha256": "f95d0075166f8bd5d81444bae66d7c3245125752c06f5dac1b260f4c1aefeaf4",
+        "src": "/assets/products/skateboard-stand/turntable/stand/ice-blue/frame_330.webp",
+        "width": 1024
+      }
+    ],
+    "id": "stand--ice-blue",
+    "viewId": "stand"
+  },
+  {
+    "colorId": "dark-green",
+    "frames": [
+      {
+        "angleDegrees": 0,
+        "height": 1536,
+        "sha256": "61525d1140fb5c8df47cf5748dee16675c41e5e474e677c964e55440a39aeebe",
+        "src": "/assets/products/skateboard-stand/turntable/stand/dark-green/frame_000.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 30,
+        "height": 1536,
+        "sha256": "8c9fdd4640fce832c66cf2ede9a88e5c6e44e66263b90ee6a328cc35e3a2e258",
+        "src": "/assets/products/skateboard-stand/turntable/stand/dark-green/frame_030.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 60,
+        "height": 1536,
+        "sha256": "079f5192d40e976f7e0650d83754f8425c02770e34259e95c18217f70a458b2d",
+        "src": "/assets/products/skateboard-stand/turntable/stand/dark-green/frame_060.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 90,
+        "height": 1536,
+        "sha256": "d532e6ee441bf8f4cae37ce2df134d844bbdb18f76b131abfe6b8995d5a9e2ae",
+        "src": "/assets/products/skateboard-stand/turntable/stand/dark-green/frame_090.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 120,
+        "height": 1536,
+        "sha256": "038ae93c4735d0e9b8f20bd22133bb31f51c85910d298036ef9d528453acc9e7",
+        "src": "/assets/products/skateboard-stand/turntable/stand/dark-green/frame_120.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 150,
+        "height": 1536,
+        "sha256": "dc02f4ff03ceeadae288eeb51f0bdc4ee2f74e7236409ecb6334f52d417af3c9",
+        "src": "/assets/products/skateboard-stand/turntable/stand/dark-green/frame_150.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 180,
+        "height": 1536,
+        "sha256": "bb12c45c6034996748418a42527f447da5a4687e0d26a97f1bf0faebca0c0dfb",
+        "src": "/assets/products/skateboard-stand/turntable/stand/dark-green/frame_180.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 210,
+        "height": 1536,
+        "sha256": "66c15bd7993bcd7413778061f78c9397deaa6301359371ac6a6cee8454b54658",
+        "src": "/assets/products/skateboard-stand/turntable/stand/dark-green/frame_210.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 240,
+        "height": 1536,
+        "sha256": "dc12edfc37f9fee0bcf00524f27979f3723b8e3c20051f58a38e5da80b2dc26b",
+        "src": "/assets/products/skateboard-stand/turntable/stand/dark-green/frame_240.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 270,
+        "height": 1536,
+        "sha256": "9cf1d8f314f2a0ffd652b29ad05c2eac8b807c50877e778c9fc043b2b3bb66e0",
+        "src": "/assets/products/skateboard-stand/turntable/stand/dark-green/frame_270.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 300,
+        "height": 1536,
+        "sha256": "6d0896a92e601cdadf1db4a02aba2384d2049666979c92676c5140a15b2c2c4e",
+        "src": "/assets/products/skateboard-stand/turntable/stand/dark-green/frame_300.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 330,
+        "height": 1536,
+        "sha256": "a1b7dbae3fca76835e7783dfc40a00eebbd83dea12bbdbb4d4851df4a82d0df7",
+        "src": "/assets/products/skateboard-stand/turntable/stand/dark-green/frame_330.webp",
+        "width": 1024
+      }
+    ],
+    "id": "stand--dark-green",
+    "viewId": "stand"
+  },
+  {
+    "colorId": "white-marble",
+    "frames": [
+      {
+        "angleDegrees": 0,
+        "height": 1536,
+        "sha256": "6b0c450369675194ef11be974ddd82bca266fd24448b87ce947ad6e89e1869cc",
+        "src": "/assets/products/skateboard-stand/turntable/stand/white-marble/frame_000.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 30,
+        "height": 1536,
+        "sha256": "02fde230d6e410f70705225ca208ca983ee2d74c9a8d800e4d9812fc868a6bf4",
+        "src": "/assets/products/skateboard-stand/turntable/stand/white-marble/frame_030.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 60,
+        "height": 1536,
+        "sha256": "fb63d3da6af9bc86a65c782a02175494c379cedca1de877afcf9a16183178fd2",
+        "src": "/assets/products/skateboard-stand/turntable/stand/white-marble/frame_060.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 90,
+        "height": 1536,
+        "sha256": "b45d58b4bdf583a4722faf956904f949fffaac9b0454e4c7c17235965bed3156",
+        "src": "/assets/products/skateboard-stand/turntable/stand/white-marble/frame_090.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 120,
+        "height": 1536,
+        "sha256": "7590ce50eefc9d7bc2cd0f71283ab320f68a59ccfcea57f32b743c4128a1f426",
+        "src": "/assets/products/skateboard-stand/turntable/stand/white-marble/frame_120.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 150,
+        "height": 1536,
+        "sha256": "ea49b960f1ddf4b848e9311cb6afdaf48b6a48beb180417511936d94f020a037",
+        "src": "/assets/products/skateboard-stand/turntable/stand/white-marble/frame_150.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 180,
+        "height": 1536,
+        "sha256": "5676720f6e53e5b74ba52dbc6b78702cbd9bfdd035357a1ed160d8499ae6deb0",
+        "src": "/assets/products/skateboard-stand/turntable/stand/white-marble/frame_180.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 210,
+        "height": 1536,
+        "sha256": "8c0386ec08f915a49bebf37a99a974f65e2f781e4398711f635779d816ae1e86",
+        "src": "/assets/products/skateboard-stand/turntable/stand/white-marble/frame_210.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 240,
+        "height": 1536,
+        "sha256": "9993a2203b728beac60e1796e33941e4f3fb9f47ac7c16c6eee16d530409bd7e",
+        "src": "/assets/products/skateboard-stand/turntable/stand/white-marble/frame_240.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 270,
+        "height": 1536,
+        "sha256": "06f8c354c9feb1d2cb8d9a994a405468c29ce79abfc3abb2e80402f520f447f9",
+        "src": "/assets/products/skateboard-stand/turntable/stand/white-marble/frame_270.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 300,
+        "height": 1536,
+        "sha256": "cf3b61c509d6cbd2f72c0d28d691310889bfbf35a71d45d685eda68a4f9fbdcf",
+        "src": "/assets/products/skateboard-stand/turntable/stand/white-marble/frame_300.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 330,
+        "height": 1536,
+        "sha256": "9bcf9f8a4dd508590e8edbbc377bccca632d6b33773210360a52180b0db635a1",
+        "src": "/assets/products/skateboard-stand/turntable/stand/white-marble/frame_330.webp",
+        "width": 1024
+      }
+    ],
+    "id": "stand--white-marble",
+    "viewId": "stand"
+  },
+  {
+    "colorId": "cobalt-blue",
+    "frames": [
+      {
+        "angleDegrees": 0,
+        "height": 1536,
+        "sha256": "d8afc2b87b1a4143566426712b64633b596c15ae4fd3e1bb613bbd86cd5efbb6",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/cobalt-blue/frame_000.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 30,
+        "height": 1536,
+        "sha256": "3b2f7ba21f2f6b845e1d6ca828aae1340a4f4034786e28232a00166e75193b43",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/cobalt-blue/frame_030.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 60,
+        "height": 1536,
+        "sha256": "6fea2a734d130cef684cf859b22f4b3d8f8f22d8d4b3922ba8bce1726fc23705",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/cobalt-blue/frame_060.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 90,
+        "height": 1536,
+        "sha256": "3c582da05ff0b22f87b87d9e9fde598fd9d728b2ee0675ff7774414b1ad4a273",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/cobalt-blue/frame_090.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 120,
+        "height": 1536,
+        "sha256": "6265ee15bb35d213377c1598a37f6322eff62264c62a43d2dbbb478e2c837034",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/cobalt-blue/frame_120.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 150,
+        "height": 1536,
+        "sha256": "6e368c2ae7d26137c287fd27a35e2114eedc34061f8d8c9b384d3756f5943fc8",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/cobalt-blue/frame_150.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 180,
+        "height": 1536,
+        "sha256": "33df9850a5c78f758fa1295ce113e65bef3783d69811be07f3c1ed81304a58f3",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/cobalt-blue/frame_180.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 210,
+        "height": 1536,
+        "sha256": "8c5d5e736433a944f8d8aa1b2547da1bac1a92ad4cef5fe6a9f3fbb6e989ccea",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/cobalt-blue/frame_210.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 240,
+        "height": 1536,
+        "sha256": "2d6051d1f5cc9823ee60d25a3b0f8594a1c3d875d20d4cd1e5bf66fc79b8f2ef",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/cobalt-blue/frame_240.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 270,
+        "height": 1536,
+        "sha256": "5bec46238f321032c8d8802e71cd2e73a67048d12dfe8a3306613feb0d016ba6",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/cobalt-blue/frame_270.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 300,
+        "height": 1536,
+        "sha256": "cb183590977ef0a55076dab092f0066f80308a477eb938cde28d7a97c339d7c5",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/cobalt-blue/frame_300.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 330,
+        "height": 1536,
+        "sha256": "db738ce4365489b352e9eb65deafa0fa3a18ee281f7aa7a9cb8ba589f611dbc6",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/cobalt-blue/frame_330.webp",
+        "width": 1024
+      }
+    ],
+    "id": "board--cobalt-blue",
+    "viewId": "board"
+  },
+  {
+    "colorId": "charcoal",
+    "frames": [
+      {
+        "angleDegrees": 0,
+        "height": 1536,
+        "sha256": "908769788f68d8869f747fe5e5e5c3473114a3cf0c907f8c1302b36a02c8309b",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/charcoal/frame_000.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 30,
+        "height": 1536,
+        "sha256": "b1ad3110c5545fd3dcd3d474bc959138bff3d282a835dc4ba6ad2c61aa260712",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/charcoal/frame_030.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 60,
+        "height": 1536,
+        "sha256": "b508c17626ac271afe8ea0ba1b88905d3c9eb5a3d4a698a63c0779bc61debf58",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/charcoal/frame_060.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 90,
+        "height": 1536,
+        "sha256": "a9f230654769400aef6c119b589fab0829cc4f3815b1edf7197b3bba94dc687e",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/charcoal/frame_090.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 120,
+        "height": 1536,
+        "sha256": "563f02c6a895c1d53a3c9cc3cddb321f797072355e5d3a1272f1d391bd055cdf",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/charcoal/frame_120.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 150,
+        "height": 1536,
+        "sha256": "a489b2269bdc0374a194706d55547c40bad4216636845124e09332608aa6b0e1",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/charcoal/frame_150.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 180,
+        "height": 1536,
+        "sha256": "aa41288b50b2720173f4fbdb4ea3000571dc267e3f534eae54a56cc4ca72f0e4",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/charcoal/frame_180.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 210,
+        "height": 1536,
+        "sha256": "a1f40ed785879349083a13e8da6ff1285556b4e90b89e6696f2e3eb75a819957",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/charcoal/frame_210.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 240,
+        "height": 1536,
+        "sha256": "56da101908dc471fbc7ad130ef5c3aac814fa49f52f6127e39c736ec13cd9e91",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/charcoal/frame_240.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 270,
+        "height": 1536,
+        "sha256": "a29241403021827bc8ead109fd59bf565f7cea86a5ede66d0b0a7e5ee327efd0",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/charcoal/frame_270.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 300,
+        "height": 1536,
+        "sha256": "3f127c30f5785d75732e2b7a51a493c72b70538995a3684618e839e0b5b09712",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/charcoal/frame_300.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 330,
+        "height": 1536,
+        "sha256": "1e642b02e1de3821ef871b33dae64097e74684cc743de480be1455e3f50515b1",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/charcoal/frame_330.webp",
+        "width": 1024
+      }
+    ],
+    "id": "board--charcoal",
+    "viewId": "board"
+  },
+  {
+    "colorId": "bone-white",
+    "frames": [
+      {
+        "angleDegrees": 0,
+        "height": 1536,
+        "sha256": "c5bbef310733f03466ac44955d6525e6958cf92360a7ac8df2cd74db95499f1c",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/bone-white/frame_000.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 30,
+        "height": 1536,
+        "sha256": "e210fc3d6982360d54d58108bc801b2467567207fa480b5e6711f64309ad2e2f",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/bone-white/frame_030.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 60,
+        "height": 1536,
+        "sha256": "9185d141384dc07e63a849379fc86cf7fa605780c4888552c83cc7051ead4f1e",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/bone-white/frame_060.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 90,
+        "height": 1536,
+        "sha256": "cbdc11e5e75bcaeb18d773f2761a378e92bea535f043745ec94d4b51a83a58d5",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/bone-white/frame_090.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 120,
+        "height": 1536,
+        "sha256": "a771902f9e2cbb19fb29d07478b809e5048db992978fd69a128c7e49d4399e6e",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/bone-white/frame_120.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 150,
+        "height": 1536,
+        "sha256": "e0c1459d94db7663b26f415e2cc5aacd6babed14e881af5b381214229498e366",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/bone-white/frame_150.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 180,
+        "height": 1536,
+        "sha256": "0589b66f7a0634d68be26a8a5225b7f3c51710f0cb851692714fe1478a60d5dc",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/bone-white/frame_180.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 210,
+        "height": 1536,
+        "sha256": "dfea9fe05431a52420ad3d0e75a7fb34b4ecdfdeb682387668106114adda1c62",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/bone-white/frame_210.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 240,
+        "height": 1536,
+        "sha256": "d8f05bcab11a8870b245c8a055f5afbd9a566fca94d74d65222586b208404f81",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/bone-white/frame_240.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 270,
+        "height": 1536,
+        "sha256": "010124c3d0660a4a8c51763ce0a0722d04fa8af3c046dde2c83a6c0f400e73a6",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/bone-white/frame_270.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 300,
+        "height": 1536,
+        "sha256": "6cdffca036a00f29681f9e52a9927d91d6a86e975ee231cfe856b60bfe9469c1",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/bone-white/frame_300.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 330,
+        "height": 1536,
+        "sha256": "04be27dc3f8326cda282367687e7508f03a8a8a380fd35b44629b90766d70325",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/bone-white/frame_330.webp",
+        "width": 1024
+      }
+    ],
+    "id": "board--bone-white",
+    "viewId": "board"
+  },
+  {
+    "colorId": "ash-gray",
+    "frames": [
+      {
+        "angleDegrees": 0,
+        "height": 1536,
+        "sha256": "baccfb16c58df264eeeb59aae3ef563bdec137fdfce634e6951da2cc698af5eb",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/ash-gray/frame_000.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 30,
+        "height": 1536,
+        "sha256": "e7c1da1160748657b81b8998ff8ec080e2f9fc0d4cbe86fd13775bd88b21c662",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/ash-gray/frame_030.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 60,
+        "height": 1536,
+        "sha256": "f7464ce2b33158b663a42b0edbb8dd007aaba2463814f0938853966dbedf5dda",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/ash-gray/frame_060.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 90,
+        "height": 1536,
+        "sha256": "0b8b10483d5c4ccf1a4ade1c0735b5911dbe1d79a113d1c3bbaf81b6dd720a78",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/ash-gray/frame_090.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 120,
+        "height": 1536,
+        "sha256": "b9548474fb9516ebeb4b4d55b2c23e10f4c6cc04ae9ae47aba9861c0eef1bcae",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/ash-gray/frame_120.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 150,
+        "height": 1536,
+        "sha256": "04d10ef480f540bf580d061c0d1711ffc117c21e483741d2a91ea0fa122261ba",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/ash-gray/frame_150.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 180,
+        "height": 1536,
+        "sha256": "a78e8b0022fa377f128ed44818acaaadd5288019de5ca9d7316f73ff5ec45ffa",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/ash-gray/frame_180.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 210,
+        "height": 1536,
+        "sha256": "f83f151956f28bd0a014cd164bd3976624d34bd614b967421eb85888469c8f9e",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/ash-gray/frame_210.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 240,
+        "height": 1536,
+        "sha256": "3870e93b032e8abc96bbc7e46a770235813fb274020737f678f9aee96e379154",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/ash-gray/frame_240.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 270,
+        "height": 1536,
+        "sha256": "6039bb6c4ce94f4e715ab1a915170bc4be86aa81f32660228b346d8dcd005c64",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/ash-gray/frame_270.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 300,
+        "height": 1536,
+        "sha256": "eaf11331d6e40577faded620c2dfde10a8c38610dec2f94d21d74f5d80d7bcfe",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/ash-gray/frame_300.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 330,
+        "height": 1536,
+        "sha256": "d7f0124dd045775c076128b007d05e1ce1911b71ed5c7a1388b6fafaf73c807b",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/ash-gray/frame_330.webp",
+        "width": 1024
+      }
+    ],
+    "id": "board--ash-gray",
+    "viewId": "board"
+  },
+  {
+    "colorId": "ice-blue",
+    "frames": [
+      {
+        "angleDegrees": 0,
+        "height": 1536,
+        "sha256": "eff842fc352378b5e0cdaa99fde75fd38e83369cd8aecd40373d31b5ccb5a9d5",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/ice-blue/frame_000.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 30,
+        "height": 1536,
+        "sha256": "dcabf4ca2948f58f1e9d4cb84a1a262cfd1b493b03e211d5a61eda7e3e54e65c",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/ice-blue/frame_030.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 60,
+        "height": 1536,
+        "sha256": "f7b30cf7c5c2b439971671fd4df953ec5fde6a161261006f56e07f1c760f5830",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/ice-blue/frame_060.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 90,
+        "height": 1536,
+        "sha256": "752da5b076b788f1fb535fc58a501a91c7203a8ecf51c998d96bc7f42e0886ad",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/ice-blue/frame_090.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 120,
+        "height": 1536,
+        "sha256": "a383b4827e5648cdd3a91141ee88e6fb9de639aa7cded78f79609706906164c6",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/ice-blue/frame_120.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 150,
+        "height": 1536,
+        "sha256": "6b83aba8f519f4cc32bf2d80b52fa8fb2253074c5561f01cedc2bc9dfe1595f6",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/ice-blue/frame_150.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 180,
+        "height": 1536,
+        "sha256": "efa6a070a4fa4df5e8bd06e8a59093302945938441807c071df9db21fcd62053",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/ice-blue/frame_180.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 210,
+        "height": 1536,
+        "sha256": "35d64b361af747b50de69f7f2d8817f1dc5521491619e151eb6b2e0f63d50ae4",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/ice-blue/frame_210.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 240,
+        "height": 1536,
+        "sha256": "c2bb37e010f30ba630245f41bb58764827fed0a515b24d6af3732d7aaabcd84f",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/ice-blue/frame_240.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 270,
+        "height": 1536,
+        "sha256": "17834ea6e7ab66944f5a049f80b6cf4b69a5791c1600b12b4aa89dd34ea6774e",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/ice-blue/frame_270.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 300,
+        "height": 1536,
+        "sha256": "97d349b80bd5aba52cb570b19006cab87af6dfc20c457c1002bb0fd535495d52",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/ice-blue/frame_300.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 330,
+        "height": 1536,
+        "sha256": "aa1660b16fff2d6aa2169f4843f1ad24f15ea24b5475a17b13874cd4af004e65",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/ice-blue/frame_330.webp",
+        "width": 1024
+      }
+    ],
+    "id": "board--ice-blue",
+    "viewId": "board"
+  },
+  {
+    "colorId": "dark-green",
+    "frames": [
+      {
+        "angleDegrees": 0,
+        "height": 1536,
+        "sha256": "5ba88528421e5accc7b3d4b80020f119a630dec91fb0033e8d6076b69f9681bf",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/dark-green/frame_000.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 30,
+        "height": 1536,
+        "sha256": "51c8787f40e5aa7994357adcd99e83c5204b57da1dbc11cbca66269ade829127",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/dark-green/frame_030.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 60,
+        "height": 1536,
+        "sha256": "56fbe96b4ece65b56a71ccd078241c550523b8a290938f82c57e04ac8934e553",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/dark-green/frame_060.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 90,
+        "height": 1536,
+        "sha256": "6f6f7243cb05ceb8820efa3c32819ea4abdf570a218339a493664c5420d21f6b",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/dark-green/frame_090.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 120,
+        "height": 1536,
+        "sha256": "4fa8fefeb0309bfa339fe309169753428baee69b887b5622aa1a943d18575c90",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/dark-green/frame_120.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 150,
+        "height": 1536,
+        "sha256": "c4724d894fcd64231538aa8304473040cf6c92541a784cc82093f530ae499be5",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/dark-green/frame_150.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 180,
+        "height": 1536,
+        "sha256": "9a646a881fc0bd139716f15c902f6102a1ea5197eb10bc2d55fdd6fce04d004b",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/dark-green/frame_180.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 210,
+        "height": 1536,
+        "sha256": "6635a6aa53b8ce66d879ba3c672b226c6ebf0f6be869718b221e698afffb803b",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/dark-green/frame_210.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 240,
+        "height": 1536,
+        "sha256": "b6a8cf1068aacd22e27c2e4a630e87bbb95e09b95881396081bc7107ea391315",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/dark-green/frame_240.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 270,
+        "height": 1536,
+        "sha256": "0747cb21cb236ae2c27148e089da70cdcbde0024f0f8a624a969cfd8bb8c6753",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/dark-green/frame_270.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 300,
+        "height": 1536,
+        "sha256": "c84a4ae275b1da08c1a32db018b79cdf479f3aa73d5c641069c60e2748feea77",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/dark-green/frame_300.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 330,
+        "height": 1536,
+        "sha256": "dc15d100769f033c94fa704f074da6bb1c997fc8fecd1966c7ee5ced0d91f0e2",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/dark-green/frame_330.webp",
+        "width": 1024
+      }
+    ],
+    "id": "board--dark-green",
+    "viewId": "board"
+  },
+  {
+    "colorId": "white-marble",
+    "frames": [
+      {
+        "angleDegrees": 0,
+        "height": 1536,
+        "sha256": "8c2d6bcfc7269f979624e59efe8937b9186ef67abe2ebb56fa819359e3ec432f",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/white-marble/frame_000.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 30,
+        "height": 1536,
+        "sha256": "314a231206fafe05cbaec07b9e12c1a4aafc6f253df71b08d002228ffbfe5ed0",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/white-marble/frame_030.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 60,
+        "height": 1536,
+        "sha256": "ac965ab438cf3cf032e62e7e96d1c3458e2d101f3d695fcd4e947d4eb7f609a0",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/white-marble/frame_060.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 90,
+        "height": 1536,
+        "sha256": "0dd949411789ff23f06144e4d8a1162173f3cbcd44de56240d74554732ddf9d8",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/white-marble/frame_090.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 120,
+        "height": 1536,
+        "sha256": "430451fbeaf8e80aa7eec2520db2e6880880e145fa3b6dce335812d8194694f2",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/white-marble/frame_120.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 150,
+        "height": 1536,
+        "sha256": "b43c758795dc80713255fc531534b5579effeb64b7a5603a42c946fcca0eb5de",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/white-marble/frame_150.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 180,
+        "height": 1536,
+        "sha256": "4e146c52fb2f39e3eaddaad6a47072be81571666b0ed255864cb5c164ffe1b9e",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/white-marble/frame_180.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 210,
+        "height": 1536,
+        "sha256": "11d0f160313df9bf5ac2a719a324ce35c53c1b0e52f4734b7247228849aee509",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/white-marble/frame_210.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 240,
+        "height": 1536,
+        "sha256": "2bc10f4064901c0a5e6fb8e4018cdb05f748aa17b7313fddb66bb8279d8db48a",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/white-marble/frame_240.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 270,
+        "height": 1536,
+        "sha256": "4756c85c3eae68d29fc6f383e234dfec3fe75ceaa03210463c9d60efb2bddff5",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/white-marble/frame_270.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 300,
+        "height": 1536,
+        "sha256": "cfba297dcab6134ae7b7d03a07d38bd7e2c6e1ddbb96de6543f9465cf0d875de",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/white-marble/frame_300.webp",
+        "width": 1024
+      },
+      {
+        "angleDegrees": 330,
+        "height": 1536,
+        "sha256": "f4ea783fd1c99cae7bf019dea00daf1f9ddfa4e28d95cec2a89553525beb8d4d",
+        "src": "/assets/products/skateboard-stand/turntable/with-board/white-marble/frame_330.webp",
+        "width": 1024
+      }
+    ],
+    "id": "board--white-marble",
+    "viewId": "board"
+  }
+]

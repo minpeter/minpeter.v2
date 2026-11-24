@@ -235,6 +235,8 @@
     "mediaLabel": "{product} renders",
     "viewSource": "View on GitHub",
     "downloadFiles": "Download print files",
+    "naverSmartStore": "Buy on Naver Smart Store",
+    "naverSmartStoreSoon": "Naver Smart Store · Coming soon",
     "descriptionLabel": "Description",
     "detailsLabel": "Details",
     "upcoming": "Coming soon",
@@ -251,6 +253,90 @@
           "print": "v7.15 is designated for the second physical build. Print completion and assembly results are unconfirmed; check fit coupons before printing a full assembly",
           "status": "Prototype — opaque renders use v7.15; Transparent Inventor approximates the latest exterior shell (a552798), omitting PCB, switches, plate, gaskets and catch internals. CAD checks do not establish physical fit or assembly.",
           "license": "CC BY-NC 4.0 — print and modify for personal, non-commercial use only. Selling prints or files is not permitted."
+        }
+      },
+      "skateboardStand": {
+        "variant": "8\" freestanding stand",
+        "license": "Coming soon",
+        "intro": "Freestanding 8\" skateboard stand.",
+        "description": "A 3D-printed freestanding stand that holds an 8-inch skateboard upright without wall mounts.",
+        "details": {
+          "size": "162.7 × 157.5 × 62.8 mm",
+          "slot": "20° tail slot (12 mm+)",
+          "pads": "4× 3M SJ5302 bumper seats",
+          "fit": "Fit-tested on 8\" Deathwish"
+        }
+      }
+    },
+    "standCustomization": {
+      "viewLabel": "View",
+      "views": {
+        "stand": "Stand",
+        "board": "Board"
+      },
+      "colorLabel": "Color",
+      "selected": "{view} · {color}",
+      "boardPreviewLabel": "Reconstructed 3D render with an 8-inch skateboard seated (not a photograph): drag or use arrow keys to rotate in 30° steps",
+      "pending": "Render pending",
+      "pendingDetail": "Images for this view and color are not ready yet.",
+      "loading": "Loading…",
+      "partial": "Some angles unavailable.",
+      "ready": "Ready",
+      "loadError": "Could not load render.",
+      "retry": "Retry",
+      "detailsLabel": "Specs",
+      "configurationNote": "3D render · 8\" street deck reference",
+      "boardModelLabel": "Reference deck",
+      "boardModelSpec": "8\" (800.1 × 203.2 mm)",
+      "marbleNote": "PLA Marble 13103 · fine gray flecks",
+      "approximation": "3D render approximation · actual print may vary",
+      "materialSource": "Color spec",
+      "colorNames": {
+        "cobalt-blue": "Cobalt Blue",
+        "charcoal": "Charcoal",
+        "bone-white": "Bone White",
+        "ash-gray": "Ash Gray",
+        "ice-blue": "Ice Blue",
+        "dark-green": "Dark Green",
+        "white-marble": "White Marble"
+      },
+      "cinema": {
+        "label": "3D scroll sequence"
+      },
+      "showcase": {
+        "heading": "Gallery",
+        "intro": "",
+        "scenes": {
+          "wall": {
+            "title": "01 · Corner",
+            "caption": "",
+            "alt": "3D studio render of three skateboards with distinct deck graphics standing side by side in Dark Green, Bone White, and Charcoal stands along a concrete corner wall"
+          },
+          "slot": {
+            "title": "02 · 20° slot",
+            "caption": "",
+            "alt": "Close-up 3D render of the deck tail seated inside the 20-degree ribbed slot with MINPETER debossed lettering"
+          },
+          "underside": {
+            "title": "03 · Bottom",
+            "caption": "",
+            "alt": "Overhead flat-lay 3D render of the stand underside showing four recessed 3M SJ5302 clear rubber bumper seats"
+          },
+          "top": {
+            "title": "04 · Top",
+            "caption": "",
+            "alt": "Overhead top-down 3D render of the Bone White stand highlighting the 20-degree slot channel and parallel wave ribs"
+          },
+          "side": {
+            "title": "05 · Side",
+            "caption": "",
+            "alt": "Orthographic side profile 3D render showing the 20-degree tail slot, curved wave silhouette, and clear bottom pads"
+          },
+          "real": {
+            "title": "06 · Real print",
+            "caption": "",
+            "alt": "Real photograph of the 3D-printed Bone White and Cobalt Blue skateboard stands holding an 8-inch skateboard beside an interior wall"
+          }
         }
       }
     },
