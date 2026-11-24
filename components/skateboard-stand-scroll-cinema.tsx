@@ -12,31 +12,52 @@ const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
 const TOTAL_FRAMES = STAND_SCROLL_SEQUENCE.frameCount;
 const KEYFRAME_INDICES = [0, 8, 16, 25, 34, 42, 50, 59] as const;
 
-// Measured horizontal subject envelope (in 2560px source coordinates):
-// Act I (F00–F06) holds the horizontal solo stand (max span ~1,740px -> 1,940px safe width).
-// Act II–IV (F13.5–F59) holds the vertical docked board (max span ~545px -> 600px safe width).
+// Measured 2D subject envelope (in 2560×1440 source coordinates):
+// - Horizontal: Act I (F00–F06) holds the wide solo stand (1,940px safe width);
+//   Act II–IV (F13.5–F59) holds the narrow upright board (600px safe width).
+// - Vertical: Act I (F00–F07) spans y∈[325..1149] (1,040px safe height);
+//   by F10 the descending & upright board needs the full 1,440px frame height.
 const WIDE_SAFE_WIDTH = 1940;
 const NARROW_SAFE_WIDTH = 600;
-const TRANSITION_START_FRAME = 6;
-const TRANSITION_END_FRAME = 13.5;
+const WIDTH_TRANSITION_START = 6;
+const WIDTH_TRANSITION_END = 13.5;
+
+const SOLO_SAFE_HEIGHT = 1040;
+const BOARD_SAFE_HEIGHT = 1440;
+const HEIGHT_TRANSITION_START = 7;
+const HEIGHT_TRANSITION_END = 10;
 
 function clamp(value: number, min: number, max: number): number {
   return Math.min(max, Math.max(min, value));
 }
 
 export function getCinemaSafeWidth(frameProgress: number): number {
-  if (frameProgress <= TRANSITION_START_FRAME) {
+  if (frameProgress <= WIDTH_TRANSITION_START) {
     return WIDE_SAFE_WIDTH;
   }
-  if (frameProgress >= TRANSITION_END_FRAME) {
+  if (frameProgress >= WIDTH_TRANSITION_END) {
     return NARROW_SAFE_WIDTH;
   }
   const t =
-    (frameProgress - TRANSITION_START_FRAME) /
-    (TRANSITION_END_FRAME - TRANSITION_START_FRAME);
+    (frameProgress - WIDTH_TRANSITION_START) /
+    (WIDTH_TRANSITION_END - WIDTH_TRANSITION_START);
   const smooth = t * t * (3 - 2 * t);
   const eased = smooth ** 1.35;
   return WIDE_SAFE_WIDTH + (NARROW_SAFE_WIDTH - WIDE_SAFE_WIDTH) * eased;
+}
+
+export function getCinemaSafeHeight(frameProgress: number): number {
+  if (frameProgress <= HEIGHT_TRANSITION_START) {
+    return SOLO_SAFE_HEIGHT;
+  }
+  if (frameProgress >= HEIGHT_TRANSITION_END) {
+    return BOARD_SAFE_HEIGHT;
+  }
+  const t =
+    (frameProgress - HEIGHT_TRANSITION_START) /
+    (HEIGHT_TRANSITION_END - HEIGHT_TRANSITION_START);
+  const smooth = t * t * (3 - 2 * t);
+  return SOLO_SAFE_HEIGHT + (BOARD_SAFE_HEIGHT - SOLO_SAFE_HEIGHT) * smooth;
 }
 
 export interface CinemaDrawRect {
@@ -48,9 +69,10 @@ export interface CinemaDrawRect {
 }
 
 /**
- * Computes cover-or-safe-fit draw coordinates so landscape viewports stay full-bleed
- * while portrait mobile viewports smoothly keep Act I's wide stand uncropped and
- * zoom into full-height vertical framing once the upright board docks.
+ * Computes 2D safe-box draw coordinates across every aspect ratio (from 32:9
+ * ultrawide and short desktop split windows down to 9:19.5 mobile portrait):
+ * never crops the active subject horizontally or vertically while preserving
+ * full-bleed cover framing whenever the viewport ratio allows it.
  */
 export function computeCinemaDrawRect(
   viewportW: number,
@@ -62,8 +84,14 @@ export function computeCinemaDrawRect(
   const coverScale = Math.max(viewportW / sourceW, viewportH / sourceH);
   const safeWidth =
     (getCinemaSafeWidth(frameProgress) / STAND_SCROLL_SEQUENCE.width) * sourceW;
-  const safeScale = viewportW / safeWidth;
-  const scale = Math.min(coverScale, safeScale);
+  const safeHeight =
+    (getCinemaSafeHeight(frameProgress) / STAND_SCROLL_SEQUENCE.height) *
+    sourceH;
+  const scale = Math.min(
+    coverScale,
+    viewportW / safeWidth,
+    viewportH / safeHeight
+  );
   const dw = sourceW * scale;
   const dh = sourceH * scale;
   return {
@@ -314,7 +342,7 @@ export function SkateboardStandScrollCinema() {
       const progress = clamp(currentFrameRef.current, 0, TOTAL_FRAMES - 1);
       const frameIdx = Math.round(progress);
       const inZoomTransition =
-        progress > TRANSITION_START_FRAME && progress < TRANSITION_END_FRAME;
+        progress > WIDTH_TRANSITION_START && progress < WIDTH_TRANSITION_END;
       if (
         frameIdx !== drawnFrameRef.current ||
         (inZoomTransition &&
@@ -341,6 +369,14 @@ export function SkateboardStandScrollCinema() {
       paintFrame(currentFrameRef.current);
     };
 
+    const resizeObserver =
+      typeof ResizeObserver !== "undefined" && canvasRef.current
+        ? new ResizeObserver(onResize)
+        : null;
+    if (resizeObserver && canvasRef.current) {
+      resizeObserver.observe(canvasRef.current);
+    }
+
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onResize, { passive: true });
@@ -348,6 +384,7 @@ export function SkateboardStandScrollCinema() {
       if (rafId) {
         cancelAnimationFrame(rafId);
       }
+      resizeObserver?.disconnect();
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onResize);
     };
