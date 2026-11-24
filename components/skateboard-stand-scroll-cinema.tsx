@@ -12,8 +12,67 @@ const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
 const TOTAL_FRAMES = STAND_SCROLL_SEQUENCE.frameCount;
 const KEYFRAME_INDICES = [0, 8, 16, 25, 34, 42, 50, 59] as const;
 
+// Measured horizontal subject envelope (in 2560px source coordinates):
+// Act I (F00–F06) holds the horizontal solo stand (max span ~1,740px -> 1,940px safe width).
+// Act II–IV (F13.5–F59) holds the vertical docked board (max span ~545px -> 600px safe width).
+const WIDE_SAFE_WIDTH = 1940;
+const NARROW_SAFE_WIDTH = 600;
+const TRANSITION_START_FRAME = 6;
+const TRANSITION_END_FRAME = 13.5;
+
 function clamp(value: number, min: number, max: number): number {
   return Math.min(max, Math.max(min, value));
+}
+
+export function getCinemaSafeWidth(frameProgress: number): number {
+  if (frameProgress <= TRANSITION_START_FRAME) {
+    return WIDE_SAFE_WIDTH;
+  }
+  if (frameProgress >= TRANSITION_END_FRAME) {
+    return NARROW_SAFE_WIDTH;
+  }
+  const t =
+    (frameProgress - TRANSITION_START_FRAME) /
+    (TRANSITION_END_FRAME - TRANSITION_START_FRAME);
+  const smooth = t * t * (3 - 2 * t);
+  const eased = smooth ** 1.35;
+  return WIDE_SAFE_WIDTH + (NARROW_SAFE_WIDTH - WIDE_SAFE_WIDTH) * eased;
+}
+
+export interface CinemaDrawRect {
+  dh: number;
+  dw: number;
+  dx: number;
+  dy: number;
+  scale: number;
+}
+
+/**
+ * Computes cover-or-safe-fit draw coordinates so landscape viewports stay full-bleed
+ * while portrait mobile viewports smoothly keep Act I's wide stand uncropped and
+ * zoom into full-height vertical framing once the upright board docks.
+ */
+export function computeCinemaDrawRect(
+  viewportW: number,
+  viewportH: number,
+  sourceW: number,
+  sourceH: number,
+  frameProgress: number
+): CinemaDrawRect {
+  const coverScale = Math.max(viewportW / sourceW, viewportH / sourceH);
+  const safeWidth =
+    (getCinemaSafeWidth(frameProgress) / STAND_SCROLL_SEQUENCE.width) * sourceW;
+  const safeScale = viewportW / safeWidth;
+  const scale = Math.min(coverScale, safeScale);
+  const dw = sourceW * scale;
+  const dh = sourceH * scale;
+  return {
+    dh,
+    dw,
+    dx: (viewportW - dw) * 0.5,
+    dy: (viewportH - dh) * 0.5,
+    scale,
+  };
 }
 
 function findNearestLoaded(
@@ -37,18 +96,61 @@ function findNearestLoaded(
   return null;
 }
 
+function syncCanvasResolution(canvas: HTMLCanvasElement): {
+  height: number;
+  width: number;
+} {
+  const rect = canvas.getBoundingClientRect();
+  if (rect.width > 0 && rect.height > 0) {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const targetW = Math.max(1, Math.round(rect.width * dpr));
+    const targetH = Math.max(1, Math.round(rect.height * dpr));
+    if (canvas.width !== targetW || canvas.height !== targetH) {
+      canvas.width = targetW;
+      canvas.height = targetH;
+    }
+    return { height: targetH, width: targetW };
+  }
+  return { height: canvas.height, width: canvas.width };
+}
+
 function drawFrameToCanvas(
   canvas: HTMLCanvasElement,
-  img: HTMLImageElement
-): void {
+  img: HTMLImageElement,
+  frameProgress: number
+): number {
   const ctx = canvas.getContext("2d");
   if (!ctx) {
-    return;
+    return 0;
   }
-  const { width, height } = canvas;
+  const { width, height } = syncCanvasResolution(canvas);
+  const sourceW = img.naturalWidth || STAND_SCROLL_SEQUENCE.width;
+  const sourceH = img.naturalHeight || STAND_SCROLL_SEQUENCE.height;
+  const rect = computeCinemaDrawRect(
+    width,
+    height,
+    sourceW,
+    sourceH,
+    frameProgress
+  );
+
   ctx.fillStyle = "#000000";
   ctx.fillRect(0, 0, width, height);
-  ctx.drawImage(img, 0, 0, width, height);
+  ctx.drawImage(img, rect.dx, rect.dy, rect.dw, rect.dh);
+
+  // When portrait safe-fit leaves pure-black letterbox space above the 16:9 frame
+  // (e.g. F10–F12 as the board enters from y=0), feather the top edge into black so
+  // the descending deck emerges seamlessly with no visible rectangular seam.
+  if (rect.dy > 1) {
+    const featherH = rect.dh * 0.14;
+    const grad = ctx.createLinearGradient(0, rect.dy, 0, rect.dy + featherH);
+    grad.addColorStop(0, "#000000");
+    grad.addColorStop(1, "rgba(0, 0, 0, 0)");
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, rect.dy - 1, width, featherH + 1);
+  }
+
+  return rect.scale;
 }
 
 export function SkateboardStandScrollCinema() {
@@ -61,21 +163,24 @@ export function SkateboardStandScrollCinema() {
   const currentFrameRef = useRef(0);
   const targetFrameRef = useRef(0);
   const drawnFrameRef = useRef(-1);
+  const drawnProgressRef = useRef(-1);
   const [activeFrame, setActiveFrame] = useState(0);
   const [reducedMotion, setReducedMotion] = useState(false);
 
-  const paintFrame = useCallback((frameIndex: number) => {
+  const paintFrame = useCallback((frameProgress: number) => {
     const canvas = canvasRef.current;
     if (!canvas) {
       return;
     }
-    const clamped = clamp(Math.round(frameIndex), 0, TOTAL_FRAMES - 1);
-    const img = findNearestLoaded(imagesRef.current, clamped);
+    const clampedProgress = clamp(frameProgress, 0, TOTAL_FRAMES - 1);
+    const clampedIndex = Math.round(clampedProgress);
+    const img = findNearestLoaded(imagesRef.current, clampedIndex);
     if (!img) {
       return;
     }
-    drawFrameToCanvas(canvas, img);
-    drawnFrameRef.current = clamped;
+    drawFrameToCanvas(canvas, img, clampedProgress);
+    drawnFrameRef.current = clampedIndex;
+    drawnProgressRef.current = clampedProgress;
   }, []);
 
   // Detect prefers-reduced-motion after hydration (keeps SSR & initial client render identical).
@@ -114,7 +219,7 @@ export function SkateboardStandScrollCinema() {
               TOTAL_FRAMES - 1
             );
             if (index === wanted || drawnFrameRef.current === -1) {
-              paintFrame(wanted);
+              paintFrame(currentFrameRef.current);
             }
           }
           resolve();
@@ -170,7 +275,10 @@ export function SkateboardStandScrollCinema() {
     const frame = STAND_SCROLL_SEQUENCE.posterFrame;
     currentFrameRef.current = frame;
     targetFrameRef.current = frame;
-    paintFrame(frame);
+    const repaint = () => paintFrame(frame);
+    repaint();
+    window.addEventListener("resize", repaint, { passive: true });
+    return () => window.removeEventListener("resize", repaint);
   }, [paintFrame, reducedMotion]);
 
   // 60fps momentum-smoothed scroll scrubber (0% idle CPU when settled).
@@ -203,13 +311,16 @@ export function SkateboardStandScrollCinema() {
         rafId = requestAnimationFrame(tick);
       }
 
-      const frameIdx = clamp(
-        Math.round(currentFrameRef.current),
-        0,
-        TOTAL_FRAMES - 1
-      );
-      if (frameIdx !== drawnFrameRef.current) {
-        paintFrame(frameIdx);
+      const progress = clamp(currentFrameRef.current, 0, TOTAL_FRAMES - 1);
+      const frameIdx = Math.round(progress);
+      const inZoomTransition =
+        progress > TRANSITION_START_FRAME && progress < TRANSITION_END_FRAME;
+      if (
+        frameIdx !== drawnFrameRef.current ||
+        (inZoomTransition &&
+          Math.abs(progress - drawnProgressRef.current) > 0.02)
+      ) {
+        paintFrame(progress);
       }
       if (frameIdx !== lastReportedFrame) {
         lastReportedFrame = frameIdx;
@@ -225,15 +336,20 @@ export function SkateboardStandScrollCinema() {
       }
     };
 
+    const onResize = () => {
+      onScroll();
+      paintFrame(currentFrameRef.current);
+    };
+
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll, { passive: true });
+    window.addEventListener("resize", onResize, { passive: true });
     return () => {
       if (rafId) {
         cancelAnimationFrame(rafId);
       }
       window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
+      window.removeEventListener("resize", onResize);
     };
   }, [paintFrame, reducedMotion]);
 
