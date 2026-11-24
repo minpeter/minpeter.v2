@@ -671,27 +671,27 @@ body:has(
     background: linear-gradient(
       to bottom,
       #000000 0%,
-      transparent 16%,
-      transparent 88%,
+      transparent 7%,
+      transparent 94%,
       #000000 100%
     );
   }
 
-  @media (min-width: 48rem) {
+  @media (min-aspect-ratio: 4 / 3) {
     .store-cinema-frame::after {
       background:
         linear-gradient(
           to bottom,
           #000000 0%,
-          transparent 16%,
-          transparent 88%,
+          transparent 7%,
+          transparent 94%,
           #000000 100%
         ),
         linear-gradient(
           to right,
           #000000 0%,
-          transparent 10%,
-          transparent 90%,
+          transparent 8%,
+          transparent 92%,
           #000000 100%
         );
     }
