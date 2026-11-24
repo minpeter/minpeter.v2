@@ -668,29 +668,45 @@ body:has(
     inset: 0;
     pointer-events: none;
     content: "";
-    background:
-      linear-gradient(
-        to bottom,
-        #000000 0%,
-        transparent 16%,
-        transparent 88%,
-        #000000 100%
-      ),
-      linear-gradient(
-        to right,
-        #000000 0%,
-        transparent 10%,
-        transparent 90%,
-        #000000 100%
-      );
+    background: linear-gradient(
+      to bottom,
+      #000000 0%,
+      transparent 16%,
+      transparent 88%,
+      #000000 100%
+    );
+  }
+
+  @media (min-width: 48rem) {
+    .store-cinema-frame::after {
+      background:
+        linear-gradient(
+          to bottom,
+          #000000 0%,
+          transparent 16%,
+          transparent 88%,
+          #000000 100%
+        ),
+        linear-gradient(
+          to right,
+          #000000 0%,
+          transparent 10%,
+          transparent 90%,
+          #000000 100%
+        );
+    }
   }
 
   .store-cinema-canvas {
     display: block;
     width: 100%;
     height: 100%;
-    object-fit: cover;
     background-color: #000000;
+  }
+
+  .store-cinema-runway[data-reduced-motion="true"] .store-cinema-canvas {
+    height: auto;
+    aspect-ratio: 16 / 9;
   }
 
   .store-showcase {
