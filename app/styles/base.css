@@ -75,23 +75,25 @@
     @apply bg-secondary text-secondary-foreground;
   }
 
-  /* Reserve the scrollbar track; older engines without scrollbar-gutter always show it. */
   html {
-    overflow-y: scroll;
     scroll-behavior: smooth;
   }
 
-  /* Suppress desktop rubber-banding; preserve touch pull-to-refresh. */
+  /* Reserve the scrollbar track and suppress rubber-banding on desktop pointer
+     devices only; touch browsers use overlay scrollbars and `overflow-y: scroll`
+     on `html` can break `position: sticky` on iOS WebKit when `scrollbar-gutter`
+     is unsupported. */
   @media (pointer: fine) {
     html {
+      overflow-y: scroll;
       overscroll-behavior: none;
     }
-  }
 
-  @supports (scrollbar-gutter: stable) {
-    html {
-      overflow-y: visible;
-      scrollbar-gutter: stable;
+    @supports (scrollbar-gutter: stable) {
+      html {
+        overflow-y: visible;
+        scrollbar-gutter: stable;
+      }
     }
   }
 

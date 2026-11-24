@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import {
   computeCinemaDrawRect,
+  findNearestLoadedFrame,
   getCinemaSafeHeight,
   getCinemaSafeWidth,
 } from "./skateboard-stand-scroll-cinema";
@@ -86,5 +87,29 @@ describe("SkateboardStandScrollCinema adaptive framing", () => {
       expect(rect.scale).toBeCloseTo(coverScale, 6);
       expect(rect.dh).toBeCloseTo(vh, 1);
     }
+  });
+
+  it("reports the actual loaded frame index when falling back during progressive mobile loading", () => {
+    const frames: (string | null)[] = Array.from({ length: 60 }, () => null);
+    frames[0] = "f0";
+    frames[8] = "f8";
+    const isString = (v: string | null | undefined): v is string =>
+      typeof v === "string";
+
+    // Target 5 is closer to frame 8 (dist 3) than frame 0 (dist 5)
+    expect(findNearestLoadedFrame(frames, 5, isString)).toEqual({
+      frame: "f8",
+      index: 8,
+    });
+    // Target 2 falls back to frame 0 and reports index 0 (not 2) so newly loaded frames still trigger repaint
+    expect(findNearestLoadedFrame(frames, 2, isString)).toEqual({
+      frame: "f0",
+      index: 0,
+    });
+    // Exact match returns itself
+    expect(findNearestLoadedFrame(frames, 8, isString)).toEqual({
+      frame: "f8",
+      index: 8,
+    });
   });
 });

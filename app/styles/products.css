@@ -635,23 +635,13 @@ body:has(
     background-color: #000000;
   }
 
-  .store-cinema-runway[data-reduced-motion="true"] {
-    height: auto;
-    padding-block: 3rem;
-  }
-
   .store-cinema-sticky {
     position: sticky;
     top: 0;
     display: grid;
     place-items: center;
-    height: 100dvh;
+    height: 100svh;
     background-color: #000000;
-  }
-
-  .store-cinema-runway[data-reduced-motion="true"] .store-cinema-sticky {
-    position: static;
-    height: auto;
   }
 
   .store-cinema-frame {
@@ -702,11 +692,6 @@ body:has(
     width: 100%;
     height: 100%;
     background-color: #000000;
-  }
-
-  .store-cinema-runway[data-reduced-motion="true"] .store-cinema-canvas {
-    height: auto;
-    aspect-ratio: 16 / 9;
   }
 
   .store-showcase {
@@ -874,16 +859,6 @@ body:has(
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .store-cinema-runway {
-      height: auto;
-      padding-block: 3rem;
-    }
-
-    .store-cinema-sticky {
-      position: static;
-      height: auto;
-    }
-
     .store-stand-stage-pop {
       animation: none;
     }
