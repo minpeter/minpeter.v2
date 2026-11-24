@@ -235,6 +235,8 @@
     "mediaLabel": "{product} 렌더 이미지",
     "viewSource": "GitHub에서 보기",
     "downloadFiles": "출력 파일 받기",
+    "naverSmartStore": "네이버 스마트스토어에서 구매",
+    "naverSmartStoreSoon": "네이버 스마트스토어 · 발매 예정",
     "descriptionLabel": "설명",
     "detailsLabel": "상세",
     "upcoming": "발매 예정",
@@ -251,6 +253,90 @@
           "print": "v7.15는 실물 제작 2차용으로 지정된 설계입니다. 출력 완료·조립 결과는 확인되지 않았으므로 전체 출력 전 결합 테스트 조각으로 확인하세요",
           "status": "프로토타입 — 불투명은 v7.15 기준, 투명 Inventor는 최신 외피(a552798)의 외관 근사입니다. 투명 렌더의 PCB·스위치·플레이트·가스켓·캐치 내부는 생략했습니다. CAD 검사는 실물 체결·조립 검증이 아닙니다.",
           "license": "CC BY-NC 4.0 — 개인·비상업 용도로만 출력하고 수정할 수 있습니다. 출력물이나 파일 판매는 허용하지 않습니다."
+        }
+      },
+      "skateboardStand": {
+        "variant": "8\" 자립 거치대",
+        "license": "발매 예정",
+        "intro": "8인치 스케이트보드 자립 거치대.",
+        "description": "벽에 구멍 없이 8인치 스케이트보드를 세워 두는 3D 프린팅 자립 거치대.",
+        "details": {
+          "size": "162.7 × 157.5 × 62.8 mm",
+          "slot": "20° 테일 슬롯 (최소 12 mm)",
+          "pads": "3M SJ5302 범폰 좌석 ×4",
+          "fit": "8\" Deathwish 실물 확인"
+        }
+      }
+    },
+    "standCustomization": {
+      "viewLabel": "보기",
+      "views": {
+        "stand": "단독",
+        "board": "보드"
+      },
+      "colorLabel": "색상",
+      "selected": "{view} · {color}",
+      "boardPreviewLabel": "8인치 스케이트보드를 거치한 재구성 3D 렌더 (실제 사진이 아님): 드래그하거나 화살표 키로 30°씩 회전",
+      "pending": "렌더 준비 중",
+      "pendingDetail": "선택한 조합의 이미지를 준비 중입니다.",
+      "loading": "불러오는 중…",
+      "partial": "일부 각도를 불러오지 못했어요.",
+      "ready": "준비 완료",
+      "loadError": "렌더를 불러오지 못했습니다.",
+      "retry": "다시 불러오기",
+      "detailsLabel": "스펙",
+      "configurationNote": "8\" 스트리트 데크 기준 3D 렌더",
+      "boardModelLabel": "기준 보드",
+      "boardModelSpec": "8\" (800.1 × 203.2 mm)",
+      "marbleNote": "PLA Marble 13103 · 회색 입자 혼합",
+      "approximation": "3D 렌더 근사 · 실물과 색감 차이 가능",
+      "materialSource": "색상 자료",
+      "colorNames": {
+        "cobalt-blue": "코발트 블루",
+        "charcoal": "차콜",
+        "bone-white": "본 화이트",
+        "ash-gray": "애쉬 그레이",
+        "ice-blue": "아이스 블루",
+        "dark-green": "다크 그린",
+        "white-marble": "화이트 마블"
+      },
+      "cinema": {
+        "label": "3D 스크롤 시퀀스"
+      },
+      "showcase": {
+        "heading": "사용 예시",
+        "intro": "",
+        "scenes": {
+          "wall": {
+            "title": "01 · 벽면",
+            "caption": "",
+            "alt": "콘크리트 코너 벽면에 다크 그린, 본 화이트, 차콜 스탠드 3대와 서로 다른 디자인의 스케이트보드 3대가 나란히 세워진 3D 렌더"
+          },
+          "slot": {
+            "title": "02 · 20° 슬롯",
+            "caption": "",
+            "alt": "테일이 20도 슬롯에 끼워진 접사 3D 렌더와 전면 MINPETER 음각 로고"
+          },
+          "underside": {
+            "title": "03 · 바닥",
+            "caption": "",
+            "alt": "스탠드 바닥면 네 곳의 범폰 좌석과 3M SJ5302 투명 고무 패드를 정면에서 내려다본 탑다운 3D 렌더"
+          },
+          "top": {
+            "title": "04 · 항공",
+            "caption": "",
+            "alt": "본 화이트 스탠드의 20도 슬롯과 리브 패턴을 정면 위에서 내려다본 항공 탑다운 3D 렌더"
+          },
+          "side": {
+            "title": "05 · 측면",
+            "caption": "",
+            "alt": "20도 테일 슬롯과 유려한 곡선 프로파일, 바닥 투명 범폰을 옆에서 정면으로 담은 측면 3D 렌더"
+          },
+          "real": {
+            "title": "06 · 실물",
+            "caption": "",
+            "alt": "실제 실내 벽면 옆 바닥에 놓인 본 화이트·코발트 블루 3D 프린팅 스탠드와 8인치 스케이트보드 실사 사진"
+          }
         }
       }
     },

@@ -51,4 +51,20 @@ describe("app/[locale]/products/[slug]/page.tsx generateMetadata", () => {
     expect(metadata.title).toBe("minpeter | Maru60");
     expect(metadata.description).toBe("products.items.rule60.description");
   });
+
+  it("returns Skateboard Stand metadata with its OG preview image", async () => {
+    mockLocale = "ko";
+    const metadata = await metadataFor("skateboard-stand");
+
+    expect(metadata.title).toBe("minpeter | Skateboard Stand");
+    expect(metadata.description).toBe(
+      "products.items.skateboardStand.description"
+    );
+    expect(metadata.openGraph).toMatchObject({
+      images: {
+        alt: "Skateboard Stand",
+        url: "/assets/products/skateboard-stand/og.png",
+      },
+    });
+  });
 });

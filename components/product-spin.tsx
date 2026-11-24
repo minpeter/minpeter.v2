@@ -47,6 +47,8 @@ interface ProductSpinProps {
   resetOnLeave?: boolean;
   sizes: string;
   spin: ProductSpinData;
+  /** Optional external angle target (e.g. scroll-driven scrub) ignored while the user drags. */
+  targetAngle?: number;
 }
 
 /** Shortest signed step (−1, 0, 1) from `from` to `to` around a loop of `count` frames. */
@@ -68,6 +70,7 @@ export function ProductSpin({
   resetOnLeave = true,
   sizes,
   spin,
+  targetAngle,
 }: ProductSpinProps) {
   const interactive = alt !== undefined;
   const {
@@ -310,6 +313,23 @@ export function ProductSpin({
     },
     [animate, frameCount, onAngleChange, reducedMotion]
   );
+
+  useEffect(() => {
+    if (
+      targetAngle === undefined ||
+      reducedMotion ||
+      active ||
+      dragRef.current
+    ) {
+      return;
+    }
+    const targetFrame =
+      Math.round(((((targetAngle % 360) + 360) % 360) / 360) * frameCount) %
+      frameCount;
+    if (targetFrame !== targetRef.current) {
+      aim(targetFrame, false);
+    }
+  }, [active, aim, frameCount, reducedMotion, targetAngle]);
 
   const handlePointerEnter = useCallback(() => setActive(true), []);
 

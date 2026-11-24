@@ -68,8 +68,11 @@ describe("product loading skeletons", () => {
         .querySelector('[data-slot="skeleton"]')
         ?.classList.contains("aspect-[2/3]")
     ).toBe(true);
-    expect(skeleton.querySelectorAll(".store-card-caption > div")).toHaveLength(
-      2
-    );
+    expect(skeleton.querySelectorAll(".store-card")).toHaveLength(2);
+    expect(
+      skeleton
+        .querySelectorAll(".store-card")[0]
+        ?.querySelectorAll(".store-card-caption > div")
+    ).toHaveLength(2);
   });
 });

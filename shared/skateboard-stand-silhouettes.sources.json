@@ -1,0 +1,50 @@
+{
+  "frame_000": {
+    "source": "public/assets/products/skateboard-stand/turntable/stand/bone-white/frame_000.webp",
+    "sourceSha256": "b024be8f834d1e0ad62cbad16c2b26c2c9280d11f2e8039a0b757b46bbac3811"
+  },
+  "frame_030": {
+    "source": "public/assets/products/skateboard-stand/turntable/stand/bone-white/frame_030.webp",
+    "sourceSha256": "e2bd464541747f735c4ef4874ab31a2b8b32965ec3fdc0b0244a73b59b945621"
+  },
+  "frame_060": {
+    "source": "public/assets/products/skateboard-stand/turntable/stand/bone-white/frame_060.webp",
+    "sourceSha256": "2685df04ee0fb89b7be6261a10034954104f766dbce969416dec610a6a4650d9"
+  },
+  "frame_090": {
+    "source": "public/assets/products/skateboard-stand/turntable/stand/bone-white/frame_090.webp",
+    "sourceSha256": "1eb85fe41817381ac71ff13409a8758ded58762d17e34940c02422aa6a8a34ff"
+  },
+  "frame_120": {
+    "source": "public/assets/products/skateboard-stand/turntable/stand/bone-white/frame_120.webp",
+    "sourceSha256": "fb25462fdcb351712f0c13ea95e95dfc7b75baaab4fbfb300d87788e4ed6d4aa"
+  },
+  "frame_150": {
+    "source": "public/assets/products/skateboard-stand/turntable/stand/bone-white/frame_150.webp",
+    "sourceSha256": "66e8503f3c4d6551e25e2a6a812450f8811df806228f1f63599fa4d8dd135191"
+  },
+  "frame_180": {
+    "source": "public/assets/products/skateboard-stand/turntable/stand/bone-white/frame_180.webp",
+    "sourceSha256": "853e3ba742578bbae405ec4f05f8006c27ba3112204ee0d22761325e3b47f563"
+  },
+  "frame_210": {
+    "source": "public/assets/products/skateboard-stand/turntable/stand/bone-white/frame_210.webp",
+    "sourceSha256": "aab834dd4b7fac8a4dcb05fe957b85f3aea120e708073454c992df1afce68e1f"
+  },
+  "frame_240": {
+    "source": "public/assets/products/skateboard-stand/turntable/stand/bone-white/frame_240.webp",
+    "sourceSha256": "a0e032c19f2b14953b57ee0c611f9ac294fd3f856b65248fbffc66feee209109"
+  },
+  "frame_270": {
+    "source": "public/assets/products/skateboard-stand/turntable/stand/bone-white/frame_270.webp",
+    "sourceSha256": "aad8874e8026e1cfe3420d998b146cbc75c72dcb9cf8515fec44bc3db5a7b643"
+  },
+  "frame_300": {
+    "source": "public/assets/products/skateboard-stand/turntable/stand/bone-white/frame_300.webp",
+    "sourceSha256": "efd66b423eb90bb6b9d527cfc65a604c7ce09fc22a5ce6668172bf1ca435052d"
+  },
+  "frame_330": {
+    "source": "public/assets/products/skateboard-stand/turntable/stand/bone-white/frame_330.webp",
+    "sourceSha256": "107e41d993dcd735625122882d4c4c7229c64d9e58e439fa27d4973dd1f870e3"
+  }
+}

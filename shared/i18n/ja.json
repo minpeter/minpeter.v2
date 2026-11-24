@@ -235,6 +235,8 @@
     "mediaLabel": "{product}のレンダー画像",
     "viewSource": "GitHubで見る",
     "downloadFiles": "印刷ファイルを入手",
+    "naverSmartStore": "Naver Smart Storeで購入",
+    "naverSmartStoreSoon": "Naver Smart Store · 発売予定",
     "descriptionLabel": "説明",
     "detailsLabel": "詳細",
     "upcoming": "発売予定",
@@ -251,6 +253,90 @@
           "print": "v7.15は2回目の実物製作用に指定された設計です。造形完了・組立結果は未確認のため、全体を造形する前に適合テスト片で確認してください",
           "status": "試作設計 — 不透明はv7.15基準、透明Inventorは最新の外殻(a552798)の外観の近似です。透明レンダーではPCB・スイッチ・プレート・ガスケット・キャッチ内部を省略しています。CAD確認は実物の嵌合・組立検証ではありません。",
           "license": "CC BY-NC 4.0 — 個人・非商用の目的に限り印刷・改変できます。印刷物やファイルの販売は認めていません。"
+        }
+      },
+      "skateboardStand": {
+        "variant": "8\" 自立スタンド",
+        "license": "発売予定",
+        "intro": "8インチスケートボード自立スタンド。",
+        "description": "壁固定なしで8インチスケートボードを直立保管できる3Dプリント自立スタンド。",
+        "details": {
+          "size": "162.7 × 157.5 × 62.8 mm",
+          "slot": "20° テールスロット (12 mm+)",
+          "pads": "3M SJ5302 ゴム足座面 ×4",
+          "fit": "8\" Deathwish 実物確認済み"
+        }
+      }
+    },
+    "standCustomization": {
+      "viewLabel": "表示",
+      "views": {
+        "stand": "単体",
+        "board": "ボード"
+      },
+      "colorLabel": "カラー",
+      "selected": "{view} · {color}",
+      "boardPreviewLabel": "8インチスケートボードを設置した再構成3Dレンダー（実際の写真ではありません）：ドラッグまたは矢印キーで30°ずつ回転",
+      "pending": "準備中",
+      "pendingDetail": "この組み合わせの画像は準備中です。",
+      "loading": "読み込み中…",
+      "partial": "一部の角度を読み込めませんでした。",
+      "ready": "準備完了",
+      "loadError": "画像を読み込めませんでした。",
+      "retry": "再読み込み",
+      "detailsLabel": "仕様",
+      "configurationNote": "8\" デッキ基準 3Dレンダー",
+      "boardModelLabel": "参照デッキ",
+      "boardModelSpec": "8\" (800.1 × 203.2 mm)",
+      "marbleNote": "PLA Marble 13103 · 灰色の粒入り",
+      "approximation": "3Dレンダー近似 · 実物と異なる場合あり",
+      "materialSource": "カラー資料",
+      "colorNames": {
+        "cobalt-blue": "コバルトブルー",
+        "charcoal": "チャコール",
+        "bone-white": "ボーンホワイト",
+        "ash-gray": "アッシュグレー",
+        "ice-blue": "アイスブルー",
+        "dark-green": "ダークグリーン",
+        "white-marble": "ホワイトマーブル"
+      },
+      "cinema": {
+        "label": "3Dスクロールシーケンス"
+      },
+      "showcase": {
+        "heading": "ギャラリー",
+        "intro": "",
+        "scenes": {
+          "wall": {
+            "title": "01 · 壁際",
+            "caption": "",
+            "alt": "コンクリートコーナーの壁際にダークグリーン・ボーンホワイト・チャコールの3色スタンドと異なるデザインのスケートボード3台を並べた3Dレンダー"
+          },
+          "slot": {
+            "title": "02 · 20° スロット",
+            "caption": "",
+            "alt": "20度スロットに収まったテールと前面MINPETER刻印ロゴのクローズアップ3Dレンダー"
+          },
+          "underside": {
+            "title": "03 · 底面",
+            "caption": "",
+            "alt": "スタンド底面4か所の3M SJ5302透明ゴム足座面を真上から収めたトップダウン3Dレンダー"
+          },
+          "top": {
+            "title": "04 · 上面",
+            "caption": "",
+            "alt": "ボーンホワイトスタンドの20度スロットとウェーブ模様を真上から捉えた俯瞰3Dレンダー"
+          },
+          "side": {
+            "title": "05 · 側面",
+            "caption": "",
+            "alt": "20度テールスロットと滑らかな曲線プロファイル、底面の透明ゴム足を示す側面3Dレンダー"
+          },
+          "real": {
+            "title": "06 · 実物",
+            "caption": "",
+            "alt": "実際の室内の壁際に置かれたボーンホワイトとコバルトブルーの3Dプリントスタンドと8インチスケートボードの実物写真"
+          }
         }
       }
     },
