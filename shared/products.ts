@@ -119,8 +119,11 @@ export const PRODUCTS: readonly Product[] = [
     },
     slug: "skateboard-stand",
     spin: getDefaultStandSpin(),
-    // Add the live Naver Smart Store listing URL here once pricing and launch are finalized.
-    storeChannel: { kind: "naver-smart-store" },
+    // Naver Smart Store product marketing link (reduces external-traffic shopping fee to 1%).
+    storeChannel: {
+      href: "https://mkt.shopping.naver.com/link/6b0558f9d54ba872e8db5259",
+      kind: "naver-smart-store",
+    },
   },
 ];
 

@@ -14,7 +14,7 @@ import {
 } from "./skateboard-stand";
 
 describe("Skateboard Stand catalog and rendered assets", () => {
-  it("configures Skateboard Stand as a Naver Smart Store coming-soon product without public STL links", () => {
+  it("configures Skateboard Stand as a live Naver Smart Store product without public STL links", () => {
     const product = getProduct("skateboard-stand");
     expect(product).toBeDefined();
     expect(product?.name).toBe("Skateboard Stand");
@@ -22,7 +22,10 @@ describe("Skateboard Stand catalog and rendered assets", () => {
     expect(product?.sourceHref).toBeUndefined();
     expect(product?.downloadHref).toBeUndefined();
     expect(product?.upcomingPrice).toBeUndefined();
-    expect(product?.storeChannel).toEqual({ kind: "naver-smart-store" });
+    expect(product?.storeChannel).toEqual({
+      href: "https://mkt.shopping.naver.com/link/6b0558f9d54ba872e8db5259",
+      kind: "naver-smart-store",
+    });
     expect(product?.preview?.image).toBe(
       "/assets/products/skateboard-stand/og.png"
     );
