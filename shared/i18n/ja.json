@@ -55,12 +55,8 @@
   "resume": {
     "navigationLabel": "履歴書ページのナビゲーション",
     "kicker": "履歴書",
-    "title": "作成中",
-    "description": "役に立つ内容になるよう、履歴書を整えています。",
-    "statusTitle": "近日公開。",
-    "statusDescription": "それまでは、このサイトで今取り組んでいることをご覧いただけます。",
     "homeLabel": "ホームへ",
-    "metadataDescription": "経歴とプロフィール — 近日公開。"
+    "metadataDescription": "ソフトウェアエンジニア minpeter の職歴、プロジェクト、オープンソース活動。"
   },
   "showcase": {
     "navigationLabel": "ショーケースのナビゲーション",
@@ -168,12 +164,6 @@
         "replay": "もう一度",
         "simulationLabel": "技術スタックのアイコンを使ったインタラクティブな物理シミュレーション"
       },
-      "dynamicText": {
-        "title": "Dynamic hacked text",
-        "summary": "文字にカーソルを合わせ、その反応を観察する実験。",
-        "kicker": "インタラクション実験",
-        "description": "文字の上でポインターを動かすと、テキストが再構築されていきます。"
-      },
       "newYear": {
         "title": "New year clock",
         "summary": "新年までの時間をリアルタイムで表示するカウントダウン。",
@@ -215,15 +205,6 @@
         "middle": "ミドル",
         "back1": "バック1",
         "back2": "バック2"
-      },
-      "unstructured0828": {
-        "title": "Unstructured 0828",
-        "summary": "レイヤー化された製品インターフェースの遠近感を探る実験。",
-        "kicker": "遠近感の実験",
-        "description": "重なり合う製品インターフェースで遠近感を試した実験です。",
-        "imageAlt": "重なり合うSaaSインターフェース",
-        "overlayAlt": "浮遊するSaaSインターフェースパネル",
-        "instruction": "浮遊するパネルを選択すると、参照先のモデルページが開きます。"
       }
     }
   },
@@ -412,8 +393,8 @@
         "description": "AIインフラ、エージェントツール、小さなインタラクティブ実験。"
       },
       "resume": {
-        "title": "履歴書（準備中）",
-        "description": "経歴とプロフィール — 近日公開。"
+        "title": "履歴書",
+        "description": "職歴、プロジェクト、オープンソース活動。"
       }
     },
     "socialTitle": "ソーシャル",

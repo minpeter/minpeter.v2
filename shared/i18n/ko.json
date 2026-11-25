@@ -55,12 +55,8 @@
   "resume": {
     "navigationLabel": "이력서 페이지 탐색",
     "kicker": "이력서",
-    "title": "작성 중",
-    "description": "유용한 내용을 담은 이력서를 정리하고 있습니다.",
-    "statusTitle": "곧 공개합니다.",
-    "statusDescription": "그동안은 이 사이트에서 제가 무엇을 하고 있는지 더 잘 확인할 수 있습니다.",
     "homeLabel": "홈으로",
-    "metadataDescription": "경력과 활동 이력 — 곧 공개합니다."
+    "metadataDescription": "소프트웨어 엔지니어 minpeter의 경력, 프로젝트, 오픈소스 활동."
   },
   "showcase": {
     "navigationLabel": "쇼케이스 탐색",
@@ -168,12 +164,6 @@
         "replay": "다시 실행",
         "simulationLabel": "기술 스택 아이콘으로 구성된 인터랙티브 물리 시뮬레이션"
       },
-      "dynamicText": {
-        "title": "Dynamic hacked text",
-        "summary": "글자 위에 마우스를 올려 반응을 확인하는 실험.",
-        "kicker": "상호작용 실험",
-        "description": "글자 위로 포인터를 움직이면 텍스트가 다시 조립되는 모습을 볼 수 있습니다."
-      },
       "newYear": {
         "title": "New year clock",
         "summary": "다음 해까지 남은 시간을 실시간으로 보여 주는 카운트다운.",
@@ -215,15 +205,6 @@
         "middle": "중간",
         "back1": "뒷면 1",
         "back2": "뒷면 2"
-      },
-      "unstructured0828": {
-        "title": "Unstructured 0828",
-        "summary": "겹친 제품 인터페이스의 원근감을 탐구한 실험.",
-        "kicker": "원근 실험",
-        "description": "겹친 제품 인터페이스로 원근감을 탐구한 실험입니다.",
-        "imageAlt": "겹친 SaaS 인터페이스",
-        "overlayAlt": "부유하는 SaaS 인터페이스 패널",
-        "instruction": "떠 있는 패널을 누르면 연결된 모델 페이지가 열립니다."
       }
     }
   },
@@ -412,8 +393,8 @@
         "description": "AI 인프라, 에이전트 도구, 작은 인터랙티브 실험."
       },
       "resume": {
-        "title": "이력서 (작성 중)",
-        "description": "경력과 활동 이력 — 곧 공개합니다."
+        "title": "이력서",
+        "description": "경력, 프로젝트, 오픈소스 활동."
       }
     },
     "socialTitle": "소셜",

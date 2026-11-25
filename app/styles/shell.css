@@ -101,6 +101,8 @@
     .home-social-link,
     .home-more-link,
     .showcase-item-link,
+    .resume-entry-link,
+    .resume-contact-link,
     .resume-home-link
   ):focus-visible {
     outline: 2px solid hsl(var(--ring));

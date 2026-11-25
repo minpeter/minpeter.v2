@@ -3,6 +3,7 @@ import { Suspense } from "react";
 
 import { SiteNav } from "@/components/site-nav";
 import { Link } from "@/shared/i18n/navigation";
+import { SOCIAL_LINKS } from "@/shared/social-links";
 
 import { RecentPosts } from "./recent-posts";
 
@@ -26,16 +27,6 @@ const SECTIONS = [
     descriptionKey: "sections.resume.description",
     href: "/resume",
     titleKey: "sections.resume.title",
-  },
-] as const;
-
-const SOCIAL_LINKS = [
-  { href: "https://github.com/minpeter", label: "GitHub", slug: "/minpeter" },
-  { href: "https://x.com/minpeter", label: "X", slug: "/minpeter" },
-  {
-    href: "https://linkedin.com/in/minpeter/",
-    label: "LinkedIn",
-    slug: "/in/minpeter",
   },
 ] as const;
 
