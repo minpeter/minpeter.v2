@@ -49,7 +49,12 @@ describe("product loading skeletons", () => {
     ).toHaveLength(1);
     expect(
       skeleton.querySelectorAll(".store-actions .store-button")
-    ).toHaveLength(2);
+    ).toHaveLength(3);
+    expect(
+      skeleton.querySelectorAll(
+        ".store-actions .store-button[data-primary][data-store-cta]"
+      )
+    ).toHaveLength(1);
     expect(skeleton.querySelector(".store-media")).toBeNull();
     expect(skeleton.querySelector("input,button,a,summary")).toBeNull();
     expect(

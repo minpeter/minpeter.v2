@@ -244,6 +244,10 @@ body:has(
     background-color: hsl(var(--foreground) / 0.85);
   }
 
+  .store-actions > .store-button[data-primary] {
+    grid-column: 1 / -1;
+  }
+
   .store-prose {
     font-size: 0.875rem;
     line-height: 1.7;
@@ -629,6 +633,17 @@ body:has(
     cursor: default;
     background: transparent;
     border-color: hsl(var(--foreground) / 0.2);
+  }
+
+  .store-stand-sidebar
+    .store-button[data-store-cta]:not([data-disabled="true"]):hover,
+  .store-stand-sidebar
+    .store-button[data-store-cta]:not([data-disabled="true"]):focus-visible,
+  .store-product-info
+    .store-button[data-store-cta]:not([data-disabled="true"]):hover,
+  .store-product-info
+    .store-button[data-store-cta]:not([data-disabled="true"]):focus-visible {
+    background: hsl(var(--foreground) / 0.08);
   }
 
   @media (min-width: 64rem) {

@@ -38,6 +38,7 @@ const detailMarkup = (locale: string) => {
         messages.products.viewSource,
         messages.products.downloadFiles,
       ],
+      primaryActionText: messages.products.naverSmartStoreNotify,
       variantText: messages.products.items.rule60.variant,
     })
   );

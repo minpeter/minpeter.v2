@@ -52,10 +52,16 @@ describe("Maru60 naming and historical turntable assets", () => {
     expect(product?.downloadHref).toBe(
       "https://github.com/minpeter/maru60/tree/main/models"
     );
+    expect(product?.storeChannel).toEqual({
+      href: "https://smartstore.naver.com/minpeter",
+      intent: "notify",
+      kind: "naver-smart-store",
+    });
     for (const locale of ["en", "ko", "ja"]) {
       const messages = JSON.parse(
         readFileSync(new URL(`./i18n/${locale}.json`, import.meta.url), "utf8")
       );
+      expect(messages.products.naverSmartStoreNotify).toBeTruthy();
       expect(messages.products.items.rule60.description).toContain("MARU60");
       expect(messages.products.items.rule60.details.status).toContain("PCB");
       expect(messages.products.items.rule60.details.status).toContain("v7.17");

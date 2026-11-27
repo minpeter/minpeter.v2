@@ -46,6 +46,8 @@ interface ProductPreview {
 interface ProductStoreChannel {
   /** Leave omitted while the Naver Smart Store listing is in preparation. */
   href?: string;
+  /** "notify" links to the store home for pre-launch alerts; default ("buy") links to a live listing. */
+  intent?: "buy" | "notify";
   kind: "naver-smart-store";
 }
 
@@ -105,6 +107,12 @@ export const PRODUCTS: readonly Product[] = [
           poster: rule60SpinPoster,
           width: 1024,
         },
+    // Store home URL so visitors can follow ("알림받기") ahead of launch.
+    storeChannel: {
+      href: "https://smartstore.naver.com/minpeter",
+      intent: "notify",
+      kind: "naver-smart-store",
+    },
     upcomingPrice: { max: 300_000, min: 200_000 },
   },
   {

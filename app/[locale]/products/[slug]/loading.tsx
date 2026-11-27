@@ -4,9 +4,11 @@ import { Skeleton } from "@/components/ui/skeleton";
 /** Mirrors the minimal customizer's geometry for MARU60 regression checks. */
 export function ProductDetailSkeleton({
   actionTexts,
+  primaryActionText,
   variantText,
 }: {
   actionTexts?: readonly [string, string];
+  primaryActionText?: string;
   variantText: string;
 }) {
   const intro = (
@@ -28,15 +30,21 @@ export function ProductDetailSkeleton({
   );
   const actions = (
     <div aria-hidden="true" className="store-actions">
+      <Skeleton
+        className="store-button store-label rounded-none"
+        data-primary
+        data-store-cta
+      >
+        {primaryActionText ? (
+          <span className="invisible">{primaryActionText}</span>
+        ) : null}
+      </Skeleton>
       <Skeleton className="store-button store-label rounded-none">
         {actionTexts ? (
           <span className="invisible">{actionTexts[0]}</span>
         ) : null}
       </Skeleton>
-      <Skeleton
-        className="store-button store-label rounded-none"
-        data-store-cta
-      >
+      <Skeleton className="store-button store-label rounded-none">
         {actionTexts ? (
           <span className="invisible">{actionTexts[1]}</span>
         ) : null}
