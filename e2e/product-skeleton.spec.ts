@@ -30,12 +30,18 @@ function desktopHeight(width: number) {
 const ko: typeof en = JSON.parse(
   readFileSync(new URL("../shared/i18n/ko.json", import.meta.url), "utf8")
 );
-const detailMarkup = (locale: string) =>
-  renderToStaticMarkup(
+const detailMarkup = (locale: string) => {
+  const messages = { en, ja, ko }[locale] ?? en;
+  return renderToStaticMarkup(
     createElement(ProductDetailSkeleton, {
-      introText: ({ en, ja, ko }[locale] ?? en).products.items.rule60.intro,
+      actionTexts: [
+        messages.products.viewSource,
+        messages.products.downloadFiles,
+      ],
+      variantText: messages.products.items.rule60.variant,
     })
   );
+};
 const listMarkup = renderToStaticMarkup(createElement(ListLoading));
 const LINK_HEADER_SEPARATOR = /,(?=\s*<)/u;
 const selectors = [
@@ -67,10 +73,10 @@ async function geometry(root: Locator) {
       })
     );
     return {
-      boxes,
-      infoTop: container
-        .querySelector(".store-product-info")
+      actionsTop: container
+        .querySelector(".store-actions")
         ?.getBoundingClientRect().top,
+      boxes,
       noOverflow: document.documentElement.scrollWidth <= innerWidth,
     };
   }, selectors);
@@ -131,8 +137,8 @@ for (const scenario of [
           shell.getByTestId("product-customizer-skeleton")
         ).toBeVisible();
         await expect(shell.locator("h1")).toHaveText("MARU60");
-        const [shellInfo] = await shell
-          .locator(".store-product-info")
+        const [shellHeading] = await shell
+          .locator(".store-product-heading")
           .allInnerTexts();
         const shellGeometry = await geometry(shell);
         const shellFrame = await shell
@@ -200,8 +206,8 @@ for (const scenario of [
           )
         );
         expect(
-          await ready.locator(".store-product-info").allInnerTexts()
-        ).toEqual([shellInfo]);
+          await ready.locator(".store-product-heading").allInnerTexts()
+        ).toEqual([shellHeading]);
         expect(shellGeometry).toEqual(readyGeometry);
         expect(shellBox).toEqual(readyBox);
         expect(shellHeight).toBe(readyHeight);
@@ -263,7 +269,7 @@ for (const scenario of [
         )
       );
       expect(skeletonGeometry.boxes).toEqual(readyGeometry.boxes);
-      expect(skeletonGeometry.infoTop).toBe(readyGeometry.infoTop);
+      expect(skeletonGeometry.actionsTop).toBe(readyGeometry.actionsTop);
       expect(skeletonGeometry.noOverflow).toBe(true);
     });
   });
@@ -310,20 +316,15 @@ for (const scenario of [
       await page.getByTestId("products-page").evaluate((element, markup) => {
         element.outerHTML = markup;
       }, listMarkup);
-      const after = await page
-        .getByTestId("product-list-skeleton")
-        .locator(".store-card")
-        .boundingBox();
-      expect(after).toEqual(before);
-      expect(
-        await page
-          .getByTestId("product-list-skeleton")
-          .getByTestId("product-silhouette")
-          .boundingBox()
-      ).toEqual(mediaBefore);
       const skeletonCard = page
         .getByTestId("product-list-skeleton")
-        .locator(".store-card");
+        .locator(".store-card")
+        .first();
+      const after = await skeletonCard.boundingBox();
+      expect(after).toEqual(before);
+      expect(
+        await skeletonCard.getByTestId("product-silhouette").boundingBox()
+      ).toEqual(mediaBefore);
       expect(
         await skeletonCard.locator(".store-card-caption").boundingBox()
       ).toEqual(captionBefore);

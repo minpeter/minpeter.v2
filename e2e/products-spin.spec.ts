@@ -45,7 +45,7 @@ test("OG player decodes and loops the latest six-second render", async ({
 });
 
 const FRAME_URL =
-  /\/assets\/products\/maru60\/assembled\/v716-exterior\/transparent--inventor\/frame_\d{3}\.webp(?:\?.*)?$/u;
+  /\/assets\/products\/maru60\/assembled\/v717-pcb\/transparent--inventor\/frame_\d{3}\.webp(?:\?.*)?$/u;
 
 for (const width of [1440, 393, 320]) {
   for (const prefix of ["", "/en", "/ja"]) {
@@ -140,7 +140,7 @@ async function frameBodies() {
   }
   return Promise.all(
     Array.from({ length: 12 }, (_, index) => {
-      const expected = `/assets/products/maru60/assembled/v716-exterior/transparent--inventor/frame_${String(index * 30).padStart(3, "0")}.webp`;
+      const expected = `/assets/products/maru60/assembled/v717-pcb/transparent--inventor/frame_${String(index * 30).padStart(3, "0")}.webp`;
       expect(manifest.frames[index].src).toBe(expected);
       expect(manifest.frames[index].angleDegrees).toBe(index * 30);
       return readFile(path.join(process.cwd(), "public", expected));

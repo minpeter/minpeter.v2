@@ -1,0 +1,92 @@
+{
+  "id": "dark-green--nicepbt-noel-latin-retail",
+  "housingId": "dark-green",
+  "keycapId": "nicepbt-noel-latin-retail",
+  "orderable": false,
+  "frames": [
+    {
+      "angleDegrees": 0,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "5869a6f071f74d51334a6beabc7d0982a0088e2013a41de19ad2b4be9d24d0f5",
+      "src": "/assets/products/maru60/assembled/v717-pcb/dark-green--nicepbt-noel-latin-retail/frame_000.webp"
+    },
+    {
+      "angleDegrees": 30,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "63a55aee19e3491613cb5b05915b421bd38c7194bb1969e8b75691107b8288c7",
+      "src": "/assets/products/maru60/assembled/v717-pcb/dark-green--nicepbt-noel-latin-retail/frame_030.webp"
+    },
+    {
+      "angleDegrees": 60,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "fb3e490906eaf418998060f754763e0edd21acb3b49b85f8d40d9cda874085bb",
+      "src": "/assets/products/maru60/assembled/v717-pcb/dark-green--nicepbt-noel-latin-retail/frame_060.webp"
+    },
+    {
+      "angleDegrees": 90,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "57de42228b2087d390a2edcfe486e64e96e83f6af8f7033ec671a7b22fac10c0",
+      "src": "/assets/products/maru60/assembled/v717-pcb/dark-green--nicepbt-noel-latin-retail/frame_090.webp"
+    },
+    {
+      "angleDegrees": 120,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "536c56ff05de9f8e62a381381ee3c7a17e8ef71919f21981ceedd00ca5ad6cf3",
+      "src": "/assets/products/maru60/assembled/v717-pcb/dark-green--nicepbt-noel-latin-retail/frame_120.webp"
+    },
+    {
+      "angleDegrees": 150,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "f1ddcbf96fd51583cf6f9218470b1f5358668e4ab924d5db41fe7a5ec97f4f70",
+      "src": "/assets/products/maru60/assembled/v717-pcb/dark-green--nicepbt-noel-latin-retail/frame_150.webp"
+    },
+    {
+      "angleDegrees": 180,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "0b8658f9b7c4a4fe41f95cf799bba4280f51f3134b2a5fd31543e25dc86965b5",
+      "src": "/assets/products/maru60/assembled/v717-pcb/dark-green--nicepbt-noel-latin-retail/frame_180.webp"
+    },
+    {
+      "angleDegrees": 210,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "20f0431fd0de98d14290a961ff75539e179dc78e0769bdfb3a339795b3dda8a0",
+      "src": "/assets/products/maru60/assembled/v717-pcb/dark-green--nicepbt-noel-latin-retail/frame_210.webp"
+    },
+    {
+      "angleDegrees": 240,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "ca42ca81150cf09abb9be703f8a72e29e3ea05839f1f2d69b9ad50637730af15",
+      "src": "/assets/products/maru60/assembled/v717-pcb/dark-green--nicepbt-noel-latin-retail/frame_240.webp"
+    },
+    {
+      "angleDegrees": 270,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "179a1c323dfac35dd901e74e24cab9cd2f76cdb5c06de56ae1568faa68efe08d",
+      "src": "/assets/products/maru60/assembled/v717-pcb/dark-green--nicepbt-noel-latin-retail/frame_270.webp"
+    },
+    {
+      "angleDegrees": 300,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "df0229b460d7bc01148ee347033fd5d2404507f7f1e885c224bbc6fb6741dcb2",
+      "src": "/assets/products/maru60/assembled/v717-pcb/dark-green--nicepbt-noel-latin-retail/frame_300.webp"
+    },
+    {
+      "angleDegrees": 330,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "9b963074e6cff4113c2559ccdaac09809d02a87a27af48b8d1f5f262a6135e78",
+      "src": "/assets/products/maru60/assembled/v717-pcb/dark-green--nicepbt-noel-latin-retail/frame_330.webp"
+    }
+  ]
+}

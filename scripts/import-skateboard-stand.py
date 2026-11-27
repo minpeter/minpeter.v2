@@ -59,14 +59,18 @@ for view_id, folder in VIEWS:
     json.dumps(manifests, indent=2) + "\n"
 )
 
-# Copy usage showcase scenes
+# Copy usage showcase scenes (fail fast if any scene is missing or unreadable)
 scenes_dst = target_root / "scenes"
 scenes_dst.mkdir(parents=True, exist_ok=True)
+scene_versions = {}
 for scene_name in SCENES:
     src = source / "scenes" / f"{scene_name}.webp"
     if not src.exists():
-        continue
+        raise FileNotFoundError(f"Missing required showcase scene: {src}")
+    with Image.open(src) as im:
+        im.verify()
     shutil.copy2(src, scenes_dst / f"{scene_name}.webp")
+    scene_versions[scene_name] = hashlib.sha256(src.read_bytes()).hexdigest()[:8]
 
 # Copy OG preview
 og_src = source / "og.png"
@@ -74,7 +78,7 @@ with Image.open(og_src) as im:
     assert im.size == (1200, 630), (og_src, im.size)
 shutil.copy2(og_src, target_root / "og.png")
 
-# Generate silhouettes from cobalt-blue stand & board turntables
+# Generate silhouettes from bone-white stand & board turntables
 spec = importlib.util.spec_from_file_location("silhouette", root / "scripts/product-silhouette.py")
 module = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(module)
@@ -86,7 +90,8 @@ def build_silhouettes(folder, out_name, single_out=None):
     for angle in range(0, 360, 30):
         stem = f"frame_{angle:03d}"
         file_path = root / rel_dir / f"{stem}.webp"
-        outline = module.outline(Image.open(file_path), tolerance=1.5)
+        with Image.open(file_path) as im:
+            outline = module.outline(im, tolerance=1.5)
         assert outline is not None, file_path
         shapes[stem] = outline
         sources[stem] = {
@@ -104,4 +109,7 @@ def build_silhouettes(folder, out_name, single_out=None):
 build_silhouettes("stand", "skateboard-stand-silhouettes")
 build_silhouettes("with-board", "skateboard-stand-board-silhouettes", "skateboard-stand-silhouette.json")
 
-print(f"Imported {len(manifests)} turntable sets ({len(manifests) * 12} frames), 4 scenes, og.png, and silhouettes.")
+print(
+    f"Imported {len(manifests)} turntable sets ({len(manifests) * 12} frames), "
+    f"{len(scene_versions)} scenes ({scene_versions}), og.png, and silhouettes."
+)

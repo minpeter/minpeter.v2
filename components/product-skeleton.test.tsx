@@ -9,10 +9,10 @@ import { ProductCustomizerSkeleton } from "./product-customizer-skeleton";
 afterEach(cleanup);
 
 describe("product loading skeletons", () => {
-  it("keeps real introduction and details accessible while the preview suspends", () => {
+  it("keeps real introduction and actions accessible while the preview suspends", () => {
     render(
       <ProductCustomizerSkeleton
-        details={<p>Existing product description</p>}
+        actions={<a href="#download">Download</a>}
         intro={<h1>MARU60</h1>}
       />
     );
@@ -23,7 +23,7 @@ describe("product loading skeletons", () => {
     ).toBeNull();
     expect(
       screen
-        .getByText("Existing product description")
+        .getByRole("link", { name: "Download" })
         .closest('[aria-hidden="true"]')
     ).toBeNull();
     expect(
@@ -33,9 +33,9 @@ describe("product loading skeletons", () => {
     ).toHaveLength(1);
   });
 
-  it("reserves the stage, selectors, details row and full information hierarchy", () => {
+  it("reserves the stage, selectors, actions and collapsed specs row", () => {
     render(
-      <ProductDetailSkeleton introText={en.products.items.rule60.intro} />
+      <ProductDetailSkeleton variantText={en.products.items.rule60.variant} />
     );
     const skeleton = screen.getByTestId("product-detail-skeleton");
     expect(skeleton.getAttribute("aria-busy")).toBe("true");
@@ -48,10 +48,7 @@ describe("product loading skeletons", () => {
       skeleton.querySelectorAll(".store-custom-details-placeholder")
     ).toHaveLength(1);
     expect(
-      skeleton.querySelectorAll(".store-product-info .store-button")
-    ).toHaveLength(2);
-    expect(
-      skeleton.querySelectorAll(".store-product-info section")
+      skeleton.querySelectorAll(".store-actions .store-button")
     ).toHaveLength(2);
     expect(skeleton.querySelector(".store-media")).toBeNull();
     expect(skeleton.querySelector("input,button,a,summary")).toBeNull();

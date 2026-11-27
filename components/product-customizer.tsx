@@ -35,6 +35,7 @@ import type { ProductSpin as ProductSpinData } from "@/shared/products";
 import { useKeyboardCustomizationQuery } from "@/shared/use-keyboard-customization-query";
 
 export interface ProductCustomizerProps {
+  actions?: ReactNode;
   details?: ReactNode;
   intro?: ReactNode;
   labels: {
@@ -58,7 +59,7 @@ function geometryRevision(
   if (combination) {
     return "assembled-draft";
   }
-  return personal || combination ? "previous" : undefined;
+  return personal ? "previous" : undefined;
 }
 
 function ValidatedPreview({
@@ -315,7 +316,7 @@ export function ProductCustomizer(props: ProductCustomizerProps) {
   });
   return (
     <div
-      className="store-customizer"
+      className="store-customizer store-customizer-minimal"
       data-configuration={personal ? "personal" : retailState}
       data-geometry-revision={revision}
       data-orderable="false"
@@ -332,7 +333,7 @@ export function ProductCustomizer(props: ProductCustomizerProps) {
           unsupported={unsupported}
         />
       </div>
-      <div className="store-custom-sidebar">
+      <div className="store-custom-sidebar store-stand-sidebar">
         {props.intro}
         <div className="store-custom-controls">
           {pairing?.signature ===
@@ -381,7 +382,12 @@ export function ProductCustomizer(props: ProductCustomizerProps) {
             </div>
           </fieldset>
           <fieldset>
-            <legend className="store-label">{t("keycaps")}</legend>
+            <legend className="store-label">
+              {t("keycaps")}{" "}
+              <span aria-hidden="true" className="store-custom-selected-name">
+                {KEYCAP_LABELS[selectedKeycaps.id]}
+              </span>
+            </legend>
             <div className="store-custom-kits">
               {SELECTION_KEYCAP_OPTIONS.map((option) => (
                 <label
@@ -404,12 +410,14 @@ export function ProductCustomizer(props: ProductCustomizerProps) {
               ))}
             </div>
           </fieldset>
+          {props.actions}
           <details
             className="store-custom-details"
             data-testid="customization-details"
           >
             <summary className="store-label">{t("detailsLabel")}</summary>
             <div className="store-custom-details-body store-prose">
+              {props.details}
               <p>{t("configurationNote")}</p>
               <dl>
                 <div>
@@ -474,7 +482,6 @@ export function ProductCustomizer(props: ProductCustomizerProps) {
             </div>
           </details>
         </div>
-        {props.details}
       </div>
     </div>
   );

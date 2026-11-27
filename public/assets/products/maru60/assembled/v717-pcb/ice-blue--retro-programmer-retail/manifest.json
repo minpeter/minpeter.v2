@@ -1,0 +1,92 @@
+{
+  "id": "ice-blue--retro-programmer-retail",
+  "housingId": "ice-blue",
+  "keycapId": "retro-programmer-retail",
+  "orderable": false,
+  "frames": [
+    {
+      "angleDegrees": 0,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "d5c29dce336ffe1e97318943676b7c066305bf5b198090f21e9ec8c66015205e",
+      "src": "/assets/products/maru60/assembled/v717-pcb/ice-blue--retro-programmer-retail/frame_000.webp"
+    },
+    {
+      "angleDegrees": 30,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "d28efb63cd80e588e93f79dc5ee6e5391c909af74efb290294cac82b89b8fccf",
+      "src": "/assets/products/maru60/assembled/v717-pcb/ice-blue--retro-programmer-retail/frame_030.webp"
+    },
+    {
+      "angleDegrees": 60,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "9c4094f21a60ccbbfbc7b45b9e0a49c2dba41ce19f7fda324c2cd55aa1fd2e7b",
+      "src": "/assets/products/maru60/assembled/v717-pcb/ice-blue--retro-programmer-retail/frame_060.webp"
+    },
+    {
+      "angleDegrees": 90,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "0d13abcaaf6fa06ce14a65b15fbf5d7b0deadd5e81c44d9d7cd8b27b89c25b3e",
+      "src": "/assets/products/maru60/assembled/v717-pcb/ice-blue--retro-programmer-retail/frame_090.webp"
+    },
+    {
+      "angleDegrees": 120,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "28ad3ba765d76b23092b8c38f22d18da533a048c11c556e7465bd05068eca040",
+      "src": "/assets/products/maru60/assembled/v717-pcb/ice-blue--retro-programmer-retail/frame_120.webp"
+    },
+    {
+      "angleDegrees": 150,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "c6efe331e6c65c8f6a17cf21bfb7adcad5536142ef41632f7f6ebaa7cdeb2053",
+      "src": "/assets/products/maru60/assembled/v717-pcb/ice-blue--retro-programmer-retail/frame_150.webp"
+    },
+    {
+      "angleDegrees": 180,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "33eb6ec0bc19fa262fac61a2827f2703f84af0fdff7d66ed0483f2051f470854",
+      "src": "/assets/products/maru60/assembled/v717-pcb/ice-blue--retro-programmer-retail/frame_180.webp"
+    },
+    {
+      "angleDegrees": 210,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "96bb94230e1b203f1ccf9ee34361b0466237cdff0aee1d7caaf9a345d588916a",
+      "src": "/assets/products/maru60/assembled/v717-pcb/ice-blue--retro-programmer-retail/frame_210.webp"
+    },
+    {
+      "angleDegrees": 240,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "4531cd8d8f1579c8247315ab5b1625d9229fd6fee6ce9ec147ff3c1b38f4f667",
+      "src": "/assets/products/maru60/assembled/v717-pcb/ice-blue--retro-programmer-retail/frame_240.webp"
+    },
+    {
+      "angleDegrees": 270,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "73e8f2c7669a7642b93599a6f9ab1c6fdf4804afd50ef1c5dd5f67bfc8bba2ab",
+      "src": "/assets/products/maru60/assembled/v717-pcb/ice-blue--retro-programmer-retail/frame_270.webp"
+    },
+    {
+      "angleDegrees": 300,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "b479b5ec17a1d0ec3ae9784fed02f2194546f58abeb2a950836d673a218ff34c",
+      "src": "/assets/products/maru60/assembled/v717-pcb/ice-blue--retro-programmer-retail/frame_300.webp"
+    },
+    {
+      "angleDegrees": 330,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "a49f2c8fd4878892a6c69d00b51962b9c56a084912198b4f2e873736d11a6bfa",
+      "src": "/assets/products/maru60/assembled/v717-pcb/ice-blue--retro-programmer-retail/frame_330.webp"
+    }
+  ]
+}

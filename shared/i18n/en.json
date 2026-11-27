@@ -244,15 +244,15 @@
       "rule60": {
         "variant": "HHKB housing · integrated wrist rest",
         "license": "CC BY-NC 4.0",
-        "intro": "MARU60 is an independent HHKB housing for Rule 60 V3 internals, with a honeycomb wrist rest built in.",
-        "description": "MARU60 is an independent HHKB housing for Rule 60 V3 internals, with a honeycomb wrist rest built in. Opaque renders use the v7.15 top case and current wired bottom case. Transparent Inventor approximates the latest exterior shell (a552798), omitting PCB, switches, plate, gaskets and catch internals. It is not an INKC STUDIO product.",
+        "intro": "HHKB housing with integrated wrist rest for Rule 60 V3 internals.",
+        "description": "MARU60 — independent HHKB housing with integrated honeycomb wrist rest for Rule 60 V3 internals. Not an INKC STUDIO product.",
         "details": {
-          "size": "Current top-case footprint: 298.1 × 198.3 mm; complete assembly dimensions and physical fit are not yet verified",
-          "joints": "Split top case with three central dovetails; draft bottom case with five sliding dovetails",
-          "reuse": "Designed around the stock PC gasket plate, silicone gasket caps, ball catches, PCB, battery and weight plate",
-          "print": "v7.15 is designated for the second physical build. Print completion and assembly results are unconfirmed; check fit coupons before printing a full assembly",
-          "status": "Prototype — opaque renders use v7.15; Transparent Inventor approximates the latest exterior shell (a552798), omitting PCB, switches, plate, gaskets and catch internals. CAD checks do not establish physical fit or assembly.",
-          "license": "CC BY-NC 4.0 — print and modify for personal, non-commercial use only. Selling prints or files is not permitted."
+          "size": "298.1 × 198.3 mm (top case · physical fit unverified)",
+          "joints": "3× top dovetails · 5× sliding bottom dovetails",
+          "reuse": "Fits Rule 60 V3 internals (plate · PCB · weight)",
+          "print": "v7.15 build 2 · check fit coupons before full print",
+          "status": "Prototype · v7.17 all finishes (RP2350A PCB, plate & USB-C; switches omitted)",
+          "license": "CC BY-NC 4.0 · personal, non-commercial use only"
         }
       },
       "skateboardStand": {
@@ -301,7 +301,7 @@
         "white-marble": "White Marble"
       },
       "cinema": {
-        "label": "3D scroll sequence"
+        "label": "3D sequence showing an 8-inch skateboard docking into the 20-degree stand slot"
       },
       "showcase": {
         "heading": "Gallery",
@@ -344,24 +344,24 @@
       "showcase": "Personal showcase",
       "customize": "Explore keycap sets",
       "showcaseNote": "Inventor · personal showcase · not for sale",
-      "configurationNote": "Choose a housing and keycap set to explore the appearance. Transparent × Inventor is the original personal keyboard. No ordering is available here.",
+      "configurationNote": "3D appearance preview · not for sale (Transparent × Inventor is personal)",
       "selected": "{housing} × {keycaps}",
       "previewLabel": "Selected configuration — reconstructed render; drag or use arrow keys to rotate in 30° steps",
-      "pending": "This render is not ready",
-      "pendingDetail": "Images for this combination are not available yet. Another configuration will not be shown in its place.",
+      "pending": "Render pending",
+      "pendingDetail": "Images for this combination are not ready yet.",
       "kitQA": "Individual key and all-angle review must pass before a render appears.",
-      "loading": "Loading the selected render…",
+      "loading": "Loading…",
       "ready": "Ready",
-      "loadError": "The selected render could not be loaded.",
-      "retry": "Retry this render",
+      "loadError": "Could not load render.",
+      "retry": "Retry",
       "housing": "Housing",
       "keycaps": "Keycaps",
       "fullRetailSet": "Full set · no personal logo keys",
-      "geometryPrevious": "This preview shows the previous housing revision, not the assembled bottom-case draft.",
-      "geometryAssembled": "Exterior render: opaque options use v7.15; Transparent Inventor uses the latest shell (a552798), with internal parts omitted. Physical fit and assembly are unverified.",
-      "approximation": "Colors, surface finish and legends are visual approximations, not a guarantee of printed color or physical keycap compatibility. A render is not an order or stock confirmation.",
-      "materialSource": "Manufacturer color reference",
-      "keycapSource": "Manufacturer keycap reference",
+      "geometryPrevious": "Based on previous housing revision",
+      "geometryAssembled": "v7.17 (with RP2350A PCB, plate & USB-C) · physical fit unverified",
+      "approximation": "3D render approximation · actual print may vary",
+      "materialSource": "Color spec",
+      "keycapSource": "Keycap spec",
       "housingNames": {
         "bone-white": "Bone White",
         "ash-gray": "Ash Gray",
@@ -372,16 +372,36 @@
         "white-marble": "White Marble",
         "transparent": "Transparent"
       },
-      "partial": "Some views could not load. Rotation uses the nearest available view. You can retry loading.",
-      "marbleNote": "PLA Marble 13103: off-white with fine, irregular gray flecks. The swatch shows only the manufacturer’s base color, not the printed texture.",
-      "transparentNote": "Approximate appearance of the translucent PETG housing, with PCB, switches, plate, gaskets and catch internals omitted. It does not verify internal construction or physical assembly, and is not a Bambu Lab PLA color.",
-      "personalHousing": "Original translucent PETG · approximate appearance",
-      "inventorNote": "Original personal keycaps with logo keys",
+      "partial": "Some angles unavailable.",
+      "marbleNote": "PLA Marble 13103 · fine gray flecks",
+      "transparentNote": "Translucent PETG · RP2350A PCB, plate, USB-C & brass inserts (switches omitted)",
+      "personalHousing": "Translucent PETG · exterior approx.",
+      "inventorNote": "Original personal keycaps",
       "pairedPersonal": "Transparent × Inventor · Not for sale",
       "pairedRetail": "Paired: {housing} × {keycaps}",
-      "unsupported": "This pairing is unavailable",
-      "unsupportedDetail": "Transparent housing and Inventor keycaps are only shown together. Select both, or choose another housing and keycap set. No substitute image is shown.",
-      "detailsLabel": "Details & materials"
+      "unsupported": "Pairing unavailable",
+      "unsupportedDetail": "Transparent housing and Inventor keycaps are only paired together.",
+      "detailsLabel": "Specs"
+    },
+    "maru60Cinema": {
+      "label": "MARU60 3D scroll cinema: 6-degree profile, brushed steel backplate with seven bumpons, six-layer assembly, surface macro, and eight housing and keycap pairings",
+      "beats": {
+        "profileFront": "6° Unibody · Charcoal",
+        "profileUsb": "Flush USB-C",
+        "profileBackplate": "Brushed Steel · 7× Bumpons",
+        "assemblyExploded": "Six-Layer Gasket Stack",
+        "assemblySnap": "Four-Part Dovetail Fit",
+        "assemblyHero": "Bone White · Retro Programmer",
+        "surfaceMacro": "Dark Green · NicePBT BoW",
+        "lineupDarkGreen": "Dark Green · NicePBT BoW",
+        "lineupIceBlue": "Ice Blue · NicePBT Noel",
+        "lineupCharcoal": "Charcoal · PBTfans WoB",
+        "lineupBoneWhite": "Bone White · Retro Programmer",
+        "lineupTransparent": "Transparent · Inventor",
+        "lineupAshGray": "Ash Gray · PBTfans WoB",
+        "lineupLilacPurple": "Lilac Purple · Purple Chonkers",
+        "lineupWhiteMarble": "White Marble · NicePBT BoW"
+      }
     }
   },
   "modCodeBlock": {

@@ -1,0 +1,92 @@
+{
+  "id": "white-marble--retro-programmer-retail",
+  "housingId": "white-marble",
+  "keycapId": "retro-programmer-retail",
+  "orderable": false,
+  "frames": [
+    {
+      "angleDegrees": 0,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "d1a2bb2334911fc5edbe16b0b63f2f950613efeabf325b706cc0655872d1e282",
+      "src": "/assets/products/maru60/assembled/v717-pcb/white-marble--retro-programmer-retail/frame_000.webp"
+    },
+    {
+      "angleDegrees": 30,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "29003d46d4a74c7a537a324c7942acc925058afabac204911a8116816636e4be",
+      "src": "/assets/products/maru60/assembled/v717-pcb/white-marble--retro-programmer-retail/frame_030.webp"
+    },
+    {
+      "angleDegrees": 60,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "7d62437e8382f82e6cb5793cc9c188d46094f53f1f59919e7a6550d8e82312e2",
+      "src": "/assets/products/maru60/assembled/v717-pcb/white-marble--retro-programmer-retail/frame_060.webp"
+    },
+    {
+      "angleDegrees": 90,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "eda116bf962aef1c1f834bce767a5778786ec42db111b83036c703af8a7f6572",
+      "src": "/assets/products/maru60/assembled/v717-pcb/white-marble--retro-programmer-retail/frame_090.webp"
+    },
+    {
+      "angleDegrees": 120,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "63f84df66a2ee0385c34c23b708c354d94e2b713a9df0e46a7f2f0f7e4365a24",
+      "src": "/assets/products/maru60/assembled/v717-pcb/white-marble--retro-programmer-retail/frame_120.webp"
+    },
+    {
+      "angleDegrees": 150,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "33ff7a780924734cc6d779da3c32a51bd9a500d21e059ae97de58e8e394fb7a4",
+      "src": "/assets/products/maru60/assembled/v717-pcb/white-marble--retro-programmer-retail/frame_150.webp"
+    },
+    {
+      "angleDegrees": 180,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "71fc5882fc468728d0c64baf5bf2a5dd418a19d4fc993d045631974307ddaedc",
+      "src": "/assets/products/maru60/assembled/v717-pcb/white-marble--retro-programmer-retail/frame_180.webp"
+    },
+    {
+      "angleDegrees": 210,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "b5ad4419aa8aa9b562963f8078430774c343c9e07c8e7a938334eaab2babb3f4",
+      "src": "/assets/products/maru60/assembled/v717-pcb/white-marble--retro-programmer-retail/frame_210.webp"
+    },
+    {
+      "angleDegrees": 240,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "b60dfbbd06542abd5a7f43bf70e4b9a513ee35d62d7de28b342fc65fbdc6169a",
+      "src": "/assets/products/maru60/assembled/v717-pcb/white-marble--retro-programmer-retail/frame_240.webp"
+    },
+    {
+      "angleDegrees": 270,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "aa77fc45f9e6e8a746972784463423830ca7406741c41f9058127360b7bcba26",
+      "src": "/assets/products/maru60/assembled/v717-pcb/white-marble--retro-programmer-retail/frame_270.webp"
+    },
+    {
+      "angleDegrees": 300,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "450a3a977f7468502df59869782ee14ef8625c38acf4e82109cb59fa887a4b16",
+      "src": "/assets/products/maru60/assembled/v717-pcb/white-marble--retro-programmer-retail/frame_300.webp"
+    },
+    {
+      "angleDegrees": 330,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "71db7c3365231b9ac4bcf4f5dfe411a30dfc1109d95f3143f65eb9e4c8ec572b",
+      "src": "/assets/products/maru60/assembled/v717-pcb/white-marble--retro-programmer-retail/frame_330.webp"
+    }
+  ]
+}

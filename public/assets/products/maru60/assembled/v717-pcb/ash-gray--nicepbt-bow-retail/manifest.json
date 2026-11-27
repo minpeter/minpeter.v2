@@ -1,0 +1,92 @@
+{
+  "id": "ash-gray--nicepbt-bow-retail",
+  "housingId": "ash-gray",
+  "keycapId": "nicepbt-bow-retail",
+  "orderable": false,
+  "frames": [
+    {
+      "angleDegrees": 0,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "6cbc9d21dbfdae5b9ff230ed71c309b01a1031e01a1f475e1f8611171850eb40",
+      "src": "/assets/products/maru60/assembled/v717-pcb/ash-gray--nicepbt-bow-retail/frame_000.webp"
+    },
+    {
+      "angleDegrees": 30,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "73445aaf7d0e916543bad1772f8fc625e68ba66aba60282bc52c3942e2f13449",
+      "src": "/assets/products/maru60/assembled/v717-pcb/ash-gray--nicepbt-bow-retail/frame_030.webp"
+    },
+    {
+      "angleDegrees": 60,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "bb4139a434e98295a660ff49a52d05d5fbc5588d7e3f1eb05cd5d509f0b06de3",
+      "src": "/assets/products/maru60/assembled/v717-pcb/ash-gray--nicepbt-bow-retail/frame_060.webp"
+    },
+    {
+      "angleDegrees": 90,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "13e8f00b263e0cc00144d334157299509ebde9f3c5be1301b5c96aaf82131880",
+      "src": "/assets/products/maru60/assembled/v717-pcb/ash-gray--nicepbt-bow-retail/frame_090.webp"
+    },
+    {
+      "angleDegrees": 120,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "26a1e967bcbc3e92af763dbf1506892f98ac1dd3a8a20d1ebe745a0f0dd56abe",
+      "src": "/assets/products/maru60/assembled/v717-pcb/ash-gray--nicepbt-bow-retail/frame_120.webp"
+    },
+    {
+      "angleDegrees": 150,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "9f803c1f7f167e9151a119ca04148665f1f0dd584eed6cbfe4ad3a7ef93064ac",
+      "src": "/assets/products/maru60/assembled/v717-pcb/ash-gray--nicepbt-bow-retail/frame_150.webp"
+    },
+    {
+      "angleDegrees": 180,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "c95be87aa14753bacd8e773e3a0dccc9ba68d39fbd79519e8ba4c490fbaef5a2",
+      "src": "/assets/products/maru60/assembled/v717-pcb/ash-gray--nicepbt-bow-retail/frame_180.webp"
+    },
+    {
+      "angleDegrees": 210,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "c96271e77a1929040d0db001a83b1c299536921f18081c0be0628e2168e4f2b0",
+      "src": "/assets/products/maru60/assembled/v717-pcb/ash-gray--nicepbt-bow-retail/frame_210.webp"
+    },
+    {
+      "angleDegrees": 240,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "3a641d1319fed1f76d140dd452881f61def9b23553c50b1ea685b6b6d5691783",
+      "src": "/assets/products/maru60/assembled/v717-pcb/ash-gray--nicepbt-bow-retail/frame_240.webp"
+    },
+    {
+      "angleDegrees": 270,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "7a761587613e6527bdf827a46f8f4757e08993a96625eb43ec4fe1fe31c95d79",
+      "src": "/assets/products/maru60/assembled/v717-pcb/ash-gray--nicepbt-bow-retail/frame_270.webp"
+    },
+    {
+      "angleDegrees": 300,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "3ab32481dce9d63989b29ebaedb12a16acdc35c2927970425e6541f6e560662e",
+      "src": "/assets/products/maru60/assembled/v717-pcb/ash-gray--nicepbt-bow-retail/frame_300.webp"
+    },
+    {
+      "angleDegrees": 330,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "e923842b54382be83dc15f060fbb49adf56620ebcd608681af2453e00898ce3e",
+      "src": "/assets/products/maru60/assembled/v717-pcb/ash-gray--nicepbt-bow-retail/frame_330.webp"
+    }
+  ]
+}

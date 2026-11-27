@@ -1,0 +1,92 @@
+{
+  "id": "ash-gray--retro-programmer-retail",
+  "housingId": "ash-gray",
+  "keycapId": "retro-programmer-retail",
+  "orderable": false,
+  "frames": [
+    {
+      "angleDegrees": 0,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "9dbe357d9304902f386862a1f7c1c134ec585fc3916289c99bc3fbbef8e92859",
+      "src": "/assets/products/maru60/assembled/v717-pcb/ash-gray--retro-programmer-retail/frame_000.webp"
+    },
+    {
+      "angleDegrees": 30,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "5e246e18286528ade43403a842aa0f23546cb233cc564a481d59c7d3be3cf5c1",
+      "src": "/assets/products/maru60/assembled/v717-pcb/ash-gray--retro-programmer-retail/frame_030.webp"
+    },
+    {
+      "angleDegrees": 60,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "66cd18f43dfcaaf81d82cb2894648679e97269de76a4e2a020516a0b634bd39b",
+      "src": "/assets/products/maru60/assembled/v717-pcb/ash-gray--retro-programmer-retail/frame_060.webp"
+    },
+    {
+      "angleDegrees": 90,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "301ada7be41a7a57e6fa191f26605fa6bd41b48c86e6418cf72a3c38509243e4",
+      "src": "/assets/products/maru60/assembled/v717-pcb/ash-gray--retro-programmer-retail/frame_090.webp"
+    },
+    {
+      "angleDegrees": 120,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "e8ba25acea092a954cc302c8190c45926a143f46a046344aa8ed42795c55df74",
+      "src": "/assets/products/maru60/assembled/v717-pcb/ash-gray--retro-programmer-retail/frame_120.webp"
+    },
+    {
+      "angleDegrees": 150,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "bbe1c2e5c111f7031a3bf68f32bf54be99cb33f3849c2b84cd58488e04565ad6",
+      "src": "/assets/products/maru60/assembled/v717-pcb/ash-gray--retro-programmer-retail/frame_150.webp"
+    },
+    {
+      "angleDegrees": 180,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "9c76283a4042eb1493493621dbc45168adc20ab37923dd11954ee7115119710e",
+      "src": "/assets/products/maru60/assembled/v717-pcb/ash-gray--retro-programmer-retail/frame_180.webp"
+    },
+    {
+      "angleDegrees": 210,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "5451dcc1fb3195e636e0115bf67fb992c2fe76a661dc4d201e84ff125b37ac56",
+      "src": "/assets/products/maru60/assembled/v717-pcb/ash-gray--retro-programmer-retail/frame_210.webp"
+    },
+    {
+      "angleDegrees": 240,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "bd2ae0fa4da193d5f42ee705bf94756aa3ddb2cf5778bc13d478494c73319a3f",
+      "src": "/assets/products/maru60/assembled/v717-pcb/ash-gray--retro-programmer-retail/frame_240.webp"
+    },
+    {
+      "angleDegrees": 270,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "a8993a2a25c29b34f6d2fdbb88a75dd9b522ee189e49e628703f99268190ee78",
+      "src": "/assets/products/maru60/assembled/v717-pcb/ash-gray--retro-programmer-retail/frame_270.webp"
+    },
+    {
+      "angleDegrees": 300,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "2ae6561efd8fb87e82e91d3fc4a7bb8187139d6f892a5149d253fc40a4df6f49",
+      "src": "/assets/products/maru60/assembled/v717-pcb/ash-gray--retro-programmer-retail/frame_300.webp"
+    },
+    {
+      "angleDegrees": 330,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "c6885d72fc9c5a4985bc43bcdc758b3384040a0d241987d83974e5bad2360a12",
+      "src": "/assets/products/maru60/assembled/v717-pcb/ash-gray--retro-programmer-retail/frame_330.webp"
+    }
+  ]
+}

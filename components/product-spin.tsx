@@ -118,6 +118,8 @@ export function ProductSpin({
   const rafRef = useRef(0);
   const lastStepRef = useRef(0);
   const dragRef = useRef<{ startFrame: number; startX: number } | null>(null);
+  const touchDraggingRef = useRef(false);
+  const lastAppliedTargetAngleRef = useRef<number | undefined>(targetAngle);
 
   useEffect(() => {
     if (version !== loader.getSnapshot()) {
@@ -317,10 +319,12 @@ export function ProductSpin({
   useEffect(() => {
     if (
       targetAngle === undefined ||
-      reducedMotion ||
-      active ||
-      dragRef.current
+      targetAngle === lastAppliedTargetAngleRef.current
     ) {
+      return;
+    }
+    lastAppliedTargetAngleRef.current = targetAngle;
+    if (reducedMotion || touchDraggingRef.current) {
       return;
     }
     const targetFrame =
@@ -329,7 +333,7 @@ export function ProductSpin({
     if (targetFrame !== targetRef.current) {
       aim(targetFrame, false);
     }
-  }, [active, aim, frameCount, reducedMotion, targetAngle]);
+  }, [aim, frameCount, reducedMotion, targetAngle]);
 
   const handlePointerEnter = useCallback(() => setActive(true), []);
 
@@ -361,6 +365,7 @@ export function ProductSpin({
     (event: React.PointerEvent<HTMLDivElement>) => {
       setActive(true);
       if (event.pointerType === "touch") {
+        touchDraggingRef.current = true;
         event.currentTarget.setPointerCapture(event.pointerId);
         dragRef.current = {
           startFrame: frameRef.current,
@@ -372,6 +377,7 @@ export function ProductSpin({
   );
 
   const handlePointerEnd = useCallback(() => {
+    touchDraggingRef.current = false;
     setActive(false);
     dragRef.current = null;
   }, []);
@@ -392,7 +398,24 @@ export function ProductSpin({
 
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent<HTMLDivElement>) => {
-      const delta = { ArrowLeft: -1, ArrowRight: 1 }[event.key];
+      if (event.key === "Home") {
+        event.preventDefault();
+        setActive(true);
+        aim(0);
+        return;
+      }
+      if (event.key === "End") {
+        event.preventDefault();
+        setActive(true);
+        aim(frameCount - 1);
+        return;
+      }
+      const delta = {
+        ArrowDown: -1,
+        ArrowLeft: -1,
+        ArrowRight: 1,
+        ArrowUp: 1,
+      }[event.key];
       if (!delta) {
         return;
       }

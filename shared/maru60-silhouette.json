@@ -1,11 +1,11 @@
 {
-  "source": "public/assets/products/maru60/assembled/v716-exterior/transparent--inventor/frame_000.webp",
-  "sourceSha256": "e7625f2f22646c48702a461db48ae1fdbbd8254cadf438e2dccef6f5c61e35ad",
+  "source": "public/assets/products/maru60/assembled/v717-pcb/transparent--inventor/frame_000.webp",
+  "sourceSha256": "7bf61c6565cceb477618891d4f587992c76a45861d14738f8854c68fde2ed3e8",
   "outline": {
     "width": 1024,
     "height": 1536,
     "polygons": [
-      "63,1156 316,210 318,206 323,201 327,199 341,200 942,361 952,364 957,367 962,376 961,387 711,1320 707,1331 703,1335 694,1338 683,1336 75,1173 67,1168 64,1163"
+      "63,1156 315,214 318,206 323,201 327,199 337,199 364,206 942,361 952,364 957,367 962,376 961,387 711,1320 707,1331 703,1335 695,1338 679,1335 78,1174 69,1170 67,1168 64,1163"
     ]
   }
 }

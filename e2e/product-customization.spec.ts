@@ -416,16 +416,17 @@ async function expectCompactPicker(page: Page, messages: typeof en) {
       "label.store-custom-option p, label.store-custom-option small, label.store-custom-option dl"
     )
   ).toHaveCount(0);
-  await expect(page.locator(".store-custom-selected-name")).toHaveCount(1);
+  await expect(page.locator(".store-custom-selected-name")).toHaveCount(2);
   const housingId = await page
     .locator('input[name="housing"]:checked')
     .inputValue();
   const keycapId = await page
     .locator('input[name="keycaps"]:checked')
     .inputValue();
-  await expect(page.locator(".store-custom-selected-name")).toHaveText(
-    labels.housingNames[housingId as keyof typeof labels.housingNames]
-  );
+  await expect(page.locator(".store-custom-selected-name")).toHaveText([
+    labels.housingNames[housingId as keyof typeof labels.housingNames],
+    KEYCAP_CHIPS[keycapId as keyof typeof KEYCAP_CHIPS],
+  ]);
   for (const [id, name] of Object.entries(KEYCAP_CHIPS)) {
     await expect(
       page.getByRole("radio", { exact: true, name })

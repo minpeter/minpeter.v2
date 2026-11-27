@@ -888,4 +888,98 @@ describe("ProductSpin progressive canvas", () => {
     fireEvent.pointerLeave(slider, { pointerType: "mouse" });
     expect(slider.getAttribute("data-frame")).toBe("8");
   });
+
+  it("preserves manual touch drag angle on release and still scrubs on scroll while focused", () => {
+    vi.stubGlobal(
+      "matchMedia",
+      vi.fn(() => ({
+        addEventListener: vi.fn(),
+        matches: false,
+        removeEventListener: vi.fn(),
+      }))
+    );
+    const callbacks: FrameRequestCallback[] = [];
+    vi.stubGlobal("requestAnimationFrame", (callback: FrameRequestCallback) =>
+      callbacks.push(callback)
+    );
+    vi.stubGlobal("cancelAnimationFrame", () => {
+      callbacks.length = 0;
+    });
+    let now = 0;
+    const settle = () => {
+      act(() => {
+        while (callbacks.length > 0) {
+          now += 20;
+          callbacks.shift()?.(now);
+        }
+      });
+    };
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
+      DOMRect.fromRect({ height: 540, width: 360, x: 0, y: 0 })
+    );
+
+    const onAngleChange = vi.fn();
+    const { rerender } = render(
+      <ProductSpin
+        alt="Stand 360"
+        onAngleChange={onAngleChange}
+        resetOnLeave={false}
+        sizes="92vw"
+        spin={{ ...spin, frameCount: 12 }}
+        targetAngle={undefined}
+      />
+    );
+    const slider = screen.getByRole("slider", { name: "Stand 360" });
+    slider.setPointerCapture = vi.fn();
+
+    // 1. Scroll sets hero angle to 30° (frame 1).
+    rerender(
+      <ProductSpin
+        alt="Stand 360"
+        onAngleChange={onAngleChange}
+        resetOnLeave={false}
+        sizes="92vw"
+        spin={{ ...spin, frameCount: 12 }}
+        targetAngle={30}
+      />
+    );
+    settle();
+    expect(slider.getAttribute("data-frame")).toBe("1");
+
+    // 2. Touch drag half a width (+6 frames -> frame 7 = 210°) and release -> must NOT snap back to 30°.
+    fireEvent.pointerDown(slider, {
+      clientX: 40,
+      pointerId: 1,
+      pointerType: "touch",
+    });
+    fireEvent.pointerMove(slider, {
+      clientX: 220,
+      pointerId: 1,
+      pointerType: "touch",
+    });
+    settle();
+    expect(slider.getAttribute("data-frame")).toBe("7");
+    fireEvent.pointerUp(slider, {
+      clientX: 220,
+      pointerId: 1,
+      pointerType: "touch",
+    });
+    settle();
+    expect(slider.getAttribute("data-frame")).toBe("7");
+
+    // 3. Focusing the slider must NOT block subsequent scroll-driven targetAngle updates.
+    fireEvent.focus(slider);
+    rerender(
+      <ProductSpin
+        alt="Stand 360"
+        onAngleChange={onAngleChange}
+        resetOnLeave={false}
+        sizes="92vw"
+        spin={{ ...spin, frameCount: 12 }}
+        targetAngle={240}
+      />
+    );
+    settle();
+    expect(slider.getAttribute("data-frame")).toBe("8");
+  });
 });

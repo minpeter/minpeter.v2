@@ -1,0 +1,92 @@
+{
+  "id": "ice-blue--nicepbt-purple-chonkers-retail",
+  "housingId": "ice-blue",
+  "keycapId": "nicepbt-purple-chonkers-retail",
+  "orderable": false,
+  "frames": [
+    {
+      "angleDegrees": 0,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "1b6acb66ac6d9432fc4b0f15bb7ded35258a9c94f78412ac024b7706537a9480",
+      "src": "/assets/products/maru60/assembled/v717-pcb/ice-blue--nicepbt-purple-chonkers-retail/frame_000.webp"
+    },
+    {
+      "angleDegrees": 30,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "ae356c4e3f1bf8240830c7107269b29b429b89213863b396c4c81468f70fa423",
+      "src": "/assets/products/maru60/assembled/v717-pcb/ice-blue--nicepbt-purple-chonkers-retail/frame_030.webp"
+    },
+    {
+      "angleDegrees": 60,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "08468a8bee2835d990711ee596ed341b6ce5326b9429d794957b7cf32bbbb7db",
+      "src": "/assets/products/maru60/assembled/v717-pcb/ice-blue--nicepbt-purple-chonkers-retail/frame_060.webp"
+    },
+    {
+      "angleDegrees": 90,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "f24c7b2f35252e39060db73b477d4ba6eeb92498f566262f1d21239133a6d5af",
+      "src": "/assets/products/maru60/assembled/v717-pcb/ice-blue--nicepbt-purple-chonkers-retail/frame_090.webp"
+    },
+    {
+      "angleDegrees": 120,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "2498ddb9e2f8464174eb6084e5c25449d1cf0767806d172f39c00c84d28e53b5",
+      "src": "/assets/products/maru60/assembled/v717-pcb/ice-blue--nicepbt-purple-chonkers-retail/frame_120.webp"
+    },
+    {
+      "angleDegrees": 150,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "c0091272a41acd18d005517c0e6bbc7e5b56209d6113e3331a696f3b29d7ba97",
+      "src": "/assets/products/maru60/assembled/v717-pcb/ice-blue--nicepbt-purple-chonkers-retail/frame_150.webp"
+    },
+    {
+      "angleDegrees": 180,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "fda52edad23613f3297caff64d60cdbaa643db0c713728ff6aa343ac9af6ee3d",
+      "src": "/assets/products/maru60/assembled/v717-pcb/ice-blue--nicepbt-purple-chonkers-retail/frame_180.webp"
+    },
+    {
+      "angleDegrees": 210,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "658b0e6de1bd8d099418b20b17a37d4ac65e13c4c2ad18d08eff1a8652686ea9",
+      "src": "/assets/products/maru60/assembled/v717-pcb/ice-blue--nicepbt-purple-chonkers-retail/frame_210.webp"
+    },
+    {
+      "angleDegrees": 240,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "48885d35e9acddbf7a1c53500a0a1f4af6f281dcc73a0f3eddf51c758ce6e8c8",
+      "src": "/assets/products/maru60/assembled/v717-pcb/ice-blue--nicepbt-purple-chonkers-retail/frame_240.webp"
+    },
+    {
+      "angleDegrees": 270,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "15435442da1eec03ae12acb323dac6517df343d70a8bfad7f25eb55dc71c62ca",
+      "src": "/assets/products/maru60/assembled/v717-pcb/ice-blue--nicepbt-purple-chonkers-retail/frame_270.webp"
+    },
+    {
+      "angleDegrees": 300,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "9d7b909a23ab10de8c218e43669864b4f2a519e19ec2bfa115b425dc31869584",
+      "src": "/assets/products/maru60/assembled/v717-pcb/ice-blue--nicepbt-purple-chonkers-retail/frame_300.webp"
+    },
+    {
+      "angleDegrees": 330,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "9e5b0a2e8ccc5ccd64c752e75cd6382e1e565b7897658e80a9a6aea4aecb53b9",
+      "src": "/assets/products/maru60/assembled/v717-pcb/ice-blue--nicepbt-purple-chonkers-retail/frame_330.webp"
+    }
+  ]
+}

@@ -1,0 +1,92 @@
+{
+  "id": "dark-green--nicepbt-bow-retail",
+  "housingId": "dark-green",
+  "keycapId": "nicepbt-bow-retail",
+  "orderable": false,
+  "frames": [
+    {
+      "angleDegrees": 0,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "c7cfb3c931fbce8bc4a8e75a58580e0bc19fdb09ad398e6928ed1f069d0f7d4c",
+      "src": "/assets/products/maru60/assembled/v717-pcb/dark-green--nicepbt-bow-retail/frame_000.webp"
+    },
+    {
+      "angleDegrees": 30,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "bfa2f1ca63ff776fc8667840b2d6a740a168395f7cbf5a6167f0106467a819c4",
+      "src": "/assets/products/maru60/assembled/v717-pcb/dark-green--nicepbt-bow-retail/frame_030.webp"
+    },
+    {
+      "angleDegrees": 60,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "8974c01aa3e3fd304e93eaa3950e9cc479a09438ca607e3f1b70ced06a3095d6",
+      "src": "/assets/products/maru60/assembled/v717-pcb/dark-green--nicepbt-bow-retail/frame_060.webp"
+    },
+    {
+      "angleDegrees": 90,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "27d639c86c3bd9fbf2b4d2e59a4d47d1895e5f20f3635822bd085eada1ccaa4d",
+      "src": "/assets/products/maru60/assembled/v717-pcb/dark-green--nicepbt-bow-retail/frame_090.webp"
+    },
+    {
+      "angleDegrees": 120,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "ecaf9d1dfa7fae9e050376e9da738fb64ad70eaf07cf79c84977f73501e0c98b",
+      "src": "/assets/products/maru60/assembled/v717-pcb/dark-green--nicepbt-bow-retail/frame_120.webp"
+    },
+    {
+      "angleDegrees": 150,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "178c646dbb998fcbaadc607d33b1da7f9ebb9553d34fe14cf03e0d9ec1b15ab8",
+      "src": "/assets/products/maru60/assembled/v717-pcb/dark-green--nicepbt-bow-retail/frame_150.webp"
+    },
+    {
+      "angleDegrees": 180,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "16d429fbb57aa72c9ac6cec55b8c7cfc17369ab1745656e4a981a692376f28d9",
+      "src": "/assets/products/maru60/assembled/v717-pcb/dark-green--nicepbt-bow-retail/frame_180.webp"
+    },
+    {
+      "angleDegrees": 210,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "424688aa24518f72b47bd716f2745695948e65ce084590be0effd382a93bafd0",
+      "src": "/assets/products/maru60/assembled/v717-pcb/dark-green--nicepbt-bow-retail/frame_210.webp"
+    },
+    {
+      "angleDegrees": 240,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "4df5a31447d41694edafd0046d61e25a10744e6d0f198ab4949b0fce5fa73296",
+      "src": "/assets/products/maru60/assembled/v717-pcb/dark-green--nicepbt-bow-retail/frame_240.webp"
+    },
+    {
+      "angleDegrees": 270,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "cbb98fcd0f61200298709e21096edfa8f8e04188c0004dac38a5c30673d7d180",
+      "src": "/assets/products/maru60/assembled/v717-pcb/dark-green--nicepbt-bow-retail/frame_270.webp"
+    },
+    {
+      "angleDegrees": 300,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "99dacbab7033fbf837c4bd9b2070a850a150e39d8a5e2507b03d2c783b34adb3",
+      "src": "/assets/products/maru60/assembled/v717-pcb/dark-green--nicepbt-bow-retail/frame_300.webp"
+    },
+    {
+      "angleDegrees": 330,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "c615f77c59c9d649a9dbf086ecd831ea9f5faf8511be215be78dc45a1684926b",
+      "src": "/assets/products/maru60/assembled/v717-pcb/dark-green--nicepbt-bow-retail/frame_330.webp"
+    }
+  ]
+}

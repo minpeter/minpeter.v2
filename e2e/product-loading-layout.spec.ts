@@ -723,8 +723,8 @@ test("borderless detail keeps the product sticky while the page scrolls through 
   await expect(
     page.getByRole("heading", { level: 1, name: "MARU60" })
   ).toBeVisible();
-  await expect(page.locator(".store-product-intro")).toContainText(
-    "Rule 60 V3"
+  await expect(page.locator(".store-product-heading")).toContainText(
+    "HHKB housing · integrated wrist rest"
   );
   await expect(page.getByTestId("product-spin")).toHaveAttribute(
     "data-ready-count",
@@ -745,9 +745,11 @@ test("borderless detail keeps the product sticky while the page scrolls through 
     fullPage: true,
     path: testInfo.outputPath("refined-detail-full.png"),
   });
-  await page.evaluate(() => window.scrollTo({ behavior: "instant", top: 180 }));
+  // Expand specs so the minimal sidebar exceeds stage height and exercises sticky pinning.
+  await page.locator(".store-custom-details summary").click();
+  await page.evaluate(() => window.scrollTo({ behavior: "instant", top: 240 }));
   const first = await page.locator(".store-custom-visual").boundingBox();
-  await page.evaluate(() => window.scrollTo({ behavior: "instant", top: 300 }));
+  await page.evaluate(() => window.scrollTo({ behavior: "instant", top: 360 }));
   const second = await page.locator(".store-custom-visual").boundingBox();
   expect(first?.y).toBe(24);
   expect(second?.y).toBe(24);

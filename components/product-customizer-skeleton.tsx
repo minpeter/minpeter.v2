@@ -27,16 +27,16 @@ const KEYCAP_SLOTS = [
 
 /** Shared by the route fallback and the customizer-only streaming boundary. */
 export function ProductCustomizerSkeleton({
+  actions,
   intro,
-  details,
 }: {
+  actions?: ReactNode;
   intro?: ReactNode;
-  details?: ReactNode;
 } = {}) {
   return (
     <div
       aria-busy="true"
-      className="store-customizer"
+      className="store-customizer store-customizer-minimal"
       data-testid="product-customizer-skeleton"
     >
       <div aria-hidden="true" className="store-custom-visual">
@@ -47,10 +47,10 @@ export function ProductCustomizerSkeleton({
           />
         </div>
       </div>
-      <div className="store-custom-sidebar">
+      <div className="store-custom-sidebar store-stand-sidebar">
         {intro}
-        <div aria-hidden="true" className="store-custom-controls">
-          <fieldset disabled>
+        <div className="store-custom-controls">
+          <fieldset aria-hidden="true" disabled>
             <legend className="store-label">
               <Skeleton className="store-skeleton-label w-32 rounded-none" />
             </legend>
@@ -65,7 +65,7 @@ export function ProductCustomizerSkeleton({
               ))}
             </div>
           </fieldset>
-          <fieldset disabled>
+          <fieldset aria-hidden="true" disabled>
             <legend className="store-label">
               <Skeleton className="store-skeleton-label w-20 rounded-none" />
             </legend>
@@ -83,13 +83,13 @@ export function ProductCustomizerSkeleton({
               ))}
             </div>
           </fieldset>
-          <div className="store-custom-details">
+          {actions}
+          <div aria-hidden="true" className="store-custom-details">
             <div className="store-custom-details-placeholder store-label">
-              <Skeleton className="store-skeleton-label w-40 rounded-none" />
+              <Skeleton className="store-skeleton-label w-16 rounded-none" />
             </div>
           </div>
         </div>
-        {details}
       </div>
     </div>
   );

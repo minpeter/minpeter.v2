@@ -1,0 +1,92 @@
+{
+  "id": "ice-blue--pbtfans-wob-retail",
+  "housingId": "ice-blue",
+  "keycapId": "pbtfans-wob-retail",
+  "orderable": false,
+  "frames": [
+    {
+      "angleDegrees": 0,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "517cca7041e42865c92d4d6a754612cf11fa077b97e3b0d3c8bb2fc09a1f5a94",
+      "src": "/assets/products/maru60/assembled/v717-pcb/ice-blue--pbtfans-wob-retail/frame_000.webp"
+    },
+    {
+      "angleDegrees": 30,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "3f774fb2ebb57d1125e3cca86ea4ab7c3573cd21aa563da5309b94343b7ae52f",
+      "src": "/assets/products/maru60/assembled/v717-pcb/ice-blue--pbtfans-wob-retail/frame_030.webp"
+    },
+    {
+      "angleDegrees": 60,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "2dbc8c01f7a5d9bfeca48a16e4f28ced59d0f427a92a11c0931986b923d46452",
+      "src": "/assets/products/maru60/assembled/v717-pcb/ice-blue--pbtfans-wob-retail/frame_060.webp"
+    },
+    {
+      "angleDegrees": 90,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "85b1018634fc5faedd110baf2792abfa234527a43d24e5b8fba1ac0a48b5eb92",
+      "src": "/assets/products/maru60/assembled/v717-pcb/ice-blue--pbtfans-wob-retail/frame_090.webp"
+    },
+    {
+      "angleDegrees": 120,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "de950ea7987929da7a49b73b75dee0780e998abbe23819e97e2e099776b5e91c",
+      "src": "/assets/products/maru60/assembled/v717-pcb/ice-blue--pbtfans-wob-retail/frame_120.webp"
+    },
+    {
+      "angleDegrees": 150,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "e14a700c222dfb5c1b5d45ced716b4741f45abbe6799f3c24f2e20b3439bd92a",
+      "src": "/assets/products/maru60/assembled/v717-pcb/ice-blue--pbtfans-wob-retail/frame_150.webp"
+    },
+    {
+      "angleDegrees": 180,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "66e4922929dcbac469d955338093f7601357ab81eacac14b913644e7393c8e30",
+      "src": "/assets/products/maru60/assembled/v717-pcb/ice-blue--pbtfans-wob-retail/frame_180.webp"
+    },
+    {
+      "angleDegrees": 210,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "8147985c64f2d564e1fc66394db79d02b2040c37c95faf49c06a920162ef7d33",
+      "src": "/assets/products/maru60/assembled/v717-pcb/ice-blue--pbtfans-wob-retail/frame_210.webp"
+    },
+    {
+      "angleDegrees": 240,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "8677ecd87d087be123f37c0f79d6dbf5271bb432e56953470c981aa8dd408c5d",
+      "src": "/assets/products/maru60/assembled/v717-pcb/ice-blue--pbtfans-wob-retail/frame_240.webp"
+    },
+    {
+      "angleDegrees": 270,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "e043a2aa0da8a177f9296872747a43ce2ce338f779c50c636569e55e0f1b3808",
+      "src": "/assets/products/maru60/assembled/v717-pcb/ice-blue--pbtfans-wob-retail/frame_270.webp"
+    },
+    {
+      "angleDegrees": 300,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "2128f3c88d97d10ca522be7f0d08f8a3c255f555ea5a0302d881af7dc06eb6a3",
+      "src": "/assets/products/maru60/assembled/v717-pcb/ice-blue--pbtfans-wob-retail/frame_300.webp"
+    },
+    {
+      "angleDegrees": 330,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "7f0fb01c2a0bdd8775d4f299c6eabcd425face0011cc9d361ff87eddfa6cb96c",
+      "src": "/assets/products/maru60/assembled/v717-pcb/ice-blue--pbtfans-wob-retail/frame_330.webp"
+    }
+  ]
+}

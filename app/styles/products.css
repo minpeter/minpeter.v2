@@ -73,7 +73,9 @@ body:has(
     display: grid;
     grid-template-columns: 1fr auto 1fr;
     align-items: center;
-    padding: 1rem var(--store-gutter);
+    padding: calc(1rem + env(safe-area-inset-top, 0px))
+      calc(var(--store-gutter) + env(safe-area-inset-right, 0px)) 1rem
+      calc(var(--store-gutter) + env(safe-area-inset-left, 0px));
   }
 
   .store-header-home {
@@ -99,7 +101,9 @@ body:has(
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 2.5rem var(--store-gutter);
     align-content: start;
-    padding: 2.5rem var(--store-gutter) 4rem;
+    align-items: start;
+    padding: 2.5rem calc(var(--store-gutter) + env(safe-area-inset-right, 0px))
+      4rem calc(var(--store-gutter) + env(safe-area-inset-left, 0px));
   }
 
   @media (min-width: 64rem) {
@@ -159,7 +163,8 @@ body:has(
     gap: 2rem;
     width: 100%;
     max-width: 90rem;
-    padding: 1.5rem var(--store-gutter) 5rem;
+    padding: 1.5rem calc(var(--store-gutter) + env(safe-area-inset-right, 0px))
+      5rem calc(var(--store-gutter) + env(safe-area-inset-left, 0px));
     margin-inline: auto;
   }
 
@@ -339,6 +344,12 @@ body:has(
     grid-template-columns: repeat(6, minmax(0, 1fr));
     gap: 0.5rem;
   }
+  /* Keep 44px+ square keycap buttons inside ultra-narrow 320px–360px containers without right-edge overflow. */
+  @media (max-width: 22.5rem) {
+    .store-custom-kits {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
   .store-custom-kit {
     position: relative;
     aspect-ratio: 1;
@@ -388,6 +399,9 @@ body:has(
     margin-left: 0.5rem;
     color: hsl(var(--muted-foreground));
   }
+  .sr-only + .store-custom-selected-name {
+    margin-left: 0;
+  }
   .store-custom-details {
     border: 0;
   }
@@ -419,6 +433,9 @@ body:has(
     gap: 1rem;
   }
   .store-custom-sources a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
     text-decoration: underline;
     text-underline-offset: 0.2em;
   }
@@ -486,6 +503,18 @@ body:has(
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(2.75rem, 1fr));
     gap: 0;
+  }
+  /* Prevent a 7+1 orphan swatch row on 320px–390px phones while keeping >=44px tap targets. */
+  @media (max-width: 24.499rem) {
+    .store-custom-swatches:has(> :nth-child(8)) {
+      grid-template-columns: repeat(4, minmax(2.75rem, 1fr));
+    }
+  }
+  /* Prevent a 6+1 orphan swatch row for 7-color products on <352px phones while keeping >=44px tap targets. */
+  @media (max-width: 22rem) {
+    .store-custom-swatches:has(> :nth-child(7)) {
+      grid-template-columns: repeat(4, minmax(2.75rem, 1fr));
+    }
   }
   .store-custom-color[data-selected="true"]::after {
     position: absolute;
@@ -608,6 +637,10 @@ body:has(
       min-height: min(82dvh, 52rem);
     }
 
+    .store-customizer-minimal:has(.store-custom-details[open]) {
+      align-items: start;
+    }
+
     .store-customizer-minimal .store-stand-sidebar {
       gap: 2rem;
     }
@@ -630,32 +663,47 @@ body:has(
   .store-cinema-runway {
     position: relative;
     height: clamp(190rem, 360vh, 300rem);
-    margin-inline: calc(var(--store-gutter) * -1);
-    margin-top: 2rem;
+    margin-inline-start: calc(
+      (var(--store-gutter) + env(safe-area-inset-left, 0px)) *
+      -1
+    );
+    margin-inline-end: calc(
+      (var(--store-gutter) + env(safe-area-inset-right, 0px)) *
+      -1
+    );
+    margin-top: clamp(3rem, 7vw, 6rem);
     background-color: #000000;
   }
 
   .store-cinema-sticky {
     position: sticky;
     top: 0;
-    display: grid;
-    place-items: center;
     height: 100svh;
+    overflow: hidden;
     background-color: #000000;
+  }
+
+  .store-cinema-runway[data-reduced-motion="true"] {
+    height: auto;
+  }
+
+  .store-cinema-runway[data-reduced-motion="true"] .store-cinema-sticky {
+    position: relative;
+    height: min(76svh, 46rem);
   }
 
   .store-cinema-frame {
     position: relative;
-    display: grid;
-    place-items: center;
     width: 100%;
     height: 100%;
     overflow: hidden;
+    background-color: #000000;
   }
 
   .store-cinema-frame::after {
     position: absolute;
     inset: 0;
+    z-index: 2;
     pointer-events: none;
     content: "";
     background: linear-gradient(
@@ -687,11 +735,42 @@ body:has(
     }
   }
 
+  .store-cinema-poster {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    object-fit: contain;
+    background-color: #000000;
+    opacity: 1;
+    transition: none;
+  }
+
+  .store-cinema-poster[data-hidden="true"] {
+    opacity: 0;
+    transition: opacity 220ms ease-out;
+  }
+
+  @media (orientation: portrait) {
+    .store-cinema-runway[data-reduced-motion="true"] .store-cinema-poster {
+      object-fit: cover;
+      object-position: center;
+    }
+  }
+
   .store-cinema-canvas {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
     display: block;
     width: 100%;
     height: 100%;
-    background-color: #000000;
+    background-color: transparent;
+  }
+
+  .store-cinema-canvas[data-ready="false"] {
+    visibility: hidden;
   }
 
   .store-showcase {
@@ -722,6 +801,10 @@ body:has(
     .store-showcase-row[data-layout="trio"] {
       grid-template-columns: repeat(3, minmax(0, 1fr));
     }
+
+    .store-showcase-row[data-layout="trio"] .store-showcase-card {
+      --beat-delay: var(--col-delay, 0ms);
+    }
   }
 
   @media (min-width: 48rem) {
@@ -729,13 +812,19 @@ body:has(
       grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
     }
 
+    .store-showcase-row[data-layout="editorial"] .store-showcase-card {
+      --beat-delay: var(--col-delay, 0ms);
+    }
+
     .store-showcase-row[data-layout="feature"] {
       grid-template-columns: minmax(0, 1fr);
     }
 
     .store-showcase-row[data-layout="feature"] .store-showcase-media {
+      width: min(100%, calc(min(76dvh, 46rem) * 16 / 9));
       max-height: min(76dvh, 46rem);
       aspect-ratio: 16 / 9;
+      margin-inline: auto;
     }
 
     .store-showcase-row[data-layout="feature"] .store-showcase-img {
@@ -758,11 +847,6 @@ body:has(
     background-color: #000000;
     clip-path: inset(0% 0% 0% 0%);
     transform-origin: center bottom;
-    transition:
-      transform 580ms cubic-bezier(0.22, 1.24, 0.36, 1) var(--beat-delay),
-      opacity 380ms ease-out var(--beat-delay),
-      clip-path 520ms cubic-bezier(0.22, 1, 0.36, 1) var(--beat-delay);
-    will-change: transform, opacity, clip-path;
   }
 
   .store-showcase-card[data-aspect="portrait"] .store-showcase-media {
@@ -774,9 +858,6 @@ body:has(
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 720ms cubic-bezier(0.22, 1.14, 0.36, 1)
-      var(--beat-delay);
-    will-change: transform;
   }
 
   .store-showcase-grid[data-motion-armed="true"]
@@ -801,6 +882,8 @@ body:has(
     transform: translate3d(0, 0, 0)
       scale(calc(1.015 - var(--scene-abs, 0) * 0.03))
       rotateX(calc(var(--scene-p, 0) * -3.5deg));
+    animation: store-showcase-media-in 560ms cubic-bezier(0.22, 1.24, 0.36, 1)
+      var(--beat-delay) backwards;
   }
 
   .store-showcase-grid[data-motion-armed="true"]
@@ -808,6 +891,8 @@ body:has(
     .store-showcase-img {
     transform: translate3d(0, calc(var(--scene-p, 0) * -18px), 0)
       scale(calc(1.055 + (1 - var(--scene-abs, 0)) * 0.02));
+    animation: store-showcase-img-in 680ms cubic-bezier(0.22, 1.14, 0.36, 1)
+      var(--beat-delay) backwards;
   }
 
   /* Keep the 3-view orthographic strip (top · side · bottom) geometrically true with zero tilt or edge crop. */
@@ -827,12 +912,15 @@ body:has(
     opacity: 1;
     clip-path: inset(0% 0% 0% 0%);
     transform: translate3d(0, 0, 0);
+    animation: store-showcase-trio-in 420ms cubic-bezier(0.22, 1, 0.36, 1)
+      var(--beat-delay) backwards;
   }
 
   .store-showcase-grid[data-motion-armed="true"]
     .store-showcase-row[data-layout="trio"]
     .store-showcase-img {
     transform: none;
+    animation: none;
   }
 
   .store-showcase-grid[data-motion-armed="true"]
@@ -841,6 +929,54 @@ body:has(
     .store-showcase-img {
     transform: translate3d(0, calc(var(--scene-p, 0) * -10px), 0)
       scale(calc(1.03 + (1 - var(--scene-abs, 0)) * 0.015));
+    animation: store-showcase-feature-img-in 680ms
+      cubic-bezier(0.22, 1.14, 0.36, 1) var(--beat-delay) backwards;
+  }
+
+  @keyframes store-showcase-media-in {
+    from {
+      opacity: 0;
+      clip-path: inset(14% 5% 14% 5%);
+      transform: translate3d(0, 3.25rem, 0) scale(0.9) rotateX(7deg);
+    }
+    to {
+      opacity: 1;
+      clip-path: inset(0% 0% 0% 0%);
+      transform: translate3d(0, 0, 0)
+        scale(calc(1.015 - var(--scene-abs, 0) * 0.03))
+        rotateX(calc(var(--scene-p, 0) * -3.5deg));
+    }
+  }
+
+  @keyframes store-showcase-img-in {
+    from {
+      transform: scale(1.18);
+    }
+    to {
+      transform: translate3d(0, calc(var(--scene-p, 0) * -18px), 0)
+        scale(calc(1.055 + (1 - var(--scene-abs, 0)) * 0.02));
+    }
+  }
+
+  @keyframes store-showcase-feature-img-in {
+    from {
+      transform: scale(1.18);
+    }
+    to {
+      transform: translate3d(0, calc(var(--scene-p, 0) * -10px), 0)
+        scale(calc(1.03 + (1 - var(--scene-abs, 0)) * 0.015));
+    }
+  }
+
+  @keyframes store-showcase-trio-in {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 1rem, 0);
+    }
+    to {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
   }
 
   @keyframes store-stand-pop {
@@ -858,9 +994,184 @@ body:has(
     }
   }
 
+  .store-product:has(.store-maru-cinema-runway) {
+    padding-bottom: 0;
+  }
+
+  .store-maru-cinema-runway {
+    position: relative;
+    height: clamp(210rem, 400vh, 320rem);
+    margin-inline: calc(var(--store-gutter) * -1);
+    margin-top: clamp(3rem, 7vw, 6rem);
+    background-color: #000000;
+  }
+
+  .store-maru-cinema-sticky {
+    position: sticky;
+    top: 0;
+    height: 100svh;
+    overflow: hidden;
+    background-color: #000000;
+  }
+
+  .store-maru-cinema-stage {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background-color: #000000;
+  }
+
+  .store-maru-cinema-runway[data-reduced-motion="true"] {
+    height: auto;
+  }
+
+  .store-maru-cinema-runway[data-reduced-motion="true"]
+    .store-maru-cinema-sticky {
+    position: relative;
+    height: min(76svh, 46rem);
+  }
+
+  .store-maru-cinema-poster {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    padding-block: clamp(1.5rem, 4svh, 2.75rem) clamp(3.5rem, 9.5svh, 5.25rem);
+    padding-inline: 0.75rem;
+    pointer-events: none;
+    object-fit: contain;
+    background-color: #000000;
+    opacity: 1;
+    transition: opacity 220ms ease-out;
+  }
+
+  @media (min-width: 40rem) {
+    .store-maru-cinema-poster {
+      padding-inline: clamp(1.5rem, 5vw, 4rem);
+    }
+  }
+
+  .store-maru-cinema-poster[data-hidden="true"] {
+    opacity: 0;
+  }
+
+  .store-maru-cinema-canvas {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+  }
+
+  .store-maru-cinema-hud {
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline: 0;
+    z-index: 2;
+    max-width: 72rem;
+    padding: calc(clamp(0.875rem, 2vh, 1.5rem) + env(safe-area-inset-top, 0px))
+      calc(var(--store-gutter) + env(safe-area-inset-right, 0px)) 0
+      calc(var(--store-gutter) + env(safe-area-inset-left, 0px));
+    margin-inline: auto;
+    pointer-events: none;
+  }
+
+  .store-maru-cinema-progress-track {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 1px;
+    overflow: hidden;
+    background-color: hsl(var(--foreground) / 0.12);
+  }
+
+  .store-maru-cinema-progress-fill {
+    position: absolute;
+    inset: 0;
+    display: block;
+    background-color: hsl(var(--foreground) / 0.58);
+    transform: scaleX(0);
+    transform-origin: left center;
+    will-change: transform;
+  }
+
+  .store-maru-cinema-caption {
+    position: absolute;
+    inset-block-end: calc(
+      clamp(1.1rem, 2.8vh, 1.85rem) +
+      env(safe-area-inset-bottom, 0px)
+    );
+    inset-inline: calc(var(--store-gutter) + env(safe-area-inset-left, 0px))
+      calc(var(--store-gutter) + env(safe-area-inset-right, 0px));
+    z-index: 2;
+    display: grid;
+    gap: 0.5rem;
+    justify-items: center;
+    text-align: center;
+    pointer-events: none;
+  }
+
+  .store-maru-cinema-title {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: clamp(0.875rem, 1.35vw, 1rem);
+    font-weight: 450;
+    line-height: 1.3;
+    color: hsl(var(--foreground) / 0.84);
+    letter-spacing: -0.01em;
+    animation: store-maru-caption-in 260ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .store-maru-cinema-pips {
+    display: flex;
+    gap: 0.35rem;
+    align-items: center;
+  }
+
+  .store-maru-cinema-pip {
+    display: block;
+    width: 0.875rem;
+    height: 1.5px;
+    background-color: hsl(var(--foreground) / 0.2);
+    transition: background-color 180ms ease;
+  }
+
+  .store-maru-cinema-pip[data-active="true"] {
+    background-color: hsl(var(--foreground) / 0.86);
+  }
+
+  @keyframes store-maru-caption-in {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 0.3rem, 0);
+    }
+    to {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+  }
+
   @media (prefers-reduced-motion: reduce) {
-    .store-stand-stage-pop {
+    .store-cinema-runway,
+    .store-maru-cinema-runway {
+      height: auto;
+    }
+
+    .store-cinema-runway .store-cinema-sticky,
+    .store-maru-cinema-runway .store-maru-cinema-sticky {
+      position: relative;
+      height: min(76svh, 46rem);
+    }
+
+    .store-stand-stage-pop,
+    .store-maru-cinema-title {
       animation: none;
+    }
+
+    .store-cinema-poster,
+    .store-maru-cinema-poster,
+    .store-maru-cinema-pip {
+      transition: none;
     }
 
     .store-stand-hero-visual .store-media-stage {
@@ -874,6 +1185,7 @@ body:has(
       clip-path: none;
       transform: none;
       transition: none;
+      animation: none;
     }
   }
 }

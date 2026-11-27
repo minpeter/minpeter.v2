@@ -48,22 +48,17 @@ describe("Maru60 naming and historical turntable assets", () => {
   it("uses the canonical Maru60 slug without claiming printed draft fit", () => {
     const product = getProduct("maru60");
     expect(product?.name).toBe("Maru60");
-    expect(product?.sourceHref).toBe(
-      "https://github.com/minpeter/maru60/pull/1"
-    );
+    expect(product?.sourceHref).toBe("https://github.com/minpeter/maru60");
     expect(product?.downloadHref).toBe(
-      "https://github.com/minpeter/maru60/tree/hhkb-topcase-wrist-rest/models"
+      "https://github.com/minpeter/maru60/tree/main/models"
     );
     for (const locale of ["en", "ko", "ja"]) {
       const messages = JSON.parse(
         readFileSync(new URL(`./i18n/${locale}.json`, import.meta.url), "utf8")
       );
       expect(messages.products.items.rule60.description).toContain("MARU60");
-      expect(messages.products.items.rule60.details.status).toContain("v7.15");
       expect(messages.products.items.rule60.details.status).toContain("PCB");
-      expect(messages.products.items.rule60.details.status).toContain(
-        "a552798"
-      );
+      expect(messages.products.items.rule60.details.status).toContain("v7.17");
       expect(messages.products.customization.transparentNote).toContain("PCB");
       expect(messages.products.items.rule60.details.status).not.toContain(
         "v0.10"
