@@ -70,11 +70,12 @@ test("keeps 12 lightweight outer angle envelopes tied to the exact source frames
   }
 });
 
-test("uses opaque retail contours instead of the smaller transparent side profile", () => {
+test("keeps 12 opaque retail outer angle envelopes tied to the canonical retail source frames", () => {
   expect(silhouette.outline).toEqual(spinOutlines.frame_000);
-  expect(retailOutlines.frame_090.polygons).not.toEqual(
-    spinOutlines.frame_090.polygons
+  expect(retailSources.frame_090.source).toContain(
+    "/v717-pcb/bone-white--nicepbt-bow-retail/"
   );
+  expect(retailSources.frame_090.source).not.toBe(spinSources.frame_090.source);
   expect(JSON.stringify(retailOutlines).length).toBeLessThan(3000);
   for (const [key, shape] of Object.entries(retailOutlines)) {
     const source = retailSources[key as keyof typeof retailSources];

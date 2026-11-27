@@ -1,3 +1,4 @@
+import type { Viewport } from "next";
 import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 import type { ReactNode } from "react";
@@ -6,6 +7,11 @@ import { Suspense } from "react";
 import { LanguageSelector } from "@/components/language-selector";
 import { StoreThemeColor } from "@/components/store-theme-color";
 import { Link } from "@/shared/i18n/navigation";
+
+export const viewport: Viewport = {
+  colorScheme: "dark",
+  viewportFit: "cover",
+};
 
 export default async function ProductsLayout({
   children,

@@ -1,0 +1,92 @@
+{
+  "id": "white-marble--nicepbt-purple-chonkers-retail",
+  "housingId": "white-marble",
+  "keycapId": "nicepbt-purple-chonkers-retail",
+  "orderable": false,
+  "frames": [
+    {
+      "angleDegrees": 0,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "f3e93f616c7c700511492913464dc833640c17d91e48eb7c0fa966fadd2d77ac",
+      "src": "/assets/products/maru60/assembled/v717-pcb/white-marble--nicepbt-purple-chonkers-retail/frame_000.webp"
+    },
+    {
+      "angleDegrees": 30,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "7d63ec9b7e7d2dedb839b37df244b497975dfb96e92a3cd53add405065fe025a",
+      "src": "/assets/products/maru60/assembled/v717-pcb/white-marble--nicepbt-purple-chonkers-retail/frame_030.webp"
+    },
+    {
+      "angleDegrees": 60,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "1f8b068324f2c3bd122eca6426e3f8373909523778ae60bc0f8d00870eee3c2f",
+      "src": "/assets/products/maru60/assembled/v717-pcb/white-marble--nicepbt-purple-chonkers-retail/frame_060.webp"
+    },
+    {
+      "angleDegrees": 90,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "706a4f0375e53c6be5058c052ec14a0e27d7a5520917a257bbe7dec9191cb1d9",
+      "src": "/assets/products/maru60/assembled/v717-pcb/white-marble--nicepbt-purple-chonkers-retail/frame_090.webp"
+    },
+    {
+      "angleDegrees": 120,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "e0f8a84c2a8c4d3b606cedc54bf4fddb41b6d2ef74766bdc04efdd0c12c3b63e",
+      "src": "/assets/products/maru60/assembled/v717-pcb/white-marble--nicepbt-purple-chonkers-retail/frame_120.webp"
+    },
+    {
+      "angleDegrees": 150,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "964ca26b610cbbf276434f216e4804cc20d6439741ba0bcf425c52beb71624be",
+      "src": "/assets/products/maru60/assembled/v717-pcb/white-marble--nicepbt-purple-chonkers-retail/frame_150.webp"
+    },
+    {
+      "angleDegrees": 180,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "4d25146e53722e21b411c3ced06de3fff9d2dec9994e65584fab5b4285c47264",
+      "src": "/assets/products/maru60/assembled/v717-pcb/white-marble--nicepbt-purple-chonkers-retail/frame_180.webp"
+    },
+    {
+      "angleDegrees": 210,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "dd5bb2e7b0eaaf14ca5bda257940b8b23d0654cbbe07c8aa7ef99ab2b21c3680",
+      "src": "/assets/products/maru60/assembled/v717-pcb/white-marble--nicepbt-purple-chonkers-retail/frame_210.webp"
+    },
+    {
+      "angleDegrees": 240,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "7c67c6b3f9a2f04357faaacb97b105d01216dffc9b1309c976261f959ed50174",
+      "src": "/assets/products/maru60/assembled/v717-pcb/white-marble--nicepbt-purple-chonkers-retail/frame_240.webp"
+    },
+    {
+      "angleDegrees": 270,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "b0d3e157bb41240f1c8db2927bb722836a0a455f75840829cba7e56f61fb3146",
+      "src": "/assets/products/maru60/assembled/v717-pcb/white-marble--nicepbt-purple-chonkers-retail/frame_270.webp"
+    },
+    {
+      "angleDegrees": 300,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "fc92d709b1fe54028cf00ef9efc404e8abb13f7c33d29e4b6726bf46448ce970",
+      "src": "/assets/products/maru60/assembled/v717-pcb/white-marble--nicepbt-purple-chonkers-retail/frame_300.webp"
+    },
+    {
+      "angleDegrees": 330,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "f20483b821a766df14e3c982dcfdf0d8d886a8370b3888adb8b302ca2e1656dd",
+      "src": "/assets/products/maru60/assembled/v717-pcb/white-marble--nicepbt-purple-chonkers-retail/frame_330.webp"
+    }
+  ]
+}

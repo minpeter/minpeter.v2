@@ -1,0 +1,92 @@
+{
+  "id": "lilac-purple--nicepbt-noel-latin-retail",
+  "housingId": "lilac-purple",
+  "keycapId": "nicepbt-noel-latin-retail",
+  "orderable": false,
+  "frames": [
+    {
+      "angleDegrees": 0,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "8a820c4f0b1455baadc7d2826a827c6e04ef9a9e357ae4d1ea90878663cbc862",
+      "src": "/assets/products/maru60/assembled/v717-pcb/lilac-purple--nicepbt-noel-latin-retail/frame_000.webp"
+    },
+    {
+      "angleDegrees": 30,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "9ae7dac35ec62d595cf57925f19c8ee550d6c817af6b8399211a45349026c511",
+      "src": "/assets/products/maru60/assembled/v717-pcb/lilac-purple--nicepbt-noel-latin-retail/frame_030.webp"
+    },
+    {
+      "angleDegrees": 60,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "8411bed1d772c8043c69aa2aadecbe16f0b7c4996a379f33e892eff3892ba614",
+      "src": "/assets/products/maru60/assembled/v717-pcb/lilac-purple--nicepbt-noel-latin-retail/frame_060.webp"
+    },
+    {
+      "angleDegrees": 90,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "f714255a150323f7a929b5c0f069b7d3ecee4efd547b63413c12b3e189cfb4ac",
+      "src": "/assets/products/maru60/assembled/v717-pcb/lilac-purple--nicepbt-noel-latin-retail/frame_090.webp"
+    },
+    {
+      "angleDegrees": 120,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "8fc426be9a53babbfb3a295ab5bbf4f7e8908dad0092b64477f0e7823f593f98",
+      "src": "/assets/products/maru60/assembled/v717-pcb/lilac-purple--nicepbt-noel-latin-retail/frame_120.webp"
+    },
+    {
+      "angleDegrees": 150,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "262aa87b0cf79c07a55b099b21c733fc8c9b7d639b0452e1e41b764f9677e424",
+      "src": "/assets/products/maru60/assembled/v717-pcb/lilac-purple--nicepbt-noel-latin-retail/frame_150.webp"
+    },
+    {
+      "angleDegrees": 180,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "f43667c74632e670a83d57a275f9b266c85935544987ba6e7a80058afd387d1a",
+      "src": "/assets/products/maru60/assembled/v717-pcb/lilac-purple--nicepbt-noel-latin-retail/frame_180.webp"
+    },
+    {
+      "angleDegrees": 210,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "4c355bd8a4c8cc341491324727ff417f3fbbc3516b63a4924907366c67365cde",
+      "src": "/assets/products/maru60/assembled/v717-pcb/lilac-purple--nicepbt-noel-latin-retail/frame_210.webp"
+    },
+    {
+      "angleDegrees": 240,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "3c63426e3fc6aed3234882c3ecd808be4172474ef04aca1fda474bcd0f993235",
+      "src": "/assets/products/maru60/assembled/v717-pcb/lilac-purple--nicepbt-noel-latin-retail/frame_240.webp"
+    },
+    {
+      "angleDegrees": 270,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "eaae2bb3546cf3d96d1a578074956716192262b4b969393577c79a65ae94205d",
+      "src": "/assets/products/maru60/assembled/v717-pcb/lilac-purple--nicepbt-noel-latin-retail/frame_270.webp"
+    },
+    {
+      "angleDegrees": 300,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "9816203ea3eb5ef421249469e9f6fe75fda40e70fd0a938705ebba13d2cdc73d",
+      "src": "/assets/products/maru60/assembled/v717-pcb/lilac-purple--nicepbt-noel-latin-retail/frame_300.webp"
+    },
+    {
+      "angleDegrees": 330,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "64316561ad40006f76fe45d5106cb31b09135dfe11e22ce0cdb0974f2c7aac74",
+      "src": "/assets/products/maru60/assembled/v717-pcb/lilac-purple--nicepbt-noel-latin-retail/frame_330.webp"
+    }
+  ]
+}

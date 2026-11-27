@@ -1,0 +1,92 @@
+{
+  "id": "transparent--inventor",
+  "housingId": "transparent",
+  "keycapId": "inventor",
+  "orderable": false,
+  "frames": [
+    {
+      "angleDegrees": 0,
+      "height": 1536,
+      "width": 1024,
+      "src": "/assets/products/maru60/assembled/v717-pcb/transparent--inventor/frame_000.webp",
+      "sha256": "7bf61c6565cceb477618891d4f587992c76a45861d14738f8854c68fde2ed3e8"
+    },
+    {
+      "angleDegrees": 30,
+      "height": 1536,
+      "width": 1024,
+      "src": "/assets/products/maru60/assembled/v717-pcb/transparent--inventor/frame_030.webp",
+      "sha256": "96ebd9b3b02ae6d75d31f1e2f58c2cf1424fc9d3931ac108b7c96fc961c55c89"
+    },
+    {
+      "angleDegrees": 60,
+      "height": 1536,
+      "width": 1024,
+      "src": "/assets/products/maru60/assembled/v717-pcb/transparent--inventor/frame_060.webp",
+      "sha256": "68d7468d81983dfbd54c650f0eb4c0053e2a121edc56573762d6e6c8ff7c61a7"
+    },
+    {
+      "angleDegrees": 90,
+      "height": 1536,
+      "width": 1024,
+      "src": "/assets/products/maru60/assembled/v717-pcb/transparent--inventor/frame_090.webp",
+      "sha256": "139264e4c4d1190cd5ec08debb0bfbe95d2e47531d5a4ffaabb12c3c22b4e8ba"
+    },
+    {
+      "angleDegrees": 120,
+      "height": 1536,
+      "width": 1024,
+      "src": "/assets/products/maru60/assembled/v717-pcb/transparent--inventor/frame_120.webp",
+      "sha256": "404b8f832c1c7daf2c1a9d3d08115dedb77f007242a8bda5e3d3dd5ff1cdfee7"
+    },
+    {
+      "angleDegrees": 150,
+      "height": 1536,
+      "width": 1024,
+      "src": "/assets/products/maru60/assembled/v717-pcb/transparent--inventor/frame_150.webp",
+      "sha256": "f22d09a40fd57d7977cdea027b630180ac5a496567b8d8b17b1dad2b27919dee"
+    },
+    {
+      "angleDegrees": 180,
+      "height": 1536,
+      "width": 1024,
+      "src": "/assets/products/maru60/assembled/v717-pcb/transparent--inventor/frame_180.webp",
+      "sha256": "d4a7e715d2c99c876d88cb37f750f257709f75287b16f5b105bf38aef788df75"
+    },
+    {
+      "angleDegrees": 210,
+      "height": 1536,
+      "width": 1024,
+      "src": "/assets/products/maru60/assembled/v717-pcb/transparent--inventor/frame_210.webp",
+      "sha256": "85b6fbd495a90eb2fb642e29bdc8125e843645992c64992d489a08a03da8acf1"
+    },
+    {
+      "angleDegrees": 240,
+      "height": 1536,
+      "width": 1024,
+      "src": "/assets/products/maru60/assembled/v717-pcb/transparent--inventor/frame_240.webp",
+      "sha256": "748b142cb1e2f85c670452ba56716d5e3fd0e3a8cc55f5d14a7391853391488a"
+    },
+    {
+      "angleDegrees": 270,
+      "height": 1536,
+      "width": 1024,
+      "src": "/assets/products/maru60/assembled/v717-pcb/transparent--inventor/frame_270.webp",
+      "sha256": "69c4820da86750c2b5e93b80634df661c153170092732d8cf01c640cca13b8cd"
+    },
+    {
+      "angleDegrees": 300,
+      "height": 1536,
+      "width": 1024,
+      "src": "/assets/products/maru60/assembled/v717-pcb/transparent--inventor/frame_300.webp",
+      "sha256": "357ab3b2e6f30db6e918c4008f6f46556d48172e06546669d956f9ae5b9cef35"
+    },
+    {
+      "angleDegrees": 330,
+      "height": 1536,
+      "width": 1024,
+      "src": "/assets/products/maru60/assembled/v717-pcb/transparent--inventor/frame_330.webp",
+      "sha256": "f9e9cd96451dd4e428da982077acd14dfb6dc9061cc0ffa98beeea2566240952"
+    }
+  ]
+}

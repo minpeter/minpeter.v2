@@ -1,0 +1,92 @@
+{
+  "id": "lilac-purple--pbtfans-wob-retail",
+  "housingId": "lilac-purple",
+  "keycapId": "pbtfans-wob-retail",
+  "orderable": false,
+  "frames": [
+    {
+      "angleDegrees": 0,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "451f8f31ef4d63dbda377f57f52209a5eaa01d419747624e5271ec35061739a9",
+      "src": "/assets/products/maru60/assembled/v717-pcb/lilac-purple--pbtfans-wob-retail/frame_000.webp"
+    },
+    {
+      "angleDegrees": 30,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "9f99182d3bfc39d8b6b38e6c94791ece04d3f8efb596704ae0d738591d2b2f22",
+      "src": "/assets/products/maru60/assembled/v717-pcb/lilac-purple--pbtfans-wob-retail/frame_030.webp"
+    },
+    {
+      "angleDegrees": 60,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "7425ff73d2eecfb854a10bba0cfbe217d4e27426960683695ff7f31afc58346b",
+      "src": "/assets/products/maru60/assembled/v717-pcb/lilac-purple--pbtfans-wob-retail/frame_060.webp"
+    },
+    {
+      "angleDegrees": 90,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "8462a73c90ab563825c0b0b591b7c9ad51c0c656649a2d931283a0784143acf2",
+      "src": "/assets/products/maru60/assembled/v717-pcb/lilac-purple--pbtfans-wob-retail/frame_090.webp"
+    },
+    {
+      "angleDegrees": 120,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "8191128cbbe7c6d1a8077832115bc9725fa04bad19a6b025d99ee3402f05ec64",
+      "src": "/assets/products/maru60/assembled/v717-pcb/lilac-purple--pbtfans-wob-retail/frame_120.webp"
+    },
+    {
+      "angleDegrees": 150,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "e651c5fec40acd2217e25535ea0d6f6607e5423425ace14ad92be8502449aced",
+      "src": "/assets/products/maru60/assembled/v717-pcb/lilac-purple--pbtfans-wob-retail/frame_150.webp"
+    },
+    {
+      "angleDegrees": 180,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "4c747e31702f8174569cc5b1de4c355d51238710bc76e4d88f36253e915af787",
+      "src": "/assets/products/maru60/assembled/v717-pcb/lilac-purple--pbtfans-wob-retail/frame_180.webp"
+    },
+    {
+      "angleDegrees": 210,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "5bf753fd75065c8dd76ec1927d38cb487174ad46c835bd26cf23c84e6c2dfcee",
+      "src": "/assets/products/maru60/assembled/v717-pcb/lilac-purple--pbtfans-wob-retail/frame_210.webp"
+    },
+    {
+      "angleDegrees": 240,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "0d984994e7ae955ea688c125f4afa2ef9534491a9216b23dc9e022753a57d829",
+      "src": "/assets/products/maru60/assembled/v717-pcb/lilac-purple--pbtfans-wob-retail/frame_240.webp"
+    },
+    {
+      "angleDegrees": 270,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "5df2880ea3c382bce2fa6ae5b07371f396b95b13d708006eebfcb64497ea0285",
+      "src": "/assets/products/maru60/assembled/v717-pcb/lilac-purple--pbtfans-wob-retail/frame_270.webp"
+    },
+    {
+      "angleDegrees": 300,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "e595999626207b9a19bdfa26ee2279ea74788426f4990616c690d6e4866c4f43",
+      "src": "/assets/products/maru60/assembled/v717-pcb/lilac-purple--pbtfans-wob-retail/frame_300.webp"
+    },
+    {
+      "angleDegrees": 330,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "9cdc9e8ee48fc06ac2176e43598086c0212090bd0f7a5fbaec765242ebe44564",
+      "src": "/assets/products/maru60/assembled/v717-pcb/lilac-purple--pbtfans-wob-retail/frame_330.webp"
+    }
+  ]
+}

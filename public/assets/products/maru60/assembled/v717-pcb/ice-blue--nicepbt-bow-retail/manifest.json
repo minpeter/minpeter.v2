@@ -1,0 +1,92 @@
+{
+  "id": "ice-blue--nicepbt-bow-retail",
+  "housingId": "ice-blue",
+  "keycapId": "nicepbt-bow-retail",
+  "orderable": false,
+  "frames": [
+    {
+      "angleDegrees": 0,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "19fd15fa6b45b304841b2ee8a60b468ca6ba5997edd42d447279016699b7224f",
+      "src": "/assets/products/maru60/assembled/v717-pcb/ice-blue--nicepbt-bow-retail/frame_000.webp"
+    },
+    {
+      "angleDegrees": 30,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "43207e8f17f5eb5daeb51e82c9f9c8639f727a46790cfacc361749e48a69fa31",
+      "src": "/assets/products/maru60/assembled/v717-pcb/ice-blue--nicepbt-bow-retail/frame_030.webp"
+    },
+    {
+      "angleDegrees": 60,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "3b7f2d50a6d39169ed84c17c0d738519e83029440dacad2f0a8afbed32b73398",
+      "src": "/assets/products/maru60/assembled/v717-pcb/ice-blue--nicepbt-bow-retail/frame_060.webp"
+    },
+    {
+      "angleDegrees": 90,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "13fb738c7c02bcdcc94bae6faf5000cdf6fa6aff6a243ae9c8768b70932db4f7",
+      "src": "/assets/products/maru60/assembled/v717-pcb/ice-blue--nicepbt-bow-retail/frame_090.webp"
+    },
+    {
+      "angleDegrees": 120,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "49f3dfe19152a9b44b06484468836215bbbc9983d49170239735b5d636f75694",
+      "src": "/assets/products/maru60/assembled/v717-pcb/ice-blue--nicepbt-bow-retail/frame_120.webp"
+    },
+    {
+      "angleDegrees": 150,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "1d52a7cda1e7892bd0d8d0c03149860aa0496c490cf145b338f4f284098a9a08",
+      "src": "/assets/products/maru60/assembled/v717-pcb/ice-blue--nicepbt-bow-retail/frame_150.webp"
+    },
+    {
+      "angleDegrees": 180,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "a4644eda3dd788207b2c94f3feb39af8da517dde16ece990dc5125f038e951b9",
+      "src": "/assets/products/maru60/assembled/v717-pcb/ice-blue--nicepbt-bow-retail/frame_180.webp"
+    },
+    {
+      "angleDegrees": 210,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "74949db06e5da0e1b9ea647119cb82645bb0240f3ae3e215236918666aa0adef",
+      "src": "/assets/products/maru60/assembled/v717-pcb/ice-blue--nicepbt-bow-retail/frame_210.webp"
+    },
+    {
+      "angleDegrees": 240,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "7ed789a63d3867e3a5a8ced7f023184caeacce054c0a720d6ef71eb8af9a49f6",
+      "src": "/assets/products/maru60/assembled/v717-pcb/ice-blue--nicepbt-bow-retail/frame_240.webp"
+    },
+    {
+      "angleDegrees": 270,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "c2e0d369f9613f232fa488d3540b16df55dc82a78f20156c6ced090d0fe4af88",
+      "src": "/assets/products/maru60/assembled/v717-pcb/ice-blue--nicepbt-bow-retail/frame_270.webp"
+    },
+    {
+      "angleDegrees": 300,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "8537a1892b636c7d8d755b8c4ab1d79a758180937f1b90b62d1be6200c3bd574",
+      "src": "/assets/products/maru60/assembled/v717-pcb/ice-blue--nicepbt-bow-retail/frame_300.webp"
+    },
+    {
+      "angleDegrees": 330,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "2012b99a5fb62b29c9090ea3d162042654a1b1f93c7bf599a8ad8689277733ae",
+      "src": "/assets/products/maru60/assembled/v717-pcb/ice-blue--nicepbt-bow-retail/frame_330.webp"
+    }
+  ]
+}

@@ -1,0 +1,92 @@
+{
+  "id": "dark-green--pbtfans-wob-retail",
+  "housingId": "dark-green",
+  "keycapId": "pbtfans-wob-retail",
+  "orderable": false,
+  "frames": [
+    {
+      "angleDegrees": 0,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "2d2ea94daf207a4ffdd9a38c758648bd79ace160b888bb4952577244d1599c89",
+      "src": "/assets/products/maru60/assembled/v717-pcb/dark-green--pbtfans-wob-retail/frame_000.webp"
+    },
+    {
+      "angleDegrees": 30,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "d5c51a49447129bcda2154d490d7a21fb4fdcf00c1023d2a586b6c2132d2ac1a",
+      "src": "/assets/products/maru60/assembled/v717-pcb/dark-green--pbtfans-wob-retail/frame_030.webp"
+    },
+    {
+      "angleDegrees": 60,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "5444576b2ac53b73e832b0882c7a9ce4f26413caba0d1a9dad1b149eb421a634",
+      "src": "/assets/products/maru60/assembled/v717-pcb/dark-green--pbtfans-wob-retail/frame_060.webp"
+    },
+    {
+      "angleDegrees": 90,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "c27a2731e77d679b41f8a34d8fe4e33b448260980a20109a4fbbffa61e45f749",
+      "src": "/assets/products/maru60/assembled/v717-pcb/dark-green--pbtfans-wob-retail/frame_090.webp"
+    },
+    {
+      "angleDegrees": 120,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "e9d20a35ee53337cb2fb2d9fd79162714a95e00614eb5351949aa9febfba8a7a",
+      "src": "/assets/products/maru60/assembled/v717-pcb/dark-green--pbtfans-wob-retail/frame_120.webp"
+    },
+    {
+      "angleDegrees": 150,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "8f1caae364681a6d69ec3fd7a83b3e7c8fac9994e3619669b918d31ee3580974",
+      "src": "/assets/products/maru60/assembled/v717-pcb/dark-green--pbtfans-wob-retail/frame_150.webp"
+    },
+    {
+      "angleDegrees": 180,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "411f6af18ca0526326ffde6b79626c715ecb1a66e0a3fb3dbacccd3cb4ab5df1",
+      "src": "/assets/products/maru60/assembled/v717-pcb/dark-green--pbtfans-wob-retail/frame_180.webp"
+    },
+    {
+      "angleDegrees": 210,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "303b6cc79c1ac5d5e5e2ba6439154f2764ceeb3afdbe03e1e12bcdc0cb26a336",
+      "src": "/assets/products/maru60/assembled/v717-pcb/dark-green--pbtfans-wob-retail/frame_210.webp"
+    },
+    {
+      "angleDegrees": 240,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "312dc9a59f2d87e64be10a0dde99712e3f6d57e8a221ca92bcbadeb2fd8f568a",
+      "src": "/assets/products/maru60/assembled/v717-pcb/dark-green--pbtfans-wob-retail/frame_240.webp"
+    },
+    {
+      "angleDegrees": 270,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "c38d74005710e25e65cc1ab2ac3397b8c3f6c4fbf85a6a88b8d098042f103d85",
+      "src": "/assets/products/maru60/assembled/v717-pcb/dark-green--pbtfans-wob-retail/frame_270.webp"
+    },
+    {
+      "angleDegrees": 300,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "702fa7011436e6233147bc33e2a494e668ff56b1a5adb13405e02314c930cacd",
+      "src": "/assets/products/maru60/assembled/v717-pcb/dark-green--pbtfans-wob-retail/frame_300.webp"
+    },
+    {
+      "angleDegrees": 330,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "db64e74724293670c0214b3a6ba510449a72677cfa4352ee303caaf7fb43b290",
+      "src": "/assets/products/maru60/assembled/v717-pcb/dark-green--pbtfans-wob-retail/frame_330.webp"
+    }
+  ]
+}

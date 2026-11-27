@@ -1,0 +1,92 @@
+{
+  "id": "dark-green--nicepbt-purple-chonkers-retail",
+  "housingId": "dark-green",
+  "keycapId": "nicepbt-purple-chonkers-retail",
+  "orderable": false,
+  "frames": [
+    {
+      "angleDegrees": 0,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "c66966c1d3c2df6e76f12adf78e9bb4348c4c66526e53b0f0ad17b5a3361c9ff",
+      "src": "/assets/products/maru60/assembled/v717-pcb/dark-green--nicepbt-purple-chonkers-retail/frame_000.webp"
+    },
+    {
+      "angleDegrees": 30,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "47b087ce5c5a4e354a121c8c89c0d32fcf1b45651319015416b6fe6f8d12e37b",
+      "src": "/assets/products/maru60/assembled/v717-pcb/dark-green--nicepbt-purple-chonkers-retail/frame_030.webp"
+    },
+    {
+      "angleDegrees": 60,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "bcb75340ad4e45c917836b5296b71fa7a32e55241edae20e94a2f2ae75861136",
+      "src": "/assets/products/maru60/assembled/v717-pcb/dark-green--nicepbt-purple-chonkers-retail/frame_060.webp"
+    },
+    {
+      "angleDegrees": 90,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "52056e9425eaf0624d7f1b8090cce38bbabfd4c01548be4e9c8409f8638292f4",
+      "src": "/assets/products/maru60/assembled/v717-pcb/dark-green--nicepbt-purple-chonkers-retail/frame_090.webp"
+    },
+    {
+      "angleDegrees": 120,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "e625ad84a5f7f3e8646241824f2e0997653c372718a69ca24c9659fa50abff0a",
+      "src": "/assets/products/maru60/assembled/v717-pcb/dark-green--nicepbt-purple-chonkers-retail/frame_120.webp"
+    },
+    {
+      "angleDegrees": 150,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "2521682c330a6cc6bc6e3d6d95cd082a5eb33332f7d53424393d3bdddbb7ab4f",
+      "src": "/assets/products/maru60/assembled/v717-pcb/dark-green--nicepbt-purple-chonkers-retail/frame_150.webp"
+    },
+    {
+      "angleDegrees": 180,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "c1af4f07d0cf035865e79189e5d33d0a7f50e2e858693baeb50f80653842c7ee",
+      "src": "/assets/products/maru60/assembled/v717-pcb/dark-green--nicepbt-purple-chonkers-retail/frame_180.webp"
+    },
+    {
+      "angleDegrees": 210,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "8e732a4733a7eabb4e462c32e8db84c59acd7387eeaad2b97668e969064dcd27",
+      "src": "/assets/products/maru60/assembled/v717-pcb/dark-green--nicepbt-purple-chonkers-retail/frame_210.webp"
+    },
+    {
+      "angleDegrees": 240,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "676e8518343753a60c613ec626b64c2ec3f656738ac6f0eb4c0d11b30b81c587",
+      "src": "/assets/products/maru60/assembled/v717-pcb/dark-green--nicepbt-purple-chonkers-retail/frame_240.webp"
+    },
+    {
+      "angleDegrees": 270,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "a95bbce834b6eb8465ebaa1ea43cec1e4cab420b8c853fab854a3bdfd12a444f",
+      "src": "/assets/products/maru60/assembled/v717-pcb/dark-green--nicepbt-purple-chonkers-retail/frame_270.webp"
+    },
+    {
+      "angleDegrees": 300,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "b774387ecf6ea9ac53baab8e8d35021874695dc1c8bb3eee86e283c494e1e870",
+      "src": "/assets/products/maru60/assembled/v717-pcb/dark-green--nicepbt-purple-chonkers-retail/frame_300.webp"
+    },
+    {
+      "angleDegrees": 330,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "d3c735d504ce7d98f38f30bcd5278b56260eaa669387bc7da883b4249f33060c",
+      "src": "/assets/products/maru60/assembled/v717-pcb/dark-green--nicepbt-purple-chonkers-retail/frame_330.webp"
+    }
+  ]
+}

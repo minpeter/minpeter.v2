@@ -244,15 +244,15 @@
       "rule60": {
         "variant": "HHKB 하우징 · 일체형 손목 받침",
         "license": "CC BY-NC 4.0",
-        "intro": "MARU60은 Rule 60 V3 내부 부품을 위한 독립 설계 HHKB 하우징으로, 허니컴 손목 받침을 한 몸으로 넣었습니다.",
-        "description": "MARU60은 Rule 60 V3 내부 부품을 위한 독립 설계 HHKB 하우징으로, 허니컴 손목 받침을 한 몸으로 넣었습니다. 불투명 렌더는 v7.15 상판과 현행 유선 하판 기준입니다. 투명 Inventor는 최신 외피(a552798)를 반영한 외관 근사이며 PCB·스위치·플레이트·가스켓·캐치 내부를 생략했습니다. INKC STUDIO의 제품이 아닙니다.",
+        "intro": "Rule 60 V3용 일체형 손목 받침 HHKB 하우징.",
+        "description": "MARU60 — Rule 60 V3 내부 부품용 일체형 허니컴 손목 받침 HHKB 하우징. INKC STUDIO의 제품이 아닙니다.",
         "details": {
-          "size": "현재 상판 외곽: 298.1 × 198.3 mm; 전체 조립 치수와 실물 결합은 아직 검증되지 않았습니다",
-          "joints": "상판은 중앙 도브테일 3개로 연결하는 분할 구조, 초안 하판은 슬라이딩 도브테일 5개로 연결",
-          "reuse": "기존 PC 가스켓 플레이트, 실리콘 가스켓 캡, 볼 캐치, PCB, 배터리와 무게추를 기준으로 설계",
-          "print": "v7.15는 실물 제작 2차용으로 지정된 설계입니다. 출력 완료·조립 결과는 확인되지 않았으므로 전체 출력 전 결합 테스트 조각으로 확인하세요",
-          "status": "프로토타입 — 불투명은 v7.15 기준, 투명 Inventor는 최신 외피(a552798)의 외관 근사입니다. 투명 렌더의 PCB·스위치·플레이트·가스켓·캐치 내부는 생략했습니다. CAD 검사는 실물 체결·조립 검증이 아닙니다.",
-          "license": "CC BY-NC 4.0 — 개인·비상업 용도로만 출력하고 수정할 수 있습니다. 출력물이나 파일 판매는 허용하지 않습니다."
+          "size": "298.1 × 198.3 mm (상판 외곽 · 실물 조립 미검증)",
+          "joints": "상판 도브테일 ×3 · 하판 슬라이딩 도브테일 ×5",
+          "reuse": "Rule 60 V3 내부 부품 기준 (플레이트 · PCB · 무게추)",
+          "print": "v7.15 2차 제작용 · 전체 출력 전 결합 테스트 권장",
+          "status": "프로토타입 · v7.17 전 조합 (RP2350A PCB·플레이트·USB-C 포함, 스위치 생략)",
+          "license": "CC BY-NC 4.0 · 개인·비상업 용도 (판매 불가)"
         }
       },
       "skateboardStand": {
@@ -301,7 +301,7 @@
         "white-marble": "화이트 마블"
       },
       "cinema": {
-        "label": "3D 스크롤 시퀀스"
+        "label": "스케이트보드 스탠드에 8인치 데크가 20도 슬롯으로 거치되는 3D 시퀀스"
       },
       "showcase": {
         "heading": "사용 예시",
@@ -344,24 +344,24 @@
       "showcase": "개인 키보드 자랑",
       "customize": "키캡 조합 보기",
       "showcaseNote": "Inventor · 개인 전시용 · 주문 불가",
-      "configurationNote": "하우징과 키캡을 골라 외형을 살펴보세요. 투명 × Inventor는 기존 개인 키보드입니다. 여기서는 주문할 수 없습니다.",
+      "configurationNote": "3D 외형 미리보기 · 주문 불가 (투명 × Inventor는 개인 전시용)",
       "selected": "{housing} × {keycaps}",
       "previewLabel": "선택한 조합의 재구성 렌더 — 드래그하거나 화살표 키로 30°씩 회전",
-      "pending": "아직 준비되지 않은 조합입니다",
-      "pendingDetail": "이 조합의 이미지는 아직 준비 중입니다. 다른 조합의 이미지를 대신 보여주지 않습니다.",
+      "pending": "렌더 준비 중",
+      "pendingDetail": "이 조합의 이미지를 준비 중입니다.",
       "kitQA": "키 하나씩 검수하고 전체 각도 검수를 통과해야 렌더를 표시합니다.",
-      "loading": "선택한 조합을 불러오는 중…",
+      "loading": "불러오는 중…",
       "ready": "준비 완료",
-      "loadError": "선택한 렌더를 불러오지 못했습니다.",
-      "retry": "이 렌더 다시 불러오기",
+      "loadError": "렌더를 불러오지 못했습니다.",
+      "retry": "다시 불러오기",
       "housing": "하우징",
       "keycaps": "키캡",
       "fullRetailSet": "풀세트 · 개인 로고 키 없음",
-      "geometryPrevious": "이 미리보기는 이전 하우징 버전이며, 초안 하판을 결합한 렌더가 아닙니다.",
-      "geometryAssembled": "외관 렌더: 불투명은 v7.15 기준, 투명 Inventor는 최신 외피(a552798) 기준이며 내부 부품을 생략했습니다. 실물 체결·조립은 검증되지 않았습니다.",
-      "approximation": "색상·표면 질감·각인은 외형을 근사한 표현입니다. 실제 출력 색상이나 키캡의 물리적 호환성을 보장하지 않으며, 렌더는 주문 또는 재고 확인이 아닙니다.",
-      "materialSource": "제조사 색상 자료",
-      "keycapSource": "제조사 키캡 자료",
+      "geometryPrevious": "이전 하우징 버전 기준 렌더",
+      "geometryAssembled": "v7.17 (RP2350A PCB·플레이트·USB-C 포함) 기준 · 실물 조립 미검증",
+      "approximation": "3D 렌더 근사 · 실물 색감 및 호환성 차이 가능",
+      "materialSource": "색상 자료",
+      "keycapSource": "키캡 자료",
       "housingNames": {
         "bone-white": "본 화이트",
         "ash-gray": "애쉬 그레이",
@@ -372,16 +372,36 @@
         "white-marble": "화이트 마블",
         "transparent": "투명"
       },
-      "partial": "일부 각도를 불러오지 못했어요. 준비된 가장 가까운 각도로 표시합니다. 불러오기를 다시 시도할 수 있어요.",
-      "marbleNote": "PLA Marble 13103: 따뜻한 흰색 바탕에 작고 불규칙한 회색 입자가 있는 소재입니다. 색상 견본은 제조사 기준 바탕색이며 실제 출력 질감을 나타내지는 않습니다.",
-      "transparentNote": "반투명 PETG 개인 키보드의 외형을 근사한 표현으로, PCB·스위치·플레이트·가스켓·캐치 내부는 생략했습니다. 내부 구조나 실물 조립 검증을 의미하지 않습니다. Bambu Lab PLA 색상이나 새로운 판매용 소재가 아닙니다.",
-      "personalHousing": "기존 반투명 PETG · 외형 근사",
-      "inventorNote": "개인 로고 키가 있는 기존 키캡",
+      "partial": "일부 각도를 불러오지 못했어요.",
+      "marbleNote": "PLA Marble 13103 · 회색 입자 혼합",
+      "transparentNote": "반투명 PETG · RP2350A PCB·플레이트·USB-C·황동 인서트 포함 (스위치 생략)",
+      "personalHousing": "반투명 PETG · 외관 근사",
+      "inventorNote": "개인 로고 키 포함",
       "pairedPersonal": "투명 × Inventor · 주문 불가",
       "pairedRetail": "함께 선택: {housing} × {keycaps}",
-      "unsupported": "지원하지 않는 조합입니다",
-      "unsupportedDetail": "투명 하우징과 Inventor 키캡은 함께 선택할 수 있습니다. 둘을 함께 선택하거나 다른 하우징과 키캡을 골라 주세요. 다른 조합의 이미지를 대신 보여주지 않습니다.",
-      "detailsLabel": "제품 정보 · 소재"
+      "unsupported": "지원하지 않는 조합",
+      "unsupportedDetail": "투명 하우징과 Inventor 키캡은 함께 선택해야 합니다.",
+      "detailsLabel": "스펙"
+    },
+    "maru60Cinema": {
+      "label": "MARU60 3D 스크롤 시네마: 6도 프로파일, 브러시드 스틸 백플레이트와 7개 범폰, 6층 조립 구조, 표면 질감, 8종 하우징·키캡 라인업",
+      "beats": {
+        "profileFront": "6° 유니바디 · Charcoal",
+        "profileUsb": "매립형 USB-C",
+        "profileBackplate": "브러시드 스틸 · 3M 범폰 7×",
+        "assemblyExploded": "6층 개스킷 구조",
+        "assemblySnap": "4분할 도브테일 결합",
+        "assemblyHero": "Bone White · Retro Programmer",
+        "surfaceMacro": "Dark Green · NicePBT BoW",
+        "lineupDarkGreen": "Dark Green · NicePBT BoW",
+        "lineupIceBlue": "Ice Blue · NicePBT Noel",
+        "lineupCharcoal": "Charcoal · PBTfans WoB",
+        "lineupBoneWhite": "Bone White · Retro Programmer",
+        "lineupTransparent": "Transparent · Inventor",
+        "lineupAshGray": "Ash Gray · PBTfans WoB",
+        "lineupLilacPurple": "Lilac Purple · Purple Chonkers",
+        "lineupWhiteMarble": "White Marble · NicePBT BoW"
+      }
     }
   },
   "modCodeBlock": {

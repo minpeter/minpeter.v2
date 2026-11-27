@@ -1,0 +1,92 @@
+{
+  "id": "charcoal--nicepbt-bow-retail",
+  "housingId": "charcoal",
+  "keycapId": "nicepbt-bow-retail",
+  "orderable": false,
+  "frames": [
+    {
+      "angleDegrees": 0,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "d681e03376b8ebeba41f2498888b5a9d983a1d0ffce09fee322a8c40b6f26e60",
+      "src": "/assets/products/maru60/assembled/v717-pcb/charcoal--nicepbt-bow-retail/frame_000.webp"
+    },
+    {
+      "angleDegrees": 30,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "9eb35b9e9177916b75d6ccd1f9e353cefd8af1804c431d915dbe39d0c2c0b82c",
+      "src": "/assets/products/maru60/assembled/v717-pcb/charcoal--nicepbt-bow-retail/frame_030.webp"
+    },
+    {
+      "angleDegrees": 60,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "537ec9b31626c4e159f211deb80aa0e5b245217d44e13ef26594d964d84a5b23",
+      "src": "/assets/products/maru60/assembled/v717-pcb/charcoal--nicepbt-bow-retail/frame_060.webp"
+    },
+    {
+      "angleDegrees": 90,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "6f3a57b682a8275a1d179df029ba70e1630fc06712e67bc3ecaebd88dfe71cb3",
+      "src": "/assets/products/maru60/assembled/v717-pcb/charcoal--nicepbt-bow-retail/frame_090.webp"
+    },
+    {
+      "angleDegrees": 120,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "ca0c889a04b812db15ddc815ae953c6e3f1dec32d85c5de57208b0da99fa1c1d",
+      "src": "/assets/products/maru60/assembled/v717-pcb/charcoal--nicepbt-bow-retail/frame_120.webp"
+    },
+    {
+      "angleDegrees": 150,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "db2c78f2215132bfa7d234ade65224fd78477c8921e974651af928ac629cd3fe",
+      "src": "/assets/products/maru60/assembled/v717-pcb/charcoal--nicepbt-bow-retail/frame_150.webp"
+    },
+    {
+      "angleDegrees": 180,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "495b9e15913ad4334cd378faa9a254daa8e33b30155d97bab9a43fc2e9edd904",
+      "src": "/assets/products/maru60/assembled/v717-pcb/charcoal--nicepbt-bow-retail/frame_180.webp"
+    },
+    {
+      "angleDegrees": 210,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "f7cbf6aba1433367f6fb28f4a4ccc5956f30a4012cb47d2ac01b5fbb4a6c281b",
+      "src": "/assets/products/maru60/assembled/v717-pcb/charcoal--nicepbt-bow-retail/frame_210.webp"
+    },
+    {
+      "angleDegrees": 240,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "420f68e6b8b0cc17311bfd60a2b768065ca6f2a12af37dccd3458a764676537d",
+      "src": "/assets/products/maru60/assembled/v717-pcb/charcoal--nicepbt-bow-retail/frame_240.webp"
+    },
+    {
+      "angleDegrees": 270,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "9f6e9b10d4095c21bffe720647d0ee9dc4318719a7ae515a5fab84d3f404e867",
+      "src": "/assets/products/maru60/assembled/v717-pcb/charcoal--nicepbt-bow-retail/frame_270.webp"
+    },
+    {
+      "angleDegrees": 300,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "509f8975e8cdb2e80d2de1b2cfb0457fe24b82d3157c94a27e67fe29d39f3e49",
+      "src": "/assets/products/maru60/assembled/v717-pcb/charcoal--nicepbt-bow-retail/frame_300.webp"
+    },
+    {
+      "angleDegrees": 330,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "8a95f0cd5985c98ff84c58e0b40066164e13fbf72c727ef6b7a0623cc7ef4ad3",
+      "src": "/assets/products/maru60/assembled/v717-pcb/charcoal--nicepbt-bow-retail/frame_330.webp"
+    }
+  ]
+}

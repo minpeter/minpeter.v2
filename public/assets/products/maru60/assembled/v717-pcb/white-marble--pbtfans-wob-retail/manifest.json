@@ -1,0 +1,92 @@
+{
+  "id": "white-marble--pbtfans-wob-retail",
+  "housingId": "white-marble",
+  "keycapId": "pbtfans-wob-retail",
+  "orderable": false,
+  "frames": [
+    {
+      "angleDegrees": 0,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "32e3ef5d6d88bd97d4d59823af0de08125a6b99cf69b49b00be3ca7c1a8f91d6",
+      "src": "/assets/products/maru60/assembled/v717-pcb/white-marble--pbtfans-wob-retail/frame_000.webp"
+    },
+    {
+      "angleDegrees": 30,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "f19db5e38675b364a1e9e6cb36f2045cc6c56af83b2370c18267802902f2c7ea",
+      "src": "/assets/products/maru60/assembled/v717-pcb/white-marble--pbtfans-wob-retail/frame_030.webp"
+    },
+    {
+      "angleDegrees": 60,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "2534e5de4298776f757915259ca8690052c732eb0c97dbe2975de35f5a52b58c",
+      "src": "/assets/products/maru60/assembled/v717-pcb/white-marble--pbtfans-wob-retail/frame_060.webp"
+    },
+    {
+      "angleDegrees": 90,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "2a98e5b04e57fb7e0fbf69aba8e4a086f6c17d5a38217a0979bdffdecd5f249e",
+      "src": "/assets/products/maru60/assembled/v717-pcb/white-marble--pbtfans-wob-retail/frame_090.webp"
+    },
+    {
+      "angleDegrees": 120,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "ef69a98d73a200b1589042abbe04fceaa97f720592b19fa1181ac29f93709428",
+      "src": "/assets/products/maru60/assembled/v717-pcb/white-marble--pbtfans-wob-retail/frame_120.webp"
+    },
+    {
+      "angleDegrees": 150,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "facf2ae4562569071b8b653987e63cd8227eaa84afc642c471075135413d45cc",
+      "src": "/assets/products/maru60/assembled/v717-pcb/white-marble--pbtfans-wob-retail/frame_150.webp"
+    },
+    {
+      "angleDegrees": 180,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "691e149bfe6a3a7d7799d6209417415b346e5e5cf12627c30aa050ca5b74bde9",
+      "src": "/assets/products/maru60/assembled/v717-pcb/white-marble--pbtfans-wob-retail/frame_180.webp"
+    },
+    {
+      "angleDegrees": 210,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "0231ca96bbe6bfda74f76384c2e6cf3cfef5b6a3c3a822fd7fa217812583e9c0",
+      "src": "/assets/products/maru60/assembled/v717-pcb/white-marble--pbtfans-wob-retail/frame_210.webp"
+    },
+    {
+      "angleDegrees": 240,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "e0b8cf2df71ae363bd71dd6e166db840bd1b7793ca033b65460eea6b7b016551",
+      "src": "/assets/products/maru60/assembled/v717-pcb/white-marble--pbtfans-wob-retail/frame_240.webp"
+    },
+    {
+      "angleDegrees": 270,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "476f659c4f204de700e87e6248e53202b197e49a58790e64654db74c2d43b38d",
+      "src": "/assets/products/maru60/assembled/v717-pcb/white-marble--pbtfans-wob-retail/frame_270.webp"
+    },
+    {
+      "angleDegrees": 300,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "e3e00f65c6d572358d1b43043a8ad9794b7170167874fd84d72b1eba71e35e77",
+      "src": "/assets/products/maru60/assembled/v717-pcb/white-marble--pbtfans-wob-retail/frame_300.webp"
+    },
+    {
+      "angleDegrees": 330,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "791227042f499e046c44882dec46f64d7cfd9ca5d07f00c5c595d360e287fa18",
+      "src": "/assets/products/maru60/assembled/v717-pcb/white-marble--pbtfans-wob-retail/frame_330.webp"
+    }
+  ]
+}

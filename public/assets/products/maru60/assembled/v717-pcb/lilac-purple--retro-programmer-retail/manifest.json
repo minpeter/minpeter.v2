@@ -1,0 +1,92 @@
+{
+  "id": "lilac-purple--retro-programmer-retail",
+  "housingId": "lilac-purple",
+  "keycapId": "retro-programmer-retail",
+  "orderable": false,
+  "frames": [
+    {
+      "angleDegrees": 0,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "0cdfc7538f8ca4a553455c95c12458937cf59d33f40ca3fe884dbd6c7c6bb24c",
+      "src": "/assets/products/maru60/assembled/v717-pcb/lilac-purple--retro-programmer-retail/frame_000.webp"
+    },
+    {
+      "angleDegrees": 30,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "ab20cafa8282d1614e424fec682de44aff289815cca65aef3fce2c2daccef46b",
+      "src": "/assets/products/maru60/assembled/v717-pcb/lilac-purple--retro-programmer-retail/frame_030.webp"
+    },
+    {
+      "angleDegrees": 60,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "225d7f2a0d51ea0ec5d002392f6f5496d87000fc4aef50cce929a9c3f74a50a4",
+      "src": "/assets/products/maru60/assembled/v717-pcb/lilac-purple--retro-programmer-retail/frame_060.webp"
+    },
+    {
+      "angleDegrees": 90,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "ed8251cdc54636afb3521196d6f27ecec36d6d229e20ba641c78d54f1a76d1b3",
+      "src": "/assets/products/maru60/assembled/v717-pcb/lilac-purple--retro-programmer-retail/frame_090.webp"
+    },
+    {
+      "angleDegrees": 120,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "693b1ae1e8f16eac57c66afd21093960474f910bd88e9f14138dd546f07b1690",
+      "src": "/assets/products/maru60/assembled/v717-pcb/lilac-purple--retro-programmer-retail/frame_120.webp"
+    },
+    {
+      "angleDegrees": 150,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "ff62fabee803cbdc2c938a77f1435e3a4112e0d41f1e5ed3238f0ce2f8266c6e",
+      "src": "/assets/products/maru60/assembled/v717-pcb/lilac-purple--retro-programmer-retail/frame_150.webp"
+    },
+    {
+      "angleDegrees": 180,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "5125a969153ec5e754db884472b8473b582ced0fc296112284760dba9520c0b1",
+      "src": "/assets/products/maru60/assembled/v717-pcb/lilac-purple--retro-programmer-retail/frame_180.webp"
+    },
+    {
+      "angleDegrees": 210,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "2b3c3adad9237c2aa19e99c1c1f96fe7da008be9ec94b1e03419dd8578da8852",
+      "src": "/assets/products/maru60/assembled/v717-pcb/lilac-purple--retro-programmer-retail/frame_210.webp"
+    },
+    {
+      "angleDegrees": 240,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "b0d65dfc29c265e5be82c376f8cb2ea9e8825ceb4b7c11d18f92d4bfb82da103",
+      "src": "/assets/products/maru60/assembled/v717-pcb/lilac-purple--retro-programmer-retail/frame_240.webp"
+    },
+    {
+      "angleDegrees": 270,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "74dd0a88fd67c9f649d44601997f973526ac30eb4e94b63ec2b719b35418d4d7",
+      "src": "/assets/products/maru60/assembled/v717-pcb/lilac-purple--retro-programmer-retail/frame_270.webp"
+    },
+    {
+      "angleDegrees": 300,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "2c081f82795949248c9072a94c0435dcddc0225b239121ae3c311625181554c7",
+      "src": "/assets/products/maru60/assembled/v717-pcb/lilac-purple--retro-programmer-retail/frame_300.webp"
+    },
+    {
+      "angleDegrees": 330,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "3d8e577f3c1226b227338b74669e1c35f54f7a58770112046616e40c398e6dc2",
+      "src": "/assets/products/maru60/assembled/v717-pcb/lilac-purple--retro-programmer-retail/frame_330.webp"
+    }
+  ]
+}

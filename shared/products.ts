@@ -82,9 +82,7 @@ export const PRODUCTS: readonly Product[] = [
     customizer: "maru60",
     details: ["size", "joints", "reuse", "print", "status", "license"],
     // Historical assets stay stable; the former page slug permanently redirects to maru60.
-    // PR #1 contains the current top case and the unprinted bottom-case draft.
-    downloadHref:
-      "https://github.com/minpeter/maru60/tree/hhkb-topcase-wrist-rest/models",
+    downloadHref: "https://github.com/minpeter/maru60/tree/main/models",
     key: "rule60",
     name: "Maru60",
     preview: {
@@ -96,7 +94,7 @@ export const PRODUCTS: readonly Product[] = [
       },
     },
     slug: "maru60",
-    sourceHref: "https://github.com/minpeter/maru60/pull/1",
+    sourceHref: "https://github.com/minpeter/maru60",
     spin: validatedPersonalManifest
       ? personalManifestToSpin(validatedPersonalManifest)
       : {

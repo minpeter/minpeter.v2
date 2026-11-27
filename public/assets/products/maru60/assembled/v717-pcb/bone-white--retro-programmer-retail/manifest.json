@@ -1,0 +1,92 @@
+{
+  "id": "bone-white--retro-programmer-retail",
+  "housingId": "bone-white",
+  "keycapId": "retro-programmer-retail",
+  "orderable": false,
+  "frames": [
+    {
+      "angleDegrees": 0,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "a39793b2c8271f817ed66b1e4cd3b657b824f9ef10885ecdb764ff4f213533c2",
+      "src": "/assets/products/maru60/assembled/v717-pcb/bone-white--retro-programmer-retail/frame_000.webp"
+    },
+    {
+      "angleDegrees": 30,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "c5518ab601b463d1e3f8ad8c8ec7a0d5f61056f4f8993eac4aade394f94ecbdf",
+      "src": "/assets/products/maru60/assembled/v717-pcb/bone-white--retro-programmer-retail/frame_030.webp"
+    },
+    {
+      "angleDegrees": 60,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "e831333bb5ace2f2425bd41e11215883220dc12e358a32d37daf4056ae5f2000",
+      "src": "/assets/products/maru60/assembled/v717-pcb/bone-white--retro-programmer-retail/frame_060.webp"
+    },
+    {
+      "angleDegrees": 90,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "77c38883e5d817e004c66b984dace7549922c324d27ee1f131d674648fe71d0f",
+      "src": "/assets/products/maru60/assembled/v717-pcb/bone-white--retro-programmer-retail/frame_090.webp"
+    },
+    {
+      "angleDegrees": 120,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "26599c96a69f9ed56a530538184dfbd829f179eaf6b3c85b537421d91c31fcf9",
+      "src": "/assets/products/maru60/assembled/v717-pcb/bone-white--retro-programmer-retail/frame_120.webp"
+    },
+    {
+      "angleDegrees": 150,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "87100171ba352e399f0655dc7fc7f3a272ca44aa844a26b1041d1a22744ef8c5",
+      "src": "/assets/products/maru60/assembled/v717-pcb/bone-white--retro-programmer-retail/frame_150.webp"
+    },
+    {
+      "angleDegrees": 180,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "8e31be53e6bb87cea4a37cfda2849535e9f24808102715fcfc9795e74fc385a6",
+      "src": "/assets/products/maru60/assembled/v717-pcb/bone-white--retro-programmer-retail/frame_180.webp"
+    },
+    {
+      "angleDegrees": 210,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "f6be540512813ae489017241189a1a75b384a7d14ba8ac99becaa3aee5aa97be",
+      "src": "/assets/products/maru60/assembled/v717-pcb/bone-white--retro-programmer-retail/frame_210.webp"
+    },
+    {
+      "angleDegrees": 240,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "5a5f12c269247621ca1686a4b8bc584b62174798e04341228792b54438a43863",
+      "src": "/assets/products/maru60/assembled/v717-pcb/bone-white--retro-programmer-retail/frame_240.webp"
+    },
+    {
+      "angleDegrees": 270,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "83454d9fa7f29fc6a94546adef81c621b7da5231a9da88d1eebd0614617947b5",
+      "src": "/assets/products/maru60/assembled/v717-pcb/bone-white--retro-programmer-retail/frame_270.webp"
+    },
+    {
+      "angleDegrees": 300,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "f5800cb8ea70298df5ecc461dbe787cf4524adbd1b4e3845413ffd86e4b55997",
+      "src": "/assets/products/maru60/assembled/v717-pcb/bone-white--retro-programmer-retail/frame_300.webp"
+    },
+    {
+      "angleDegrees": 330,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "95cec1c442490174dabc510118c44675346009f120474dee285c41555e595cbc",
+      "src": "/assets/products/maru60/assembled/v717-pcb/bone-white--retro-programmer-retail/frame_330.webp"
+    }
+  ]
+}

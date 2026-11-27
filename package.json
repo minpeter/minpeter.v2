@@ -39,6 +39,7 @@
     "fumadocs-core": "16.18.2",
     "fumadocs-mdx": "15.5.1",
     "fumadocs-ui": "16.18.2",
+    "gsap": "^3.15.1",
     "ky": "2.2.0",
     "lucide-react": "^1.70.0",
     "matter-js": "^0.20.0",

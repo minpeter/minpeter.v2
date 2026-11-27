@@ -1,0 +1,92 @@
+{
+  "id": "lilac-purple--nicepbt-bow-retail",
+  "housingId": "lilac-purple",
+  "keycapId": "nicepbt-bow-retail",
+  "orderable": false,
+  "frames": [
+    {
+      "angleDegrees": 0,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "d6954993f000e055c6438abea2ef6c24c4362f6c4cae3dc66ce9dc826d011b49",
+      "src": "/assets/products/maru60/assembled/v717-pcb/lilac-purple--nicepbt-bow-retail/frame_000.webp"
+    },
+    {
+      "angleDegrees": 30,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "e544af0fa1a5c6c6440a833c881aa402b568bd583b8896aab16135f78475fb82",
+      "src": "/assets/products/maru60/assembled/v717-pcb/lilac-purple--nicepbt-bow-retail/frame_030.webp"
+    },
+    {
+      "angleDegrees": 60,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "055bb8b9bdf9532c5931f1c5ab898c5f02a5fba64e97cab9d11f9c996290ffa8",
+      "src": "/assets/products/maru60/assembled/v717-pcb/lilac-purple--nicepbt-bow-retail/frame_060.webp"
+    },
+    {
+      "angleDegrees": 90,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "13171c6689b7a350400bcfa43fbb67d3686ef9262a7eb29730107593b9772cab",
+      "src": "/assets/products/maru60/assembled/v717-pcb/lilac-purple--nicepbt-bow-retail/frame_090.webp"
+    },
+    {
+      "angleDegrees": 120,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "67d8562c215f4fd10f7732213c7a264f0d1c070a1da1a4238b68a7abdd67f581",
+      "src": "/assets/products/maru60/assembled/v717-pcb/lilac-purple--nicepbt-bow-retail/frame_120.webp"
+    },
+    {
+      "angleDegrees": 150,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "02bcb9c01c95a4a7e17c0d154f386814dc100dc3a7aa0a8fa469090485b6ab06",
+      "src": "/assets/products/maru60/assembled/v717-pcb/lilac-purple--nicepbt-bow-retail/frame_150.webp"
+    },
+    {
+      "angleDegrees": 180,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "c38de73bc172e74fec1087e1c553c4ee6a1eee59c3bbc7ff75a4f1214b78f67c",
+      "src": "/assets/products/maru60/assembled/v717-pcb/lilac-purple--nicepbt-bow-retail/frame_180.webp"
+    },
+    {
+      "angleDegrees": 210,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "7ec9b44e23ed0039be854ace6f2413fb6a87168f7a6982e23d5df31be32eb671",
+      "src": "/assets/products/maru60/assembled/v717-pcb/lilac-purple--nicepbt-bow-retail/frame_210.webp"
+    },
+    {
+      "angleDegrees": 240,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "635c943a409c0d4303fa0ae838c9dc1d9c15b8dea60f7768486a2fb6555f9b0d",
+      "src": "/assets/products/maru60/assembled/v717-pcb/lilac-purple--nicepbt-bow-retail/frame_240.webp"
+    },
+    {
+      "angleDegrees": 270,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "37dcdf8a862236a835879e5a6f62a3ac25f1163f5ad0efa14ecbc9da4a5f22ea",
+      "src": "/assets/products/maru60/assembled/v717-pcb/lilac-purple--nicepbt-bow-retail/frame_270.webp"
+    },
+    {
+      "angleDegrees": 300,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "3d131bf78d39e507369c9fb9eb7f50fd0af0f3c9edf1eb59d8e852698e783e40",
+      "src": "/assets/products/maru60/assembled/v717-pcb/lilac-purple--nicepbt-bow-retail/frame_300.webp"
+    },
+    {
+      "angleDegrees": 330,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "64d9030b65e130ee0bd3b25e3ae53e581dac0e8f6da4fe8408431c2e6a219604",
+      "src": "/assets/products/maru60/assembled/v717-pcb/lilac-purple--nicepbt-bow-retail/frame_330.webp"
+    }
+  ]
+}

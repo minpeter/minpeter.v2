@@ -1,0 +1,92 @@
+{
+  "id": "charcoal--pbtfans-wob-retail",
+  "housingId": "charcoal",
+  "keycapId": "pbtfans-wob-retail",
+  "orderable": false,
+  "frames": [
+    {
+      "angleDegrees": 0,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "3c90f8f42ead2bf4b57027d3d2ec27b119b3fcbb7dea759ade0eceb7754db7db",
+      "src": "/assets/products/maru60/assembled/v717-pcb/charcoal--pbtfans-wob-retail/frame_000.webp"
+    },
+    {
+      "angleDegrees": 30,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "8b44b6eb9840b6ca187af5c8ac238dcd8ecf2685ce2ee5fb6a97905720db2fdb",
+      "src": "/assets/products/maru60/assembled/v717-pcb/charcoal--pbtfans-wob-retail/frame_030.webp"
+    },
+    {
+      "angleDegrees": 60,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "6bfccce9b33e0d8d70121b660bcb3999d771c04bc32ce959fb209c88ecc2e574",
+      "src": "/assets/products/maru60/assembled/v717-pcb/charcoal--pbtfans-wob-retail/frame_060.webp"
+    },
+    {
+      "angleDegrees": 90,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "3737aa74a29bf2b2df2651740897ebcbf4b8a7271dfc828a722771dbb00522ef",
+      "src": "/assets/products/maru60/assembled/v717-pcb/charcoal--pbtfans-wob-retail/frame_090.webp"
+    },
+    {
+      "angleDegrees": 120,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "acd1b1686af25ae127af973fee9d2e36afcb5b96651794a36ec3806bac64aa54",
+      "src": "/assets/products/maru60/assembled/v717-pcb/charcoal--pbtfans-wob-retail/frame_120.webp"
+    },
+    {
+      "angleDegrees": 150,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "8eeb65ee6e82af2ba4edfedfbaf63465a7b580db5d392a3b073a685be49329c7",
+      "src": "/assets/products/maru60/assembled/v717-pcb/charcoal--pbtfans-wob-retail/frame_150.webp"
+    },
+    {
+      "angleDegrees": 180,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "7fbe24b33180f2470975e137f7b8256dee76fde2a8ba6428a58407827c022aac",
+      "src": "/assets/products/maru60/assembled/v717-pcb/charcoal--pbtfans-wob-retail/frame_180.webp"
+    },
+    {
+      "angleDegrees": 210,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "281718f070828e85c1216fac7a3326d17eb00873f5d4f04ffe6aa3cc6d273318",
+      "src": "/assets/products/maru60/assembled/v717-pcb/charcoal--pbtfans-wob-retail/frame_210.webp"
+    },
+    {
+      "angleDegrees": 240,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "b8d2bda8348dfe2857d6893a98f1a69a9879f971c0c07741444bf2fce31d57f3",
+      "src": "/assets/products/maru60/assembled/v717-pcb/charcoal--pbtfans-wob-retail/frame_240.webp"
+    },
+    {
+      "angleDegrees": 270,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "4a3692a2cc24d1d2e5f3e6d852f3645e7ea59adfd8d2fbf50f2f1367daeae935",
+      "src": "/assets/products/maru60/assembled/v717-pcb/charcoal--pbtfans-wob-retail/frame_270.webp"
+    },
+    {
+      "angleDegrees": 300,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "1229efb932739e9f1f39f082b43a423880b468a8c0b5dfddefdaf83f25e4085a",
+      "src": "/assets/products/maru60/assembled/v717-pcb/charcoal--pbtfans-wob-retail/frame_300.webp"
+    },
+    {
+      "angleDegrees": 330,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "5222a66e59fad0b27c66f45f37595eebba1ab15504950d8869adce3963450106",
+      "src": "/assets/products/maru60/assembled/v717-pcb/charcoal--pbtfans-wob-retail/frame_330.webp"
+    }
+  ]
+}

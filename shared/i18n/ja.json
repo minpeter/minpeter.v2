@@ -244,15 +244,15 @@
       "rule60": {
         "variant": "HHKBハウジング · パームレスト一体型",
         "license": "CC BY-NC 4.0",
-        "intro": "MARU60はRule 60 V3の内部部品向けに独立設計した、ハニカムのパームレスト一体型HHKBハウジングです。",
-        "description": "MARU60はRule 60 V3の内部部品向けに独立設計した、ハニカムのパームレスト一体型HHKBハウジングです。不透明レンダーはv7.15トップケースと現行の有線ボトムケースが基準です。透明Inventorは最新の外殻(a552798)の外観を近似し、PCB・スイッチ・プレート・ガスケット・キャッチ内部を省略しています。INKC STUDIOの製品ではありません。",
+        "intro": "Rule 60 V3向けパームレスト一体型HHKBハウジング。",
+        "description": "MARU60 — Rule 60 V3の内部部品向けに設計したハニカムパームレスト一体型HHKBハウジング。INKC STUDIOの製品ではありません。",
         "details": {
-          "size": "現行トップケース外形：298.1 × 198.3 mm。組立全体の寸法と実物の適合は未検証です",
-          "joints": "トップケースは中央のダブテール3本で接合する分割構造。ボトムケース草案はスライド式ダブテール5本で接合",
-          "reuse": "純正PCガスケットプレート、シリコンガスケットキャップ、ボールキャッチ、PCB、バッテリー、ウェイトプレートを基準に設計",
-          "print": "v7.15は2回目の実物製作用に指定された設計です。造形完了・組立結果は未確認のため、全体を造形する前に適合テスト片で確認してください",
-          "status": "試作設計 — 不透明はv7.15基準、透明Inventorは最新の外殻(a552798)の外観の近似です。透明レンダーではPCB・スイッチ・プレート・ガスケット・キャッチ内部を省略しています。CAD確認は実物の嵌合・組立検証ではありません。",
-          "license": "CC BY-NC 4.0 — 個人・非商用の目的に限り印刷・改変できます。印刷物やファイルの販売は認めていません。"
+          "size": "298.1 × 198.3 mm (トップ外形 · 実物組立未検証)",
+          "joints": "トップ ダブテール ×3 · ボトム スライド ×5",
+          "reuse": "Rule 60 V3 内部部品基準 (プレート · PCB · ウェイト)",
+          "print": "v7.15 2次製作用 · 全体造形前に適合テスト推奨",
+          "status": "試作 · v7.17 全バリエーション (RP2350A PCB・プレート・USB-C含む、スイッチ省略)",
+          "license": "CC BY-NC 4.0 · 個人・非商用のみ (販売不可)"
         }
       },
       "skateboardStand": {
@@ -301,7 +301,7 @@
         "white-marble": "ホワイトマーブル"
       },
       "cinema": {
-        "label": "3Dスクロールシーケンス"
+        "label": "8インチスケートボードが20度スロットのスタンドに収まる3Dシーケンス"
       },
       "showcase": {
         "heading": "ギャラリー",
@@ -344,24 +344,24 @@
       "showcase": "個人キーボード紹介",
       "customize": "キーキャップの組み合わせ",
       "showcaseNote": "Inventor · 個人展示用 · 注文不可",
-      "configurationNote": "ハウジングとキーキャップを選んで外観を確認できます。透明 × Inventorは元の個人キーボードです。ここでは注文できません。",
+      "configurationNote": "3D外観プレビュー · 非売品 (透明 × Inventorは個人展示用)",
       "selected": "{housing} × {keycaps}",
       "previewLabel": "選択した構成の再構成レンダリング — ドラッグまたは矢印キーで30°ずつ回転",
-      "pending": "このレンダリングは準備中です",
-      "pendingDetail": "この組み合わせの画像は準備中です。別の構成の画像は表示しません。",
+      "pending": "準備中",
+      "pendingDetail": "この組み合わせの画像は準備中です。",
       "kitQA": "キーごとの検査と全方向の確認に合格するとレンダリングを表示します。",
-      "loading": "選択した構成を読み込み中…",
+      "loading": "読み込み中…",
       "ready": "準備完了",
-      "loadError": "選択したレンダリングを読み込めませんでした。",
-      "retry": "この画像を再読み込み",
+      "loadError": "画像を読み込めませんでした。",
+      "retry": "再読み込み",
       "housing": "ハウジング",
       "keycaps": "キーキャップ",
       "fullRetailSet": "フルセット · 個人ロゴキーなし",
-      "geometryPrevious": "このプレビューは旧ハウジング版であり、ボトムケース草案を組み合わせたレンダーではありません。",
-      "geometryAssembled": "外観レンダー：不透明はv7.15基準、透明Inventorは最新の外殻(a552798)基準で内部部品を省略しています。実物の嵌合と組立は未検証です。",
-      "approximation": "色・表面仕上げ・刻印は外観の近似表現です。実際の造形色や物理的なキーキャップの互換性を保証するものではなく、注文や在庫確認を示すものでもありません。",
-      "materialSource": "メーカーの色資料",
-      "keycapSource": "メーカーのキーキャップ資料",
+      "geometryPrevious": "旧ハウジング版基準のレンダー",
+      "geometryAssembled": "v7.17 (RP2350A PCB・プレート・USB-C含む) 基準 · 実物組立未検証",
+      "approximation": "3Dレンダー近似 · 実物と色味が異なる場合あり",
+      "materialSource": "カラー資料",
+      "keycapSource": "キーキャップ資料",
       "housingNames": {
         "bone-white": "ボーンホワイト",
         "ash-gray": "アッシュグレー",
@@ -372,16 +372,36 @@
         "white-marble": "ホワイトマーブル",
         "transparent": "透明"
       },
-      "partial": "一部の角度を読み込めませんでした。利用できる最も近い角度を表示しています。読み込みを再試行できます。",
-      "marbleNote": "PLA Marble 13103：オフホワイトに細かく不規則な灰色の粒がある素材です。色見本はメーカーのベース色のみで、実際の造形表面を表すものではありません。",
-      "transparentNote": "半透明PETG製個人キーボードの外観を近似し、PCB・スイッチ・プレート・ガスケット・キャッチ内部は省略しています。内部構造や実物の組立を検証したものではありません。Bambu Lab PLAの色や新しい販売用素材ではありません。",
-      "personalHousing": "元の半透明PETG · 外観の近似",
-      "inventorNote": "個人ロゴキーを含む元のキーキャップ",
+      "partial": "一部の角度を読み込めませんでした。",
+      "marbleNote": "PLA Marble 13103 · 灰色の粒入り",
+      "transparentNote": "半透明PETG · RP2350A PCB・プレート・USB-C・真鍮インサート含む (スイッチ省略)",
+      "personalHousing": "半透明PETG · 外観近似",
+      "inventorNote": "個人ロゴキー含む",
       "pairedPersonal": "透明 × Inventor · 非売品",
       "pairedRetail": "組み合わせ: {housing} × {keycaps}",
-      "unsupported": "この組み合わせは表示できません",
-      "unsupportedDetail": "透明ハウジングとInventorキーキャップは一緒に選択できます。両方を選ぶか、別のハウジングとキーキャップを選んでください。別の構成の画像は表示しません。",
-      "detailsLabel": "詳細・素材"
+      "unsupported": "非対応の組み合わせ",
+      "unsupportedDetail": "透明ハウジングとInventorキーキャップはセットで選択してください。",
+      "detailsLabel": "仕様"
+    },
+    "maru60Cinema": {
+      "label": "MARU60 3Dスクロールシネマ：6度プロファイル、ヘアラインスチール製バックプレートと7つのバンポン、6層組立構造、表面接写、8種のカラーラインナップ",
+      "beats": {
+        "profileFront": "6° ユニボディ · Charcoal",
+        "profileUsb": "埋め込みUSB-C",
+        "profileBackplate": "ヘアラインスチール · バンポン7点",
+        "assemblyExploded": "6層ガスケット構造",
+        "assemblySnap": "4分割ダブテール接合",
+        "assemblyHero": "Bone White · Retro Programmer",
+        "surfaceMacro": "Dark Green · NicePBT BoW",
+        "lineupDarkGreen": "Dark Green · NicePBT BoW",
+        "lineupIceBlue": "Ice Blue · NicePBT Noel",
+        "lineupCharcoal": "Charcoal · PBTfans WoB",
+        "lineupBoneWhite": "Bone White · Retro Programmer",
+        "lineupTransparent": "Transparent · Inventor",
+        "lineupAshGray": "Ash Gray · PBTfans WoB",
+        "lineupLilacPurple": "Lilac Purple · Purple Chonkers",
+        "lineupWhiteMarble": "White Marble · NicePBT BoW"
+      }
     }
   },
   "modCodeBlock": {

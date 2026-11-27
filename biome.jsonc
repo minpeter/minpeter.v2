@@ -7,7 +7,7 @@
     "ultracite/biome/vitest"
   ],
   "files": {
-    "includes": ["!public/fonts/*.css"]
+    "includes": ["!public/fonts/*.css", "!public/assets/drive-lab"]
   },
   "linter": {
     "rules": {

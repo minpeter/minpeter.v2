@@ -1,0 +1,92 @@
+{
+  "id": "charcoal--retro-programmer-retail",
+  "housingId": "charcoal",
+  "keycapId": "retro-programmer-retail",
+  "orderable": false,
+  "frames": [
+    {
+      "angleDegrees": 0,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "0956122da11ffba7eed166ecedc5f570272fdca819acfec7cfe90cdb7740314c",
+      "src": "/assets/products/maru60/assembled/v717-pcb/charcoal--retro-programmer-retail/frame_000.webp"
+    },
+    {
+      "angleDegrees": 30,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "639353d58505faf90a245bc02dc896f5a03b0a33cf13a0c354e1ab977c96ebf9",
+      "src": "/assets/products/maru60/assembled/v717-pcb/charcoal--retro-programmer-retail/frame_030.webp"
+    },
+    {
+      "angleDegrees": 60,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "e56dc7e43d5e79e6ca587f0b456a4f13f9de78bf7e97e769eecbb27dcc08aecf",
+      "src": "/assets/products/maru60/assembled/v717-pcb/charcoal--retro-programmer-retail/frame_060.webp"
+    },
+    {
+      "angleDegrees": 90,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "46cfd844ef7ce3c560afa986de96c6ef21be063095e07ab96b70094aa4a4329d",
+      "src": "/assets/products/maru60/assembled/v717-pcb/charcoal--retro-programmer-retail/frame_090.webp"
+    },
+    {
+      "angleDegrees": 120,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "007a402d11de021e65896c5209267aec3dfc31d0411e5225a0c4f4d9a74d9cad",
+      "src": "/assets/products/maru60/assembled/v717-pcb/charcoal--retro-programmer-retail/frame_120.webp"
+    },
+    {
+      "angleDegrees": 150,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "4b93d50ab1b111efd7c852864f2d3783896f5fe85454e8b9ab451675129d2a23",
+      "src": "/assets/products/maru60/assembled/v717-pcb/charcoal--retro-programmer-retail/frame_150.webp"
+    },
+    {
+      "angleDegrees": 180,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "495b9e15913ad4334cd378faa9a254daa8e33b30155d97bab9a43fc2e9edd904",
+      "src": "/assets/products/maru60/assembled/v717-pcb/charcoal--retro-programmer-retail/frame_180.webp"
+    },
+    {
+      "angleDegrees": 210,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "3d5ffb914219f58a2428e898ec18c02d91e09f1db0f3073dd9e11bc49eeecfbe",
+      "src": "/assets/products/maru60/assembled/v717-pcb/charcoal--retro-programmer-retail/frame_210.webp"
+    },
+    {
+      "angleDegrees": 240,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "934bc9f65cea379f10601a36217d932be4aa36ff52983249c1dd2eb575811b6d",
+      "src": "/assets/products/maru60/assembled/v717-pcb/charcoal--retro-programmer-retail/frame_240.webp"
+    },
+    {
+      "angleDegrees": 270,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "4fb14e37d35731d02d1144afdeb0a701ad829c1f6e5fb0ea9e5dee7a3c331a60",
+      "src": "/assets/products/maru60/assembled/v717-pcb/charcoal--retro-programmer-retail/frame_270.webp"
+    },
+    {
+      "angleDegrees": 300,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "9b8a0f7d8349bafd902cb18329047f6d56c9aa9831589157ff2306530db8436f",
+      "src": "/assets/products/maru60/assembled/v717-pcb/charcoal--retro-programmer-retail/frame_300.webp"
+    },
+    {
+      "angleDegrees": 330,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "53fa57620bde87f3d36012e2112b7d2f09ea20024eb423325115416babe1f3ed",
+      "src": "/assets/products/maru60/assembled/v717-pcb/charcoal--retro-programmer-retail/frame_330.webp"
+    }
+  ]
+}

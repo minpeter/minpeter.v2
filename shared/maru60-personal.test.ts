@@ -16,7 +16,7 @@ function fixture() {
       angleDegrees: index * 30,
       height: 1536,
       sha256: "a".repeat(64),
-      src: `/assets/products/maru60/assembled/v716-exterior/transparent--inventor/frame_${String(index * 30).padStart(3, "0")}.webp`,
+      src: `/assets/products/maru60/assembled/v717-pcb/transparent--inventor/frame_${String(index * 30).padStart(3, "0")}.webp`,
       width: 1024,
     })),
     housingId: "transparent",
@@ -131,7 +131,7 @@ describe("independent Maru60 personal manifest gate", () => {
       width: 1024,
     });
     expect(spin.basePath).toBe(
-      "/assets/products/maru60/assembled/v716-exterior/transparent--inventor"
+      "/assets/products/maru60/assembled/v717-pcb/transparent--inventor"
     );
     expect(spin.frameSources).toEqual(
       input.frames.map((frame) => `${frame.src}?v=${frame.sha256}`)

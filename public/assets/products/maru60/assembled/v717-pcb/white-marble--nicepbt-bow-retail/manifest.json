@@ -1,0 +1,92 @@
+{
+  "id": "white-marble--nicepbt-bow-retail",
+  "housingId": "white-marble",
+  "keycapId": "nicepbt-bow-retail",
+  "orderable": false,
+  "frames": [
+    {
+      "angleDegrees": 0,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "c424819b8b7c63a9d1ed62434bc768a3c7764232db931fbae5281275c60bf8ea",
+      "src": "/assets/products/maru60/assembled/v717-pcb/white-marble--nicepbt-bow-retail/frame_000.webp"
+    },
+    {
+      "angleDegrees": 30,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "61a18cb7b71fc33f9fa1a39869e3b5faf0a829fbb76429f61b09f9d6149aaacc",
+      "src": "/assets/products/maru60/assembled/v717-pcb/white-marble--nicepbt-bow-retail/frame_030.webp"
+    },
+    {
+      "angleDegrees": 60,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "f319ced66e664bedeca8d342f9609d63fbd0af29697673ea8448e9e0e3960176",
+      "src": "/assets/products/maru60/assembled/v717-pcb/white-marble--nicepbt-bow-retail/frame_060.webp"
+    },
+    {
+      "angleDegrees": 90,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "7e8cf223f7816b74e5e186385f645f1e96011f850fdc2ec7bf9b15dabab54e56",
+      "src": "/assets/products/maru60/assembled/v717-pcb/white-marble--nicepbt-bow-retail/frame_090.webp"
+    },
+    {
+      "angleDegrees": 120,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "fd65433d34f098a5d34cc26305ca884cdde6be7905ce567896eba43c79b4a8f1",
+      "src": "/assets/products/maru60/assembled/v717-pcb/white-marble--nicepbt-bow-retail/frame_120.webp"
+    },
+    {
+      "angleDegrees": 150,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "76911da243fb7c4b1d162766ffb46c60e0e3442916ed99b0408d34c035585dfa",
+      "src": "/assets/products/maru60/assembled/v717-pcb/white-marble--nicepbt-bow-retail/frame_150.webp"
+    },
+    {
+      "angleDegrees": 180,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "c4144d908a400f0a68dcb33a08370fba977bf91ef2b2161d0cd0395c7aa470cf",
+      "src": "/assets/products/maru60/assembled/v717-pcb/white-marble--nicepbt-bow-retail/frame_180.webp"
+    },
+    {
+      "angleDegrees": 210,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "8a046b47561ffdc28aeab400120b08011cecbdeda34858dae21e0e7df5b374dd",
+      "src": "/assets/products/maru60/assembled/v717-pcb/white-marble--nicepbt-bow-retail/frame_210.webp"
+    },
+    {
+      "angleDegrees": 240,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "23b509ac06142cc74e3fa6b5b9286b6476e6f2edb81fe40c94e51e1e632345e4",
+      "src": "/assets/products/maru60/assembled/v717-pcb/white-marble--nicepbt-bow-retail/frame_240.webp"
+    },
+    {
+      "angleDegrees": 270,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "9acf7c476082293a4ced7d6e6acaf97463d96d7117d3e02186d2602a8a29d850",
+      "src": "/assets/products/maru60/assembled/v717-pcb/white-marble--nicepbt-bow-retail/frame_270.webp"
+    },
+    {
+      "angleDegrees": 300,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "4f5da4561e191929e3c5edf484fc6f8f6ec99960b353943c9aa9cae84edc9f6b",
+      "src": "/assets/products/maru60/assembled/v717-pcb/white-marble--nicepbt-bow-retail/frame_300.webp"
+    },
+    {
+      "angleDegrees": 330,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "c9f3ed288adda41166d79c9ed726c798f64c60e5c190ed2d36a8d765e1c5a78d",
+      "src": "/assets/products/maru60/assembled/v717-pcb/white-marble--nicepbt-bow-retail/frame_330.webp"
+    }
+  ]
+}

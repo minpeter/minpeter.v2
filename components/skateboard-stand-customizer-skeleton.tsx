@@ -39,15 +39,15 @@ export function SkateboardStandCustomizerSkeleton({
       </div>
       <div className="store-custom-sidebar store-stand-sidebar">
         {intro}
-        <div aria-hidden="true" className="store-custom-controls">
-          <fieldset disabled>
+        <div className="store-custom-controls">
+          <fieldset aria-hidden="true" disabled>
             <div className="store-view-toggle">
               {VIEW_SLOTS.map((slot) => (
                 <Skeleton className="h-11 rounded-none" key={slot} />
               ))}
             </div>
           </fieldset>
-          <fieldset disabled>
+          <fieldset aria-hidden="true" disabled>
             <legend className="store-label">
               <Skeleton className="store-skeleton-label w-24 rounded-none" />
             </legend>
@@ -63,7 +63,7 @@ export function SkateboardStandCustomizerSkeleton({
             </div>
           </fieldset>
           {actions}
-          <div className="store-custom-details">
+          <div aria-hidden="true" className="store-custom-details">
             <div className="store-custom-details-placeholder store-label">
               <Skeleton className="store-skeleton-label w-16 rounded-none" />
             </div>

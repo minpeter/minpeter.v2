@@ -1,0 +1,92 @@
+{
+  "id": "bone-white--pbtfans-wob-retail",
+  "housingId": "bone-white",
+  "keycapId": "pbtfans-wob-retail",
+  "orderable": false,
+  "frames": [
+    {
+      "angleDegrees": 0,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "73174b56cf9260f36f8e011d1632b48d411595f7dfcb90b5889643a5265e8da2",
+      "src": "/assets/products/maru60/assembled/v717-pcb/bone-white--pbtfans-wob-retail/frame_000.webp"
+    },
+    {
+      "angleDegrees": 30,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "c46bc37cca54d94480b9bca01def0339fc1d7b5777b73f8f39b04697a2e848ce",
+      "src": "/assets/products/maru60/assembled/v717-pcb/bone-white--pbtfans-wob-retail/frame_030.webp"
+    },
+    {
+      "angleDegrees": 60,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "dbabfdf124a085b72c6d3a41fc4e88c669bc74b265138015863572479900b278",
+      "src": "/assets/products/maru60/assembled/v717-pcb/bone-white--pbtfans-wob-retail/frame_060.webp"
+    },
+    {
+      "angleDegrees": 90,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "8f9dedc362b1b8b225419fec8941b4ae213e6d7adb49c4b8382a1ce489b3f7aa",
+      "src": "/assets/products/maru60/assembled/v717-pcb/bone-white--pbtfans-wob-retail/frame_090.webp"
+    },
+    {
+      "angleDegrees": 120,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "62c87cf36fb4b6c5d7446c69d3e3dcb7dca66bb44afa9e72fa7347b40c041337",
+      "src": "/assets/products/maru60/assembled/v717-pcb/bone-white--pbtfans-wob-retail/frame_120.webp"
+    },
+    {
+      "angleDegrees": 150,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "c01d515b468ccc9eb1bf007987044aeea26340d02b4fcc542e00caa1c19e9ede",
+      "src": "/assets/products/maru60/assembled/v717-pcb/bone-white--pbtfans-wob-retail/frame_150.webp"
+    },
+    {
+      "angleDegrees": 180,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "92a63bb4f675b22dae6eed15aacbbdf850a99bd2658f767f7a665244707e99e7",
+      "src": "/assets/products/maru60/assembled/v717-pcb/bone-white--pbtfans-wob-retail/frame_180.webp"
+    },
+    {
+      "angleDegrees": 210,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "e96cd05f7e132e159bc3f2a50a9f7689222d3a6cb9e016144946256809e38904",
+      "src": "/assets/products/maru60/assembled/v717-pcb/bone-white--pbtfans-wob-retail/frame_210.webp"
+    },
+    {
+      "angleDegrees": 240,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "72f100f7feb3fd5af6bd534212eddcce90d0434a970bb713b6c8b8006bab1866",
+      "src": "/assets/products/maru60/assembled/v717-pcb/bone-white--pbtfans-wob-retail/frame_240.webp"
+    },
+    {
+      "angleDegrees": 270,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "c2613ae76c5a4fdd31b8e496faee79ea99aeca5131d8bb91bb90d1cfdeda72bc",
+      "src": "/assets/products/maru60/assembled/v717-pcb/bone-white--pbtfans-wob-retail/frame_270.webp"
+    },
+    {
+      "angleDegrees": 300,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "924173d052117045cb0466f4b4c30954a88149e8c53d504eb4e7564036f788b0",
+      "src": "/assets/products/maru60/assembled/v717-pcb/bone-white--pbtfans-wob-retail/frame_300.webp"
+    },
+    {
+      "angleDegrees": 330,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "320705bdb9724898133e00c8791938a76aed465ac29c9f980a9aa5bc46256965",
+      "src": "/assets/products/maru60/assembled/v717-pcb/bone-white--pbtfans-wob-retail/frame_330.webp"
+    }
+  ]
+}

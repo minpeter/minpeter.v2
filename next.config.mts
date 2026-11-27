@@ -31,6 +31,53 @@ const nextConfig: NextConfig = {
     ],
     useTypeScriptCli: true,
   },
+  headers: () => [
+    {
+      headers: [
+        {
+          key: "Cache-Control",
+          value: "public, max-age=31536000, immutable",
+        },
+      ],
+      source: "/assets/products/maru60/cinema/:path*",
+    },
+    {
+      headers: [
+        {
+          key: "Cache-Control",
+          value: "public, max-age=31536000, immutable",
+        },
+      ],
+      source: "/assets/products/maru60/assembled/:path*",
+    },
+    {
+      headers: [
+        {
+          key: "Cache-Control",
+          value: "public, max-age=31536000, immutable",
+        },
+      ],
+      source: "/assets/products/skateboard-stand/sequence/:path*",
+    },
+    {
+      headers: [
+        {
+          key: "Cache-Control",
+          value: "public, max-age=31536000, immutable",
+        },
+      ],
+      source: "/assets/products/skateboard-stand/turntable/:path*",
+    },
+    {
+      headers: [
+        {
+          key: "Cache-Control",
+          value: "public, max-age=31536000, immutable",
+        },
+      ],
+      source: "/assets/products/skateboard-stand/scenes/:path*",
+    },
+  ],
   images: {
     formats: ["image/avif", "image/webp"],
     remotePatterns: [

@@ -2,10 +2,13 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getLocale, getTranslations } from "next-intl/server";
 import { type ReactNode, Suspense } from "react";
+import { Maru60ScrollCinema } from "@/components/maru60-scroll-cinema";
 import { ProductCustomizer } from "@/components/product-customizer";
 import { ProductCustomizerSkeleton } from "@/components/product-customizer-skeleton";
 import { SkateboardStandCustomizer } from "@/components/skateboard-stand-customizer";
 import { SkateboardStandCustomizerSkeleton } from "@/components/skateboard-stand-customizer-skeleton";
+import { SkateboardStandScrollCinema } from "@/components/skateboard-stand-scroll-cinema";
+import { SkateboardStandShowcase } from "@/components/skateboard-stand-showcase";
 import { getProduct, PRODUCTS } from "@/shared/products";
 import {
   createMetadata,
@@ -134,7 +137,7 @@ async function ProductDetail({
 
     return (
       <article className="store-product" data-testid="product-detail">
-        {/* Keep localized content in the static shell; only URL-dependent controls suspend. */}
+        {/* Keep localized content and below-fold sections in the static shell; only URL-dependent controls suspend. */}
         <Suspense
           fallback={
             <SkateboardStandCustomizerSkeleton
@@ -150,50 +153,46 @@ async function ProductDetail({
             labels={labels}
           />
         </Suspense>
+        <SkateboardStandScrollCinema />
+        <SkateboardStandShowcase />
       </article>
     );
   }
 
   const intro = (
-    <header className="store-product-heading">
-      <h1>{product.name.toUpperCase()}</h1>
-      <p className="store-product-intro">{t(`items.${product.key}.intro`)}</p>
+    <header className="store-product-heading store-stand-heading">
+      <div className="flex items-baseline justify-between gap-4">
+        <h1>{product.name.toUpperCase()}</h1>
+        <span className="store-label shrink-0">
+          {t(`items.${product.key}.license`)}
+        </span>
+      </div>
+      <p className="store-label text-muted-foreground">
+        {t(`items.${product.key}.variant`)}
+      </p>
+      {product.upcomingPrice ? (
+        <p
+          className="store-label mt-1.5 flex flex-wrap items-baseline gap-x-3"
+          data-testid="product-price"
+        >
+          <span className="text-foreground">
+            {new Intl.NumberFormat(locale, {
+              currency: "KRW",
+              currencyDisplay: "code",
+              style: "currency",
+            }).formatRange(
+              product.upcomingPrice.min,
+              product.upcomingPrice.max
+            )}
+          </span>
+          <span className="text-muted-foreground">{t("upcoming")}</span>
+        </p>
+      ) : null}
     </header>
   );
-  const details = (
-    <div className="store-product-info">
-      <div>
-        <div className="flex items-baseline justify-between gap-4">
-          <span className="store-label text-foreground">
-            {product.name.toUpperCase()}
-          </span>
-          <span className="store-label shrink-0">
-            {t(`items.${product.key}.license`)}
-          </span>
-        </div>
-        <p className="store-label text-muted-foreground">
-          {t(`items.${product.key}.variant`)}
-        </p>
-        {product.upcomingPrice ? (
-          <p
-            className="store-label mt-3 flex flex-wrap items-baseline gap-x-3"
-            data-testid="product-price"
-          >
-            <span className="text-foreground">
-              {new Intl.NumberFormat(locale, {
-                currency: "KRW",
-                currencyDisplay: "code",
-                style: "currency",
-              }).formatRange(
-                product.upcomingPrice.min,
-                product.upcomingPrice.max
-              )}
-            </span>
-            <span className="text-muted-foreground">{t("upcoming")}</span>
-          </p>
-        ) : null}
-      </div>
 
+  const actions =
+    storeChannelCta || product.sourceHref || product.downloadHref ? (
       <div
         className={
           product.storeChannel && !(product.sourceHref || product.downloadHref)
@@ -215,7 +214,7 @@ async function ProductDetail({
         {product.downloadHref ? (
           <a
             className="store-button store-label"
-            data-primary
+            data-store-cta
             href={product.downloadHref}
             rel="noreferrer"
             target="_blank"
@@ -224,36 +223,31 @@ async function ProductDetail({
           </a>
         ) : null}
       </div>
+    ) : null;
 
-      <section>
-        <h2 className="store-label mb-3">{t("descriptionLabel")}</h2>
-        <p className="store-prose">{t(`items.${product.key}.description`)}</p>
-      </section>
-
-      <section>
-        <h2 className="store-label mb-3">{t("detailsLabel")}</h2>
-        <ul className="store-prose store-details">
-          {product.details.map((detail) => (
-            <li key={detail}>{t(`items.rule60.details.${detail}`)}</li>
-          ))}
-        </ul>
-      </section>
-    </div>
+  const specs = (
+    <ul className="store-prose store-details">
+      {product.details.map((detail) => (
+        <li key={detail}>{t(`items.rule60.details.${detail}`)}</li>
+      ))}
+    </ul>
   );
 
   return (
     <article className="store-product" data-testid="product-detail">
       {/* Keep localized content in the static shell; only URL-dependent controls suspend. */}
       <Suspense
-        fallback={<ProductCustomizerSkeleton details={details} intro={intro} />}
+        fallback={<ProductCustomizerSkeleton actions={actions} intro={intro} />}
       >
         <ProductCustomizer
-          details={details}
+          actions={actions}
+          details={specs}
           intro={intro}
           labels={labels}
           spin={product.spin}
         />
       </Suspense>
+      {product.slug === "maru60" ? <Maru60ScrollCinema /> : null}
     </article>
   );
 }

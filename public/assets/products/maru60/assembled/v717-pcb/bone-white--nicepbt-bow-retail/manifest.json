@@ -1,0 +1,92 @@
+{
+  "id": "bone-white--nicepbt-bow-retail",
+  "housingId": "bone-white",
+  "keycapId": "nicepbt-bow-retail",
+  "orderable": false,
+  "frames": [
+    {
+      "angleDegrees": 0,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "59ed484d5989a426af2cb753c74dcd681258cec244256efc069c378813db6388",
+      "src": "/assets/products/maru60/assembled/v717-pcb/bone-white--nicepbt-bow-retail/frame_000.webp"
+    },
+    {
+      "angleDegrees": 30,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "5bf2a1ef8afd4b66b4a42af33e0434c0874bc696473ba2e1bad8f73a639bce6b",
+      "src": "/assets/products/maru60/assembled/v717-pcb/bone-white--nicepbt-bow-retail/frame_030.webp"
+    },
+    {
+      "angleDegrees": 60,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "05ca2a6b89c50b3dd08b87a88bc3b7b0f079676a3dd8752834fc149c0874e8bc",
+      "src": "/assets/products/maru60/assembled/v717-pcb/bone-white--nicepbt-bow-retail/frame_060.webp"
+    },
+    {
+      "angleDegrees": 90,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "3ff3085700bb73a906a6c325e41b1b5f8f9733b12a3b6519f0c3c4c14ff04929",
+      "src": "/assets/products/maru60/assembled/v717-pcb/bone-white--nicepbt-bow-retail/frame_090.webp"
+    },
+    {
+      "angleDegrees": 120,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "d54a7177d1a2112849d31c860e80bc1e71b174527fb751ca6dee94f150b3ba74",
+      "src": "/assets/products/maru60/assembled/v717-pcb/bone-white--nicepbt-bow-retail/frame_120.webp"
+    },
+    {
+      "angleDegrees": 150,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "fd6f4d6a6f402dc035df39785574dc095e3f069ad52ef79d0bb9e1acfa05c396",
+      "src": "/assets/products/maru60/assembled/v717-pcb/bone-white--nicepbt-bow-retail/frame_150.webp"
+    },
+    {
+      "angleDegrees": 180,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "74ebc747bfbabd91bd2e1e34d3b74312b23b59b88cb4c7504e802bc7710cce92",
+      "src": "/assets/products/maru60/assembled/v717-pcb/bone-white--nicepbt-bow-retail/frame_180.webp"
+    },
+    {
+      "angleDegrees": 210,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "9ddeb8c181e6b0bbe432349b4a6acaff100b7d34f13041e20187bddc4069efc4",
+      "src": "/assets/products/maru60/assembled/v717-pcb/bone-white--nicepbt-bow-retail/frame_210.webp"
+    },
+    {
+      "angleDegrees": 240,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "c86b0f448e78788f3e62e6976a737a859f2288d0b87d5a0fdd5977ee5f8c59e7",
+      "src": "/assets/products/maru60/assembled/v717-pcb/bone-white--nicepbt-bow-retail/frame_240.webp"
+    },
+    {
+      "angleDegrees": 270,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "eaa4a8273b3b09f0654aa852188b876e4b993f004b893d5eb09ebaa91e2dfa5e",
+      "src": "/assets/products/maru60/assembled/v717-pcb/bone-white--nicepbt-bow-retail/frame_270.webp"
+    },
+    {
+      "angleDegrees": 300,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "d9b5121cdaf10351dc7fc3548571642b31f9f8241814ec086ebe06d16b7616d0",
+      "src": "/assets/products/maru60/assembled/v717-pcb/bone-white--nicepbt-bow-retail/frame_300.webp"
+    },
+    {
+      "angleDegrees": 330,
+      "height": 1536,
+      "width": 1024,
+      "sha256": "8e2c0df4db7604386009fe548023e308cb1453931ea76afb54d60879ab706494",
+      "src": "/assets/products/maru60/assembled/v717-pcb/bone-white--nicepbt-bow-retail/frame_330.webp"
+    }
+  ]
+}
