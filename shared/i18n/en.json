@@ -246,7 +246,7 @@
         "variant": "HHKB housing · integrated wrist rest",
         "license": "CC BY-NC 4.0",
         "intro": "HHKB housing with integrated wrist rest for Rule 60 V3 internals.",
-        "description": "MARU60 — independent HHKB housing with integrated honeycomb wrist rest for Rule 60 V3 internals. Not an INKC STUDIO product.",
+        "description": "MARU60 DIY Kit — independent HHKB housing with integrated honeycomb wrist rest for Rule 60 V3 internals. Not an INKC STUDIO product.",
         "details": {
           "size": "298.1 × 198.3 mm (top case · physical fit unverified)",
           "joints": "3× top dovetails · 5× sliding bottom dovetails",
@@ -385,7 +385,7 @@
       "detailsLabel": "Specs"
     },
     "maru60Cinema": {
-      "label": "MARU60 3D scroll cinema: 6-degree profile, brushed steel backplate with seven bumpons, six-layer assembly, surface macro, and eight housing and keycap pairings",
+      "label": "MARU60 DIY Kit 3D scroll cinema: 6-degree profile, brushed steel backplate with seven bumpons, six-layer assembly, surface macro, and eight housing and keycap pairings",
       "beats": {
         "profileFront": "6° Unibody · Charcoal",
         "profileUsb": "Flush USB-C",

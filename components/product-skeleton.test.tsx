@@ -13,12 +13,12 @@ describe("product loading skeletons", () => {
     render(
       <ProductCustomizerSkeleton
         actions={<a href="#download">Download</a>}
-        intro={<h1>MARU60</h1>}
+        intro={<h1>MARU60 DIY KIT</h1>}
       />
     );
     expect(
       screen
-        .getByRole("heading", { name: "MARU60" })
+        .getByRole("heading", { name: "MARU60 DIY KIT" })
         .closest('[aria-hidden="true"]')
     ).toBeNull();
     expect(

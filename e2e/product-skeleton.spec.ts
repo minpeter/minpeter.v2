@@ -38,6 +38,8 @@ const detailMarkup = (locale: string) => {
         messages.products.viewSource,
         messages.products.downloadFiles,
       ],
+      headingText: "MARU60 DIY KIT",
+      licenseText: messages.products.items.rule60.license,
       primaryActionText: messages.products.naverSmartStoreNotify,
       variantText: messages.products.items.rule60.variant,
     })
@@ -137,7 +139,7 @@ for (const scenario of [
         await expect(
           shell.getByTestId("product-customizer-skeleton")
         ).toBeVisible();
-        await expect(shell.locator("h1")).toHaveText("MARU60");
+        await expect(shell.locator("h1")).toHaveText("MARU60 DIY KIT");
         const [shellHeading] = await shell
           .locator(".store-product-heading")
           .allInnerTexts();

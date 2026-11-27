@@ -4,10 +4,14 @@ import { Skeleton } from "@/components/ui/skeleton";
 /** Mirrors the minimal customizer's geometry for MARU60 regression checks. */
 export function ProductDetailSkeleton({
   actionTexts,
+  headingText,
+  licenseText,
   primaryActionText,
   variantText,
 }: {
   actionTexts?: readonly [string, string];
+  headingText?: string;
+  licenseText?: string;
   primaryActionText?: string;
   variantText: string;
 }) {
@@ -18,9 +22,21 @@ export function ProductDetailSkeleton({
     >
       <div className="flex items-baseline justify-between gap-4">
         <h1>
-          <Skeleton className="store-skeleton-label w-40 rounded-none" />
+          {headingText ? (
+            <Skeleton className="rounded-none">
+              <span className="invisible">{headingText}</span>
+            </Skeleton>
+          ) : (
+            <Skeleton className="store-skeleton-label w-40 rounded-none" />
+          )}
         </h1>
-        <Skeleton className="store-skeleton-label w-24 shrink-0 rounded-none" />
+        {licenseText ? (
+          <Skeleton className="store-label shrink-0 rounded-none">
+            <span className="invisible">{licenseText}</span>
+          </Skeleton>
+        ) : (
+          <Skeleton className="store-skeleton-label w-24 shrink-0 rounded-none" />
+        )}
       </div>
       <p className="store-label text-muted-foreground">{variantText}</p>
       <div className="store-label mt-1.5">
