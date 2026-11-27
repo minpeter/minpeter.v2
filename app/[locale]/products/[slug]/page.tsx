@@ -9,7 +9,7 @@ import { SkateboardStandCustomizer } from "@/components/skateboard-stand-customi
 import { SkateboardStandCustomizerSkeleton } from "@/components/skateboard-stand-customizer-skeleton";
 import { SkateboardStandScrollCinema } from "@/components/skateboard-stand-scroll-cinema";
 import { SkateboardStandShowcase } from "@/components/skateboard-stand-showcase";
-import { getProduct, PRODUCTS } from "@/shared/products";
+import { getProduct, PRODUCTS, type Product } from "@/shared/products";
 import {
   createMetadata,
   createNotFoundMetadata,
@@ -56,6 +56,42 @@ export async function generateMetadata(
   });
 }
 
+function renderStoreChannelCta(
+  storeChannel: Product["storeChannel"],
+  labels: { buy: string; notify: string; soon: string }
+): ReactNode {
+  if (!storeChannel) {
+    return null;
+  }
+  if (storeChannel.href) {
+    return (
+      <a
+        className="store-button store-label"
+        data-primary
+        data-store-cta
+        data-testid="product-store-cta"
+        href={storeChannel.href}
+        rel="noreferrer"
+        target="_blank"
+      >
+        {storeChannel.intent === "notify" ? labels.notify : labels.buy}
+      </a>
+    );
+  }
+  return (
+    <button
+      className="store-button store-label"
+      data-disabled="true"
+      data-store-cta
+      data-testid="product-store-cta"
+      disabled
+      type="button"
+    >
+      {labels.soon}
+    </button>
+  );
+}
+
 async function ProductDetail({
   params,
 }: {
@@ -73,35 +109,11 @@ async function ProductDetail({
     getTranslations("products"),
   ]);
 
-  let storeChannelCta: ReactNode = null;
-  if (product.storeChannel?.href) {
-    storeChannelCta = (
-      <a
-        className="store-button store-label"
-        data-primary
-        data-store-cta
-        data-testid="product-store-cta"
-        href={product.storeChannel.href}
-        rel="noreferrer"
-        target="_blank"
-      >
-        {t("naverSmartStore")}
-      </a>
-    );
-  } else if (product.storeChannel) {
-    storeChannelCta = (
-      <button
-        className="store-button store-label"
-        data-disabled="true"
-        data-store-cta
-        data-testid="product-store-cta"
-        disabled
-        type="button"
-      >
-        {t("naverSmartStoreSoon")}
-      </button>
-    );
-  }
+  const storeChannelCta = renderStoreChannelCta(product.storeChannel, {
+    buy: t("naverSmartStore"),
+    notify: t("naverSmartStoreNotify"),
+    soon: t("naverSmartStoreSoon"),
+  });
 
   const labels = {
     media: t("mediaLabel", { product: product.name }),
@@ -214,7 +226,7 @@ async function ProductDetail({
         {product.downloadHref ? (
           <a
             className="store-button store-label"
-            data-store-cta
+            data-store-cta={storeChannelCta ? undefined : ""}
             href={product.downloadHref}
             rel="noreferrer"
             target="_blank"
