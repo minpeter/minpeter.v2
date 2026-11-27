@@ -107,9 +107,10 @@ export const PRODUCTS: readonly Product[] = [
           poster: rule60SpinPoster,
           width: 1024,
         },
-    // Store home URL so visitors can follow ("알림받기") ahead of launch.
+    // Naver Smart Store home marketing link (reduces external-traffic shopping fee to 1%)
+    // so visitors can follow ("알림받기") ahead of launch.
     storeChannel: {
-      href: "https://smartstore.naver.com/minpeter",
+      href: "https://mkt.shopping.naver.com/link/6b053b42f072e06bc99b55b0",
       intent: "notify",
       kind: "naver-smart-store",
     },

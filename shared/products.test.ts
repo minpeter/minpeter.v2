@@ -53,7 +53,7 @@ describe("Maru60 naming and historical turntable assets", () => {
       "https://github.com/minpeter/maru60/tree/main/models"
     );
     expect(product?.storeChannel).toEqual({
-      href: "https://smartstore.naver.com/minpeter",
+      href: "https://mkt.shopping.naver.com/link/6b053b42f072e06bc99b55b0",
       intent: "notify",
       kind: "naver-smart-store",
     });
