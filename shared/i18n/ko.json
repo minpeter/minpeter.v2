@@ -246,7 +246,7 @@
         "variant": "HHKB 하우징 · 일체형 손목 받침",
         "license": "CC BY-NC 4.0",
         "intro": "Rule 60 V3용 일체형 손목 받침 HHKB 하우징.",
-        "description": "MARU60 — Rule 60 V3 내부 부품용 일체형 허니컴 손목 받침 HHKB 하우징. INKC STUDIO의 제품이 아닙니다.",
+        "description": "MARU60 DIY Kit — Rule 60 V3 내부 부품용 일체형 허니컴 손목 받침 HHKB 하우징. INKC STUDIO의 제품이 아닙니다.",
         "details": {
           "size": "298.1 × 198.3 mm (상판 외곽 · 실물 조립 미검증)",
           "joints": "상판 도브테일 ×3 · 하판 슬라이딩 도브테일 ×5",
@@ -385,7 +385,7 @@
       "detailsLabel": "스펙"
     },
     "maru60Cinema": {
-      "label": "MARU60 3D 스크롤 시네마: 6도 프로파일, 브러시드 스틸 백플레이트와 7개 범폰, 6층 조립 구조, 표면 질감, 8종 하우징·키캡 라인업",
+      "label": "MARU60 DIY Kit 3D 스크롤 시네마: 6도 프로파일, 브러시드 스틸 백플레이트와 7개 범폰, 6층 조립 구조, 표면 질감, 8종 하우징·키캡 라인업",
       "beats": {
         "profileFront": "6° 유니바디 · Charcoal",
         "profileUsb": "매립형 USB-C",

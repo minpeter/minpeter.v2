@@ -684,7 +684,7 @@ for (const width of [390, 768, 1440, 1920]) {
     await page.setViewportSize({ height: 1000, width });
     await page.goto("/en/products/maru60");
     await expect(
-      page.getByRole("heading", { level: 1, name: "MARU60" })
+      page.getByRole("heading", { level: 1, name: "MARU60 DIY KIT" })
     ).toBeVisible();
     await expect(
       page.getByTestId("product-spin").filter({ visible: true })
@@ -721,7 +721,7 @@ test("borderless detail keeps the product sticky while the page scrolls through 
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/en/products/maru60");
   await expect(
-    page.getByRole("heading", { level: 1, name: "MARU60" })
+    page.getByRole("heading", { level: 1, name: "MARU60 DIY KIT" })
   ).toBeVisible();
   await expect(page.locator(".store-product-heading")).toContainText(
     "HHKB housing · integrated wrist rest"

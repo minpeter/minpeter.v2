@@ -48,7 +48,7 @@ describe("app/[locale]/products/[slug]/page.tsx generateMetadata", () => {
     mockLocale = "en";
     const metadata = await metadataFor("maru60");
 
-    expect(metadata.title).toBe("minpeter | Maru60");
+    expect(metadata.title).toBe("minpeter | MARU60 DIY Kit");
     expect(metadata.description).toBe("products.items.rule60.description");
   });
 

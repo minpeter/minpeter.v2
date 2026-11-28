@@ -47,7 +47,7 @@ function webpCanvas(bytes: Buffer) {
 describe("Maru60 naming and historical turntable assets", () => {
   it("uses the canonical Maru60 slug without claiming printed draft fit", () => {
     const product = getProduct("maru60");
-    expect(product?.name).toBe("Maru60");
+    expect(product?.name).toBe("MARU60 DIY Kit");
     expect(product?.sourceHref).toBe("https://github.com/minpeter/maru60");
     expect(product?.downloadHref).toBe(
       "https://github.com/minpeter/maru60/tree/main/models"
@@ -62,7 +62,9 @@ describe("Maru60 naming and historical turntable assets", () => {
         readFileSync(new URL(`./i18n/${locale}.json`, import.meta.url), "utf8")
       );
       expect(messages.products.naverSmartStoreNotify).toBeTruthy();
-      expect(messages.products.items.rule60.description).toContain("MARU60");
+      expect(messages.products.items.rule60.description).toContain(
+        "MARU60 DIY Kit"
+      );
       expect(messages.products.items.rule60.details.status).toContain("PCB");
       expect(messages.products.items.rule60.details.status).toContain("v7.17");
       expect(messages.products.customization.transparentNote).toContain("PCB");

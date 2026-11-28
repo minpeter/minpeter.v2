@@ -29,12 +29,12 @@ describe("canonical Maru60 product routes", () => {
     "uses the canonical product slug for %s metadata",
     (locale) => {
       const product = getProduct("maru60");
-      expect(product?.name).toBe("Maru60");
+      expect(product?.name).toBe("MARU60 DIY Kit");
       expect(getProduct("rule60-hhkb-unibody")).toBeUndefined();
       const metadata = createMetadata({
         locale,
         path: `/products/${product?.slug}`,
-        title: "Maru60",
+        title: "MARU60 DIY Kit",
       });
       expect(metadata.alternates?.canonical).toBe(
         `https://minpeter.com${locale === "ko" ? "" : `/${locale}`}/products/maru60`

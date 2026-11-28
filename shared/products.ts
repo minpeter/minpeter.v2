@@ -86,7 +86,7 @@ export const PRODUCTS: readonly Product[] = [
     // Historical assets stay stable; the former page slug permanently redirects to maru60.
     downloadHref: "https://github.com/minpeter/maru60/tree/main/models",
     key: "rule60",
-    name: "Maru60",
+    name: "MARU60 DIY Kit",
     preview: {
       image: "/assets/products/rule60-hhkb-unibody/og.png",
       video: {

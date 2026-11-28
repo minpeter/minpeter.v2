@@ -246,7 +246,7 @@
         "variant": "HHKBハウジング · パームレスト一体型",
         "license": "CC BY-NC 4.0",
         "intro": "Rule 60 V3向けパームレスト一体型HHKBハウジング。",
-        "description": "MARU60 — Rule 60 V3の内部部品向けに設計したハニカムパームレスト一体型HHKBハウジング。INKC STUDIOの製品ではありません。",
+        "description": "MARU60 DIY Kit — Rule 60 V3の内部部品向けに設計したハニカムパームレスト一体型HHKBハウジング。INKC STUDIOの製品ではありません。",
         "details": {
           "size": "298.1 × 198.3 mm (トップ外形 · 実物組立未検証)",
           "joints": "トップ ダブテール ×3 · ボトム スライド ×5",
@@ -385,7 +385,7 @@
       "detailsLabel": "仕様"
     },
     "maru60Cinema": {
-      "label": "MARU60 3Dスクロールシネマ：6度プロファイル、ヘアラインスチール製バックプレートと7つのバンポン、6層組立構造、表面接写、8種のカラーラインナップ",
+      "label": "MARU60 DIY Kit 3Dスクロールシネマ：6度プロファイル、ヘアラインスチール製バックプレートと7つのバンポン、6層組立構造、表面接写、8種のカラーラインナップ",
       "beats": {
         "profileFront": "6° ユニボディ · Charcoal",
         "profileUsb": "埋め込みUSB-C",
